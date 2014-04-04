@@ -14,8 +14,8 @@ all: mcas
 mcas: main_tester.o ucf_threading.o
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $^ -o $@ $(LIBS)
 
-main_tester.o: main_tester.cpp wf_mcas_3.hpp
-ucf_threading.o: ucf_threading.hpp
+main_tester.o: main_tester.cc wf_mcas_3.h
+ucf_threading.o: ucf_threading.cc ucf_threading.h
 
 .PHONY: clean
 clean:

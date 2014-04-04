@@ -6,7 +6,7 @@
 #ifndef WF_MCAS_3_HPP_
 #define WF_MCAS_3_HPP_
 
-#include "ucf_threading.hpp"
+#include "ucf_threading.h"
 #include <algorithm>
 
 namespace ucf {

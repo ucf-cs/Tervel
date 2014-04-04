@@ -1,4 +1,4 @@
-#include "ucf_threading.hpp"
+#include "ucf_threading.h"
 
 namespace ucf {
 namespace thread {
