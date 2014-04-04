@@ -1,20 +1,23 @@
+CXX      ?= g++-4.7
+CXXFLAGS = -Wall -g -std=c++11 -march=native -m64 -pthread -fno-strict-aliasing
+CPPFLAGS = -DDEBUG=1 -DINTEL
 
-#CPPSRCS		= main_tester_v2.c
-#DIRECTORY	= test_executables/eachThread/
+INC     = -I/Libraries/boost_1_51_0/BOOST_INSTAL/include
+LDFLAGS = -L/Libraries/boost_1_51_0/BOOST_INSTAL/lib
+LIBS    = -ldl -lpthread -lboost_system -lboost_regex -lrt # -lllalloc
 
-CPPSRCS         = main_tester.cpp
+CPPFLAGS += $(INC)
 
-CPP		= g++-4.7
-CPPFLAGS	= -Wall -std=c++11   -march=native -m64 -pthread -DINTEL -fno-strict-aliasing
+.PHONY: all
+all: mcas
 
-#-march=native -fomit-frame-pointer
+mcas: main_tester.o ucf_threading.o
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $^ -o $@ $(LIBS)
 
-LFLAGS =   -ldl -lpthread  -I/Libraries/boost_1_51_0/BOOST_INSTAL/include -L/Libraries/boost_1_51_0/BOOST_INSTAL/lib -lboost_system -lboost_regex -lrt -lllalloc -lrt
+main_tester.o: main_tester.cpp wf_mcas_3.hpp
+ucf_threading.o: ucf_threading.hpp
 
-all: clean mcas
-
+.PHONY: clean
 clean:
-	rm -f mcas
-mcas:
-	$(CPP)  -g -ggdb -DDEBUG=1   $(CPPFLAGS) main_tester.cpp -o mcas $(LFLAGS)
-
+	$(RM) mcas
+	$(RM) *.o
