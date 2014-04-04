@@ -140,13 +140,13 @@ void run_updateObject(int Thread_ID, int start_pos) {
   int failed_count = 0;
   int passed_count = 0;
 
-  ucf::mcas_ns::MCAS<int64 , MWORDS> *vmcas;
+  ucf::mcas::MCAS<int64 , MWORDS> *vmcas;
 
   isReady[Thread_ID].store(true);
   while (waitFlag.load()) {}
 
   while (running.load()) {
-    vmcas = new ucf::mcas_ns::MCAS<int64, MWORDS>();
+    vmcas = new ucf::mcas::MCAS<int64, MWORDS>();
 
     bool success;
     for (int i = 0; i < MWORDS; i++) {
@@ -154,7 +154,7 @@ void run_updateObject(int Thread_ID, int start_pos) {
 
       std::atomic<int64> *address = (&testArray[var]);
 
-      int64 old_v = ucf::mcas_ns::read<int64>(address);
+      int64 old_v = ucf::mcas::read<int64>(address);
       int64 new_v = (old_v + 0x16) & (~3);
       success = vmcas->addCASTriple(address, old_v, new_v);
       assert(success);
@@ -183,13 +183,13 @@ void run_updateMultiObject(int Thread_ID) {
   boost::mt19937 rng(Thread_ID);
   boost::uniform_int<> memory_pos_rand(0, max_start_pos-1);
 
-  ucf::mcas_ns::MCAS<int64 , MWORDS> *vmcas;
+  ucf::mcas::MCAS<int64 , MWORDS> *vmcas;
 
   isReady[Thread_ID].store(true);
   while (waitFlag.load()) {}
 
   while (running.load()) {
-    vmcas = new ucf::mcas_ns::MCAS<int64 , MWORDS>();
+    vmcas = new ucf::mcas::MCAS<int64 , MWORDS>();
     int start_pos = memory_pos_rand(rng);
     start_pos = start_pos*MWORDS;
 
@@ -199,7 +199,7 @@ void run_updateMultiObject(int Thread_ID) {
 
       std::atomic<int64> *address = (&testArray[var]);
 
-      int64 old_v = ucf::mcas_ns::read<int64>(address);
+      int64 old_v = ucf::mcas::read<int64>(address);
       int64 new_v = (old_v + 0x16) & (~3);
       success = vmcas->addCASTriple(address, old_v, new_v);
 
@@ -228,13 +228,13 @@ void run_RandomOverlaps(int Thread_ID) {
 
   boost::mt19937 rng(Thread_ID);
   boost::uniform_int<> memory_pos_rand(0, arrayLength);
-  ucf::mcas_ns::MCAS<int64 , MWORDS> *vmcas;
+  ucf::mcas::MCAS<int64 , MWORDS> *vmcas;
 
   isReady[Thread_ID].store(true);
   while (waitFlag.load()) {}
 
   while (running.load()) {
-    vmcas = new ucf::mcas_ns::MCAS<int64 , MWORDS>();
+    vmcas = new ucf::mcas::MCAS<int64 , MWORDS>();
 
     bool success;
     for (int i = 0; i < MWORDS; i++) {
@@ -243,7 +243,7 @@ void run_RandomOverlaps(int Thread_ID) {
         int var = memory_pos_rand(rng);
         std::atomic<int64> *address = (&testArray[var]);
 
-        int64 old_v = ucf::mcas_ns::read<int64>(address);
+        int64 old_v = ucf::mcas::read<int64>(address);
         int64 new_v = (old_v + 0x16) & (~3);
         success = vmcas->addCASTriple(address, old_v, new_v);
       }while(!success);

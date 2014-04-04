@@ -10,7 +10,7 @@
 #include <algorithm>
 
 namespace ucf {
-namespace mcas_ns {
+namespace mcas {
 
   template<class T, int words>
   class CasRow;
@@ -449,7 +449,7 @@ namespace mcas_ns {
       }  // End While loop over casrows.
     }  // End cleanup function.
   };
-};  // namespace mcas_ns
+};  // namespace mcas
 };  // namespace ucf
 
 #endif  // WF_MCAS_3_HPP_
