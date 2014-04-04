@@ -251,10 +251,121 @@ void Destroy_Hazard_Pointers() {
   assert(tl_unsafe_pool == nullptr);
 }
 
+bool PoolElem::watch(std::atomic<void *> *address, void *v, int pos) {
+  hazardPointers[threadID*ID::END + pos].store(v);
+  if (address->load() != v) {
+    hazardPointers[threadID*ID::END + pos].store(nullptr);
+    return false;
+  } else {
+    // return v->advanceWatch(address, v, pos);
+    // Must call this from caller!
+    return true;
+  }
+}
+
+bool PoolElem::isWatched(PoolElem *p) {
+  size_t i;
+  for (i = 0; i < nThreads*ID::END; i++) {
+    if (hazardPointers[i].load() == p) {
+      return true;
+    }
+  }
+  return p->advanceIsWatched();
+}
+
+void PoolElem::emptyThreadPool() {
+  tryToFreeUnSafePool(false);
+
+  if (tl_unsafe_pool != nullptr) {
+    PoolElem *p1 = tl_unsafe_pool;
+    PoolElem *p2 = p1->pool_next;
+    while (p2 != nullptr) {
+      p1 = p2;
+      p2 = p1->pool_next;
+    }
+
+    p1->pool_next = gl_unsafe_pool.load();
+    while (
+            !gl_unsafe_pool.compare_exchange_strong
+                (p1->pool_next, tl_unsafe_pool)
+          ) {}
+      // p1->pool_next's value is updated to the current value
+      // after a failed cas. (pass by reference fun)
+  }
+  tl_unsafe_pool = nullptr;
+}
+
+void PoolElem::emptyGlobalPool() {
+  PoolElem *list = gl_unsafe_pool.exchange(nullptr);
+
+  while (list) {
+    PoolElem *temp = list->pool_next;
+    list->unsafeFree();
+    list = temp;
+  }
+}
+
+void PoolElem::tryToFreeUnSafePool(bool force) {
+  while (tl_unsafe_pool) {
+    PoolElem *temp = tl_unsafe_pool->pool_next;
+
+    bool watched = isWatched(temp);
+    if (!force && watched) {
+      break;
+    } else {
+      temp->unsafeFree();
+      tl_unsafe_pool = temp;
+    }
+  }
+
+  if (tl_unsafe_pool != nullptr) {
+    PoolElem *prev = tl_unsafe_pool;
+    PoolElem *temp = tl_unsafe_pool->pool_next;
+
+    while (temp) {
+      PoolElem *temp3 = temp->pool_next;
+      bool watched = isWatched(temp);
+
+      if (!force && watched) {
+        prev = temp;
+        temp = temp3;
+      } else {
+        temp->unsafeFree();
+        prev->pool_next = temp3;
+        temp = temp3;
+      }
+    }
+  }
+}
+
 }  // namespace hp
 
 __thread int64 helpID;
 __thread int64 delayCount;
+
+
+void ProgressAssurance::tryToHelp() {
+  if (delayCount++ > helpDelay) {
+    delayCount = 0;
+
+    OpRecord *op = opTable[helpID].load();
+    if (op != nullptr) {
+      int pos =  hp::ID::id_oprec;
+      std::atomic<void *> *temp =
+          reinterpret_cast<std::atomic<void *> *>(&(opTable[helpID]));
+      bool res = hp::PoolElem::watch(temp, op, pos);
+      if (res) {
+        if (op->advanceWatch(temp, op, pos)) {
+          op->helpComplete();
+          hp::PoolElem::unwatch(op, pos);
+        }
+      }
+    }
+
+    helpID = (helpID + 1) % nThreads;
+  }
+}
+
 
 ProgressAssurance *progressAssurance;
 
