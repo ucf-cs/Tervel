@@ -21,7 +21,7 @@ namespace thread {
   int64 nThreads;
   std::atomic<int64> threadCount;
 
-  __thread int64 rDepth, threadID, helpID, delayCount;
+  __thread int64 rDepth, threadID;
   __thread bool rReturn;
 
   const size_t ALIGNLEN = 64;
@@ -134,14 +134,16 @@ namespace thread {
           rcObj->rc_count.fetch_add(-1);
           return false;
         } else {
-          return obj->advanceWatch(a, value);
+          bool res = obj->advanceWatch(a, value);
+          if (res) {
+            return true;
+          } else {
+            rcObj->rc_count.fetch_add(-1);
+            return false;
+          }
         }
       }
 
-      static void abort_watch(Descriptor* obj) {
-        PoolElem * rcObj = getPoolElemRef(obj);
-        rcObj->rc_count.fetch_add(-1);
-      }
       static void unwatch(Descriptor* obj) {
         PoolElem * rcObj = getPoolElemRef(obj);
         rcObj->rc_count.fetch_add(-1);
@@ -546,17 +548,61 @@ namespace thread {
     }
   };
 
-  std::atomic<OpRecord *> *opTable;
+    __thread int64 helpID, delayCount;
+  class ProgressAssurance {
+  public:
+    std::atomic<OpRecord *> *opTable;
+    int nThreads;
+    explicit ProgressAssurance(int _nThreads) {
+      nThreads = _nThreads;
+      opTable = new std::atomic<OpRecord *>[nThreads]();
+    }
+
+    ~ProgressAssurance() {
+      delete opTable;
+    }
+
+    void tryToHelp() {
+      if (delayCount++ > helpDelay) {
+        delayCount = 0;
+
+        OpRecord *op = opTable[helpID].load();
+        if (op != nullptr) {
+          int pos =  hp::ID::id_oprec;
+          std::atomic<void *> *temp =
+              reinterpret_cast<std::atomic<void *> *>(&(opTable[helpID]));
+          bool res = hp::PoolElem::watch(temp, op, pos);
+          if (res) {
+            if (op->advanceWatch(temp, op, pos)) {
+              op->helpComplete();
+              hp::PoolElem::unwatch(op, pos);
+            }
+          }
+        }
+
+        helpID = (helpID + 1) % nThreads;
+      }
+    }
+
+    void askForHelp(OpRecord *op) {
+      opTable[threadID].store(op);
+      op->helpComplete();
+      opTable[threadID].store(nullptr);
+      return;
+    }
+  };  // End Progress Assurance Class
+
+  ProgressAssurance *progressAssurance;
 
   static void Initilize_Threading_Manager(int maxUniqueThreads) {
     nThreads = maxUniqueThreads;
-    opTable = new std::atomic<OpRecord *>[nThreads]();
+    progressAssurance =  new ProgressAssurance(nThreads);
     threadCount.store(0);
 
     hp::Initilize_Hazard_Pointers();
   }
   static void Destory_Threading_Manager() {
-    delete[] opTable;
+    delete progressAssurance;
     hp::Destroy_Hazard_Pointers();
     rc::PoolElem::emptyGlobalPools();
     hp::PoolElem::emptyGlobalPool();
@@ -573,34 +619,6 @@ namespace thread {
     hp::PoolElem::emptyThreadPool();
   }
 
-  static void tryToHelp() {
-    if (delayCount++ > helpDelay) {
-      delayCount = 0;
-
-      OpRecord *op = opTable[helpID].load();
-      if (op != nullptr) {
-        int pos =  hp::ID::id_oprec;
-        std::atomic<void *> *temp =
-            reinterpret_cast<std::atomic<void *> *>(&(opTable[helpID]));
-        bool res = hp::PoolElem::watch(temp, op, pos);
-        if (res) {
-          if (op->advanceWatch(temp, op, pos)) {
-            op->helpComplete();
-            hp::PoolElem::unwatch(op, pos);
-          }
-        }
-      }
-
-      helpID = (helpID + 1) % nThreads;
-    }
-  }
-
-  static void askForHelp(OpRecord *op) {
-    opTable[threadID].store(op);
-    op->helpComplete();
-    opTable[threadID].store(nullptr);
-    return;
-  }
 
 }  // End Thread namespace
 }  // End UCF namespace

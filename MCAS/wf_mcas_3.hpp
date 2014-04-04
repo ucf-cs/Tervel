@@ -58,7 +58,7 @@ namespace mcas_ns {
       thread::hp::PoolElem::watch(reinterpret_cast<void *>(lastRow), hpPos);
       if (address->load() != value) {
         thread::hp::PoolElem::unwatch(hpPos);
-        thread::rc::PoolElem::abort_watch(this);
+        return false;
       }
       // Alright, now both this helper can not be changed
       // and the mcas it reference can not be changed.
@@ -83,7 +83,6 @@ namespace mcas_ns {
         T temp2 = RCDescr::mark<T>(this);
         address->compare_exchange_strong(temp2, cr->expectedValue);
         thread::hp::PoolElem::unwatch(hpPos);
-        thread::rc::PoolElem::abort_watch(this);
         return false;
       }
     };
@@ -200,7 +199,7 @@ namespace mcas_ns {
     };
 
     bool wfcomplete(t_CasRow *lastRow) {  // must be lastRow
-      thread::askForHelp(lastRow);
+      thread::progressAssurance->askForHelp(lastRow);
       assert(lastRow->helper.load());
       return (lastRow->helper.load() != t_MCAS::MCAS_FAIL_CONST);
     }
@@ -326,7 +325,7 @@ namespace mcas_ns {
     };
 
     bool execute() {
-      thread::tryToHelp();
+      thread::progressAssurance->tryToHelp();
 
       if (row_count != words) {
         // TODO(steven): fix code to address when row_count < words
