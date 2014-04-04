@@ -20,34 +20,35 @@ typedef std::uint64_t int64;
 
 namespace ucf {
 namespace thread {
-  const size_t helpDelay = 1;
-  int64 nThreads;
-  std::atomic<int64> threadCount;
+  constexpr size_t helpDelay = 1;
+  constexpr size_t ALIGNLEN = 64;
 
-  __thread int64 rDepth, threadID;
-  __thread bool rReturn;
+  extern int64 nThreads;
+  extern std::atomic<int64> threadCount;
 
-  const size_t ALIGNLEN = 64;
+  extern __thread int64 rDepth;
+  extern __thread int64 threadID;
+  extern __thread bool rReturn;
 
   namespace rc {
-    const bool NO_REUSE_MEM = false;
-
     class PoolElem;
-    __thread PoolElem * tl_safe_pool = nullptr;
-    __thread PoolElem * tl_unsafe_pool = nullptr;
-    std::atomic<PoolElem *> gl_safe_pool;
-    std::atomic<PoolElem *> gl_unsafe_pool;
 
+    constexpr bool NO_REUSE_MEM = false;
 
-    #ifdef DEBUG_POOL
-        __thread int64 tl_safe_pool_count = 0;
-        __thread int64 tl_unsafe_pool_count = 0;
-        std::atomic<int64> gl_safe_pool_count;
-        std::atomic<int64> gl_unsafe_pool_count;
-    #endif
+    extern __thread PoolElem * tl_safe_pool;
+    extern __thread PoolElem * tl_unsafe_pool;
+    extern std::atomic<PoolElem *> gl_safe_pool;
+    extern std::atomic<PoolElem *> gl_unsafe_pool;
+
+#ifdef DEBUG_POOL
+    extern __thread int64 tl_safe_pool_count;
+    extern __thread int64 tl_unsafe_pool_count;
+    extern std::atomic<int64> gl_safe_pool_count;
+    extern std::atomic<int64> gl_unsafe_pool_count;
+#endif
 
     class Descriptor {
-    public:
+     public:
       Descriptor() {}
       virtual ~Descriptor() {}
 
@@ -59,22 +60,16 @@ namespace thread {
         assert(false);
         return nullptr;
       };
-      virtual void helpComplete() {
-        assert(false);
-      }
+      virtual void helpComplete() { assert(false); }
 
       virtual void * getLogicalValue(void * t, std::atomic<void *> *address) {
         assert(false);
         return nullptr;
       };
 
-      bool advanceWatch(std::atomic<void *> *address, void * p) {
-        return true;
-      }
+      bool advanceWatch(std::atomic<void *> *address, void * p) { return true; }
       void advanceunwatch() {}
-      bool advanceIsWatched() {
-        return false;
-      }
+      bool advanceIsWatched() { return false; }
 
       template<class T>
       static T mark(Descriptor *descr) {
@@ -101,9 +96,10 @@ namespace thread {
     };  // End class Descriptor
 
     class PoolElem {
-    public:
+     public:
       PoolElem *pool_next;
       std::atomic<int64> rc_count;
+
 #ifdef DEBUG_POOL
       int64 type = 0;
       std::atomic<int64> allocation_count;
@@ -130,218 +126,37 @@ namespace thread {
         return reinterpret_cast<Descriptor *>(p + 1);
       }
 
-      static bool watch(Descriptor* obj, std::atomic<void *> *a, void * value) {
-        PoolElem * rcObj = getPoolElemRef(obj);
-        rcObj->rc_count.fetch_add(1);
-        if (a->load() != value) {
-          rcObj->rc_count.fetch_add(-1);
-          return false;
-        } else {
-          bool res = obj->advanceWatch(a, value);
-          if (res) {
-            return true;
-          } else {
-            rcObj->rc_count.fetch_add(-1);
-            return false;
-          }
-        }
-      }
+      static bool watch(Descriptor* obj, std::atomic<void *> *a, void * value);
 
-      static void unwatch(Descriptor* obj) {
-        PoolElem * rcObj = getPoolElemRef(obj);
-        rcObj->rc_count.fetch_add(-1);
-        obj->advanceunwatch();
-      }
+      static void unwatch(Descriptor* obj);
 
-      static bool isWatched(Descriptor *obj) {
-        PoolElem * rcObj = getPoolElemRef(obj);
-        if (rcObj->rc_count.load() == 0) {
-          return obj->advanceIsWatched();
-        } else {
-          return true;
-        }
-      }
+      static bool isWatched(Descriptor *obj);
 
-      static void addToSafe(Descriptor *descr) {
-        PoolElem *p = getPoolElemRef(descr);
+      static void addToSafe(Descriptor *descr);
 
-#ifdef DEBUG_POOL
-        p->free_count.fetch_add(1);
-        assert(p->free_count.load() == p->allocation_count.load());
-        tl_safe_pool_count++;
-#endif
-        p->pool_next = tl_safe_pool;
-        tl_safe_pool = p;
-      };
+      static void addToUnSafe(Descriptor *descr);
 
-      static void addToUnSafe(Descriptor *descr) {
-        PoolElem *p = getPoolElemRef(descr);
-        p->pool_next = tl_unsafe_pool;
-        tl_unsafe_pool = p;
+      static void tryToFreeUnSafePool(bool force=false);
 
-#ifdef DEBUG_POOL
-          tl_unsafe_pool_count++;
-#endif
-      };
+      // Sends it to the global pool
+      static void emptySafePool();
 
-
-
-      static void tryToFreeUnSafePool(bool force = false) {
-        while (tl_unsafe_pool) {
-          PoolElem *temp = tl_unsafe_pool->pool_next;
-          Descriptor *temp_descr = getDescrRef(tl_unsafe_pool);
-
-          bool watched = isWatched(temp_descr);
-          if (!force && watched) {
-            break;
-          } else {
-#ifdef DEBUG_POOL
-            tl_unsafe_pool_count--;
-#endif
-            temp_descr->unsafeFree();
-            tl_unsafe_pool = temp;
-          }
-        }  // End While Unsafe pool
-
-        if (tl_unsafe_pool != nullptr) {
-          PoolElem *prev = tl_unsafe_pool;
-          PoolElem *temp = tl_unsafe_pool->pool_next;
-
-          while (temp) {
-            Descriptor *temp_descr = getDescrRef(temp);
-            PoolElem *temp3 = temp->pool_next;
-
-            bool watched = isWatched(temp_descr);
-            if (!force && watched) {
-              prev = temp;
-              temp = temp3;
-            } else {
-              temp_descr->unsafeFree();
-              prev->pool_next = temp3;
-              temp = temp3;
-#ifdef DEBUG_POOL
-              tl_unsafe_pool_count--;
-#endif
-            }  // End Else
-          }  // End While
-        }  // End If tl_pool
-      };  // End tryToFreeUnSafePool
-
-      static void emptySafePool() {  // Sends it to Global pool
-        if (tl_safe_pool != nullptr) {
-          PoolElem *p1 = tl_safe_pool;
-          PoolElem *p2 = p1->pool_next;
-          while (p2 != nullptr) {
-            p1 = p2;
-            p2 = p1->pool_next;
-          }
-
-          p1->pool_next = gl_safe_pool.load();
-          while (
-                  !gl_safe_pool.compare_exchange_strong
-                      (p1->pool_next, tl_unsafe_pool)
-                ) {}
-            // p1->pool_next's value is updated to the current value
-            // after a failed cas. (pass by reference fun)
-        }
-        tl_safe_pool = nullptr;
-      };
-
-      static void emptyUnSafePool() {  // Sends it  safePool
-        tryToFreeUnSafePool(true);
-        if (tl_unsafe_pool != nullptr) {
-          PoolElem *p1 = tl_unsafe_pool;
-          PoolElem *p2 = p1->pool_next;
-          while (p2 != nullptr) {
-            p1 = p2;
-            p2 = p1->pool_next;
-          }
-
-          p1->pool_next = gl_unsafe_pool.load();
-          while (
-                  !gl_unsafe_pool.compare_exchange_strong
-                      (p1->pool_next, tl_unsafe_pool)
-                ) {}
-            // p1->pool_next's value is updated to the current value
-            // after a failed cas. (pass by reference fun)
-        }
-        tl_unsafe_pool = nullptr;
-      };
+      // Sends it to the safe pool
+      static void emptyUnSafePool();
 
       static void emptyThreadPools() {
         emptyUnSafePool();
         emptySafePool();
       };
 
-      static void emptyGlobalPools() {
-        PoolElem *list = gl_unsafe_pool.exchange(nullptr);
+      static void emptyGlobalPools();
 
-        while (list) {
-          PoolElem *temp = list->pool_next;
-          Descriptor *temp_descr = getDescrRef(list);
-          temp_descr->unsafeFree();
-          list = temp;
-        }
+      static PoolElem * getFromPool();
 
-        list = gl_safe_pool.exchange(nullptr);
+      static void * getDescriptor(size_t s);
 
-        while (list) {
-          PoolElem *temp = list->pool_next;
-          delete list;
-          list = temp;
-        }
-      }
-
-
-      static PoolElem * getFromPool() {
-        /**
-            First Try to move any object from the unsafe list to the safe list
-        **/
-        tryToFreeUnSafePool();  // false
-
-        if (!NO_REUSE_MEM && tl_safe_pool) {
-          PoolElem *temp = tl_safe_pool;
-          tl_safe_pool = tl_safe_pool->pool_next;
-
-          #ifdef DEBUG_POOL
-            assert(temp->free_count.load() == temp->allocation_count.load());
-            temp->allocation_count.fetch_add(1);
-            tl_safe_pool_count--;
-          #endif
-
-          temp->pool_next = nullptr;
-          return temp;
-        } else {
-          return nullptr;
-        }
-      };
-
-      static void * getDescriptor(size_t s) {
-        assert(s <= ALIGNLEN);
-        PoolElem * temp = getFromPool();
-        if (temp == nullptr) {
-          temp = reinterpret_cast<PoolElem *>(new char[ALIGNLEN]);
-          if (temp == nullptr) {
-            exit(-1);
-          } else {
-            temp->init();
-           // printf("New: (%ld) %p, %p\n", threadID, temp, getDescrRef(temp));
-          }
-        } else {
-        // printf("Reusing: (%ld) %p, %p\n", threadID, temp, getDescrRef(temp));
-        }
-        return getDescrRef(temp);
-      }
-
-      void * operator new(size_t size) {
-        assert(false);
-      };  // End  new operator
+      // void * operator new(size_t) { assert(false); return nullptr; }
     };  // End Pool Elem class
-
-    void * Descriptor::operator new(size_t s) {
-        return PoolElem::getDescriptor(s);
-    }
-
 
     template<class T>
     T Descriptor::remove(T t, std::atomic<T> *address) {
@@ -370,38 +185,27 @@ namespace thread {
       rDepth--;
       return newValue;
     }
-    void Descriptor::unsafeFree() {
-      PoolElem::addToSafe(this);
-    }
 
-
-    void Descriptor::safeFree() {
-      if (PoolElem::isWatched(this)) {
-        PoolElem::addToUnSafe(this);
-      } else {
-        unsafeFree();
-      }
-    }
-  }  // end rc pool name space
+  }  // namespace rc
 
 
   namespace hp {
-    const bool NO_FREE_MEMORY = false;
-
     class PoolElem;
-    __thread PoolElem * tl_unsafe_pool = nullptr;
-    std::atomic<PoolElem *> gl_unsafe_pool;
 
-    enum ID {id_mcas, id_oprec, END};
-    std::atomic<void *> *hazardPointers;
-    static void Initilize_Hazard_Pointers() {
-      hazardPointers = new std::atomic<void *>[nThreads*ID::END]();
-      gl_unsafe_pool.store(nullptr);
-    }
-    static void Destroy_Hazard_Pointers() {
-      delete[] hazardPointers;
-      assert(tl_unsafe_pool == nullptr);
-    }
+    constexpr bool NO_FREE_MEMORY = false;
+    enum ID {
+      id_mcas,
+      id_oprec,
+      END
+    };
+
+    extern __thread PoolElem * tl_unsafe_pool;
+    extern std::atomic<PoolElem *> gl_unsafe_pool;
+    extern std::atomic<void *> *hazardPointers;
+
+    void Initilize_Hazard_Pointers();
+
+    void Destroy_Hazard_Pointers();
 
     class PoolElem {
     public:
@@ -413,23 +217,14 @@ namespace thread {
 
       PoolElem() {}
       virtual ~PoolElem() {}
-      virtual bool advanceWatch(std::atomic<void *> *address,
-                                          void *v, int pos) {
-        return true;
-      }
+      virtual bool advanceWatch(std::atomic<void *> *address, void *v,
+          int pos) { return true; }
       virtual void advanceunwatch(int pos) {}
-      virtual bool advanceIsWatched() {
-        return false;
-      }
-      virtual void safeFree() {
-        assert(false);
-      }
-      virtual void unsafeFree() {
-        assert(false);
-      }
+      virtual bool advanceIsWatched() { return false; }
+      virtual void safeFree() { assert(false); }
+      virtual void unsafeFree() { assert(false); }
 
-      static bool watch(std::atomic<void *> *address,
-                                  void *v, int pos) {
+      static bool watch(std::atomic<void *> *address, void *v, int pos) {
         hazardPointers[threadID*ID::END + pos].store(v);
         if (address->load() != v) {
           hazardPointers[threadID*ID::END + pos].store(nullptr);
@@ -466,7 +261,6 @@ namespace thread {
         }
         return p->advanceIsWatched();
       }
-
 
       static void addToUnSafe(PoolElem *p) {
         p->pool_next = tl_unsafe_pool;
@@ -536,13 +330,16 @@ namespace thread {
             }  // End Else
           }  // End While
         }  // End If tl_pool
-      };  // End tryToFreeUnSafePool
+      }  // End tryToFreeUnSafePool
     };
-  };  // End hp namespace
+  }  // namespace hp
+
+  extern __thread int64 helpID;
+  extern __thread int64 delayCount;
 
   class OpRecord: public hp::PoolElem {
-  public:
-    static const size_t MAX_FAILURE = 1;
+   public:
+    static constexpr size_t MAX_FAILURE = 1;
     OpRecord() {}
     virtual ~OpRecord() {}
 
@@ -551,9 +348,8 @@ namespace thread {
     }
   };
 
-    __thread int64 helpID, delayCount;
   class ProgressAssurance {
-  public:
+   public:
     std::atomic<OpRecord *> *opTable;
     int nThreads;
     explicit ProgressAssurance(int _nThreads) {
@@ -595,35 +391,17 @@ namespace thread {
     }
   };  // End Progress Assurance Class
 
-  ProgressAssurance *progressAssurance;
+  extern ProgressAssurance *progressAssurance;
 
-  static void Initilize_Threading_Manager(int maxUniqueThreads) {
-    nThreads = maxUniqueThreads;
-    progressAssurance =  new ProgressAssurance(nThreads);
-    threadCount.store(0);
+  void Initilize_Threading_Manager(int maxUniqueThreads);
 
-    hp::Initilize_Hazard_Pointers();
-  }
-  static void Destory_Threading_Manager() {
-    delete progressAssurance;
-    hp::Destroy_Hazard_Pointers();
-    rc::PoolElem::emptyGlobalPools();
-    hp::PoolElem::emptyGlobalPool();
-  }
-  static void attachThread() {
-    threadID = threadCount.fetch_add(1);
-    helpID = 0;
-    rDepth = 0;
-    delayCount = 0;
-    rReturn = false;
-  }
-  static void dettachThread() {
-    rc::PoolElem::emptyThreadPools();
-    hp::PoolElem::emptyThreadPool();
-  }
+  void Destory_Threading_Manager();
 
+  void attachThread();
 
-}  // End Thread namespace
-}  // End UCF namespace
+  void dettachThread();
+
+}  // namespace thread
+}  // namespace ucf
 
 #endif  // UCF_THREADING_HPP_

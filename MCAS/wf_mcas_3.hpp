@@ -449,7 +449,7 @@ namespace mcas_ns {
       }  // End While loop over casrows.
     }  // End cleanup function.
   };
-};  // End MCAS name space
-};  // End UCF name space
+};  // namespace mcas_ns
+};  // namespace ucf
 
 #endif  // WF_MCAS_3_HPP_
