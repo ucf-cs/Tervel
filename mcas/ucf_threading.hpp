@@ -11,24 +11,22 @@
 
 #include <atomic>
 #include <memory>
-#include <cstdint>
 
-#include <stdlib.h>
 #include <assert.h>
+#include <stdint.h>
+#include <stdlib.h>
 #define DEBUG_POOL 1
-
-typedef std::uint64_t int64;
 
 namespace ucf {
 namespace thread {
   constexpr size_t helpDelay = 1;
   constexpr size_t ALIGNLEN = 64;
 
-  extern int64 nThreads;
-  extern std::atomic<int64> threadCount;
+  extern uint64_t nThreads;
+  extern std::atomic<uint64_t> threadCount;
 
-  extern __thread int64 rDepth;
-  extern __thread int64 threadID;
+  extern __thread uint64_t rDepth;
+  extern __thread uint64_t threadID;
   extern __thread bool rReturn;
 
   namespace rc {
@@ -42,10 +40,10 @@ namespace thread {
     extern std::atomic<PoolElem *> gl_unsafe_pool;
 
 #ifdef DEBUG_POOL
-    extern __thread int64 tl_safe_pool_count;
-    extern __thread int64 tl_unsafe_pool_count;
-    extern std::atomic<int64> gl_safe_pool_count;
-    extern std::atomic<int64> gl_unsafe_pool_count;
+    extern __thread uint64_t tl_safe_pool_count;
+    extern __thread uint64_t tl_unsafe_pool_count;
+    extern std::atomic<uint64_t> gl_safe_pool_count;
+    extern std::atomic<uint64_t> gl_unsafe_pool_count;
 #endif
 
     class Descriptor {
@@ -74,19 +72,19 @@ namespace thread {
 
       template<class T>
       static T mark(Descriptor *descr) {
-        int64 temp = reinterpret_cast<int64>(descr);
+        uint64_t temp = reinterpret_cast<uint64_t>(descr);
         return reinterpret_cast<T>(temp | 0x1L);
       }
 
       template<class T>
       static Descriptor * unmark(T descr) {
-        int64 temp = reinterpret_cast<int64>(descr);
+        uint64_t temp = reinterpret_cast<uint64_t>(descr);
         return reinterpret_cast<Descriptor *> (temp & ~0x1L);
       }
 
       template<class T>
       static bool isDescr(T descr) {
-        int64 temp = reinterpret_cast<int64>(descr);
+        uint64_t temp = reinterpret_cast<uint64_t>(descr);
         return (0x1L == (temp & 0x1L));
       }
 
@@ -99,12 +97,12 @@ namespace thread {
     class PoolElem {
      public:
       PoolElem *pool_next;
-      std::atomic<int64> rc_count;
+      std::atomic<uint64_t> rc_count;
 
 #ifdef DEBUG_POOL
-      int64 type = 0;
-      std::atomic<int64> allocation_count;
-      std::atomic<int64> free_count;
+      uint64_t type = 0;
+      std::atomic<uint64_t> allocation_count;
+      std::atomic<uint64_t> free_count;
 #endif
 
 
@@ -258,8 +256,8 @@ namespace thread {
     };
   }  // namespace hp
 
-  extern __thread int64 helpID;
-  extern __thread int64 delayCount;
+  extern __thread uint64_t helpID;
+  extern __thread uint64_t delayCount;
 
   class OpRecord: public hp::PoolElem {
    public:

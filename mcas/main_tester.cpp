@@ -36,8 +36,8 @@ enum TEST_TYPE_CODE {UPDATEOBJECT,
 
 
 struct Results {
-  int64 passed_count;
-  int64 failed_count;
+  uint64_t passed_count;
+  uint64_t failed_count;
 
   void add(struct Results *o) {
     passed_count+=o->passed_count;
@@ -48,7 +48,7 @@ struct Results * results;
 
 std::atomic<bool> running(true);
 std::atomic<bool> waitFlag(true);
-std::atomic<int64> *testArray;
+std::atomic<uint64_t> *testArray;
 std::atomic<bool>* isReady;
 
 const int arrayLength = 64;
@@ -62,7 +62,7 @@ int main(int argc, const char * argv[]) {
 
   waitFlag.store(true);
 
-  testArray = new std::atomic<int64>[arrayLength];
+  testArray = new std::atomic<uint64_t>[arrayLength];
   for (int i = 0; i < arrayLength; i++) {
     testArray[i].store(0x8);
   }
@@ -140,22 +140,22 @@ void run_updateObject(int Thread_ID, int start_pos) {
   int failed_count = 0;
   int passed_count = 0;
 
-  ucf::mcas::MCAS<int64 , MWORDS> *vmcas;
+  ucf::mcas::MCAS<uint64_t , MWORDS> *vmcas;
 
   isReady[Thread_ID].store(true);
   while (waitFlag.load()) {}
 
   while (running.load()) {
-    vmcas = new ucf::mcas::MCAS<int64, MWORDS>();
+    vmcas = new ucf::mcas::MCAS<uint64_t, MWORDS>();
 
     bool success;
     for (int i = 0; i < MWORDS; i++) {
       int var = start_pos + i;
 
-      std::atomic<int64> *address = (&testArray[var]);
+      std::atomic<uint64_t> *address = (&testArray[var]);
 
-      int64 old_v = ucf::mcas::read<int64>(address);
-      int64 new_v = (old_v + 0x16) & (~3);
+      uint64_t old_v = ucf::mcas::read<uint64_t>(address);
+      uint64_t new_v = (old_v + 0x16) & (~3);
       success = vmcas->addCASTriple(address, old_v, new_v);
       assert(success);
       success = false;
@@ -183,13 +183,13 @@ void run_updateMultiObject(int Thread_ID) {
   boost::mt19937 rng(Thread_ID);
   boost::uniform_int<> memory_pos_rand(0, max_start_pos-1);
 
-  ucf::mcas::MCAS<int64 , MWORDS> *vmcas;
+  ucf::mcas::MCAS<uint64_t , MWORDS> *vmcas;
 
   isReady[Thread_ID].store(true);
   while (waitFlag.load()) {}
 
   while (running.load()) {
-    vmcas = new ucf::mcas::MCAS<int64 , MWORDS>();
+    vmcas = new ucf::mcas::MCAS<uint64_t , MWORDS>();
     int start_pos = memory_pos_rand(rng);
     start_pos = start_pos*MWORDS;
 
@@ -197,10 +197,10 @@ void run_updateMultiObject(int Thread_ID) {
     for (int i = 0; i < MWORDS; i++) {
       int var = start_pos + i;
 
-      std::atomic<int64> *address = (&testArray[var]);
+      std::atomic<uint64_t> *address = (&testArray[var]);
 
-      int64 old_v = ucf::mcas::read<int64>(address);
-      int64 new_v = (old_v + 0x16) & (~3);
+      uint64_t old_v = ucf::mcas::read<uint64_t>(address);
+      uint64_t new_v = (old_v + 0x16) & (~3);
       success = vmcas->addCASTriple(address, old_v, new_v);
 
       assert(success);
@@ -228,23 +228,23 @@ void run_RandomOverlaps(int Thread_ID) {
 
   boost::mt19937 rng(Thread_ID);
   boost::uniform_int<> memory_pos_rand(0, arrayLength);
-  ucf::mcas::MCAS<int64 , MWORDS> *vmcas;
+  ucf::mcas::MCAS<uint64_t , MWORDS> *vmcas;
 
   isReady[Thread_ID].store(true);
   while (waitFlag.load()) {}
 
   while (running.load()) {
-    vmcas = new ucf::mcas::MCAS<int64 , MWORDS>();
+    vmcas = new ucf::mcas::MCAS<uint64_t , MWORDS>();
 
     bool success;
     for (int i = 0; i < MWORDS; i++) {
     //  printf("MCAS Params: %d : \n",i);
       do {
         int var = memory_pos_rand(rng);
-        std::atomic<int64> *address = (&testArray[var]);
+        std::atomic<uint64_t> *address = (&testArray[var]);
 
-        int64 old_v = ucf::mcas::read<int64>(address);
-        int64 new_v = (old_v + 0x16) & (~3);
+        uint64_t old_v = ucf::mcas::read<uint64_t>(address);
+        uint64_t new_v = (old_v + 0x16) & (~3);
         success = vmcas->addCASTriple(address, old_v, new_v);
       }while(!success);
       success = false;

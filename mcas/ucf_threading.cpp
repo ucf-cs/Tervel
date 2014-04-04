@@ -3,11 +3,11 @@
 namespace ucf {
 namespace thread {
 
-int64 nThreads;
-std::atomic<int64> threadCount;
+uint64_t nThreads;
+std::atomic<uint64_t> threadCount;
 
-__thread int64 rDepth;
-__thread int64 threadID;
+__thread uint64_t rDepth;
+__thread uint64_t threadID;
 __thread bool rReturn;
 
 namespace rc {
@@ -18,10 +18,10 @@ std::atomic<PoolElem *> gl_safe_pool;
 std::atomic<PoolElem *> gl_unsafe_pool;
 
 #ifdef DEBUG_POOL
-__thread int64 tl_safe_pool_count = 0;
-__thread int64 tl_unsafe_pool_count = 0;
-std::atomic<int64> gl_safe_pool_count;
-std::atomic<int64> gl_unsafe_pool_count;
+__thread uint64_t tl_safe_pool_count = 0;
+__thread uint64_t tl_unsafe_pool_count = 0;
+std::atomic<uint64_t> gl_safe_pool_count;
+std::atomic<uint64_t> gl_unsafe_pool_count;
 #endif
 
 void Descriptor::unsafeFree() {
@@ -340,9 +340,8 @@ void PoolElem::tryToFreeUnSafePool(bool force) {
 
 }  // namespace hp
 
-__thread int64 helpID;
-__thread int64 delayCount;
-
+__thread uint64_t helpID;
+__thread uint64_t delayCount;
 
 void ProgressAssurance::tryToHelp() {
   if (delayCount++ > helpDelay) {
@@ -365,7 +364,6 @@ void ProgressAssurance::tryToHelp() {
     helpID = (helpID + 1) % nThreads;
   }
 }
-
 
 ProgressAssurance *progressAssurance;
 
