@@ -6,6 +6,9 @@
 //  Copyright (c) 2012 Steven FELDMAN. All rights reserved.
 //
 
+#ifndef UCF_THREADING_HPP_
+#define UCF_THREADING_HPP_
+
 #include <atomic>
 #include <cstdint>
 
@@ -622,3 +625,5 @@ namespace thread {
 
 }  // End Thread namespace
 }  // End UCF namespace
+
+#endif  // UCF_THREADING_HPP_

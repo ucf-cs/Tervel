@@ -3,6 +3,8 @@
 //  Copyright (c) 2013 Steven FELDMAN. All rights reserved.
 //
 
+#ifndef WF_MCAS_3_HPP_
+#define WF_MCAS_3_HPP_
 
 #include "ucf_threading.hpp"
 #include <algorithm>
@@ -450,3 +452,4 @@ namespace mcas_ns {
 };  // End MCAS name space
 };  // End UCF name space
 
+#endif  // WF_MCAS_3_HPP_
