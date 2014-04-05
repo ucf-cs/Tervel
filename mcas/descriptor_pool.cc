@@ -5,14 +5,8 @@ namespace ucf {
 namespace thread {
 namespace rc {
 
-void PoolElem::cleanup_descriptor() {
-#ifdef POOL_DEBUG
-  assert(header_.descriptor_in_use_.load());
-  header_.descriptor_in_use_.store(false);
-#endif
-  this->descriptor()->~Descriptor();
-}
-
+// DescriptorPool Implementations
+// ==============================
 void DescriptorPool::add_to_safe(Descriptor *descr) {
   PoolElem *p = getPoolElemRef(descr);
 
@@ -24,6 +18,10 @@ void DescriptorPool::add_to_safe(Descriptor *descr) {
 
   p->next_ = safe_pool_;
   safe_pool_ = p;
+}
+
+PoolElem * DescriptorPool::get_elem_from_descriptor(Descriptor *descr) {
+  return reinterpret_cast<PoolElem *>(descr) - 1;
 }
 
 PoolElem * DescriptorPool::get_from_pool(bool allocate_new) {
@@ -59,6 +57,18 @@ PoolElem * DescriptorPool::get_from_pool(bool allocate_new) {
 
   return ret;
 }
+
+
+// PoolElem Implementations
+// ========================
+void PoolElem::cleanup_descriptor() {
+#ifdef POOL_DEBUG
+  assert(header_.descriptor_in_use_.load());
+  header_.descriptor_in_use_.store(false);
+#endif
+  this->descriptor()->~Descriptor();
+}
+
 
 }  // namespace rc
 }  // namespace thread

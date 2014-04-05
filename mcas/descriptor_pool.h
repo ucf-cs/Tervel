@@ -118,6 +118,16 @@ class DescriptorPool {
 
  private:
   /**
+   * If the given descriptor was allocated through a DescriptorPool, then it has
+   * an associated PoolElem header. This methods returns that PoolElem.
+   *
+   * Use with caution as Descriptors not allocated from a pool will not have an
+   * associated header, and, thus, the returned value will be to some random
+   * place in memory.
+   */
+  static PoolElem * get_elem_from_descriptor(Descriptor *descr);
+
+  /**
    * Gets a free element from this pool. If there are no free elements to
    * retrieve from the pool, a new one is allocated if allocate_new is true, and
    * nullptr is returned if it is false.
