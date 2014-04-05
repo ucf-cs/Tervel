@@ -3,8 +3,8 @@
 //  Copyright (c) 2013 Steven FELDMAN. All rights reserved.
 //
 
-#ifndef WF_MCAS_3_HPP_
-#define WF_MCAS_3_HPP_
+#ifndef MCAS_WF_MCAS_3_H_
+#define MCAS_WF_MCAS_3_H_
 
 #include "ucf_threading.h"
 #include <algorithm>
@@ -452,4 +452,4 @@ namespace mcas {
 };  // namespace mcas
 };  // namespace ucf
 
-#endif  // WF_MCAS_3_HPP_
+#endif  // MCAS_WF_MCAS_3_H_

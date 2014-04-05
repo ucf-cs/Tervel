@@ -6,8 +6,8 @@
 //  Copyright (c) 2012 Steven FELDMAN. All rights reserved.
 //
 
-#ifndef UCF_THREADING_HPP_
-#define UCF_THREADING_HPP_
+#ifndef MCAS_UCF_THREADING_H_
+#define MCAS_UCF_THREADING_H_
 
 #include <atomic>
 #include <memory>
@@ -302,4 +302,4 @@ namespace thread {
 }  // namespace thread
 }  // namespace ucf
 
-#endif  // UCF_THREADING_HPP_
+#endif  // MCAS_UCF_THREADING_H_
