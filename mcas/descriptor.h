@@ -10,11 +10,9 @@
 namespace ucf {
 namespace thread {
 
-class DescriptorPool;
-
 class Descriptor {
  public:
-  Descriptor(DescriptorPool *pool) : pool_(pool) {}
+  Descriptor() {}
   virtual ~Descriptor() {}
 
   virtual void unsafeFree();
@@ -55,9 +53,6 @@ class Descriptor {
 
   template<class T>
   static T remove(T t, std::atomic<T> *address);
-
- private:
-  DescriptorPool *pool_;
 };
 
 
