@@ -312,7 +312,7 @@ namespace mcas {
           if (crows[i] > crows[i-1]) {
             swap(crows[i], crows[i-1]);
           } else if (crows[i] == crows[i-1]) {
-            for (i = i; i < row_count-1; i++) {
+            for (; i < row_count-1; i++) {
               swap(crows[i], crows[i+1]);
             }
             row_count--;
