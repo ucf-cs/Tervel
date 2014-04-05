@@ -15,29 +15,25 @@ class Descriptor {
   Descriptor() {}
   virtual ~Descriptor() {}
 
-  virtual void unsafeFree();
-  virtual void safeFree();
+  virtual void unsafeFree() = 0;
+  virtual void safeFree() = 0;
 
   // TODO(carlos) For all methods under this comment, we need some method
   // comment explaining the semantics of the call and what the arguments are.
   // Would do it myself, but steven's the only one who knows what any of this
   // does.
 
-  virtual void * complete(void *, std::atomic<void *> *address) {
-    assert(false);
-    return nullptr;
-  };
+  virtual void * complete(void *, std::atomic<void *> *address) = 0;
 
-  virtual void help_complete() { assert(false); }
+  virtual void help_complete() = 0;
 
-  virtual void * get_logical_value(void *t, std::atomic<void *> *address) {
-    assert(false);
-    return nullptr;
-  };
+  virtual void * get_logical_value(void *t, std::atomic<void *> *address) = 0;
 
-  bool advance_watch(std::atomic<void *> *address, void *p) { return true; }
-  void advance_unwatch() {}
-  bool advance_is_watched() { return false; }
+  virtual bool advance_watch(std::atomic<void *> *, void *) {
+    return true;
+  }
+  virtual void advance_unwatch() {}
+  virtual bool advance_is_watched() { return false; }
 
   static uintptr_t mark(Descriptor *descr) {
     return reinterpret_cast<uintptr_t>(descr) | 0x1L;
@@ -54,6 +50,15 @@ class Descriptor {
   template<class T>
   static T remove(T t, std::atomic<T> *address);
 };
+
+
+// TEMPLATE IMPLEMENTATIONS
+// ========================
+template<class T>
+T Descriptor::remove(T, std::atomic<T> *) {
+  // TODO(carlos) migrate code from ucf_threading. trouble w/ use of globals
+  // (which I would preffer to eliminate)
+}
 
 
 }  // namespace thread
