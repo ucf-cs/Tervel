@@ -21,16 +21,16 @@ class Descriptor;
 
 namespace rc {
 
-// TODO(carlos) user should never be aware of existance of the PoolElem object.
-// What's the best way to hide its definition? Could be a private class of
-// DescriptorPool, but need to see how meshes with hazard pointers.
-class PoolElem {
+// TODO(carlos) user should never be aware of existance of the PoolElement
+// object.  What's the best way to hide its definition? Could be a private class
+// of DescriptorPool, but need to see how meshes with hazard pointers.
+class PoolElement {
  public:
   static constexpr int BASE_TYPE = 69;
   static constexpr int DEBUG_EXPECTED_STAMP = 0xDEADBEEF;
 
   /**
-   * All the member variables of PoolElem are stored in a struct so that the
+   * All the member variables of PoolElement are stored in a struct so that the
    * left over memory for cache padding can be easily calculated.
    *
    * TODO(carlos) figure out a way to generalize this header to pool elememts
@@ -53,7 +53,7 @@ class PoolElem {
 #endif
   };
 
-  PoolElem(PoolElem *next=nullptr) { next_ = next; }
+  PoolElement(PoolElement *next=nullptr) { next_ = next; }
 
   /**
    * Returns a pointer to the associated descriptor of this element.
@@ -84,7 +84,7 @@ class PoolElem {
     this->descriptor()->~Descriptor();
   }
 
-  PoolElem *next_;
+  PoolElement *next_;
   Header header_;
 
  private:
@@ -94,7 +94,7 @@ class PoolElem {
    */
   char padding_[CACHE_LINE_SIZE - sizeof(header_) - sizeof(next_)];
 };
-static_assert(sizeof(PoolElem) == CACHE_LINE_SIZE,
+static_assert(sizeof(PoolElement) == CACHE_LINE_SIZE,
     "Pool elements should be cache-aligned. Padding calculation is probably"
     " wrong.");
 
@@ -103,7 +103,7 @@ static_assert(sizeof(PoolElem) == CACHE_LINE_SIZE,
 // ===============
 
 template<typename DescrType, typename... Args>
-void PoolElem::init_descriptor(Args&&... args) {
+void PoolElement::init_descriptor(Args&&... args) {
   static_assert(sizeof(DescrType) <= sizeof(padding_),
       "Descriptor is too large to use in a pool element");
 #ifdef DEBUG_POOL

@@ -114,20 +114,20 @@ class DescriptorPool {
  private:
   /**
    * If the given descriptor was allocated through a DescriptorPool, then it has
-   * an associated PoolElem header. This methods returns that PoolElem.
+   * an associated PoolElement header. This methods returns that PoolElement.
    *
    * Use with caution as Descriptors not allocated from a pool will not have an
    * associated header, and, thus, the returned value will be to some random
    * place in memory.
    */
-  static PoolElem * get_elem_from_descriptor(Descriptor *descr);
+  static PoolElement * get_elem_from_descriptor(Descriptor *descr);
 
   /**
    * Gets a free element from this pool. If there are no free elements to
    * retrieve from the pool, a new one is allocated if allocate_new is true, and
    * nullptr is returned if it is false.
    */
-  PoolElem * get_from_pool(bool allocate_new=true);
+  PoolElement * get_from_pool(bool allocate_new=true);
 
   /**
    * Refrence to some pool that's shared between other threads. All accesses to
@@ -137,8 +137,8 @@ class DescriptorPool {
 
   // TODO(carlos) I really don't know the distinction between these. Will have
   // to ask steven to write it down.
-  PoolElem *safe_pool_ {nullptr};
-  PoolElem *unsafe_pool_ {nullptr};
+  PoolElement *safe_pool_ {nullptr};
+  PoolElement *unsafe_pool_ {nullptr};
 };
 
 
@@ -147,7 +147,7 @@ class DescriptorPool {
 
 template<typename DescrType, typename... Args>
 Descriptor * DescriptorPool::get_descriptor(Args&&... args) {
-  PoolElem *elem = this->get_from_pool();
+  PoolElement *elem = this->get_from_pool();
   elem->init_descriptor<DescrType>(std::forward<Args>(args)...);
   return elem->descriptor();
 }

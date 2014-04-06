@@ -6,7 +6,7 @@ namespace rc {
 
 
 void DescriptorPool::add_to_safe(Descriptor *descr) {
-  PoolElem *p = DescriptorPool::get_elem_from_descriptor(descr);
+  PoolElement *p = DescriptorPool::get_elem_from_descriptor(descr);
   p->next_ = safe_pool_;
   safe_pool_ = p;
 
@@ -21,10 +21,10 @@ void DescriptorPool::add_to_safe(Descriptor *descr) {
 #endif
 }
 
-PoolElem * DescriptorPool::get_elem_from_descriptor(Descriptor *descr) {
-  PoolElem *tmp = reinterpret_cast<PoolElem *>(descr) - 1;
+PoolElement * DescriptorPool::get_elem_from_descriptor(Descriptor *descr) {
+  PoolElement *tmp = reinterpret_cast<PoolElement *>(descr) - 1;
 #ifdef DEBUG_POOL
-  // If this fails, then the given descriptor is not part of a PoolElem. This
+  // If this fails, then the given descriptor is not part of a PoolElement. This
   // probably means the user passed in a descriptor that wasn't allocated
   // through a memory pool.
   assert(tmp->header_.debug_pool_stamp_ == DEBUG_EXPECTED_STAMP);
@@ -32,12 +32,12 @@ PoolElem * DescriptorPool::get_elem_from_descriptor(Descriptor *descr) {
   return tmp;
 }
 
-PoolElem * DescriptorPool::get_from_pool(bool allocate_new) {
+PoolElement * DescriptorPool::get_from_pool(bool allocate_new) {
   // move any objects from the unsafe list to the safe list so that it's more
   // likely the safe list has something to take from.
   this->try_free_unsafe();
 
-  PoolElem *ret {nullptr};
+  PoolElement *ret {nullptr};
 
   // safe pool has something in it. pop the next item from the head of the list.
   if (!NO_REUSE_MEM && safe_pool_ != nullptr) {
@@ -60,7 +60,7 @@ PoolElem * DescriptorPool::get_from_pool(bool allocate_new) {
   // that the caller may leak memory. Alternative is that this pool object owns
   // the memory, but there may not be any performant way to do that.
   if (ret == nullptr && allocate_new) {
-    ret = new PoolElem();
+    ret = new PoolElement();
   }
 
   return ret;
