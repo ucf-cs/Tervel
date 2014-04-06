@@ -4,8 +4,7 @@ namespace ucf {
 namespace thread {
 namespace rc {
 
-// DescriptorPool Implementations
-// ==============================
+
 void DescriptorPool::add_to_safe(Descriptor *descr) {
   PoolElem *p = DescriptorPool::get_elem_from_descriptor(descr);
   p->next_ = safe_pool_;
