@@ -25,6 +25,7 @@ namespace rc {
 class PoolElem {
  public:
   static constexpr int BASE_TYPE = 69;
+  static constexpr int DEBUG_EXPECTED_STAMP = 0xDEADBEEF;
 
   /**
    * All the member variables of PoolElem are stored in a struct so that the
@@ -46,7 +47,7 @@ class PoolElem {
 
     // This stamp is checked when doing memory pool shenanigans to make sure
     // that a given descriptor actually belongs to a memory pool.
-    const int kDebugPoolStamp = 0xDEADBEEF;
+    int debug_pool_stamp_ {DEBUG_EXPECTED_STAMP};
 #endif
   };
 

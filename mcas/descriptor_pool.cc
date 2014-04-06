@@ -7,20 +7,30 @@ namespace rc {
 // DescriptorPool Implementations
 // ==============================
 void DescriptorPool::add_to_safe(Descriptor *descr) {
-  PoolElem *p = getPoolElemRef(descr);
+  PoolElem *p = DescriptorPool::get_elem_from_descriptor(descr);
+  p->next_ = safe_pool_;
+  safe_pool_ = p;
+
+  // TODO(carlos) is it safe to call the descriptor's destructor here? Can we be
+  // sure that no other thread will try to acces a data member of the
+  // descriptor?
 
 #ifdef DEBUG_POOL
   p->header_.free_count_.fetch_add(1);
   assert(p->header_.free_count_.load() == p->header_.allocation_count_.load());
   safe_pool_count_++;
 #endif
-
-  p->next_ = safe_pool_;
-  safe_pool_ = p;
 }
 
 PoolElem * DescriptorPool::get_elem_from_descriptor(Descriptor *descr) {
-  return reinterpret_cast<PoolElem *>(descr) - 1;
+  PoolElem *tmp = reinterpret_cast<PoolElem *>(descr) - 1;
+#ifdef DEBUG_POOL
+  // If this fails, then the given descriptor is not part of a PoolElem. This
+  // probably means the user passed in a descriptor that wasn't allocated
+  // through a memory pool.
+  assert(tmp->header_.debug_pool_stamp_ == DEBUG_EXPECTED_STAMP);
+#endif
+  return tmp;
 }
 
 PoolElem * DescriptorPool::get_from_pool(bool allocate_new) {
