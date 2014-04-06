@@ -1,4 +1,3 @@
-#include "descriptor.h"
 #include "descriptor_pool.h"
 
 namespace ucf {
@@ -56,17 +55,6 @@ PoolElem * DescriptorPool::get_from_pool(bool allocate_new) {
   }
 
   return ret;
-}
-
-
-// PoolElem Implementations
-// ========================
-void PoolElem::cleanup_descriptor() {
-#ifdef POOL_DEBUG
-  assert(header_.descriptor_in_use_.load());
-  header_.descriptor_in_use_.store(false);
-#endif
-  this->descriptor()->~Descriptor();
 }
 
 
