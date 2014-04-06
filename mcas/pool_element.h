@@ -8,6 +8,8 @@
 #include <stdint.h>
 #include <stddef.h>
 
+#include "descriptor.h"
+
 namespace ucf {
 namespace thread {
 
@@ -74,7 +76,13 @@ class PoolElem {
    * element is no longer needed, and it is safe to destroy it. Simply calls the
    * destructor on the internal descriptor.
    */
-  void cleanup_descriptor();
+  void cleanup_descriptor() {
+#ifdef POOL_DEBUG
+    assert(header_.descriptor_in_use_.load());
+    header_.descriptor_in_use_.store(false);
+#endif
+    this->descriptor()->~Descriptor();
+  }
 
   PoolElem *next_;
   Header header_;
@@ -91,8 +99,8 @@ static_assert(sizeof(PoolElem) == CACHE_LINE_SIZE,
     " wrong.");
 
 
-// TEMPLATE IMPLEMENTATIONS
-// ========================
+// IMPLEMENTATIONS
+// ===============
 
 template<typename DescrType, typename... Args>
 void PoolElem::init_descriptor(Args&&... args) {
