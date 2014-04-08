@@ -13,6 +13,7 @@ void DescriptorPool::add_to_safe(Descriptor *descr) {
   // TODO(carlos) is it safe to call the descriptor's destructor here? Can we be
   // sure that no other thread will try to acces a data member of the
   // descriptor?
+  // p->cleanup_descriptor();
 
 #ifdef DEBUG_POOL
   p->header_.free_count_.fetch_add(1);
