@@ -1,7 +1,7 @@
 #ifndef MCAS_DESCRIPTOR_POOL_H_
 #define MCAS_DESCRIPTOR_POOL_H_
 
-#define DEBUG_POOL
+#define DEBUG_POOL true
 
 #include <atomic>
 #include <utility>

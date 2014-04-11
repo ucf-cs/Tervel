@@ -76,13 +76,7 @@ class PoolElement {
    * element is no longer needed, and it is safe to destroy it. Simply calls the
    * destructor on the internal descriptor.
    */
-  void cleanup_descriptor() {
-#ifdef POOL_DEBUG
-    assert(header_.descriptor_in_use_.load());
-    header_.descriptor_in_use_.store(false);
-#endif
-    this->descriptor()->~Descriptor();
-  }
+  void cleanup_descriptor();
 
   PoolElement *next_;
   Header header_;
@@ -111,6 +105,14 @@ void PoolElement::init_descriptor(Args&&... args) {
   header_.descriptor_in_use_.store(true);
 #endif
   new(padding_) DescrType(std::forward<Args>(args)...);
+}
+
+inline void PoolElement::cleanup_descriptor() {
+#ifdef POOL_DEBUG
+  assert(header_.descriptor_in_use_.load());
+  header_.descriptor_in_use_.store(false);
+#endif
+  this->descriptor()->~Descriptor();
 }
 
 
