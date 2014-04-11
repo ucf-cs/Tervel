@@ -10,6 +10,8 @@
 namespace ucf {
 namespace thread {
 
+namespace rc { class DescriptorPool; }
+
 class Descriptor {
  public:
   Descriptor() {}
@@ -49,16 +51,28 @@ class Descriptor {
 
   template<class T>
   static T remove(T t, std::atomic<T> *address);
+
+ protected:
+  /**
+   * This method is called by a DescriptorPool when a descriptor is deleted but
+   * before the destructor is called. This way, associated descriptors can be
+   * recursively freed.
+   *
+   * @param pool The memory pool which this is being freed into.
+   */
+  virtual void advance_return_to_pool(rc::DescriptorPool * pool);
 };
 
 
-// TEMPLATE IMPLEMENTATIONS
-// ========================
+// IMPLEMENTATIONS
+// ===============
 template<class T>
 T Descriptor::remove(T, std::atomic<T> *) {
   // TODO(carlos) migrate code from ucf_threading. trouble w/ use of globals
   // (which I would preffer to eliminate)
 }
+
+inline void Descriptor::advance_return_to_pool(rc::DescriptorPool *) {}
 
 
 }  // namespace thread
