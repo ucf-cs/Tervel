@@ -10,10 +10,10 @@ void DescriptorPool::add_to_safe(Descriptor *descr) {
   p->next_ = safe_pool_;
   safe_pool_ = p;
 
-  // TODO(carlos) is it safe to call the descriptor's destructor here? Can we be
-  // sure that no other thread will try to acces a data member of the
-  // descriptor?
-  // p->cleanup_descriptor();
+  // TODO(carlos): make sure that this is the only place stuff is added to the
+  // safe list from.
+  p->descriptor()->advance_return_to_pool(this);
+  p->cleanup_descriptor();
 
 #ifdef DEBUG_POOL
   p->header_.free_count_.fetch_add(1);
@@ -56,10 +56,6 @@ PoolElement * DescriptorPool::get_from_pool(bool allocate_new) {
   }
 
   // allocate a new element if needed
-  // TODO(carlos) the way ownership semantics work here, the caller of this
-  // function owns any returned pool elements. This leaves open the possibility
-  // that the caller may leak memory. Alternative is that this pool object owns
-  // the memory, but there may not be any performant way to do that.
   if (ret == nullptr && allocate_new) {
     ret = new PoolElement();
   }

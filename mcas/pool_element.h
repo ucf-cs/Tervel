@@ -22,7 +22,7 @@ class Descriptor;
 namespace rc {
 
 // TODO(carlos) user should never be aware of existance of the PoolElement
-// object.  What's the best way to hide its definition? Could be a private class
+// object. What's the best way to hide its definition? Could be a private class
 // of DescriptorPool, but need to see how meshes with hazard pointers.
 class PoolElement {
  public:

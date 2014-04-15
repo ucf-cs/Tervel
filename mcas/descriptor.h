@@ -17,6 +17,7 @@ class Descriptor {
   Descriptor() {}
   virtual ~Descriptor() {}
 
+  // TODO(carlos): these belong in the descriptor pool class
   virtual void unsafeFree() = 0;
   virtual void safeFree() = 0;
 
@@ -31,11 +32,21 @@ class Descriptor {
 
   virtual void * get_logical_value(void *t, std::atomic<void *> *address) = 0;
 
-  virtual bool advance_watch(std::atomic<void *> *, void *) {
-    return true;
-  }
+  virtual bool advance_watch(std::atomic<void *> *, void *) { return true; }
+
   virtual void advance_unwatch() {}
+
   virtual bool advance_is_watched() { return false; }
+
+  /**
+   * This method is called by a DescriptorPool when a descriptor is deleted but
+   * before the destructor is called. This way, associated descriptors can be
+   * recursively freed.
+   * TODO(carlos): do crazy stuff with friends of rc::DescriptorPool
+   *
+   * @param pool The memory pool which this is being freed into.
+   */
+  virtual void advance_return_to_pool(rc::DescriptorPool * pool);
 
   static uintptr_t mark(Descriptor *descr) {
     return reinterpret_cast<uintptr_t>(descr) | 0x1L;
@@ -52,15 +63,6 @@ class Descriptor {
   template<class T>
   static T remove(T t, std::atomic<T> *address);
 
- protected:
-  /**
-   * This method is called by a DescriptorPool when a descriptor is deleted but
-   * before the destructor is called. This way, associated descriptors can be
-   * recursively freed.
-   *
-   * @param pool The memory pool which this is being freed into.
-   */
-  virtual void advance_return_to_pool(rc::DescriptorPool * pool);
 };
 
 
