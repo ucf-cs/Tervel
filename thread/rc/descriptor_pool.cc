@@ -7,7 +7,7 @@ namespace rc {
 
 void DescriptorPool::free_descriptor(Descriptor *descr, bool dont_check) {
   if (!dont_check && is_watched(descr)) {
-    add_to_unsafe(descr);
+    this->add_to_unsafe(descr);
   } else {
     this->add_to_safe(descr);
   }
@@ -65,8 +65,6 @@ void DescriptorPool::add_to_safe(Descriptor *descr) {
   p->next(safe_pool_);
   safe_pool_ = p;
 
-  // TODO(carlos): make sure that this is the only place stuff is added to the
-  // safe list from.
   p->descriptor()->advance_return_to_pool(this);
   p->cleanup_descriptor();
 
