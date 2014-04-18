@@ -53,27 +53,26 @@ class DescriptorPool {
   ~DescriptorPool() { this->send_to_parent(); }
 
   /**
-   * Constructs a Descriptor of the given type and returns a pool element
-   * containing that descriptor. Arguments are forwarded to the constructor of
-   * the given descriptor type.
+   * Constructs and returns a descriptor. Arguments are forwarded to the
+   * constructor of the given descriptor type. User should call free_descriptor
+   * on the returned pointer when they are done with it to avoid memory leaks.
    */
   template<typename DescrType, typename... Args>
   Descriptor * get_descriptor(Args&&... args);
 
   /**
-   * TODO(carlos): write docs
+   * Once a user is done with a descriptor, they should free it with this
+   * method.
+   *
+   * @param descr The descriptor to free.
    */
-  void return_descriptor(Descriptor *descr);
+  void free_descriptor(Descriptor *descr);
 
   /**
-   * TODO(carlos): write docs
+   * Assures that the pool has at least num_descriptor elements to spare so that
+   * calls to the main allocator can be avoided.
    */
   void reserve(int num_descriptors);
-
-#ifdef DEBUG_POOL
-  uint64_t safe_pool_count_ {0};
-  uint64_t unsafe_pool_count_ {0};
-#endif
 
  private:
   /**
@@ -97,6 +96,11 @@ class DescriptorPool {
   // ------------------------
   // FOR DEALING WITH PARENTS
   // ------------------------
+
+  // TODO(carlos) parent-child relation is being abandoned in favor of a
+  // manager-worker relation which makes the shallow depth of it more obvious,
+  // and allows for clean seperation of code which needs to be thread safe from
+  // code which doesn't
 
   /**
    * Sends all elements managed by this pool to the parent pool. Same as:
@@ -126,12 +130,8 @@ class DescriptorPool {
    * ownership of descriptor. It's expected that the given descriptor was taken
    * from this pool to begin with.
    *
-   * TODO(carlos) What are the guarantees on when the descriptor's destructor is
-   * called? Does adding to the safe pool mean it's safe to call the destructor,
-   * but in the unsafe pool it may not be?
-   *
-   * TODO(carlos) How does the caller distinguish when to use this function vs.
-   * when to use the unsafe variant?
+   * Adding a descriptor to the safe pool calls its 'advance_return_to_pool'
+   * method and its destructor.
    */
   void add_to_safe(Descriptor* descr);
 
@@ -161,15 +161,33 @@ class DescriptorPool {
    */
   DescriptorPool *parent_;
 
-  // TODO(carlos) I really don't know the distinction between these. Will have
-  // to ask steven to write it down.
+  /**
+   * A linked list of pool elements.  One can be assured that no thread will try
+   * to access the descriptor of any element in this pool. They can't be freed
+   * as some threads may still have access to the element itself and may try to
+   * increment the refrence count.
+   */
   PoolElement *safe_pool_ {nullptr};
+
+  /**
+   * A linked list of pool elements. Elements get released to this pool when
+   * they're no longer needed, but some threads may still try to access the
+   * descriptor in the element. After some time has passed, items generally move
+   * from this pool to the safe_pool_
+   */
   PoolElement *unsafe_pool_ {nullptr};
+
+#ifdef DEBUG_POOL
+  // TODO(carlos) what, exactly, do these keep track of?
+  uint64_t safe_pool_count_ {0};
+  uint64_t unsafe_pool_count_ {0};
+#endif
+
 };
 
 
-// TEMPLATE IMPLEMENTATIONS
-// ========================
+// IMPLEMENTATIONS
+// ===============
 
 template<typename DescrType, typename... Args>
 Descriptor * DescriptorPool::get_descriptor(Args&&... args) {
