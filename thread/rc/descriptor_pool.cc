@@ -82,7 +82,44 @@ void DescriptorPool::free_safe() {}
 
 
 void DescriptorPool::try_free_unsafe(bool dont_check) {
-  UNUSED(dont_check);
+  while (unsafe_pool_) {
+    PoolElement *temp = unsafe_pool_->next();
+    Descriptor *temp_descr = unsafe_pool_->descriptor();
+
+    bool watched = is_watched(temp_descr);
+    if (!dont_check && watched) {
+      break;
+    } else {
+#ifdef DEBUG_POOL
+      unsafe_pool_count_--;
+#endif
+      // temp_descr->unsafeFree();  // TODO(carlos) migrte unsafeFree
+      unsafe_pool_ = temp;
+    }
+  }  // End While Unsafe pool
+
+  if (unsafe_pool_ != nullptr) {
+    PoolElement *prev = unsafe_pool_;
+    PoolElement *temp = unsafe_pool_->next();
+
+    while (temp) {
+      Descriptor *temp_descr = temp->descriptor();
+      PoolElement *temp3 = temp->next();  // TODO(carlos) terrible name
+
+      bool watched = is_watched(temp_descr);
+      if (!dont_check && watched) {
+        prev = temp;
+        temp = temp3;
+      } else {
+        temp_descr->unsafeFree();
+        prev->next(temp3);
+        temp = temp3;
+#ifdef DEBUG_POOL
+        unsafe_pool_count_--;
+#endif
+      }
+    }
+  }
 }
 
 
