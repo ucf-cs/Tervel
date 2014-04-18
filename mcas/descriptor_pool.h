@@ -79,6 +79,10 @@ class DescriptorPool {
 
 
  private:
+  // -------------------------
+  // FOR DEALING WITH ELEMENTS
+  // -------------------------
+
   /**
    * If the given descriptor was allocated through a DescriptorPool, then it has
    * an associated PoolElement header. This methods returns that PoolElement.
@@ -100,9 +104,9 @@ class DescriptorPool {
   PoolElement * get_from_pool(bool allocate_new=true);
 
 
-  // ------------------------
-  // FOR DEALING WITH PARENTS
-  // ------------------------
+  // -------------------------
+  // FOR DEALING WITH MANAGERS
+  // -------------------------
 
   /**
    * Sends all elements managed by this pool to the parent pool. Same as:

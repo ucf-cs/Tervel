@@ -9,13 +9,10 @@
 #include <stddef.h>
 
 #include "descriptor.h"
+#include "system.h"
 
 namespace ucf {
 namespace thread {
-
-// TODO(carlos) find a better place to put this, this constant should be
-// configurable based on target system.
-constexpr size_t CACHE_LINE_SIZE = 64;  // bytes
 
 class Descriptor;
 
