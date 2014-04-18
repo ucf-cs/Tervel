@@ -1,5 +1,5 @@
-#ifndef MCAS_SYSTEM_H_
-#define MCAS_SYSTEM_H_
+#ifndef UCF_THREAD_SYSTEM_H_
+#define UCF_THREAD_SYSTEM_H_
 /**
  * System-dependent constants.
  */
@@ -14,4 +14,4 @@ constexpr size_t CACHE_LINE_SIZE = 64;  // bytes
 }  // namespace thread
 }  // namespace ucf
 
-#endif  // MCAS_SYSTEM_H_
+#endif  // UCF_THREAD_SYSTEM_H_

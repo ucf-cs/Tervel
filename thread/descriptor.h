@@ -1,5 +1,5 @@
-#ifndef MCAS_DESCRIPTOR_H_
-#define MCAS_DESCRIPTOR_H_
+#ifndef UCF_THREAD_DESCRIPTOR_H_
+#define UCF_THREAD_DESCRIPTOR_H_
 
 #include <atomic>
 
@@ -53,7 +53,7 @@ class Descriptor {
   }
 
   static Descriptor * unmark(uintptr_t descr) {
-    return reinterpret_cast<Descriptor *> (descr & ~0x1L);
+    return reinterpret_cast<Descriptor *>(descr & ~0x1L);
   }
 
   static bool is_descriptor(uintptr_t descr) {
@@ -81,4 +81,4 @@ inline void Descriptor::advance_return_to_pool(rc::DescriptorPool *) {}
 }  // namespace ucf
 
 
-#endif  // MCAS_DESCRIPTOR_H_
+#endif  // UCF_THREAD_DESCRIPTOR_H_

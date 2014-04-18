@@ -1,5 +1,5 @@
-#ifndef MCAS_DESCRIPTOR_POOL_H_
-#define MCAS_DESCRIPTOR_POOL_H_
+#ifndef UCF_THREAD_RC_DESCRIPTOR_POOL_H_
+#define UCF_THREAD_RC_DESCRIPTOR_POOL_H_
 
 #define DEBUG_POOL true
 
@@ -9,7 +9,7 @@
 #include <assert.h>
 #include <stdint.h>
 
-#include "pool_element.h"
+#include "thread/rc/pool_element.h"
 
 namespace ucf {
 namespace thread {
@@ -195,6 +195,16 @@ class DescriptorPool {
 
 };
 
+/**
+ * TODO(carlos) what does this do? What do the arguments mean?
+ */
+bool watch(Descriptor *descr, std::atomic<void *> *a, void *value);
+
+/**
+ * TODO(carlos) what does this do?
+ */
+void unwatch(Descriptor *descr);
+
 
 // IMPLEMENTATIONS
 // ===============
@@ -210,5 +220,5 @@ Descriptor * DescriptorPool::get_descriptor(Args&&... args) {
 }  // namespace thread
 }  // namespace ucf
 
-#endif  // MCAS_DESCRIPTOR_POOL_H_
+#endif  // UCF_THREAD_RC_DESCRIPTOR_POOL_H_
 

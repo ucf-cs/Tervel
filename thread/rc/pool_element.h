@@ -1,5 +1,5 @@
-#ifndef MCAS_POOL_ELEMENT_H_
-#define MCAS_POOL_ELEMENT_H_
+#ifndef UCF_THREAD_RC_POOL_ELEMENT_H_
+#define UCF_THREAD_RC_POOL_ELEMENT_H_
 
 #include <atomic>
 #include <utility>
@@ -8,8 +8,8 @@
 #include <stdint.h>
 #include <stddef.h>
 
-#include "descriptor.h"
-#include "system.h"
+#include "thread/descriptor.h"
+#include "thread/system.h"
 
 namespace ucf {
 namespace thread {
@@ -34,6 +34,7 @@ class PoolElement {
    * for hazard pointer'd pools.
    */
   struct Header {
+    PoolElement *next_;
     std::atomic<uint64_t> ref_count_ {0};
 
 #ifdef DEBUG_POOL
@@ -50,7 +51,7 @@ class PoolElement {
 #endif
   };
 
-  PoolElement(PoolElement *next=nullptr) { next_ = next; }
+  PoolElement(PoolElement *next=nullptr) { header_.next_ = next; }
 
   /**
    * Returns a pointer to the associated descriptor of this element.
@@ -75,7 +76,6 @@ class PoolElement {
    */
   void cleanup_descriptor();
 
-  PoolElement *next_;
   Header header_;
 
  private:
@@ -83,11 +83,30 @@ class PoolElement {
    * This padding includes enough room for both the descriptor associated with
    * this pool element and the cache line padding after it.
    */
-  char padding_[CACHE_LINE_SIZE - sizeof(header_) - sizeof(next_)];
+  char padding_[CACHE_LINE_SIZE - sizeof(header_)];
 };
 static_assert(sizeof(PoolElement) == CACHE_LINE_SIZE,
     "Pool elements should be cache-aligned. Padding calculation is probably"
     " wrong.");
+
+/**
+ * If the given descriptor was allocated through a DescriptorPool, then it has
+ * an associated PoolElement header. This methods returns that PoolElement.
+ *
+ * Use with caution as Descriptors not allocated from a pool will not have an
+ * associated header, and, thus, the returned value will be to some random
+ * place in memory.
+ */
+PoolElement * get_elem_from_descriptor(Descriptor *descr) {
+  PoolElement::Header *tmp = reinterpret_cast<PoolElement::Header *>(descr) - 1;
+#ifdef DEBUG_POOL
+  // If this fails, then the given descriptor is not part of a PoolElement. This
+  // probably means the user passed in a descriptor that wasn't allocated
+  // through a memory pool.
+  assert(tmp->debug_pool_stamp_ == DEBUG_EXPECTED_STAMP);
+#endif
+  return reinterpret_cast<PoolElement *>(tmp);
+}
 
 
 // IMPLEMENTATIONS
@@ -117,4 +136,4 @@ inline void PoolElement::cleanup_descriptor() {
 }  // namespace thread
 }  // namespace ucf
 
-#endif  // MCAS_POOL_ELEMENT_H_
+#endif  // UCF_THREAD_RC_POOL_ELEMENT_H_

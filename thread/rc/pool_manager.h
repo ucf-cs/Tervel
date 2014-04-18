@@ -1,5 +1,5 @@
-#ifndef MCAS_POOL_MANAGER_H_
-#define MCAS_POOL_MANAGER_H_
+#ifndef UCF_THREAD_RC_POOL_MANAGER_H_
+#define UCF_THREAD_RC_POOL_MANAGER_H_
 
 #include <atomic>
 #include <memory>
@@ -46,4 +46,4 @@ class PoolManager {
 }  // namespace thread
 }  // namespace ucf
 
-#endif  // MCAS_POOL_MANAGER_H_
+#endif  // UCF_THREAD_RC_POOL_MANAGER_H_
