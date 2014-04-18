@@ -14,6 +14,7 @@ void DescriptorPool::free_descriptor(Descriptor *descr, bool dont_check) {
 }
 
 
+// TODO(carlos) implement
 void DescriptorPool::reserve(int) {}
 
 
@@ -54,9 +55,11 @@ void DescriptorPool::send_to_manager() {
 }
 
 
+// TODO(carlos) implement
 void DescriptorPool::send_safe_to_manager() {}
 
 
+// TODO(carlos) implement
 void DescriptorPool::send_unsafe_to_manager() {}
 
 
@@ -78,7 +81,13 @@ void DescriptorPool::add_to_safe(Descriptor *descr) {
 
 
 void DescriptorPool::add_to_unsafe(Descriptor* descr) {
-  UNUSED(descr);
+  PoolElement *p = get_elem_from_descriptor(descr);
+  p->next(unsafe_pool_);
+  unsafe_pool_ = p;
+
+#ifdef DEBUG_POOL
+    unsafe_pool_count_++;
+#endif
 }
 
 
