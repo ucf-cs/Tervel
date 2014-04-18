@@ -216,7 +216,7 @@ PoolElem * PoolElem::getFromPool() {
   }
 }
 
-void * PoolElem::getDescriptor(size_t s) {
+void * PoolElem::getDescriptor(size_t) {
   assert(s <= ALIGNLEN);
   PoolElem * temp = getFromPool();
   if (temp == nullptr) {
