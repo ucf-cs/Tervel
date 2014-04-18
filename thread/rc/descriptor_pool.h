@@ -184,6 +184,21 @@ class DescriptorPool {
 
 };
 
+/**
+ * TODO(carlos) what does this do? What do the arguments mean?
+ */
+bool watch(Descriptor *descr, std::atomic<void *> *a, void *value);
+
+/**
+ * TODO(carlos) what does this do?
+ */
+void unwatch(Descriptor *descr);
+
+/**
+ * TODO(carlos) what does this do?
+ */
+bool is_watched(Descriptor *descr);
+
 
 // IMPLEMENTATIONS
 // ===============
