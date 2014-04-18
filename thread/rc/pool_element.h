@@ -58,7 +58,10 @@ class PoolElement {
    * pointer may or may not refrence a constructed object.
    */
   Descriptor * descriptor();
-  Header &header() { return *reinterpret_cast<Header*>(padding_); }
+  Header & header() { return *reinterpret_cast<Header*>(padding_); }
+
+  PoolElement * next() { return header().next_; }
+  void next(PoolElement *next) { header().next_ = next; }
 
   /**
    * Constructs a descriptor of the given type within this pool element. Caller

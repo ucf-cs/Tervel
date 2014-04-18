@@ -21,8 +21,8 @@ PoolElement * DescriptorPool::get_from_pool(bool allocate_new) {
   // safe pool has something in it. pop the next item from the head of the list.
   if (!NO_REUSE_MEM && safe_pool_ != nullptr) {
     ret = safe_pool_;
-    safe_pool_ = safe_pool_->header().next_;
-    ret->header().next_ = nullptr;
+    safe_pool_ = safe_pool_->next();
+    ret->next(nullptr);
 
 #ifdef DEBUG_POOL
     // update counters to denote that an item was taken from the pool
@@ -56,7 +56,7 @@ void DescriptorPool::send_unsafe_to_manager() {}
 
 void DescriptorPool::add_to_safe(Descriptor *descr) {
   PoolElement *p = get_elem_from_descriptor(descr);
-  p->header().next_ = safe_pool_;
+  p->next(safe_pool_);
   safe_pool_ = p;
 
   // TODO(carlos): make sure that this is the only place stuff is added to the
