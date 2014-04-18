@@ -21,6 +21,8 @@ class DescriptorPool;
 
 class PoolManager {
  public:
+  friend class DescriptorPool;
+
   PoolManager(int number_pools)
       : number_pools_(number_pools)
       , pools_(new ManagedPool[number_pools_]) {}
@@ -39,7 +41,7 @@ class PoolManager {
 
     // TODO(carlos) what other things belong in here?
 
-    char padding_[CACHE_LINE_SIZE - sizeof(pool)];
+    char padding[CACHE_LINE_SIZE - sizeof(pool)];
   };
   static_assert(sizeof(ManagedPool) == CACHE_LINE_SIZE,
       "Managed pools have to cache aligned to prevent false sharing.");

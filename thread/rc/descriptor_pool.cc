@@ -33,9 +33,9 @@ PoolElement * DescriptorPool::get_from_pool(bool allocate_new) {
 
 #ifdef DEBUG_POOL
     // update counters to denote that an item was taken from the pool
-    assert(ret->header().free_count_.load() ==
-        ret->header().allocation_count_.load());
-    ret->header().allocation_count_.fetch_add(1);
+    assert(ret->header().free_count.load() ==
+        ret->header().allocation_count.load());
+    ret->header().allocation_count.fetch_add(1);
     safe_pool_count_ -= 1;
 #endif
   }
@@ -72,9 +72,9 @@ void DescriptorPool::add_to_safe(Descriptor *descr) {
   p->cleanup_descriptor();
 
 #ifdef DEBUG_POOL
-  p->header().free_count_.fetch_add(1);
-  assert(p->header().free_count_.load() ==
-      p->header().allocation_count_.load());
+  p->header().free_count.fetch_add(1);
+  assert(p->header().free_count.load() ==
+      p->header().allocation_count.load());
   safe_pool_count_++;
 #endif
 }
@@ -177,16 +177,16 @@ void DescriptorPool::try_clear_unsafe_pool(bool dont_check) {
 // TODO(carlos) a and value ar just the WORST names for parameters.
 bool watch(Descriptor *descr, std::atomic<void *> *a, void *value) {
   PoolElement *elem = get_elem_from_descriptor(descr);
-  elem->header().ref_count_.fetch_add(1);
+  elem->header().ref_count.fetch_add(1);
   if (a->load() != value) {
-    elem->header().ref_count_.fetch_add(-1);
+    elem->header().ref_count.fetch_add(-1);
     return false;
   } else {
     bool res = descr->advance_watch(a, value);
     if (res) {
       return true;
     } else {
-      elem->header().ref_count_.fetch_add(-1);
+      elem->header().ref_count.fetch_add(-1);
       return false;
     }
   }
@@ -195,14 +195,14 @@ bool watch(Descriptor *descr, std::atomic<void *> *a, void *value) {
 
 void unwatch(Descriptor *descr) {
   PoolElement *elem = get_elem_from_descriptor(descr);
-  elem->header().ref_count_.fetch_add(-1);
+  elem->header().ref_count.fetch_add(-1);
   descr->advance_unwatch();
 }
 
 
 bool is_watched(Descriptor *descr) {
   PoolElement * elem = get_elem_from_descriptor(descr);
-  if (elem->header().ref_count_.load() == 0) {
+  if (elem->header().ref_count.load() == 0) {
     return descr->advance_is_watched();
   } else {
     return true;

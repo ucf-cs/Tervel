@@ -34,24 +34,24 @@ class PoolElement {
    * for hazard pointer'd pools.
    */
   struct Header {
-    PoolElement *next_;
-    std::atomic<uint64_t> ref_count_ {0};
+    PoolElement *next;
+    std::atomic<uint64_t> ref_count {0};
 
 #ifdef DEBUG_POOL
     int type_ {BASE_TYPE};
 
-    std::atomic<bool> descriptor_in_use_ {false};
+    std::atomic<bool> descriptor_in_use {false};
 
-    std::atomic<uint64_t> allocation_count_ {1};
-    std::atomic<uint64_t> free_count_ {0};
+    std::atomic<uint64_t> allocation_count {1};
+    std::atomic<uint64_t> free_count {0};
 
     // This stamp is checked when doing memory pool shenanigans to make sure
     // that a given descriptor actually belongs to a memory pool.
-    int debug_pool_stamp_ {DEBUG_EXPECTED_STAMP};
+    int debug_pool_stamp {DEBUG_EXPECTED_STAMP};
 #endif
   };
 
-  PoolElement(PoolElement *next=nullptr) { this->header().next_ = next; }
+  PoolElement(PoolElement *next=nullptr) { this->header().next = next; }
 
   /**
    * Returns a pointer to the associated descriptor of this element. This
@@ -60,8 +60,8 @@ class PoolElement {
   Descriptor * descriptor();
   Header & header() { return *reinterpret_cast<Header*>(padding_); }
 
-  PoolElement * next() { return header().next_; }
-  void next(PoolElement *next) { header().next_ = next; }
+  PoolElement * next() { return header().next; }
+  void next(PoolElement *next) { header().next = next; }
 
   /**
    * Constructs a descriptor of the given type within this pool element. Caller
@@ -133,7 +133,7 @@ void PoolElement::init_descriptor(Args&&... args) {
       "Descriptor is too large to use in a pool element");
 #ifdef DEBUG_POOL
   assert(!this->header().descriptor_in_use_.load());
-  this->header().descriptor_in_use_.store(true);
+  this->header().descriptor_in_use.store(true);
 #endif
   new(descriptor()) DescrType(std::forward<Args>(args)...);
 }
@@ -142,7 +142,7 @@ void PoolElement::init_descriptor(Args&&... args) {
 inline void PoolElement::cleanup_descriptor() {
 #ifdef DEBUG_POOL
   assert(this->header().descriptor_in_use_.load());
-  this->header().descriptor_in_use_.store(false);
+  this->header().descriptor_in_use.store(false);
 #endif
   this->descriptor()->~Descriptor();
 }
