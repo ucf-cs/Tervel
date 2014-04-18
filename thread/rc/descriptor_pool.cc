@@ -91,9 +91,17 @@ void DescriptorPool::add_to_unsafe(Descriptor* descr) {
 }
 
 
-void DescriptorPool::clear_safe_pool() {
-  if (safe_pool_ != nullptr) {
-    PoolElement *p1 = safe_pool_;
+namespace {
+
+/**
+ * Generic logic for clearing a pool and sending its elements to another,
+ * shared pool. Parameters are passed by pointer because this function changes
+ * their values.
+ */
+void clear_pool(PoolElement **local_pool,
+    std::atomic<PoolElement *> *manager_pool) {
+  if (local_pool != nullptr) {
+    PoolElement *p1 = *local_pool;
     PoolElement *p2 = p1->next();
     while (p2 != nullptr) {
       p1 = p2;
@@ -102,31 +110,24 @@ void DescriptorPool::clear_safe_pool() {
 
     // p1->pool_next's value is updated to the current value
     // after a failed cas. (pass by reference fun)
-    p1->next(this->manager_safe_pool().load());
-    while (!this->manager_safe_pool()
-        .compare_exchange_strong(p1->header().next, unsafe_pool_)) {}
+    p1->next(manager_pool->load());
+    while (!manager_pool->
+        compare_exchange_strong(p1->header().next, *local_pool)) {}
   }
-  safe_pool_ = nullptr;
+  *local_pool = nullptr;
+}
+
+}  // namespace
+
+
+void DescriptorPool::clear_safe_pool() {
+  clear_pool(&safe_pool_, &this->manager_safe_pool());
 }
 
 
 void DescriptorPool::clear_unsafe_pool() {
   this->try_clear_unsafe_pool(true);
-  if (unsafe_pool_ != nullptr) {
-    PoolElement *p1 = unsafe_pool_;
-    PoolElement *p2 = p1->next();
-    while (p2 != nullptr) {
-      p1 = p2;
-      p2 = p1->next();
-    }
-
-    // p1->pool_next's value is updated to the current value
-    // after a failed cas. (pass by reference fun)
-    p1->next(this->manager_unsafe_pool().load());
-    while (!this->manager_unsafe_pool()
-        .compare_exchange_strong(p1->header().next, unsafe_pool_)) {}
-  }
-  unsafe_pool_ = nullptr;
+  clear_pool(&unsafe_pool_, &this->manager_unsafe_pool());
 }
 
 
