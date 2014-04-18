@@ -43,8 +43,8 @@ class PoolManager {
     // TODO(carlos) use a pool object, or a pool pointer?
     std::unique_ptr<DescriptorPool> pool {nullptr};
 
-    std::atomic<PoolElement *> safe_pool;
-    std::atomic<PoolElement *> unsafe_pool;
+    std::atomic<PoolElement *> safe_pool {nullptr};
+    std::atomic<PoolElement *> unsafe_pool {nullptr};
 
     char padding[CACHE_LINE_SIZE - sizeof(pool) - sizeof(safe_pool) -
       sizeof(unsafe_pool)];
