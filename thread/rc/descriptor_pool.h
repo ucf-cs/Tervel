@@ -145,12 +145,12 @@ class DescriptorPool {
   /**
    * Clear all elements from the safe pool; send them to the manager.
    */
-  void free_safe();
+  void clear_safe_pool();
 
   /**
    * Try to move elements from the unsafe pool to the safe pool.
    */
-  void try_free_unsafe(bool dont_check=false);
+  void try_clear_unsafe_pool(bool dont_check=false);
 
 
   /**

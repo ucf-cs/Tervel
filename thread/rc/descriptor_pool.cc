@@ -20,7 +20,7 @@ void DescriptorPool::reserve(int) {}
 PoolElement * DescriptorPool::get_from_pool(bool allocate_new) {
   // move any objects from the unsafe list to the safe list so that it's more
   // likely the safe list has something to take from.
-  this->try_free_unsafe();
+  this->try_clear_unsafe_pool();
 
   PoolElement *ret {nullptr};
 
@@ -84,10 +84,10 @@ void DescriptorPool::add_to_unsafe(Descriptor* descr) {
 }
 
 
-void DescriptorPool::free_safe() {}
+void DescriptorPool::clear_safe_pool() {}
 
 
-void DescriptorPool::try_free_unsafe(bool dont_check) {
+void DescriptorPool::try_clear_unsafe_pool(bool dont_check) {
   while (unsafe_pool_) {
     PoolElement *temp = unsafe_pool_->next();
     Descriptor *temp_descr = unsafe_pool_->descriptor();
