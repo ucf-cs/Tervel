@@ -110,12 +110,14 @@ class DescriptorPool {
   void send_to_manager();
 
   /**
-   * Sends the elements from the safe pool to the parent pool's safe pool.
+   * Sends the elements from the safe pool to the corresponding safe pool in
+   * this pool's manager.
    */
   void send_safe_to_manager();
 
   /**
-   * Sends the elements from the unsafe pool to the parent pool's unsafe pool.
+   * Sends the elements from the unsafe pool to the corresponding unsafe pool in
+   * this pool's manager.
    */
   void send_unsafe_to_manager();
 
@@ -158,20 +160,13 @@ class DescriptorPool {
   void add_to_unsafe(Descriptor* descr);
 
   /**
-   * Clear all elements from the safe pool; send them to the manager.
-   */
-  void clear_safe_pool();
-
-  /**
-   * TODO(carlos) why is there both a clear and a try_clear?
-   */
-  void clear_unsafe_pool();
-
-  /**
    * Try to move elements from the unsafe pool to the safe pool.
    */
   void try_clear_unsafe_pool(bool dont_check=false);
 
+
+  // MEMBERS
+  // -------
 
   /**
    * Index into this pool's manager's pool array corresponding to this pool.

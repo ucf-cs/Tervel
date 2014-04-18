@@ -55,42 +55,6 @@ void DescriptorPool::send_to_manager() {
 }
 
 
-// TODO(carlos) implement
-void DescriptorPool::send_safe_to_manager() {}
-
-
-// TODO(carlos) implement
-void DescriptorPool::send_unsafe_to_manager() {}
-
-
-void DescriptorPool::add_to_safe(Descriptor *descr) {
-  PoolElement *p = get_elem_from_descriptor(descr);
-  p->next(safe_pool_);
-  safe_pool_ = p;
-
-  p->descriptor()->advance_return_to_pool(this);
-  p->cleanup_descriptor();
-
-#ifdef DEBUG_POOL
-  p->header().free_count.fetch_add(1);
-  assert(p->header().free_count.load() ==
-      p->header().allocation_count.load());
-  safe_pool_count_++;
-#endif
-}
-
-
-void DescriptorPool::add_to_unsafe(Descriptor* descr) {
-  PoolElement *p = get_elem_from_descriptor(descr);
-  p->next(unsafe_pool_);
-  unsafe_pool_ = p;
-
-#ifdef DEBUG_POOL
-    unsafe_pool_count_++;
-#endif
-}
-
-
 namespace {
 
 /**
@@ -120,14 +84,42 @@ void clear_pool(PoolElement **local_pool,
 }  // namespace
 
 
-void DescriptorPool::clear_safe_pool() {
+void DescriptorPool::send_safe_to_manager() {
   clear_pool(&safe_pool_, &this->manager_safe_pool());
 }
 
 
-void DescriptorPool::clear_unsafe_pool() {
+void DescriptorPool::send_unsafe_to_manager() {
   this->try_clear_unsafe_pool(true);
   clear_pool(&unsafe_pool_, &this->manager_unsafe_pool());
+}
+
+
+void DescriptorPool::add_to_safe(Descriptor *descr) {
+  PoolElement *p = get_elem_from_descriptor(descr);
+  p->next(safe_pool_);
+  safe_pool_ = p;
+
+  p->descriptor()->advance_return_to_pool(this);
+  p->cleanup_descriptor();
+
+#ifdef DEBUG_POOL
+  p->header().free_count.fetch_add(1);
+  assert(p->header().free_count.load() ==
+      p->header().allocation_count.load());
+  safe_pool_count_++;
+#endif
+}
+
+
+void DescriptorPool::add_to_unsafe(Descriptor* descr) {
+  PoolElement *p = get_elem_from_descriptor(descr);
+  p->next(unsafe_pool_);
+  unsafe_pool_ = p;
+
+#ifdef DEBUG_POOL
+    unsafe_pool_count_++;
+#endif
 }
 
 
