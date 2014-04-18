@@ -121,19 +121,6 @@ bool is_watched(Descriptor *descr);
 
 // IMPLEMENTATIONS
 // ===============
-
-template<typename DescrType, typename... Args>
-void PoolElement::init_descriptor(Args&&... args) {
-  static_assert(sizeof(DescrType) <= sizeof(padding_),
-      "Descriptor is too large to use in a pool element");
-#ifdef DEBUG_POOL
-  assert(!this->header().descriptor_in_use_.load());
-  this->header().descriptor_in_use_.store(true);
-#endif
-  new(descriptor()) DescrType(std::forward<Args>(args)...);
-}
-
-
 inline Descriptor * PoolElement::descriptor() {
   // Extra padding is added to ensure that the descriptor pointer returned is
   // cache-aligned.
@@ -152,8 +139,20 @@ inline Descriptor * PoolElement::descriptor() {
 }
 
 
+template<typename DescrType, typename... Args>
+void PoolElement::init_descriptor(Args&&... args) {
+  static_assert(sizeof(DescrType) <= sizeof(padding_),
+      "Descriptor is too large to use in a pool element");
+#ifdef DEBUG_POOL
+  assert(!this->header().descriptor_in_use_.load());
+  this->header().descriptor_in_use_.store(true);
+#endif
+  new(descriptor()) DescrType(std::forward<Args>(args)...);
+}
+
+
 inline void PoolElement::cleanup_descriptor() {
-#ifdef POOL_DEBUG
+#ifdef DEBUG_POOL
   assert(this->header().descriptor_in_use_.load());
   this->header().descriptor_in_use_.store(false);
 #endif
