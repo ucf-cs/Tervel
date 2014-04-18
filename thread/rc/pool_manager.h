@@ -18,6 +18,7 @@ class Descriptor;
 namespace rc {
 
 class DescriptorPool;
+class PoolElement;
 
 class PoolManager {
  public:
@@ -39,12 +40,14 @@ class PoolManager {
     // TODO(carlos) use a pool object, or a pool pointer?
     DescriptorPool *pool {nullptr};
 
-    // TODO(carlos) what other things belong in here?
+    std::atomic<PoolElement *> safe_pool;
+    std::atomic<PoolElement *> unsafe_pool;
 
-    char padding[CACHE_LINE_SIZE - sizeof(pool)];
+    char padding[CACHE_LINE_SIZE - sizeof(pool) - sizeof(safe_pool) -
+      sizeof(unsafe_pool)];
   };
   static_assert(sizeof(ManagedPool) == CACHE_LINE_SIZE,
-      "Managed pools have to cache aligned to prevent false sharing.");
+      "Managed pools have to be cache aligned to prevent false sharing.");
 
   int number_pools_;
   std::unique_ptr<ManagedPool[]> pools_;

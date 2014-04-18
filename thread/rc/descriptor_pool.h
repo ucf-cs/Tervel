@@ -8,6 +8,7 @@
 #include <stdint.h>
 
 #include "thread/rc/pool_element.h"
+#include "thread/rc/pool_manager.h"
 #include "thread/system.h"
 
 namespace ucf {
@@ -117,6 +118,20 @@ class DescriptorPool {
    * Sends the elements from the unsafe pool to the parent pool's unsafe pool.
    */
   void send_unsafe_to_manager();
+
+  /**
+   * Gets the safe pool of the manager associated with this pool.
+   */
+  std::atomic<PoolElement *> & manager_safe_pool() {
+    return manager_->pools_[pool_id_].safe_pool;
+  }
+
+  /**
+   * Gets the unsafe pool of the manager associated with this pool.
+   */
+  std::atomic<PoolElement *> & manager_unsafe_pool() {
+    return manager_->pools_[pool_id_].unsafe_pool;
+  }
 
 
   // --------------------------------

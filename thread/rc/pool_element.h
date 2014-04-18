@@ -53,6 +53,8 @@ class PoolElement {
 
   PoolElement(PoolElement *next=nullptr) { this->header().next = next; }
 
+  // TODO(carlos) add const versions of these accessors
+
   /**
    * Returns a pointer to the associated descriptor of this element. This
    * pointer may or may not refrence a constructed object.
@@ -60,7 +62,14 @@ class PoolElement {
   Descriptor * descriptor();
   Header & header() { return *reinterpret_cast<Header*>(padding_); }
 
+  /**
+   * Helper method for getting the next pointer.
+   */
   PoolElement * next() { return header().next; }
+
+  /**
+   * Helper method for setting the next pointer.
+   */
   void next(PoolElement *next) { header().next = next; }
 
   /**
