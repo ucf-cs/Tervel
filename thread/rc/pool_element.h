@@ -78,7 +78,6 @@ class PoolElement {
 
   Header header_;
 
- private:
   /**
    * This padding includes enough room for both the descriptor associated with
    * this pool element and the cache line padding after it.
@@ -97,16 +96,22 @@ static_assert(sizeof(PoolElement) == CACHE_LINE_SIZE,
  * associated header, and, thus, the returned value will be to some random
  * place in memory.
  */
-PoolElement * get_elem_from_descriptor(Descriptor *descr) {
-  PoolElement::Header *tmp = reinterpret_cast<PoolElement::Header *>(descr) - 1;
-#ifdef DEBUG_POOL
-  // If this fails, then the given descriptor is not part of a PoolElement. This
-  // probably means the user passed in a descriptor that wasn't allocated
-  // through a memory pool.
-  assert(tmp->debug_pool_stamp_ == DEBUG_EXPECTED_STAMP);
-#endif
-  return reinterpret_cast<PoolElement *>(tmp);
-}
+PoolElement * get_elem_from_descriptor(Descriptor *descr);
+
+/**
+ * TODO(carlos) what does this do? What do the arguments mean?
+ */
+bool watch(Descriptor *descr, std::atomic<void *> *a, void *value);
+
+/**
+ * TODO(carlos) what does this do?
+ */
+void unwatch(Descriptor *descr);
+
+/**
+ * TODO(carlos) what does this do?
+ */
+bool is_watched(Descriptor *descr);
 
 
 // IMPLEMENTATIONS
@@ -123,12 +128,25 @@ void PoolElement::init_descriptor(Args&&... args) {
   new(padding_) DescrType(std::forward<Args>(args)...);
 }
 
+
 inline void PoolElement::cleanup_descriptor() {
 #ifdef POOL_DEBUG
   assert(header_.descriptor_in_use_.load());
   header_.descriptor_in_use_.store(false);
 #endif
   this->descriptor()->~Descriptor();
+}
+
+
+inline PoolElement * get_elem_from_descriptor(Descriptor *descr) {
+  PoolElement::Header *tmp = reinterpret_cast<PoolElement::Header *>(descr) - 1;
+#ifdef DEBUG_POOL
+  // If this fails, then the given descriptor is not part of a PoolElement. This
+  // probably means the user passed in a descriptor that wasn't allocated
+  // through a memory pool.
+  assert(tmp->debug_pool_stamp_ == DEBUG_EXPECTED_STAMP);
+#endif
+  return reinterpret_cast<PoolElement *>(tmp);
 }
 
 

@@ -84,16 +84,6 @@ class DescriptorPool {
   // -------------------------
 
   /**
-   * If the given descriptor was allocated through a DescriptorPool, then it has
-   * an associated PoolElement header. This methods returns that PoolElement.
-   *
-   * Use with caution as Descriptors not allocated from a pool will not have an
-   * associated header, and, thus, the returned value will be to some random
-   * place in memory.
-   */
-  static PoolElement * get_elem_from_descriptor(Descriptor *descr);
-
-  /**
    * Gets a free element. The local pool is checked for one first, then the
    * manager if there are no local ones, and if all else fails, a new one is
    * allocated using new.
@@ -151,7 +141,7 @@ class DescriptorPool {
   void add_to_unsafe(Descriptor* descr);
 
   /**
-   * Clear all elements from the safe pool.
+   * Clear all elements from the safe pool; send them to the manager.
    */
   void free_safe();
 
@@ -194,16 +184,6 @@ class DescriptorPool {
 #endif
 
 };
-
-/**
- * TODO(carlos) what does this do? What do the arguments mean?
- */
-bool watch(Descriptor *descr, std::atomic<void *> *a, void *value);
-
-/**
- * TODO(carlos) what does this do?
- */
-void unwatch(Descriptor *descr);
 
 
 // IMPLEMENTATIONS
