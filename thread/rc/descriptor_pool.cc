@@ -1,26 +1,15 @@
 #include "thread/rc/descriptor_pool.h"
+#include "thread/util.h"
 
 namespace ucf {
 namespace thread {
 namespace rc {
 
-void DescriptorPool::add_to_safe(Descriptor *descr) {
-  PoolElement *p = get_elem_from_descriptor(descr);
-  p->header().next_ = safe_pool_;
-  safe_pool_ = p;
+void DescriptorPool::free_descriptor(Descriptor *) {}
 
-  // TODO(carlos): make sure that this is the only place stuff is added to the
-  // safe list from.
-  p->descriptor()->advance_return_to_pool(this);
-  p->cleanup_descriptor();
 
-#ifdef DEBUG_POOL
-  p->header().free_count_.fetch_add(1);
-  assert(p->header().free_count_.load() ==
-      p->header().allocation_count_.load());
-  safe_pool_count_++;
-#endif
-}
+void DescriptorPool::reserve(int) {}
+
 
 PoolElement * DescriptorPool::get_from_pool(bool allocate_new) {
   // move any objects from the unsafe list to the safe list so that it's more
@@ -50,6 +39,62 @@ PoolElement * DescriptorPool::get_from_pool(bool allocate_new) {
   }
 
   return ret;
+}
+
+
+void DescriptorPool::send_to_manager() {
+  this->send_safe_to_manager();
+  this->send_unsafe_to_manager();
+}
+
+
+void DescriptorPool::send_safe_to_manager() {}
+
+
+void DescriptorPool::send_unsafe_to_manager() {}
+
+
+void DescriptorPool::add_to_safe(Descriptor *descr) {
+  PoolElement *p = get_elem_from_descriptor(descr);
+  p->header().next_ = safe_pool_;
+  safe_pool_ = p;
+
+  // TODO(carlos): make sure that this is the only place stuff is added to the
+  // safe list from.
+  p->descriptor()->advance_return_to_pool(this);
+  p->cleanup_descriptor();
+
+#ifdef DEBUG_POOL
+  p->header().free_count_.fetch_add(1);
+  assert(p->header().free_count_.load() ==
+      p->header().allocation_count_.load());
+  safe_pool_count_++;
+#endif
+}
+
+
+void DescriptorPool::add_to_unsafe(Descriptor* descr) {
+  UNUSED(descr);
+}
+
+
+void DescriptorPool::free_safe() {}
+
+
+void DescriptorPool::try_free_unsafe(bool dont_check) {
+  UNUSED(dont_check);
+}
+
+
+bool watch(Descriptor *descr, std::atomic<void *> *a, void *value) {
+}
+
+
+void unwatch(Descriptor *descr) {
+}
+
+
+bool is_watched(Descriptor *descr) {
 }
 
 
