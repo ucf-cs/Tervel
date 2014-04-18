@@ -17,10 +17,6 @@ class Descriptor {
   Descriptor() {}
   virtual ~Descriptor() {}
 
-  // TODO(carlos): these belong in the descriptor pool class
-  virtual void unsafeFree() = 0;
-  virtual void safeFree() = 0;
-
   // TODO(carlos) For all methods under this comment, we need some method
   // comment explaining the semantics of the call and what the arguments are.
   // Would do it myself, but steven's the only one who knows what any of this

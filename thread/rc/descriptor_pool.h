@@ -67,8 +67,11 @@ class DescriptorPool {
    * method.
    *
    * @param descr The descriptor to free.
+   * @param dont_check Don't check if the descriptor is being watched before
+   *   freeing it. Use this flag if you know that no other thread has had access
+   *   to this descriptor.
    */
-  void free_descriptor(Descriptor *descr);
+  void free_descriptor(Descriptor *descr, bool dont_check=false);
 
   /**
    * Assures that the pool has at least num_descriptor elements to spare so that

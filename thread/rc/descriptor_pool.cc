@@ -5,7 +5,13 @@ namespace ucf {
 namespace thread {
 namespace rc {
 
-void DescriptorPool::free_descriptor(Descriptor *) {}
+void DescriptorPool::free_descriptor(Descriptor *descr, bool dont_check) {
+  if (!dont_check && is_watched(descr)) {
+    add_to_unsafe(descr);
+  } else {
+    this->add_to_safe(descr);
+  }
+}
 
 
 void DescriptorPool::reserve(int) {}
@@ -93,7 +99,7 @@ void DescriptorPool::try_free_unsafe(bool dont_check) {
 #ifdef DEBUG_POOL
       unsafe_pool_count_--;
 #endif
-      // temp_descr->unsafeFree();  // TODO(carlos) migrte unsafeFree
+      this->free_descriptor(temp_descr, true);
       unsafe_pool_ = temp;
     }
   }  // End While Unsafe pool
@@ -111,7 +117,7 @@ void DescriptorPool::try_free_unsafe(bool dont_check) {
         prev = temp;
         temp = temp3;
       } else {
-        temp_descr->unsafeFree();
+        this->free_descriptor(temp_descr, true);
         prev->next(temp3);
         temp = temp3;
 #ifdef DEBUG_POOL
