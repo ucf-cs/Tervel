@@ -86,15 +86,39 @@ void DescriptorPool::try_free_unsafe(bool dont_check) {
 }
 
 
+// TODO(carlos) a and value ar just the WORST names for parameters.
 bool watch(Descriptor *descr, std::atomic<void *> *a, void *value) {
+  PoolElement *elem = get_elem_from_descriptor(descr);
+  elem->header().ref_count_.fetch_add(1);
+  if (a->load() != value) {
+    elem->header().ref_count_.fetch_add(-1);
+    return false;
+  } else {
+    bool res = descr->advance_watch(a, value);
+    if (res) {
+      return true;
+    } else {
+      elem->header().ref_count_.fetch_add(-1);
+      return false;
+    }
+  }
 }
 
 
 void unwatch(Descriptor *descr) {
+  PoolElement *elem = get_elem_from_descriptor(descr);
+  elem->header().ref_count_.fetch_add(-1);
+  descr->advance_unwatch();
 }
 
 
 bool is_watched(Descriptor *descr) {
+  PoolElement * elem = get_elem_from_descriptor(descr);
+  if (elem->header().ref_count_.load() == 0) {
+    return descr->advance_is_watched();
+  } else {
+    return true;
+  }
 }
 
 
