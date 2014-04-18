@@ -14,8 +14,13 @@ void DescriptorPool::free_descriptor(Descriptor *descr, bool dont_check) {
 }
 
 
-// TODO(carlos) implement
-void DescriptorPool::reserve(int) {}
+void DescriptorPool::reserve(int num_descriptors) {
+  for (int i = 0; i < num_descriptors; ++i) {
+    PoolElement *elem = new PoolElement();
+    elem->next(safe_pool_);
+    safe_pool_ = elem;
+  }
+}
 
 
 PoolElement * DescriptorPool::get_from_pool(bool allocate_new) {

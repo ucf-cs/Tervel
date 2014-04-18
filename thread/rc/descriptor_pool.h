@@ -75,8 +75,13 @@ class DescriptorPool {
   void free_descriptor(Descriptor *descr, bool dont_check=false);
 
   /**
-   * Assures that the pool has at least num_descriptor elements to spare so that
-   * calls to the main allocator can be avoided.
+   * Allocates an extra `num_descriptors` elements to the pool.
+   *
+   * TODO(carlos): Currently, this just blindly allocates using new, but
+   * typical semantics are that this should ensure at least n elements in the
+   * list. This is more expensive as it requires a list traversal, and I don't
+   * think there's any real benefit to it. Further, should this method first try
+   * to reclaim elements from the managers before calling new?
    */
   void reserve(int num_descriptors);
 
