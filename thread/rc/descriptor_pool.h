@@ -108,9 +108,8 @@ class DescriptorPool {
 
   /**
    * Sends all elements managed by this pool to the parent pool. Same as:
-   *   send_safe_to_parent();
-   *   send_unsafe_to_parent();
-   * TODO(carlos): what should happen if parent_ is null?
+   *   send_safe_to_manager();
+   *   send_unsafe_to_manager();
    */
   void send_to_manager();
 
