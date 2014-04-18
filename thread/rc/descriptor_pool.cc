@@ -165,7 +165,8 @@ void DescriptorPool::try_clear_unsafe_pool(bool dont_check) {
 }
 
 
-// TODO(carlos) a and value ar just the WORST names for parameters.
+// TODO(carlos) `a` and `value` are just the WORST names for parameters. I have
+// no idea what they're supposed to be.
 bool watch(Descriptor *descr, std::atomic<void *> *a, void *value) {
   PoolElement *elem = get_elem_from_descriptor(descr);
   elem->header().ref_count.fetch_add(1);

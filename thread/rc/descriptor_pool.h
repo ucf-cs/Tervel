@@ -165,6 +165,7 @@ class DescriptorPool {
   void try_clear_unsafe_pool(bool dont_check=false);
 
 
+  // -------
   // MEMBERS
   // -------
 
