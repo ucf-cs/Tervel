@@ -18,6 +18,8 @@ class Descriptor;
 
 namespace rc {
 
+class PoolManager;
+
 /**
  * If true, then DescriptorPool shouldn't reuse old pool elements when being
  * asked, even if it's safe to fo so. Instead, elements should be stock-piled
@@ -46,11 +48,12 @@ constexpr bool NO_REUSE_MEM = false;
  */
 class DescriptorPool {
  public:
-  DescriptorPool(DescriptorPool* parent=nullptr, int prefill=4)
-      : parent_(parent) {
+  DescriptorPool(int pool_id, PoolManager *manager, int prefill=4)
+      : pool_id_(pool_id)
+      , manager_(manager) {
     this->reserve(prefill);
   }
-  ~DescriptorPool() { this->send_to_parent(); }
+  ~DescriptorPool() { this->send_to_manager(); }
 
   /**
    * Constructs and returns a descriptor. Arguments are forwarded to the
@@ -74,6 +77,7 @@ class DescriptorPool {
    */
   void reserve(int num_descriptors);
 
+
  private:
   /**
    * If the given descriptor was allocated through a DescriptorPool, then it has
@@ -86,9 +90,12 @@ class DescriptorPool {
   static PoolElement * get_elem_from_descriptor(Descriptor *descr);
 
   /**
-   * Gets a free element from this pool. If there are no free elements to
-   * retrieve from the pool, a new one is allocated if allocate_new is true, and
-   * nullptr is returned if it is false.
+   * Gets a free element. The local pool is checked for one first, then the
+   * manager if there are no local ones, and if all else fails, a new one is
+   * allocated using new.
+   *
+   * @param allocate_new If true and there are no free elements to retrieve from
+   *   the pool, a new one is allocated. Otherwise, nullptr is returned.
    */
   PoolElement * get_from_pool(bool allocate_new=true);
 
@@ -97,28 +104,23 @@ class DescriptorPool {
   // FOR DEALING WITH PARENTS
   // ------------------------
 
-  // TODO(carlos) parent-child relation is being abandoned in favor of a
-  // manager-worker relation which makes the shallow depth of it more obvious,
-  // and allows for clean seperation of code which needs to be thread safe from
-  // code which doesn't
-
   /**
    * Sends all elements managed by this pool to the parent pool. Same as:
    *   send_safe_to_parent();
    *   send_unsafe_to_parent();
    * TODO(carlos): what should happen if parent_ is null?
    */
-  void send_to_parent();
+  void send_to_manager();
 
   /**
    * Sends the elements from the safe pool to the parent pool's safe pool.
    */
-  void send_safe_to_parent();
+  void send_safe_to_manager();
 
   /**
    * Sends the elements from the unsafe pool to the parent pool's unsafe pool.
    */
-  void send_unsafe_to_parent();
+  void send_unsafe_to_manager();
 
 
   // --------------------------------
@@ -156,10 +158,14 @@ class DescriptorPool {
 
 
   /**
-   * Refrence to some pool that's shared between other threads. All accesses to
-   * this pool have to be done in an atomic fashion.
+   * Index into this pool's manager's pool array corresponding to this pool.
    */
-  DescriptorPool *parent_;
+  int pool_id_;
+
+  /**
+   * This pool's manager.
+   */
+  PoolManager *manager_;
 
   /**
    * A linked list of pool elements.  One can be assured that no thread will try
