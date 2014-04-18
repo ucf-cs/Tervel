@@ -51,12 +51,14 @@ class PoolElement {
 #endif
   };
 
-  PoolElement(PoolElement *next=nullptr) { header_.next_ = next; }
+  PoolElement(PoolElement *next=nullptr) { header().next_ = next; }
 
   /**
-   * Returns a pointer to the associated descriptor of this element.
+   * Returns a pointer to the associated descriptor of this element. This
+   * pointer may or may not refrence a constructed object.
    */
-  Descriptor * descriptor() { return reinterpret_cast<Descriptor*>(padding_); }
+  Descriptor * descriptor();
+  Header &header() { return *reinterpret_cast<Header*>(padding_); }
 
   /**
    * Constructs a descriptor of the given type within this pool element. Caller
@@ -76,13 +78,16 @@ class PoolElement {
    */
   void cleanup_descriptor();
 
-  Header header_;
-
+ private:
   /**
-   * This padding includes enough room for both the descriptor associated with
-   * this pool element and the cache line padding after it.
+   * This object should have 2 members: a header and a descriptor, but the
+   * memory layout of classes is system-dependent, so we explicitly construct
+   * everything in-place inside this padding.
+   *
+   * This is possibly a horrible idea, and it might be safer (but slower) to use
+   * back-pointers.
    */
-  char padding_[CACHE_LINE_SIZE - sizeof(header_)];
+  char padding_[CACHE_LINE_SIZE];
 };
 static_assert(sizeof(PoolElement) == CACHE_LINE_SIZE,
     "Pool elements should be cache-aligned. Padding calculation is probably"
@@ -125,7 +130,19 @@ void PoolElement::init_descriptor(Args&&... args) {
   assert(!header_.descriptor_in_use_.load());
   header_.descriptor_in_use_.store(true);
 #endif
-  new(padding_) DescrType(std::forward<Args>(args)...);
+  new(descriptor()) DescrType(std::forward<Args>(args)...);
+}
+
+
+inline Descriptor * PoolElement::descriptor() {
+  // Extra padding is added to ensure that the descriptor pointer returned is
+  // cache-aligned.
+  //
+  // TODO(carlos) This assumes that cache is aligned to 4 bytes. Should grab
+  // the cache alignment size of the target system and use that instead.
+  constexpr size_t header_pad = 4 - sizeof(Header) % 4;
+  return reinterpret_cast<Descriptor*>(padding_ + sizeof(Header)
+      + header_pad);
 }
 
 
