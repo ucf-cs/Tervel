@@ -42,7 +42,7 @@ class Descriptor {
    *
    * @param pool The memory pool which this is being freed into.
    */
-  virtual void advance_return_to_pool(rc::DescriptorPool * pool);
+  virtual void advance_return_to_pool(rc::DescriptorPool * /*pool*/) {}
 
   static uintptr_t mark(Descriptor *descr) {
     return reinterpret_cast<uintptr_t>(descr) | 0x1L;
@@ -58,7 +58,6 @@ class Descriptor {
 
   template<class T>
   static T remove(T t, std::atomic<T> *address);
-
 };
 
 
@@ -69,8 +68,6 @@ T Descriptor::remove(T, std::atomic<T> *) {
   // TODO(carlos) migrate code from ucf_threading. trouble w/ use of globals
   // (which I would preffer to eliminate)
 }
-
-inline void Descriptor::advance_return_to_pool(rc::DescriptorPool *) {}
 
 
 }  // namespace thread
