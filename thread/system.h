@@ -6,6 +6,8 @@
 
 #include <stddef.h>
 
+#define DEBUG_POOL true
+
 namespace ucf {
 namespace thread {
 

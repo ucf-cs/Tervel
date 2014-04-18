@@ -141,8 +141,14 @@ inline Descriptor * PoolElement::descriptor() {
   // TODO(carlos) This assumes that cache is aligned to 4 bytes. Should grab
   // the cache alignment size of the target system and use that instead.
   constexpr size_t header_pad = 4 - sizeof(Header) % 4;
-  return reinterpret_cast<Descriptor*>(padding_ + sizeof(Header)
+  Descriptor *descr = reinterpret_cast<Descriptor*>(padding_ + sizeof(Header)
       + header_pad);
+
+  // algorithms expect descriptors to be mem-aligned, so the LSB's should not be
+  // taken up.
+  assert(reinterpret_cast<uintptr_t>(descr) & 0x03 == 0);
+
+  return descr;
 }
 
 

@@ -1,8 +1,6 @@
 #ifndef UCF_THREAD_RC_DESCRIPTOR_POOL_H_
 #define UCF_THREAD_RC_DESCRIPTOR_POOL_H_
 
-#define DEBUG_POOL true
-
 #include <atomic>
 #include <utility>
 
@@ -10,6 +8,7 @@
 #include <stdint.h>
 
 #include "thread/rc/pool_element.h"
+#include "thread/system.h"
 
 namespace ucf {
 namespace thread {
