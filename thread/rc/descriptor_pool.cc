@@ -1,5 +1,4 @@
 #include "thread/rc/descriptor_pool.h"
-#include "thread/util.h"
 
 namespace ucf {
 namespace thread {
