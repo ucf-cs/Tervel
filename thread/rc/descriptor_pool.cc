@@ -104,6 +104,27 @@ void DescriptorPool::clear_safe_pool() {
 }
 
 
+void DescriptorPool::clear_unsafe_pool() {
+  this->try_clear_unsafe_pool(true);
+  if (unsafe_pool_ != nullptr) {
+    PoolElement *p1 = unsafe_pool_;
+    PoolElement *p2 = p1->next();
+    while (p2 != nullptr) {
+      p1 = p2;
+      p2 = p1->next();
+    }
+
+    // TODO(carlos) migrate global pool / manager stuff
+    // p1->next(gl_unsafe_pool.load());
+    // while (!gl_unsafe_pool
+    //     .compare_exchange_strong(p1->next(), unsafe_pool_)) {}
+    //   // p1->pool_next's value is updated to the current value
+    //   // after a failed cas. (pass by reference fun)
+  }
+  unsafe_pool_ = nullptr;
+}
+
+
 void DescriptorPool::try_clear_unsafe_pool(bool dont_check) {
   while (unsafe_pool_) {
     PoolElement *temp = unsafe_pool_->next();

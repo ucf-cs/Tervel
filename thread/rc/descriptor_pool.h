@@ -148,6 +148,11 @@ class DescriptorPool {
   void clear_safe_pool();
 
   /**
+   * TODO(carlos) why is there both a clear and a try_clear?
+   */
+  void clear_unsafe_pool();
+
+  /**
    * Try to move elements from the unsafe pool to the safe pool.
    */
   void try_clear_unsafe_pool(bool dont_check=false);
