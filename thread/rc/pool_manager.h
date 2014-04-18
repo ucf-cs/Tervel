@@ -8,6 +8,8 @@
 #include <assert.h>
 #include <stdint.h>
 
+#include "thread/system.h"
+
 namespace ucf {
 namespace thread {
 
@@ -36,7 +38,11 @@ class PoolManager {
     DescriptorPool *pool {nullptr};
 
     // TODO(carlos) what other things belong in here?
+
+    char padding_[CACHE_LINE_SIZE - sizeof(pool)];
   };
+  static_assert(sizeof(ManagedPool) == CACHE_LINE_SIZE,
+      "Managed pools have to cache aligned to prevent false sharing.");
 
   int number_pools_;
   std::unique_ptr<ManagedPool[]> pools_;
