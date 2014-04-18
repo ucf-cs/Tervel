@@ -84,7 +84,24 @@ void DescriptorPool::add_to_unsafe(Descriptor* descr) {
 }
 
 
-void DescriptorPool::clear_safe_pool() {}
+void DescriptorPool::clear_safe_pool() {
+  if (safe_pool_ != nullptr) {
+    PoolElement *p1 = safe_pool_;
+    PoolElement *p2 = p1->next();
+    while (p2 != nullptr) {
+      p1 = p2;
+      p2 = p1->next();
+    }
+
+    // TODO(carlos) add manager stuff
+    // p1->next(gl_safe_pool.load());
+    // while (
+    //     !gl_safe_pool.compare_exchange_strong(p1->pool_next, tl_unsafe_pool)) {}
+    //   // p1->pool_next's value is updated to the current value
+    //   // after a failed cas. (pass by reference fun)
+  }
+  safe_pool_ = nullptr;
+}
 
 
 void DescriptorPool::try_clear_unsafe_pool(bool dont_check) {
