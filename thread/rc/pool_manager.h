@@ -20,6 +20,14 @@ namespace rc {
 class DescriptorPool;
 class PoolElement;
 
+/**
+ * Encapsulates a shared central pool between several thread-local pools. Idea
+ * is that each thread gets a local pool to grab descriptors from, and that each
+ * of these pools is managed by a single instance of this class. The thread
+ * local pools can periodically release their unused elements into the shared
+ * pool in this manager, or can take elements from the shared pools in this
+ * manager.
+ */
 class PoolManager {
  public:
   friend class DescriptorPool;
