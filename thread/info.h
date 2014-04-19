@@ -27,6 +27,10 @@ struct SharedInfo {
 
 /**
  * Thread local information. Each thread should have an instance of this.
+ *
+ * TODO(carlos) figure out what data members are used by what code, and split
+ *   this struct into several classes if needed. I think the help_id and
+ *   delay_count are used exclusively by ProgressAssurance.
  */
 struct ThreadInfo {
   /**
