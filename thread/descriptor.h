@@ -6,6 +6,8 @@
 #include <assert.h>
 #include <stdint.h>
 
+#include "thread/info.h"
+
 
 namespace ucf {
 namespace thread {
@@ -22,7 +24,7 @@ class Descriptor {
   // Would do it myself, but steven's the only one who knows what any of this
   // does.
 
-  virtual void * complete(void *, std::atomic<void *> *address) = 0;
+  virtual void * complete(void *t, std::atomic<void *> *address) = 0;
 
   virtual void help_complete() = 0;
 
@@ -43,32 +45,22 @@ class Descriptor {
    * @param pool The memory pool which this is being freed into.
    */
   virtual void advance_return_to_pool(rc::DescriptorPool * /*pool*/) {}
-
-  static uintptr_t mark(Descriptor *descr) {
-    return reinterpret_cast<uintptr_t>(descr) | 0x1L;
-  }
-
-  static Descriptor * unmark(uintptr_t descr) {
-    return reinterpret_cast<Descriptor *>(descr & ~0x1L);
-  }
-
-  static bool is_descriptor(uintptr_t descr) {
-    return (0x1L == (descr & 0x1L));
-  }
-
-  template<class T>
-  static T remove(T t, std::atomic<T> *address);
 };
 
+// TODO(carlos) not sure where to put the below functions
 
-// IMPLEMENTATIONS
-// ===============
-template<class T>
-T Descriptor::remove(T, std::atomic<T> *) {
-  // TODO(carlos) migrate code from ucf_threading. trouble w/ use of globals
-  // (which I would preffer to eliminate)
+inline void * mark(Descriptor *descr) {
+  return reinterpret_cast<void *>(reinterpret_cast<uintptr_t>(descr) | 0x1L);
 }
 
+inline Descriptor * unmark(void *descr) {
+  return reinterpret_cast<Descriptor *>(
+      reinterpret_cast<uintptr_t>(descr) & ~0x1L);
+}
+
+inline bool is_descriptor(void *descr) {
+  return (0x1L == (reinterpret_cast<uintptr_t>(descr) & 0x1L));
+}
 
 }  // namespace thread
 }  // namespace ucf

@@ -206,6 +206,25 @@ bool is_watched(Descriptor *descr) {
 }
 
 
+void * remove(const SharedInfo &shared_info, ThreadInfo *local_info,
+    void *t, std::atomic<void *> *address) {
+  RecursiveAction recurse(shared_info, local_info);
+  void *newValue;
+  if (local_info->recursive_return) {
+    newValue = nullptr;  // result not used
+  } else {
+    Descriptor *descr = unmark(t);
+    if (watch(descr, address, t)) {
+      newValue = descr->complete(t, address);
+      unwatch(descr);
+    } else {
+      newValue = address->load();
+    }
+  }
+  return newValue;
+}
+
+
 }  // namespace rc
 }  // namespace thread
 }  // namespace ucf

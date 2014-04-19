@@ -41,6 +41,27 @@ struct ThreadInfo {
   uint64_t delay_count {0};
 };
 
+/**
+ * Helper class for RAII management of recursive helping of threads. Lifetime
+ * of this object handles the increment and decrement of the `recursive_depth`
+ * of the given ThreadInfo object and sets the `recursive_return` if needed.
+ */
+class RecursiveAction {
+ public:
+  RecursiveAction(const SharedInfo &shared_info, ThreadInfo *local_info)
+      : shared_info_(shared_info), local_info_(local_info) {
+    if (local_info_->recursive_depth > shared_info.num_threads + 1) {
+      local_info_->recursive_return = true;
+    }
+    local_info_->recursive_depth += 1;
+  }
+
+  ~RecursiveAction() { local_info_->recursive_depth -= 1; }
+
+  const SharedInfo &shared_info_;
+  ThreadInfo *local_info_;
+};
+
 }  // namespace ucf
 }  // namespace thread
 

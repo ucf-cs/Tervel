@@ -7,6 +7,8 @@
 #include <assert.h>
 #include <stdint.h>
 
+#include "thread/descriptor.h"
+#include "thread/info.h"
 #include "thread/rc/pool_element.h"
 #include "thread/rc/pool_manager.h"
 #include "thread/system.h"
@@ -223,6 +225,14 @@ void unwatch(Descriptor *descr);
 bool is_watched(Descriptor *descr);
 
 
+/**
+ * TODO(carlos) TERRIBLE param names
+ * TODO(carlos) what does this do?
+ */
+void * remove(const SharedInfo &shared_info, ThreadInfo *local_info,
+    void *t, std::atomic<void *> *address);
+
+
 // IMPLEMENTATIONS
 // ===============
 
@@ -232,6 +242,7 @@ Descriptor * DescriptorPool::get_descriptor(Args&&... args) {
   elem->init_descriptor<DescrType>(std::forward<Args>(args)...);
   return elem->descriptor();
 }
+
 
 }  // namespace rc
 }  // namespace thread
