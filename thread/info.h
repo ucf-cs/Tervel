@@ -53,7 +53,8 @@ struct ThreadInfo {
 
   //help_id and delay_count are used exclusively by the announcement table
   // function tryHelpAnother (unless function has been renamed)
-  // help_id is the thread_id of a thread to check if that thread has an announcement
+  // help_id is the thread_id of a thread to check if that thread has an 
+  // announcement
   // delay_count is a variable used to delay how often a thread checks for an
   // annoucnement
   uint64_t help_id {0};
@@ -64,6 +65,14 @@ struct ThreadInfo {
  * Helper class for RAII management of recursive helping of threads. Lifetime
  * of this object handles the increment and decrement of the `recursive_depth`
  * of the given ThreadInfo object and sets the `recursive_return` if needed.
+ * TODO(Carlos), this just feels bloated to me for a number of reasons.
+ * 1)The parameters on the construction, these are thread local/global constants
+ * Why do we need to pass them in, when we can access the source from this scope
+ * 2) Why do we need a class which increments/decrements, why not just call the
+ * the correct functions. These are used in one function, with no foreseeable
+ * use elsewhere. We save one line of code in the other function, but force the
+ * person reading it to understand this function. It also adds unto the stack
+ * unnecessary the initlization of this class and descrution.
  */
 class RecursiveAction {
  public:

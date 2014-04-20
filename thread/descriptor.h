@@ -124,47 +124,7 @@ inline bool is_descriptor(void *descr) {
   return (0x1L == (reinterpret_cast<uintptr_t>(descr) & 0x1L));
 }
 
-/**
- * This method is used to remove a descriptor object that is conflict with
- * another threads operation.
- * It first checks the recursive depth before proceding. 
- * Next it protects against the object being reused else where by acquiring
- * either HP or RC watch on the object.
- * Then once it is safe it will call the objects complete function
- * This function must gurantee that after its return the object has been removed
- * It returns the value.
- * 
- * TODO(carlos): Check to make sure integrated this correctly
- * This also an RC function, and should be moved to the correct location
- *
- * @param a marked reference to the object and the address the object was
- * dereferenced from.
- */
-template<class T>
-inline T Descriptor::remove(T t, std::atomic<T> *address) {
-  RecursiveAction recursiveAction();
-  if (rReturn) {
-    return reinterpret_cast<T>(nullptr);  // result not used
-  }
 
-  Descriptor *descr = Descriptor::unmark(t);
-
-  bool watched = rc::PoolElem::watch(descr,
-                reinterpret_cast<std::atomic<void *>*>(address),
-                reinterpret_cast<void *>(t));
-  T newValue;
-  if (watched) {
-    newValue = reinterpret_cast<T>(descr->descr_complete(
-        reinterpret_cast<void *>(t),
-        reinterpret_cast<std::atomic<void *>*>(address)));
-
-    PoolElem::unwatch(descr);
-  } else {
-    newValue = address->load();
-  }
-
-  return newValue;
-}
 
 }  // namespace thread
 }  // namespace ucf
