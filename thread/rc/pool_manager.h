@@ -32,6 +32,9 @@ class PoolManager {
  public:
   friend class DescriptorPool;
 
+  // TODO(carlos): I think number_pools should not be passed, but rather  we use
+  // the numb_threads found in the shared info to set the number of pools
+  // plus pools are accessed by thread id, which must be <= num_threads.
   PoolManager(int number_pools)
       : number_pools_(number_pools)
       , allocated_pools_(0)
@@ -40,6 +43,7 @@ class PoolManager {
   /**
    * Allocates a pool for thread-local use. Semantically, the manager owns all
    * pools. Method is not thread-safe.
+   * TODO(carlos): should be able to specify pool by thread id (tid).
    */
   DescriptorPool * get_pool();
 
@@ -49,6 +53,8 @@ class PoolManager {
  private:
   struct ManagedPool {
     // TODO(carlos) use a pool object, or a pool pointer?
+    // TODO(carlos) Below item should not be here, I think it is for HP objects, 
+    // but this is in rc name space.
     std::unique_ptr<DescriptorPool> pool {nullptr};
 
     std::atomic<PoolElement *> safe_pool {nullptr};
@@ -63,6 +69,8 @@ class PoolManager {
   /**
    * Keeps track of how many pools have been allocated.
    * TODO(carlos) should this be atomic?
+   * TODO(carlos) No, this is not needed.
+   * 
    */
   int allocated_pools_;
 

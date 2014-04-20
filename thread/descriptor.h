@@ -19,24 +19,82 @@ class Descriptor {
   Descriptor() {}
   virtual ~Descriptor() {}
 
-  // TODO(carlos) For all methods under this comment, we need some method
-  // comment explaining the semantics of the call and what the arguments are.
-  // Would do it myself, but steven's the only one who knows what any of this
-  // does.
+
+
+   /**
+   * This method is implmented by each sub class and must gurantee that upon
+   * return that the descriptor no longer exists at the address it was placed
+   * @param The bitmarked reference to this object, and the address it was 
+   * placed at.
+   */
 
   virtual void * complete(void *t, std::atomic<void *> *address) = 0;
 
+  /**
+   * This method is implmented by each descriptor object that can be placed into
+   * the pending operation table. It must contain all the information necessary
+   * to complete the associated operation
+   * @param  none
+   */
+
   virtual void help_complete() = 0;
 
-  virtual void * get_logical_value(void *t, std::atomic<void *> *address) = 0;
+//TODO(carlos): Below is private functions that should only be called by our
+// Functions
+
+  /**
+   * This method is implmented by each sub class.
+   * It returns the logical value of the past address.
+   * If the associted operation is still in progress then it will generally 
+   * return the value that was replaced by this descriptor. Otherwise it will
+   * generally return the result of the operation for the specified addres.
+   *
+   * It can only be called from the static function which protects the object
+   * from being reused during the function.
+   *
+   * @param none
+   */
+  virtual void * get_logical_value() = 0;
+
+  /**
+   * This method is optional to implment for each sub class.
+   * In the event there is a complex dependency between descriptor objects, where
+   * watching one implies performing other actions, such as watching a parent
+   * object, a developer will implement this function to encapsulate that logic
+   *
+   * This function is called by the static watch function
+   * It should not watch itself.
+   * @param The address the object resides and the value of the object at that
+   * address
+   */
 
   virtual bool advance_watch(std::atomic<void *> *, void *) { return true; }
 
+  /**
+   * This method is optional to implement for each sub class.
+   * This function must be implemented if advance_watch is implemented.
+   * It must unwatch any object watched by advance_watch.
+   * It should not unwatch itself.
+   *
+   * This function is called by the static unwatch function
+   * @param none
+   */
   virtual void advance_unwatch() {}
+
+  /**
+   * This method is optional to implement for each sub class.
+   * This function must be implemented if advance_watch is implemented.
+   * 
+   * This function returns true/false depending on the watch status
+   * @param none
+   */
 
   virtual bool advance_is_watched() { return false; }
 
   /**
+   * This method is optional to implement for each sub class.
+   *  It should free any child objects.
+   
    * This method is called by a DescriptorPool when a descriptor is deleted but
    * before the destructor is called. This way, associated descriptors can be
    * recursively freed.
@@ -45,9 +103,13 @@ class Descriptor {
    * @param pool The memory pool which this is being freed into.
    */
   virtual void advance_return_to_pool(rc::DescriptorPool * /*pool*/) {}
+
+ 
 };
 
 // TODO(carlos) not sure where to put the below functions
+// Lets move into RC, this way it is clear that it is an rc protected descriptor
+// We can add them to HP with different bits as well. ie use 2 instead of 1
 
 inline void * mark(Descriptor *descr) {
   return reinterpret_cast<void *>(reinterpret_cast<uintptr_t>(descr) | 0x1L);
@@ -60,6 +122,48 @@ inline Descriptor * unmark(void *descr) {
 
 inline bool is_descriptor(void *descr) {
   return (0x1L == (reinterpret_cast<uintptr_t>(descr) & 0x1L));
+}
+
+/**
+ * This method is used to remove a descriptor object that is conflict with
+ * another threads operation.
+ * It first checks the recursive depth before proceding. 
+ * Next it protects against the object being reused else where by acquiring
+ * either HP or RC watch on the object.
+ * Then once it is safe it will call the objects complete function
+ * This function must gurantee that after its return the object has been removed
+ * It returns the value.
+ * 
+ * TODO(carlos): Check to make sure integrated this correctly
+ * This also an RC function, and should be moved to the correct location
+ *
+ * @param a marked reference to the object and the address the object was
+ * dereferenced from.
+ */
+template<class T>
+inline T Descriptor::remove(T t, std::atomic<T> *address) {
+  RecursiveAction recursiveAction();
+  if (rReturn) {
+    return reinterpret_cast<T>(nullptr);  // result not used
+  }
+
+  Descriptor *descr = Descriptor::unmark(t);
+
+  bool watched = rc::PoolElem::watch(descr,
+                reinterpret_cast<std::atomic<void *>*>(address),
+                reinterpret_cast<void *>(t));
+  T newValue;
+  if (watched) {
+    newValue = reinterpret_cast<T>(descr->descr_complete(
+        reinterpret_cast<void *>(t),
+        reinterpret_cast<std::atomic<void *>*>(address)));
+
+    PoolElem::unwatch(descr);
+  } else {
+    newValue = address->load();
+  }
+
+  return newValue;
 }
 
 }  // namespace thread

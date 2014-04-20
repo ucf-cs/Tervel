@@ -171,14 +171,15 @@ void DescriptorPool::try_clear_unsafe_pool(bool dont_check) {
 
 // TODO(carlos) `a` and `value` are just the WORST names for parameters. I have
 // no idea what they're supposed to be.
-bool watch(Descriptor *descr, std::atomic<void *> *a, void *value) {
+// TODO(carlos) fixed
+bool watch(Descriptor *descr, std::atomic<void *> *address, void *expected) {
   PoolElement *elem = get_elem_from_descriptor(descr);
   elem->header().ref_count.fetch_add(1);
-  if (a->load() != value) {
+  if (address->load() != expected) {
     elem->header().ref_count.fetch_add(-1);
     return false;
   } else {
-    bool res = descr->advance_watch(a, value);
+    bool res = descr->advance_watch(address, expected);
     if (res) {
       return true;
     } else {
@@ -204,6 +205,8 @@ bool is_watched(Descriptor *descr) {
     return true;
   }
 }
+
+
 
 
 void * remove(const SharedInfo &shared_info, ThreadInfo *local_info,

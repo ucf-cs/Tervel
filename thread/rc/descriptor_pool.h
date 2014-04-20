@@ -84,6 +84,11 @@ class DescriptorPool {
    * list. This is more expensive as it requires a list traversal, and I don't
    * think there's any real benefit to it. Further, should this method first try
    * to reclaim elements from the managers before calling new?
+   * TODO(steven): I think we should track the number of elements with counters
+   * Then we can use them to keep the number of elements between an upper
+   * limit and a lower limit.
+   * I think we should always check the Manager before asking the allocator 
+   *
    */
   void reserve(int num_descriptors);
 
@@ -209,27 +214,55 @@ class DescriptorPool {
 
 };
 
+//TODO(carlos): These methods are static methods of the rc descriptor class
+// They 
 /**
- * TODO(carlos) what does this do? What do the arguments mean?
+ * This method is used to increment the reference count of the passed descriptor
+ * object. If after increming the reference count the object is still at the
+ * address (indicated by *a == value), it will call advance_watch.
+ * If that returns true then it will return true.
+ * Otherwise it decrements the reference count and returns false
+ *
+ * @param the descriptor which needs rc protection, 
+ * the address it was derferenced from, and the bitmarked value of it.
  */
-bool watch(Descriptor *descr, std::atomic<void *> *a, void *value);
+static bool watch(Descriptor *descr, std::atomic<void *> *a, void *value);
 
 /**
- * TODO(carlos) what does this do?
+ * This method is used to decrement the reference count of the passed descriptor
+ * object.
+ * Then it will call advance_unwatch and decrement any related objects necessary
+ *
+ * @param the descriptor which no longer needs rc protection.
  */
-void unwatch(Descriptor *descr);
+static void unwatch(Descriptor *descr);
 
 /**
- * TODO(carlos) what does this do?
+ * This method is used to determine if the passed descriptor is under rc
+ * rc protection.
+ * Internally calls advance_iswatch.
+ *
+ * @param the descriptor to be checked for rc protection.
  */
-bool is_watched(Descriptor *descr);
+static bool is_watched(Descriptor *descr);
+
 
 
 /**
- * TODO(carlos) TERRIBLE param names
- * TODO(carlos) what does this do?
+ * This method is used to remove a descriptor object that is conflict with
+ * another threads operation.
+ * It first checks the recursive depth before proceding. 
+ * Next it protects against the object being reused else where by acquiring
+ * either HP or RC watch on the object.
+ * Then once it is safe it will call the objects complete function
+ * This function must gurantee that after its return the object has been removed
+ * It returns the value.
+ * 
+ * @param a marked reference to the object and the address the object was
+ * dereferenced from.
  */
-void * remove(const SharedInfo &shared_info, ThreadInfo *local_info,
+
+static void * remove_descriptor(const SharedInfo &shared_info, ThreadInfo *local_info,
     void *t, std::atomic<void *> *address);
 
 

@@ -21,9 +21,11 @@ namespace rc {
 // TODO(carlos) user should never be aware of existance of the PoolElement
 // object. What's the best way to hide its definition? Could be a private class
 // of DescriptorPool, but need to see how meshes with hazard pointers.
+  //TODO(carlos) they are similar in the API but that is all, so they should not
+  // share Pool Elements.
 class PoolElement {
  public:
-  static constexpr int BASE_TYPE = 69;
+  static constexpr int BASE_TYPE = 42;
   static constexpr int DEBUG_EXPECTED_STAMP = 0xDEADBEEF;
 
   /**

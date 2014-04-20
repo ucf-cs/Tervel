@@ -22,6 +22,10 @@ struct SharedInfo {
   uint64_t num_threads;
 
   // TODO(carlos) what diffrientiates this from the above `num_threads`?
+  // @Carlos, num_threads is the max unique threads, while thread_count 
+  // (name could be changed), is used to assign thread ids.
+  // In the future, we may wish to change this so that thread ids can be 
+  // safely returned. For now this is not a priority. -Sven (Sven=Steven)
   std::atomic<uint64_t> thread_count {0};
 };
 
@@ -35,8 +39,23 @@ struct ThreadInfo {
   uint64_t thread_id;
 
   // TODO(carlos) what are the below members for?
+  // Recurive_return: Used to indicate a thread must return to its own 
+  // operation and re-evaualte its state. This is set to true in the event
+  // 1) The thread reasons that the dependncy between the current op it is
+  // Trying to help has changed and a result it must re-examine its op
+  // 2) Max Fail count has been reached and it needs to make an announcement
+  // For its operation
   bool recursive_return {false};
+  // recursive_depth: used to track the number of times Descriptor::remove
+  // has been called, this is incremented at the start of Descriptor::remove
+  // and decremented upon return.
   uint64_t recursive_depth {0};
+
+  //help_id and delay_count are used exclusively by the announcement table
+  // function tryHelpAnother (unless function has been renamed)
+  // help_id is the thread_id of a thread to check if that thread has an announcement
+  // delay_count is a variable used to delay how often a thread checks for an
+  // annoucnement
   uint64_t help_id {0};
   uint64_t delay_count {0};
 };
