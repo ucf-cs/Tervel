@@ -31,8 +31,11 @@ class PoolManager {
  public:
   friend class DescriptorPool;
 
+  // REVIEW(carlos) if it fits on one line, that's preferable.
+  // REVIEW(carlos) semi-colon will cause error
   PoolManager();
       : pool_(new ManagedPool) {}
+  // REVIEW(carlos) excessive vertical whitespace
 
 
 
@@ -40,6 +43,7 @@ class PoolManager {
   struct ManagedPool {
     std::atomic<HPElement *> unsafe_pool {nullptr}
 
+    // REVIEW(carlos) no such member `pool' Will cause an error.
     char padding[CACHE_LINE_SIZE - sizeof(pool) - sizeof(unsafe_pool)];
   };
   static_assert(sizeof(ManagedPool) == CACHE_LINE_SIZE,
