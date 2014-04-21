@@ -13,6 +13,7 @@ namespace ucf {
 namespace thread {
 
 namespace rc { class DescriptorPool; }
+namespace hp { class HPElementPool; }
 
 class Descriptor {
  public:

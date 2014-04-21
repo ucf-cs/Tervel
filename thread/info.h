@@ -10,7 +10,7 @@
 #include <atomic>
 
 #include <stdint.h>
-
+#include "hp/hazard_pointer.h"
 
 namespace ucf {
 namespace thread {
@@ -27,6 +27,8 @@ struct SharedInfo {
   // In the future, we may wish to change this so that thread ids can be 
   // safely returned. For now this is not a priority. -Sven (Sven=Steven)
   std::atomic<uint64_t> thread_count {0};
+
+  HazardPointer *hazard_pointer {nullptr};
 };
 
 /**
@@ -63,7 +65,11 @@ struct ThreadInfo {
   // annoucnement
   uint64_t help_id {0};
   uint64_t delay_count {0};
+
+  SharedInfo *shared_info {nullptr};
 };
+
+thread_local ThreadInfo tl_thread_info;
 
 /**
  * Helper class for RAII management of recursive helping of threads. Lifetime
@@ -80,18 +86,15 @@ struct ThreadInfo {
  */
 class RecursiveAction {
  public:
-  RecursiveAction(const SharedInfo &shared_info, ThreadInfo *local_info)
-      : shared_info_(shared_info), local_info_(local_info) {
-    if (local_info_->recursive_depth > shared_info.num_threads + 1) {
-      local_info_->recursive_return = true;
+  RecursiveAction(){
+    if (tl_thread_info.recursive_depth > tl_thread_info.shared_info->num_threads + 1) {
+      tl_thread_info.recursive_return = true;
     }
-    local_info_->recursive_depth += 1;
+    tl_thread_info.recursive_depth += 1;
   }
 
-  ~RecursiveAction() { local_info_->recursive_depth -= 1; }
+  ~RecursiveAction() { tl_thread_info.recursive_depth -= 1; }
 
-  const SharedInfo &shared_info_;
-  ThreadInfo *local_info_;
 };
 
 }  // namespace ucf

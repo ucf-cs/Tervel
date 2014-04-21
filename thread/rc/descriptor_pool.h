@@ -262,8 +262,7 @@ static bool is_watched(Descriptor *descr);
  * dereferenced from.
  */
 
-static void * remove_descriptor(const SharedInfo &shared_info, ThreadInfo *local_info,
-    void *t, std::atomic<void *> *address);
+static void * remove_descriptor(void *expected, std::atomic<void *> *address);
 
 
 // IMPLEMENTATIONS

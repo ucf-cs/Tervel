@@ -94,7 +94,7 @@ void DescriptorPool::send_safe_to_manager() {
 
 
 void DescriptorPool::send_unsafe_to_manager() {
-  this->try_clear_unsafe_pool(true);
+  this->try_clear_unsafe_pool(false);
   clear_pool(&unsafe_pool_, &this->manager_unsafe_pool());
 }
 
@@ -209,15 +209,14 @@ bool is_watched(Descriptor *descr) {
 
 
 
-void * remove(const SharedInfo &shared_info, ThreadInfo *local_info,
-    void *t, std::atomic<void *> *address) {
-  RecursiveAction recurse(shared_info, local_info);
+void * remove(void *expected, std::atomic<void *> *address) {
+  RecursiveAction recurse();
   void *newValue;
-  if (local_info->recursive_return) {
+  if (tl_thread_info.recursive_return) {
     newValue = nullptr;  // result not used
   } else {
-    Descriptor *descr = unmark(t);
-    if (watch(descr, address, t)) {
+    Descriptor *descr = unmark(expected);
+    if (watch(descr, address, expected)) {
       newValue = descr->complete(t, address);
       unwatch(descr);
     } else {
