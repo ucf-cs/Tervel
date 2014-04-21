@@ -9,9 +9,8 @@ namespace hp {
  * address the object was read from, and the expected value for the object
  */
 
-bool watch(int slot, HPElement *descr, std::atomic<void *> *address,
+bool watch(slot_id, HPElement *descr, std::atomic<void *> *address,
            void *expected) {
-  slot = tl_thread_info.hazardPointer->get_slot(slot);
   tl_thread_info.hazardPointer->watch(slot, descr);
 
   if (address->load() != expected) {
@@ -28,9 +27,8 @@ bool watch(int slot, HPElement *descr, std::atomic<void *> *address,
   }
 }
 
-bool watch(int slot, void *value, std::atomic<void *> *address,
+bool watch(slot_id slot, void *value, std::atomic<void *> *address,
            void *expected) {
-  slot = tl_thread_info.hazardPointer->get_slot(slot);
   tl_thread_info.hazardPointer->watch(slot, descr);
 
   if (address->load() != expected) {
@@ -45,14 +43,13 @@ bool watch(int slot, void *value, std::atomic<void *> *address,
  * 
  * @param the slot number to remove the watch value, the descriptor to unwatch
  */
-void unwatch(int slot, HPElement *descr) {
-  slot = tl_thread_info.hazardPointer->get_slot(slot);
+void unwatch(slot_id slot, HPElement *descr) {
   tl_thread_info.hazardPointer->clear_watch(slot);
   descr->advance_unwatch();
 }
 
 
-/* This function performs a hazard pointer is_atch on a descriptor
+/* This function checks for a hazard pointer watch on a descriptor
  * 
  * @param the descriptor to check
  */
@@ -69,7 +66,11 @@ bool is_watched(void *value) {
 }
 
 
-
+/* This function removes a descriptor that was placed at an address
+ * It protects it by using hazard pointers
+ *
+ * @param 
+ */
 
 void * remove_hp_element(void *expected, std::atomic<void *> *address) {
   RecursiveAction recurse();
