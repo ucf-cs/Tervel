@@ -3,11 +3,20 @@
 namespace ucf {
 namespace thread {
 namespace hp {
+// REVIEW(carlos) stylistic, but I like to have a blank line between the
+//   namespace block and the beginning of the code.
+// REVIEW(carlos) don't bother duplicating comments between the declaration
+//   (*.h) and the implemntation (.cc). Duplicated comments just get
+//   out-of-sync. Implementation should have any comments related to the
+//   internals of the function, declaration should have comments related to
+//   external access and call semantics of function.
 /* This function performs a hazard pointer watch on a descriptor
  * 
+ * REVIEW(carlos) see comments on HazardPointer::watch
  * @param the slot number to place the watch value, the value to place, the
  * address the object was read from, and the expected value for the object
  */
+// REVIEW(carlos) blank line between comment and function shouldn't exist
 
 bool watch(slot_id, HPElement *descr, std::atomic<void *> *address,
            void *expected) {
@@ -41,6 +50,7 @@ bool watch(slot_id slot, void *value, std::atomic<void *> *address,
 
 /* This function performs a hazard pointer unwatch on a descriptor
  * 
+ * REVIEW(carlos) see comments on HazardPointer::watch
  * @param the slot number to remove the watch value, the descriptor to unwatch
  */
 void unwatch(slot_id slot, HPElement *descr) {
@@ -51,6 +61,7 @@ void unwatch(slot_id slot, HPElement *descr) {
 
 /* This function checks for a hazard pointer watch on a descriptor
  * 
+ * REVIEW(carlos) see comments on HazardPointer::watch
  * @param the descriptor to check
  */
 bool is_watched(HPElement *descr) {
@@ -69,6 +80,7 @@ bool is_watched(void *value) {
 /* This function removes a descriptor that was placed at an address
  * It protects it by using hazard pointers
  *
+ * REVIEW(carlos) no param documentation?
  * @param 
  */
 
