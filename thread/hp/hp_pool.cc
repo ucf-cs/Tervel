@@ -46,6 +46,7 @@ void clear_pool(HPElement **local_pool,
 }
 
 }  // namespace
+// REVIEW(carlos) excess whitespace
 
 
 
@@ -65,6 +66,8 @@ void HPPool::try_clear_unsafe_pool(bool dont_check) {
   while (unsafe_pool_) {
     HPElement *temp = unsafe_pool_->next();
 
+    // REVIEW(carlos) 2 large blocks of code here, should add a short comment
+    // for each
     bool watched = is_watched(temp);
     if (!dont_check && watched) {
       break;
@@ -72,6 +75,12 @@ void HPPool::try_clear_unsafe_pool(bool dont_check) {
 #ifdef DEBUG_POOL
       unsafe_pool_count_--;
 #endif
+      // REVIEW(carlos) That's not how the destructor is called. It's just
+      //   another function:
+      //     temp->~HPElement()
+      // REVIEW(carlos) It'd be nice if the public interface to HPElement was
+      //   the same as rc::PoolElement, so that this would be
+      //   temp->cleanup_descriptor()
       ~temp();
       unsafe_pool_ = temp;
     }
@@ -89,6 +98,7 @@ void HPPool::try_clear_unsafe_pool(bool dont_check) {
         prev = temp;
         temp = temp_next;
       } else {
+        // REVIEW(carlos) see above comments
         ~temp();
         prev->next(temp_next);
         temp = temp_next;
