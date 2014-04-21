@@ -4,11 +4,11 @@
 namespace ucf {
 namespace thread {
 
-void ProgressAssurance::try_to_help(ThreadInfo *local_info) {
-  if (local_info->delay_count++ > HELP_DELAY) {
-    local_info->delay_count = 0;
+void ProgressAssurance::try_to_help) {
+  if (tl_thread_info->delay_count++ > HELP_DELAY) {
+    tl_thread_info->delay_count = 0;
 
-    OpRecord *op = op_table_[local_info->help_id].load();
+    OpRecord *op = op_table_[tl_thread_info->help_id].load();
     if (op != nullptr) {
       // std::atomic<void *> *temp = reinterpret_cast<std::atomic<void *> *>(
       //     &(op_table_[local_info->help_id]));
@@ -24,14 +24,14 @@ void ProgressAssurance::try_to_help(ThreadInfo *local_info) {
       // }
     }
 
-    local_info->help_id = (local_info->help_id + 1) % shared_info_.num_threads;
+    local_info->help_id = (tl_thread_info->help_id + 1) % tl_thread_info->shared_info_->num_threads;
   }
 }
 
-void ProgressAssurance::ask_for_help(OpRecord *op, ThreadInfo *local_info) {
-  op_table_[local_info->thread_id].store(op);
+void ProgressAssurance::ask_for_help(OpRecord *op) {
+  op_table_[tl_thread_info->thread_id].store(op);
   // op->helpComplete();  // TODO(carlos) implement OpRecord for this to work
-  op_table_[local_info->thread_id].store(nullptr);
+  op_table_[tl_thread_info->thread_id].store(nullptr);
 }
 
 }  // namespace thread

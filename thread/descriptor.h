@@ -105,7 +105,18 @@ class Descriptor {
    */
   virtual void advance_return_to_pool(rc::DescriptorPool * /*pool*/) {}
 
- 
+
+  /**
+   * This method is used to get the value stored at an address that may have a
+   *  descriptor object their.
+   * It handles memory protection of the objects.
+   * It also performs the read in a wait-free manner using the progress
+   * assurance scheme.
+   *
+   * @param the address to read
+   */   
+  template<class T>
+  static T read(std::atomic<T> * address);
 };
 
 // TODO(carlos) not sure where to put the below functions

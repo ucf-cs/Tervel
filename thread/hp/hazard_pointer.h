@@ -17,8 +17,10 @@ namespace hp {
 
   class HazardPointer {
     public:
-      enum slot_id {
+      static enum slot_id {
         op_rec,
+        id_temp, // a better name is needed, but it basically means that it is
+        // used temportalliy to gain a stronger watch
         end
       };
 

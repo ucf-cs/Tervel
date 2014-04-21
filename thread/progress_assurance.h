@@ -13,6 +13,7 @@ namespace thread {
 constexpr size_t HELP_DELAY = 1;
 
 // TODO(carlos) originally, this extends hp::PoolElem. Why?
+// It should be again because these are HP protected objects
 class OpRecord {
  public:
   static constexpr size_t MAX_FAILURES = 1;
@@ -24,16 +25,16 @@ class OpRecord {
 
 class ProgressAssurance {
  public:
-  explicit ProgressAssurance(const SharedInfo &shared_info)
-      : shared_info_(shared_info)
-      , op_table_(new std::atomic<OpRecord *>[shared_info_.num_threads]) {}
+  explicit ProgressAssurance()
+      : op_table_(
+        new std::atomic<OpRecord *>[tl_thread_info.shared_info_->num_threads]
+        ) {}
 
   // TODO(carlos) what do these do?
-  void try_to_help(ThreadInfo *local_info);
-  void ask_for_help(OpRecord *op, ThreadInfo *local_info);
+  void try_to_help();
+  void ask_for_help(OpRecord *op);
 
  private:
-  const SharedInfo &shared_info_;
   std::unique_ptr<std::atomic<OpRecord *>[]> op_table_;
 };
 
