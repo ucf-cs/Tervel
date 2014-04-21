@@ -15,10 +15,13 @@
 
 namespace ucf {
 namespace thread {
+// REVIEW(carlos): excess whitespace (should be no blank lines here)
 
 
 
 namespace hp {
+// REVIEW(carlos) blank line between namespace decl and code
+// REVIEW(carlos) blank lines between below classes in forward decl is unneeded.
 class HPElement;
 
 class PoolManager;
@@ -44,6 +47,10 @@ constexpr bool NO_REUSE_MEM = false;
  * parent. At the moment, it only makes sense to have a single top-level parent
  * representing the central pool for all threads, and several local pools for
  * each thread.
+ *
+ * REVIEW(carlos) class should be named the same as rc::DescriptorPool (putting
+ *   HP in front of everything is redundant since we have namespaces for that.
+ *   Same with file names.
  */
 class HPPool {
  public:
@@ -52,6 +59,8 @@ class HPPool {
   }
   ~HPPool() { this->send_to_manager(); }
 
+  // REVIEW(carlos) where are the public methods? This should try to implement
+  // the same public interface as rc::DescriptorPool
 
 
  private:
@@ -107,6 +116,10 @@ class HPPool {
   uint64_t unsafe_pool_count_ {0}
 #endif
 };
+// REVIEW(carlos) prefrence, but I like to have 1 or 2 lines of blank space
+// betweeen the closing namespace decl's and the end of the "real" code. I'd put
+// 1 here since there's not much code on the screen, and I'd put 2 in places
+// where there's a high code density (to make it easier on the eyes)
 
 
 
@@ -115,4 +128,3 @@ class HPPool {
 }  // namespace ucf
 
 #endif  // UCF_THREAD_HP_DESCRIPTOR_POOL_H_
-
