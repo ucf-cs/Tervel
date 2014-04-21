@@ -15,12 +15,9 @@
 
 namespace ucf {
 namespace thread {
-
-
-
 namespace hp {
-class HPElement;
 
+class HPElement;
 class PoolManager;
 
 /**
@@ -106,9 +103,9 @@ class HPPool {
   // TODO(carlos) what, exactly, do these keep track of?
   uint64_t unsafe_pool_count_ {0}
 #endif
+
+  DISALLOW_COPY_AND_ASSIGN(HPPool);
 };
-
-
 
 }  // namespace hp
 }  // namespace thread

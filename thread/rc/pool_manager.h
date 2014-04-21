@@ -75,6 +75,8 @@ class PoolManager {
   int allocated_pools_;
 
   std::unique_ptr<ManagedPool[]> pools_;
+
+  DISALLOW_COPY_AND_ASSIGN(PoolManager);
 };
 
 }  // namespace rc

@@ -20,8 +20,6 @@ class Descriptor {
   Descriptor() {}
   virtual ~Descriptor() {}
 
-
-
    /**
    * This method is implmented by each sub class and must gurantee that upon
    * return that the descriptor no longer exists at the address it was placed
@@ -85,7 +83,7 @@ class Descriptor {
   /**
    * This method is optional to implement for each sub class.
    * This function must be implemented if advance_watch is implemented.
-   * 
+   *
    * This function returns true/false depending on the watch status
    * @param none
    */
@@ -95,7 +93,6 @@ class Descriptor {
   /**
    * This method is optional to implement for each sub class.
    *  It should free any child objects.
-   
    * This method is called by a DescriptorPool when a descriptor is deleted but
    * before the destructor is called. This way, associated descriptors can be
    * recursively freed.
@@ -114,9 +111,12 @@ class Descriptor {
    * assurance scheme.
    *
    * @param the address to read
-   */   
+   */
   template<class T>
   static T read(std::atomic<T> * address);
+
+ private:
+  DISALLOW_COPY_AND_ASSIGN(Descriptor);
 };
 
 // TODO(carlos) not sure where to put the below functions

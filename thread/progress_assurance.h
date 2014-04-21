@@ -21,6 +21,9 @@ class OpRecord {
   virtual ~OpRecord() {}
 
   virtual void help_complete() = 0;
+
+ private:
+  DISALLOW_COPY_AND_ASSIGN(OpRecord);
 };
 
 class ProgressAssurance {
@@ -36,6 +39,8 @@ class ProgressAssurance {
 
  private:
   std::unique_ptr<std::atomic<OpRecord *>[]> op_table_;
+
+  DISALLOW_COPY_AND_ASSIGN(ProgressAssurance);
 };
 
 }  // namespace thread

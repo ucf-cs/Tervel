@@ -101,6 +101,8 @@ static bool is_watched(HPElement *descr);
 
 static void * remove_hp_element(void *expected, std::atomic<void *> *address);
 
+ private
+  DISALLOW_COPY_AND_ASSIGN(HPElement);
 };
 
 

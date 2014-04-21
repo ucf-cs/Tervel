@@ -9,6 +9,7 @@
 #include <stdint.h>
 
 #include "thread/system.h"
+#include "util.h"
 
 namespace ucf {
 namespace thread {
@@ -46,6 +47,8 @@ class PoolManager {
       "Managed pools have to be cache aligned to prevent false sharing.");
 
   std::unique_ptr<ManagedPool> pool_;
+
+  DISALLOW_COPY_AND_ASSIGN(PoolManager);
 };
 
 }  // namespace hp

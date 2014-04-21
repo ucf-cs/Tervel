@@ -4,7 +4,7 @@
 namespace ucf {
 namespace thread {
 
-void ProgressAssurance::try_to_help) {
+void ProgressAssurance::try_to_help() {
   if (tl_thread_info->delay_count++ > HELP_DELAY) {
     tl_thread_info->delay_count = 0;
 

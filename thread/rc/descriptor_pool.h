@@ -212,6 +212,7 @@ class DescriptorPool {
   uint64_t unsafe_pool_count_ {0};
 #endif
 
+  DISALLOW_COPY_AND_ASSIGN(DescriptorPool);
 };
 
 //TODO(carlos): These methods are static methods of the rc descriptor class

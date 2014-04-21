@@ -52,6 +52,7 @@ struct ThreadInfo {
   // 2) Max Fail count has been reached and it needs to make an announcement
   // For its operation
   bool recursive_return {false};
+
   // recursive_depth: used to track the number of times Descriptor::remove
   // has been called, this is incremented at the start of Descriptor::remove
   // and decremented upon return.
@@ -75,6 +76,7 @@ thread_local ThreadInfo tl_thread_info;
  * Helper class for RAII management of recursive helping of threads. Lifetime
  * of this object handles the increment and decrement of the `recursive_depth`
  * of the given ThreadInfo object and sets the `recursive_return` if needed.
+ *
  * TODO(Carlos), this just feels bloated to me for a number of reasons.
  * 1)The parameters on the construction, these are thread local/global constants
  * Why do we need to pass them in, when we can access the source from this scope
@@ -95,6 +97,8 @@ class RecursiveAction {
 
   ~RecursiveAction() { tl_thread_info.recursive_depth -= 1; }
 
+ private:
+  DISALLOW_COPY_AND_ASSIGN(RecursiveAction);
 };
 
 }  // namespace ucf
