@@ -19,11 +19,23 @@ class Descriptor;
 namespace hp {
 
 /**
- *Unlike reference counting, this class does not need a struct to sepeate the
+ * Unlike reference counting, this class does not need a struct to sepeate the
  * object from the header. As such Implementations can safely extend this class.
-**/
+ *
+ * REVIEW(carlos) Should just be called PoolElement (same as analogous class in
+ * rc) and should expose the same public interface to keep things simple. i.e.,
+ * instead of extending Descriptor, it should have the public descriptor() and
+ * init_descriptor() functions. Further, it shouldn't extend descriptor as it's
+ * not, itself, a descriptor, but a containter for a descriptor in a pool. These
+ * changes would make the public interface f
+ */
 class HPElement: public Descriptor {
  public:
+   // REVIEW(carlos) indentation should be 2 spaces for below members
+   // REVIEW(carlos) naming convention is to have class members w/ a trailing
+   //   underscore
+   // REVIEW(carlos) next should be private as next() accessor method works for
+   //   this.
     HPElement *next {nullptr}
 
 #ifdef DEBUG_POOL
@@ -52,6 +64,14 @@ class HPElement: public Descriptor {
 // -------
 // Static Functions
 // -------
+
+// REVIEW(carlos) Indentation of class members should be 2 spaces.
+// REVIEW(carlos) In namespace rc, these methods are regular functions, not
+//   static methods of PoolElement. Personally, I prefer the regular functions
+//   over the static methods as it eliminates having to type the class name
+//   everywhere it's used (which provides relatively little semantic context for
+//   the function anyway), but that's just me. Either way, these methods should
+//   be declared in the same analogous context as
 
 /**
  * This method is used to increment the reference count of the passed descriptor
