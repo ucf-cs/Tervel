@@ -169,6 +169,8 @@ void DescriptorPool::try_clear_unsafe_pool(bool dont_check) {
 }
 
 
+// REVIEW(carlos) if you objectively fix a TODO, just remove it. Also, TODO's
+//   should be labeled with the name of the person writing them.
 // TODO(carlos) `a` and `value` are just the WORST names for parameters. I have
 // no idea what they're supposed to be.
 // TODO(carlos) fixed
@@ -205,6 +207,7 @@ bool is_watched(Descriptor *descr) {
     return true;
   }
 }
+// REVIEW(carlos) excess whitespace
 
 
 
