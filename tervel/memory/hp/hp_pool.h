@@ -1,5 +1,5 @@
-#ifndef UCF_THREAD_HP_DESCRIPTOR_POOL_H_
-#define UCF_THREAD_HP_DESCRIPTOR_POOL_H_
+#ifndef TERVEL_MEMORY_HP_DESCRIPTOR_POOL_H_
+#define TERVEL_MEMORY_HP_DESCRIPTOR_POOL_H_
 
 #include <atomic>
 #include <utility>
@@ -7,14 +7,14 @@
 #include <assert.h>
 #include <stdint.h>
 
-#include "thread/descriptor.h"
-#include "thread/info.h"
-#include "thread/hp/pool_element.h"
-#include "thread/hp/pool_manager.h"
-#include "thread/system.h"
+#include "tervel/memory/descriptor.h"
+#include "tervel/memory/info.h"
+#include "tervel/memory/hp/pool_element.h"
+#include "tervel/memory/hp/pool_manager.h"
+#include "tervel/memory/system.h"
 
-namespace ucf {
-namespace thread {
+namespace tervel {
+namespace memory {
 
 
 
@@ -111,8 +111,8 @@ class HPPool {
 
 
 }  // namespace hp
-}  // namespace thread
-}  // namespace ucf
+}  // namespace memory
+}  // namespace tervel
 
-#endif  // UCF_THREAD_HP_DESCRIPTOR_POOL_H_
+#endif  // TERVEL_MEMORY_HP_DESCRIPTOR_POOL_H_
 

@@ -1,7 +1,7 @@
-#include "thread/hp/descriptor_pool.h"
+#include "tervel/memory/hp/descriptor_pool.h"
 
-namespace ucf {
-namespace thread {
+namespace tervel {
+namespace memory {
 namespace hp {
 
 void HPPool::free_descriptor(HPElement *descr, bool dont_check) {
@@ -101,5 +101,5 @@ void HPPool::try_clear_unsafe_pool(bool dont_check) {
 }
 
 }  // namespace hp
-}  // namespace thread
-}  // namespace ucf
+}  // namespace memory
+}  // namespace tervel

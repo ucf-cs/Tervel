@@ -1,9 +1,9 @@
-#include "thread/rc/descriptor_pool.h"
-#include "thread/rc/pool_manager.h"
+#include "tervel/memory/rc/descriptor_pool.h"
+#include "tervel/memory/rc/pool_manager.h"
 
 
-namespace ucf {
-namespace thread {
+namespace tervel {
+namespace memory {
 namespace rc {
 
 DescriptorPool * PoolManager::get_pool() {
@@ -28,5 +28,5 @@ DescriptorPool * PoolManager::get_pool() {
 }
 
 }  // namespace rc
-}  // namespace thread
-}  // namespace ucf
+}  // namespace memory
+}  // namespace tervel

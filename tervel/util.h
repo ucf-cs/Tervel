@@ -1,5 +1,5 @@
-#ifndef UCF_UTIL_H_
-#define UCF_UTIL_H_
+#ifndef TERVEL_UTIL_H_
+#define TERVEL_UTIL_H_
 
 // A macro to disallow the copy constructor and operator= functions.  This
 // should be used in the `private` declarations for a class. Use unless you have
@@ -11,4 +11,4 @@
   TypeName(const TypeName&) = delete;       \
   void operator=(const TypeName&) = delete
 
-#endif  // UCF_UTIL_H_
+#endif  // TERVEL_UTIL_H_

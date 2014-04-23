@@ -1,7 +1,7 @@
-#include "thread/hp/hp_element.h"
+#include "tervel/memory/hp/hp_element.h"
 
-namespace ucf {
-namespace thread {
+namespace tervel {
+namespace memory {
 namespace hp {
 /* This function performs a hazard pointer watch on a descriptor
  * 
@@ -90,5 +90,5 @@ void * remove_hp_element(void *expected, std::atomic<void *> *address) {
 }
 
 }  // namespace hp
-}  // namespace thread
-}  // namespace ucf
+}  // namespace memory
+}  // namespace tervel
