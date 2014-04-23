@@ -1,7 +1,7 @@
-#include "thread/rc/descriptor_pool.h"
+#include "tervel/memory/rc/descriptor_pool.h"
 
-namespace ucf {
-namespace thread {
+namespace tervel {
+namespace memory {
 namespace rc {
 
 void DescriptorPool::free_descriptor(Descriptor *descr, bool dont_check) {
@@ -228,5 +228,5 @@ void * remove(void *expected, std::atomic<void *> *address) {
 
 
 }  // namespace rc
-}  // namespace thread
-}  // namespace ucf
+}  // namespace memory
+}  // namespace tervel

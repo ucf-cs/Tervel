@@ -1,5 +1,5 @@
-#ifndef UCF_THREAD_RC_POOL_ELEMENT_H_
-#define UCF_THREAD_RC_POOL_ELEMENT_H_
+#ifndef TERVEL_MEMORY_RC_POOL_ELEMENT_H_
+#define TERVEL_MEMORY_RC_POOL_ELEMENT_H_
 
 #include <atomic>
 #include <utility>
@@ -8,11 +8,11 @@
 #include <stdint.h>
 #include <stddef.h>
 
-#include "thread/descriptor.h"
-#include "thread/system.h"
+#include "tervel/memory/descriptor.h"
+#include "tervel/memory/system.h"
 
-namespace ucf {
-namespace thread {
+namespace tervel {
+namespace memory {
 
 class Descriptor;
 
@@ -172,7 +172,7 @@ inline PoolElement * get_elem_from_descriptor(Descriptor *descr) {
 
 
 }  // namespace rc
-}  // namespace thread
-}  // namespace ucf
+}  // namespace memory
+}  // namespace tervel
 
-#endif  // UCF_THREAD_RC_POOL_ELEMENT_H_
+#endif  // TERVEL_MEMORY_RC_POOL_ELEMENT_H_

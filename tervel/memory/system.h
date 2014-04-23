@@ -1,5 +1,5 @@
-#ifndef UCF_THREAD_SYSTEM_H_
-#define UCF_THREAD_SYSTEM_H_
+#ifndef TERVEL_MEMORY_SYSTEM_H_
+#define TERVEL_MEMORY_SYSTEM_H_
 /**
  * System-dependent constants.
  */
@@ -8,12 +8,12 @@
 
 #define DEBUG_POOL true
 
-namespace ucf {
-namespace thread {
+namespace tervel {
+namespace memory {
 
 constexpr size_t CACHE_LINE_SIZE = 64;  // bytes
 
-}  // namespace thread
-}  // namespace ucf
+}  // namespace memory
+}  // namespace tervel
 
-#endif  // UCF_THREAD_SYSTEM_H_
+#endif  // TERVEL_MEMORY_SYSTEM_H_

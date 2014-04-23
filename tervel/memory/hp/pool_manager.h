@@ -1,5 +1,5 @@
-#ifndef UCF_THREAD_HP_POOL_MANAGER_H_
-#define UCF_THREAD_HP_POOL_MANAGER_H_
+#ifndef TERVEL_MEMORY_HP_POOL_MANAGER_H_
+#define TERVEL_MEMORY_HP_POOL_MANAGER_H_
 
 #include <atomic>
 #include <memory>
@@ -8,10 +8,10 @@
 #include <assert.h>
 #include <stdint.h>
 
-#include "thread/system.h"
+#include "tervel/memory/system.h"
 
-namespace ucf {
-namespace thread {
+namespace tervel {
+namespace memory {
 
 class Descriptor;
 
@@ -49,7 +49,7 @@ class PoolManager {
 };
 
 }  // namespace hp
-}  // namespace thread
-}  // namespace ucf
+}  // namespace memory
+}  // namespace tervel
 
-#endif  // UCF_THREAD_HP_POOL_MANAGER_H_
+#endif  // TERVEL_MEMORY_HP_POOL_MANAGER_H_
