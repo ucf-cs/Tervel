@@ -1,14 +1,16 @@
 #include "tervel/mcas/mcas.h"
 #include <algorithm>
+namespace ucf {
+namespace mcas {
 
-bool MCAS::addCASTriple(std::atomic<T> *a, T ev, T nv) {
-  if (thread::Descriptor::isValid(ev) ||  thread::Descriptor::isValid(nv)) {
+bool t_MCAS::addCASTriple(std::atomic<T> *a, T ev, T nv) {
+  if (memory::Descriptor::isValid(ev) ||  memory::Descriptor::isValid(nv)) {
     return false;
   } else if (row_count == max_rows_) {
     return false;
   } else {
     cas_rows[row_count].address = a;
-    cas_rows[row_count].expectedValue = ev;
+    cas_rows[row_count].expected_value = ev;
     cas_rows[row_count].newValue = nv;
     cas_rows[row_count++].helper.store(nullptr);
 
@@ -21,7 +23,7 @@ bool MCAS::addCASTriple(std::atomic<T> *a, T ev, T nv) {
         }
         row_count--;
         cas_rows[row_count].address = reinterpret_cast<T>(nullptr);
-        cas_rows[row_count].expectedValue = reinterpret_cast<T>(nullptr);
+        cas_rows[row_count].expected_value = reinterpret_cast<T>(nullptr);
         cas_rows[row_count].newValue = reinterpret_cast<T>(nullptr);
         return false;
       }
@@ -30,125 +32,192 @@ bool MCAS::addCASTriple(std::atomic<T> *a, T ev, T nv) {
   }
 };
 
-bool MCAS::execute() {
-  tl_thread_info->progreass_assurance->tryToHelp();
-  if (row_count != max_rows_) {
-    // TODO(steven): fix code to address when row_count < max_rows_
-    // Also check if duplicate address...
-    assert(false);
-    return false;
-  }
+bool t_MCAS::execute() {
+  memory::ProgressAssurance::check_for_announcement();
 
-  bool res = mcas_complete(&(cas_rows[0]), &(cas_rows[row_count-1]));
+  bool res = mcas_complete(0);
 
   // Now Clean up
-  cleanup(res, &(cas_rows[0]), &(cas_rows[row_count-1]));
+  cleanup(res);
   return res;
 };
 
-static bool MCAS::mcas_complete(t_CasRow *current, t_CasRow *last_row,
-                                          bool wfmode = false) {
-  current--;
-  while (current != last_row) {
-    current++;
-    T temp = current->address->load();
+bool t_MCAS::mcas_complete(int start_pos, bool wfmode = false) {
+  for (int pos = start_pos; pos < row_count_; pos++) {
+    /* Loop for each row in the op, if helping complete another thread's MCAS
+       Start at last known completed row. */
 
-    size_t fcount = 0;
+    size_t fcount = 0;  // Tracks the number of failures.
 
-    while (current->helper.load() == nullptr) {
-      if (!wfmode && fcount++ == thread::OpRecord::MAX_FAILURE) {
-        if (thread::rDepth == 0) {
+    t_CasRow * row = &cas_rows[pos];
+    T current_value = row->address->load();
+
+    while (row->helper.load() == nullptr) {
+      if (state_.load() != MCAS_STATE::IN_PROGRESS) {
+        // Checks if the operation has been completed
+        return (state_.load() == MCAS_STATE::PASS);
+      } else if (!wfmode &&
+                  fcount++ == memory::ProgressAssurance::MAX_FAILURE) {
+        if (tl_thread_info.rDepth == 0) {
           // Make An annoucnement
-          return current->wfcomplete(last_row);
+          return this->wfcomplete();
         } else {
-          thread::rReturn = true;
+          tl_thread_info.recursive_return = true;
           return false;
         }
-      }  // End If Fail Count has been Reached
+      }  // End else if Fail Count has been Reached
 
-      if (RCDescr::isDescr(temp)) {  // Not should be replaced by isDescr?
+      if (memory::Descriptor::is_descriptor(current_value)) {
         // Remove it by completing the op, try again
-        temp = t_MCASHelper::mcasRemove(temp, current->address, last_row);
+        current_value = this->mcas_remove(pos, current_value);
 
-        if (thread::rReturn) {
-          if (thread::rDepth == 0) {
-            thread::rReturn = false;
-            temp = current->address->load();
+        if (tl_thread_info.recursive_return) {
+          if (tl_thread_info.rDepth == 0) {
+            tl_thread_info.recursive_return = false;
+            current_value = row->address->load();
           } else {
             return false;
           }
         }
         continue;
-      } else if (temp != current->expectedValue) {
-        t_MCASHelper* temp_n = nullptr;
-        if (current->helper.compare_exchange_strong(temp_n, MCAS_FAIL_CONST)
-          || temp_n == MCAS_FAIL_CONST) {
-          temp_n = nullptr;
-          last_row->helper.compare_exchange_strong(temp_n, MCAS_FAIL_CONST);
-          assert(last_row->helper.load() == MCAS_FAIL_CONST);
+      } else if (current_value != row->expected_value) {
+        // Current Value Does not match and it is a non descriptor type, so
+        // The operation has failed.
+        t_MCASHelper* temp_null = nullptr;
+        if (row->helper.compare_exchange_strong(temp_null, MCAS_FAIL_CONST)
+                                            || temp_null == MCAS_FAIL_CONST) {
+          MCAS_STATE temp_state = MCAS_STATE::IN_PROGRESS;
+          this->state_.compare_exchange_strong(temp_state, MCAS_STATE::FAIL);
+          assert(this->stat_.load() == MCAS_STATE::FAIL);
           return false;
         }
+        // Or perhaps not? Lets re-evaulte, the while condition must be false
         continue;
       }  else {
-        t_MCASHelper *helper = new t_MCASHelper(current, last_row);
-        if (current->address->compare_exchange_strong(temp,
-                                thread::Descriptor::rc_mark<T>(helper))) {
+        // Elese the current_vale matches the expected_value
+        t_MCASHelper *helper =
+            memory::rc::DescriptorPool::get_descriptor<t_MCASHelper>(row, this);
+        if (row->address->compare_exchange_strong(current_value,
+                                memory::rc::mark_first(helper))) {
           // Succesfully placed
           t_MCASHelper * temp_null = nullptr;
-          if (current->helper.compare_exchange_strong(temp_null, helper)
+          if (row->helper.compare_exchange_strong(temp_null, helper)
                                                 || temp_null == helper) {
             // Succesfully associoated!
+            break;  // On to the next row!
           } else {
             // Failed...op must be done!
-            temp = thread::Descriptor::rc_mark<T>(helper);
-            current->address->compare_exchange_strong(temp,
-                                      current->expectedValue);
-            helper->safeFree();
+            T temp_helper = memory::rc::mark_first(helper);
+            row->address->compare_exchange_strong(temp_helper,
+                                      row->expected_value);
+            memory::rc::DescriptorPool::free_descriptor(helper);
           }
           break;
         } else {
           // Failed to place...try again!
-          // temp already holds the new value
-          helper->unsafeFree();
+          memory::rc::DescriptorPool::free_descriptor(helper, true);
+          // Set no check to true since it was never used.
           continue;
         }
       }  // End Else Try to replace
-    }  // End loop on CasRow
+    }  // End While Current helper is null
+  }  // End For Loop on CasRows
 
-    assert(current->helper.load() != nullptr);
-    if (current->helper.load() == MCAS_FAIL_CONST) {
-      t_MCASHelper* temp_n = nullptr;
-      last_row->helper.compare_exchange_strong(temp_n, MCAS_FAIL_CONST);
-      assert(last_row->helper.load() == MCAS_FAIL_CONST);
-      return false;
-    }
-  }  // End While current != last_row
-
-  assert(last_row->helper.load() != nullptr);
-  return (last_row->helper.load() != MCAS_FAIL_CONST);
+  // Alll rows have been associated, so set the state to passed!
+  MCAS_STATE temp_state = MCAS_STATE::IN_PROGRESS;
+  if (this->state_.compare_exchange_strong(temp_state, MCAS_STATE::PASS)) {
+    temp_state = MCAS_STATE::PASS;
+  }
+  assert(this->state_.load() != MCAS_STATE::IN_PROGRESS);
+  return (temp_state == MCAS_STATE::PASS);
 }  // End Complete function.
 
-static void cleanup(bool success, t_CasRow *current, t_CasRow *last_row) {
-  current--;
-  while (current != last_row) {
-    current++;
+T t_MCAS::mcas_remove(const int pos, T value) {
+  if (memory::rc::is_descriptor_first(value)) {
+    // Checks if it is an rc_discriptor, could be another type (or bitmark)
+    Descriptor *descr = memory::rc::unmark_first(value);
 
-    assert(current->helper.load() != nullptr);
-    T marked_temp = thread::Descriptor::rc_mark<T>(current->helper.load());
-    if (marked_temp == reinterpret_cast<T>(MCAS_FAIL_CONST)) {
-      return;
+    // Gains RC protection on the object, if succesful then the object cant
+    // be freed while we dereference it.
+    bool watched = thread::rc::watch(descr,
+                  reinterpret_cast<std::atomic<void *>*>(address),
+                  reinterpret_cast<void *>(t));
+    if (!watched) {
+      // watch failed do to the value at the address changing, return new value
+      return address->load();
     }
 
-    T temp_current = current->address->load();
 
-    if (temp_current == marked_temp) {
-      if (success) {
-        current->address->compare_exchange_strong(temp_current,
-                                                  current->newValue);
-      } else {
-        current->address->compare_exchange_strong(temp_current,
-                                                  current->expectedValue);
+    t_MCASHelper* cast_p = dynamic_cast<t_MCASHelper *>(descr);
+    // TODO(steven): Hey carlos is there a betterway to check if this is a MCH
+    // type?
+
+    if ( (cast_p !=  nullptr) && (cast_p->mcas_op_ == mcas_op_) ) {
+      // This is a MCH for the same op, ie same position.
+      assert((uintptr_t)cast_p == (uintptr_t)descr);
+      assert(cast_p->cas_row_ == &(cas_row_[pos]));
+
+      // Make sure it is associated
+      t_MCASHelper* temp_null = nullptr;
+      cas_row_[pos]->helper.compare_exchange_strong(temp_null, cast_p);
+      if (temp_null != nullptr && temp_null != cast_p) {
+        // Was placed in error/can't assoactie, so remove
+        address->compare_exchange_strong(t, cast_p->cas_row_->expected_value);
       }
+      thread::rc::unwatch(descr);
+      return address->load();
     }
+    thread::rc::unwatch(descr);
+  }
+  // Otherwise it is a non-mcas descas_row_iptor
+  return reinterpret_cast<T>(memory::Descriptor::remove_descriptor
+                                                              (address, value));
+};
+
+
+
+void cleanup(bool success) {
+  for (int pos = 0; pos < row_count_; pos++) {
+    /* Loop for each row in the op*/
+    t_CasRow * row = &cas_rows[pos];
+
+    assert(row->helper.load() != nullptr);
+    void * marked_helper = memory::RC::mark_first(row->helper.load());
+    if (marked_temp == reinterpret_cast<void *>(MCAS_FAIL_CONST)) {
+      // There can not be any any associated rows beyond this position.
+      return;
+    } else {
+      // else there was a helper placed for this row
+      T cur_value = row->address->load();
+      if (cur_value == marked_temp) {
+        if (success) {
+          row->address->compare_exchange_strong(cur_value, row->new_value);
+        } else {
+          row->address->compare_exchange_strong(cur_value, row->expected_value);
+        }
+      }  // End If the current value matches the helper placed for this op
+    }  // End Else there was a helper placed for this row
   }  // End While loop over casrows.
 }  // End cleanup function.
+
+
+//-------
+// Op Record functions
+//-------
+
+/**
+ * This function is used to call the Progress Assurance Scheme
+ * Upon its return it is guranteed to be completed.
+ */
+bool wf_complete() {
+  tl_thread_info.progress_assurance->askForHelp(this);
+  assert(this->state_.load() != MCAS_STATE::IN_PROGRESS);
+  return (temp_state == MCAS_STATE::PASS);
+}
+
+void help_complete() {
+  t_MCAS::mcas_complete(0, true);
+};
+
+}  // End mcas namespace
+}  // End ucf name space

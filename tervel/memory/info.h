@@ -87,6 +87,8 @@ struct ThreadInfo {
   }
 
   SharedInfo *shared_info {nullptr}
+  rc::DescriptorPool *descriptor_pool {nullptr}
+
 };
 
 thread_local ThreadInfo tl_thread_info;

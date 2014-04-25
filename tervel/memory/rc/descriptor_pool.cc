@@ -4,11 +4,12 @@ namespace tervel {
 namespace memory {
 namespace rc {
 
-void DescriptorPool::free_descriptor(Descriptor *descr, bool dont_check) {
+void DescriptorPool::free_descriptor(Descriptor *descr, bool dont_check,
+                , DescriptorPool *pool /*= tl_thread_info.descriptor_pool*/) {
   if (!dont_check && is_watched(descr)) {
-    this->add_to_unsafe(descr);
+    pool->add_to_unsafe(descr);
   } else {
-    this->add_to_safe(descr);
+    pool->add_to_safe(descr);
   }
 }
 

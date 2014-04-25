@@ -23,8 +23,12 @@ typedef MCASHelper<T> t_MCASHelper;
 typedef MCAS<T> t_MCAS;
 
   public:
-    MCASHelper<T>(t_CasRow *c, t_CasRow *l)
-        : cr(c), last_row(l) {}
+    /**
+     * @param mcas_op the t_MCAS which contains the referenced cas_row
+     * @param cas_row the referenced row in the t_MCAS.
+     */
+    MCASHelper<T>(t_MCAS *mcas_op, t_CasRow *cas_row)
+        : cas_row_(cas_row), mcas_op_(mcas_op) {}
 
     /**
      * This function is called after this objects rc count was incremented.
@@ -63,11 +67,10 @@ typedef MCAS<T> t_MCAS;
     static T mcas_remove(std::atomic<T> *address, T value, t_CasRow *last_row);
 
  private:
-  //The Row in the MCAS operation this MCH was placed for
-  t_CasRow *cr;
-  //The final ROW in the MCAS operation, it is used for bounds checking
-  //And Op Identification
-  t_CasRow *last_row;
+  // The Row in the MCAS operation this MCH was placed for
+  t_CasRow *cas_row_;
+  // The MCAS which contains the cas_row_
+  t_MCAS *mcas_op_;
 };
 
 }  // End mcas namespace

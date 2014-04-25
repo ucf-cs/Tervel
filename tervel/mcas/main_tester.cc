@@ -22,7 +22,7 @@
 #include <boost/random.hpp>
 #include <boost/generator_iterator.hpp>
 
-#include "wf_mcas_3.h"
+#include "tervel/mcas/mcas.h"
 
 enum TEST_TYPE_CODE {UPDATEOBJECT,
     UPDATEMULTIOBJECT, RANDOMOVERLAPS};

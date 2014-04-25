@@ -46,7 +46,7 @@ class ProgressAssurance {
 
   explicit ProgressAssurance(int num_threads =
                                       tl_thread_info.shared_info_->num_threads)
-      : num_threads_{num_threads}
+      : num_threads_ {num_threads}
       , op_table_(new std::atomic<OpRecord *>[num_threads_] ) {}
 
   /**
@@ -55,7 +55,7 @@ class ProgressAssurance {
    */
   static void check_for_announcement(ProgressAssurance *progress_assuarance =
                       tl_thread_info.progress_assuarance) {
-    progress_assuarance->check_for_announcement();
+    progress_assuarance->p_check_for_announcement();
   }
 
   /**
@@ -64,9 +64,9 @@ class ProgressAssurance {
    * @return on return the OpRecord must be completed.
    */
   static void make_announcement(OpRecord *op, int tid = tl_thread_info.thread_id
-                                ,ProgressAssurance *progress_assuarance = 
+                                , ProgressAssurance *progress_assuarance =
                                           tl_thread_info.progress_assuarance) {
-    progress_assuarance->make_announcement(op, tid);
+    progress_assuarance->p_make_announcement(op, tid);
   }
 
  private:
@@ -89,7 +89,7 @@ class ProgressAssurance {
    * that corresponds to its thread if.
    */
   std::unique_ptr<std::atomic<OpRecord *>[]> op_table_;
-  //The number of threads that are using this operation table
+  // The number of threads that are using this operation table
   int num_threads_;
 };
 

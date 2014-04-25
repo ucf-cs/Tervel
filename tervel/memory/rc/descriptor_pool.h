@@ -56,7 +56,8 @@ class DescriptorPool {
    * on the returned pointer when they are done with it to avoid memory leaks.
    */
   template<typename DescrType, typename... Args>
-  Descriptor * get_descriptor(Args&&... args);
+  static Descriptor * get_descriptor(Args&&... args
+                      , DescriptorPool *pool = tl_thread_info.descriptor_pool);
 
   /**
    * Once a user is done with a descriptor, they should free it with this
@@ -66,8 +67,10 @@ class DescriptorPool {
    * @param dont_check Don't check if the descriptor is being watched before
    *   freeing it. Use this flag if you know that no other thread has had access
    *   to this descriptor.
+   * @param pool the pool to use when freeing the descriptor.
    */
-  void free_descriptor(Descriptor *descr, bool dont_check=false);
+  static void free_descriptor(Descriptor *descr, bool dont_check=false
+                      , DescriptorPool *pool = tl_thread_info.descriptor_pool);
 
   /**
    * Allocates an extra `num_descriptors` elements to the pool.
@@ -178,7 +181,7 @@ class DescriptorPool {
    * as some threads may still have access to the element itself and may try to
    * increment the refrence count.
    */
-  PoolElement *safe_pool_ {nullptr};
+  PoolElement *safe_pool_ {nullptr}
 
   /**
    * A linked list of pool elements. Elements get released to this pool when
@@ -186,14 +189,14 @@ class DescriptorPool {
    * descriptor in the element. After some time has passed, items generally move
    * from this pool to the safe_pool_
    */
-  PoolElement *unsafe_pool_ {nullptr};
+  PoolElement *unsafe_pool_ {nullptr}
 
   /** 
    * Two counters used to track the number of elements in the linked list.
    * this facilitates the detection of when there are too many elements.
    */
-  uint64_t safe_pool_count_ {0};
-  uint64_t unsafe_pool_count_ {0};
+  uint64_t safe_pool_count_ {0}
+  uint64_t unsafe_pool_count_ {0}
 
   /**
    * If true, then DescriptorPool shouldn't reuse old pool elements when being
@@ -201,16 +204,16 @@ class DescriptorPool {
    * and left untouched when they're returned to the pool. This allows the user to
    * view associations. Entirely for debug purposes.
    */
-  constexpr bool NO_REUSE_MEM = false;
-
+  constexpr bool NO_REUSE_MEM {false}
 };
 
 // IMPLEMENTATIONS
 // ===============
 
 template<typename DescrType, typename... Args>
-  Descriptor * DescriptorPool::get_descriptor(Args&&... args) {
-  PoolElement *elem = this->get_from_pool();
+  DescrType * DescriptorPool::get_descriptor(Args&&... args
+          , DescriptorPool *pool /*= tl_thread_info.descriptor_pool */) {
+  PoolElement *elem = pool->get_from_pool();
   elem->init_descriptor<DescrType>(std::forward<Args>(args)...);
   return elem->descriptor();
 }

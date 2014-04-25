@@ -113,7 +113,6 @@ public:
    */
   template<class T>
   static T read(std::atomic<T> * address);
-  
   /** This Method determins if the passed value is a descriptor or not.
    * It does so by calling the two static is_descriptor functions of the RC and 
    * HP descriptor classes.
@@ -145,8 +144,8 @@ public:
     if (RC::is_descriptor_first(value)) {
       assert(false);
     }
-    //This assert hits in the event an unknown discriptor type wass passed in
-    assert(false); 
+    // This assert hits in the event an unknown discriptor type wass passed in
+    assert(false);
     return false;
   }
 };
