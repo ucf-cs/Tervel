@@ -21,7 +21,7 @@ class ListManager;
 
 
 /**
- * Defines a pool of objects which are stored until they are safe to be freed.
+ * Defines a list of objects which are stored until they are safe to be freed.
  *
  * The list is represented as a linked lists of HP Elements
  *

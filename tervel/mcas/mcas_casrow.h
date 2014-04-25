@@ -78,7 +78,7 @@ class CasRow: public thread::OpRecord {
       t_MCAS::mcas_complete(current, this, true);
     };
 
-    bool advance_is_watched() {
+    bool on_is_watched() {
       t_CasRow* current = (this - (words - 1) );
       int i;
       for (i = 0; i < words; i++) {
@@ -88,7 +88,7 @@ class CasRow: public thread::OpRecord {
         } else if (mch == nullptr) {
           assert(i == 0);
           break;
-        } else if (thread::rc::PoolElem::isWatched(mch)) {
+        } else if (thread::rc::isWatched(mch)) {
           return true;
         }
         current++;

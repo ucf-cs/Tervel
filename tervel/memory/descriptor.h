@@ -136,11 +136,14 @@ public:
    * @param address the address the descriptor was read from value to check
    * @param value the expected value for the address, which should be a 
    * descriptor
+   * @return the current value
+   *
+   * TODO(steven): code this.
    */
 
-  static bool remove_descriptor(std::atomic<void *> *address, void *value) {
+  static void *remove_descriptor(std::atomic<void *> *address, void *value) {
     if (RC::is_descriptor_first(value)) {
-      return true;
+      assert(false);
     }
     //This assert hits in the event an unknown discriptor type wass passed in
     assert(false); 

@@ -49,7 +49,7 @@ class HazardPointer {
 
   static bool watch(SlotID slot, HPElement *elem, std::atomic<void *> *address
              , void *expected
-             , HazardPointer *hazard_pointer = tl_thread_info->hazard_pointer) {
+             , HazardPointer *hazard_pointer = tl_thread_info->hazard_pointer);
 
   /**
    * This method is used to achieve a hazard pointer watch on a memory address.
@@ -65,7 +65,7 @@ class HazardPointer {
    */
   static bool watch(SlotID slot, void *value, std::atomic<void *> *address
             , void *expected
-            , HazardPointer *hazard_pointer = tl_thread_info->hazard_pointer) {
+            , HazardPointer *hazard_pointer = tl_thread_info->hazard_pointer);
 
   /**
    * This method is used to remove the hazard pointer watch.
@@ -76,21 +76,21 @@ class HazardPointer {
    * @param (optional) descr to call on_unwatch on.
    */
   static void unwatch(SlotID slot
-            , HazardPointer *hazard_pointer = tl_thread_info->hazard_pointer) {
+            , HazardPointer *hazard_pointer = tl_thread_info->hazard_pointer);
   static void unwatch(SlotID slot, HPElement *descr
-            , HazardPointer *hazard_pointer = tl_thread_info->hazard_pointer) {
+            , HazardPointer *hazard_pointer = tl_thread_info->hazard_pointer);
 
   /**
-   * This method is used to determine if a hazard pointer watch exists on a passed
-   * value.
+   * This method is used to determine if a hazard pointer watch exists on a
+   * passed value.
    * If a descr is passed then it will internally call descr->on_is_watched.
    *
    * @param (optional) descr to call on_is_watched on.
    */
   static bool is_watched(HPElement *descr
-            , HazardPointer *hazard_pointer = tl_thread_info->hazard_pointer) {
+            , HazardPointer *hazard_pointer = tl_thread_info->hazard_pointer);
   static bool is_watched(void *value
-            , HazardPointer *hazard_pointer = tl_thread_info->hazard_pointer) {
+            , HazardPointer *hazard_pointer = tl_thread_info->hazard_pointer);
 
 
   // -------
