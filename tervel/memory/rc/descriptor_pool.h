@@ -12,6 +12,7 @@
 #include "tervel/memory/rc/pool_element.h"
 #include "tervel/memory/rc/pool_manager.h"
 #include "tervel/memory/system.h"
+#include "tervel/util.h"
 
 namespace tervel {
 namespace memory {

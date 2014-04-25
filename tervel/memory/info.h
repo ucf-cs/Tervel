@@ -10,7 +10,9 @@
 #include <atomic>
 
 #include <stdint.h>
+
 #include "tervel/memory/hp/hazard_pointer.h"
+#include "tervel/util.h"
 
 namespace tervel {
 namespace memory {

@@ -9,6 +9,7 @@
 #include <stdint.h>
 
 #include "tervel/memory/system.h"
+#include "tervel/util.h"
 
 namespace tervel {
 namespace memory {

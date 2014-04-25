@@ -5,6 +5,7 @@
 #include <memory>
 
 #include "tervel/memory/info.h"
+#include "tervel/util.h"
 
 
 namespace tervel {
