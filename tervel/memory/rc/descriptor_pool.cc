@@ -27,7 +27,7 @@ PoolElement * DescriptorPool::get_from_pool(bool allocate_new) {
   // likely the safe list has something to take from.
   this->try_clear_unsafe_pool();
 
-  PoolElement *ret {nullptr};
+  PoolElement *ret {nullptr}
 
   // safe pool has something in it. pop the next item from the head of the list.
   if (!NO_REUSE_MEM && safe_pool_ != nullptr) {
@@ -169,9 +169,6 @@ void DescriptorPool::try_clear_unsafe_pool(bool dont_check) {
 }
 
 
-// TODO(carlos) `a` and `value` are just the WORST names for parameters. I have
-// no idea what they're supposed to be.
-// TODO(carlos) fixed
 bool watch(Descriptor *descr, std::atomic<void *> *address, void *expected) {
   PoolElement *elem = get_elem_from_descriptor(descr);
   elem->header().ref_count.fetch_add(1);
@@ -205,9 +202,6 @@ bool is_watched(Descriptor *descr) {
     return true;
   }
 }
-
-
-
 
 void * remove(void *expected, std::atomic<void *> *address) {
   RecursiveAction recurse();
