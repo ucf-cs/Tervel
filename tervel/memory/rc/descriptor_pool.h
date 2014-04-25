@@ -81,14 +81,19 @@ class DescriptorPool {
    * Allocates an extra `num_descriptors` elements to the pool.
    *
    * TODO(carlos): Currently, this just blindly allocates using new, but
-   * typical semantics are that this should ensure at least n elements in the
-   * list. This is more expensive as it requires a list traversal, and I don't
-   * think there's any real benefit to it. Further, should this method first try
-   * to reclaim elements from the managers before calling new?
-   * TODO(steven): I think we should track the number of elements with counters
-   * Then we can use them to keep the number of elements between an upper
-   * limit and a lower limit.
-   * I think we should always check the Manager before asking the allocator 
+   *   typical semantics are that this should ensure at least n elements in the
+   *   list. This is more expensive as it requires a list traversal, and I don't
+   *   think there's any real benefit to it. Further, should this method first
+   *   try to reclaim elements from the managers before calling new?
+   *
+   *   (steven): I think we should track the number of elements with counters
+   *     Then we can use them to keep the number of elements between an upper
+   *     limit and a lower limit.  I think we should always check the Manager
+   *     before asking the allocator
+   *
+   *   (carlos) But what benefit does it get us to use counters? We basically
+   *     just get extra contention on the counters so that this one seldom-used
+   *     method can have correct semantics.
    *
    */
   void reserve(int num_descriptors);
@@ -216,6 +221,9 @@ class DescriptorPool {
   DISALLOW_COPY_AND_ASSIGN(DescriptorPool);
 };
 
+// REVIEW(carlos) These methods are not part of the class, and should thus not
+//   be labled static.
+
 //TODO(carlos): These methods are static methods of the rc descriptor class
 // They 
 /**
@@ -225,6 +233,10 @@ class DescriptorPool {
  * If that returns true then it will return true.
  * Otherwise it decrements the reference count and returns false
  *
+ * REVIEW(carlos) param directives are java-doc style. should be 3 directives
+ *   for each parameter, each with a parameter name and a description.
+ * REVIEW(carlos) parameter names of this function have gone out-of-sync with
+ *   function in the cc file
  * @param the descriptor which needs rc protection, 
  * the address it was derferenced from, and the bitmarked value of it.
  */
@@ -235,6 +247,7 @@ static bool watch(Descriptor *descr, std::atomic<void *> *a, void *value);
  * object.
  * Then it will call advance_unwatch and decrement any related objects necessary
  *
+ * REVIEW(carlos) see notes on watch
  * @param the descriptor which no longer needs rc protection.
  */
 static void unwatch(Descriptor *descr);
@@ -244,6 +257,7 @@ static void unwatch(Descriptor *descr);
  * rc protection.
  * Internally calls advance_iswatch.
  *
+ * REVIEW(carlos) see notes on watch
  * @param the descriptor to be checked for rc protection.
  */
 static bool is_watched(Descriptor *descr);
@@ -260,6 +274,7 @@ static bool is_watched(Descriptor *descr);
  * This function must gurantee that after its return the object has been removed
  * It returns the value.
  * 
+ * REVIEW(carlos) see notes on watch
  * @param a marked reference to the object and the address the object was
  * dereferenced from.
  */

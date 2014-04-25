@@ -13,6 +13,9 @@ namespace memory {
 
 constexpr size_t HELP_DELAY = 1;
 
+// REVIEW(carlos) If you feel this is the correct way forward, just implement
+//   it. If you're not sure, the comment is fine, but do something to mark it as
+//   a continuation of the TODO.
 // TODO(carlos) originally, this extends hp::PoolElem. Why?
 // It should be again because these are HP protected objects
 class OpRecord {

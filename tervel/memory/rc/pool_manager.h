@@ -33,9 +33,13 @@ class PoolManager {
  public:
   friend class DescriptorPool;
 
+  // REVIEW(carlos) my name is forsaken...
   // TODO(carlos): I think number_pools should not be passed, but rather  we use
-  // the numb_threads found in the shared info to set the number of pools
-  // plus pools are accessed by thread id, which must be <= num_threads.
+  //   the numb_threads found in the shared info to set the number of pools
+  //   plus pools are accessed by thread id, which must be <= num_threads.
+  //
+  //   (the-real-carlos): We discussed the solution as taking a defaulted
+  //     parameter for the thread_info. We'll get the number_pools from there.
   PoolManager(int number_pools)
       : number_pools_(number_pools)
       , allocated_pools_(0)
@@ -70,7 +74,9 @@ class PoolManager {
   /**
    * Keeps track of how many pools have been allocated.
    * TODO(carlos) should this be atomic?
+   * REVIEW(carlos) RIP: my name :'(
    * TODO(carlos) No, this is not needed.
+   * REVIEW(carlos) extra unneeded line at bottom
    * 
    */
   int allocated_pools_;
