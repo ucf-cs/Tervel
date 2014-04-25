@@ -22,13 +22,13 @@ struct SharedInfo {
   uint64_t num_threads;
 
   // TODO(carlos) what diffrientiates this from the above `num_threads`?
-  // @Carlos, num_threads is the max unique threads, while thread_count 
+  // @Carlos, num_threads is the max unique threads, while thread_count
   // (name could be changed), is used to assign thread ids.
-  // In the future, we may wish to change this so that thread ids can be 
+  // In the future, we may wish to change this so that thread ids can be
   // safely returned. For now this is not a priority. -Sven (Sven=Steven)
-  std::atomic<uint64_t> thread_count {0};
+  std::atomic<uint64_t> thread_count {0}
 
-  HazardPointer *hazard_pointer {nullptr};
+  HazardPointer *hazard_pointer {nullptr}
 };
 
 /**
@@ -44,7 +44,6 @@ struct ThreadInfo {
    */
   uint64_t thread_id;
 
-  
   /** 
    * Recurive_return: Used to indicate a thread must return to its own 
    * operation and re-evaualte its state. This is set to true in the event
@@ -53,7 +52,7 @@ struct ThreadInfo {
    * 2) Max Fail count has been reached and it needs to make an announcement
    * For its operation
    */
-  bool recursive_return {false};
+  bool recursive_return {false}
   /**
    * recursive_depth: used to track the number of times Descriptor::remove
   // has been called, this is incremented at the start of Descriptor::remove
@@ -67,14 +66,27 @@ struct ThreadInfo {
    * announcement
    */
 
-  uint64_t help_id {0};
+  uint64_t help_id_ {0}
+  int help_id(int num_threads) {
+    if (help_id_ == num_threads) {
+      help_id_ = 0;
+    }
+    return ++help_id_;
+  }
+
   /** 
    * delay_count is a variable used to delay how often a thread checks for an
    * annoucnement
    */
-  uint64_t delay_count {0};
+  uint64_t delay_count_ {0}
+  int delay_count(int max_delay) {
+    if (delay_count_ == max_delay) {
+      delay_count_ = 0;
+    }
+    return ++delay_count_;
+  }
 
-  SharedInfo *shared_info {nullptr};
+  SharedInfo *shared_info {nullptr}
 };
 
 thread_local ThreadInfo tl_thread_info;
@@ -83,12 +95,11 @@ thread_local ThreadInfo tl_thread_info;
  * Helper class for RAII management of recursive helping of threads. Lifetime
  * of this object handles the increment and decrement of the `recursive_depth`
  * of the given ThreadInfo object and sets the `recursive_return` if needed.
- * 
  */
 class RecursiveAction {
  public:
   RecursiveAction() {
-    if (tl_thread_info.recursive_depth > 
+    if (tl_thread_info.recursive_depth >
                               tl_thread_info.shared_info->num_threads + 1) {
       tl_thread_info.recursive_return = true;
     }
