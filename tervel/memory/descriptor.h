@@ -1,15 +1,15 @@
-#ifndef UCF_THREAD_DESCRIPTOR_H_
-#define UCF_THREAD_DESCRIPTOR_H_
+#ifndef TERVEL_MEMORY_DESCRIPTOR_H_
+#define TERVEL_MEMORY_DESCRIPTOR_H_
 
 #include <atomic>
 
 #include <assert.h>
 #include <stdint.h>
 
-#include "thread/info.h"
+#include "tervel/memory/info.h"
 
 
-namespace ucf {
+namespace tervel {
 namespace thread {
 
 namespace rc { class DescriptorPool; }
@@ -139,7 +139,7 @@ inline bool is_descriptor(void *descr) {
 
 
 }  // namespace thread
-}  // namespace ucf
+}  // namespace tervel
 
 
-#endif  // UCF_THREAD_DESCRIPTOR_H_
+#endif  // TERVEL_MEMORY_DESCRIPTOR_H_

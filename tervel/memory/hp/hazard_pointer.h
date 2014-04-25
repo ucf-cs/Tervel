@@ -1,5 +1,5 @@
-#ifndef UCF_THREAD_HP_HAZARD_POINTER_H_
-#define UCF_THREAD_HP_HAZARD_POINTER_H_
+#ifndef TERVEL_MEMORY_HP_HAZARD_POINTER_H_
+#define TERVEL_MEMORY_HP_HAZARD_POINTER_H_
 
 #include <atomic>
 #include <utility>
@@ -8,11 +8,11 @@
 #include <stdint.h>
 #include <stddef.h>
 
-#include "thread/descriptor.h"
-#include "thread/system.h"
+#include "tervel/memory/descriptor.h"
+#include "tervel/memory/system.h"
 
-namespace ucf {
-namespace thread {
+namespace tervel {
+namespace memory {
 namespace hp {
 
 class HazardPointer {
@@ -77,7 +77,7 @@ class HazardPointer {
 
 
 }  // namespace hp
-}  // namespace thread
-}  // namespace ucf
+}  // namespace memory
+}  // namespace tervel
 
-#endif  // UCF_THREAD_HP_HAZARD_POINTER_H_
+#endif  // TERVEL_MEMORY_HP_HAZARD_POINTER_H_

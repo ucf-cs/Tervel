@@ -1,8 +1,7 @@
-#include "thread/progress_assurance.h"
+#include "tervel/memory/progress_assurance.h"
 
-
-namespace ucf {
-namespace thread {
+namespace tervel {
+namespace memory {
 
 void ProgressAssurance::try_to_help() {
   if (tl_thread_info->delay_count++ > HELP_DELAY) {
@@ -34,5 +33,5 @@ void ProgressAssurance::ask_for_help(OpRecord *op) {
   op_table_[tl_thread_info->thread_id].store(nullptr);
 }
 
-}  // namespace thread
-}  // namespace ucf
+}  // namespace memory
+}  // namespace tervel

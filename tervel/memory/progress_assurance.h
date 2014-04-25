@@ -1,14 +1,14 @@
-#ifndef UCF_THREAD_PROGRESS_ASSURANCE_H_
-#define UCF_THREAD_PROGRESS_ASSURANCE_H_
+#ifndef TERVEL_MEMORY_PROGRESS_ASSURANCE_H_
+#define TERVEL_MEMORY_PROGRESS_ASSURANCE_H_
 
 #include <atomic>
 #include <memory>
 
-#include "thread/info.h"
+#include "tervel/memory/info.h"
 
 
-namespace ucf {
-namespace thread {
+namespace tervel {
+namespace memory {
 
 constexpr size_t HELP_DELAY = 1;
 
@@ -43,7 +43,7 @@ class ProgressAssurance {
   DISALLOW_COPY_AND_ASSIGN(ProgressAssurance);
 };
 
-}  // namespace thread
-}  // namespace ucf
+}  // namespace memory
+}  // namespace tervel
 
-#endif  // UCF_THREAD_PROGRESS_ASSURANCE_H_
+#endif  // TERVEL_MEMORY_PROGRESS_ASSURANCE_H_

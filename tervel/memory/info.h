@@ -4,16 +4,16 @@
  */
 
 
-#ifndef THREAD_INFO_H_
-#define THREAD_INFO_H_
+#ifndef MEMORY_INFO_H_
+#define MEMORY_INFO_H_
 
 #include <atomic>
 
 #include <stdint.h>
-#include "hp/hazard_pointer.h"
+#include "tervel/memory/hp/hazard_pointer.h"
 
-namespace ucf {
-namespace thread {
+namespace tervel {
+namespace memory {
 
 /**
  * Contains shared information that should be accessible by all threads.
@@ -101,7 +101,7 @@ class RecursiveAction {
   DISALLOW_COPY_AND_ASSIGN(RecursiveAction);
 };
 
-}  // namespace ucf
-}  // namespace thread
+}  // namespace tervel
+}  // namespace memory
 
-#endif  //  THREAD_INFO_H_
+#endif  //  MEMORY_INFO_H_
