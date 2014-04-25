@@ -8,7 +8,7 @@
 #include <stdint.h>
 #include <stddef.h>
 
-#include "tervel/memory/descriptor.h"
+
 #include "tervel/memory/system.h"
 
 namespace tervel {
@@ -47,7 +47,7 @@ class HazardPointer {
    * @param expected The value which is to be expected at the address
    */
 
-  static bool watch(SlotID slot, HPElement *descr, std::atomic<void *> *address
+  static bool watch(SlotID slot, HPElement *elem, std::atomic<void *> *address
              , void *expected
              , HazardPointer *hazard_pointer = tl_thread_info->hazard_pointer) {
 

@@ -40,8 +40,9 @@ PoolElement * DescriptorPool::get_from_pool(bool allocate_new) {
     assert(ret->header().free_count.load() ==
         ret->header().allocation_count.load());
     ret->header().allocation_count.fetch_add(1);
-    safe_pool_count_ -= 1;
 #endif
+    
+    safe_pool_count_ --;
   }
 
   // allocate a new element if needed
@@ -104,15 +105,15 @@ void DescriptorPool::add_to_safe(Descriptor *descr) {
   p->next(safe_pool_);
   safe_pool_ = p;
 
-  p->descriptor()->advance_return_to_pool(this);
+  p->descriptor()->on_return_to_pool(this);
   p->cleanup_descriptor();
 
 #ifdef DEBUG_POOL
   p->header().free_count.fetch_add(1);
   assert(p->header().free_count.load() ==
       p->header().allocation_count.load());
-  safe_pool_count_++;
 #endif
+  safe_pool_count_++;
 }
 
 
@@ -120,10 +121,8 @@ void DescriptorPool::add_to_unsafe(Descriptor* descr) {
   PoolElement *p = get_elem_from_descriptor(descr);
   p->next(unsafe_pool_);
   unsafe_pool_ = p;
+  unsafe_pool_count_++;
 
-#ifdef DEBUG_POOL
-    unsafe_pool_count_++;
-#endif
 }
 
 
@@ -136,9 +135,8 @@ void DescriptorPool::try_clear_unsafe_pool(bool dont_check) {
     if (!dont_check && watched) {
       break;
     } else {
-#ifdef DEBUG_POOL
+
       unsafe_pool_count_--;
-#endif
       this->free_descriptor(temp_descr, true);
       unsafe_pool_ = temp;
     }
@@ -160,66 +158,11 @@ void DescriptorPool::try_clear_unsafe_pool(bool dont_check) {
         this->free_descriptor(temp_descr, true);
         prev->next(temp3);
         temp = temp3;
-#ifdef DEBUG_POOL
         unsafe_pool_count_--;
-#endif
       }
     }
   }
 }
-
-
-bool watch(Descriptor *descr, std::atomic<void *> *address, void *expected) {
-  PoolElement *elem = get_elem_from_descriptor(descr);
-  elem->header().ref_count.fetch_add(1);
-  if (address->load() != expected) {
-    elem->header().ref_count.fetch_add(-1);
-    return false;
-  } else {
-    bool res = descr->advance_watch(address, expected);
-    if (res) {
-      return true;
-    } else {
-      elem->header().ref_count.fetch_add(-1);
-      return false;
-    }
-  }
-}
-
-
-void unwatch(Descriptor *descr) {
-  PoolElement *elem = get_elem_from_descriptor(descr);
-  elem->header().ref_count.fetch_add(-1);
-  descr->advance_unwatch();
-}
-
-
-bool is_watched(Descriptor *descr) {
-  PoolElement * elem = get_elem_from_descriptor(descr);
-  if (elem->header().ref_count.load() == 0) {
-    return descr->advance_is_watched();
-  } else {
-    return true;
-  }
-}
-
-void * remove(void *expected, std::atomic<void *> *address) {
-  RecursiveAction recurse();
-  void *newValue;
-  if (tl_thread_info.recursive_return) {
-    newValue = nullptr;  // result not used
-  } else {
-    Descriptor *descr = unmark(expected);
-    if (watch(descr, address, expected)) {
-      newValue = descr->complete(t, address);
-      unwatch(descr);
-    } else {
-      newValue = address->load();
-    }
-  }
-  return newValue;
-}
-
 
 }  // namespace rc
 }  // namespace memory

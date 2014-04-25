@@ -7,6 +7,7 @@
 #include <stdint.h>
 
 #include "tervel/memory/info.h"
+#include "tervel/memory/rc/util_descriptor.h"
 
 
 namespace tervel {
@@ -19,42 +20,28 @@ class Descriptor {
  public:
   Descriptor() {}
   virtual ~Descriptor() {}
-   // REVIEW(carlos): excesive whitespace
+  /**
+  * This method is implmented by each sub class and must gurantee that upon
+  * return that the descriptor no longer exists at the address it was placed
+  *
+  * @param current the reference to this object as it is at the address,
+  * @param address the location this object was read from
+  */
 
-
-
-   /**
-   * This method is implmented by each sub class and must gurantee that upon
-   * return that the descriptor no longer exists at the address it was placed
-   *
-   * REVIEW(carlos) param name? Other parameter? There shouldn't be a space
-   *   between the function and the comment block. The stars on the comment
-   *   aren't aligned.
-   * @param The bitmarked reference to this object, and the address it was
-   *   placed at.
-   */
-
-  virtual void * complete(void *t, std::atomic<void *> *address) = 0;
+  virtual void * complete(void *current, std::atomic<void *> *address) = 0;
 
   /**
    * This method is implmented by each descriptor object that can be placed into
-   * the pending operation table. It must contain all the information necessary
-   * to complete the associated operation
-   * REVIEW(carlos) should be a blank line between descriptions and
-   *   documentation directives
-   * REVIEW(carlos) don't bother putting none if there aren't any parameters
-   * @param  none 
+   * the pending operation table.
+   *
+   * It must contain all the information necessary to complete the associated
+   * operation
+   * 
    */
 
   virtual void help_complete() = 0;
 
-// TODO(carlos): Below are private functions that should only be called by our
-//   Functions. Make below functions protected and add a list of friend classes
-//   which access them.
-//
-// REVIEW(carlos) keep comments at the same indentation level as surrounding
-//   code.
-
+private:
   /**
    * This method is implmented by each sub class. It returns the logical value
    * of the past address.  If the associted operation is still in progress then
@@ -67,6 +54,7 @@ class Descriptor {
    */
   virtual void * get_logical_value() = 0;
 
+ 
   /**
    * This method is optional to implment for each sub class.  In the event there
    * is a complex dependency between descriptor objects, where watching one
@@ -76,37 +64,32 @@ class Descriptor {
    * This function is called by the static watch function It should not watch
    * itself.
    *
-   * TODO(carlos) what are the parameter names and uses? below param declaration
-   * doesn't give a name.
+   * @param address The location to check.
+   * @param expected The expected value for that location
    *
-   * @param The address the object resides and the value of the object at that
-   * address
-   *
-   * @return TODO(carlos)
+   * @return true if successfull, false otherwise
    */
 
-  virtual bool advance_watch(std::atomic<void *> * /* address */,
-      void * /* TODO(carlos) param name */) {
+  virtual bool on_watch(std::atomic<void *> * /*address*/, void * /*expected*/) {
     return true;
   }
 
   /**
-   * This method must be implemented if advance_watch is implemented, and is
-   * optional otherwise.  It must unwatch any object watched by advance_watch.
+   * This method must be implemented if on_watch is implemented, and is
+   * optional otherwise.  It must unwatch any object watched by on_watch.
    * It should not unwatch itself. It is called when this descriptor is
    * unwatched.
    */
-  virtual void advance_unwatch() {}
+  virtual void on_unwatch() {}
 
   /**
    * This method is optional to implement for each sub class.
-   * This function must be implemented if advance_watch is implemented.
+   * This function must be implemented if on_watch is implemented.
    *
-   * @return true/false depending on the watch status. TODO(carlos)
-   *   no idea what this means.
+   * @return true iff the item is watched by another thread
    */
 
-  virtual bool advance_is_watched() { return false; }
+  virtual bool on_is_watched() { return false; }
 
   /**
    * This method is optional. It should free any child objects.  This method is
@@ -116,51 +99,54 @@ class Descriptor {
    *
    * @param pool The memory pool which this is being freed into.
    */
-  virtual void advance_return_to_pool(rc::DescriptorPool * /*pool*/) {}
+  virtual void on_return_to_pool(rc::DescriptorPool * /*pool*/) {}
 
-
+public:
   /**
    * This method is used to get the value stored at an address that may have a
    * descriptor object their.  It handles memory protection of the objects.  It
    * also performs the read in a wait-free manner using the progress assurance
    * scheme.
    *
-   * TODO(carlos) should this be a member of ProgressAssurance since it needs
-   *   the scheme to be wait-free?
-   * REVIEW(carlos): I don't like havine static methods in classes in general.
-   *   It would be better if it was just a regular function.
-   *
-   * @param the address to read
+   * @param address the address to read
+   * @return the logical value of the address
    */
   template<class T>
   static T read(std::atomic<T> * address);
+  
+  /** This Method determins if the passed value is a descriptor or not.
+   * It does so by calling the two static is_descriptor functions of the RC and 
+   * HP descriptor classes.
+   *
+   * @param value the value to check
+   * @return true if is a descriptor
+   */
+  static bool is_descriptor(void *value) {
+    if (RC::is_descriptor_first(value)) {
+      return true;
+    }
+    return false;
+  }
+
+  /** This method removes a descriptor from the passed address.
+   * First it determineds the type of descriptor, currently only supports RC
+   * Then it calls that descriptor type's watch procedure
+   * Finally it calls the descriptor complete function
+   *
+   * @param address the address the descriptor was read from value to check
+   * @param value the expected value for the address, which should be a 
+   * descriptor
+   */
+
+  static bool remove_descriptor(std::atomic<void *> *address, void *value) {
+    if (RC::is_descriptor_first(value)) {
+      return true;
+    }
+    //This assert hits in the event an unknown discriptor type wass passed in
+    assert(false); 
+    return false;
+  }
 };
-
-// REVIEW(carlos) If you feel this is the correct way forward, just implement
-//   it. If you're not sure, the comment is fine, but do something to mark it as
-//   a continuation of the TODO.
-//
-// TODO(carlos) not sure where to put the below functions
-//   (steven) Lets move into RC, this way it is clear that it is an rc protected
-//   descriptor We can add them to HP with different bits as well. ie use 2
-//   instead of 1
-
-inline void * mark(Descriptor *descr) {
-  return reinterpret_cast<void *>(reinterpret_cast<uintptr_t>(descr) | 0x1L);
-}
-
-inline Descriptor * unmark(void *descr) {
-  return reinterpret_cast<Descriptor *>(
-      reinterpret_cast<uintptr_t>(descr) & ~0x1L);
-}
-
-inline bool is_descriptor(void *descr) {
-  return (0x1L == (reinterpret_cast<uintptr_t>(descr) & 0x1L));
-}
-// REVIEW(carlos) excessive whitespace
-
-
-
 }  // namespace thread
 }  // namespace tervel
 

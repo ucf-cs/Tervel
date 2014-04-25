@@ -21,17 +21,6 @@ class Descriptor;
 namespace rc {
 
 class PoolManager;
-
-/**
- * If true, then DescriptorPool shouldn't reuse old pool elements when being
- * asked, even if it's safe to fo so. Instead, elements should be stock-piled
- * and left untouched when they're returned to the pool. This allows the user to
- * view associations. Entirely for debug purposes.
- *
- * TODO(carlos): move this to member var
- */
-constexpr bool NO_REUSE_MEM = false;
-
 /**
  * Defines a pool of descriptor objects which is used to allocate descriptors
  * and to store them while they are not safe to delete.
@@ -47,6 +36,10 @@ constexpr bool NO_REUSE_MEM = false;
  * parent. At the moment, it only makes sense to have a single top-level parent
  * representing the central pool for all threads, and several local pools for
  * each thread.
+ *
+ * TODO(steven) Need to implement max list size, when it is reached, elements
+ * are sent to the manager list
+ * TODO(steven) Need to implement logic to attempt to get elements from manager
  */
 class DescriptorPool {
  public:
@@ -78,22 +71,6 @@ class DescriptorPool {
 
   /**
    * Allocates an extra `num_descriptors` elements to the pool.
-   *
-   * TODO(carlos): Currently, this just blindly allocates using new, but
-   *   typical semantics are that this should ensure at least n elements in the
-   *   list. This is more expensive as it requires a list traversal, and I don't
-   *   think there's any real benefit to it. Further, should this method first
-   *   try to reclaim elements from the managers before calling new?
-   *
-   *   (steven): I think we should track the number of elements with counters
-   *     Then we can use them to keep the number of elements between an upper
-   *     limit and a lower limit.  I think we should always check the Manager
-   *     before asking the allocator
-   *
-   *   (carlos) But what benefit does it get us to use counters? We basically
-   *     just get extra contention on the counters so that this one seldom-used
-   *     method can have correct semantics.
-   *
    */
   void reserve(int num_descriptors);
 
@@ -161,7 +138,7 @@ class DescriptorPool {
    * ownership of descriptor. It's expected that the given descriptor was taken
    * from this pool to begin with.
    *
-   * Adding a descriptor to the safe pool calls its 'advance_return_to_pool'
+   * Adding a descriptor to the safe pool calls its 'on_return_to_pool'
    * method and its destructor.
    */
   void add_to_safe(Descriptor* descr);
@@ -211,80 +188,28 @@ class DescriptorPool {
    */
   PoolElement *unsafe_pool_ {nullptr};
 
-#ifdef DEBUG_POOL
-  // TODO(carlos) what, exactly, do these keep track of?
+  /** 
+   * Two counters used to track the number of elements in the linked list.
+   * this facilitates the detection of when there are too many elements.
+   */
   uint64_t safe_pool_count_ {0};
   uint64_t unsafe_pool_count_ {0};
-#endif
+
+  /**
+   * If true, then DescriptorPool shouldn't reuse old pool elements when being
+   * asked, even if it's safe to fo so. Instead, elements should be stock-piled
+   * and left untouched when they're returned to the pool. This allows the user to
+   * view associations. Entirely for debug purposes.
+   */
+  constexpr bool NO_REUSE_MEM = false;
 
 };
-
-// REVIEW(carlos) These methods are not part of the class, and should thus not
-//   be labled static.
-
-//TODO(carlos): These methods are static methods of the rc descriptor class
-// They 
-/**
- * This method is used to increment the reference count of the passed descriptor
- * object. If after increming the reference count the object is still at the
- * address (indicated by *a == value), it will call advance_watch.
- * If that returns true then it will return true.
- * Otherwise it decrements the reference count and returns false
- *
- * REVIEW(carlos) param directives are java-doc style. should be 3 directives
- *   for each parameter, each with a parameter name and a description.
- * REVIEW(carlos) parameter names of this function have gone out-of-sync with
- *   function in the cc file
- * @param the descriptor which needs rc protection, 
- * the address it was derferenced from, and the bitmarked value of it.
- */
-static bool watch(Descriptor *descr, std::atomic<void *> *a, void *value);
-
-/**
- * This method is used to decrement the reference count of the passed descriptor
- * object.
- * Then it will call advance_unwatch and decrement any related objects necessary
- *
- * REVIEW(carlos) see notes on watch
- * @param the descriptor which no longer needs rc protection.
- */
-static void unwatch(Descriptor *descr);
-
-/**
- * This method is used to determine if the passed descriptor is under rc
- * rc protection.
- * Internally calls advance_iswatch.
- *
- * REVIEW(carlos) see notes on watch
- * @param the descriptor to be checked for rc protection.
- */
-static bool is_watched(Descriptor *descr);
-
-
-
-/**
- * This method is used to remove a descriptor object that is conflict with
- * another threads operation.
- * It first checks the recursive depth before proceding. 
- * Next it protects against the object being reused else where by acquiring
- * either HP or RC watch on the object.
- * Then once it is safe it will call the objects complete function
- * This function must gurantee that after its return the object has been removed
- * It returns the value.
- * 
- * REVIEW(carlos) see notes on watch
- * @param a marked reference to the object and the address the object was
- * dereferenced from.
- */
-
-static void * remove_descriptor(void *expected, std::atomic<void *> *address);
-
 
 // IMPLEMENTATIONS
 // ===============
 
 template<typename DescrType, typename... Args>
-Descriptor * DescriptorPool::get_descriptor(Args&&... args) {
+  Descriptor * DescriptorPool::get_descriptor(Args&&... args) {
   PoolElement *elem = this->get_from_pool();
   elem->init_descriptor<DescrType>(std::forward<Args>(args)...);
   return elem->descriptor();
