@@ -12,6 +12,7 @@
 #include "tervel/memory/rc/pool_element.h"
 #include "tervel/memory/rc/pool_manager.h"
 #include "tervel/memory/system.h"
+#include "tervel/util.h"
 
 namespace tervel {
 namespace memory {
@@ -205,6 +206,8 @@ class DescriptorPool {
    * view associations. Entirely for debug purposes.
    */
   constexpr bool NO_REUSE_MEM {false}
+
+  DISALLOW_COPY_AND_ASSIGN(DescriptorPool);
 };
 
 // IMPLEMENTATIONS

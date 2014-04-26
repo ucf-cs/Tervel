@@ -10,6 +10,7 @@
 
 #include "tervel/memory/descriptor.h"
 #include "tervel/memory/system.h"
+#include "tervel/util.h"
 
 namespace tervel {
 namespace memory {
@@ -103,6 +104,8 @@ class PoolElement {
    * back-pointers.
    */
   char padding_[CACHE_LINE_SIZE];
+
+  DISALLOW_COPY_AND_ASSIGN(PoolElement);
 };
 static_assert(sizeof(PoolElement) == CACHE_LINE_SIZE,
     "Pool elements should be cache-aligned. Padding calculation is probably"

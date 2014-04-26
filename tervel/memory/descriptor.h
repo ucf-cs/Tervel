@@ -8,6 +8,7 @@
 
 #include "tervel/memory/info.h"
 #include "tervel/memory/rc/util_descriptor.h"
+#include "tervel/util.h"
 
 
 namespace tervel {
@@ -150,7 +151,11 @@ public:
     assert(false);
     return false;
   }
+
+ private:
+  DISALLOW_COPY_AND_ASSIGN(Descriptor);
 };
+
 }  // namespace thread
 }  // namespace tervel
 

@@ -5,6 +5,7 @@
 #include <memory>
 
 #include "tervel/memory/info.h"
+#include "tervel/util.h"
 
 
 namespace tervel {
@@ -26,6 +27,9 @@ class OpRecord : public HP::HPElement {
    * information necessary to complete the operation.
    */
   virtual void help_complete() = 0;
+
+ private:
+  DISALLOW_COPY_AND_ASSIGN(OpRecord);
 };
 
 /**
@@ -89,8 +93,11 @@ class ProgressAssurance {
    * that corresponds to its thread if.
    */
   std::unique_ptr<std::atomic<OpRecord *>[]> op_table_;
+
   // The number of threads that are using this operation table
   int num_threads_;
+
+  DISALLOW_COPY_AND_ASSIGN(ProgressAssurance);
 };
 
 }  // namespace memory

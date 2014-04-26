@@ -10,9 +10,11 @@
 
 #include "tervel/memory/descriptor.h"
 #include "tervel/memory/system.h"
+#include "tervel/util.h"
 
 namespace tervel {
 namespace memory {
+namespace hp {
 
 class HPElement {
   /**
@@ -27,21 +29,19 @@ class HPElement {
   HPElement() {}
   ~HPElement() {}
 
-  /** 
+  /**
    * This function is used to free a hazard pointer protected object if it is
    * safe to do so OR add it to a list to be freed later.
    * It also calls 'try_to_free_HPElements' in an attempt to free previously
    * unfreeable objects.
    */
-  void safeFree(HazardPointer *hazard_pointer =
-                                              tl_thread_info->hazard_pointer) {
+  void safeFree(HazardPointer *hazard_pointer=tl_thread_info->hazard_pointer) {
     hazard_pointer->try_to_free_HPElements();
     if (HazardPointer::is_watched(this)) {
       hazard_pointer->add_to_unsafe(this);
     } else {
       this->~HPElement();
     }
-
     hazard_pointer->try_clear_unsafe_pool();
   }
 
@@ -67,7 +67,6 @@ class HPElement {
 
 
  private:
-  HPElement *next_ {nullptr}
   /**
    * Helper method for getting the next pointer.
    */
@@ -77,6 +76,10 @@ class HPElement {
    * Helper method for setting the next pointer.
    */
   void next(HPElement *next) { next_ = next; }
+
+  HPElement *next_ {nullptr}
+
+  DISALLOW_COPY_AND_ASSIGN(HPElement);
 };
 
 }  // namespace hp

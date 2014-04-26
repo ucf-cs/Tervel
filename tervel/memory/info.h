@@ -10,7 +10,9 @@
 #include <atomic>
 
 #include <stdint.h>
+
 #include "tervel/memory/hp/hazard_pointer.h"
+#include "tervel/util.h"
 
 namespace tervel {
 namespace memory {
@@ -109,6 +111,9 @@ class RecursiveAction {
   }
 
   ~RecursiveAction() { tl_thread_info.recursive_depth -= 1; }
+
+ private:
+  DISALLOW_COPY_AND_ASSIGN(RecursiveAction);
 };
 
 }  // namespace tervel

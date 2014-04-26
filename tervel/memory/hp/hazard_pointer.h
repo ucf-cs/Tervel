@@ -10,6 +10,7 @@
 
 
 #include "tervel/memory/system.h"
+#include "tervel/util.h"
 
 namespace tervel {
 namespace memory {
@@ -40,8 +41,8 @@ class HazardPointer {
   /**
    * This method is used to achieve a hazard pointer watch on the the based descr.
    * Internally it will call the descriptors on_watch function.
-   *  
-   * If after writing descr the object is still at the address 
+   *
+   * If after writing descr the object is still at the address
    * (indicated by *a == value), it will call on_watch.
    * If that returns true then it will return true.
    * Otherwise it removes the hazard pointer watch and returns false
@@ -58,8 +59,8 @@ class HazardPointer {
 
   /**
    * This method is used to achieve a hazard pointer watch on a memory address.
-   *  
-   * If after writing the value, it is still at the address 
+   *
+   * If after writing the value, it is still at the address
    * (indicated by *a == value), will return true.
    * Otherwise it removes the hazard pointer watch and returns false
    *
@@ -119,8 +120,8 @@ class HazardPointer {
   // -------
 
   /** This function takes a SlotID and stores the specified value into that
-   * the threads alloated slot for that id in the hazard pointer watch list 
-   * 
+   * the threads alloated slot for that id in the hazard pointer watch list
+   *
    * @param slot The id of the slot to watch.
    * @param value The value to watch
    **/
@@ -130,7 +131,7 @@ class HazardPointer {
   };
 
   /** This function takes a SlotID and stores null into that
-   * the threads alloated slot for that id in the hazard pointer watch list 
+   * the threads alloated slot for that id in the hazard pointer watch list
    *
    * @param slot The id of the slot to watch.
    */
@@ -158,7 +159,7 @@ class HazardPointer {
  private:
   /** This function calculates a the position of a threads slot for the
    * specified SlotID
-   * 
+   *
    * @param slot The slot id to get the position of
    */
   int get_slot(SlotID id) {
@@ -167,6 +168,8 @@ class HazardPointer {
 
   std::unique_ptr<std::atomic<value *>[]> watches_;
   const size_t num_slots;
+
+  DISALLOW_COPY_AND_ASSIGN(HazardPointer);
 };
 
 

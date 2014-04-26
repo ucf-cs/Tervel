@@ -9,6 +9,7 @@
 #include <stdint.h>
 
 #include "tervel/memory/system.h"
+#include "tervel/util.h"
 
 namespace tervel {
 namespace memory {
@@ -61,6 +62,8 @@ class PoolManager {
 
 
   std::unique_ptr<ManagedPool[]> pools_;
+
+  DISALLOW_COPY_AND_ASSIGN(PoolManager);
 };
 
 }  // namespace rc
