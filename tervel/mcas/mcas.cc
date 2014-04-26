@@ -215,7 +215,28 @@ bool wf_complete() {
 
 void help_complete() {
   t_MCAS::mcas_complete(0, true);
-};
+}
+
+/**
+ * This function is called after is_watched checked if this item was in the HP
+ * But before this is freeded we need to check that each associated MCH is also
+ * un_watched
+ */
+bool on_is_watched() {
+  for (int i = 0; i < row_count_; i++) {
+    t_MCASHelper mch = cas_row_[i]->helper.load();
+    assert(mch != nullptr);
+    if (mch == MCAS_FAIL_CONST) {
+      return false;
+    }
+    if (memory::rc::is_watched(mch)) {
+      return true;
+    }
+  }
+  assert(false);
+  return false;
+}
+
 
 }  // End mcas namespace
 }  // End ucf name space
