@@ -14,17 +14,17 @@
 namespace tervel {
 namespace memory {
 namespace hp {
-/**
- * This class is used to maintain the list of hazard pointed objects.
- * Any value can be written into a slot, however we provide special
- * implementation for HPElements, in that we call their on_* functions.
- * This allows for more expressive operations to be performed.
- * 
- * If an individual thread requires more than one element to be hazard pointer
- * portected at a single instance, then SlotIDs should be added.
- */
+
 class HazardPointer {
-  
+  /**
+   * This class is used to maintain the list of hazard pointed objects.
+   * Any value can be written into a slot, however we provide special
+   * implementation for HPElements, in that we call their on_* functions.
+   * This allows for more expressive operations to be performed.
+   * 
+   * If an individual thread requires more than one element to be hazard pointer
+   * portected at a single instance, then SlotIDs should be added.
+   */
  public:
   enum class SlotID {SHORTUSE, END};
 

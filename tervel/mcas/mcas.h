@@ -9,6 +9,12 @@ namespace mcas {
 
 template<class T>
 class MCAS : public : memory::OpRecord {
+  /**
+   * This is the MCAS class, it is used to perform a Multi-Word Compare-and-Swap
+   * To execute an MCAS, simply call addCASTriple for each address you want to
+   * update, then call execute();
+   * This function is wait-free.
+   */
   typedef CasRow<T> t_CasRow;
   typedef MCASHelper<T> t_MCASHelper;
   typedef MCAS<T> t_MCAS;
@@ -46,10 +52,10 @@ class MCAS : public : memory::OpRecord {
    * is a value which does not use one of the reserved bits or constants.
    * See related documentation for more details
    *
-   * @params address
-   * @params expected_value
-   * @params new_value
-   * returns true if successfully added.
+   * @param address
+   * @param expected_value
+   * @param new_value
+   * @return true if successfully added.
    */
 
   bool addCASTriple(std::atomic<T> *address, T expected_value, T new_value);

@@ -4,7 +4,7 @@
 #include "tervel/memory/rc/pool_element.h"
 
 namespace tervel {
-namespace thread {
+namespace memory {
 namespace rc {
 
 /**

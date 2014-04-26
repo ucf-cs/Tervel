@@ -14,16 +14,15 @@
 namespace tervel {
 namespace memory {
 
-
-/**
- * This class is used for the creation of Hazard Pointer Protected Objects
- * Objects which extend it have the ability to call safeFree which delays
- * the calling of the objects destructor until it is safe to do so.
- * 
- * To achieve more advance functionality, the user can also extend the Descriptor
- * class which will proive on_watch, on_unwatch, and on_is_watch functions.
- */
 class HPElement {
+  /**
+   * This class is used for the creation of Hazard Pointer Protected Objects
+   * Objects which extend it have the ability to call safeFree which delays
+   * the calling of the objects destructor until it is safe to do so.
+   * 
+   * To achieve more advance functionality, the user can also extend the Descriptor
+   * class which will proive on_watch, on_unwatch, and on_is_watch functions.
+   */
  public:
   HPElement() {}
   ~HPElement() {}

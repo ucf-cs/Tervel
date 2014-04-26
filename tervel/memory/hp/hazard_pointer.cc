@@ -1,7 +1,7 @@
 #include "thread/hp/hazard_pointer.h"
 
 namespace ucf {
-namespace thread {
+namespace memory {
 namespace hp {
 
 bool watch(SlotID slot, HPElement *descr, std::atomic<void *> *address

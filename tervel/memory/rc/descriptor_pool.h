@@ -91,7 +91,7 @@ class DescriptorPool {
    * @param allocate_new If true and there are no free elements to retrieve from
    *   the pool, a new one is allocated. Otherwise, nullptr is returned.
    */
-  PoolElement * get_from_pool(bool allocate_new=true);
+  PoolElement * get_from_pool(bool allocate_new = true);
 
 
   // -------------------------
@@ -158,7 +158,7 @@ class DescriptorPool {
   /**
    * Try to move elements from the unsafe pool to the safe pool.
    */
-  void try_clear_unsafe_pool(bool dont_check=false);
+  void try_clear_unsafe_pool(bool dont_check = false);
 
 
   // -------

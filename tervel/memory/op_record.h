@@ -4,7 +4,7 @@
 #include "tervel/memory/hp/hp_element.h"
 
 namespace tervel {
-namespace thread {
+namespace memory {
   namespace HP { class HPElement; }
   class OpRecord: public HPElement {
    public:

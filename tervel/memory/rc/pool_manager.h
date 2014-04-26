@@ -32,37 +32,26 @@ class PoolManager {
  public:
   friend class DescriptorPool;
 
-  // REVIEW(carlos) my name is forsaken...
-  // TODO(carlos): I think number_pools should not be passed, but rather  we use
-  //   the numb_threads found in the shared info to set the number of pools
-  //   plus pools are accessed by thread id, which must be <= num_threads.
-  //
-  //   (the-real-carlos): We discussed the solution as taking a defaulted
-  //     parameter for the thread_info. We'll get the number_pools from there.
-  PoolManager(int number_pools)
+  explicit PoolManager(int number_pools)
       : number_pools_(number_pools)
       , allocated_pools_(0)
       , pools_(new ManagedPool[number_pools_]) {}
 
   /**
    * Allocates a pool for thread-local use. Semantically, the manager owns all
-   * pools. Method is not thread-safe.
-   * TODO(carlos): should be able to specify pool by thread id (tid).
+   * pools. Method is thread-safe iff each thread calls it with a unique pos,
+   * the thread's ID satifies this
    */
-  DescriptorPool * get_pool();
+  DescriptorPool * get_pool(int pos = tl_thread_info.thread_id);
 
   const int number_pools_;
 
 
  private:
   struct ManagedPool {
-    // TODO(carlos) use a pool object, or a pool pointer?
-    // TODO(carlos) Below item should not be here, I think it is for HP objects, 
-    // but this is in rc name space.
-    std::unique_ptr<DescriptorPool> pool {nullptr};
-
-    std::atomic<PoolElement *> safe_pool {nullptr};
-    std::atomic<PoolElement *> unsafe_pool {nullptr};
+    std::unique_ptr<DescriptorPool> pool {nullptr}
+    std::atomic<PoolElement *> safe_pool {nullptr}
+    std::atomic<PoolElement *> unsafe_pool {nullptr}
 
     char padding[CACHE_LINE_SIZE - sizeof(pool) - sizeof(safe_pool) -
       sizeof(unsafe_pool)];
@@ -70,15 +59,6 @@ class PoolManager {
   static_assert(sizeof(ManagedPool) == CACHE_LINE_SIZE,
       "Managed pools have to be cache aligned to prevent false sharing.");
 
-  /**
-   * Keeps track of how many pools have been allocated.
-   * TODO(carlos) should this be atomic?
-   * REVIEW(carlos) RIP: my name :'(
-   * TODO(carlos) No, this is not needed.
-   * REVIEW(carlos) extra unneeded line at bottom
-   * 
-   */
-  int allocated_pools_;
 
   std::unique_ptr<ManagedPool[]> pools_;
 };

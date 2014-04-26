@@ -14,23 +14,22 @@
 #include "thread/system.h"
 
 namespace ucf {
-namespace thread {
+namespace memory {
 namespace hp {
 class HPElement;
 class ListManager;
 
-
-/**
- * Defines a list of objects which are stored until they are safe to be freed.
- *
- * The list is represented as a linked lists of HP Elements
- *
- * Further, this object has a parent who is shared amongst other threads.
- * When it is to be destroyed, it sends its remaining elements to the
- * parent, relinquishing ownership of said elements. 
- *
- */
 class HPList {
+  /**
+   * Defines a list of objects which are stored until they are safe to be freed.
+   *
+   * The list is represented as a linked lists of HP Elements
+   *
+   * Further, this object has a parent who is shared amongst other threads.
+   * When it is to be destroyed, it sends its remaining elements to the
+   * parent, relinquishing ownership of said elements. 
+   *
+   */
  public:
   friend HPElement;
   explicit HPList(ListManager *manager)

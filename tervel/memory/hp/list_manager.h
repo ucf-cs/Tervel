@@ -11,7 +11,7 @@
 #include "thread/system.h"
 
 namespace ucf {
-namespace thread {
+namespace memory {
 namespace hp {
 
 class HPList;

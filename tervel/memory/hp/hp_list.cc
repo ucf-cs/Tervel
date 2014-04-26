@@ -1,7 +1,7 @@
 
 
 namespace ucf {
-namespace thread {
+namespace memory {
 namespace hp {
 
 void HPList::free_descriptor(HPElement *descr, bool dont_check) {

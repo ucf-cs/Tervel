@@ -7,16 +7,16 @@
 
 template<class T>
 class CasRow {
+  /**
+   * This class is used to represent a one of the M CAS operations performed
+   * by an MCAS operation.
+   * It holds an address, expected value and new value for that address.
+   */
   typedef CasRow<T> t_CasRow;
   typedef MCASHelper<T> t_MCASHelper;
   typedef MCAS<T> t_MCAS;
 
   public:
-    /**
-     * This class is used to represent a one of the M CAS operations performed
-     * by an MCAS operation.
-     * It holds an address, expected value and new value for that address.
-     */
     CasRow<T>() {}
 
     CasRow<T>(std::atomic<T> *a, T ev, T nv)

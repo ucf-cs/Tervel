@@ -18,11 +18,12 @@ class Descriptor;
 
 namespace rc {
 
-// TODO(carlos) user should never be aware of existance of the PoolElement
-// object. What's the best way to hide its definition? Could be a private class
-// of DescriptorPool, but need to see how meshes with hazard pointers.
-  //TODO(carlos) they are similar in the API but that is all, so they should not
-  // share Pool Elements.
+/** 
+ * This class is used to hold the memory management information (Header) and
+ * a descriptor object. It is important to sepearte them to prevent the case
+ * where a thread attempts to dereference an object while its type id is being
+ * changed.
+ */
 class PoolElement {
  public:
   static constexpr int BASE_TYPE = 42;
