@@ -1,9 +1,0 @@
-var searchData=
-[
-  ['info_2eh',['info.h',['../info_8h.html',1,'']]],
-  ['init_5fdescriptor',['init_descriptor',['../classtervel_1_1memory_1_1rc_1_1_pool_element.html#a79abb89c2cea68e0ee08f4c1a818bb5b',1,'tervel::memory::rc::PoolElement']]],
-  ['is_5fdescriptor',['is_descriptor',['../classtervel_1_1memory_1_1_descriptor.html#a5329a350717ece1711ef130979ae01a5',1,'tervel::memory::Descriptor']]],
-  ['is_5fdescriptor_5ffirst',['is_descriptor_first',['../namespacetervel_1_1memory_1_1rc.html#a67a941bc0094b9417fa1e1aa2510f2a7',1,'tervel::memory::rc']]],
-  ['is_5fwatched',['is_watched',['../classtervel_1_1memory_1_1hp_1_1_hazard_pointer.html#a9e3bd4ca493a0d8510ca03ec97e195ce',1,'tervel::memory::hp::HazardPointer::is_watched(HPElement *descr, HazardPointer *hazard_pointer=tl_thread_info-&gt;hazard_pointer)'],['../classtervel_1_1memory_1_1hp_1_1_hazard_pointer.html#ae20e9952a51b49b18721b82bc97baf9f',1,'tervel::memory::hp::HazardPointer::is_watched(void *value, HazardPointer *hazard_pointer=tl_thread_info-&gt;hazard_pointer)'],['../namespaceucf_1_1memory_1_1hp.html#ad93a5961f74d6328d3b826dc43786da5',1,'ucf::memory::hp::is_watched(HPElement *descr, HazardPointer *hazard_pointer=tl_thread_info-&gt;hazard_pointer)'],['../namespaceucf_1_1memory_1_1hp.html#a5e8fe3f4b070f2ff2a869a226ece580e',1,'ucf::memory::hp::is_watched(void *value, HazardPointer *hazard_pointer=tl_thread_info-&gt;hazard_pointer)'],['../namespacetervel_1_1memory_1_1hp.html#a7b490bfb85d8f84d11b1a7a28d2675ba',1,'tervel::memory::hp::is_watched(HPElement *descr)'],['../namespacetervel_1_1memory_1_1hp.html#a14006817d293837292c4a9310dbd1ad8',1,'tervel::memory::hp::is_watched(void *value)'],['../namespacetervel_1_1memory_1_1rc.html#afb234acc75b39b4bb6e501c7017edef0',1,'tervel::memory::rc::is_watched()']]],
-  ['isready',['isReady',['../main__tester_8cc.html#a4367a5bcb412331962c22cd42f0ff2e2',1,'main_tester.cc']]]
-];
