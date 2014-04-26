@@ -121,6 +121,13 @@ bool t_MCAS::mcas_complete(int start_pos, bool wfmode = false) {
         }
       }  // End Else Try to replace
     }  // End While Current helper is null
+
+    if (row->helper.load() == MCAS_FAIL_CONST) {
+      MCAS_STATE temp_state = MCAS_STATE::IN_PROGRESS;
+      this->state_.compare_exchange_strong(temp_state, MCAS_STATE::FAIL);
+      assert(this->stat_.load() == MCAS_STATE::FAIL);
+      return false;
+    }
   }  // End For Loop on CasRows
 
   // Alll rows have been associated, so set the state to passed!
@@ -137,39 +144,30 @@ T t_MCAS::mcas_remove(const int pos, T value) {
     // Checks if it is an rc_discriptor, could be another type (or bitmark)
     Descriptor *descr = memory::rc::unmark_first(value);
 
-    // Gains RC protection on the object, if succesful then the object cant
-    // be freed while we dereference it.
+    // First get a watch on the object.
     bool watched = thread::rc::watch(descr,
                   reinterpret_cast<std::atomic<void *>*>(address),
                   reinterpret_cast<void *>(t));
-    if (!watched) {
+    // Now unwatch it, crazy right
+    memory::rc::unwatch(descr);
+    if (watched) {
+      /* If we watched it and it is a MCH for this operation, then act of 
+       * watching will call the MCH's on_watch function, which will associate it
+       * with this cas row...thus if cas_rows[pos].helper != nullprt, then this
+       * could have been a MCH to for this row but it does not matter, because
+       * this row is already done, so we need to go to the next row.
+       */
+      if (this->cas_row_[pos].helper.load() != nullptr) {
+        return nullptr;  // Does not matter, it wont be used.
+      }
+    } else {
       // watch failed do to the value at the address changing, return new value
       return address->load();
     }
-
-
-    t_MCASHelper* cast_p = dynamic_cast<t_MCASHelper *>(descr);
-    // TODO(steven): Hey carlos is there a betterway to check if this is a MCH
-    // type?
-
-    if ( (cast_p !=  nullptr) && (cast_p->mcas_op_ == mcas_op_) ) {
-      // This is a MCH for the same op, ie same position.
-      assert((uintptr_t)cast_p == (uintptr_t)descr);
-      assert(cast_p->cas_row_ == &(cas_row_[pos]));
-
-      // Make sure it is associated
-      t_MCASHelper* temp_null = nullptr;
-      cas_row_[pos]->helper.compare_exchange_strong(temp_null, cast_p);
-      if (temp_null != nullptr && temp_null != cast_p) {
-        // Was placed in error/can't assoactie, so remove
-        address->compare_exchange_strong(t, cast_p->cas_row_->expected_value);
-      }
-      thread::rc::unwatch(descr);
-      return address->load();
-    }
-    thread::rc::unwatch(descr);
   }
-  // Otherwise it is a non-mcas descas_row_iptor
+
+  // Otherwise it is someother descriptor type, so call the generic descriptor
+  // remove operation
   return reinterpret_cast<T>(memory::Descriptor::remove_descriptor
                                                               (address, value));
 };
