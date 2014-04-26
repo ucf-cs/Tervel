@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['slotid',['SlotID',['../classtervel_1_1memory_1_1hp_1_1_hazard_pointer.html#ad14bc59c9f79d5064fae9a57ad5ecc09',1,'tervel::memory::hp::HazardPointer']]]
+  ['test_5ftype_5fcode',['TEST_TYPE_CODE',['../main__tester_8cc.html#a3d2a5252672487c51beba27a687c8845',1,'main_tester.cc']]]
 ];

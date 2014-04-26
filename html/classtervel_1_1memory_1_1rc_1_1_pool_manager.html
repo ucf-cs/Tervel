@@ -114,9 +114,9 @@ Classes</h2></td></tr>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:abc3b2e3076d347750fd64fe29098addd"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtervel_1_1memory_1_1rc_1_1_pool_manager.html#abc3b2e3076d347750fd64fe29098addd">PoolManager</a> (int number_pools)</td></tr>
 <tr class="separator:abc3b2e3076d347750fd64fe29098addd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a10b79947623ecb104e034c8e226fd8ae"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classtervel_1_1memory_1_1rc_1_1_descriptor_pool.html">DescriptorPool</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtervel_1_1memory_1_1rc_1_1_pool_manager.html#a10b79947623ecb104e034c8e226fd8ae">get_pool</a> ()</td></tr>
-<tr class="memdesc:a10b79947623ecb104e034c8e226fd8ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocates a pool for thread-local use.  <a href="#a10b79947623ecb104e034c8e226fd8ae">More...</a><br /></td></tr>
-<tr class="separator:a10b79947623ecb104e034c8e226fd8ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a800a031e117909c5bff5c85981025842"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classtervel_1_1memory_1_1rc_1_1_descriptor_pool.html">DescriptorPool</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtervel_1_1memory_1_1rc_1_1_pool_manager.html#a800a031e117909c5bff5c85981025842">get_pool</a> (int pos=tl_thread_info.thread_id)</td></tr>
+<tr class="memdesc:a800a031e117909c5bff5c85981025842"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocates a pool for thread-local use.  <a href="#a800a031e117909c5bff5c85981025842">More...</a><br /></td></tr>
+<tr class="separator:a800a031e117909c5bff5c85981025842"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -125,9 +125,6 @@ Public Attributes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:a42f17555a891914ed0cd19e115583622"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtervel_1_1memory_1_1rc_1_1_pool_manager.html#a42f17555a891914ed0cd19e115583622">allocated_pools_</a></td></tr>
-<tr class="memdesc:a42f17555a891914ed0cd19e115583622"><td class="mdescLeft">&#160;</td><td class="mdescRight">Keeps track of how many pools have been allocated.  <a href="#a42f17555a891914ed0cd19e115583622">More...</a><br /></td></tr>
-<tr class="separator:a42f17555a891914ed0cd19e115583622"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab99dd108eb2e0020fcff46843bf0ba0b"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="structtervel_1_1memory_1_1rc_1_1_pool_manager_1_1_managed_pool.html">ManagedPool</a>[]&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtervel_1_1memory_1_1rc_1_1_pool_manager.html#ab99dd108eb2e0020fcff46843bf0ba0b">pools_</a></td></tr>
 <tr class="separator:ab99dd108eb2e0020fcff46843bf0ba0b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -157,7 +154,7 @@ Friends</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">explicit</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -165,23 +162,22 @@ Friends</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a class="anchor" id="a10b79947623ecb104e034c8e226fd8ae"></a>
+<a class="anchor" id="a800a031e117909c5bff5c85981025842"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname"><a class="el" href="classtervel_1_1memory_1_1rc_1_1_descriptor_pool.html">DescriptorPool</a> * tervel::memory::rc::PoolManager::get_pool </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>pos</em> = <code>tl_thread_info.thread_id</code></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p>Allocates a pool for thread-local use. </p>
-<p>Semantically, the manager owns all pools. Method is not thread-safe. TODO(carlos): should be able to specify pool by thread id (tid). </p>
-<p>TODO(carlos): the above should take an TID. Logic related to NULL should be handled by the calling thread If its tid == TID then it will allocate the object through a seperate function Other wise it returns a reference to the pool Though I am not sure about the use of this function... The name implies it gets a pool but not that it creates a new pool. So we can have two functions, init_pool and get_pool. We use get_pool when we are iterating trying to get elements</p>
-<p>(the-real-carlos) I wasn't too sure about it either. Figured that this would be called as an entry point to allocating a new pool. splitting things into two functions sounds fine, though I don't see the use case for grabbing a pool by id.</p>
+<p>Semantically, the manager owns all pools. Method is thread-safe iff each thread calls it with a unique pos, the thread's ID satifies this </p>
 
 </div>
 </div>
@@ -207,29 +203,6 @@ Friends</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a class="anchor" id="a42f17555a891914ed0cd19e115583622"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">int tervel::memory::rc::PoolManager::allocated_pools_</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Keeps track of how many pools have been allocated. </p>
-<p>TODO(carlos) should this be atomic? REVIEW(carlos) RIP: my name :'( TODO(carlos) No, this is not needed. REVIEW(carlos) extra unneeded line at bottom </p>
-
-</div>
-</div>
 <a class="anchor" id="a5a53e308385b3139085cff97add159ee"></a>
 <div class="memitem">
 <div class="memproto">
@@ -269,7 +242,7 @@ Friends</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 25 2014 13:17:00 for Tervel by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Apr 25 2014 20:30:36 for Tervel by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.7
 </small></address>

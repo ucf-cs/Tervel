@@ -90,6 +90,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pri-methods">Private Member Functions</a> &#124;
 <a href="#pri-attribs">Private Attributes</a> &#124;
 <a href="classtervel_1_1memory_1_1rc_1_1_descriptor_pool-members.html">List of all members</a>  </div>
@@ -109,16 +110,22 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a77cad4dab41c3977c2ddc0e872b34025"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7e43c5c21db028bf62a7a43d5533f1e5"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtervel_1_1memory_1_1rc_1_1_descriptor_pool.html#a7e43c5c21db028bf62a7a43d5533f1e5">~DescriptorPool</a> ()</td></tr>
 <tr class="separator:a7e43c5c21db028bf62a7a43d5533f1e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a75a19822fa75d106b251f361ef0bcf00"><td class="memTemplParams" colspan="2">template&lt;typename DescrType , typename... Args&gt; </td></tr>
-<tr class="memitem:a75a19822fa75d106b251f361ef0bcf00"><td class="memTemplItemLeft" align="right" valign="top">Descriptor *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classtervel_1_1memory_1_1rc_1_1_descriptor_pool.html#a75a19822fa75d106b251f361ef0bcf00">get_descriptor</a> (Args &amp;&amp;...args)</td></tr>
-<tr class="memdesc:a75a19822fa75d106b251f361ef0bcf00"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs and returns a descriptor.  <a href="#a75a19822fa75d106b251f361ef0bcf00">More...</a><br /></td></tr>
-<tr class="separator:a75a19822fa75d106b251f361ef0bcf00"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a18909f7bc2535719f6c135cef478016f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtervel_1_1memory_1_1rc_1_1_descriptor_pool.html#a18909f7bc2535719f6c135cef478016f">free_descriptor</a> (Descriptor *descr, bool dont_check=false)</td></tr>
-<tr class="memdesc:a18909f7bc2535719f6c135cef478016f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Once a user is done with a descriptor, they should free it with this method.  <a href="#a18909f7bc2535719f6c135cef478016f">More...</a><br /></td></tr>
-<tr class="separator:a18909f7bc2535719f6c135cef478016f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3d6d8a6c3ebd8e18addff1a3f723d3e0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtervel_1_1memory_1_1rc_1_1_descriptor_pool.html#a3d6d8a6c3ebd8e18addff1a3f723d3e0">reserve</a> (int num_descriptors)</td></tr>
 <tr class="memdesc:a3d6d8a6c3ebd8e18addff1a3f723d3e0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocates an extra <code>num_descriptors</code> elements to the pool.  <a href="#a3d6d8a6c3ebd8e18addff1a3f723d3e0">More...</a><br /></td></tr>
 <tr class="separator:a3d6d8a6c3ebd8e18addff1a3f723d3e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7d9d67ba4502797891f0c83fecf00ba1"><td class="memTemplParams" colspan="2">template&lt;typename DescrType , typename... Args&gt; </td></tr>
+<tr class="memitem:a7d9d67ba4502797891f0c83fecf00ba1"><td class="memTemplItemLeft" align="right" valign="top">DescrType *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classtervel_1_1memory_1_1rc_1_1_descriptor_pool.html#a7d9d67ba4502797891f0c83fecf00ba1">get_descriptor</a> (Args &amp;&amp;...args, <a class="el" href="classtervel_1_1memory_1_1rc_1_1_descriptor_pool.html">DescriptorPool</a> *pool)</td></tr>
+<tr class="separator:a7d9d67ba4502797891f0c83fecf00ba1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a06f961717bed70382bd8a729d49e42cf"><td class="memTemplParams" colspan="2">template&lt;typename DescrType , typename... Args&gt; </td></tr>
+<tr class="memitem:a06f961717bed70382bd8a729d49e42cf"><td class="memTemplItemLeft" align="right" valign="top">static <a class="el" href="classtervel_1_1memory_1_1_descriptor.html">Descriptor</a> *&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classtervel_1_1memory_1_1rc_1_1_descriptor_pool.html#a06f961717bed70382bd8a729d49e42cf">get_descriptor</a> (Args &amp;&amp;...args, <a class="el" href="classtervel_1_1memory_1_1rc_1_1_descriptor_pool.html">DescriptorPool</a> *pool=tl_thread_info.descriptor_pool)</td></tr>
+<tr class="memdesc:a06f961717bed70382bd8a729d49e42cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs and returns a descriptor.  <a href="#a06f961717bed70382bd8a729d49e42cf">More...</a><br /></td></tr>
+<tr class="separator:a06f961717bed70382bd8a729d49e42cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a451355f206affc3777746f5a8c39db6c"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtervel_1_1memory_1_1rc_1_1_descriptor_pool.html#a451355f206affc3777746f5a8c39db6c">free_descriptor</a> (<a class="el" href="classtervel_1_1memory_1_1_descriptor.html">Descriptor</a> *descr, bool dont_check=false, <a class="el" href="classtervel_1_1memory_1_1rc_1_1_descriptor_pool.html">DescriptorPool</a> *pool=tl_thread_info.descriptor_pool)</td></tr>
+<tr class="memdesc:a451355f206affc3777746f5a8c39db6c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Once a user is done with a descriptor, they should free it with this method.  <a href="#a451355f206affc3777746f5a8c39db6c">More...</a><br /></td></tr>
+<tr class="separator:a451355f206affc3777746f5a8c39db6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-methods"></a>
 Private Member Functions</h2></td></tr>
@@ -140,10 +147,10 @@ Private Member Functions</h2></td></tr>
 <tr class="memitem:adf683720748c90ddb9d35889247fd174"><td class="memItemLeft" align="right" valign="top">std::atomic&lt; <a class="el" href="classtervel_1_1memory_1_1rc_1_1_pool_element.html">PoolElement</a> * &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtervel_1_1memory_1_1rc_1_1_descriptor_pool.html#adf683720748c90ddb9d35889247fd174">manager_unsafe_pool</a> ()</td></tr>
 <tr class="memdesc:adf683720748c90ddb9d35889247fd174"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the unsafe pool of the manager associated with this pool.  <a href="#adf683720748c90ddb9d35889247fd174">More...</a><br /></td></tr>
 <tr class="separator:adf683720748c90ddb9d35889247fd174"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acc7943acf515840cbbd9bc50c9fd7848"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtervel_1_1memory_1_1rc_1_1_descriptor_pool.html#acc7943acf515840cbbd9bc50c9fd7848">add_to_safe</a> (Descriptor *descr)</td></tr>
+<tr class="memitem:acc7943acf515840cbbd9bc50c9fd7848"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtervel_1_1memory_1_1rc_1_1_descriptor_pool.html#acc7943acf515840cbbd9bc50c9fd7848">add_to_safe</a> (<a class="el" href="classtervel_1_1memory_1_1_descriptor.html">Descriptor</a> *descr)</td></tr>
 <tr class="memdesc:acc7943acf515840cbbd9bc50c9fd7848"><td class="mdescLeft">&#160;</td><td class="mdescRight">Releases the descriptor back to the safe pool.  <a href="#acc7943acf515840cbbd9bc50c9fd7848">More...</a><br /></td></tr>
 <tr class="separator:acc7943acf515840cbbd9bc50c9fd7848"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adffdaf2c2f5bc27a680f9d0b877872df"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtervel_1_1memory_1_1rc_1_1_descriptor_pool.html#adffdaf2c2f5bc27a680f9d0b877872df">add_to_unsafe</a> (Descriptor *descr)</td></tr>
+<tr class="memitem:adffdaf2c2f5bc27a680f9d0b877872df"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtervel_1_1memory_1_1rc_1_1_descriptor_pool.html#adffdaf2c2f5bc27a680f9d0b877872df">add_to_unsafe</a> (<a class="el" href="classtervel_1_1memory_1_1_descriptor.html">Descriptor</a> *descr)</td></tr>
 <tr class="memdesc:adffdaf2c2f5bc27a680f9d0b877872df"><td class="mdescLeft">&#160;</td><td class="mdescRight">Releases the descriptor back to the unsafe pool.  <a href="#adffdaf2c2f5bc27a680f9d0b877872df">More...</a><br /></td></tr>
 <tr class="separator:adffdaf2c2f5bc27a680f9d0b877872df"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad711d846f9aa222e01496ea7a56ab0b7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtervel_1_1memory_1_1rc_1_1_descriptor_pool.html#ad711d846f9aa222e01496ea7a56ab0b7">try_clear_unsafe_pool</a> (bool dont_check=false)</td></tr>
@@ -158,20 +165,6 @@ Private Attributes</h2></td></tr>
 <tr class="memitem:a080cbc50d9d56449ca1469ec6fae62fb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classtervel_1_1memory_1_1rc_1_1_pool_manager.html">PoolManager</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtervel_1_1memory_1_1rc_1_1_descriptor_pool.html#a080cbc50d9d56449ca1469ec6fae62fb">manager_</a></td></tr>
 <tr class="memdesc:a080cbc50d9d56449ca1469ec6fae62fb"><td class="mdescLeft">&#160;</td><td class="mdescRight">This pool's manager.  <a href="#a080cbc50d9d56449ca1469ec6fae62fb">More...</a><br /></td></tr>
 <tr class="separator:a080cbc50d9d56449ca1469ec6fae62fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a14bf9b954a32f8bcfa10d5dfeda49409"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classtervel_1_1memory_1_1rc_1_1_pool_element.html">PoolElement</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtervel_1_1memory_1_1rc_1_1_descriptor_pool.html#a14bf9b954a32f8bcfa10d5dfeda49409">safe_pool_</a> {nullptr}</td></tr>
-<tr class="memdesc:a14bf9b954a32f8bcfa10d5dfeda49409"><td class="mdescLeft">&#160;</td><td class="mdescRight">A linked list of pool elements.  <a href="#a14bf9b954a32f8bcfa10d5dfeda49409">More...</a><br /></td></tr>
-<tr class="separator:a14bf9b954a32f8bcfa10d5dfeda49409"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae7eabf5758301500e60f308f1206fb2d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classtervel_1_1memory_1_1rc_1_1_pool_element.html">PoolElement</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtervel_1_1memory_1_1rc_1_1_descriptor_pool.html#ae7eabf5758301500e60f308f1206fb2d">unsafe_pool_</a> {nullptr}</td></tr>
-<tr class="memdesc:ae7eabf5758301500e60f308f1206fb2d"><td class="mdescLeft">&#160;</td><td class="mdescRight">A linked list of pool elements.  <a href="#ae7eabf5758301500e60f308f1206fb2d">More...</a><br /></td></tr>
-<tr class="separator:ae7eabf5758301500e60f308f1206fb2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3ea9f5e59c69ece7c45bdacc93ae6bb5"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtervel_1_1memory_1_1rc_1_1_descriptor_pool.html#a3ea9f5e59c69ece7c45bdacc93ae6bb5">safe_pool_count_</a> {0}</td></tr>
-<tr class="memdesc:a3ea9f5e59c69ece7c45bdacc93ae6bb5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Two counters used to track the number of elements in the linked list.  <a href="#a3ea9f5e59c69ece7c45bdacc93ae6bb5">More...</a><br /></td></tr>
-<tr class="separator:a3ea9f5e59c69ece7c45bdacc93ae6bb5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad1a9a6b72a53eae4ce753835b3d98d0c"><td class="memItemLeft" align="right" valign="top">uint64_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtervel_1_1memory_1_1rc_1_1_descriptor_pool.html#ad1a9a6b72a53eae4ce753835b3d98d0c">unsafe_pool_count_</a> {0}</td></tr>
-<tr class="separator:ad1a9a6b72a53eae4ce753835b3d98d0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a28fbdf35797b435856341c2cd0bdf939"><td class="memItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtervel_1_1memory_1_1rc_1_1_descriptor_pool.html#a28fbdf35797b435856341c2cd0bdf939">NO_REUSE_MEM</a> = false</td></tr>
-<tr class="memdesc:a28fbdf35797b435856341c2cd0bdf939"><td class="mdescLeft">&#160;</td><td class="mdescRight">If true, then <a class="el" href="classtervel_1_1memory_1_1rc_1_1_descriptor_pool.html" title="Defines a pool of descriptor objects which is used to allocate descriptors and to store them while th...">DescriptorPool</a> shouldn't reuse old pool elements when being asked, even if it's safe to fo so.  <a href="#a28fbdf35797b435856341c2cd0bdf939">More...</a><br /></td></tr>
-<tr class="separator:a28fbdf35797b435856341c2cd0bdf939"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Defines a pool of descriptor objects which is used to allocate descriptors and to store them while they are not safe to delete. </p>
@@ -253,7 +246,7 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="memname">void tervel::memory::rc::DescriptorPool::add_to_safe </td>
           <td>(</td>
-          <td class="paramtype">Descriptor *&#160;</td>
+          <td class="paramtype"><a class="el" href="classtervel_1_1memory_1_1_descriptor.html">Descriptor</a> *&#160;</td>
           <td class="paramname"><em>descr</em></td><td>)</td>
           <td></td>
         </tr>
@@ -281,7 +274,7 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="memname">void tervel::memory::rc::DescriptorPool::add_to_unsafe </td>
           <td>(</td>
-          <td class="paramtype">Descriptor *&#160;</td>
+          <td class="paramtype"><a class="el" href="classtervel_1_1memory_1_1_descriptor.html">Descriptor</a> *&#160;</td>
           <td class="paramname"><em>descr</em></td><td>)</td>
           <td></td>
         </tr>
@@ -299,21 +292,112 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a18909f7bc2535719f6c135cef478016f"></a>
+<a class="anchor" id="a451355f206affc3777746f5a8c39db6c"></a>
 <div class="memitem">
 <div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
       <table class="memname">
         <tr>
           <td class="memname">void tervel::memory::rc::DescriptorPool::free_descriptor </td>
           <td>(</td>
-          <td class="paramtype">Descriptor *&#160;</td>
+          <td class="paramtype"><a class="el" href="classtervel_1_1memory_1_1_descriptor.html">Descriptor</a> *&#160;</td>
           <td class="paramname"><em>descr</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">bool&#160;</td>
-          <td class="paramname"><em>dont_check</em> = <code>false</code>&#160;</td>
+          <td class="paramname"><em>dont_check</em> = <code>false</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classtervel_1_1memory_1_1rc_1_1_descriptor_pool.html">DescriptorPool</a> *&#160;</td>
+          <td class="paramname"><em>pool</em> = <code>tl_thread_info.descriptor_pool</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Once a user is done with a descriptor, they should free it with this method. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">descr</td><td>The descriptor to free. </td></tr>
+    <tr><td class="paramname">dont_check</td><td>Don't check if the descriptor is being watched before freeing it. Use this flag if you know that no other thread has had access to this descriptor. </td></tr>
+    <tr><td class="paramname">pool</td><td>the pool to use when freeing the descriptor. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a class="anchor" id="a06f961717bed70382bd8a729d49e42cf"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename DescrType , typename... Args&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static <a class="el" href="classtervel_1_1memory_1_1_descriptor.html">Descriptor</a>* tervel::memory::rc::DescriptorPool::get_descriptor </td>
+          <td>(</td>
+          <td class="paramtype">Args &amp;&amp;...&#160;</td>
+          <td class="paramname"><em>args</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classtervel_1_1memory_1_1rc_1_1_descriptor_pool.html">DescriptorPool</a> *&#160;</td>
+          <td class="paramname"><em>pool</em> = <code>tl_thread_info.descriptor_pool</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Constructs and returns a descriptor. </p>
+<p>Arguments are forwarded to the constructor of the given descriptor type. User should call free_descriptor on the returned pointer when they are done with it to avoid memory leaks. </p>
+
+</div>
+</div>
+<a class="anchor" id="a7d9d67ba4502797891f0c83fecf00ba1"></a>
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename DescrType , typename... Args&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">DescrType* tervel::memory::rc::DescriptorPool::get_descriptor </td>
+          <td>(</td>
+          <td class="paramtype">Args &amp;&amp;...&#160;</td>
+          <td class="paramname"><em>args</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classtervel_1_1memory_1_1rc_1_1_descriptor_pool.html">DescriptorPool</a> *&#160;</td>
+          <td class="paramname"><em>pool</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -322,36 +406,6 @@ Private Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Once a user is done with a descriptor, they should free it with this method. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">descr</td><td>The descriptor to free. </td></tr>
-    <tr><td class="paramname">dont_check</td><td>Don't check if the descriptor is being watched before freeing it. Use this flag if you know that no other thread has had access to this descriptor. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a class="anchor" id="a75a19822fa75d106b251f361ef0bcf00"></a>
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename DescrType , typename... Args&gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">Descriptor * tervel::memory::rc::DescriptorPool::get_descriptor </td>
-          <td>(</td>
-          <td class="paramtype">Args &amp;&amp;...&#160;</td>
-          <td class="paramname"><em>args</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Constructs and returns a descriptor. </p>
-<p>Arguments are forwarded to the constructor of the given descriptor type. User should call free_descriptor on the returned pointer when they are done with it to avoid memory leaks. </p>
 
 </div>
 </div>
@@ -581,29 +635,6 @@ template&lt;typename DescrType , typename... Args&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a28fbdf35797b435856341c2cd0bdf939"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">constexpr bool tervel::memory::rc::DescriptorPool::NO_REUSE_MEM = false</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>If true, then <a class="el" href="classtervel_1_1memory_1_1rc_1_1_descriptor_pool.html" title="Defines a pool of descriptor objects which is used to allocate descriptors and to store them while th...">DescriptorPool</a> shouldn't reuse old pool elements when being asked, even if it's safe to fo so. </p>
-<p>Instead, elements should be stock-piled and left untouched when they're returned to the pool. This allows the user to view associations. Entirely for debug purposes. </p>
-
-</div>
-</div>
 <a class="anchor" id="a3972485e0d1a5a9fa8a4720b7d059b4a"></a>
 <div class="memitem">
 <div class="memproto">
@@ -626,95 +657,6 @@ template&lt;typename DescrType , typename... Args&gt; </div>
 
 </div>
 </div>
-<a class="anchor" id="a14bf9b954a32f8bcfa10d5dfeda49409"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classtervel_1_1memory_1_1rc_1_1_pool_element.html">PoolElement</a>* tervel::memory::rc::DescriptorPool::safe_pool_ {nullptr}</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>A linked list of pool elements. </p>
-<p>One can be assured that no thread will try to access the descriptor of any element in this pool. They can't be freed as some threads may still have access to the element itself and may try to increment the refrence count. </p>
-
-</div>
-</div>
-<a class="anchor" id="a3ea9f5e59c69ece7c45bdacc93ae6bb5"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">uint64_t tervel::memory::rc::DescriptorPool::safe_pool_count_ {0}</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Two counters used to track the number of elements in the linked list. </p>
-<p>this facilitates the detection of when there are too many elements. </p>
-
-</div>
-</div>
-<a class="anchor" id="ae7eabf5758301500e60f308f1206fb2d"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classtervel_1_1memory_1_1rc_1_1_pool_element.html">PoolElement</a>* tervel::memory::rc::DescriptorPool::unsafe_pool_ {nullptr}</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>A linked list of pool elements. </p>
-<p>Elements get released to this pool when they're no longer needed, but some threads may still try to access the descriptor in the element. After some time has passed, items generally move from this pool to the safe_pool_ </p>
-
-</div>
-</div>
-<a class="anchor" id="ad1a9a6b72a53eae4ce753835b3d98d0c"></a>
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">uint64_t tervel::memory::rc::DescriptorPool::unsafe_pool_count_ {0}</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>tervel/memory/rc/<a class="el" href="descriptor__pool_8h_source.html">descriptor_pool.h</a></li>
 <li>tervel/memory/rc/<a class="el" href="descriptor__pool_8cc.html">descriptor_pool.cc</a></li>
@@ -722,7 +664,7 @@ template&lt;typename DescrType , typename... Args&gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 25 2014 13:17:00 for Tervel by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Apr 25 2014 20:30:36 for Tervel by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.7
 </small></address>

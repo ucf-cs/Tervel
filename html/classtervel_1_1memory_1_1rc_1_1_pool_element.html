@@ -99,19 +99,22 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </div><!--header-->
 <div class="contents">
 
+<p>This class is used to hold the memory management information (<a class="el" href="structtervel_1_1memory_1_1rc_1_1_pool_element_1_1_header.html" title="All the member variables of PoolElement are stored in a struct so that the left over memory for cache...">Header</a>) and a descriptor object.  
+ <a href="classtervel_1_1memory_1_1rc_1_1_pool_element.html#details">More...</a></p>
+
 <p><code>#include &lt;<a class="el" href="pool__element_8h_source.html">pool_element.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="nested-classes"></a>
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structtervel_1_1memory_1_1rc_1_1_pool_element_1_1_header.html">Header</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">All the member variables of <a class="el" href="classtervel_1_1memory_1_1rc_1_1_pool_element.html">PoolElement</a> are stored in a struct so that the left over memory for cache padding can be easily calculated.  <a href="structtervel_1_1memory_1_1rc_1_1_pool_element_1_1_header.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">All the member variables of <a class="el" href="classtervel_1_1memory_1_1rc_1_1_pool_element.html" title="This class is used to hold the memory management information (Header) and a descriptor object...">PoolElement</a> are stored in a struct so that the left over memory for cache padding can be easily calculated.  <a href="structtervel_1_1memory_1_1rc_1_1_pool_element_1_1_header.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a229507ae54e99e269a2776671ff117e3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtervel_1_1memory_1_1rc_1_1_pool_element.html#a229507ae54e99e269a2776671ff117e3">PoolElement</a> (<a class="el" href="classtervel_1_1memory_1_1rc_1_1_pool_element.html">PoolElement</a> *<a class="el" href="classtervel_1_1memory_1_1rc_1_1_pool_element.html#ab2ad955f32c32ac525e24b1a409d62a4">next</a>=nullptr)</td></tr>
 <tr class="separator:a229507ae54e99e269a2776671ff117e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a51bd093e94a065a0fd3e8c9820be364e"><td class="memItemLeft" align="right" valign="top">Descriptor *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtervel_1_1memory_1_1rc_1_1_pool_element.html#a51bd093e94a065a0fd3e8c9820be364e">descriptor</a> ()</td></tr>
+<tr class="memitem:a51bd093e94a065a0fd3e8c9820be364e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classtervel_1_1memory_1_1_descriptor.html">Descriptor</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtervel_1_1memory_1_1rc_1_1_pool_element.html#a51bd093e94a065a0fd3e8c9820be364e">descriptor</a> ()</td></tr>
 <tr class="memdesc:a51bd093e94a065a0fd3e8c9820be364e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a pointer to the associated descriptor of this element.  <a href="#a51bd093e94a065a0fd3e8c9820be364e">More...</a><br /></td></tr>
 <tr class="separator:a51bd093e94a065a0fd3e8c9820be364e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae8557c96a0804c5c55799715638668e5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structtervel_1_1memory_1_1rc_1_1_pool_element_1_1_header.html">Header</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classtervel_1_1memory_1_1rc_1_1_pool_element.html#ae8557c96a0804c5c55799715638668e5">header</a> ()</td></tr>
@@ -143,7 +146,10 @@ Private Attributes</h2></td></tr>
 <tr class="memdesc:a9efa8aae4e5640588beea55b7f778c6b"><td class="mdescLeft">&#160;</td><td class="mdescRight">This object should have 2 members: a header and a descriptor, but the memory layout of classes is system-dependent, so we explicitly construct everything in-place inside this padding.  <a href="#a9efa8aae4e5640588beea55b7f778c6b">More...</a><br /></td></tr>
 <tr class="separator:a9efa8aae4e5640588beea55b7f778c6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>This class is used to hold the memory management information (<a class="el" href="structtervel_1_1memory_1_1rc_1_1_pool_element_1_1_header.html" title="All the member variables of PoolElement are stored in a struct so that the left over memory for cache...">Header</a>) and a descriptor object. </p>
+<p>It is important to sepearte them to prevent the case where a thread attempts to dereference an object while its type id is being changed. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a class="anchor" id="a229507ae54e99e269a2776671ff117e3"></a>
 <div class="memitem">
 <div class="memproto">
@@ -203,7 +209,7 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">Descriptor * tervel::memory::rc::PoolElement::descriptor </td>
+          <td class="memname"><a class="el" href="classtervel_1_1memory_1_1_descriptor.html">Descriptor</a> * tervel::memory::rc::PoolElement::descriptor </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td></td>
@@ -387,7 +393,7 @@ template&lt;typename DescrType , typename... Args&gt; </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 25 2014 13:17:00 for Tervel by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Apr 25 2014 20:30:36 for Tervel by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.7
 </small></address>

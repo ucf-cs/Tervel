@@ -103,70 +103,62 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="descriptor_8h.html">tervel/memory/descriptor.h</a>&quot;</span></div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="system_8h.html">tervel/memory/system.h</a>&quot;</span></div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD:tervel/memory/hp/hp_element.h</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="keyword">namespace </span>tervel {</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="keyword">namespace </span>memory {</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="keyword">class </span><a class="code" href="namespaceucf_1_1mcas.html#a8420b23bc4cbac09abddd4e14dc64a08">Descriptor</a>;</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;=======</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="keyword">namespace </span>ucf {</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="keyword">namespace </span>thread {</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;&gt;&gt;&gt;&gt;&gt;&gt;&gt; code-<a class="code" href="hp__element_8h.html#a19382f2d733e0c3ea7b27e16ff887aef">review</a>:thread/hp/hp_element.h</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="keyword">namespace </span>hp {</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="keyword">class </span>HPElement {</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;  HPElement() {}</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;  ~HPElement() {}</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;  <span class="keywordtype">void</span> safeFree(HazardPointer *hazard_pointer = </div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;                                              <a class="code" href="namespacetervel_1_1memory.html#a68f84b82764386c81f0061d609183d76">tl_thread_info</a>-&gt;hazard_pointer) {</div>
-<div class="line"><a name="l00048"></a><span class="lineno"><a class="line" href="hp__element_8h.html#a19382f2d733e0c3ea7b27e16ff887aef">   48</a></span>&#160;    hazard_pointer-&gt;try_to_free_HPElements();</div>
-<div class="line"><a name="l00049"></a><span class="lineno"><a class="line" href="hp__element_8h.html#ac0d79e384ee1062b90e873ead5e2caf2">   49</a></span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="namespaceucf_1_1thread_1_1hp.html#a5ccbc0e4c128714d330172f5f3dd7c07">HazardPointer::is_watched</a>(<span class="keyword">this</span>)) {</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;      hazard_pointer-&gt;add_to_unsafe(<span class="keyword">this</span>);</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    }</div>
-<div class="line"><a name="l00052"></a><span class="lineno"><a class="line" href="hp__element_8h.html#a0544c3fe466e421738dae463968b70ba">   52</a></span>&#160;    <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;      this-&gt;~HPElement();</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    }</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="keyword">namespace </span>tervel {</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="keyword">namespace </span>memory {</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;</div>
+<div class="line"><a name="l00017"></a><span class="lineno"><a class="line" href="classtervel_1_1memory_1_1_h_p_element.html">   17</a></span>&#160;<span class="keyword">class </span><a class="code" href="classtervel_1_1memory_1_1_h_p_element.html">HPElement</a> {</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00027"></a><span class="lineno"><a class="line" href="classtervel_1_1memory_1_1_h_p_element.html#ae2c80f2697a804437ba61ca0708d2e02">   27</a></span>&#160;  <a class="code" href="classtervel_1_1memory_1_1_h_p_element.html#ae2c80f2697a804437ba61ca0708d2e02">HPElement</a>() {}</div>
+<div class="line"><a name="l00028"></a><span class="lineno"><a class="line" href="classtervel_1_1memory_1_1_h_p_element.html#a5579b42a9954e53d32ee877c3f2a6e93">   28</a></span>&#160;  <a class="code" href="classtervel_1_1memory_1_1_h_p_element.html#a5579b42a9954e53d32ee877c3f2a6e93">~HPElement</a>() {}</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;</div>
+<div class="line"><a name="l00036"></a><span class="lineno"><a class="line" href="classtervel_1_1memory_1_1_h_p_element.html#a3cd3d47d0ec655e2adcaf90c32209ff1">   36</a></span>&#160;  <span class="keywordtype">void</span> <a class="code" href="classtervel_1_1memory_1_1_h_p_element.html#a3cd3d47d0ec655e2adcaf90c32209ff1">safeFree</a>(HazardPointer *hazard_pointer =</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;                                              <a class="code" href="namespacetervel_1_1memory.html#a68f84b82764386c81f0061d609183d76">tl_thread_info</a>-&gt;hazard_pointer) {</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    hazard_pointer-&gt;try_to_free_HPElements();</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <span class="keywordflow">if</span> (<a class="code" href="namespaceucf_1_1memory_1_1hp.html#ad93a5961f74d6328d3b826dc43786da5">HazardPointer::is_watched</a>(<span class="keyword">this</span>)) {</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;      hazard_pointer-&gt;add_to_unsafe(<span class="keyword">this</span>);</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;      this-&gt;<a class="code" href="classtervel_1_1memory_1_1_h_p_element.html#a5579b42a9954e53d32ee877c3f2a6e93">~HPElement</a>();</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    }</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    hazard_pointer-&gt;try_clear_unsafe_pool();</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;  }</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;</div>
+<div class="line"><a name="l00052"></a><span class="lineno"><a class="line" href="classtervel_1_1memory_1_1_h_p_element.html#ac80871242aa618c00e81730103d88342">   52</a></span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classtervel_1_1memory_1_1_h_p_element.html#ac80871242aa618c00e81730103d88342">on_watch</a>(std::atomic&lt;void *&gt; *address, <span class="keywordtype">void</span> *expected) {</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;  };</div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    hazard_pointer-&gt;try_clear_unsafe_pool();</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;  }</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;</div>
-<div class="line"><a name="l00060"></a><span class="lineno"><a class="line" href="hp__element_8h.html#a4d9551efc168265e3af26c9fd2b4e904">   60</a></span>&#160;  <span class="keywordtype">bool</span> <a class="code" href="hp__element_8h.html#a4d9551efc168265e3af26c9fd2b4e904">on_watch</a>(std::atomic&lt;void *&gt; *address, <span class="keywordtype">void</span> *expected) { <span class="keywordflow">return</span> <span class="keyword">true</span> };</div>
-<div class="line"><a name="l00061"></a><span class="lineno"><a class="line" href="hp__element_8h.html#ab84653631a3c3c7349b90efae537f55b">   61</a></span>&#160;  <span class="keywordtype">bool</span> <a class="code" href="hp__element_8h.html#ab84653631a3c3c7349b90efae537f55b">on_is_watch</a>() {};</div>
-<div class="line"><a name="l00062"></a><span class="lineno"><a class="line" href="hp__element_8h.html#a2b1ce1ce0df4433d521eb9252b318b14">   62</a></span>&#160;  <span class="keywordtype">void</span> <a class="code" href="hp__element_8h.html#a2b1ce1ce0df4433d521eb9252b318b14">on_unwatch</a>() {};</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160; <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00066"></a><span class="lineno"><a class="line" href="hp__element_8h.html#aac3bf4aac70e564d96a497da7d40bcf1">   66</a></span>&#160;  HPElement *<a class="code" href="hp__element_8h.html#aac3bf4aac70e564d96a497da7d40bcf1">next_</a> {<span class="keyword">nullptr</span>}</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;  HPElement * next() { <span class="keywordflow">return</span> <a class="code" href="hp__element_8h.html#aac3bf4aac70e564d96a497da7d40bcf1">next_</a>; }</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;  <span class="keywordtype">void</span> next(HPElement *next) { <a class="code" href="hp__element_8h.html#aac3bf4aac70e564d96a497da7d40bcf1">next_</a> = next; }</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;  </div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;};</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;}  <span class="comment">// namespace hp</span></div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;}  <span class="comment">// namespace memory</span></div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;}  <span class="comment">// namespace tervel</span></div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;<span class="preprocessor">#endif  // TERVEL_MEMORY_HP_POOL_ELEMENT_H_</span></div>
-<div class="ttc" id="hp__element_8h_html_a4d9551efc168265e3af26c9fd2b4e904"><div class="ttname"><a href="hp__element_8h.html#a4d9551efc168265e3af26c9fd2b4e904">on_watch</a></div><div class="ttdeci">bool on_watch(std::atomic&lt; void * &gt; *address, void *expected)</div><div class="ttdef"><b>Definition:</b> hp_element.h:60</div></div>
-<div class="ttc" id="hp__element_8h_html_ab84653631a3c3c7349b90efae537f55b"><div class="ttname"><a href="hp__element_8h.html#ab84653631a3c3c7349b90efae537f55b">on_is_watch</a></div><div class="ttdeci">bool on_is_watch()</div><div class="ttdef"><b>Definition:</b> hp_element.h:61</div></div>
-<div class="ttc" id="hp__element_8h_html_a2b1ce1ce0df4433d521eb9252b318b14"><div class="ttname"><a href="hp__element_8h.html#a2b1ce1ce0df4433d521eb9252b318b14">on_unwatch</a></div><div class="ttdeci">void on_unwatch()</div><div class="ttdef"><b>Definition:</b> hp_element.h:62</div></div>
-<div class="ttc" id="namespaceucf_1_1thread_1_1hp_html_a5ccbc0e4c128714d330172f5f3dd7c07"><div class="ttname"><a href="namespaceucf_1_1thread_1_1hp.html#a5ccbc0e4c128714d330172f5f3dd7c07">ucf::thread::hp::is_watched</a></div><div class="ttdeci">bool is_watched(HPElement *descr, HazardPointer *hazard_pointer=tl_thread_info-&gt;hazard_pointer)</div><div class="ttdef"><b>Definition:</b> hazard_pointer.cc:51</div></div>
+<div class="line"><a name="l00060"></a><span class="lineno"><a class="line" href="classtervel_1_1memory_1_1_h_p_element.html#abf594b830d846a2ad53a2e6ec8becf04">   60</a></span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classtervel_1_1memory_1_1_h_p_element.html#abf594b830d846a2ad53a2e6ec8becf04">on_is_watch</a>() {}</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;</div>
+<div class="line"><a name="l00066"></a><span class="lineno"><a class="line" href="classtervel_1_1memory_1_1_h_p_element.html#a6ee4c1839fa4d9f457497aaef01ad408">   66</a></span>&#160;  <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classtervel_1_1memory_1_1_h_p_element.html#a6ee4c1839fa4d9f457497aaef01ad408">on_unwatch</a>() {}</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;  <a class="code" href="classtervel_1_1memory_1_1_h_p_element.html">HPElement</a> *next_ {<span class="keyword">nullptr</span>}</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;  <a class="code" href="classtervel_1_1memory_1_1_h_p_element.html#ae2c80f2697a804437ba61ca0708d2e02">HPElement</a> * next() { <span class="keywordflow">return</span> next_; }</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;  <span class="keywordtype">void</span> next(<a class="code" href="classtervel_1_1memory_1_1_h_p_element.html#ae2c80f2697a804437ba61ca0708d2e02">HPElement</a> *next) { next_ = next; }</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;};</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;}  <span class="comment">// namespace hp</span></div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;}  <span class="comment">// namespace memory</span></div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;}  <span class="comment">// namespace tervel</span></div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="preprocessor">#endif  // TERVEL_MEMORY_HP_POOL_ELEMENT_H_</span></div>
+<div class="ttc" id="classtervel_1_1memory_1_1_h_p_element_html_a3cd3d47d0ec655e2adcaf90c32209ff1"><div class="ttname"><a href="classtervel_1_1memory_1_1_h_p_element.html#a3cd3d47d0ec655e2adcaf90c32209ff1">tervel::memory::HPElement::safeFree</a></div><div class="ttdeci">void safeFree(HazardPointer *hazard_pointer=tl_thread_info-&gt;hazard_pointer)</div><div class="ttdoc">This function is used to free a hazard pointer protected object if it is safe to do so OR add it to a...</div><div class="ttdef"><b>Definition:</b> hp_element.h:36</div></div>
+<div class="ttc" id="classtervel_1_1memory_1_1_h_p_element_html_a5579b42a9954e53d32ee877c3f2a6e93"><div class="ttname"><a href="classtervel_1_1memory_1_1_h_p_element.html#a5579b42a9954e53d32ee877c3f2a6e93">tervel::memory::HPElement::~HPElement</a></div><div class="ttdeci">~HPElement()</div><div class="ttdef"><b>Definition:</b> hp_element.h:28</div></div>
+<div class="ttc" id="classtervel_1_1memory_1_1_h_p_element_html_abf594b830d846a2ad53a2e6ec8becf04"><div class="ttname"><a href="classtervel_1_1memory_1_1_h_p_element.html#abf594b830d846a2ad53a2e6ec8becf04">tervel::memory::HPElement::on_is_watch</a></div><div class="ttdeci">virtual bool on_is_watch()</div><div class="ttdoc">This function is used to check a strong watch on an HPElement. </div><div class="ttdef"><b>Definition:</b> hp_element.h:60</div></div>
 <div class="ttc" id="descriptor_8h_html"><div class="ttname"><a href="descriptor_8h.html">descriptor.h</a></div></div>
-<div class="ttc" id="hp__element_8h_html_a19382f2d733e0c3ea7b27e16ff887aef"><div class="ttname"><a href="hp__element_8h.html#a19382f2d733e0c3ea7b27e16ff887aef">review</a></div><div class="ttdeci">&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD:tervel/memory/hp/hp_element.hnamespacetervel{namespacememory{classDescriptor;=======namespaceucf{namespacethread{&gt;&gt;&gt;&gt;&gt;&gt; code review</div><div class="ttdef"><b>Definition:</b> hp_element.h:48</div></div>
-<div class="ttc" id="hp__element_8h_html_aac3bf4aac70e564d96a497da7d40bcf1"><div class="ttname"><a href="hp__element_8h.html#aac3bf4aac70e564d96a497da7d40bcf1">next_</a></div><div class="ttdeci">HPElement * next_</div><div class="ttdef"><b>Definition:</b> hp_element.h:66</div></div>
-<div class="ttc" id="namespacetervel_1_1memory_html_a68f84b82764386c81f0061d609183d76"><div class="ttname"><a href="namespacetervel_1_1memory.html#a68f84b82764386c81f0061d609183d76">tervel::memory::tl_thread_info</a></div><div class="ttdeci">thread_local ThreadInfo tl_thread_info</div><div class="ttdef"><b>Definition:</b> info.h:92</div></div>
+<div class="ttc" id="classtervel_1_1memory_1_1_h_p_element_html_ac80871242aa618c00e81730103d88342"><div class="ttname"><a href="classtervel_1_1memory_1_1_h_p_element.html#ac80871242aa618c00e81730103d88342">tervel::memory::HPElement::on_watch</a></div><div class="ttdeci">virtual bool on_watch(std::atomic&lt; void * &gt; *address, void *expected)</div><div class="ttdoc">This function is used to achieve a strong watch on an HPElement. </div><div class="ttdef"><b>Definition:</b> hp_element.h:52</div></div>
+<div class="ttc" id="namespacetervel_1_1memory_html_a68f84b82764386c81f0061d609183d76"><div class="ttname"><a href="namespacetervel_1_1memory.html#a68f84b82764386c81f0061d609183d76">tervel::memory::tl_thread_info</a></div><div class="ttdeci">thread_local ThreadInfo tl_thread_info</div><div class="ttdef"><b>Definition:</b> info.h:94</div></div>
+<div class="ttc" id="classtervel_1_1memory_1_1_h_p_element_html_a6ee4c1839fa4d9f457497aaef01ad408"><div class="ttname"><a href="classtervel_1_1memory_1_1_h_p_element.html#a6ee4c1839fa4d9f457497aaef01ad408">tervel::memory::HPElement::on_unwatch</a></div><div class="ttdeci">virtual void on_unwatch()</div><div class="ttdoc">This function is used to remove a strong watch on an HPElement. </div><div class="ttdef"><b>Definition:</b> hp_element.h:66</div></div>
 <div class="ttc" id="system_8h_html"><div class="ttname"><a href="system_8h.html">system.h</a></div></div>
-<div class="ttc" id="namespaceucf_1_1mcas_html_a8420b23bc4cbac09abddd4e14dc64a08"><div class="ttname"><a href="namespaceucf_1_1mcas.html#a8420b23bc4cbac09abddd4e14dc64a08">ucf::mcas::Descriptor</a></div><div class="ttdeci">thread::Descriptor Descriptor</div><div class="ttdef"><b>Definition:</b> old_wf_mcas.h:22</div></div>
+<div class="ttc" id="namespaceucf_1_1memory_1_1hp_html_ad93a5961f74d6328d3b826dc43786da5"><div class="ttname"><a href="namespaceucf_1_1memory_1_1hp.html#ad93a5961f74d6328d3b826dc43786da5">ucf::memory::hp::is_watched</a></div><div class="ttdeci">bool is_watched(HPElement *descr, HazardPointer *hazard_pointer=tl_thread_info-&gt;hazard_pointer)</div><div class="ttdef"><b>Definition:</b> hazard_pointer.cc:51</div></div>
+<div class="ttc" id="classtervel_1_1memory_1_1_h_p_element_html_ae2c80f2697a804437ba61ca0708d2e02"><div class="ttname"><a href="classtervel_1_1memory_1_1_h_p_element.html#ae2c80f2697a804437ba61ca0708d2e02">tervel::memory::HPElement::HPElement</a></div><div class="ttdeci">HPElement()</div><div class="ttdoc">This class is used for the creation of Hazard Pointer Protected Objects Objects which extend it have ...</div><div class="ttdef"><b>Definition:</b> hp_element.h:27</div></div>
+<div class="ttc" id="classtervel_1_1memory_1_1_h_p_element_html"><div class="ttname"><a href="classtervel_1_1memory_1_1_h_p_element.html">tervel::memory::HPElement</a></div><div class="ttdef"><b>Definition:</b> hp_element.h:17</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 25 2014 13:17:00 for Tervel by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Apr 25 2014 20:30:35 for Tervel by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.7
 </small></address>

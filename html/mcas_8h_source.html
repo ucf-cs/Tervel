@@ -99,63 +99,65 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="keyword">namespace </span>ucf {</div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="keyword">namespace </span>mcas {</div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;</div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;  <span class="keyword">template</span>&lt;<span class="keyword">class</span> T&gt;</div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;  <span class="keyword">class </span>MCAS {</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;    <span class="keyword">typedef</span> <a class="code" href="class_cas_row.html">CasRow&lt;T&gt;</a> <a class="code" href="classucf_1_1mcas_1_1_m_c_a_s.html#af9031f23f938c25b8ce82ced2686acab">t_CasRow</a>;</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;    <span class="keyword">typedef</span> MCASHelper&lt;T&gt; <a class="code" href="classucf_1_1mcas_1_1_m_c_a_s.html#a0ba22caa69abae377d1790b9925e614d">t_MCASHelper</a>;</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;    <span class="keyword">typedef</span> MCAS&lt;T&gt; <a class="code" href="classucf_1_1mcas_1_1_m_c_a_s.html#a9744996afdf47315a2b94724cfaa78aa">t_MCAS</a>;</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;  <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;    <span class="keyword">static</span> constexpr <a class="code" href="classucf_1_1mcas_1_1_m_c_a_s.html#a0ba22caa69abae377d1790b9925e614d">t_MCASHelper</a> * <a class="code" href="classucf_1_1mcas_1_1_m_c_a_s.html#a15b22dcce6f9df0a4c6c1b0ec3402c4e">MCAS_FAIL_CONST</a> =</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;                 <span class="keyword">reinterpret_cast&lt;</span><a class="code" href="classucf_1_1mcas_1_1_m_c_a_s.html#a0ba22caa69abae377d1790b9925e614d">t_MCASHelper</a> *<span class="keyword">&gt;</span>(0x1);</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;    <a class="code" href="classucf_1_1mcas_1_1_m_c_a_s.html#af9031f23f938c25b8ce82ced2686acab">t_CasRow</a> *cas_rows;</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;    <span class="keywordtype">int</span> row_count_;</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    <span class="keywordtype">int</span> max_rows_;</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;    <span class="keyword">explicit</span> MCAS&lt;T&gt;(<span class="keywordtype">int</span> max_rows)</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    : max_rows_ {max_rows},</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;      <a class="code" href="classucf_1_1mcas_1_1_m_c_a_s.html#a2a62db1d71cdd9e48c1ea77944a5390c">row_count</a> {0},</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;      cas_rows {<span class="keyword">new</span> <a class="code" href="classucf_1_1mcas_1_1_m_c_a_s.html#af9031f23f938c25b8ce82ced2686acab">t_CasRow</a>[max_rows]} {}</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    ~MCAS&lt;T&gt;() {</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;      <span class="keywordflow">if</span> (<a class="code" href="classucf_1_1mcas_1_1_m_c_a_s.html#a2a62db1d71cdd9e48c1ea77944a5390c">row_count</a> == max_rows_) {</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;        <a class="code" href="classucf_1_1mcas_1_1_m_c_a_s.html#af9031f23f938c25b8ce82ced2686acab">t_CasRow</a> *last_row = &amp;(cas_rows[<a class="code" href="classucf_1_1mcas_1_1_m_c_a_s.html#a2a62db1d71cdd9e48c1ea77944a5390c">row_count</a>-1]);</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;        last_row-&gt;safeFree();</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;        <span class="comment">// Do not delete cas_rows, this will be done in safeFree</span></div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;      } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        assert(<span class="keyword">false</span>);</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;        <span class="keyword">delete</span>[] cas_rows;</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;      }</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    }</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classucf_1_1mcas_1_1_m_c_a_s.html#a78b48b90ddc792d3ffebdbbe8a2f50b3">addCASTriple</a>(std::atomic&lt;T&gt; *address, T expected_value, T new_value);</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classucf_1_1mcas_1_1_m_c_a_s.html#ac46bde477b3e6c8f39ddc681d76bfd7b">execute</a>();</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">bool</span> mcas_complete(<a class="code" href="classucf_1_1mcas_1_1_m_c_a_s.html#af9031f23f938c25b8ce82ced2686acab">t_CasRow</a> *current, <a class="code" href="classucf_1_1mcas_1_1_m_c_a_s.html#af9031f23f938c25b8ce82ced2686acab">t_CasRow</a> *last_row,</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;                                          <span class="keywordtype">bool</span> wfmode = <span class="keyword">false</span>);</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="classucf_1_1mcas_1_1_m_c_a_s.html#a7b3ee82249a9e125716d64e501794d92">cleanup</a>(<span class="keywordtype">bool</span> success, <a class="code" href="classucf_1_1mcas_1_1_m_c_a_s.html#af9031f23f938c25b8ce82ced2686acab">t_CasRow</a> *current, <a class="code" href="classucf_1_1mcas_1_1_m_c_a_s.html#af9031f23f938c25b8ce82ced2686acab">t_CasRow</a> *last_row);</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;}  <span class="comment">// End mcas namespace</span></div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;}  <span class="comment">// End ucf namespace</span></div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;<span class="preprocessor">#endif  // UCF_MCAS_MCAS_H_</span></div>
-<div class="ttc" id="classucf_1_1mcas_1_1_m_c_a_s_html_ac46bde477b3e6c8f39ddc681d76bfd7b"><div class="ttname"><a href="classucf_1_1mcas_1_1_m_c_a_s.html#ac46bde477b3e6c8f39ddc681d76bfd7b">ucf::mcas::MCAS::execute</a></div><div class="ttdeci">bool execute()</div><div class="ttdef"><b>Definition:</b> old_wf_mcas.h:324</div></div>
-<div class="ttc" id="classucf_1_1mcas_1_1_m_c_a_s_html_a7b3ee82249a9e125716d64e501794d92"><div class="ttname"><a href="classucf_1_1mcas_1_1_m_c_a_s.html#a7b3ee82249a9e125716d64e501794d92">ucf::mcas::MCAS::cleanup</a></div><div class="ttdeci">static void cleanup(bool success, t_CasRow *current, t_CasRow *lastRow)</div><div class="ttdef"><b>Definition:</b> old_wf_mcas.h:423</div></div>
-<div class="ttc" id="classucf_1_1mcas_1_1_m_c_a_s_html_a78b48b90ddc792d3ffebdbbe8a2f50b3"><div class="ttname"><a href="classucf_1_1mcas_1_1_m_c_a_s.html#a78b48b90ddc792d3ffebdbbe8a2f50b3">ucf::mcas::MCAS::addCASTriple</a></div><div class="ttdeci">bool addCASTriple(std::atomic&lt; T &gt; *a, T ev, T nv)</div><div class="ttdef"><b>Definition:</b> old_wf_mcas.h:295</div></div>
-<div class="ttc" id="classucf_1_1mcas_1_1_m_c_a_s_html_a9744996afdf47315a2b94724cfaa78aa"><div class="ttname"><a href="classucf_1_1mcas_1_1_m_c_a_s.html#a9744996afdf47315a2b94724cfaa78aa">ucf::mcas::MCAS::t_MCAS</a></div><div class="ttdeci">MCAS&lt; T, words &gt; t_MCAS</div><div class="ttdef"><b>Definition:</b> old_wf_mcas.h:271</div></div>
-<div class="ttc" id="classucf_1_1mcas_1_1_m_c_a_s_html_a2a62db1d71cdd9e48c1ea77944a5390c"><div class="ttname"><a href="classucf_1_1mcas_1_1_m_c_a_s.html#a2a62db1d71cdd9e48c1ea77944a5390c">ucf::mcas::MCAS::row_count</a></div><div class="ttdeci">int row_count</div><div class="ttdef"><b>Definition:</b> old_wf_mcas.h:278</div></div>
-<div class="ttc" id="classucf_1_1mcas_1_1_m_c_a_s_html_a15b22dcce6f9df0a4c6c1b0ec3402c4e"><div class="ttname"><a href="classucf_1_1mcas_1_1_m_c_a_s.html#a15b22dcce6f9df0a4c6c1b0ec3402c4e">ucf::mcas::MCAS::MCAS_FAIL_CONST</a></div><div class="ttdeci">static constexpr t_MCASHelper * MCAS_FAIL_CONST</div><div class="ttdef"><b>Definition:</b> old_wf_mcas.h:274</div></div>
-<div class="ttc" id="classucf_1_1mcas_1_1_m_c_a_s_html_af9031f23f938c25b8ce82ced2686acab"><div class="ttname"><a href="classucf_1_1mcas_1_1_m_c_a_s.html#af9031f23f938c25b8ce82ced2686acab">ucf::mcas::MCAS::t_CasRow</a></div><div class="ttdeci">CasRow&lt; T, words &gt; t_CasRow</div><div class="ttdef"><b>Definition:</b> old_wf_mcas.h:269</div></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="keyword">template</span>&lt;<span class="keyword">class</span> T&gt;</div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;<span class="keyword">class </span>MCAS : <span class="keyword">public</span> : memory::OpRecord {</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;  <span class="keyword">typedef</span> <a class="code" href="class_cas_row.html">CasRow&lt;T&gt;</a> t_CasRow;</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;  <span class="keyword">typedef</span> MCASHelper&lt;T&gt; t_MCASHelper;</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;  <span class="keyword">typedef</span> MCAS&lt;T&gt; t_MCAS;</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160; <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;  <span class="keyword">enum class</span> MCAS_STATE {IN_PROGRESS, PASS, FAIL};</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;  <span class="keyword">static</span> constexpr t_MCASHelper * MCAS_FAIL_CONST =</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;                                        <span class="keyword">reinterpret_cast&lt;</span>t_MCASHelper *<span class="keyword">&gt;</span>(0x1);</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;  <span class="keyword">explicit</span> MCAS&lt;T&gt;(<span class="keywordtype">int</span> max_rows)</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;  : max_rows_ {max_rows}</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;  , row_count_ {0}</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;  , cas_rows {<span class="keyword">new</span> t_CasRow[max_rows]}</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;  , state_ {MCAS_STATE::IN_PROGRESS} {}</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;  ~MCAS&lt;T&gt;() {</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; row_count_; i++) {</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;      t_MCASHelper * mch = cas_rows[i].<a class="code" href="class_cas_row.html#aca1a4ccaf9943b601b8ddfc2f5e2b4e3">helper</a>.load();</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;      <span class="comment">// The No check flag is true because each was check prior</span></div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;      <span class="comment">// to the call of this descructor.</span></div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;      memory::rc::DescriptorPool::free_descriptor(helper, <span class="keyword">true</span>);</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    }</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <span class="keyword">delete</span>[] cas_rows;</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;  }</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;  <span class="keywordtype">bool</span> addCASTriple(std::atomic&lt;T&gt; *address, T expected_value, T new_value);</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;  <span class="keywordtype">bool</span> execute();</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160; <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;  <span class="keywordtype">bool</span> mcas_complete(t_CasRow *current, <span class="keywordtype">bool</span> wfmode = <span class="keyword">false</span>);</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;  <span class="keywordtype">void</span> <a class="code" href="namespaceucf_1_1mcas.html#add5ba0041532af307d6f2bae8037697d">cleanup</a>();</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;  T t_MCAS::mcas_remove(<span class="keyword">const</span> <span class="keywordtype">int</span> pos, T value)</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;  t_CasRow[] cas_rows;</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;  std::atomic&lt;MCAS_STATE&gt; state_;</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;  <span class="keywordtype">int</span> row_count_;</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;  <span class="keywordtype">int</span> max_rows_;</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;}  <span class="comment">// End mcas namespace</span></div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;}  <span class="comment">// End ucf namespace</span></div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;<span class="preprocessor">#endif  // UCF_MCAS_MCAS_H_</span></div>
+<div class="ttc" id="class_cas_row_html_aca1a4ccaf9943b601b8ddfc2f5e2b4e3"><div class="ttname"><a href="class_cas_row.html#aca1a4ccaf9943b601b8ddfc2f5e2b4e3">CasRow::helper</a></div><div class="ttdeci">std::atomic&lt; t_MCASHelper * &gt; helper</div><div class="ttdef"><b>Definition:</b> mcas_casrow.h:60</div></div>
 <div class="ttc" id="class_cas_row_html"><div class="ttname"><a href="class_cas_row.html">CasRow</a></div><div class="ttdef"><b>Definition:</b> mcas_casrow.h:9</div></div>
-<div class="ttc" id="classucf_1_1mcas_1_1_m_c_a_s_html_a0ba22caa69abae377d1790b9925e614d"><div class="ttname"><a href="classucf_1_1mcas_1_1_m_c_a_s.html#a0ba22caa69abae377d1790b9925e614d">ucf::mcas::MCAS::t_MCASHelper</a></div><div class="ttdeci">MCASHelper&lt; T, words &gt; t_MCASHelper</div><div class="ttdef"><b>Definition:</b> old_wf_mcas.h:270</div></div>
 <div class="ttc" id="mcas__helper_8h_html"><div class="ttname"><a href="mcas__helper_8h.html">mcas_helper.h</a></div></div>
 <div class="ttc" id="mcas__casrow_8h_html"><div class="ttname"><a href="mcas__casrow_8h.html">mcas_casrow.h</a></div></div>
+<div class="ttc" id="namespaceucf_1_1mcas_html_add5ba0041532af307d6f2bae8037697d"><div class="ttname"><a href="namespaceucf_1_1mcas.html#add5ba0041532af307d6f2bae8037697d">ucf::mcas::cleanup</a></div><div class="ttdeci">void cleanup(bool success)</div><div class="ttdef"><b>Definition:</b> mcas.cc:179</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 25 2014 13:17:00 for Tervel by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Apr 25 2014 20:30:35 for Tervel by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.7
 </small></address>

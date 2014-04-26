@@ -96,25 +96,26 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include &quot;<a class="code" href="hp__element_8h.html">tervel/memory/hp/hp_element.h</a>&quot;</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;</div>
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="keyword">namespace </span>tervel {</div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="keyword">namespace </span>thread {</div>
-<div class="line"><a name="l00008"></a><span class="lineno"><a class="line" href="namespacetervel_1_1thread_1_1_h_p.html">    8</a></span>&#160;  <span class="keyword">namespace </span>HP { <span class="keyword">class </span>HPElement; }</div>
-<div class="line"><a name="l00009"></a><span class="lineno"><a class="line" href="classtervel_1_1thread_1_1_op_record.html">    9</a></span>&#160;  <span class="keyword">class </span><a class="code" href="classtervel_1_1thread_1_1_op_record.html">OpRecord</a>: <span class="keyword">public</span> HPElement {</div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="keyword">namespace </span>memory {</div>
+<div class="line"><a name="l00008"></a><span class="lineno"><a class="line" href="namespacetervel_1_1memory_1_1_h_p.html">    8</a></span>&#160;  <span class="keyword">namespace </span>HP { <span class="keyword">class </span><a class="code" href="classtervel_1_1memory_1_1_h_p_element.html">HPElement</a>; }</div>
+<div class="line"><a name="l00009"></a><span class="lineno"><a class="line" href="classtervel_1_1memory_1_1_op_record.html">    9</a></span>&#160;  <span class="keyword">class </span><a class="code" href="classtervel_1_1memory_1_1_op_record.html">OpRecord</a>: <span class="keyword">public</span> <a class="code" href="classtervel_1_1memory_1_1_h_p_element.html">HPElement</a> {</div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;   <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00011"></a><span class="lineno"><a class="line" href="classtervel_1_1thread_1_1_op_record.html#aede34fdad6f3edf8232c40cba50d487f">   11</a></span>&#160;    <a class="code" href="classtervel_1_1thread_1_1_op_record.html#aede34fdad6f3edf8232c40cba50d487f">OpRecord</a>() {}</div>
+<div class="line"><a name="l00011"></a><span class="lineno"><a class="line" href="classtervel_1_1memory_1_1_op_record.html#ac01533290f6e4d855d5845771b5b209d">   11</a></span>&#160;    <a class="code" href="classtervel_1_1memory_1_1_op_record.html#ac01533290f6e4d855d5845771b5b209d">OpRecord</a>() {}</div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classtervel_1_1thread_1_1_op_record.html#ac735c4543bef413f4741074630fa8045">help_complete</a>() = 0;</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classtervel_1_1memory_1_1_op_record.html#ac51cc189131d8b157eab4533ed1ad10f">help_complete</a>() = 0;</div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;  };</div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;}  <span class="comment">// End Threading Name Space</span></div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;}  <span class="comment">// End Tervel Name Space</span></div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor">#endif  // TERVEL_MEMORY_OP_RECORD_H_</span></div>
 <div class="ttc" id="hp__element_8h_html"><div class="ttname"><a href="hp__element_8h.html">hp_element.h</a></div></div>
-<div class="ttc" id="classtervel_1_1thread_1_1_op_record_html_ac735c4543bef413f4741074630fa8045"><div class="ttname"><a href="classtervel_1_1thread_1_1_op_record.html#ac735c4543bef413f4741074630fa8045">tervel::thread::OpRecord::help_complete</a></div><div class="ttdeci">virtual void help_complete()=0</div></div>
-<div class="ttc" id="classtervel_1_1thread_1_1_op_record_html"><div class="ttname"><a href="classtervel_1_1thread_1_1_op_record.html">tervel::thread::OpRecord</a></div><div class="ttdef"><b>Definition:</b> op_record.h:9</div></div>
-<div class="ttc" id="classtervel_1_1thread_1_1_op_record_html_aede34fdad6f3edf8232c40cba50d487f"><div class="ttname"><a href="classtervel_1_1thread_1_1_op_record.html#aede34fdad6f3edf8232c40cba50d487f">tervel::thread::OpRecord::OpRecord</a></div><div class="ttdeci">OpRecord()</div><div class="ttdef"><b>Definition:</b> op_record.h:11</div></div>
+<div class="ttc" id="classtervel_1_1memory_1_1_op_record_html_ac01533290f6e4d855d5845771b5b209d"><div class="ttname"><a href="classtervel_1_1memory_1_1_op_record.html#ac01533290f6e4d855d5845771b5b209d">tervel::memory::OpRecord::OpRecord</a></div><div class="ttdeci">OpRecord()</div><div class="ttdef"><b>Definition:</b> op_record.h:11</div></div>
+<div class="ttc" id="classtervel_1_1memory_1_1_op_record_html"><div class="ttname"><a href="classtervel_1_1memory_1_1_op_record.html">tervel::memory::OpRecord</a></div><div class="ttdoc">This class is used to create Operation Records. </div><div class="ttdef"><b>Definition:</b> op_record.h:9</div></div>
+<div class="ttc" id="classtervel_1_1memory_1_1_h_p_element_html"><div class="ttname"><a href="classtervel_1_1memory_1_1_h_p_element.html">tervel::memory::HPElement</a></div><div class="ttdef"><b>Definition:</b> hp_element.h:17</div></div>
+<div class="ttc" id="classtervel_1_1memory_1_1_op_record_html_ac51cc189131d8b157eab4533ed1ad10f"><div class="ttname"><a href="classtervel_1_1memory_1_1_op_record.html#ac51cc189131d8b157eab4533ed1ad10f">tervel::memory::OpRecord::help_complete</a></div><div class="ttdeci">virtual void help_complete()=0</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Fri Apr 25 2014 13:17:00 for Tervel by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Fri Apr 25 2014 20:30:35 for Tervel by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.7
 </small></address>
