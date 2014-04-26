@@ -15,9 +15,18 @@ namespace tervel {
 namespace memory {
 
 namespace rc { class DescriptorPool; }
+// REVIEW(carlos): There is no class with the name HPElementPool.
 namespace hp { class HPElementPool; }
 
 class Descriptor {
+  // REVIEW(carlos): Trailing whitespace in class comment block
+  // REVIEW(carlos): Class comments go above the opening line:
+  //   /**
+  //    * I am a class comment.
+  //    */
+  //    class MyClass {
+  //      ...
+  //    };
   /**
    * This defines the Descriptor class, this class is designed to be extened
    * and be used in conjunction with primariliy the RC memory pool objects.
@@ -51,6 +60,8 @@ class Descriptor {
   * @param address the location this object was read from
   */
 
+  // REVIEW(carlos): Shouldn't be a blank line between the function declaration
+  //   and its comment block.
   virtual void * complete(void *current, std::atomic<void *> *address) = 0;
 
  private:
@@ -81,6 +92,9 @@ class Descriptor {
    * @return true if successfull, false otherwise
    */
 
+  // REVIEW(carlos): Shouldn't be a blank line between the function declaration
+  //   and its comment block.
+  // REVIEW(carlos): Line is longer than 80 chars.
   virtual bool on_watch(std::atomic<void *> * /*address*/, void * /*expected*/) {
     return true;
   }
@@ -100,6 +114,8 @@ class Descriptor {
    * @return true iff the item is watched by another thread
    */
 
+  // REVIEW(carlos): Shouldn't be a blank line between the function declaration
+  //   and its comment block.
   virtual bool on_is_watched() { return false; }
 
 
@@ -113,9 +129,15 @@ public:
    * @param address the address to read
    * @return the logical value of the address
    */
+  // REVIEW(carlos): The pointer star should be consistently placed within a
+  //   file. In other declarations, it's with the variable name, so it should be
+  //   with the variable name here:
+  //     std::atomic<T> *address
   template<class T>
   static T read(std::atomic<T> * address);
 
+  // REVIEW(carlos): Comment text should start after the line with the double
+  //   star
   /** This Method determins if the passed value is a descriptor or not.
    * It does so by calling the two static is_descriptor functions of the RC and 
    * HP descriptor classes.
@@ -124,12 +146,15 @@ public:
    * @return true if is a descriptor
    */
   static bool is_descriptor(void *value) {
+    // REVIEW(carlos): There is no `namespace RC' (capital letters)
     if (RC::is_descriptor_first(value)) {
       return true;
     }
     return false;
   }
 
+  // REVIEW(carlos): Comment text should start after the line with the double
+  //   star
   /** This method removes a descriptor from the passed address.
    * First it determineds the type of descriptor, currently only supports RC
    * Then it calls that descriptor type's watch procedure
@@ -143,7 +168,14 @@ public:
    * TODO(steven): code this.
    */
 
+  // REVIEW(carlos): Shouldn't be a blank line between the function declaration
+  //   and its comment block.
+  // REVIEW(carlos): Instead of assert(false), consider just not giving the
+  //   function a body. Compiler doensn't complain if a function is declared,
+  //   not defined, but never used. This causes a compile-time error if you use
+  //   the function to remind you that you haven't implemented it.
   static void *remove_descriptor(std::atomic<void *> *address, void *value) {
+    // REVIEW(carlos): There is no `namespace RC' (capital letters)
     if (RC::is_descriptor_first(value)) {
       assert(false);
     }
