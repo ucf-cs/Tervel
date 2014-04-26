@@ -11,17 +11,9 @@
 #include "tervel/memory/descriptor.h"
 #include "tervel/memory/system.h"
 
-<<<<<<< HEAD:tervel/memory/hp/hp_element.h
 namespace tervel {
 namespace memory {
 
-class Descriptor;
-
-=======
-namespace ucf {
-namespace thread {
->>>>>>> code-review:thread/hp/hp_element.h
-namespace hp {
 
 /**
  * This class is used for the creation of Hazard Pointer Protected Objects
@@ -33,7 +25,6 @@ namespace hp {
  */
 class HPElement {
  public:
-
   HPElement() {}
   ~HPElement() {}
 
@@ -43,23 +34,37 @@ class HPElement {
    * It also calls 'try_to_free_HPElements' in an attempt to free previously
    * unfreeable objects.
    */
-  void safeFree(HazardPointer *hazard_pointer = 
+  void safeFree(HazardPointer *hazard_pointer =
                                               tl_thread_info->hazard_pointer) {
     hazard_pointer->try_to_free_HPElements();
     if (HazardPointer::is_watched(this)) {
       hazard_pointer->add_to_unsafe(this);
-    }
-    else {
+    } else {
       this->~HPElement();
     }
 
     hazard_pointer->try_clear_unsafe_pool();
-
   }
 
-  bool on_watch(std::atomic<void *> *address, void *expected) { return true };
-  bool on_is_watch() {};
-  void on_unwatch() {};
+  /**
+   * This function is used to achieve a strong watch on an HPElement.
+   * Classes wishing to express this should override this function.
+   */
+  virtual bool on_watch(std::atomic<void *> *address, void *expected) {
+    return true;
+  };
+
+  /**
+   * This function is used to check a strong watch on an HPElement.
+   * Classes wishing to express this should override this function.
+   */
+  virtual bool on_is_watch() {}
+
+  /**
+   * This function is used to remove a strong watch on an HPElement.
+   * Classes wishing to express this should override this function.
+   */
+  virtual void on_unwatch() {}
 
 
  private:
@@ -73,7 +78,6 @@ class HPElement {
    * Helper method for setting the next pointer.
    */
   void next(HPElement *next) { next_ = next; }
-  
 };
 
 }  // namespace hp

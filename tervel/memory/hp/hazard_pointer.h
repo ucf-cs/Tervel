@@ -14,14 +14,19 @@
 namespace tervel {
 namespace memory {
 namespace hp {
-
+/**
+ * This class is used to maintain the list of hazard pointed objects.
+ * Any value can be written into a slot, however we provide special
+ * implementation for HPElements, in that we call their on_* functions.
+ * This allows for more expressive operations to be performed.
+ * 
+ * If an individual thread requires more than one element to be hazard pointer
+ * portected at a single instance, then SlotIDs should be added.
+ */
 class HazardPointer {
+  
  public:
-  enum class SlotID{
-    OPREC
-    ,SHORTUSE 
-    ,END
-  };
+  enum class SlotID {SHORTUSE, END};
 
   explicit HazardPointer(int nThreads)
       : num_slots {nThreads*SlotID:END}
@@ -73,10 +78,18 @@ class HazardPointer {
    *
    *
    * @param slot the slot to remove the watch
-   * @param (optional) descr to call on_unwatch on.
    */
   static void unwatch(SlotID slot
             , HazardPointer *hazard_pointer = tl_thread_info->hazard_pointer);
+
+  /**
+   * This method is used to remove the hazard pointer watch.
+   * If a descr is passed then it will internally call descr->on_unwatch.
+   *
+   *
+   * @param slot the slot to remove the watch
+   * @param descr to call on_unwatch on.
+   */
   static void unwatch(SlotID slot, HPElement *descr
             , HazardPointer *hazard_pointer = tl_thread_info->hazard_pointer);
 
@@ -85,10 +98,18 @@ class HazardPointer {
    * passed value.
    * If a descr is passed then it will internally call descr->on_is_watched.
    *
-   * @param (optional) descr to call on_is_watched on.
+   * @param descr to call on_is_watched on.
    */
   static bool is_watched(HPElement *descr
             , HazardPointer *hazard_pointer = tl_thread_info->hazard_pointer);
+
+  /**
+   * This method is used to determine if a hazard pointer watch exists on a
+   * passed value.
+   * If a descr is passed then it will internally call descr->on_is_watched.
+   *
+   * @param value to check if watch
+   */
   static bool is_watched(void *value
             , HazardPointer *hazard_pointer = tl_thread_info->hazard_pointer);
 
@@ -122,6 +143,7 @@ class HazardPointer {
   /** This function returns true of the specified value is being watched.
    *
    * @param value The value to check.
+   * @return true is the table contains the specified value
    */
 
   bool contains(void *value) {

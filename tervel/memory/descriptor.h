@@ -11,12 +11,34 @@
 
 
 namespace tervel {
-namespace thread {
+namespace memory {
 
 namespace rc { class DescriptorPool; }
 namespace hp { class HPElementPool; }
 
 class Descriptor {
+  /**
+   * This defines the Descriptor class, this class is designed to be extened
+   * and be used in conjunction with primariliy the RC memory pool objects.
+   * Extending this class allows the developer to quickly create RC protected
+   * elements.
+   * 
+   * Classes that extend this class must implement the following functions:
+   *    complete
+   *    get_logical_function.
+   * This allows for various algorithms and data structures to be executed
+   * on overlaping regions of memory.
+   * 
+   * For use with memory protection schemes we provide the following functions:
+   *    on_watch
+   *    on_is_watched
+   *    on_unwatch
+   * These are called by the memory protection scheme in the event more advance
+   * logic is required to safely dereference of free such objects.
+   *
+   * If an object contains a reference to other object(s) that can only be freed
+   * when it is freed then this must expressed in the objects descructor. 
+   */
  public:
   Descriptor() {}
   virtual ~Descriptor() {}
@@ -30,18 +52,7 @@ class Descriptor {
 
   virtual void * complete(void *current, std::atomic<void *> *address) = 0;
 
-  /**
-   * This method is implmented by each descriptor object that can be placed into
-   * the pending operation table.
-   *
-   * It must contain all the information necessary to complete the associated
-   * operation
-   * 
-   */
-
-  virtual void help_complete() = 0;
-
-private:
+ private:
   /**
    * This method is implmented by each sub class. It returns the logical value
    * of the past address.  If the associted operation is still in progress then
@@ -54,7 +65,6 @@ private:
    */
   virtual void * get_logical_value() = 0;
 
- 
   /**
    * This method is optional to implment for each sub class.  In the event there
    * is a complex dependency between descriptor objects, where watching one
@@ -91,15 +101,6 @@ private:
 
   virtual bool on_is_watched() { return false; }
 
-  /**
-   * This method is optional. It should free any child objects.  This method is
-   * called by a DescriptorPool when a descriptor is deleted but before the
-   * destructor is called. This way, associated descriptors can be recursively
-   * freed.
-   *
-   * @param pool The memory pool which this is being freed into.
-   */
-  virtual void on_return_to_pool(rc::DescriptorPool * /*pool*/) {}
 
 public:
   /**
@@ -113,6 +114,7 @@ public:
    */
   template<class T>
   static T read(std::atomic<T> * address);
+
   /** This Method determins if the passed value is a descriptor or not.
    * It does so by calling the two static is_descriptor functions of the RC and 
    * HP descriptor classes.
