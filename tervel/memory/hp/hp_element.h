@@ -16,7 +16,11 @@ namespace tervel {
 namespace memory {
 namespace hp {
 
+// REVIEW(carlos): ::tervel::memory::hp::HPElement is a redundant name (hp::HP).
+//   please remove the HP prefix to Element.
 class HPElement {
+  // REVIEW(carlos): line exceeds 80 chars
+  // REVIEW(carlos): class comment should be above opening of class def
   /**
    * This class is used for the creation of Hazard Pointer Protected Objects
    * Objects which extend it have the ability to call safeFree which delays
@@ -51,6 +55,7 @@ class HPElement {
    */
   virtual bool on_watch(std::atomic<void *> *address, void *expected) {
     return true;
+    // REVIEW(carlos):remove trailing semicolon on closing brace.
   };
 
   /**
@@ -67,6 +72,11 @@ class HPElement {
 
 
  private:
+  // REVIEW(carlos): the getter and setter for next were public in
+  //   DescriptorElement because they defined a public interface to the class.
+  //   Here, since the next_ pointer is a the same access level as the
+  //   getter/setter, the methods are not particularly useful. For interface
+  //   compatibility, I would suggest moving them to the public section.
   /**
    * Helper method for getting the next pointer.
    */
