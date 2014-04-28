@@ -1,3 +1,4 @@
+// REVIEW(carlos): no such .h file, (meant hp_pool.h?)
 #include "tervel/memory/hp/descriptor_pool.h"
 
 namespace tervel {
@@ -46,6 +47,7 @@ void clear_pool(HPElement **local_pool,
 }
 
 }  // namespace
+// REVIEW(carlos): excess vertical whitespace
 
 
 
@@ -77,6 +79,8 @@ void HPPool::try_clear_unsafe_pool(bool dont_check) {
     }
   }
 
+  // REVIEW(carlos): Conider breaking these two blocks into two functions in a
+  //   local unnamed namespace for readability.
   if (unsafe_pool_ != nullptr) {
     HPElement *prev = unsafe_pool_;
     HPElement *temp = unsafe_pool_->next();
