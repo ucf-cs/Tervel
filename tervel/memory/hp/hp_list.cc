@@ -1,3 +1,6 @@
+// REVIEW(carlos): excess whitespace at beginning of file
+// REVIEW(carlos): should #include "tervel/memory/hp/hp_list.h"
+// REVIEW(carlos): should #include "tervel/memory/hp/hp_element.h"
 
 
 namespace ucf {
@@ -54,6 +57,9 @@ void HPList::add_to_unsafe(HPElement* elem) {
 }
 
 
+// REVIEW(carlos): Consider breaking the while loop and the if statement into
+//   functions in a local unnamed namespace (like above w/ clear_pool) for
+//   readability
 void HPList::try_to_free_HPElements(bool dont_check) {
 
   // Loop until either the unsafe_list is empty
@@ -95,5 +101,7 @@ void HPList::try_to_free_HPElements(bool dont_check) {
 }
 
 }  // namespace hp
+// REVIEW(carlos): should be namespace memory
 }  // namespace thread
+// REVIEW(carlos): should be namespace tervel
 }  // namespace ucf
