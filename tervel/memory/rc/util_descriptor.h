@@ -1,3 +1,5 @@
+// REVIEW(carlos): Suggest rename to descriptor_util.h (makes more sense to me
+//   as a shortening of the phrase `descriptor utilities')
 #ifndef TERVEL_MEMORY_RC_UTIL_DESCRIPTOR_H_
 #define TERVEL_MEMORY_RC_UTIL_DESCRIPTOR_H_
 
@@ -69,6 +71,9 @@ inline bool is_watched(Descriptor *descr) {
 }
 
 
+// REVIEW(carlos): The REVIEW in this comment is from an old review session.
+//   Please strip/address all such REVIEW comments before saending in for
+//   review.
 /**
 * This method is used to remove a descriptor object that is conflict with
 * another threads operation.
@@ -101,6 +106,7 @@ inline void * remove_descriptor(void *expected, std::atomic<void *> *address){
   return newValue;
 }
 
+// REVIEW(carlos): text should start on line after double star
 /** This returns the passed reference with its least signifcant bit set
  * to 1.
  *
@@ -111,6 +117,7 @@ inline void * mark_first(Descriptor *descr) {
   return reinterpret_cast<void *>(reinterpret_cast<uintptr_t>(descr) | 0x1L);
 }
 
+// REVIEW(carlos): text should start on line after double star
 /** This returns an unbitmarked reference
  *
  * @param the reference to remove the bitmark from
@@ -121,6 +128,7 @@ inline Descriptor * unmark_first(void *descr) {
       reinterpret_cast<uintptr_t>(descr) & ~0x1L);
 }
 
+// REVIEW(carlos): text should start on line after double star
 /** This returns whether or not the least signficant bit holds a bitmark
  *
  * @param the reference to check
@@ -131,6 +139,7 @@ inline bool is_descriptor_first(void *descr) {
 }
 
 }  // namespace rc
+// REVIEW(carlos): should be namespace memory
 }  // namespace thread
 }  // namespace tervel
 
