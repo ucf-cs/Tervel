@@ -17,8 +17,6 @@ namespace util {
 namespace memory {
 namespace hp {
 
-// REVIEW(carlos): ::tervel::memory::hp::HPElement is a redundant name (hp::HP).
-//   please remove the HP prefix to Element.
 /**
  * This class is used for the creation of Hazard Pointer Protected Objects
  * Objects which extend it have the ability to call safeFree which delays
@@ -27,20 +25,20 @@ namespace hp {
  * To achieve more advance functionality, the user can also extend Descriptor
  * class which will provides on_watch, on_unwatch, and on_is_watch functions.
  */
-class HPElement {
+class Element {
  public:
-  HPElement() {}
-  virtual ~HPElement() {}
+  Element() {}
+  virtual ~Element() {}
 
   /**
    * This function is used to free a hazard pointer protected object if it is
    * safe to do so OR add it to a list to be freed later.
-   * It also calls 'try_to_free_HPElements' in an attempt to free previously
+   * It also calls 'try_to_free_Elements' in an attempt to free previously
    * unfreeable objects.
    */
   void safe_delete(bool no_check = false
             , HazardPointer *hazard_pointer = tl_thread_info->hazard_pointer) {
-    hazard_pointer->try_to_free_HPElements();
+    hazard_pointer->try_to_free_Elements();
     if (!no_check || HazardPointer::is_watched(this)) {
       hazard_pointer->add_to_unsafe(this);
     } else {
@@ -50,7 +48,7 @@ class HPElement {
   }
 
   /**
-   * This function is used to achieve a strong watch on an HPElement.
+   * This function is used to achieve a strong watch on an Element.
    * Classes wishing to express this should override this function.
    */
   virtual bool on_watch(std::atomic<void *> *address, void *expected) {
@@ -58,13 +56,13 @@ class HPElement {
   }
 
   /**
-   * This function is used to check a strong watch on an HPElement.
+   * This function is used to check a strong watch on an Element.
    * Classes wishing to express this should override this function.
    */
   virtual bool on_is_watch() {}
 
   /**
-   * This function is used to remove a strong watch on an HPElement.
+   * This function is used to remove a strong watch on an Element.
    * Classes wishing to express this should override this function.
    */
   virtual void on_unwatch() {}
@@ -83,16 +81,16 @@ class HPElement {
   /**
    * Helper method for getting the next pointer.
    */
-  HPElement * next() { return next_; }
+  Element * next() { return next_; }
 
   /**
    * Helper method for setting the next pointer.
    */
-  void next(HPElement *next) { next_ = next; }
+  void next(Element *next) { next_ = next; }
 
-  HPElement *next_ {nullptr}
+  Element *next_ {nullptr}
   void operator delete( void * ) {}
-  DISALLOW_COPY_AND_ASSIGN(HPElement);
+  DISALLOW_COPY_AND_ASSIGN(Element);
 };
 
 }  // namespace hp

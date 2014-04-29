@@ -14,7 +14,7 @@ namespace util {
 
 namespace memory {
 namespace hp {
-  class HPElement;
+  class Element;
 }
 }
 
@@ -24,7 +24,7 @@ namespace hp {
  * some other thread's operation in the event that thread is unable to do so.
  * These objects are HP protected.
  */
-// REVIEW(carlos): why is OpRecord a subclass of HPElement? shouldn't we keep
+// REVIEW(carlos): why is OpRecord a subclass of Element? shouldn't we keep
 //   the two classes seperate? Otherwise, you're explicitly saying that the
 //   progress assurance relies on hazard pointere'd memory (which is fine, but
 //   if that's the case, progress assurance should be in a new namespace).
@@ -32,7 +32,7 @@ namespace hp {
 // elements in the optable. I moved it into the util name space, is that good?
 
 
-class OpRecord : public hp::HPElement {
+class OpRecord : public hp::Element {
  public:
   virtual ~OpRecord() {}
 

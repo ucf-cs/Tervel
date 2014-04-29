@@ -19,7 +19,7 @@ namespace memory {
 namespace hp {
 
 class HPList;
-class HPElement;
+class Element;
 
 /**
  * Encapsulates a shared central 'to free list' between several thread-local lists.
@@ -33,12 +33,12 @@ class ListManager {
   ListManager() : pool_() {}
 
   ~ListManager() {
-    // TODO(steven): destroy pool by freeing each HPElement
+    // TODO(steven): destroy pool by freeing each Element
   }
 
 
  private:
-  std::atomic<HPElement *> to_free_list_ {nullptr};
+  std::atomic<Element *> to_free_list_ {nullptr};
 };
 
 }  // namespace hp

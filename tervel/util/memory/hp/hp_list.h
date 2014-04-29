@@ -18,7 +18,7 @@ namespace util {
 namespace memory {
 namespace hp {
 
-class HPElement;
+class Element;
 class ListManager;
 
 // REVIEW(carlos): prefix HP on the List is redundant given the namespace name
@@ -35,7 +35,7 @@ class ListManager;
  */
 class HPList {
  public:
-  friend HPElement;
+  friend Element;
   explicit HPList(ListManager *manager) : manager_(manager) {}
 
   ~HPList() { this->send_to_manager(); }
@@ -56,16 +56,16 @@ class HPList {
   // DEALS WITH UNSAFE LIST
   // --------------------------------
   /**
-   * This function adds an HPElement to the unsafe list.
+   * This function adds an Element to the unsafe list.
    * @param elem The element to add
    */
-  void add_to_unsafe(HPElement* elem);
+  void add_to_unsafe(Element* elem);
 
   /**
    * Tries to free elements from the unsafe list.
    * @param dont_check If true, it ignores safty checks 
    */
-  void try_to_free_HPElements(bool dont_check = false);
+  void try_to_free_Elements(bool dont_check = false);
 
 
   // -------
@@ -79,9 +79,9 @@ class HPList {
 
   /**
    * A linked list of list elements. 
-   * HPElements are freed when they are no longer referenced by other threads.
+   * Elements are freed when they are no longer referenced by other threads.
    */
-  HPElement *element_list_ {nullptr}
+  Element *element_list_ {nullptr}
 };
 
 }  // namespace hp

@@ -5,7 +5,7 @@ namespace util {
 namespace memory {
 namespace hp {
 
-inline bool HazardPointer::watch(SlotID slot, HPElement *descr,
+inline bool HazardPointer::watch(SlotID slot, Element *descr,
       std::atomic<void *> *address, void *expected,
       HazardPointer *hazard_pointer) {
   hazard_pointer->watch(slot, descr);
@@ -38,7 +38,7 @@ bool HazardPointer::watch(SlotID slot, void *value,
   }
 }
 
-void HazardPointer::unwatch(SlotID slot, HPElement *descr
+void HazardPointer::unwatch(SlotID slot, Element *descr
       , HazardPointer *hazard_pointer) {
   hazard_pointer->clear_watch(slot);
   descr->on_unwatch();
@@ -49,7 +49,7 @@ void HazardPointer::unwatch(SlotID slot) {
 }
 
 
-bool HazardPointer::is_watched(HPElement *descr
+bool HazardPointer::is_watched(Element *descr
             , HazardPointer *hazard_pointer = tl_thread_info->hazard_pointer) {
   if (hazard_pointer->contains(descr)) {
     return descr->on_is_watched();

@@ -7,7 +7,7 @@ namespace util {
 namespace memory {
 namespace hp {
 
-void HPList::free_descriptor(HPElement *descr, bool dont_check) {
+void HPList::free_descriptor(Element *descr, bool dont_check) {
   if (!dont_check && is_watched(descr)) {
     this->add_to_unsafe(descr);
   } else {
@@ -17,7 +17,7 @@ void HPList::free_descriptor(HPElement *descr, bool dont_check) {
 
 
 void HPList::send_to_manager() {
-  this->try_to_free_HPElements(false);
+  this->try_to_free_Elements(false);
   clear_pool(&element_list_, &this->manager.to_free_list_());
 }
 
@@ -29,11 +29,11 @@ namespace {
  * shared pool. Parameters are passed by pointer because this function changes
  * their values.
  */
-void clear_pool(HPElement **local_pool,
-    std::atomic<HPElement *> *manager_pool) {
+void clear_pool(Element **local_pool,
+    std::atomic<Element *> *manager_pool) {
   if (local_pool != nullptr) {
-    HPElement *p1 = *local_pool;
-    HPElement *p2 = p1->next();
+    Element *p1 = *local_pool;
+    Element *p2 = p1->next();
     while (p2 != nullptr) {
       p1 = p2;
       p2 = p1->next();
@@ -51,20 +51,20 @@ void clear_pool(HPElement **local_pool,
 
 }  // namespace
 
-void HPList::add_to_unsafe(HPElement* elem) {
+void HPList::add_to_unsafe(Element* elem) {
   elem->next(element_list_);
   element_list_ = elem;
 }
 
 
-void HPList::try_to_free_HPElements(bool dont_check) {
+void HPList::try_to_free_Elements(bool dont_check) {
   /**
    * Loop until no more elements can be freed from the element_list_ linked list
    * OR the first element is not safe to be freed
    */
   if (element_list_ != nullptr) {
-    HPElement *prev = element_list_;
-    HPElement *temp = element_list_->next();
+    Element *prev = element_list_;
+    Element *temp = element_list_->next();
 
     while (temp) {
       PoolElement *temp_next = temp->next();
@@ -74,7 +74,7 @@ void HPList::try_to_free_HPElements(bool dont_check) {
         prev = temp;
         temp = temp_next;
       } else {
-        temp->~HPElement();
+        temp->~Element();
         prev->next(temp_next);
         temp = temp_next;
       }
@@ -86,7 +86,7 @@ void HPList::try_to_free_HPElements(bool dont_check) {
     temp = element_list_->next();
     bool watched = is_watched(temp);
     if (dont_check || !watched) {
-      temp->~HPElement();
+      temp->~Element();
       element_list_ = temp;
     }
   }

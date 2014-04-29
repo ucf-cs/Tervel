@@ -20,7 +20,7 @@ namespace hp {
 /**
  * This class is used to maintain the list of hazard pointed objects.
  * Any value can be written into a slot, however we provide special
- * implementation for HPElements, in that we call their on_* functions.
+ * implementation for Elements, in that we call their on_* functions.
  * This allows for more expressive operations to be performed.
  * 
  * If an individual thread requires more than one element to be hazard pointer
@@ -55,7 +55,7 @@ class HazardPointer {
    * @param address The address to check
    * @param expected The value which is to be expected at the address
    */
-  static bool watch(SlotID slot_id, HPElement *elem,
+  static bool watch(SlotID slot_id, Element *elem,
       std::atomic<void *> *address, void *expected,
       HazardPointer *hazard_pointer = tl_thread_info.hazard_pointer);
 
@@ -91,7 +91,7 @@ class HazardPointer {
    * @param slot the slot to remove the watch
    * @param descr to call on_unwatch on.
    */
-  static void unwatch(SlotID slot_id, HPElement *descr,
+  static void unwatch(SlotID slot_id, Element *descr,
       HazardPointer *hazard_pointer = tl_thread_info.hazard_pointer);
 
   /**
@@ -101,7 +101,7 @@ class HazardPointer {
    *
    * @param descr to call on_is_watched on.
    */
-  static bool is_watched(HPElement *descr,
+  static bool is_watched(Element *descr,
       HazardPointer *hazard_pointer = tl_thread_info.hazard_pointer);
 
   /**
