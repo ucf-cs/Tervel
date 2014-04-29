@@ -1,17 +1,32 @@
+// REVIEW(carlos): should rename file to casrow.h
+// REVIEW(carlos): should be TERVEL_*
 #ifndef UCF_MCAS_CASROW_H_
 #define UCF_MCAS_CASROW_H_
 
+// REVIEW(carlos): put blank line between include block groups. Groups are:
+//   1. .h file associated to current .cc file
+//   2. c++ standard files
+//   3. c standard files
+//   4. external library files
+//   5. internal library files
 #include <algorithm>
+// REVIEW(carlos): should be tervel/memory/*
 #include "thread/info.h"
 #include "thread/util.h"
 
+// REVIEW(carlos): missing namespace declarations
+
 template<class T>
 class CasRow {
+  // REVIEW(carlos): class comment should be above class name
   /**
    * This class is used to represent a one of the M CAS operations performed
    * by an MCAS operation.
    * It holds an address, expected value and new value for that address.
    */
+  // REVIEW(carlos): this eon't work like you expect it to.
+  // REVIEW(carlos): MCASHelper and MCAS are not forward declared anywhere and
+  //   their headers aren't included
   typedef CasRow<T> t_CasRow;
   typedef MCASHelper<T> t_MCASHelper;
   typedef MCAS<T> t_MCAS;
@@ -19,8 +34,10 @@ class CasRow {
   public:
     CasRow<T>() {}
 
+    // REVIEW(carlos): parameter names are obtuse
     CasRow<T>(std::atomic<T> *a, T ev, T nv)
         : address {a}
+        // REVIEW(carlos): comma should line up w/ colon
          , expected_value {ev}
          , new_value {nv} {}
 
@@ -60,4 +77,5 @@ class CasRow {
     std::atomic<t_MCASHelper *>helper;
 };
 
+// REVIEW(carlos): should be TERVEL_*
 #endif  // UCF_MCAS_CASROW_H_
