@@ -1,14 +1,25 @@
+// REVIEW(carlos): include paths should start w/ tervel
 #include "mcas/mcas_helper.h"
 
+// REVIEW(carlos): should be namespace tervel
 namespace ucf {
 namespace mcas {
 
+// REVIEW(carlos):you need to #include <atomic> to use std::atomic
+// REVIEW(carlos): method should be templated
 bool MCASHelper::on_watch(std::atomic<void *> *address, T value) {
+  // REVIEW(carlos): you need to include the header for this enum
+  // REVIEW(carlos): should be memory namespace
   int hp_pos = thread::hp::HazardPointer::SlotID::SHORTUSE;
+  // REVIEW(carlos): wierd line breaking, should just indent by 4 spaces on next
+  //   line, line should not start w/ comma
+  // REVIEW(carlos): should be memory namespace
   bool success = thread::hp::HazardPointer::watch(hp_pos, mcas_op_, address
                                                   , value);
 
   if (success) {
+    // REVIEW(carlos): would prefer if you didn't use accronyms like MCH. Forces
+    //   me to dig through the source to find out what you mean.
     /* Success, means that the MCAS object referenced by this MCH can not be
        freed while we check to make sure this MCH is assocaited with it. */
     t_MCASHelper *curr_mch = cas_row_->helper.load();
@@ -29,6 +40,7 @@ bool MCASHelper::on_watch(std::atomic<void *> *address, T value) {
   /* No longer need HP protection, if we have RC protection an associated MCH
      If we don't then the value at this address must have changed and 
      we don't need it either way */
+  // REVIEW(carlos): should be memory namespace
   thread::hp::HazardPointer::unwatch(hp_pos);
   return success;
 }
@@ -65,6 +77,9 @@ void * MCASHelper::complete(std::atomic<void *> *address, void * value) {
   return address->load();
 }
 
+// REVIEW(carlos): closing brackets should simply read `namespace mcas' and
+//   `namespace tervel'
 }  // End mcas namespace
+// REVIEW(carlos): should be namespace tervel
 }  // End ucf name space
 

@@ -1,27 +1,42 @@
+// REVIEW(carlos): should be TERVEL_*_H_
 #ifndef UCF_MCAS_HELPER_
 #define UCF_MCAS_HELPER_
 
+// REVIEW(carlos): include paths should start w/ tervel
 #include "mcas_casrow.h"
 #include "mcas.h"
+// REVIEW(carlos): should be tervel/memory/descriptor.h
 #include "thread/descriptor.h"
 
 
 
+// REVIEW(carlos): should be namespace tervel
 namespace ucf {
 namespace mcas {
 
 template<class T>
+// REVIEW(carlos): no such class as thread::Descriptor (it's memory::Descriptor)
+// REVIEW(carlos): space on both sides of colon
+// REVIEW(carlos): class name is redundant given that namespace name is mcas
 class MCASHelper: public thread::Descriptor {
+// REVIEW(carlos): Indentation is wonky in this class
+// REVIEW(carlos): class commentg goes above class name
 /**
  * This class is the MCAS operation's helper. The Helper or MCH is used to 
  * replace the expected value of the specified address. 
  * 
  */
 
+// REVIEW(carlos): This won't do what you expect it to do. You can't define
+//   the body of a templated class/function in a cc file and compile it
+//   seperately. It has to be in an included header.
 typedef CasRow<T> t_CasRow;
 typedef MCASHelper<T> t_MCASHelper;
 typedef MCAS<T> t_MCAS;
 
+// REVIEW(carlos): public declaration should be at top of class
+// REVIEW(carlos): indentation should be 1 space for the public: header, 2
+//   spaces for everything else
   public:
     /**
      * @param mcas_op the t_MCAS which contains the referenced cas_row
@@ -63,6 +78,7 @@ typedef MCAS<T> t_MCAS;
      * @params last_row an identifier of the current MCAS operation 
      * @return the current value of the address
      */
+    // REVIEW(carlos): excess vertical whitespace
 
     static T mcas_remove(std::atomic<T> *address, T value, t_CasRow *last_row);
 
@@ -74,5 +90,9 @@ typedef MCAS<T> t_MCAS;
 };
 
 }  // End mcas namespace
+// REVIEW(carlos): should be namespace tervel
 }  // End ucf nampespace
+// REVIEW(carlos): should be TERVEL_*_H_
+// REVIEW(carlos): should be a space between closing brace and close of
+//   include guard
 #endif  // UCF_MCAS_HELPER_
