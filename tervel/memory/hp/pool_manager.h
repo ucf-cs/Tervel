@@ -18,6 +18,7 @@ class Descriptor;
 
 namespace hp {
 
+// REVIEW(carlos): No such class hp::DescriptorPool
 class DescriptorPool;
 class HPElement;
 
@@ -30,17 +31,23 @@ class HPElement;
  */
 class PoolManager {
  public:
+   // REVIEW(carlos): No such class DescriptorPool
   friend class DescriptorPool;
 
+  // REVIEW(carlos): semi-colon causes compilation error.
+  // REVIEW(carlos): If you can fit the constructor on one line, do it.
   PoolManager();
       : pool_(new ManagedPool) {}
+  // REVIEW(carlos): excess vertical whitespace
 
 
 
  private:
   struct ManagedPool {
+    // REVIEW(carlos): missing semi colon
     std::atomic<HPElement *> unsafe_pool {nullptr}
 
+    // REVIEW(carlos): no such element named pool
     char padding[CACHE_LINE_SIZE - sizeof(pool) - sizeof(unsafe_pool)];
   };
   static_assert(sizeof(ManagedPool) == CACHE_LINE_SIZE,
