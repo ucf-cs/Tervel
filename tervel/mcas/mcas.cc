@@ -1,8 +1,19 @@
+// REVIEW(carlos): put blank lines between include groups.
 #include "tervel/mcas/mcas.h"
 #include <algorithm>
+// REVIEW(carlos): put a line between includes and opening namespace blocks.
+// REVIEW(carlos): should be namespace tervel.
+// REVIEW(carlos): tl_thread_info is used several times in here.
+//   tervel/memory/info has to be included for the forward declaration.
+// REVIEW(carlos): You're trying to define the implementation of a templated
+//   class in a .cc file. This does not work. The implementation can't be
+//   compiled seperately, and must be included in a header by the user of the
+//   class.
 namespace ucf {
 namespace mcas {
 
+// REVIEW(carlos): the typedef here will not work. This function is templated,
+//   and must be declared as so.
 bool t_MCAS::addCASTriple(std::atomic<T> *a, T ev, T nv) {
   if (memory::Descriptor::isValid(ev) ||  memory::Descriptor::isValid(nv)) {
     return false;
@@ -22,6 +33,8 @@ bool t_MCAS::addCASTriple(std::atomic<T> *a, T ev, T nv) {
           swap(cas_rows[i], cas_rows[i+1]);
         }
         row_count--;
+        // REVIEW(carlos): nullptr is implicitly convertable to all pointer
+        //   types. You shouldn't need to do a reinterpret_cast on it.
         cas_rows[row_count].address = reinterpret_cast<T>(nullptr);
         cas_rows[row_count].expected_value = reinterpret_cast<T>(nullptr);
         cas_rows[row_count].newValue = reinterpret_cast<T>(nullptr);
@@ -33,15 +46,25 @@ bool t_MCAS::addCASTriple(std::atomic<T> *a, T ev, T nv) {
 };
 
 bool t_MCAS::execute() {
+  // REVIEW(carlos): too much vertical whitespace
   memory::ProgressAssurance::check_for_announcement();
 
   bool res = mcas_complete(0);
 
+  // REVIEW(carlos): useless comment
   // Now Clean up
   cleanup(res);
   return res;
 };
 
+// REVIEW(carlos): put default arguments in the function declaration (.h file),
+//   not the definition.
+// REVIEW(carlos): This function is way too long. If it doesn't fit in ~1 screen
+//   of code, I have trouble reading what it's doing. You should break this up
+//   into auxiliary functions. You don't need to declare said functions in the
+//   .h file, just put them into an unnamed namespace in the .cc file.
+// REVIEW(carlos): TBH, the body of this function is impenatrable to me, and I
+//   can't review the contents for correctness as-is.
 bool t_MCAS::mcas_complete(int start_pos, bool wfmode = false) {
   for (int pos = start_pos; pos < row_count_; pos++) {
     /* Loop for each row in the op, if helping complete another thread's MCAS
@@ -50,12 +73,15 @@ bool t_MCAS::mcas_complete(int start_pos, bool wfmode = false) {
     size_t fcount = 0;  // Tracks the number of failures.
 
     t_CasRow * row = &cas_rows[pos];
+    // REVIEW(carlos): no such typename T.
     T current_value = row->address->load();
 
     while (row->helper.load() == nullptr) {
       if (state_.load() != MCAS_STATE::IN_PROGRESS) {
         // Checks if the operation has been completed
         return (state_.load() == MCAS_STATE::PASS);
+        // REVIEW(carlos): odd line-breaking. Just indent the next line 2
+        //   indentation levels (4 spaces)
       } else if (!wfmode &&
                   fcount++ == memory::ProgressAssurance::MAX_FAILURE) {
         if (tl_thread_info.rDepth == 0) {
@@ -65,6 +91,8 @@ bool t_MCAS::mcas_complete(int start_pos, bool wfmode = false) {
           tl_thread_info.recursive_return = true;
           return false;
         }
+        // REVIEW(carlos): A 12-line if-else probably doesn't need an "end
+        //   blarg" comment
       }  // End else if Fail Count has been Reached
 
       if (memory::Descriptor::is_descriptor(current_value)) {
@@ -145,6 +173,7 @@ T t_MCAS::mcas_remove(const int pos, T value) {
     Descriptor *descr = memory::rc::unmark_first(value);
 
     // First get a watch on the object.
+    // REVIEW(carlos): variable name address is not defined anywhere
     bool watched = thread::rc::watch(descr,
                   reinterpret_cast<std::atomic<void *>*>(address),
                   reinterpret_cast<void *>(t));
@@ -168,6 +197,10 @@ T t_MCAS::mcas_remove(const int pos, T value) {
 
   // Otherwise it is someother descriptor type, so call the generic descriptor
   // remove operation
+  // REVIEW(carlos): wierd line breaking. should be:
+  //     ...remove_descriptor(address,
+  //         value));
+  //   next line is indented by 2 indentation levels (4 spaces).
   return reinterpret_cast<T>(memory::Descriptor::remove_descriptor
                                                               (address, value));
 };
@@ -207,12 +240,14 @@ void cleanup(bool success) {
  * This function is used to call the Progress Assurance Scheme
  * Upon its return it is guranteed to be completed.
  */
+// REVIEW(carlos): No such function in the .h file
 bool wf_complete() {
   tl_thread_info.progress_assurance->askForHelp(this);
   assert(this->state_.load() != MCAS_STATE::IN_PROGRESS);
   return (temp_state == MCAS_STATE::PASS);
 }
 
+// REVIEW(carlos): No such function in the .h file
 void help_complete() {
   t_MCAS::mcas_complete(0, true);
 }
@@ -222,6 +257,7 @@ void help_complete() {
  * But before this is freeded we need to check that each associated MCH is also
  * un_watched
  */
+// REVIEW(carlos): No such function in the .h file
 bool on_is_watched() {
   for (int i = 0; i < row_count_; i++) {
     t_MCASHelper mch = cas_row_[i]->helper.load();
@@ -238,5 +274,8 @@ bool on_is_watched() {
 }
 
 
+// REVIEW(carlos): the closing comment should just repeat what's on the opening
+//   line. Here, they should just say `namespace mcas' and `namespace ucf'
 }  // End mcas namespace
+// REVIEW(carlos): should be namespace tervel
 }  // End ucf name space

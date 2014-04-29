@@ -1,13 +1,22 @@
+// REVIEW(carlos): should be TERVEL_*
 #ifndef UCF_MCAS_MCAS_H_
 #define UCF_MCAS_MCAS_H_
+// REVIEW(carlos): should be a space between block of includes and the include
+//   guards.
+// REVIEW(carlos): paths should start w/ tervel
 #include "mcas/mcas_helper.h"
 #include "mcas/mcas_casrow.h"
 
 
+// REVIEW(carlos): should be namespace tervel
 namespace ucf {
 namespace mcas {
 
 template<class T>
+// REVIEW(carlos): class does not follow class naming conventions
+// REVIEW(carlos): too many colons (class MCAS : public memory::OpRecord ...)
+// REVIEW(carlos): You don't include the op record header, so this will cause an
+//   unknown type error.
 class MCAS : public : memory::OpRecord {
   /**
    * This is the MCAS class, it is used to perform a Multi-Word Compare-and-Swap
@@ -23,10 +32,13 @@ class MCAS : public : memory::OpRecord {
   enum class MCAS_STATE {IN_PROGRESS, PASS, FAIL};
 
  public:
+  // REVIEW(carlos): wierd line breaking. next line should just be indented 2
+  //   indentation levels (4 spaces)
   static constexpr t_MCASHelper * MCAS_FAIL_CONST =
                                         reinterpret_cast<t_MCASHelper *>(0x1);
 
   explicit MCAS<T>(int max_rows)
+  // REVIEW(carlos): initializer list should be indented 4 spaces.
   : max_rows_ {max_rows}
   , row_count_ {0}
   , cas_rows {new t_CasRow[max_rows]}
@@ -57,6 +69,7 @@ class MCAS : public : memory::OpRecord {
    * @param new_value
    * @return true if successfully added.
    */
+  // REVIEW(carlos):blank line should not exist
 
   bool addCASTriple(std::atomic<T> *address, T expected_value, T new_value);
 
@@ -84,6 +97,7 @@ class MCAS : public : memory::OpRecord {
    */
   bool mcas_complete(t_CasRow *current, bool wfmode = false);
 
+  // REVIEW(carlos): excess space at bottom of comment
   /** 
    * This function is used to cleanup a completed MCAS operation
    * It removes each MCH placed during this operation, replacing it with the
@@ -104,15 +118,22 @@ class MCAS : public : memory::OpRecord {
    * @param value the value read at the position
    * @return the new current value
    **/
+  // REVIEW(carlos): shouldn't need to specify t_MCAS for this function.
   T t_MCAS::mcas_remove(const int pos, T value)
 
 
+  // REVIEW(carlos): needs a trailing underscore
   t_CasRow[] cas_rows;
 
   std::atomic<MCAS_STATE> state_;
   int row_count_;
   int max_rows_;
+// REVIEW(carlos): class is missing closing brace
+// REVIEW(carlos): the closing comment should just repeat what's on the opening
+//   line. Here, they should just say `namespace mcas' and `namespace ucf'
 }  // End mcas namespace
+// REVIEW(carlos): should be namespace tervel
 }  // End ucf namespace
 
+// REVIEW(carlos): should be TERVEL_*
 #endif  // UCF_MCAS_MCAS_H_
