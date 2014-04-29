@@ -62,36 +62,6 @@ class DescriptorPool {
   ~DescriptorPool() { this->send_to_manager(); }
 
   /**
-   * Constructs and returns a descriptor. Arguments are forwarded to the
-   * constructor of the given descriptor type. User should call free_descriptor
-   * on the returned pointer when they are done with it to avoid memory leaks.
-   */
-  // REVIEW(carlos): THIS SHOULD NOT BE STATIC!!!!!! This is evidenced by the
-  //   fact that you're passing in a DescriptorPool pointer manually rather than
-  //   relying on the this pointer of a non-static method call which would make
-  //   more sense.
-  template<typename DescrType, typename... Args>
-  static Descriptor * get_descriptor(Args&&... args
-      , DescriptorPool *pool = tl_thread_info.descriptor_pool);
-
-  /**
-   * Once a user is done with a descriptor, they should free it with this
-   * method.
-   *
-   * @param descr The descriptor to free.
-   * @param dont_check Don't check if the descriptor is being watched before
-   *   freeing it. Use this flag if you know that no other thread has had access
-   *   to this descriptor.
-   * @param pool the pool to use when freeing the descriptor.
-   */
-  // REVIEW(carlos): THIS SHOULD NOT BE STATIC!!!!!! This is evidenced by the
-  //   fact that you're passing in a DescriptorPool pointer manually rather than
-  //   relying on the this pointer of a non-static method call which would make
-  //   more sense.
-  static void free_descriptor(Descriptor *descr, bool dont_check = false
-      , DescriptorPool *pool = tl_thread_info.descriptor_pool);
-
-  /**
    * Allocates an extra `num_descriptors` elements to the pool.
    */
   void reserve(int num_descriptors);
@@ -226,9 +196,8 @@ class DescriptorPool {
 // ===============
 
 template<typename DescrType, typename... Args>
-DescrType * DescriptorPool::get_descriptor(Args&&... args,
-    DescriptorPool *pool) {
-  PoolElement *elem = pool->get_from_pool();
+DescrType * DescriptorPool::get_descriptor(Args&&... args) {
+  PoolElement *elem = this->get_from_pool();
   elem->init_descriptor<DescrType>(std::forward<Args>(args)...);
   return elem->descriptor();
 }

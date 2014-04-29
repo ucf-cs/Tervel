@@ -5,6 +5,9 @@
 #include "tervel/mcas_casrow.h"
 #include "tervel/util/info.h"
 #include "tervel/util/progress_assurance.h"
+#include "tervel/util/memory/rc/descriptor_util.h"
+
+#include <algorithm>
 
 namespace tervel {
 namespace mcas {
@@ -41,7 +44,7 @@ class MCAS : public util::OpRecord {
       t_Helper * mch = cas_rows_[i].helper.load();
       // The No check flag is true because each was check prior
       // to the call of this descructor.
-      memory::rc::DescriptorPool::free_descriptor(helper, true);
+      util::memory::rc::free_descriptor(helper, true);
     }
     delete[] cas_rows_;
   }
@@ -113,11 +116,11 @@ class MCAS : public util::OpRecord {
   std::atomic<MCAS_STATE> state_;
   int row_count_;
   int max_rows_;
-}; // MCAS class
+};  // MCAS class
 
-bool t_MCAS::addCASTriple(std::atomic<T> *address, T expected_value, 
+bool t_MCAS::addCASTriple(std::atomic<T> *address, T expected_value,
       T newValue_) {
-  if (memory::Descriptor::isValid(ev) ||  memory::Descriptor::isValid(nv)) {
+  if (util::isValid(ev) ||  util::isValid(nv)) {
     return false;
   } else if (row_count == max_rows_) {
     return false;
@@ -150,7 +153,7 @@ bool t_MCAS::addCASTriple(std::atomic<T> *address, T expected_value,
 };
 
 bool t_MCAS::execute() {
-  memory::ProgressAssurance::check_for_announcement();
+  util::ProgressAssurance::check_for_announcement();
   bool res = mcas_complete(0);
   cleanup(res);
   return res;
@@ -184,7 +187,7 @@ bool t_MCAS::mcas_complete(int start_pos, bool wfmode) {
         /* Checks if the operation has been completed */
         return (state_.load() == MCAS_STATE::PASS);
       } else if (!wfmode &&
-              fcount++ == tervel::ProgressAssurance::MAX_FAILURE) {
+              fcount++ == ProgressAssurance::MAX_FAILURE) {
         /* Check if we need to enter wf_mode */
         if (tl_thread_info.rDepth == 0) {
           /* If this is our operation then make an annoucnement */
@@ -198,7 +201,7 @@ bool t_MCAS::mcas_complete(int start_pos, bool wfmode) {
 
       /* Process the current value at the address */
       /* Now Check if the current value is descriptor */
-      if (tervel::util::Descriptor::is_descriptor(current_value)) {
+      if (util::Descriptor::is_descriptor(current_value)) {
         /* Remove it by completing the op, try again */
         current_value = this->mcas_remove(pos, current_value);
 
@@ -240,25 +243,25 @@ bool t_MCAS::mcas_complete(int start_pos, bool wfmode) {
           continue;
         }
       }  else {
-        // Else the current_value matches the expected_value_
-        t_Helper *helper = tervel::memory::rc::DescriptorPool::
-                get_descriptor<t_Helper>(row, this);
+        /* Else the current_value matches the expected_value_ */
+        t_Helper *helper = util::memory::rc::get_descriptor<t_Helper>(
+              row, this);
         if (row->address_->compare_exchange_strong(current_value,
-                                tervel::memory::rc::mark_first(helper))) {
+                util::memory::rc::mark_first(helper))) {
           /* helper was successfully placed at the address */
           t_Helper * temp_null = nullptr;
           if (row->helper_.compare_exchange_strong(temp_null, helper)
-                                                || temp_null == helper) {
+                || temp_null == helper) {
             /* We successfully associated the helper the row */
             break;  /* break the while loop, on to the next row! */
           } else {
             /* We failed to associate the helper, remove it, this implies that
              * the operation is over
              */
-            T temp_helper = tervel::memory::rc::mark_first(helper);
+            T temp_helper = util::memory::rc::mark_first(helper);
             row->address_->compare_exchange_strong(temp_helper,
-                                      row->expected_value_);
-            tervel::memory::rc::DescriptorPool::free_descriptor(helper);
+                  row->expected_value_);
+            util::memory::rc::free_descriptor(helper);
 
             assert(state_.load() == MCAS_STATE::IN_PROGRESS);
             return (state_.load() == MCAS_STATE::PASS);
@@ -267,7 +270,7 @@ bool t_MCAS::mcas_complete(int start_pos, bool wfmode) {
           /* We failed to place helper, re-evaluate the current_value
            * Set no check to true since it was never used.
            */
-          tervel::memory::rc::DescriptorPool::free_descriptor(helper, true);
+          util::memory::rc::free_descriptor(helper, true);
           continue;
         }
       }  // End Else Try to replace
@@ -291,16 +294,17 @@ bool t_MCAS::mcas_complete(int start_pos, bool wfmode) {
 }  // End Complete function.
 
 T t_MCAS::mcas_remove(const int pos, T value) {
-  if (tervel::memory::rc::is_descriptor_first(value)) {
+  if (util::memory::rc::is_descriptor_first(value)) {
     // Checks if it is an rc_discriptor, could be another type (or bitmark)
-    Descriptor *descr = tervel::memory::rc::unmark_first(value);
+    Descriptor *descr = util::memory::rc::unmark_first(value);
 
     // First get a watch on the object.
     std::atomic<void *> *address = reinterpret_cast<std::atomic<void *>*>(
             cas_rows_[pos].address_);
-    bool watched = thread::rc::watch(descr,address,reinterpret_cast<void *>(t));
+    bool watched = util::memory::rc::watch(descr,address,
+          reinterpret_cast<void *>(t));
     // Now unwatch it, crazy right? But there is a reason...
-    memory::rc::unwatch(descr);
+    util::memory::rc::unwatch(descr);
     if (watched) {
       /* If we watched it and it is a MCH for this operation, then act of 
        * watching will call the MCH's on_watch function, which will associate it
@@ -321,8 +325,8 @@ T t_MCAS::mcas_remove(const int pos, T value) {
    * Otherwise it is someother descriptor type, so call the generic descriptor
    * remove operation
    */
-  return reinterpret_cast<T>(memory::Descriptor::remove_descriptor
-          (address, value));
+  return reinterpret_cast<T>(util::Descriptor::remove_descriptor(address, 
+        value));
 };
 
 void cleanup(bool success) {
@@ -331,7 +335,7 @@ void cleanup(bool success) {
     t_CasRow * row = &cas_rows_[pos];
 
     assert(row->helper_.load() != nullptr);
-    void * marked_helper = tervel::memory::rc::mark_first(row->helper_.load());
+    void * marked_helper = util::memory::rc::mark_first(row->helper_.load());
     if (marked_temp == reinterpret_cast<void *>(MCAS_FAIL_CONST)) {
       // There can not be any any associated rows beyond this position.
       return;
@@ -342,7 +346,8 @@ void cleanup(bool success) {
         if (success) {
           row->address_->compare_exchange_strong(cur_value, row->new_value_);
         } else {
-          row->address_->compare_exchange_strong(cur_value, row->expected_value_);
+          row->address_->compare_exchange_strong(cur_value,
+                row->expected_value_);
         }
       }  // End If the current value matches the helper placed for this op
     }  // End Else there was a helper placed for this row

@@ -81,7 +81,7 @@ typedef MCAS<T> t_MCAS;
  */
 bool Helper::on_watch(std::atomic<void *> *address, void * value) {
   int hp_pos = thread::hp::HazardPointer::SlotID::SHORTUSE;
-  bool success = tervel::memory::::hp::HazardPointer::watch(
+  bool success = util::memory::::hp::HazardPointer::watch(
           hp_pos, mcas_op_, address, value);
 
   if (success) {
@@ -110,7 +110,7 @@ bool Helper::on_watch(std::atomic<void *> *address, void * value) {
    * Helper. If we don't it, the value at this address must have changed and 
    * we don't need it either way.
    */
-  tervel::memory::hp::HazardPointer::unwatch(hp_pos);
+  util::memory::hp::HazardPointer::unwatch(hp_pos);
   return success;
 }
 

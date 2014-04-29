@@ -2,11 +2,36 @@
 #define TERVEL_MEMORY_RC_UTIL_DESCRIPTOR_H_
 
 #include "tervel/util/memory/rc/pool_element.h"
+#include "tervel/util/memory/rc/descriptor_pool.h"
 
 namespace tervel {
 namespace util {
 namespace memory {
 namespace rc {
+
+/**
+ * Constructs and returns a descriptor. Arguments are forwarded to the
+ * constructor of the given descriptor type. User should call free_descriptor
+ * on the returned pointer when they are done with it to avoid memory leaks.
+ */
+template<typename DescrType, typename... Args>
+inline Descriptor * get_descriptor(Args&&... args) {
+   return tl_thread_info.descriptor_pool->get_descriptor(args);
+}
+
+/**
+ * Once a user is done with a descriptor, they should free it with this
+ * method.
+ *
+ * @param descr The descriptor to free.
+ * @param dont_check Don't check if the descriptor is being watched before
+ *   freeing it. Use this flag if you know that no other thread has had access
+ *   to this descriptor.
+ * @param pool the pool to use when freeing the descriptor.
+ */
+inline void free_descriptor(Descriptor *descr, bool dont_check = false) {
+  tl_thread_info.descriptor_pool->free_descriptor();
+}
 
 /**
 * This method is used to increment the reference count of the passed descriptor

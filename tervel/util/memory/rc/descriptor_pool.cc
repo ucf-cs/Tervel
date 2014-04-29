@@ -5,12 +5,11 @@ namespace util {
 namespace memory {
 namespace rc {
 
-void DescriptorPool::free_descriptor(Descriptor *descr, bool dont_check,
-                , DescriptorPool *pool) {
+void DescriptorPool::free_descriptor(Descriptor *descr, bool dont_check) {
   if (!dont_check && is_watched(descr)) {
-    pool->add_to_unsafe(descr);
+    this->add_to_unsafe(descr);
   } else {
-    pool->add_to_safe(descr);
+    this->add_to_safe(descr);
   }
 }
 
