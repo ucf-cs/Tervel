@@ -1,34 +1,34 @@
-#ifndef UCF_MCAS_HELPER_
-#define UCF_MCAS_HELPER_
+#ifndef TERVEL_MCAS_MCAS_HELPER_H_
+#define TERVEL_MCAS_MCAS_HELPER_H_
 
-#include "mcas_casrow.h"
-#include "mcas.h"
-#include "thread/descriptor.h"
+#include "tervel/mcas/mcas.h"
+#include "tervel/mcas/mcas_casrow.h"
 
+#include "tervel/util/descriptor.h"
+#include "tervel/util/memory/hp/hazard_pointer.h"
 
+#include <atomic>
 
-namespace ucf {
+namespace tervel {
 namespace mcas {
 
 template<class T>
-class MCASHelper: public thread::Descriptor {
 /**
  * This class is the MCAS operation's helper. The Helper or MCH is used to 
  * replace the expected value of the specified address. 
- * 
  */
-
+class Helper : public tervil::Descriptor {
 typedef CasRow<T> t_CasRow;
-typedef MCASHelper<T> t_MCASHelper;
+typedef Helper<T> t_Helper;
 typedef MCAS<T> t_MCAS;
 
-  public:
-    /**
-     * @param mcas_op the t_MCAS which contains the referenced cas_row
-     * @param cas_row the referenced row in the t_MCAS.
-     */
-    MCASHelper<T>(t_MCAS *mcas_op, t_CasRow *cas_row)
-        : cas_row_(cas_row), mcas_op_(mcas_op) {}
+ public:
+  /**
+   * @param mcas_op the t_MCAS which contains the referenced cas_row
+   * @param cas_row the referenced row in the t_MCAS.
+   */
+  Helper<T>(t_MCAS *mcas_op, t_CasRow *cas_row)
+    : cas_row_(cas_row), mcas_op_(mcas_op) {}
 
     /**
      * This function is called after this objects rc count was incremented.
@@ -40,7 +40,7 @@ typedef MCAS<T> t_MCAS;
      * @param value the bitmarked value of this MCH
      * @return returns whether or not the watch was successfull.
      */
-    bool on_watch(std::atomic<void *> *address, T value);
+    bool on_watch(std::atomic<void *> *address, void *value);
 
     /** 
      * This function is called to remove an MCH by completing its associated
@@ -63,7 +63,6 @@ typedef MCAS<T> t_MCAS;
      * @params last_row an identifier of the current MCAS operation 
      * @return the current value of the address
      */
-
     static T mcas_remove(std::atomic<T> *address, T value, t_CasRow *last_row);
 
  private:
@@ -71,8 +70,84 @@ typedef MCAS<T> t_MCAS;
   t_CasRow *cas_row_;
   // The MCAS which contains the cas_row_
   t_MCAS *mcas_op_;
-};
+}; // Helper
 
-}  // End mcas namespace
-}  // End ucf nampespace
-#endif  // UCF_MCAS_HELPER_
+/**
+ * Attempts to complete acquiring a memory watch on a Helper object
+ * Declared in util/Descriptor.h
+ * @param  address the location value was read form
+ * @param  value the last known value of address
+ * @return true if succesful acquiring the watch
+ */
+bool Helper::on_watch(std::atomic<void *> *address, void * value) {
+  int hp_pos = thread::hp::HazardPointer::SlotID::SHORTUSE;
+  bool success = tervel::memory::::hp::HazardPointer::watch(
+          hp_pos, mcas_op_, address, value);
+
+  if (success) {
+    /* Success, means that the MCAS object referenced by this Helper can not
+     * be freed while we check to make sure this Helper is assocaited with
+     * it.
+     */
+    t_Helper *curr_mch = cas_row_->helper.load();
+    if (curr_mch == nullptr) {
+       if (cas_row_->helper.compare_exchange_strong(curr_mch, this)) {
+         curr_mch = this;  /* If this passed then curr_mch == nullptr, but we
+                            * need it to be == this
+                            */
+       }
+    }
+    if (curr_mch != this) {
+      /* This Helper was placed in error, remove it and replace it with the
+       * logic value of this object (expected_value)
+       */
+      address->compare_exchange_strong(value, cas_row_->expected_value);
+      success = false;
+    }
+  }  // End Successfull watch
+
+  /* No longer need HP protection, if we have RC protection on an associated
+   * Helper. If we don't it, the value at this address must have changed and 
+   * we don't need it either way.
+   */
+  tervel::memory::hp::HazardPointer::unwatch(hp_pos);
+  return success;
+}
+
+
+void * Helper::complete(std::atomic<void *> *address, void * value) {
+  t_Helper* temp_null = nullptr;
+  this->cas_row_->helper.compare_exchange_strong(temp_null, this);
+
+  bool success = false;
+  if (temp_null == nullptr || temp_null == this) {
+    /* This implies it was successfully associated
+       So call the complete function of the MCAS operation */
+    success = t_MCAS::mcas_complete(this->mcas_op_, this->cas_row_);
+    if (tl_thread_info->recursive_return) {
+      /* If the thread is performing a recursive return back to its own operation
+         Then just return null, it will be ignored. */
+      return nullptr;
+    }
+    assert(this->last_row->helper.load() !=  nullptr);
+  }
+
+  if (success) {
+  /* If the MCAS op was successfull then remove the Helper by replacing 
+      it with the new_value */
+    assert(this->last_row->helper.load() != t_MCAS::MCAS_FAIL_CONST);
+    address->compare_exchange_strong(value,
+        reinterpret_cast<void *>(this->cas_row_->new_value_));
+  } else {
+    /*Otherwise remove the Helper by replacing it with the expected_value*/
+    address->compare_exchange_strong(value,
+        reinterpret_cast<void *>(this->cas_row_->expected_value_));
+  }
+  // Return the new current value of the position
+  return address->load();
+}
+
+}  // namespace mcas
+}  // namespace tervel
+
+#endif  // TERVEL_MCAS_MCAS_HELPER_H_

@@ -1,43 +1,53 @@
-#ifndef UCF_MCAS_CASROW_H_
-#define UCF_MCAS_CASROW_H_
+#ifndef TERVEL_MCAS_CASROW_H_
+#define TERVEL_MCAS_CASROW_H_
+
+#include "tervel/util/info.h"
+#include "tervel/util/thread/util.h"
+#include "tervel/mcas/mcas.h"
+#include "tervel/mcas/mcas_helper.h"
 
 #include <algorithm>
-#include "thread/info.h"
-#include "thread/util.h"
 
+namespace tervel {
+namespace mcas {
+
+class Helper;
+class MCAS;
+/**
+ * This class is used to represent a one of the M CAS operations performed
+ * by an MCAS operation.
+ * It holds an address, expected value and new value for that address.
+ */
 template<class T>
 class CasRow {
-  /**
-   * This class is used to represent a one of the M CAS operations performed
-   * by an MCAS operation.
-   * It holds an address, expected value and new value for that address.
-   */
+  // REVIEW(carlos): this won't work like you expect it to.
+  // RESPONSE(steven): you mean typedefing?
   typedef CasRow<T> t_CasRow;
-  typedef MCASHelper<T> t_MCASHelper;
+  typedef Helper<T> t_Helper;
   typedef MCAS<T> t_MCAS;
 
   public:
     CasRow<T>() {}
 
-    CasRow<T>(std::atomic<T> *a, T ev, T nv)
-        : address {a}
-         , expected_value {ev}
-         , new_value {nv} {}
+    CasRow<T>(std::atomic<T> *address, T expected_value, T new_value)
+        : address_ {a}
+        , expected_value_ {ev}
+        , new_value_ {nv} {}
 
     ~CasRow<T>() {}
 
 
     friend bool operator<(const t_CasRow& a, const t_CasRow& b) {
-      return ((uintptr_t)a.address) < ((uintptr_t)b.address);
+      return ((uintptr_t)a.address_) < ((uintptr_t)b.address_);
     };
     friend bool operator>(const t_CasRow& a, const t_CasRow& b) {
-      return ((uintptr_t)a.address) > ((uintptr_t)b.address);
+      return ((uintptr_t)a.address_) > ((uintptr_t)b.address_);
     };
     friend bool operator==(const t_CasRow& a, const t_CasRow& b) {
-      return ((uintptr_t)a.address) == ((uintptr_t)b.address);
+      return ((uintptr_t)a.address_) == ((uintptr_t)b.address_);
     };
     friend bool operator!=(const t_CasRow& a, const t_CasRow& b) {
-      return ((uintptr_t)a.address) != ((uintptr_t)b.address);
+      return ((uintptr_t)a.address_) != ((uintptr_t)b.address_);
     };
 
     /**
@@ -49,15 +59,17 @@ class CasRow {
      */
     friend void swap(CasRow& a, CasRow& b) {
       using std::swap;
-      swap(a.expected_value, b.expected_value);
-      swap(a.new_value, b.new_value);
-      swap(a.address, b.address);
+      swap(a.expected_value_, b.expected_value_);
+      swap(a.new_value_, b.new_value_);
+      swap(a.address_, b.address_);
     };
 
-    std::atomic<T> *address;
-    T expected_value;
-    T new_value;
-    std::atomic<t_MCASHelper *>helper;
+    std::atomic<T> *address_;
+    T expected_value_;
+    T new_value_;
+    std::atomic<t_Helper *>helper_;
 };
 
-#endif  // UCF_MCAS_CASROW_H_
+}  // namespace mcas
+}  // namespace tervel
+#endif  // TERVEL_MCAS_CASROW_H_
