@@ -56,6 +56,12 @@ class DescriptorPool {
    * constructor of the given descriptor type. User should call free_descriptor
    * on the returned pointer when they are done with it to avoid memory leaks.
    */
+  // REVIEW(carlos): THIS SHOULD NOT BE STATIC!!!!!! This is evidenced by the
+  //   fact that you're passing in a DescriptorPool pointer manually rather than
+  //   relying on the this pointer of a non-static method call which would make
+  //   more sense.
+  // REVIEW(carlos): line brakeing looks odd. New line should not start w/
+  //   comma, and should just be indented over 2 indentation levels (4 spaces)
   template<typename DescrType, typename... Args>
   static Descriptor * get_descriptor(Args&&... args
                       , DescriptorPool *pool = tl_thread_info.descriptor_pool);
@@ -70,6 +76,12 @@ class DescriptorPool {
    *   to this descriptor.
    * @param pool the pool to use when freeing the descriptor.
    */
+  // REVIEW(carlos): THIS SHOULD NOT BE STATIC!!!!!! This is evidenced by the
+  //   fact that you're passing in a DescriptorPool pointer manually rather than
+  //   relying on the this pointer of a non-static method call which would make
+  //   more sense.
+  // REVIEW(carlos): line brakeing looks odd. New line should not start w/
+  //   comma, and should just be indented over 2 indentation levels (4 spaces)
   static void free_descriptor(Descriptor *descr, bool dont_check=false
                       , DescriptorPool *pool = tl_thread_info.descriptor_pool);
 
@@ -182,6 +194,7 @@ class DescriptorPool {
    * as some threads may still have access to the element itself and may try to
    * increment the refrence count.
    */
+  // REVIEW(carlos): missing semi colon
   PoolElement *safe_pool_ {nullptr}
 
   /**
@@ -190,13 +203,16 @@ class DescriptorPool {
    * descriptor in the element. After some time has passed, items generally move
    * from this pool to the safe_pool_
    */
+  // REVIEW(carlos): missing semi colon
   PoolElement *unsafe_pool_ {nullptr}
 
   /** 
    * Two counters used to track the number of elements in the linked list.
    * this facilitates the detection of when there are too many elements.
    */
+  // REVIEW(carlos): missing semi colon
   uint64_t safe_pool_count_ {0}
+  // REVIEW(carlos): missing semi colon
   uint64_t unsafe_pool_count_ {0}
 
   /**
@@ -205,6 +221,10 @@ class DescriptorPool {
    * and left untouched when they're returned to the pool. This allows the user to
    * view associations. Entirely for debug purposes.
    */
+  // REVIEW(carlos): missing semi colon
+  // REVIEW(carlos): does not follow naming conventions for variables. If it's
+  //   meant to be a constant, then it should go at the top of the class. If you
+  //   want to use gflags, consider using a cmd-line flag for this purpose.
   constexpr bool NO_REUSE_MEM {false}
 
   DISALLOW_COPY_AND_ASSIGN(DescriptorPool);
@@ -214,6 +234,10 @@ class DescriptorPool {
 // ===============
 
 template<typename DescrType, typename... Args>
+// REVIEW(carlos): indentation of function name is not right.
+// REVIEW(carlos): Don't bother listing the default argument in the function
+//   implemnentation (even commented out). It just creates another place where
+//   two definitions may diverge.
   DescrType * DescriptorPool::get_descriptor(Args&&... args
           , DescriptorPool *pool /*= tl_thread_info.descriptor_pool */) {
   PoolElement *elem = pool->get_from_pool();

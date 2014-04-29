@@ -4,6 +4,9 @@ namespace tervel {
 namespace memory {
 namespace rc {
 
+// REVIEW(carlos): Don't bother listing the default argument in the function
+//   implemnentation (even commented out). It just creates another place where
+//   two definitions may diverge.
 void DescriptorPool::free_descriptor(Descriptor *descr, bool dont_check,
                 , DescriptorPool *pool /*= tl_thread_info.descriptor_pool*/) {
   if (!dont_check && is_watched(descr)) {
@@ -28,6 +31,7 @@ PoolElement * DescriptorPool::get_from_pool(bool allocate_new) {
   // likely the safe list has something to take from.
   this->try_clear_unsafe_pool();
 
+  // REVIEW(carlos): missing semi colon
   PoolElement *ret {nullptr}
 
   // safe pool has something in it. pop the next item from the head of the list.
@@ -43,6 +47,8 @@ PoolElement * DescriptorPool::get_from_pool(bool allocate_new) {
     ret->header().allocation_count.fetch_add(1);
 #endif
     
+    // REVIEW(carlos): don't put a space between the -- operator and the
+    //   variable name.
     safe_pool_count_ --;
   }
 
@@ -143,6 +149,12 @@ void DescriptorPool::try_clear_unsafe_pool(bool dont_check) {
     }
   }
 
+  // REVIEW(carlos): consider splitting these two blocks into two functions for
+  //   readability.
+  // REVIEW(carlos): This exact function w/ some names changed is coppied around
+  //   in at least 3 seperate files. Consider abstracting the function and
+  //   putting it somewhere where all 3 can just refrence the abstracted
+  //   version to reduce code duplication.
   if (unsafe_pool_ != nullptr) {
     PoolElement *prev = unsafe_pool_;
     PoolElement *temp = unsafe_pool_->next();
