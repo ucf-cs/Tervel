@@ -162,6 +162,8 @@ bool t_MCAS::execute() {
 //   .h file, just put them into an unnamed namespace in the .cc file.
 // REVIEW(carlos): TBH, the body of this function is impenatrable to me, and I
 //   can't review the contents for correctness as-is.
+// RESPONSE(steven): I added comments, but I am unsure how to divide it into
+// sub functions.
 bool t_MCAS::mcas_complete(int start_pos, bool wfmode) {
   /**
    * Loop for each row in the op, if helping complete another thread's MCAS
