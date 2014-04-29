@@ -102,8 +102,7 @@ class Descriptor {
 
   virtual bool on_is_watched() { return false; }
 
-
-public:
+ public:
   /**
    * This method is used to get the value stored at an address that may have a
    * descriptor object their.  It handles memory protection of the objects.  It
@@ -116,7 +115,8 @@ public:
   template<class T>
   static T read(std::atomic<T> * address);
 
-  /** This Method determins if the passed value is a descriptor or not.
+  /**
+   * This Method determins if the passed value is a descriptor or not.
    * It does so by calling the two static is_descriptor functions of the RC and 
    * HP descriptor classes.
    *
@@ -130,7 +130,8 @@ public:
     return false;
   }
 
-  /** This method removes a descriptor from the passed address.
+  /**
+   * This method removes a descriptor from the passed address.
    * First it determineds the type of descriptor, currently only supports RC
    * Then it calls that descriptor type's watch procedure
    * Finally it calls the descriptor complete function

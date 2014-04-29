@@ -15,7 +15,6 @@
 namespace tervel {
 namespace memory {
 namespace hp {
-
 class HPElement {
   /**
    * This class is used for the creation of Hazard Pointer Protected Objects
@@ -27,7 +26,7 @@ class HPElement {
    */
  public:
   HPElement() {}
-  ~HPElement() {}
+  virtual ~HPElement() {}
 
   /**
    * This function is used to free a hazard pointer protected object if it is
@@ -35,12 +34,13 @@ class HPElement {
    * It also calls 'try_to_free_HPElements' in an attempt to free previously
    * unfreeable objects.
    */
-  void safeFree(HazardPointer *hazard_pointer=tl_thread_info->hazard_pointer) {
+  void safe_delete(bool no_check = false
+            , HazardPointer *hazard_pointer = tl_thread_info->hazard_pointer) {
     hazard_pointer->try_to_free_HPElements();
-    if (HazardPointer::is_watched(this)) {
+    if (!no_check || HazardPointer::is_watched(this)) {
       hazard_pointer->add_to_unsafe(this);
     } else {
-      this->~HPElement();
+      delete this
     }
     hazard_pointer->try_clear_unsafe_pool();
   }
@@ -78,7 +78,7 @@ class HPElement {
   void next(HPElement *next) { next_ = next; }
 
   HPElement *next_ {nullptr}
-
+  void operator delete( void * ) {}
   DISALLOW_COPY_AND_ASSIGN(HPElement);
 };
 

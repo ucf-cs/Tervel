@@ -84,7 +84,7 @@ inline bool is_watched(Descriptor *descr) {
 * dereferenced from.
 */
 
-inline void * remove_descriptor(void *expected, std::atomic<void *> *address){
+inline void * remove_descriptor(void *expected, std::atomic<void *> *address) {
   RecursiveAction recurse();
   void *newValue;
   if (tl_thread_info.recursive_return) {

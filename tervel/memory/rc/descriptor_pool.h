@@ -70,7 +70,7 @@ class DescriptorPool {
    *   to this descriptor.
    * @param pool the pool to use when freeing the descriptor.
    */
-  static void free_descriptor(Descriptor *descr, bool dont_check=false
+  static void free_descriptor(Descriptor *descr, bool dont_check = false
                       , DescriptorPool *pool = tl_thread_info.descriptor_pool);
 
   /**
