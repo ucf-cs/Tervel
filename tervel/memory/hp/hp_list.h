@@ -30,6 +30,8 @@ class ListManager;
 //   of hp.
 class HPList {
   // REVIEW(carlos): class comment should be above opening of class body
+  // REVIEW(carlos): grammar: second sentence - linked *list*
+  // REVIEW(carlos): remove extra blank line at bottom of comment
   /**
    * Defines a list of objects which are stored until they are safe to be freed.
    *
