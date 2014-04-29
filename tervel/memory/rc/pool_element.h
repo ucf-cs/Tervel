@@ -42,6 +42,8 @@ class PoolElement {
     std::atomic<uint64_t> ref_count {0};
 
 #ifdef DEBUG_POOL
+    // REVIEW(carlos): Where is this used? I haven't found a single refrence to
+    //   it aside from here.
     int type_ {BASE_TYPE};
 
     std::atomic<bool> descriptor_in_use {false};
