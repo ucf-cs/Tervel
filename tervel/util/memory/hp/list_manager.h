@@ -18,7 +18,7 @@ namespace util {
 namespace memory {
 namespace hp {
 
-class HPList;
+class ElementList;
 class Element;
 
 /**
@@ -28,7 +28,7 @@ class Element;
  */
 class ListManager {
  public:
-  friend class HPList;
+  friend class ElementList;
 
   ListManager() : pool_() {}
 

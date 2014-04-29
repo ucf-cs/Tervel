@@ -33,12 +33,12 @@ class ListManager;
  * When it is to be destroyed, it sends its remaining elements to the
  * parent, relinquishing ownership of said elements. 
  */
-class HPList {
+class ElementList {
  public:
   friend Element;
-  explicit HPList(ListManager *manager) : manager_(manager) {}
+  explicit ElementList(ListManager *manager) : manager_(manager) {}
 
-  ~HPList() { this->send_to_manager(); }
+  ~ElementList() { this->send_to_manager(); }
 
 
  private:

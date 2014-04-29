@@ -7,7 +7,7 @@ namespace util {
 namespace memory {
 namespace hp {
 
-void HPList::free_descriptor(Element *descr, bool dont_check) {
+void ElementList::free_descriptor(Element *descr, bool dont_check) {
   if (!dont_check && is_watched(descr)) {
     this->add_to_unsafe(descr);
   } else {
@@ -16,7 +16,7 @@ void HPList::free_descriptor(Element *descr, bool dont_check) {
 }
 
 
-void HPList::send_to_manager() {
+void ElementList::send_to_manager() {
   this->try_to_free_Elements(false);
   clear_pool(&element_list_, &this->manager.to_free_list_());
 }
@@ -51,13 +51,13 @@ void clear_pool(Element **local_pool,
 
 }  // namespace
 
-void HPList::add_to_unsafe(Element* elem) {
+void ElementList::add_to_unsafe(Element* elem) {
   elem->next(element_list_);
   element_list_ = elem;
 }
 
 
-void HPList::try_to_free_Elements(bool dont_check) {
+void ElementList::try_to_free_Elements(bool dont_check) {
   /**
    * Loop until no more elements can be freed from the element_list_ linked list
    * OR the first element is not safe to be freed
