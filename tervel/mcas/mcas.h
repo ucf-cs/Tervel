@@ -8,6 +8,7 @@
 #include "tervel/util/memory/rc/descriptor_util.h"
 
 #include <algorithm>
+#include <cstdint>
 
 namespace tervel {
 namespace mcas {
@@ -27,7 +28,7 @@ class MCAS : public util::OpRecord {
   typedef MCAS<T> t_MCAS;
 
  private:
-  enum class MCAS_STATE {IN_PROGRESS, PASS, FAIL};
+  enum class MCAS_STATE : std::int8_t {IN_PROGRESS = 0, PASS = 0 , FAIL = 0};
 
  public:
   static constexpr t_Helper * MCAS_FAIL_CONST =
@@ -189,12 +190,12 @@ bool t_MCAS::mcas_complete(int start_pos, bool wfmode) {
       } else if (!wfmode &&
               fcount++ == ProgressAssurance::MAX_FAILURE) {
         /* Check if we need to enter wf_mode */
-        if (tl_thread_info.rDepth == 0) {
+        if (tervel::tl_thread_info->get_recursive_depth() == 0) {
           /* If this is our operation then make an annoucnement */
           return this->wfcomplete();
         } else {
           /* Otherwise perform a recursive return */
-          tl_thread_info.recursive_return = true;
+          tervel::tl_thread_info->set_recursive_return();
           return false;
         }
       }
@@ -208,12 +209,12 @@ bool t_MCAS::mcas_complete(int start_pos, bool wfmode) {
         /* Check if we are executing a recurisve return and if so determine
          * if we are at our own operation or need to return farther.
          */
-        if (tl_thread_info.recursive_return) {
-          if (tl_thread_info.rDepth == 0) {
+        if (tervel::tl_thread_info->recursive_return()) {
+          if (tervel::tl_thread_info->get_recursive_depth() == 0) {
             /* we are back to our own operation so re-read process the
              * current value
              */
-            tl_thread_info.recursive_return = false;
+            tervel::tl_thread_info->clear_recursive_return();
             current_value = row->address_->load();
             continue;
           } else {
@@ -235,8 +236,7 @@ bool t_MCAS::mcas_complete(int start_pos, bool wfmode) {
           this->state_.compare_exchange_strong(temp_state, MCAS_STATE::FAIL);
           assert(this->stat_.load() == MCAS_STATE::FAIL);
           return false;
-        }
-        else {
+        } else {
           /* the row was associated, this implies the operation is over. We
            * will re-loop and observe the value of this->state_
            */
@@ -301,7 +301,7 @@ T t_MCAS::mcas_remove(const int pos, T value) {
     // First get a watch on the object.
     std::atomic<void *> *address = reinterpret_cast<std::atomic<void *>*>(
             cas_rows_[pos].address_);
-    bool watched = util::memory::rc::watch(descr,address,
+    bool watched = util::memory::rc::watch(descr, address,
           reinterpret_cast<void *>(t));
     // Now unwatch it, crazy right? But there is a reason...
     util::memory::rc::unwatch(descr);

@@ -69,8 +69,7 @@ class ProgressAssurance {
    */
   static constexpr size_t HELP_DELAY = 1;
 
-  explicit ProgressAssurance(int num_threads =
-      tl_thread_info.shared_info_->num_threads)
+  explicit ProgressAssurance(int num_threads)
       : num_threads_ {num_threads}
       , op_table_(new std::atomic<OpRecord *>[num_threads_] ) {}
 
@@ -79,7 +78,7 @@ class ProgressAssurance {
    * If one is found it will call its help_complete function.
    */
   static void check_for_announcement(ProgressAssurance *progress_assuarance =
-          tl_thread_info.progress_assuarance) {
+          tl_thread_info->progress_assuarance) {
     progress_assuarance->p_check_for_announcement();
   }
 
@@ -88,8 +87,8 @@ class ProgressAssurance {
    * @param op an OpRecord to complete
    * @return on return the OpRecord must be completed.
    */
-  static void make_announcement(OpRecord *op, int tid = tl_thread_info.thread_id
-        , ProgressAssurance *prog_assur = tl_thread_info.progress_assuarance) {
+  static void make_announcement(OpRecord *op, int tid = tl_thread_info->thread_id
+        , ProgressAssurance *prog_assur = tl_thread_info->progress_assuarance) {
     prog_assur->p_make_announcement(op, tid);
   }
 
@@ -105,7 +104,7 @@ class ProgressAssurance {
    * @param op an OpRecord to complete
    * @return on return the OpRecord must be completed.
    */
-  void p_make_announcement(OpRecord *op, int tid = tl_thread_info.thread_id);
+  void p_make_announcement(OpRecord *op, int tid = tl_thread_info->thread_id);
 
   /**
    * Table for storing operation records, each thread has its own position

@@ -49,8 +49,7 @@ void HazardPointer::unwatch(SlotID slot) {
 }
 
 
-bool HazardPointer::is_watched(Element *descr
-            , HazardPointer *hazard_pointer = tl_thread_info->hazard_pointer) {
+bool HazardPointer::is_watched(Element *descr, HazardPointer *hazard_pointer) {
   if (hazard_pointer->contains(descr)) {
     return descr->on_is_watched();
   } else {
@@ -58,8 +57,7 @@ bool HazardPointer::is_watched(Element *descr
   }
 }
 
-bool HazardPointer::is_watched(void *value
-            , HazardPointer *hazard_pointer = tl_thread_info->hazard_pointer) {
+bool HazardPointer::is_watched(void *value, HazardPointer *hazard_pointer) {
   return hazard_pointer->contains(value);
 }
 

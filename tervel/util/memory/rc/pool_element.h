@@ -1,5 +1,5 @@
-#ifndef TERVEL_MEMORY_RC_POOL_ELEMENT_H_
-#define TERVEL_MEMORY_RC_POOL_ELEMENT_H_
+#ifndef TERVEL_UTIL_MEMORY_RC_POOL_ELEMENT_H_
+#define TERVEL_UTIL_MEMORY_RC_POOL_ELEMENT_H_
 
 #include <atomic>
 #include <utility>
@@ -10,17 +10,15 @@
 
 #include "tervel/util/descriptor.h"
 #include "tervel/util/system.h"
-#include "tervel/util.h"
+#include "tervel/util/util.h"
+#include "tervel/util/info.h"
 
 namespace tervel {
 namespace util {
-
-class Descriptor;
-
 namespace memory {
 namespace rc {
 
-
+constexpr int DEBUG_EXPECTED_STAMP = 0xDEADBEEF;
 /** 
  * This class is used to hold the memory management information (Header) and
  * a descriptor object. It is important to sepearte them to prevent the case
@@ -29,8 +27,6 @@ namespace rc {
  */
 class PoolElement {
  public:
-  static constexpr int DEBUG_EXPECTED_STAMP = 0xDEADBEEF;
-
   /**
    * All the member variables of PoolElement are stored in a struct so that the
    * left over memory for cache padding can be easily calculated.
@@ -40,18 +36,20 @@ class PoolElement {
     std::atomic<uint64_t> ref_count {0};
 
 #ifdef DEBUG_POOL
-    std::atomic<bool> descriptor_in_use {false};
+    std::atomic<bool> descriptor_in_use_ {false};
 
     std::atomic<uint64_t> allocation_count {1};
     std::atomic<uint64_t> free_count {0};
 
     // This stamp is checked when doing memory pool shenanigans to make sure
     // that a given descriptor actually belongs to a memory pool.
-    int debug_pool_stamp {DEBUG_EXPECTED_STAMP};
+    int debug_pool_stamp_ {DEBUG_EXPECTED_STAMP};
 #endif
   };
 
-  PoolElement(PoolElement *next=nullptr) { this->header().next = next; }
+  explicit PoolElement(PoolElement *next=nullptr) {
+    this->header().next = next;
+  }
 
   // TODO(carlos) add const versions of these accessors
 
@@ -59,7 +57,8 @@ class PoolElement {
    * Returns a pointer to the associated descriptor of this element. This
    * pointer may or may not refrence a constructed object.
    */
-  Descriptor * descriptor();
+  tervel::util::Descriptor * descriptor();
+
   Header & header() { return *reinterpret_cast<Header*>(padding_); }
 
   /**
@@ -107,32 +106,23 @@ static_assert(sizeof(PoolElement) == CACHE_LINE_SIZE,
     "Pool elements should be cache-aligned. Padding calculation is probably"
     " wrong.");
 
-/**
- * If the given descriptor was allocated through a DescriptorPool, then it has
- * an associated PoolElement header. This methods returns that PoolElement.
- *
- * Use with caution as Descriptors not allocated from a pool will not have an
- * associated header, and, thus, the returned value will be to some random
- * place in memory.
- */
-PoolElement * get_elem_from_descriptor(Descriptor *descr);
 
 
 // IMPLEMENTATIONS
 // ===============
-inline Descriptor * PoolElement::descriptor() {
+inline tervel::util::Descriptor * PoolElement::descriptor() {
   // Extra padding is added to ensure that the descriptor pointer returned is
   // cache-aligned.
   //
   // TODO(carlos) This assumes that cache is aligned to 4 bytes. Should grab
   // the cache alignment size of the target system and use that instead.
   constexpr size_t header_pad = 4 - sizeof(Header) % 4;
-  Descriptor *descr = reinterpret_cast<Descriptor*>(padding_ + sizeof(Header)
-      + header_pad);
+  tervel::util::Descriptor *descr = reinterpret_cast<Descriptor*>(padding_ +
+    sizeof(Header) + header_pad);
 
   // algorithms expect descriptors to be mem-aligned, so the LSB's should not be
   // taken up.
-  assert(reinterpret_cast<uintptr_t>(descr) & 0x03 == 0);
+  assert((reinterpret_cast<uintptr_t>(descr) & 0x03) == 0);
 
   return descr;
 }
@@ -145,7 +135,7 @@ void PoolElement::init_descriptor(Args&&... args) {
   // TODO(Steven) Carlos make sure the 4byte alligment is factored in to the above
 #ifdef DEBUG_POOL
   assert(!this->header().descriptor_in_use_.load());
-  this->header().descriptor_in_use.store(true);
+  this->header().descriptor_in_use_.store(true);
 #endif
   new(descriptor()) DescrType(std::forward<Args>(args)...);
 }
@@ -154,13 +144,21 @@ void PoolElement::init_descriptor(Args&&... args) {
 inline void PoolElement::cleanup_descriptor() {
 #ifdef DEBUG_POOL
   assert(this->header().descriptor_in_use_.load());
-  this->header().descriptor_in_use.store(false);
+  this->header().descriptor_in_use_.store(false);
 #endif
   this->descriptor()->~Descriptor();
 }
 
 
-inline PoolElement * get_elem_from_descriptor(Descriptor *descr) {
+/**
+ * If the given descriptor was allocated through a DescriptorPool, then it has
+ * an associated PoolElement header. This methods returns that PoolElement.
+ *
+ * Use with caution as Descriptors not allocated from a pool will not have an
+ * associated header, and, thus, the returned value will be to some random
+ * place in memory.
+ */
+inline PoolElement * get_elem_from_descriptor(tervel::util::Descriptor *descr) {
   PoolElement::Header *tmp = reinterpret_cast<PoolElement::Header *>(descr) - 1;
 #ifdef DEBUG_POOL
   // If this fails, then the given descriptor is not part of a PoolElement. This
@@ -177,4 +175,4 @@ inline PoolElement * get_elem_from_descriptor(Descriptor *descr) {
 }  // namespace util
 }  // namespace tervel
 
-#endif  // TERVEL_MEMORY_RC_POOL_ELEMENT_H_
+#endif  // TERVEL_UTIL_MEMORY_RC_POOL_ELEMENT_H_

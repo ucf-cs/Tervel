@@ -4,6 +4,7 @@
 #include "tervel/mcas/mcas.h"
 #include "tervel/mcas/mcas_casrow.h"
 
+#include "tervel/util/info.h"
 #include "tervel/util/descriptor.h"
 #include "tervel/util/memory/hp/hazard_pointer.h"
 
@@ -70,7 +71,7 @@ typedef MCAS<T> t_MCAS;
   t_CasRow *cas_row_;
   // The MCAS which contains the cas_row_
   t_MCAS *mcas_op_;
-}; // Helper
+};  // Helper
 
 /**
  * Attempts to complete acquiring a memory watch on a Helper object
@@ -124,7 +125,7 @@ void * Helper::complete(std::atomic<void *> *address, void * value) {
     /* This implies it was successfully associated
        So call the complete function of the MCAS operation */
     success = t_MCAS::mcas_complete(this->mcas_op_, this->cas_row_);
-    if (tl_thread_info->recursive_return) {
+    if (tervel::tl_thread_info->recursive_return()) {
       /* If the thread is performing a recursive return back to its own operation
          Then just return null, it will be ignored. */
       return nullptr;

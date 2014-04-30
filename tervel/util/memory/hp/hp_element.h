@@ -1,5 +1,5 @@
-#ifndef TERVEL_MEMORY_HP_POOL_ELEMENT_H_
-#define TERVEL_MEMORY_HP_POOL_ELEMENT_H_
+#ifndef TERVEL_UTIL_MEMORY_HP_POOL_ELEMENT_H_
+#define TERVEL_UTIL_MEMORY_HP_POOL_ELEMENT_H_
 
 #include <atomic>
 #include <utility>
@@ -8,15 +8,18 @@
 #include <stdint.h>
 #include <stddef.h>
 
-#include "tervel/util/memory/descriptor.h"
-#include "tervel/util/memory/system.h"
+#include "tervel/util/descriptor.h"
+#include "tervel/util/system.h"
 #include "tervel/util/util.h"
+#include "tervel/util/info.h"
+#include "tervel/util/memory/hp/hazard_pointer.h"
 
 namespace tervel {
 namespace util {
 namespace memory {
 namespace hp {
 
+class HazardPointer;
 /**
  * This class is used for the creation of Hazard Pointer Protected Objects
  * Objects which extend it have the ability to call safeFree which delays
@@ -36,13 +39,13 @@ class Element {
    * It also calls 'try_to_free_Elements' in an attempt to free previously
    * unfreeable objects.
    */
-  void safe_delete(bool no_check = false
-            , HazardPointer *hazard_pointer = tl_thread_info->hazard_pointer) {
+  void safe_delete(bool no_check = false, HazardPointer *hazard_pointer =
+          tl_thread_info->get_hazard_pointer()) {
     hazard_pointer->try_to_free_Elements();
     if (!no_check || HazardPointer::is_watched(this)) {
       hazard_pointer->add_to_unsafe(this);
     } else {
-      delete this
+      delete this;
     }
     hazard_pointer->try_clear_unsafe_pool();
   }
@@ -77,7 +80,7 @@ class Element {
   // RESPONSE(steven): Unlike pool_element, classes are expected to extend this
   // class, which was why i thought it was best to make them private and to make
   // hp_list a friend.
-  
+
   /**
    * Helper method for getting the next pointer.
    */
@@ -88,7 +91,7 @@ class Element {
    */
   void next(Element *next) { next_ = next; }
 
-  Element *next_ {nullptr}
+  Element *next_ {nullptr};
   void operator delete( void * ) {}
   DISALLOW_COPY_AND_ASSIGN(Element);
 };
@@ -98,4 +101,4 @@ class Element {
 }  // namespace util
 }  // namespace tervel
 
-#endif  // TERVEL_MEMORY_HP_POOL_ELEMENT_H_
+#endif  // TERVEL_UTIL_MEMORY_HP_POOL_ELEMENT_H_

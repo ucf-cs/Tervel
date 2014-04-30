@@ -51,7 +51,7 @@ class DescriptorPool {
    * and left untouched when they're returned to the pool. This allows the user
    * to view associations. Entirely for debug purposes.
    */
-  constexpr bool NO_REUSE_MEM {false};
+  static constexpr bool NO_REUSE_MEM {false};
 
  public:
   DescriptorPool(int pool_id, PoolManager *manager, int prefill = 4)
@@ -65,6 +65,26 @@ class DescriptorPool {
    * Allocates an extra `num_descriptors` elements to the pool.
    */
   void reserve(int num_descriptors);
+
+  /**
+   * Constructs and returns a descriptor. Arguments are forwarded to the
+   * constructor of the given descriptor type. User should call free_descriptor
+   * on the returned pointer when they are done with it to avoid memory leaks.
+   */
+  template<typename DescrType, typename... Args>
+  DescrType * get_descriptor(Args&&... args);
+
+  /**
+   * Once a user is done with a descriptor, they should free it with this
+   * method.
+   *
+   * @param descr The descriptor to free.
+   * @param dont_check Don't check if the descriptor is being watched before
+   *   freeing it. Use this flag if you know that no other thread has had access
+   *   to this descriptor.
+   * @param pool the pool to use when freeing the descriptor.
+   */
+  void free_descriptor(Descriptor *descr, bool dont_check = false);
 
 
  private:
@@ -81,6 +101,7 @@ class DescriptorPool {
    *   the pool, a new one is allocated. Otherwise, nullptr is returned.
    */
   PoolElement * get_from_pool(bool allocate_new = true);
+
 
 
   // -------------------------

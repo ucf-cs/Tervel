@@ -8,14 +8,20 @@
 #include <stdint.h>
 #include <stddef.h>
 #include <memory>
+#include <cstdint>
 
-#include "tervel/memory/system.h"
-#include "tervel/util.h"
+
+#include "tervel/util/info.h"
+#include "tervel/util/util.h"
+#include "tervel/util/system.h"
+#include "tervel/util/memory/hp/hp_element.h"
 
 namespace tervel {
 namespace util {
 namespace memory {
 namespace hp {
+
+class Element;
 
 /**
  * This class is used to maintain the list of hazard pointed objects.
@@ -28,13 +34,17 @@ namespace hp {
  */
 class HazardPointer {
  public:
-  enum class : std::int8_t SlotID {SHORTUSE = 0 , END = 1};
+  enum class SlotID : std::int8_t {SHORTUSE = 0 , END = 1};
 
   explicit HazardPointer(int nun_threads)
       // The total number of slots needed is equal to the number of threads
       // multipled by the number of slots used.
       : num_slots_ {nun_threads * SlotID::END}
       , watches_(new std::atomic<void *>[num_slots]) {}
+
+  ~HazardPointer() {
+    // TODO(steven) implement
+  }
 
 
   // -------
@@ -55,9 +65,9 @@ class HazardPointer {
    * @param address The address to check
    * @param expected The value which is to be expected at the address
    */
-  static bool watch(SlotID slot_id, Element *elem,
-      std::atomic<void *> *address, void *expected,
-      HazardPointer *hazard_pointer = tl_thread_info.hazard_pointer);
+  static bool watch(SlotID slot_id, Element *elem, std::atomic<void *> *address,
+        void *expected, HazardPointer *hazard_pointer =
+        tervel::tl_thread_info->get_hazard_pointer());
 
   /**
    * This method is used to achieve a hazard pointer watch on a memory address.
@@ -72,8 +82,8 @@ class HazardPointer {
    * @param expected The value which is to be expected at the address
    */
   static bool watch(SlotID slot_id, void *value, std::atomic<void *> *address
-      , void *expected
-      , HazardPointer *hazard_pointer = tl_thread_info.hazard_pointer);
+      , void *expected, HazardPointer *hazard_pointer = 
+      tervel::tl_thread_info->get_hazard_pointer());
 
   /**
    * This method is used to remove the hazard pointer watch.
@@ -81,8 +91,8 @@ class HazardPointer {
    *
    * @param slot the slot to remove the watch
    */
-  static void unwatch(SlotID slot_id,
-      HazardPointer *hazard_pointer = tl_thread_info.hazard_pointer);
+  static void unwatch(SlotID slot_id, HazardPointer *hazard_pointer =
+        tervel::tl_thread_info->get_hazard_pointer());
 
   /**
    * This method is used to remove the hazard pointer watch.
@@ -92,7 +102,8 @@ class HazardPointer {
    * @param descr to call on_unwatch on.
    */
   static void unwatch(SlotID slot_id, Element *descr,
-      HazardPointer *hazard_pointer = tl_thread_info.hazard_pointer);
+          HazardPointer *hazard_pointer = 
+          tervel::tl_thread_info->get_hazard_pointer());
 
   /**
    * This method is used to determine if a hazard pointer watch exists on a
@@ -101,8 +112,8 @@ class HazardPointer {
    *
    * @param descr to call on_is_watched on.
    */
-  static bool is_watched(Element *descr,
-      HazardPointer *hazard_pointer = tl_thread_info.hazard_pointer);
+  static bool is_watched(Element *descr, HazardPointer *hazard_pointer =
+        tervel::tl_thread_info->get_hazard_pointer());
 
   /**
    * This method is used to determine if a hazard pointer watch exists on a
@@ -111,8 +122,8 @@ class HazardPointer {
    *
    * @param value to check if watch
    */
-  static bool is_watched(void *value,
-    HazardPointer *hazard_pointer = tl_thread_info.hazard_pointer);
+  static bool is_watched(void *value, HazardPointer *hazard_pointer =
+        tervel::tl_thread_info->get_hazard_pointer());
 
 
   // -------
@@ -169,14 +180,14 @@ class HazardPointer {
    * @param slot The slot id to get the position of
    */
   size_t get_slot(SlotID id) {
-    return id + (SlotIDs::END * tl_thread_info.thread_id);
+    return id + (SlotIDs::END * tervel::tl_thread_info->thread_id);
   }
 
-  std::unique_ptr<std::atomic<value *>[]> watches_;
+  std::unique_ptr<std::atomic<void *>[]> watches_;
   const size_t num_slots_;
 
   DISALLOW_COPY_AND_ASSIGN(HazardPointer);
-};
+};  // HazardPointer
 
 
 }  // namespace hp

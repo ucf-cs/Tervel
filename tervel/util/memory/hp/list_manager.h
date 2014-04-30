@@ -1,4 +1,3 @@
-// REVIEW(carlos): include guard name should be TERVEL_MEMORY_HP_POOL_MANAGER_H_
 #ifndef TERVEL_UTIL_MEMORY_HP_LIST_MANAGER_H_
 #define TERVEL_UTIL_MEMORY_HP_LIST_MANAGER_H_
 
@@ -30,7 +29,7 @@ class ListManager {
  public:
   friend class ElementList;
 
-  ListManager() : pool_() {}
+  ListManager(int num_pools) : pool_() {}
 
   ~ListManager() {
     // TODO(steven): destroy pool by freeing each Element

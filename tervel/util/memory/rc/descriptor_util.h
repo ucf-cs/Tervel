@@ -1,6 +1,7 @@
 #ifndef TERVEL_MEMORY_RC_UTIL_DESCRIPTOR_H_
 #define TERVEL_MEMORY_RC_UTIL_DESCRIPTOR_H_
 
+#include "tervel/util/info.h"
 #include "tervel/util/memory/rc/pool_element.h"
 #include "tervel/util/memory/rc/descriptor_pool.h"
 
@@ -16,7 +17,7 @@ namespace rc {
  */
 template<typename DescrType, typename... Args>
 inline Descriptor * get_descriptor(Args&&... args) {
-   return tl_thread_info.descriptor_pool->get_descriptor(args);
+  return tervel::tl_thread_info->rc_descriptor_pool_->get_descriptor(args);
 }
 
 /**
@@ -30,7 +31,7 @@ inline Descriptor * get_descriptor(Args&&... args) {
  * @param pool the pool to use when freeing the descriptor.
  */
 inline void free_descriptor(Descriptor *descr, bool dont_check = false) {
-  tl_thread_info.descriptor_pool->free_descriptor();
+  tervel::tl_thread_info->rc_descriptor_pool_->free_descriptor();
 }
 
 /**
@@ -46,7 +47,8 @@ inline void free_descriptor(Descriptor *descr, bool dont_check = false) {
 * @param val the read value of the address
 * @return true if succesffully acquired a wat
 */
-inline bool watch(Descriptor *descr, std::atomic<void *> *address, void *val) {
+inline bool watch(Descriptor *descr, std::atomic<void *> *address,
+        void *value) {
   PoolElement *elem = get_elem_from_descriptor(descr);
   elem->header().ref_count.fetch_add(1);
   if (address->load() != value) {
@@ -94,40 +96,6 @@ inline bool is_watched(Descriptor *descr) {
   }
 }
 
-
-/**
-* This method is used to remove a descriptor object that is conflict with
-* another threads operation.
-* It first checks the recursive depth before proceding. 
-* Next it protects against the object being reused else where by acquiring
-* either HP or RC watch on the object.
-* Then once it is safe it will call the objects complete function
-* This function must gurantee that after its return the object has been removed
-* It returns the value.
-* 
-* @param expected a marked reference to the object
-* @param address the location expected was read from
-* dereferenced from.
-* @return the current value of the address
-*/
-
-inline void * remove_descriptor(void *expected, std::atomic<void *> *address) {
-  RecursiveAction recurse();
-  void *newValue;
-  if (tl_thread_info.recursive_return) {
-    newValue = nullptr;  // result not used
-  } else {
-    Descriptor *descr = unmark(expected);
-    if (watch(descr, address, expected)) {
-      newValue = descr->complete(t, address);
-      unwatch(descr);
-    } else {
-      newValue = address->load();
-    }
-  }
-  return newValue;
-}
-
 /**
  * This returns the passed reference with its least signifcant bit set
  * to 1.
@@ -159,6 +127,39 @@ inline Descriptor * unmark_first(void *descr) {
 inline bool is_descriptor_first(void *descr) {
   return (0x1L == (reinterpret_cast<uintptr_t>(descr) & 0x1L));
 }
+
+/**
+* This method is used to remove a descriptor object that is conflict with
+* another threads operation.
+* It first checks the recursive depth before proceding. 
+* Next it protects against the object being reused else where by acquiring
+* either HP or RC watch on the object.
+* Then once it is safe it will call the objects complete function
+* This function must gurantee that after its return the object has been removed
+* It returns the value.
+* 
+* @param expected a marked reference to the object
+* @param address the location expected was read from
+* dereferenced from.
+* @return the current value of the address
+*/
+inline void * remove_descriptor(void *expected, std::atomic<void *> *address) {
+  tervel::util::RecursiveAction recurse;
+  void *newValue;
+  if (tervel::tl_thread_info->recursive_return()) {
+    newValue = nullptr;  // result not used
+  } else {
+    Descriptor *descr = unmark_first(expected);
+    if (watch(descr, address, expected)) {
+      newValue = descr->complete(t, address);
+      unwatch(descr);
+    } else {
+      newValue = address->load();
+    }
+  }
+  return newValue;
+}
+
 
 }  // namespace rc
 }  // namespace memory

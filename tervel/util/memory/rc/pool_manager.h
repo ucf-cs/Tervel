@@ -8,9 +8,9 @@
 #include <assert.h>
 #include <stdint.h>
 
-#include "tervel/util/memory/system.h"
-#include "tervel/util/util.h"
 #include "tervel/util/info.h"
+#include "tervel/util/util.h"
+#include "tervel/util/system.h"
 
 namespace tervel {
 namespace util {
@@ -41,7 +41,7 @@ class PoolManager {
 
   ~PoolManager() {
     for (int i = 0; i < number_pools_; i++) {
-      delete pools_[i];
+      // TODO(steven) implement freeing
     }
   }
 
@@ -68,7 +68,7 @@ class PoolManager {
   //  this could allow the system to try to keep the memory closer to the thread
   //  which needs it.
   //  I will add accessor methods later on. 
-  DescriptorPool * allocate_pool(int pos = tl_thread_info.thread_id);
+  DescriptorPool * allocate_pool(int pos = tervel::tl_thread_info->thread_id);
 
 
   const int number_pools_;

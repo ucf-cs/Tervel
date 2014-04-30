@@ -24,6 +24,9 @@
 #include <gflags/gflags.h>
 
 #include "tervel/mcas/mcas.h"
+#include "tervel/util/info.h"
+
+extern thread_local ThreadContext * tl_thread_info;
 
 enum class TestType {UPDATEOBJECT, UPDATEMULTIOBJECT, RANDOMOVERLAPS};
 
@@ -40,7 +43,7 @@ struct Results test_results;
 
 std::atomic<bool> running {true}
 std::atomic<bool> wait_flag {true}
-std::atomic<uint64_t> []shared_memory;
+std::atomic<uint64_t>[] shared_memory;
 std::atomic<int> ready_count {0}
 
 
@@ -65,27 +68,27 @@ int main(int argc, const char * argv[]) {
   const int mcas_size = FLAG_mcas_size;
   const TestType operation_type =  FLAG_operation_type;
 
-  tervel::Initilize_Tervel(kThreads);
+  tervel::Initilize_Tervel(num_threads);
 
   shared_memory = new std::atomic<uint64_t>[arrayLength](0x8);
 
-  std::thread threads[kThreads];
-  for (int i = 0; i < kThreads; i++) {
+  std::thread threads[num_threads];
+  for (int i = 0; i < num_threads; i++) {
     threads[i] = std::thread(run, i, operation_type);
   }
 
-  while (ready_count.load() < kThreads) {}
+  while (ready_count.load() < num_threads) {}
   
   wait_flag.store(false);
   std::this_thread::sleep_for(std::chrono::seconds(exeTime));
   running.store(false);
   std::this_thread::sleep_for(std::chrono::seconds(1));
 
-  for (int i = 0; i < kThreads; i++) {
+  for (int i = 0; i < num_threads; i++) {
     threads[i].join();
   }
 
-  for (int i = 1; i < kThreads; i++) {
+  for (int i = 1; i < num_threads; i++) {
     results[0].add(&results[1]);
   }
 

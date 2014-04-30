@@ -1,5 +1,5 @@
-#ifndef TERVEL_MEMORY_DESCRIPTOR_H_
-#define TERVEL_MEMORY_DESCRIPTOR_H_
+#ifndef TERVEL_UTIL_DESCRIPTOR_H_
+#define TERVEL_UTIL_DESCRIPTOR_H_
 
 #include <atomic>
 
@@ -7,20 +7,12 @@
 #include <stdint.h>
 
 #include "tervel/util/info.h"
-#include "tervel/util/memory/rc/util_descriptor.h"
+#include "tervel/util/memory/rc/descriptor_util.h"
 #include "tervel/util/util.h"
 
 
 namespace tervel {
 namespace util {
-
-
-namespace rc { 
-namespace memory {
-  class DescriptorPool; 
-}
-}
-
 class Descriptor {
   /**
    * This defines the Descriptor class, this class is designed to be extened
@@ -46,7 +38,7 @@ class Descriptor {
    */
  public:
   Descriptor() {}
-  virtual ~Descriptor() {}
+  ~Descriptor() {}
   /**
   * This method is implmented by each sub class and must gurantee that upon
   * return that the descriptor no longer exists at the address it was placed
@@ -144,21 +136,21 @@ class Descriptor {
    *
    * TODO(steven): code this.
    */
-  static void *remove_descriptor(std::atomic<void *> *address, void *value) {
+  static void * remove_descriptor(std::atomic<void *> *address, void *value) {
     if (memory::rc::is_descriptor_first(value)) {
       assert(false);
     }
     // This assert hits in the event an unknown discriptor type wass passed in
     assert(false);
-    return false;
+    return nullptr;
   }
 
  private:
   DISALLOW_COPY_AND_ASSIGN(Descriptor);
 };
 
-}  // namespace thread
+}  // namespace util
 }  // namespace tervel
 
 
-#endif  // TERVEL_MEMORY_DESCRIPTOR_H_
+#endif  // TERVEL_UTIL_DESCRIPTOR_H_
