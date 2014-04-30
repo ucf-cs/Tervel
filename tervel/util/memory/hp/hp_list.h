@@ -7,11 +7,12 @@
 #include <assert.h>
 #include <stdint.h>
 
-#include "tervel/util/descriptor.h"
 #include "tervel/util/info.h"
-#include "tervel/util/memory/hp/pool_element.h"
-#include "tervel/util/memory/hp/pool_manager.h"
 #include "tervel/util/system.h"
+#include "tervel/util/descriptor.h"
+#include "tervel/util/memory/hp/hp_element.h"
+#include "tervel/util/memory/hp/list_manager.h"
+
 
 namespace tervel {
 namespace util {
@@ -20,9 +21,6 @@ namespace hp {
 
 class Element;
 class ListManager;
-
-// REVIEW(carlos): prefix HP on the List is redundant given the namespace name
-//   of hp.
 
 /**
  * Defines a list of objects which are stored until they are safe to be freed.
@@ -81,7 +79,7 @@ class ElementList {
    * A linked list of list elements. 
    * Elements are freed when they are no longer referenced by other threads.
    */
-  Element *element_list_ {nullptr}
+  Element *element_list_ {nullptr};
 };
 
 }  // namespace hp

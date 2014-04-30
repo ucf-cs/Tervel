@@ -202,7 +202,7 @@ bool t_MCAS::mcas_complete(int start_pos, bool wfmode) {
 
       /* Process the current value at the address */
       /* Now Check if the current value is descriptor */
-      if (util::Descriptor::is_descriptor(current_value)) {
+      if (util::memory::rc::is_descriptor(current_value)) {
         /* Remove it by completing the op, try again */
         current_value = this->mcas_remove(pos, current_value);
 
@@ -325,7 +325,7 @@ T t_MCAS::mcas_remove(const int pos, T value) {
    * Otherwise it is someother descriptor type, so call the generic descriptor
    * remove operation
    */
-  return reinterpret_cast<T>(util::Descriptor::remove_descriptor(address, 
+  return reinterpret_cast<T>(util::memory::rc::remove_descriptor(address,
         value));
 };
 

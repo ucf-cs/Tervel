@@ -5,7 +5,6 @@
 #include <utility>
 
 #include <assert.h>
-#include <stdint.h>
 #include <stddef.h>
 #include <memory>
 #include <cstdint>
@@ -34,13 +33,16 @@ class Element;
  */
 class HazardPointer {
  public:
-  enum class SlotID : std::int8_t {SHORTUSE = 0 , END = 1};
+  enum class SlotID : size_t {SHORTUSE = 0 , END = 1};
 
-  explicit HazardPointer(int nun_threads)
+  explicit HazardPointer(int num_threads)
       // The total number of slots needed is equal to the number of threads
       // multipled by the number of slots used.
-      : num_slots_ {nun_threads * SlotID::END}
-      , watches_(new std::atomic<void *>[num_slots]) {}
+      // Do to the potential of reordering, num_slots_ can not be used to
+      // inilitze watches.
+      : num_slots_ {num_threads * static_cast<size_t>(SlotID::END)}
+      , watches_(new std::atomic<void *>[num_threads *
+            static_cast<size_t>(SlotID::END)]) {}
 
   ~HazardPointer() {
     // TODO(steven) implement
@@ -141,8 +143,8 @@ class HazardPointer {
     //   return type of get_slot). Don't assign the result of get_slot to slot,
     //   and just use the returned value directly in the operator[] of watches_:
     //     watches_[get_slot(slot)].store(value);
-    slot = get_slot(slot);
-    watches_[slot].store(value);
+    size_t slot_pos = get_slot(slot);
+    watches_[slot_pos].store(value);
   }
 
   /**
@@ -152,8 +154,8 @@ class HazardPointer {
    * @param slot The id of the slot to watch.
    */
   void clear_watch(SlotID slot) {
-    slot = get_slot(slot);
-    watches_[slot].store(nullptr);
+    size_t slot_pos = get_slot(slot);
+    watches_[slot_pos].store(nullptr);
   }
 
 
@@ -180,7 +182,8 @@ class HazardPointer {
    * @param slot The slot id to get the position of
    */
   size_t get_slot(SlotID id) {
-    return id + (SlotIDs::END * tervel::tl_thread_info->thread_id);
+    return static_cast<size_t>(id) + (static_cast<size_t>(SlotID::END) *
+          tervel::tl_thread_info->get_thread_id());
   }
 
   std::unique_ptr<std::atomic<void *>[]> watches_;

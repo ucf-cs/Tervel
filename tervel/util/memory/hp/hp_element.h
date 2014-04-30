@@ -31,7 +31,6 @@ class HazardPointer;
 class Element {
  public:
   Element() {}
-  virtual ~Element() {}
 
   /**
    * This function is used to free a hazard pointer protected object if it is
@@ -40,7 +39,7 @@ class Element {
    * unfreeable objects.
    */
   void safe_delete(bool no_check = false, HazardPointer *hazard_pointer =
-          tl_thread_info->get_hazard_pointer()) {
+          tervel::tl_thread_info->get_hazard_pointer()) {
     hazard_pointer->try_to_free_Elements();
     if (!no_check || HazardPointer::is_watched(this)) {
       hazard_pointer->add_to_unsafe(this);

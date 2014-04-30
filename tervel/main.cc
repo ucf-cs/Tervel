@@ -35,8 +35,8 @@ struct Results {
   std::atomic<uint64_t> failed_count_ {0}
 
   void atomic_add(int passed_count, int failed_count) {
-    passed_count_.fetch_and_add(passed_count);
-    failed_count_.fetch_and_add(failed_count);
+    passed_count_.fetch_add(passed_count);
+    failed_count_.fetch_add(failed_count);
   }
 };
 struct Results test_results;
@@ -146,7 +146,7 @@ void run_update_object(int thread_id, int start_pos) {
 
   tervel::mcas::MCAS<uint64_t> *mcas;
 
-  ready_count.fetch_and_add(1);
+  ready_count.fetch_add(1);
   while (wait_flag.load()) {}
 
   while (running.load()) {

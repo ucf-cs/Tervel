@@ -21,15 +21,17 @@ class ElementList;
 class Element;
 
 /**
- * Encapsulates a shared central 'to free list' between several thread-local lists.
- * When a thread is destroyed it will send its unfreeable items to this list,
- * which is freed by the user.
+ * Encapsulates a shared central 'to free list' between several thread-local
+ * lists. When a thread is destroyed it will send its unfreeable items to this
+ * list, which is freed by the user.
  */
 class ListManager {
  public:
   friend class ElementList;
 
-  ListManager(int num_pools) : pool_() {}
+  explicit ListManager(size_t number_pools)
+      : number_pools_(number_pools)
+      , pools_(new ManagedPool[number_pools]) {}
 
   ~ListManager() {
     // TODO(steven): destroy pool by freeing each Element
@@ -37,7 +39,16 @@ class ListManager {
 
 
  private:
-  std::atomic<Element *> to_free_list_ {nullptr};
+  struct ManagedPool {
+    // std::unique_ptr<ElementList> pool {nullptr};
+    Element * element_list_ {nullptr};
+    char padding[CACHE_LINE_SIZE - sizeof(element_list_)];
+  };
+
+  std::unique_ptr<ManagedPool[]> free_lists_;
+  size_t number_pools_;
+
+  DISALLOW_COPY_AND_ASSIGN(ListManager);
 };
 
 }  // namespace hp

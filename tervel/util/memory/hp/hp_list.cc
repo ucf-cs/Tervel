@@ -18,38 +18,12 @@ void ElementList::free_descriptor(Element *descr, bool dont_check) {
 
 void ElementList::send_to_manager() {
   this->try_to_free_Elements(false);
-  clear_pool(&element_list_, &this->manager.to_free_list_());
+  this->manager.free_lists_[tervel::tl_thread_info->get_thread_id()]
+          .element_list_ = element_list_;
+  element_list_ = nullptr;
 }
 
 
-namespace {
-
-/**
- * Generic logic for clearing a pool and sending its elements to another,
- * shared pool. Parameters are passed by pointer because this function changes
- * their values.
- */
-void clear_pool(Element **local_pool,
-    std::atomic<Element *> *manager_pool) {
-  if (local_pool != nullptr) {
-    Element *p1 = *local_pool;
-    Element *p2 = p1->next();
-    while (p2 != nullptr) {
-      p1 = p2;
-      p2 = p1->next();
-    }
-
-    // p1->pool_next's value is updated to the current value
-    // after a failed cas. (pass by reference fun times)
-    p1->next(manager_pool->load());
-    while (!manager_pool->
-        compare_exchange_strong(p1->next(), *local_pool)) {
-    }
-  }
-  *local_pool = nullptr;
-}
-
-}  // namespace
 
 void ElementList::add_to_unsafe(Element* elem) {
   elem->next(element_list_);
@@ -95,4 +69,4 @@ void ElementList::try_to_free_Elements(bool dont_check) {
 }  // namespace hp
 }  // namespace memory
 }  // namespace util
-}  // namespace tervil
+}  // namespace tervel

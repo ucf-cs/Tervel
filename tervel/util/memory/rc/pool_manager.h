@@ -35,12 +35,12 @@ class PoolManager {
  public:
   friend class DescriptorPool;
 
-  explicit PoolManager(int number_pools)
+  explicit PoolManager(size_t number_pools)
       : number_pools_(number_pools)
-      , pools_(new ManagedPool[number_pools_]) {}
+      , pools_(new ManagedPool[number_pools]) {}
 
   ~PoolManager() {
-    for (int i = 0; i < number_pools_; i++) {
+    for (size_t i = 0; i < number_pools_; i++) {
       // TODO(steven) implement freeing
     }
   }
@@ -71,7 +71,7 @@ class PoolManager {
   DescriptorPool * allocate_pool(int pos = tervel::tl_thread_info->get_thread_id());
 
 
-  const int number_pools_;
+  const size_t number_pools_;
 
 
  private:

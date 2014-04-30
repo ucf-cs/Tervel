@@ -2,6 +2,7 @@
 #define TERVEL_MEMORY_RC_UTIL_DESCRIPTOR_H_
 
 #include "tervel/util/info.h"
+#include "tervel/util/descriptor.h"
 #include "tervel/util/memory/rc/pool_element.h"
 #include "tervel/util/memory/rc/descriptor_pool.h"
 

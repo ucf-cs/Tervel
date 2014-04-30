@@ -33,9 +33,6 @@ namespace hp {
 
 
 class OpRecord : public memory::hp::Element {
- public:
-  virtual ~OpRecord() {}
-
   /**
    * Implementations of this function that upon its return the operation 
    * described in the OpRecord has been completed.
@@ -71,14 +68,14 @@ class ProgressAssurance {
 
   explicit ProgressAssurance(int num_threads)
       : num_threads_ {num_threads}
-      , op_table_(new std::atomic<OpRecord *>[num_threads_] ) {}
+      , op_table_(new std::atomic<OpRecord *>[num_threads] ) {}
 
   /**
    * This function checks at most one position in the op_table_ for an OPRecod
    * If one is found it will call its help_complete function.
    */
   static void check_for_announcement(ProgressAssurance *progress_assuarance =
-          tl_thread_info->progress_assuarance) {
+          tervel::tl_thread_info->get_progress_assurance()) {
     progress_assuarance->p_check_for_announcement();
   }
 
@@ -87,8 +84,9 @@ class ProgressAssurance {
    * @param op an OpRecord to complete
    * @return on return the OpRecord must be completed.
    */
-  static void make_announcement(OpRecord *op, int tid = tl_thread_info->thread_id
-        , ProgressAssurance *prog_assur = tl_thread_info->progress_assuarance) {
+  static void make_announcement(OpRecord *op, int tid =
+        tervel::tl_thread_info->get_thread_id(), ProgressAssurance *prog_assur =
+        tervel::tl_thread_info->get_progress_assurance()) {
     prog_assur->p_make_announcement(op, tid);
   }
 
@@ -104,7 +102,8 @@ class ProgressAssurance {
    * @param op an OpRecord to complete
    * @return on return the OpRecord must be completed.
    */
-  void p_make_announcement(OpRecord *op, int tid = tl_thread_info->thread_id);
+  void p_make_announcement(OpRecord *op, int tid =
+        tervel::tl_thread_info->get_thread_id());
 
   /**
    * Table for storing operation records, each thread has its own position
