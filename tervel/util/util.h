@@ -1,6 +1,7 @@
 #ifndef TERVEL_UTIL_H_
 #define TERVEL_UTIL_H_
 
+namespace tervel {
 namespace util {
 
 /**
@@ -14,6 +15,7 @@ inline bool isValid(void * value) {
 }
 
 }  // namespace util
+}  // namespace tervel
 
 // A macro to disallow the copy constructor and operator= functions.  This
 // should be used in the `private` declarations for a class. Use unless you have

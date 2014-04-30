@@ -3,11 +3,15 @@
 
 #include "tervel/util/info.h"
 #include "tervel/util/descriptor.h"
+#include "tervel/util/recursive_action.h"
 #include "tervel/util/memory/rc/pool_element.h"
 #include "tervel/util/memory/rc/descriptor_pool.h"
 
 namespace tervel {
 namespace util {
+
+class Descriptor;
+
 namespace memory {
 namespace rc {
 
@@ -17,8 +21,9 @@ namespace rc {
  * on the returned pointer when they are done with it to avoid memory leaks.
  */
 template<typename DescrType, typename... Args>
-inline Descriptor * get_descriptor(Args&&... args) {
-  return tervel::tl_thread_info->rc_descriptor_pool_->get_descriptor(args);
+inline tervel::util::Descriptor * get_descriptor(Args&&... args) {
+  return tervel::tl_thread_info->get_rc_descriptor_pool()->get_descriptor(
+        std::forward<Args>(args));
 }
 
 /**
@@ -31,8 +36,10 @@ inline Descriptor * get_descriptor(Args&&... args) {
  *   to this descriptor.
  * @param pool the pool to use when freeing the descriptor.
  */
-inline void free_descriptor(Descriptor *descr, bool dont_check = false) {
-  tervel::tl_thread_info->rc_descriptor_pool_->free_descriptor();
+inline void free_descriptor(tervel::util::Descriptor *descr,
+      bool dont_check = false) {
+  tervel::tl_thread_info->get_rc_descriptor_pool()->free_descriptor(descr,
+        dont_check);
 }
 
 /**
@@ -48,7 +55,7 @@ inline void free_descriptor(Descriptor *descr, bool dont_check = false) {
 * @param val the read value of the address
 * @return true if succesffully acquired a wat
 */
-inline bool watch(Descriptor *descr, std::atomic<void *> *address,
+inline bool watch(tervel::util::Descriptor *descr, std::atomic<void *> *address,
         void *value) {
   PoolElement *elem = get_elem_from_descriptor(descr);
   elem->header().ref_count.fetch_add(1);
@@ -74,7 +81,7 @@ inline bool watch(Descriptor *descr, std::atomic<void *> *address,
 * 
 * @param descr the descriptor which no longer needs rc protection.
 */
-inline void unwatch(Descriptor *descr) {
+inline void unwatch(tervel::util::Descriptor *descr) {
   PoolElement *elem = get_elem_from_descriptor(descr);
   elem->header().ref_count.fetch_add(-1);
   descr->on_unwatch();
@@ -88,7 +95,7 @@ inline void unwatch(Descriptor *descr) {
 *
 * @param descr the descriptor to be checked for rc protection.
 */
-inline bool is_watched(Descriptor *descr) {
+inline bool is_watched(tervel::util::Descriptor *descr) {
   PoolElement * elem = get_elem_from_descriptor(descr);
   if (elem->header().ref_count.load() == 0) {
     return descr->on_is_watched();
@@ -114,8 +121,8 @@ inline void * mark_first(Descriptor *descr) {
  * @param the reference to remove the bitmark from
  * @return the unbitmarked reference
  */
-inline Descriptor * unmark_first(void *descr) {
-  return reinterpret_cast<Descriptor *>(
+inline tervel::util::Descriptor * unmark_first(void *descr) {
+  return reinterpret_cast<tervel::util::Descriptor *>(
       reinterpret_cast<uintptr_t>(descr) & ~0x1L);
 }
 
@@ -150,9 +157,9 @@ inline void * remove_descriptor(void *expected, std::atomic<void *> *address) {
   if (tervel::tl_thread_info->recursive_return()) {
     newValue = nullptr;  // result not used
   } else {
-    Descriptor *descr = unmark_first(expected);
+    tervel::util::Descriptor *descr = unmark_first(expected);
     if (watch(descr, address, expected)) {
-      newValue = descr->complete(t, address);
+      newValue = descr->complete(expected, address);
       unwatch(descr);
     } else {
       newValue = address->load();

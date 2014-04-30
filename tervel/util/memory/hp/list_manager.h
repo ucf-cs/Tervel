@@ -30,8 +30,8 @@ class ListManager {
   friend class ElementList;
 
   explicit ListManager(size_t number_pools)
-      : number_pools_(number_pools)
-      , free_lists_(new ManagedPool[number_pools]) {}
+      : free_lists_(new ManagedPool[number_pools])
+      , number_pools_(number_pools) {}
 
   ~ListManager() {
     // TODO(steven): destroy pool by freeing each Element

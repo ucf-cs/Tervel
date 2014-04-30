@@ -33,6 +33,8 @@ namespace hp {
 
 
 class OpRecord : public memory::hp::Element {
+ public:
+  OpRecord() {}
   /**
    * Implementations of this function that upon its return the operation 
    * described in the OpRecord has been completed.
@@ -67,8 +69,8 @@ class ProgressAssurance {
   static constexpr size_t HELP_DELAY = 1;
 
   explicit ProgressAssurance(int num_threads)
-      : num_threads_ {num_threads}
-      , op_table_(new std::atomic<OpRecord *>[num_threads] ) {}
+      : op_table_(new std::atomic<OpRecord *>[num_threads] )
+      , num_threads_ {num_threads} {}
 
   /**
    * This function checks at most one position in the op_table_ for an OPRecod

@@ -25,139 +25,150 @@
 
 #include "tervel/mcas/mcas.h"
 #include "tervel/util/info.h"
+#include "tervel/util/thread_context.h"
+#include "tervel/util/tervel.h"
 
-enum class TestType {UPDATEOBJECT, UPDATEMULTIOBJECT, RANDOMOVERLAPS};
+enum class TestType : size_t {UPDATEOBJECT, UPDATEMULTIOBJECT, RANDOMOVERLAPS};
 
-struct Results {
-  std::atomic<uint64_t> passed_count_ {0};
-  std::atomic<uint64_t> failed_count_ {0};
+class TestObject {
+ public:
+  TestObject(int num_threads, int execution_time,
+        int array_length, int mcas_size, TestType test_type)
+      : execution_time_(execution_time)
+      , array_length_(array_length)
+      , num_threads_(num_threads)
+      , mcas_size_(mcas_size)
+      , operation_type_(test_type) {
+        shared_memory_ = new std::atomic<uint64_t>[array_length];
+      }
 
   void atomic_add(int passed_count, int failed_count) {
     passed_count_.fetch_add(passed_count);
     failed_count_.fetch_add(failed_count);
   }
+
+  
+
+  
+  const int execution_time_;
+  const int array_length_;
+  const int num_threads_;
+  const int mcas_size_;
+  const TestType operation_type_;
+
+  std::atomic<uint64_t> passed_count_ {0};
+  std::atomic<uint64_t> failed_count_ {0};
+  std::atomic<uint64_t>* shared_memory_;
+
+  std::atomic<int> ready_count_ {0};
+  std::atomic<bool> running_ {true};
+  std::atomic<bool> wait_flag_ {true};
 };
-struct Results test_results;
-
-std::atomic<bool> running {true};
-std::atomic<bool> wait_flag {true};
-std::atomic<uint64_t>[] shared_memory;
-std::atomic<int> ready_count {0};
 
 
+int array_length, mcas_size;
 
-void run(int thread_id, TestType operation_type);
+void run(int thread_id, TestObject* test, TestObject * test_object);
 
-DEFINE_int(num_threads, 1, "The number of threads to spawn.");
-DEFINE_int(execution_time, 5, "The amount of time to run the tests");
-DEFINE_int(array_length, 64, "The size of the region to test on.");
-DEFINE_int(mcas_size, 2, "The number of words in a mcas operation.");
-DEFINE_int(test_type, 0, "The type of test to execute"
-                          + "(0: updating sinlge multi-word object"
-                          + ", 1: updating multiple objects"
-                          + ", 2: updating overlapping mult-word updates)");
+DEFINE_int32(num_threads, 1, "The number of threads to spawn.");
+DEFINE_int32(execution_time, 5, "The amount of time to run the tests");
+DEFINE_int32(array_length, 64, "The size of the region to test on.");
+DEFINE_int32(mcas_size, 2, "The number of words in a mcas operation.");
+DEFINE_int32(operation_type, 0, "The type of test to execute"
+    "(0: updating sinlge multi-word object"
+    ", 1: updating multiple objects"
+    ", 2: updating overlapping mult-word updates)");
 
-int main(int argc, const char * argv[]) {
-  google::ParseCommandLineFlags(&argc, &argv, true);
+int main(int argc, char** argv) {
+  gflags::ParseCommandLineFlags(&argc, &argv, true);
 
-  const int num_threads = FLAG_num_threads;
-  const int execution_time = FLAG_execution_time;
-  const int array_length = FLAG_array_length;
-  const int mcas_size = FLAG_mcas_size;
-  const TestType operation_type =  FLAG_operation_type;
+  TestObject test_data(FLAGS_num_threads, FLAGS_execution_time,
+        FLAGS_array_length, FLAGS_mcas_size,
+        static_cast<TestType>(FLAGS_operation_type) );
 
-  tervel::Initilize_Tervel(num_threads);
+  tervel::Tervel tervel_obj(test_data.num_threads_);
+  std::thread* thread_list = new std::thread[test_data.num_threads_];
 
-  shared_memory = new std::atomic<uint64_t>[arrayLength](0x8);
-
-  std::thread threads[num_threads];
-  for (int i = 0; i < num_threads; i++) {
-    threads[i] = std::thread(run, i, operation_type);
+  for (int i = 0; i < test_data.num_threads_; i++) {
+    thread_list[i] = std::thread(run, i, &tervel_obj, &test_data);
   }
 
-  while (ready_count.load() < num_threads) {}
-  
-  wait_flag.store(false);
-  std::this_thread::sleep_for(std::chrono::seconds(exeTime));
-  running.store(false);
+  while (test_data.ready_count_.load() < test_data.num_threads_) {}
+
+  test_data.wait_flag_.store(false);
+  std::this_thread::sleep_for(std::chrono::seconds(test_data.execution_time_));
+  test_data.running_.store(false);
   std::this_thread::sleep_for(std::chrono::seconds(1));
 
-  for (int i = 0; i < num_threads; i++) {
-    threads[i].join();
+  for (int i = 0; i < test_data.num_threads_; i++) {
+    thread_list[i].join();
   }
 
-  for (int i = 1; i < num_threads; i++) {
-    results[0].add(&results[1]);
-  }
-
-  printf("Completed[Passed: %ld, Failed: %ld]\n",
-    results[0].passed_count, results[0].failed_count);
-  for (int i = 1; i < arrayLength; i++) {
-    if (shared_memory[i].load() != shared_memory[0].load()) {
+  printf("Completed[Passed: %llu, Failed: %llu]\n",
+    test_data.passed_count_.load(), test_data.failed_count_.load());
+  for (int i = 1; i < test_data.array_length_; i++) {
+    if (test_data.shared_memory_[i].load() !=
+            test_data.shared_memory_[0].load()) {
       printf("Mismatch(0, %d)::>", i);
-      for (int i = 0; i < arrayLength; i++) {
-        printf("[%d:%ld] ", i, shared_memory[i].load());
+      for (int i = 0; i < test_data.array_length_; i++) {
+        printf("[%d:%llu] ", i, test_data.shared_memory_[i].load());
       }
       printf("\n");
       break;
     }
   }
 
-
-  tervel::Destroy_Tervel();
   return 1;
 }
 
 
-void run_update_multible_objects(int thread_id);
-void run_RandomOverlaps(int thread_id);
-void run_update_object(int thread_id, int start_pos);
+void run_update_multible_objects(int thread_id, TestObject * test_data);
+void run_RandomOverlaps(int thread_id, TestObject * test_data);
+void run_update_object(int thread_id,  int start_pos, TestObject * test_data);
 
-void run(int thread_id, TestType operation_type) {
-  tervel::attachThread();
+void run(int thread_id, tervel::Tervel* tervel_obj, TestObject * test_data) {
+  tervel::ThreadContext tervel_thread(tervel_obj);
 
-  switch (operation_type) {
-    case UPDATEOBJECT:
-      run_update_object(thread_id, 0);
+  switch (test_data->operation_type_) {
+    case TestType::UPDATEOBJECT:
+      run_update_object(thread_id, 0, test_data);
       break;
 
-    case UPDATEMULTIOBJECT:
-      run_update_multible_objects(thread_id);
+    case TestType::UPDATEMULTIOBJECT:
+      run_update_multible_objects(thread_id, test_data);
       break;
 
-    case RANDOMOVERLAPS:
-      run_RandomOverlaps(thread_id);
+    case TestType::RANDOMOVERLAPS:
+      run_RandomOverlaps(thread_id, test_data);
       break;
 
     default:
       printf("Error Non Recongized State Test\n");
   }
-
-  tervel::dettachThread();
 }
 
 
 
-void run_update_object(int thread_id, int start_pos) {
+void run_update_object(int thread_id, int start_pos, TestObject * test_data) {
   int failed_count = 0;
   int passed_count = 0;
 
   tervel::mcas::MCAS<uint64_t> *mcas;
 
-  ready_count.fetch_add(1);
-  while (wait_flag.load()) {}
+  test_data->ready_count_.fetch_add(1);
+  while (test_data->wait_flag_.load()) {}
 
-  while (running.load()) {
-    mcas = new tervel::mcas::MCAS<uint64_t>();
+  while (test_data->running_.load()) {
+    mcas = new tervel::mcas::MCAS<uint64_t>(test_data->mcas_size_);
 
-    for (int i = 0; i < MWORDS; i++) {
+    for (int i = 0; i < test_data->mcas_size_; i++) {
       int var = start_pos + i;
 
-      std::atomic<uint64_t> *address = (&shared_memory[var]);
-      uint64_t expected_value = tervel::Descriptor::read(address);
+      std::atomic<uint64_t> *address = (&(test_data->shared_memory_)[var]);
+      uint64_t expected_value = tervel::util::Descriptor::read(address);
       uint64_t new_value = (expected_value + 0x16) & (~3);
 
-      bool success = mcas->add_CAS_triple(address, expected_value, new_value);
+      bool success = mcas->add_cas_triple(address, expected_value, new_value);
       assert(success);
     }
 
@@ -169,36 +180,36 @@ void run_update_object(int thread_id, int start_pos) {
     mcas->safe_delete();
   }  // End Execution Loop
 
-  test_results.atomic_add(passed_count, failed_count);
+  test_data->atomic_add(passed_count, failed_count);
   return;
 }
 
 
-void run_update_multible_objects(int thread_id) {
+void run_update_multible_objects(int thread_id, TestObject * test_data) {
   int failed_count = 0;
   int passed_count = 0;
 
-  int max_start_pos=(arrayLength/MWORDS);
+  int max_start_pos=(test_data->array_length_/test_data->mcas_size_);
   boost::mt19937 rng(thread_id);
   boost::uniform_int<> memory_pos_rand(0, max_start_pos-1);
 
   tervel::mcas::MCAS<uint64_t> *mcas;
 
-  ready_count.fetch_and_add(1);
-  while (wait_flag.load()) {}
+  test_data->ready_count_.fetch_add(1);
+  while (test_data->wait_flag_.load()) {}
 
-  while (running.load()) {
-    mcas = new tervel::mcas::MCAS<uint64_t>();
-    int start_pos = memory_pos_rand(rng) * MWORDS;
+  while (test_data->running_.load()) {
+    mcas = new tervel::mcas::MCAS<uint64_t>(test_data->mcas_size_);
+    int start_pos = memory_pos_rand(rng) * test_data->mcas_size_;
 
-    for (int i = 0; i < MWORDS; i++) {
+    for (int i = 0; i < mcas_size; i++) {
       int var = start_pos + i;
 
-      std::atomic<uint64_t> *address = (&shared_memory[var]);
-      uint64_t expected_value = tervel::Descriptor::read(address);
+      std::atomic<uint64_t> *address = (&(test_data->shared_memory_)[var]);
+      uint64_t expected_value = tervel::util::Descriptor::read(address);
       uint64_t new_value = (expected_value + 0x16) & (~3);
 
-      bool success = mcas->add_CAS_triple(address, expected_value, new_value);
+      bool success = mcas->add_cas_triple(address, expected_value, new_value);
       assert(success);
     }
 
@@ -211,33 +222,33 @@ void run_update_multible_objects(int thread_id) {
     mcas->safe_delete();
   }  // End Execution Loop
 
-  test_results.atomic_add(passed_count, failed_count);
+  test_data->atomic_add(passed_count, failed_count);
   return;
 }
 
-void run_RandomOverlaps(int thread_id) {
+void run_RandomOverlaps(int thread_id, TestObject * test_data) {
   int failed_count = 0;
   int passed_count = 0;
 
   boost::mt19937 rng(thread_id);
-  boost::uniform_int<> memory_pos_rand(0, arrayLength);
+  boost::uniform_int<> memory_pos_rand(0, test_data->array_length_);
   tervel::mcas::MCAS<uint64_t> *mcas;
 
-  ready_count.fetch_and_add(1);
-  while (wait_flag.load()) {}
+  test_data->ready_count_.fetch_add(1);
+  while (test_data->wait_flag_.load()) {}
 
-  while (running.load()) {
-    mcas = new tervel::mcas::MCAS<uint64_t>();
+  while (test_data->running_.load()) {
+    mcas = new tervel::mcas::MCAS<uint64_t>(test_data->mcas_size_);
 
     bool success;
-    for (int i = 0; i < MWORDS; i++) {
+    for (int i = 0; i < mcas_size; i++) {
       do {
         int var = memory_pos_rand(rng);
-        std::atomic<uint64_t> *address = (&shared_memory[var]);
-        uint64_t expected_value = tervel::Descriptor::read(address);
+        std::atomic<uint64_t> *address = (&(test_data->shared_memory_)[var]);
+        uint64_t expected_value = tervel::util::Descriptor::read(address);
         uint64_t new_value = (expected_value + 0x16) & (~3);
 
-        success = mcas->add_CAS_triple(address, expected_value, new_value);
+        success = mcas->add_cas_triple(address, expected_value, new_value);
       }while(!success);
     }
 
@@ -249,6 +260,6 @@ void run_RandomOverlaps(int thread_id) {
     mcas->safe_delete();
   }  // End Execution Loop
 
-  test_results.atomic_add(passed_count, failed_count);
+  test_data->atomic_add(passed_count, failed_count);
   return;
 }

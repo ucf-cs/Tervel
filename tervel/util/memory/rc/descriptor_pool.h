@@ -16,10 +16,10 @@
 
 namespace tervel {
 namespace util {
-namespace memory {
 
 class Descriptor;
 
+namespace memory {
 namespace rc {
 
 class PoolManager;
@@ -84,7 +84,7 @@ class DescriptorPool {
    *   to this descriptor.
    * @param pool the pool to use when freeing the descriptor.
    */
-  void free_descriptor(Descriptor *descr, bool dont_check = false);
+  void free_descriptor(tervel::util::Descriptor *descr, bool dont_check = false);
 
 
  private:
@@ -154,7 +154,7 @@ class DescriptorPool {
    * Adding a descriptor to the safe pool calls its 'on_return_to_pool'
    * method and its destructor.
    */
-  void add_to_safe(Descriptor* descr);
+  void add_to_safe(tervel::util::Descriptor* descr);
 
   /**
    * Releases the descriptor back to the unsafe pool. Caller relinquishes
@@ -163,7 +163,7 @@ class DescriptorPool {
    *
    * See notes on add_to_safe()
    */
-  void add_to_unsafe(Descriptor* descr);
+  void add_to_unsafe(tervel::util::Descriptor* descr);
 
   /**
    * Try to move elements from the unsafe pool to the safe pool.

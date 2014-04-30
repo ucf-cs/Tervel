@@ -58,7 +58,7 @@ class ThreadContext {
   /**
    * @returns a reference to the rc_descriptor_pool
    */
-  util::memory::hp::ElementList* get_rc_descriptor_pool();
+  util::memory::rc::DescriptorPool* get_rc_descriptor_pool();
 
   /**
    * This function returns the id of the next thread to helper. If the max
@@ -114,6 +114,20 @@ class ThreadContext {
    */
   size_t get_recursive_depth() {
     return recursive_depth_;
+  }
+
+  /**
+   * increments the recursive depth
+   */
+  void inc_recursive_depth() {
+    recursive_depth_++;
+  }
+
+  /**
+   * decrements the recrusive depth
+   */
+  void dec_recursive_depth() {
+    recursive_depth_--;
   }
 
   /**
@@ -186,7 +200,6 @@ class ThreadContext {
   const util::memory::hp::ElementList* hp_element_list_;
 
  private:
-  friend class RecursiveAction;
   DISALLOW_COPY_AND_ASSIGN(ThreadContext);
 };
 

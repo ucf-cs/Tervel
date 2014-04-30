@@ -15,7 +15,7 @@ namespace tervel {
 class Tervel {
  public:
   explicit Tervel(size_t num_threads)
-      : num_threads_  {num_threads} 
+      : num_threads_  {num_threads}
       , hazard_pointer_(num_threads)
       , hp_list_manager_(num_threads)
       , rc_pool_manager_(num_threads)
@@ -25,7 +25,6 @@ class Tervel {
     // TODO(steven) implement
   }
 
- private:
   uint64_t get_thread_id() {
     return active_threads_.fetch_add(1);
   }

@@ -47,7 +47,6 @@ class Descriptor {
   */
   virtual void * complete(void *current, std::atomic<void *> *address) = 0;
 
- private:
   /**
    * This method is implmented by each sub class. It returns the logical value
    * of the past address.  If the associted operation is still in progress then
@@ -94,7 +93,6 @@ class Descriptor {
    */
   virtual bool on_is_watched() { return false; }
 
- public:
   /**
    * This method is used to get the value stored at an address that may have a
    * descriptor object their.  It handles memory protection of the objects.  It

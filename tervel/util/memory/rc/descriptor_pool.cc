@@ -5,7 +5,8 @@ namespace util {
 namespace memory {
 namespace rc {
 
-void DescriptorPool::free_descriptor(Descriptor *descr, bool dont_check) {
+void DescriptorPool::free_descriptor(tervel::util::Descriptor *descr,
+      bool dont_check) {
   if (!dont_check && is_watched(descr)) {
     this->add_to_unsafe(descr);
   } else {
@@ -101,7 +102,7 @@ void DescriptorPool::send_unsafe_to_manager() {
 }
 
 
-void DescriptorPool::add_to_safe(Descriptor *descr) {
+void DescriptorPool::add_to_safe(tervel::util::Descriptor *descr) {
   PoolElement *p = get_elem_from_descriptor(descr);
   p->next(safe_pool_);
   safe_pool_ = p;
@@ -118,7 +119,7 @@ void DescriptorPool::add_to_safe(Descriptor *descr) {
 }
 
 
-void DescriptorPool::add_to_unsafe(Descriptor* descr) {
+void DescriptorPool::add_to_unsafe(tervel::util::Descriptor* descr) {
   PoolElement *p = get_elem_from_descriptor(descr);
   p->next(unsafe_pool_);
   unsafe_pool_ = p;
@@ -132,8 +133,8 @@ void DescriptorPool::try_clear_unsafe_pool(bool dont_check) {
     PoolElement *temp = unsafe_pool_->next();
 
     while (temp) {
-      Descriptor *temp_descr = temp->descriptor();
-      PoolElement *temp_next = temp->next();
+      tervel::util::Descriptor *temp_descr = temp->descriptor();
+      tervel::util::PoolElement *temp_next = temp->next();
 
       bool watched = is_watched(temp_descr);
       if (!dont_check && watched) {

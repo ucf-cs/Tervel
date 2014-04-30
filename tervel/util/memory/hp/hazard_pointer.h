@@ -38,9 +38,9 @@ class HazardPointer {
       // multipled by the number of slots used.
       // Do to the potential of reordering, num_slots_ can not be used to
       // inilitze watches.
-      : num_slots_ {num_threads * static_cast<size_t>(SlotID::END)}
-      , watches_(new std::atomic<void *>[num_threads *
-            static_cast<size_t>(SlotID::END)]) {}
+      : watches_(new std::atomic<void *>[num_threads *
+            static_cast<size_t>(SlotID::END)])
+      , num_slots_ {num_threads * static_cast<size_t>(SlotID::END)} {}
 
   ~HazardPointer() {
     // TODO(steven) implement

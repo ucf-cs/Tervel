@@ -14,19 +14,21 @@ namespace util {
 class RecursiveAction {
  public:
   RecursiveAction() {
-    if (tervel::tl_thread_info->recursive_depth_ >
+    if (tervel::tl_thread_info->get_recursive_depth() >
         tervel::tl_thread_info->get_num_threads() + 1) {
-      tervel::tl_thread_info->recursive_return_ = true;
+      tervel::tl_thread_info->set_recursive_return();
     }
-    tervel::tl_thread_info->recursive_depth_ += 1;
+    tervel::tl_thread_info->inc_recursive_depth();
   }
 
-  ~RecursiveAction() { tervel::tl_thread_info->recursive_depth_ -= 1; }
+  ~RecursiveAction() {
+    tervel::tl_thread_info->dec_recursive_depth();
+  }
 
  private:
   DISALLOW_COPY_AND_ASSIGN(RecursiveAction);
-};
+};  // class RecursiveAction
 
 }  // namespace util
 }  // namespace tervel
-#end  // TERVEL_UTIL_RECURSIVE_ACTION_H
+#endif  // TERVEL_UTIL_RECURSIVE_ACTION_H
