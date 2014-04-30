@@ -2,7 +2,7 @@
 #define TERVEL_MCAS_CASROW_H_
 
 #include "tervel/util/info.h"
-#include "tervel/util/thread/util.h"
+#include "tervel/util/util.h"
 #include "tervel/mcas/mcas.h"
 #include "tervel/mcas/mcas_helper.h"
 
@@ -11,8 +11,12 @@
 namespace tervel {
 namespace mcas {
 
-class Helper;
+template<class T>
 class MCAS;
+
+template<class T>
+class Helper;
+
 /**
  * This class is used to represent a one of the M CAS operations performed
  * by an MCAS operation.
@@ -30,9 +34,9 @@ class CasRow {
     CasRow<T>() {}
 
     CasRow<T>(std::atomic<T> *address, T expected_value, T new_value)
-        : address_ {a}
-        , expected_value_ {ev}
-        , new_value_ {nv} {}
+        : address_ {address}
+        , expected_value_ {expected_value}
+        , new_value_ {new_value} {}
 
     ~CasRow<T>() {}
 

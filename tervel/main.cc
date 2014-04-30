@@ -26,13 +26,11 @@
 #include "tervel/mcas/mcas.h"
 #include "tervel/util/info.h"
 
-extern thread_local ThreadContext * tl_thread_info;
-
 enum class TestType {UPDATEOBJECT, UPDATEMULTIOBJECT, RANDOMOVERLAPS};
 
 struct Results {
-  std::atomic<uint64_t> passed_count_ {0}
-  std::atomic<uint64_t> failed_count_ {0}
+  std::atomic<uint64_t> passed_count_ {0};
+  std::atomic<uint64_t> failed_count_ {0};
 
   void atomic_add(int passed_count, int failed_count) {
     passed_count_.fetch_add(passed_count);
@@ -41,10 +39,10 @@ struct Results {
 };
 struct Results test_results;
 
-std::atomic<bool> running {true}
-std::atomic<bool> wait_flag {true}
+std::atomic<bool> running {true};
+std::atomic<bool> wait_flag {true};
 std::atomic<uint64_t>[] shared_memory;
-std::atomic<int> ready_count {0}
+std::atomic<int> ready_count {0};
 
 
 

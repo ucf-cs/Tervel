@@ -2,20 +2,28 @@
 #define TERVEL_UTIL_THREAD_CONTEXT_H
 
 #include "tervel/util/util.h"
-#include "tervel/util/tervel.h"
+
 
 namespace tervel {
+class Tervel;
+
 namespace util {
 
 class RecursiveAction;
+class ProgressAssurance;
 
 namespace memory {
 namespace hp {
-  class ElementList;
+
+class ElementList;
+class HazardPointer;
+
 }  // namespace hp
 
 namespace rc {
-  class DescriptorPool;
+
+class DescriptorPool;
+
 }  // namespace rc
 
 }  // namespace memory
@@ -26,23 +34,31 @@ namespace rc {
  */
 class ThreadContext {
  public:
-  explicit ThreadContext(Tervel* tervel)
-      : thread_id_ {tervel->get_thread_id()}
-      , tervel_ {tervel}
-      , rc_descriptor_pool_(tervel_->rc_pool_manager_)
-      , hp_element_list_(tervel_->hp_list_manager_) {}
+  explicit ThreadContext(Tervel* tervel);
 
   ~ThreadContext() {
     // TODO(steven) delete descriptor pools, return thread id
   }
 
-  util::memory::hp::HazardPointer get_hazard_pointer() {
-    return &(tervel_->hazard_pointer_);
-  }
+  /**
+   * @returns a reference to the HazardPointer singleton
+   */
+  util::memory::hp::HazardPointer* get_hazard_pointer();
 
-  util::ProgressAssurance get_progress_assurance() {
-    return &(tervel_->progress_assurance_);
-  }
+  /**
+   * @returns a reference to the ProgressAssurance singleton
+   */
+  util::ProgressAssurance* get_progress_assurance();
+
+  /**
+   * @returns a reference to the hp_element_list_
+   */
+  util::memory::hp::ElementList* get_hp_element_list();
+
+  /**
+   * @returns a reference to the rc_descriptor_pool
+   */
+  util::memory::hp::ElementList* get_rc_descriptor_pool();
 
   /**
    * This function returns the id of the next thread to helper. If the max
@@ -110,10 +126,7 @@ class ThreadContext {
   /**
    * @return number of threads
    */
-  uint64_t get_num_threads() {
-    return tervel_->num_threads_;
-  }
-
+  uint64_t get_num_threads();
  private:
    /**
    * A unique ID among all active threads.
@@ -165,15 +178,15 @@ class ThreadContext {
   /**
    * This is a link to the threads pool of reference counted descriptor objects.
    */
-  const util::memory::rc::DescriptorPool rc_descriptor_pool_;
+  const util::memory::rc::DescriptorPool* rc_descriptor_pool_;
 
   /**
    * THis is a link to the threads pool of hp protected elements
    */
-  const util::memory::hp::ElementList hp_element_list_;
+  const util::memory::hp::ElementList* hp_element_list_;
 
  private:
-  friend RecursiveAction;
+  friend class RecursiveAction;
   DISALLOW_COPY_AND_ASSIGN(ThreadContext);
 };
 

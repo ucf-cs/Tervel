@@ -1,6 +1,20 @@
 #ifndef TERVEL_UTIL_H_
 #define TERVEL_UTIL_H_
 
+namespace util {
+
+/**
+ * Returns whether or not the passed value is has one of the reserved bits set
+ * to 1.
+ *
+ * TODO(steven): implement this.
+ */
+inline bool isValid(void * value) {
+  return true;
+}
+
+}  // namespace util
+
 // A macro to disallow the copy constructor and operator= functions.  This
 // should be used in the `private` declarations for a class. Use unless you have
 // a good reason for a class to be copy-able.

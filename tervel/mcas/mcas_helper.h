@@ -18,7 +18,7 @@ template<class T>
  * This class is the MCAS operation's helper. The Helper or MCH is used to 
  * replace the expected value of the specified address. 
  */
-class Helper : public tervil::Descriptor {
+class Helper : public util::Descriptor {
 typedef CasRow<T> t_CasRow;
 typedef Helper<T> t_Helper;
 typedef MCAS<T> t_MCAS;
@@ -80,10 +80,11 @@ typedef MCAS<T> t_MCAS;
  * @param  value the last known value of address
  * @return true if succesful acquiring the watch
  */
-bool Helper::on_watch(std::atomic<void *> *address, void * value) {
-  int hp_pos = thread::hp::HazardPointer::SlotID::SHORTUSE;
-  bool success = util::memory::::hp::HazardPointer::watch(
-          hp_pos, mcas_op_, address, value);
+template <class T>
+bool Helper<T>::on_watch(std::atomic<void *> *address, void * value) {
+  typedef util::memory::hp::HazardPointer::SlotID t_SlotID;
+  bool success = util::memory::hp::HazardPointer::watch(
+          t_SlotID::SHORTUSE, mcas_op_, address, value);
 
   if (success) {
     /* Success, means that the MCAS object referenced by this Helper can not
@@ -93,9 +94,9 @@ bool Helper::on_watch(std::atomic<void *> *address, void * value) {
     t_Helper *curr_mch = cas_row_->helper.load();
     if (curr_mch == nullptr) {
        if (cas_row_->helper.compare_exchange_strong(curr_mch, this)) {
-         curr_mch = this;  /* If this passed then curr_mch == nullptr, but we
-                            * need it to be == this
-                            */
+         /* If this passed then curr_mch == nullptr, so we set it to be == this
+          */
+          curr_mch = this;
        }
     }
     if (curr_mch != this) {
@@ -111,12 +112,12 @@ bool Helper::on_watch(std::atomic<void *> *address, void * value) {
    * Helper. If we don't it, the value at this address must have changed and 
    * we don't need it either way.
    */
-  util::memory::hp::HazardPointer::unwatch(hp_pos);
+  util::memory::hp::HazardPointer::unwatch(t_SlotID::SHORTUSE);
   return success;
 }
 
-
-void * Helper::complete(std::atomic<void *> *address, void * value) {
+template <class T>
+void * Helper<T>::complete(std::atomic<void *> *address, void * value) {
   t_Helper* temp_null = nullptr;
   this->cas_row_->helper.compare_exchange_strong(temp_null, this);
 

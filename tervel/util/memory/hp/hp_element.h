@@ -8,11 +8,9 @@
 #include <stdint.h>
 #include <stddef.h>
 
-#include "tervel/util/descriptor.h"
-#include "tervel/util/system.h"
-#include "tervel/util/util.h"
 #include "tervel/util/info.h"
-#include "tervel/util/memory/hp/hazard_pointer.h"
+#include "tervel/util/util.h"
+#include "tervel/util/memory/hp/hp_list.h"
 
 namespace tervel {
 namespace util {
@@ -38,15 +36,14 @@ class Element {
    * It also calls 'try_to_free_Elements' in an attempt to free previously
    * unfreeable objects.
    */
-  void safe_delete(bool no_check = false, HazardPointer *hazard_pointer =
-          tervel::tl_thread_info->get_hazard_pointer()) {
-    hazard_pointer->try_to_free_Elements();
-    if (!no_check || HazardPointer::is_watched(this)) {
-      hazard_pointer->add_to_unsafe(this);
-    } else {
+  void safe_delete(bool no_check = false, ElementList *element_list
+          = tervel::tl_thread_info->get_hp_element_list()) {
+    if (no_check) {
       delete this;
+    } else {
+      element_list->add_to_unsafe(this);
     }
-    hazard_pointer->try_clear_unsafe_pool();
+    element_list->try_to_free_Elements();
   }
 
   /**

@@ -2,7 +2,7 @@
 #define TERVEL_MCAS_MCAS_H_
 
 #include "tervel/mcas/mcas_helper.h"
-#include "tervel/mcas_casrow.h"
+#include "tervel/mcas/mcas_casrow.h"
 #include "tervel/util/info.h"
 #include "tervel/util/progress_assurance.h"
 #include "tervel/util/memory/rc/descriptor_util.h"
@@ -25,7 +25,6 @@ template<class T>
 class MCAS : public util::OpRecord {
   typedef CasRow<T> t_CasRow;
   typedef Helper<T> t_Helper;
-  typedef MCAS<T> t_MCAS;
 
  private:
   enum class MCAS_STATE : std::int8_t {IN_PROGRESS = 0, PASS = 0 , FAIL = 0};
@@ -36,18 +35,15 @@ class MCAS : public util::OpRecord {
 
   explicit MCAS<T>(int max_rows)
         : max_rows_ {max_rows}
-        , row_count_ {0}
-        , cas_rows_ {new t_CasRow[max_rows]}
-        , state_ {MCAS_STATE::IN_PROGRESS} {}
+        , cas_rows_(new t_CasRow[max_rows]) {}
 
   ~MCAS<T>() {
     for (int i = 0; i < row_count_; i++) {
-      t_Helper * mch = cas_rows_[i].helper.load();
+      t_Helper* helper = cas_rows_[i].helper.load();
       // The No check flag is true because each was check prior
       // to the call of this descructor.
       util::memory::rc::free_descriptor(helper, true);
     }
-    delete[] cas_rows_;
   }
 
   /**
@@ -110,42 +106,43 @@ class MCAS : public util::OpRecord {
    * @param value the value read at the position
    * @return the new current value
    **/
-  T mcas_remove(const int pos, T value)
+  T mcas_remove(const int pos, T value);
 
 
-  t_CasRow[] cas_rows_;
-  std::atomic<MCAS_STATE> state_;
-  int row_count_;
+  std::unique_ptr<t_CasRow[]> cas_rows_;
+  std::atomic<MCAS_STATE> state_ {MCAS_STATE::IN_PROGRESS};
+  int row_count_ {0};
   int max_rows_;
 };  // MCAS class
 
-bool t_MCAS::addCASTriple(std::atomic<T> *address, T expected_value,
+template<class T>
+bool MCAS<T>::addCASTriple(std::atomic<T> *address, T expected_value,
       T newValue_) {
-  if (util::isValid(ev) ||  util::isValid(nv)) {
+  if (util::isValid(expected_value) ||  util::isValid(new_value)) {
     return false;
-  } else if (row_count == max_rows_) {
+  } else if (row_count_ == max_rows_) {
     return false;
   } else {
-    cas_rows_[row_count].address_ = address;
-    cas_rows_[row_count].expected_value_ = expected_value;
-    cas_rows_[row_count].newValue_ = newValue;
-    cas_rows_[row_count++].helper.store(nullptr);
+    cas_rows_[row_count_].address_ = address;
+    cas_rows_[row_count_].expected_value_ = expected_value;
+    cas_rows_[row_count_].newValue_ = newValue;
+    cas_rows_[row_count_++].helper.store(nullptr);
 
-    for (int i = (row_count - 1); i > 0; i--) {
+    for (int i = (row_count_ - 1); i > 0; i--) {
       if (cas_rows_[i] > cas_rows_[i-1]) {
         swap(cas_rows_[i], cas_rows_[i-1]);
       } else if (cas_rows_[i] == cas_rows_[i-1]) {
-        for (; i < row_count-1; i++) {
+        for (; i < row_count_-1; i++) {
           swap(cas_rows_[i], cas_rows_[i+1]);
         }
-        row_count--;
+        row_count_--;
 
         /* We use reinterpret_cast in the event the specied data type is an
          * integer type.
          */
-        cas_rows_[row_count].address_ = nullptr;
-        cas_rows_[row_count].expected_value_ = reinterpret_cast<T>(nullptr);
-        cas_rows_[row_count].newValue_ = reinterpret_cast<T>(nullptr);
+        cas_rows_[row_count_].address_ = nullptr;
+        cas_rows_[row_count_].expected_value_ = reinterpret_cast<T>(nullptr);
+        cas_rows_[row_count_].newValue_ = reinterpret_cast<T>(nullptr);
         return false;
       }
     }
@@ -153,7 +150,8 @@ bool t_MCAS::addCASTriple(std::atomic<T> *address, T expected_value,
   }
 };
 
-bool t_MCAS::execute() {
+template<class T>
+bool MCAS<T>::execute() {
   util::ProgressAssurance::check_for_announcement();
   bool res = mcas_complete(0);
   cleanup(res);
@@ -168,7 +166,8 @@ bool t_MCAS::execute() {
 //   can't review the contents for correctness as-is.
 // RESPONSE(steven): I added comments, but I am unsure how to divide it into
 // sub functions.
-bool t_MCAS::mcas_complete(int start_pos, bool wfmode) {
+template<class T>
+bool MCAS<T>::mcas_complete(int start_pos, bool wfmode) {
   /**
    * Loop for each row in the op, if helping complete another thread's MCAS
    * Start at last known completed row.
@@ -293,7 +292,8 @@ bool t_MCAS::mcas_complete(int start_pos, bool wfmode) {
   return (temp_state == MCAS_STATE::PASS);
 }  // End Complete function.
 
-T t_MCAS::mcas_remove(const int pos, T value) {
+template<class T>
+T MCAS<T>::mcas_remove(const int pos, T value) {
   if (util::memory::rc::is_descriptor_first(value)) {
     // Checks if it is an rc_discriptor, could be another type (or bitmark)
     Descriptor *descr = util::memory::rc::unmark_first(value);
@@ -329,7 +329,8 @@ T t_MCAS::mcas_remove(const int pos, T value) {
         value));
 };
 
-void cleanup(bool success) {
+template<class T>
+void MCAS<T>::cleanup(bool success) {
   for (int pos = 0; pos < row_count_; pos++) {
     /* Loop for each row in the op*/
     t_CasRow * row = &cas_rows_[pos];
