@@ -18,7 +18,7 @@ namespace util {
 namespace memory {
 namespace rc {
 
-constexpr int DEBUG_EXPECTED_STAMP = 0xDEADBEEF;
+const int DEBUG_EXPECTED_STAMP = 0xDEADBEEF;
 /** 
  * This class is used to hold the memory management information (Header) and
  * a descriptor object. It is important to sepearte them to prevent the case

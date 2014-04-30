@@ -6,8 +6,7 @@ LIBS    = -ldl -lpthread -lboost_system -lboost_regex -lrt -I../# -lllalloc
 
 CPPFLAGS += $(INC)
 
-SOURCES=main.cc 
-#util/progress_assurance.cc util/hp/hazard_pointer.cc util/hp/hp_list.cc util/rc/descriptor_pool.cc util/rc/pool_manager.cc
+SOURCES=main.cc util/progress_assurance.cc util/memory/hp/hazard_pointer.cc util/memory/hp/hp_list.cc util/memory/rc/descriptor_pool.cc util/memory/rc/pool_manager.cc
 OBJECTS=$(SOURCES:.cc=.o)
 EXECUTABLE=main
 
@@ -20,7 +19,8 @@ $(EXECUTABLE): $(OBJECTS)
 .cc.o:
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $^ -o $@ $(LIBS)
 
+
 .PHONY: clean
 clean:
-	$(RM) mcas
+	$(RM) main
 	$(RM) *.o

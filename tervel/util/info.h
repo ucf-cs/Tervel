@@ -2,10 +2,8 @@
  * This file defines some lightweight structures for manipulating the shared and
  * thread-local information which threads should have access to when running.
  */
-
-
-#ifndef MEMORY_INFO_H_
-#define MEMORY_INFO_H_
+#ifndef TERVEL_UTIL_INFO_H_
+#define TERVEL_UTIL_INFO_H_
 
 #include <atomic>
 
@@ -23,6 +21,9 @@
 
 namespace tervel {
 
+namespace util {
+    class RecursiveAction;
+}
 /**
  * Contains shared information that should be accessible by all threads.
  */
@@ -174,7 +175,7 @@ class ThreadContext{
    * 2) Max Fail count has been reached and it needs to make an announcement
    * For its operation
    */
-  bool recursive_return_ {false}
+  bool recursive_return_ {false};
 
   /**
    * recursive_depth: used to track the number of times Descriptor::remove
@@ -190,7 +191,7 @@ class ThreadContext{
    * This is used exclusively by the annoucement table function tryHelpAnother*
    *    *(unless function has been renamed)
    */
-  uint64_t help_id_ {0}
+  uint64_t help_id_ {0};
 
   /** 
    * delay_count_ is a variable used to delay how often a thread checks for an
@@ -199,13 +200,13 @@ class ThreadContext{
    *  This is used exclusively by the annoucement table function tryHelpAnother*
    *    *(unless function has been renamed)
    */
-  uint64_t delay_count_ {0}
+  uint64_t delay_count_ {0};
 
   /**
    * Tervel provides a link to the shared Tervel object. This object contians
    * number of threads, hazard_pointer, and other shared structures.
    */
-  const Tervel *tervel_ {nullptr}
+  const Tervel *tervel_ {nullptr};
 
  public:
   /**
@@ -251,4 +252,4 @@ class RecursiveAction {
 }  // namespace util
 }  // namespace tervel
 
-#endif  //  MEMORY_INFO_H_
+#endif  //  TERVEL_UTIL_INFO_H_

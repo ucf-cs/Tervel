@@ -32,7 +32,7 @@ namespace hp {
 // elements in the optable. I moved it into the util name space, is that good?
 
 
-class OpRecord : public hp::Element {
+class OpRecord : public memory::hp::Element {
  public:
   virtual ~OpRecord() {}
 

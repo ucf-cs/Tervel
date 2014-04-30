@@ -68,7 +68,7 @@ class PoolManager {
   //  this could allow the system to try to keep the memory closer to the thread
   //  which needs it.
   //  I will add accessor methods later on. 
-  DescriptorPool * allocate_pool(int pos = tervel::tl_thread_info->thread_id);
+  DescriptorPool * allocate_pool(int pos = tervel::tl_thread_info->get_thread_id());
 
 
   const int number_pools_;
