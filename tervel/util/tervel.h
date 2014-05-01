@@ -30,22 +30,22 @@ class Tervel {
   }
 
   // The total number of expected threads in the system.
-  const uint64_t num_threads_;
+  uint64_t num_threads_;
 
   // The number of threads which have been assigned an thread_id
   std::atomic<uint64_t> active_threads_ {0};
 
   // The shared hazard_pointer object
-  const util::memory::hp::HazardPointer hazard_pointer_;
+  util::memory::hp::HazardPointer hazard_pointer_;
 
   // Shared HP Element list manager
-  const util::memory::hp::ListManager hp_list_manager_;
+  util::memory::hp::ListManager hp_list_manager_;
 
   // Shared RC Descriptor Pool Manager
-  const util::memory::rc::PoolManager rc_pool_manager_;
+  util::memory::rc::PoolManager rc_pool_manager_;
 
   // Shared Progress Assurance Object
-  const util::ProgressAssurance progress_assurance_;
+  util::ProgressAssurance progress_assurance_;
 
   DISALLOW_COPY_AND_ASSIGN(Tervel);
 };

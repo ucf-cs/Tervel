@@ -6,7 +6,7 @@ namespace util {
 namespace memory {
 namespace hp {
 
-inline bool HazardPointer::watch(SlotID slot, Element *descr,
+bool HazardPointer::watch(SlotID slot, Element *descr,
       std::atomic<void *> *address, void *expected,
       HazardPointer *hazard_pointer) {
   hazard_pointer->watch(slot, descr);

@@ -10,7 +10,7 @@ LIB = -ldl -lgflags -lpthread -lboost_system -lboost_regex -lrt# -lllalloc
 SOURCES = main.cc \
   util/progress_assurance.cc util/memory/hp/hazard_pointer.cc \
   util/memory/hp/hp_list.cc util/memory/rc/descriptor_pool.cc \
-  util/memory/rc/pool_manager.cc util/info.cc
+  util/memory/rc/pool_manager.cc util/info.cc util/thread_context.cc
 
 EXECUTABLE =main
 

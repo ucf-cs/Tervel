@@ -54,9 +54,10 @@ class DescriptorPool {
   static constexpr bool NO_REUSE_MEM {false};
 
  public:
-  DescriptorPool(int pool_id, PoolManager *manager, int prefill = 4)
-      : pool_id_(pool_id)
-      , manager_(manager) {
+  DescriptorPool(PoolManager *manager, int prefill = 4,
+          uint64_t pool_id = tl_thread_info->get_thread_id())
+      : manager_(manager)
+      , pool_id_(pool_id) {
     this->reserve(prefill);
   }
   ~DescriptorPool() { this->send_to_manager(); }
@@ -84,7 +85,7 @@ class DescriptorPool {
    *   to this descriptor.
    * @param pool the pool to use when freeing the descriptor.
    */
-  void free_descriptor(tervel::util::Descriptor *descr, bool dont_check = false);
+  void free_descriptor(tervel::util::Descriptor *descr, bool dont_check=false);
 
 
  private:
@@ -176,14 +177,14 @@ class DescriptorPool {
   // -------
 
   /**
-   * Index into this pool's manager's pool array corresponding to this pool.
-   */
-  int pool_id_;
-
-  /**
    * This pool's manager.
    */
   PoolManager *manager_;
+
+  /**
+   * The pool where excess elements are placed
+   */
+  uint64_t pool_id_;
 
   /**
    * A linked list of pool elements.  One can be assured that no thread will try

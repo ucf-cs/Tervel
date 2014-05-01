@@ -35,6 +35,9 @@ class ListManager {
     // TODO(steven): destroy pool by freeing each Element
   }
 
+  ElementList * allocate_list() {
+    return new ElementList(this);
+  }
 
  private:
   struct ManagedPool {
