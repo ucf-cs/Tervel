@@ -65,8 +65,12 @@ class Element {
   /**
    * This function is used to check a strong watch on an Element.
    * Classes wishing to express this should override this function.
+   *
+   * @return whether or not the element is watched.
    */
-  virtual bool on_is_watch() {}
+  virtual bool on_is_watch() {
+    return false;
+  }
 
   /**
    * This function is used to remove a strong watch on an Element.
