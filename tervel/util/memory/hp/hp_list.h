@@ -10,8 +10,6 @@
 #include "tervel/util/info.h"
 #include "tervel/util/system.h"
 #include "tervel/util/descriptor.h"
-#include "tervel/util/memory/hp/hp_element.h"
-#include "tervel/util/memory/hp/list_manager.h"
 
 
 namespace tervel {
