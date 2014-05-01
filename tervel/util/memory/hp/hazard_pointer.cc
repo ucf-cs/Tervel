@@ -45,7 +45,7 @@ void HazardPointer::unwatch(SlotID slot, Element *descr
   descr->on_unwatch();
 }
 
-void HazardPointer::unwatch(SlotID slot) {
+void HazardPointer::unwatch(SlotID slot, HazardPointer *hazard_pointer) {
   hazard_pointer->clear_watch(slot);
 }
 
@@ -53,9 +53,8 @@ void HazardPointer::unwatch(SlotID slot) {
 bool HazardPointer::is_watched(Element *descr, HazardPointer *hazard_pointer) {
   if (hazard_pointer->contains(descr)) {
     return descr->on_is_watched();
-  } else {
-    return true;
   }
+  return true;
 }
 
 bool HazardPointer::is_watched(void *value, HazardPointer *hazard_pointer) {

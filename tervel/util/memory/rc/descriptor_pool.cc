@@ -1,4 +1,5 @@
 #include "tervel/util/memory/rc/descriptor_pool.h"
+#include "tervel/util/memory/rc/descriptor_util.h"
 
 namespace tervel {
 namespace util {
@@ -7,7 +8,7 @@ namespace rc {
 
 void DescriptorPool::free_descriptor(tervel::util::Descriptor *descr,
       bool dont_check) {
-  if (!dont_check && is_watched(descr)) {
+  if (!dont_check && util::memory::rc::is_watched(descr)) {
     this->add_to_unsafe(descr);
   } else {
     this->add_to_safe(descr);
@@ -107,7 +108,6 @@ void DescriptorPool::add_to_safe(tervel::util::Descriptor *descr) {
   p->next(safe_pool_);
   safe_pool_ = p;
 
-  p->descriptor()->on_return_to_pool(this);
   p->cleanup_descriptor();
 
 #ifdef DEBUG_POOL
@@ -132,9 +132,10 @@ void DescriptorPool::try_clear_unsafe_pool(bool dont_check) {
     PoolElement *prev = unsafe_pool_;
     PoolElement *temp = unsafe_pool_->next();
 
+    tervel::util::Descriptor *temp_descr;
     while (temp) {
-      tervel::util::Descriptor *temp_descr = temp->descriptor();
-      tervel::util::PoolElement *temp_next = temp->next();
+      temp_descr = temp->descriptor();
+      tervel::util::memory::rc::PoolElement *temp_next = temp->next();
 
       bool watched = is_watched(temp_descr);
       if (!dont_check && watched) {
@@ -154,7 +155,7 @@ void DescriptorPool::try_clear_unsafe_pool(bool dont_check) {
     temp = unsafe_pool_->next();
     temp_descr = unsafe_pool_->descriptor();
 
-    watched = is_watched(temp_descr);
+    bool watched = util::memory::rc::is_watched(temp_descr);
     if (dont_check || !watched) {
       unsafe_pool_count_--;
       this->free_descriptor(temp_descr, true);

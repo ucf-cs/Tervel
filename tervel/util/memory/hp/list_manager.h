@@ -27,8 +27,6 @@ class Element;
  */
 class ListManager {
  public:
-  friend class ElementList;
-
   explicit ListManager(size_t number_pools)
       : free_lists_(new ManagedPool[number_pools])
       , number_pools_(number_pools) {}
@@ -42,12 +40,17 @@ class ListManager {
   struct ManagedPool {
     // std::unique_ptr<ElementList> pool {nullptr};
     Element * element_list_ {nullptr};
-    char padding[CACHE_LINE_SIZE - sizeof(element_list_)];
+    // char padding[CACHE_LINE_SIZE - sizeof(element_list_)];
+  };
+
+  void recieve_element_list(uint64_t tid, Element * element_list) {
+    free_lists_[tid].element_list_ = element_list;
   };
 
   std::unique_ptr<ManagedPool[]> free_lists_;
   size_t number_pools_;
 
+  friend class ElementList;
   DISALLOW_COPY_AND_ASSIGN(ListManager);
 };
 

@@ -108,7 +108,7 @@ int main(int argc, char** argv) {
       t.join();
   });
 
-  printf("Completed[Passed: %llu, Failed: %llu]\n",
+  printf("Completed[Passed: %lu, Failed: %lu]\n",
     test_data.passed_count_.load(), test_data.failed_count_.load());
 
   for (int i = 1; i < test_data.array_length_; i++) {
@@ -174,7 +174,7 @@ void run_update_object(int thread_id, int start_pos, TestObject * test_data) {
       int var = start_pos + i;
 
       std::atomic<void *> *address = (&(test_data->shared_memory_)[var]);
-      void * expected_value = tervel::util::Descriptor::read(address);
+      void * expected_value = tervel::mcas::read<void *>(address);
       void * new_value = calc_next_value(expected_value);
 
       bool success = mcas->add_cas_triple(address, expected_value, new_value);
@@ -215,7 +215,7 @@ void run_update_multible_objects(int thread_id, TestObject * test_data) {
       int var = start_pos + i;
 
       std::atomic<void *> *address = (&(test_data->shared_memory_)[var]);
-      void * expected_value = tervel::util::Descriptor::read(address);
+      void * expected_value = tervel::mcas::read<void *>(address);
       void * new_value = calc_next_value(expected_value);
 
       bool success = mcas->add_cas_triple(address, expected_value, new_value);
@@ -254,7 +254,7 @@ void run_RandomOverlaps(int thread_id, TestObject * test_data) {
       do {
         int var = memory_pos_rand(rng);
         std::atomic<void *> *address = (&(test_data->shared_memory_)[var]);
-        void * expected_value = tervel::util::Descriptor::read(address);
+        void * expected_value = tervel::mcas::read<void *>(address);
         void * new_value = calc_next_value(expected_value);
 
         success = mcas->add_cas_triple(address, expected_value, new_value);

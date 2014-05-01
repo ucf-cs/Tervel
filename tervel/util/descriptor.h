@@ -93,18 +93,6 @@ class Descriptor {
    */
   virtual bool on_is_watched() { return false; }
 
-  /**
-   * This method is used to get the value stored at an address that may have a
-   * descriptor object their.  It handles memory protection of the objects.  It
-   * also performs the read in a wait-free manner using the progress assurance
-   * scheme.
-   *
-   * @param address the address to read
-   * @return the logical value of the address
-   */
-  template<class T>
-  static T read(std::atomic<T> *address);
-
  private:
   DISALLOW_COPY_AND_ASSIGN(Descriptor);
 };

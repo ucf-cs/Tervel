@@ -68,7 +68,7 @@ class Element {
    *
    * @return whether or not the element is watched.
    */
-  virtual bool on_is_watch() {
+  virtual bool on_is_watched() {
     return false;
   }
 
@@ -100,7 +100,9 @@ class Element {
   void next(Element *next) { next_ = next; }
 
   Element *next_ {nullptr};
-  //void operator delete( void * ) {}
+  // void operator delete( void * ) {}
+  friend ListManager;
+  friend ElementList;
   DISALLOW_COPY_AND_ASSIGN(Element);
 };
 
