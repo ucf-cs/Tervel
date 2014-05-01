@@ -208,8 +208,6 @@ class DescriptorPool {
   uint64_t safe_pool_count_ {0};
   uint64_t unsafe_pool_count_ {0};
 
-  
-
   DISALLOW_COPY_AND_ASSIGN(DescriptorPool);
 };
 

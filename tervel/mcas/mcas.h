@@ -319,10 +319,9 @@ T MCAS<T>::mcas_remove(const int pos, T value) {
     if (this->cas_rows_[pos].helper_.load() != nullptr) {
       return reinterpret_cast<T>(nullptr);  // Does not matter, it wont be used.
     }
-  } else {
-    // watch failed do to the value at the address changing, return new value
-    return reinterpret_cast<T>(address->load());
   }
+  // watch failed do to the value at the address changing, return new value
+  return reinterpret_cast<T>(address->load());
 }
 
 template<class T>

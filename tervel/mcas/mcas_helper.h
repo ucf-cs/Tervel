@@ -123,8 +123,8 @@ typedef MCAS<T> t_MCAS;
          So call the complete function of the MCAS operation */
       success = t_MCAS::mcas_complete(this->mcas_op_, this->cas_row_);
       if (tervel::tl_thread_info->recursive_return()) {
-        /* If the thread is performing a recursive return back to its own operation
-           Then just return null, it will be ignored. */
+        /* If the thread is performing a recursive return back to its own 
+           operation, then just return null, it will be ignored. */
         return nullptr;
       }
       assert(this->last_row->helper.load() !=  nullptr);
@@ -143,6 +143,21 @@ typedef MCAS<T> t_MCAS;
     }
     // Return the new current value of the position
     return address->load();
+  }
+
+  /**
+   * This function is only called on helpers which are associated with its
+   * mcas operation, if it is not, then the call to on_watch would have failed
+   * and this would not have been called.
+   * 
+   * @return the logicial value of this descriptor object.
+   */
+  void * get_logical_value() {
+    if (this->mcas_op_->state_ ==  MCAS::MCAS_STATE::PASS) {
+      return this->cas_row_->new_value_;
+    }
+
+    return this->cas_row_->expected_value_;
   }
 
  private:
