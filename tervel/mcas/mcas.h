@@ -23,10 +23,6 @@ template<class T>
  * This function is wait-free.
  */
 class MCAS : public util::OpRecord {
-
- private:
-  enum class MCAS_STATE : std::int8_t {IN_PROGRESS = 0, PASS = 0 , FAIL = 0};
-
  public:
   static constexpr uintptr_t MCAS_FAIL_CONST = static_cast<uintptr_t>(0x1);
 
@@ -69,6 +65,7 @@ class MCAS : public util::OpRecord {
   bool execute();
 
  private:
+  enum class MCAS_STATE : std::int8_t {IN_PROGRESS = 0, PASS = 0 , FAIL = 0};
   /** 
    * This function is used to complete a currently executing MCAS operation
    * It is most likely that this operation is in conflict with some other
@@ -335,7 +332,8 @@ void MCAS<T>::cleanup(bool success) {
 
     assert(row->helper_.load() != nullptr);
 
-    void * marked_helper = util::memory::rc::mark_first(row->helper_.load());
+    Helper<T> * temp_helper = row->helper_.load();
+    void * marked_helper = util::memory::rc::mark_first(temp_helper);
     if (marked_helper == reinterpret_cast<void *>(MCAS_FAIL_CONST)) {
       // There can not be any any associated rows beyond this position.
       return;
