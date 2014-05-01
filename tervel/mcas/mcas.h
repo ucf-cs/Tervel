@@ -247,8 +247,8 @@ bool MCAS<T>::mcas_complete(int start_pos, bool wfmode) {
         }
       }  else {
         /* Else the current_value matches the expected_value_ */
-        Helper<T> *helper = util::memory::rc::get_descriptor<Helper<T>>(
-              row, this);
+        Helper<T>* helper = tervel::util::memory::rc::get_descriptor<
+            Helper<T>>(row, this);
         if (row->address_->compare_exchange_strong(current_value,
                 util::memory::rc::mark_first(helper))) {
           /* helper was successfully placed at the address */
@@ -333,8 +333,9 @@ void MCAS<T>::cleanup(bool success) {
     assert(row->helper_.load() != nullptr);
 
     Helper<T> * temp_helper = row->helper_.load();
-    void * marked_helper = util::memory::rc::mark_first(temp_helper);
-    if (marked_helper == reinterpret_cast<void *>(MCAS_FAIL_CONST)) {
+    T marked_helper = reinterpret_cast<T>(
+          util::memory::rc::mark_first(temp_helper));
+    if (marked_helper == static_cast<T>(MCAS_FAIL_CONST)) {
       // There can not be any any associated rows beyond this position.
       return;
     } else {

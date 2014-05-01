@@ -11,7 +11,8 @@
 #include "tervel/util/thread_context.h"
 namespace tervel {
 class ThreadContext;
-thread_local ThreadContext * tl_thread_info;
+
+extern thread_local ThreadContext * tl_thread_info;
 }  // namespace tervel
 
 

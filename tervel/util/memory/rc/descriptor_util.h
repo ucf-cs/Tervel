@@ -22,8 +22,8 @@ namespace rc {
  */
 template<typename DescrType, typename... Args>
 inline tervel::util::Descriptor * get_descriptor(Args&&... args) {
-  return tervel::tl_thread_info->get_rc_descriptor_pool()->get_descriptor(
-        std::forward<Args>(args));
+  auto rc_descr_pool = tervel::tl_thread_info->get_rc_descriptor_pool();
+  return rc_descr_pool->get_descriptor<DescrType>(std::forward<Args>(args));
 }
 
 /**
@@ -111,7 +111,7 @@ inline bool is_watched(tervel::util::Descriptor *descr) {
  * @param descr the reference to bitmark
  * @return the bitmarked reference
  */
-inline void * mark_first(Descriptor *descr) {
+inline void * mark_first(tervel::util::Descriptor *descr) {
   return reinterpret_cast<void *>(reinterpret_cast<uintptr_t>(descr) | 0x1L);
 }
 

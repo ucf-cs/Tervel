@@ -37,7 +37,7 @@ class Descriptor;
 class Descriptor {
  public:
   Descriptor() {}
-  ~Descriptor() {}
+  virtual ~Descriptor() {}
   /**
   * This method is implmented by each sub class and must gurantee that upon
   * return that the descriptor no longer exists at the address it was placed
