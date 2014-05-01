@@ -56,7 +56,6 @@ class ThreadContext {
    * @returns a reference to the hp_element_list_
    */
   util::memory::hp::ElementList* get_hp_element_list();
-
   /**
    * @returns a reference to the rc_descriptor_pool
    */
@@ -188,7 +187,7 @@ class ThreadContext {
    * Tervel provides a link to the shared Tervel object. This object contians
    * number of threads, hazard_pointer, and other shared structures.
    */
-  const Tervel *tervel_ {nullptr};
+  const Tervel *tervel_;
 
  public:
   /**
