@@ -69,7 +69,7 @@ class ThreadContext {
    * @param  max_delay
    * @return current delay count
    */
-  int help_id(int num_threads) {
+  int help_id(uint64_t num_threads) {
     if (help_id_ == num_threads) {
       help_id_ = 0;
     }
@@ -83,7 +83,7 @@ class ThreadContext {
    * @param  max_delay
    * @return current delay count
    */
-  int delay_count(int max_delay) {
+  int delay_count(uint64_t max_delay) {
     if (delay_count_ == max_delay) {
       delay_count_ = 0;
     }
