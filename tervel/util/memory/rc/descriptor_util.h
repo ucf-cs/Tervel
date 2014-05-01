@@ -168,6 +168,30 @@ inline void * remove_descriptor(void *expected, std::atomic<void *> *address) {
   return newValue;
 }
 
+/**
+ * This function determines the logical value of an address which may have
+ * either a RC descriptor or a normal value.
+ *
+ * TODO(steven): implement a progress assurance on this to achieve wait-freedom
+ * 
+ * @param address to read
+ * @return the current logical value
+ */
+inline void * descriptor_read_first(std::atomic<void *> *address) {
+  void *current_value = address->load();
+
+  while (is_descriptor_first(current_value)) {
+    tervel::util::Descriptor *descr = unmark_first(current_value);
+    if (watch(descr, address, current_value)) {
+      current_value = descr->get_logical_value();
+      unwatch(descr);
+    } else {
+      current_value = address->load();
+    }
+  }
+
+  return current_value;
+}
 
 }  // namespace rc
 }  // namespace memory

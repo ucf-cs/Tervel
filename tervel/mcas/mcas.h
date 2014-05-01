@@ -12,6 +12,18 @@
 
 namespace tervel {
 namespace mcas {
+/**
+ * This function determines the logical value of the address.
+ * 
+ * @param address the location to determine the value
+ * @return the logical value
+ */
+template<class T>
+inline T read(std::atomic<T> *address) {
+  void *value = util::memory::rc::descriptor_read_first(address);
+  return reinterpret_cast<T>(value);
+}
+
 
 // REVIEW(carlos): class does not follow class naming conventions
 // RESPONSE(steven): Should it be MultiWordCompareAndSwap instead?
@@ -114,7 +126,6 @@ class MCAS : public util::OpRecord {
   void help_complete() {
     mcas_complete(0);
   }
-
 
   std::unique_ptr<CasRow<T>[]> cas_rows_;
   std::atomic<MCAS_STATE> state_ {MCAS_STATE::IN_PROGRESS};
@@ -337,6 +348,9 @@ T MCAS<T>::mcas_remove(const int pos, T value) {
      */
     if (this->cas_rows_[pos].helper_.load() != nullptr) {
       return static_cast<T>(nullptr);  // Does not matter, it wont be used.
+    } else {
+      /* It is some other threads operation, so lets complete it.*/
+      util::memory::rc::remove_descriptor(value, address);
     }
   }
   // watch failed do to the value at the address changing, return new value
