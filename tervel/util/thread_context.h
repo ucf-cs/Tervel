@@ -1,6 +1,8 @@
 #ifndef TERVEL_UTIL_THREAD_CONTEXT_H
 #define TERVEL_UTIL_THREAD_CONTEXT_H
 
+#include <stddef.h>
+
 #include "tervel/util/util.h"
 
 
