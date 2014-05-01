@@ -1,6 +1,8 @@
 #ifndef TERVEL_UTIL_THREAD_CONTEXT_H
 #define TERVEL_UTIL_THREAD_CONTEXT_H
 
+#include <stddef.h>
+
 #include "tervel/util/util.h"
 
 
@@ -81,7 +83,11 @@ class ThreadContext {
    * @param  max_delay
    * @return current delay count
    */
+<<<<<<< HEAD
   size_t delay_count(size_t max_delay) {
+=======
+  int delay_count(uint64_t max_delay) {
+>>>>>>> de68997ff1ddcd116a19ced2145b8b45e3716255
     if (delay_count_ == max_delay) {
       delay_count_ = 0;
     }
