@@ -9,7 +9,6 @@
 #include <memory>
 #include <cstdint>
 
-
 #include "tervel/util/info.h"
 #include "tervel/util/util.h"
 
