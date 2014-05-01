@@ -250,7 +250,7 @@ bool MCAS<T>::mcas_complete(int start_pos, bool wfmode) {
         Helper<T>* helper = tervel::util::memory::rc::get_descriptor<
             Helper<T> >(row, this);
         if (row->address_->compare_exchange_strong(current_value,
-                util::memory::rc::mark_first(helper))) {
+                reinterpret_cast<T>(util::memory::rc::mark_first(helper)))) {
           /* helper was successfully placed at the address */
           Helper<T> * temp_null = nullptr;
           if (row->helper_.compare_exchange_strong(temp_null, helper)
@@ -261,7 +261,8 @@ bool MCAS<T>::mcas_complete(int start_pos, bool wfmode) {
             /* We failed to associate the helper, remove it, this implies that
              * the operation is over
              */
-            T temp_helper = util::memory::rc::mark_first(helper);
+            T temp_helper = reinterpret_cast<T>(
+                  util::memory::rc::mark_first(helper));
             row->address_->compare_exchange_strong(temp_helper,
                   row->expected_value_);
             util::memory::rc::free_descriptor(helper);
