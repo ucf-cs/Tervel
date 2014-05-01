@@ -19,16 +19,12 @@ template<class T>
  * replace the expected value of the specified address. 
  */
 class Helper : public util::Descriptor {
-typedef CasRow<T> t_CasRow;
-typedef Helper<T> t_Helper;
-typedef MCAS<T> t_MCAS;
-
  public:
   /**
-   * @param mcas_op the t_MCAS which contains the referenced cas_row
-   * @param cas_row the referenced row in the t_MCAS.
+   * @param mcas_op the MCAS<T> which contains the referenced cas_row
+   * @param cas_row the referenced row in the MCAS<T>.
    */
-  Helper<T>(t_MCAS *mcas_op, t_CasRow *cas_row)
+  Helper<T>(MCAS<T> *mcas_op, CasRow<T> *cas_row)
     : cas_row_(cas_row), mcas_op_(mcas_op) {}
 
   /**
@@ -68,7 +64,7 @@ typedef MCAS<T> t_MCAS;
    * @params last_row an identifier of the current MCAS operation 
    * @return the current value of the address
    */
-  static T mcas_remove(std::atomic<T> *address, T value, t_CasRow *last_row);
+  static T mcas_remove(std::atomic<T> *address, T value, CasRow<T> *last_row);
 
   /**
    * Attempts to complete acquiring a memory watch on a Helper object
@@ -88,7 +84,7 @@ typedef MCAS<T> t_MCAS;
        * be freed while we check to make sure this Helper is assocaited with
        * it.
        */
-      t_Helper *curr_mch = cas_row_->helper.load();
+      Helper<T> *curr_mch = cas_row_->helper.load();
       if (curr_mch == nullptr) {
          if (cas_row_->helper.compare_exchange_strong(curr_mch, this)) {
            /* If this passed then curr_mch == nullptr, so we set it to be == this
@@ -114,14 +110,14 @@ typedef MCAS<T> t_MCAS;
   }
 
   void * complete(void *value, std::atomic<void *> *address) {
-    t_Helper* temp_null = nullptr;
+    Helper<T>* temp_null = nullptr;
     this->cas_row_->helper.compare_exchange_strong(temp_null, this);
 
     bool success = false;
     if (temp_null == nullptr || temp_null == this) {
       /* This implies it was successfully associated
          So call the complete function of the MCAS operation */
-      success = t_MCAS::mcas_complete(this->mcas_op_, this->cas_row_);
+      success = MCAS<T>::mcas_complete(this->mcas_op_, this->cas_row_);
       if (tervel::tl_thread_info->recursive_return()) {
         /* If the thread is performing a recursive return back to its own 
            operation, then just return null, it will be ignored. */
@@ -133,7 +129,7 @@ typedef MCAS<T> t_MCAS;
     if (success) {
     /* If the MCAS op was successfull then remove the Helper by replacing 
         it with the new_value */
-      assert(this->last_row->helper.load() != t_MCAS::MCAS_FAIL_CONST);
+      assert(this->last_row->helper.load() != MCAS<T>::MCAS_FAIL_CONST);
       address->compare_exchange_strong(value,
           reinterpret_cast<void *>(this->cas_row_->new_value_));
     } else {
@@ -162,9 +158,9 @@ typedef MCAS<T> t_MCAS;
 
  private:
   // The Row in the MCAS operation this MCH was placed for
-  t_CasRow *cas_row_;
+  CasRow<T> *cas_row_;
   // The MCAS which contains the cas_row_
-  t_MCAS *mcas_op_;
+  MCAS<T> *mcas_op_;
 };  // Helper
 
 }  // namespace mcas
