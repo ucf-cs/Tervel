@@ -87,10 +87,12 @@ int main(int argc, char** argv) {
         static_cast<TestType>(FLAGS_operation_type) );
 
   tervel::Tervel tervel_obj(test_data.num_threads_);
-  std::thread* thread_list = new std::thread[test_data.num_threads_];
+
+  std::thread** thread_list;
+  thread_list = new std::thread *[test_data.num_threads_];
 
   for (int i = 0; i < test_data.num_threads_; i++) {
-    thread_list[i] = std::thread(run, i, &tervel_obj, &test_data);
+    thread_list[i] = new std::thread(run, i, &tervel_obj, &test_data);
   }
 
   while (test_data.ready_count_.load() < test_data.num_threads_) {}
@@ -101,11 +103,12 @@ int main(int argc, char** argv) {
   std::this_thread::sleep_for(std::chrono::seconds(1));
 
   for (int i = 0; i < test_data.num_threads_; i++) {
-    thread_list[i].join();
+    thread_list[i]->join();
   }
 
   printf("Completed[Passed: %llu, Failed: %llu]\n",
     test_data.passed_count_.load(), test_data.failed_count_.load());
+
   for (int i = 1; i < test_data.array_length_; i++) {
     if (test_data.shared_memory_[i].load() !=
             test_data.shared_memory_[0].load()) {

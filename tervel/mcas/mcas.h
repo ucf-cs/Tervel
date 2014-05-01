@@ -30,7 +30,7 @@ class MCAS : public util::OpRecord {
   enum class MCAS_STATE : std::int8_t {IN_PROGRESS = 0, PASS = 0 , FAIL = 0};
 
  public:
-  static constexpr t_Helper * MCAS_FAIL_CONST = static_cast<t_Helper *>(0x1L);
+  static constexpr uintptr_t MCAS_FAIL_CONST = static_cast<uintptr_t>(0x1);
 
   explicit MCAS<T>(int max_rows)
         : cas_rows_(new t_CasRow[max_rows])
@@ -236,8 +236,9 @@ bool MCAS<T>::mcas_complete(int start_pos, bool wfmode) {
          */
         t_Helper* temp_null = nullptr;
         /* First try to disable row by assigning a failed constant */
-        if (row->helper_.compare_exchange_strong(temp_null, MCAS_FAIL_CONST)
-                                            || temp_null == MCAS_FAIL_CONST) {
+        if (row->helper_.compare_exchange_strong(temp_null,
+              reinterpret_cast<t_Helper *>(MCAS_FAIL_CONST))
+              || temp_null == reinterpret_cast<t_Helper *>(MCAS_FAIL_CONST)) {
           /* if row was disabled then set the state to FAILED */
           MCAS_STATE temp_state = MCAS_STATE::IN_PROGRESS;
           this->state_.compare_exchange_strong(temp_state, MCAS_STATE::FAIL);
@@ -283,7 +284,7 @@ bool MCAS<T>::mcas_complete(int start_pos, bool wfmode) {
       }  // End Else Try to replace
     }  // End While Current helper is null
 
-    if (row->helper_.load() == MCAS_FAIL_CONST) {
+    if (row->helper_.load() == reinterpret_cast<t_Helper *>(MCAS_FAIL_CONST)) {
       MCAS_STATE temp_state = MCAS_STATE::IN_PROGRESS;
       this->state_.compare_exchange_strong(temp_state, MCAS_STATE::FAIL);
       assert(this->state_.load() == MCAS_STATE::FAIL);
