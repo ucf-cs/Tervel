@@ -218,7 +218,9 @@ template<typename DescrType, typename... Args>
 DescrType * DescriptorPool::get_descriptor(Args&&... args) {
   PoolElement *elem = this->get_from_pool();
   elem->init_descriptor<DescrType>(std::forward<Args>(args)...);
-  return reinterpret_cast<DescrType>(elem->descriptor());
+  DescrType * descr = reinterpret_cast<DescrType>(elem->descriptor());
+
+  return descr;
 }
 
 }  // namespace rc

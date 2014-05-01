@@ -24,7 +24,7 @@ namespace mcas {
 template<class T>
 class MCAS : public util::OpRecord {
  public:
-  static constexpr T MCAS_FAIL_CONST = reinterpret_cast<T>(1);
+  static constexpr T MCAS_FAIL_CONST = reinterpret_cast<T>(0x1L);
 
   explicit MCAS<T>(int max_rows)
       : cas_rows_(new CasRow<T>[max_rows])
