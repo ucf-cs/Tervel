@@ -23,7 +23,7 @@ namespace rc {
 template<typename DescrType, typename... Args>
 inline DescrType * get_descriptor(Args&&... args) {
   auto rc_descr_pool = tervel::tl_thread_info->get_rc_descriptor_pool();
-  return rc_descr_pool->get_descriptor<DescrType>(std::forward<Args>(args));
+  return rc_descr_pool->get_descriptor<DescrType>(std::forward<Args>(args)...);
 }
 
 /**
