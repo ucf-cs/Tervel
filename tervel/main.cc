@@ -90,6 +90,7 @@ int main(int argc, char** argv) {
         static_cast<TestType>(FLAGS_operation_type) );
 
   tervel::Tervel tervel_obj(test_data.num_threads_);
+  tervel::ThreadContext tervel_thread(&tervel_obj);
 
   std::vector<std::thread> thread_list;
   for (int i = 0; i < test_data.num_threads_; i++) {
