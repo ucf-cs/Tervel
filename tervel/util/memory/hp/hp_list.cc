@@ -17,7 +17,7 @@ void ElementList::free_descriptor(Element *descr, bool dont_check) {
 
 
 void ElementList::send_to_manager() {
-  this->try_to_free_Elements(false);
+  this->try_to_free_elements(false);
   this->manager.free_lists_[tervel::tl_thread_info->get_thread_id()]
           .element_list_ = element_list_;
   element_list_ = nullptr;
@@ -26,12 +26,13 @@ void ElementList::send_to_manager() {
 
 
 void ElementList::add_to_unsafe(Element* elem) {
+  this->try_to_free_elements(false);
   elem->next(element_list_);
   element_list_ = elem;
 }
 
 
-void ElementList::try_to_free_Elements(bool dont_check) {
+void ElementList::try_to_free_elements(bool dont_check) {
   /**
    * Loop until no more elements can be freed from the element_list_ linked list
    * OR the first element is not safe to be freed

@@ -36,6 +36,9 @@ class Element {
    * safe to do so OR add it to a list to be freed later.
    * It also calls 'try_to_free_Elements' in an attempt to free previously
    * unfreeable objects.
+   *
+   * @param no_check if true then the object is imeditly deleted
+   * @param element_list the list to append the object to until it is safe
    */
   void safe_delete(bool no_check = false, ElementList *element_list
           = tervel::tl_thread_info->get_hp_element_list()) {
@@ -50,6 +53,10 @@ class Element {
   /**
    * This function is used to achieve a strong watch on an Element.
    * Classes wishing to express this should override this function.
+   *
+   * @param address the expected was load from
+   * @param expected the last known value of address
+   * @return whether or not the element was succefully watched.
    */
   virtual bool on_watch(std::atomic<void *> *address, void *expected) {
     return true;
