@@ -50,6 +50,9 @@ class Element {
   /**
    * This function is used to achieve a strong watch on an Element.
    * Classes wishing to express this should override this function.
+   *
+   * TODO(carlos): @return clause. Don't know what a true/false return means
+   *   here. Ask steven
    */
   virtual bool on_watch(std::atomic<void *> *address, void *expected) {
     return true;
@@ -58,8 +61,11 @@ class Element {
   /**
    * This function is used to check a strong watch on an Element.
    * Classes wishing to express this should override this function.
+   *
+   * TODO(carlos): @return clause. Don't know what a true/false return means
+   *   here. Ask steven
    */
-  virtual bool on_is_watch() {}
+  virtual bool on_is_watch() { return true; }
 
   /**
    * This function is used to remove a strong watch on an Element.
