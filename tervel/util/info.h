@@ -12,7 +12,7 @@
 namespace tervel {
 class ThreadContext;
 
-extern thread_local ThreadContext * tl_thread_info {nullptr};
+thread_local ThreadContext * tl_thread_info {nullptr};
 }  // namespace tervel
 
 
