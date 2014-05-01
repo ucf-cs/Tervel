@@ -132,7 +132,7 @@ template<typename DescrType, typename... Args>
 void PoolElement::init_descriptor(Args&&... args) {
   static_assert(sizeof(DescrType) <= sizeof(padding_),
       "Descriptor is too large to use in a pool element");
-  // TODO(Steven) Carlos make sure the 4byte alligment is factored in to the above
+// TODO(Steven) Carlos make sure the 4byte alligment is factored in to the above
 #ifdef DEBUG_POOL
   assert(!this->header().descriptor_in_use_.load());
   this->header().descriptor_in_use_.store(true);

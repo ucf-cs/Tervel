@@ -24,7 +24,9 @@ template<class T>
  */
 class MCAS : public util::OpRecord {
  public:
-  static constexpr uintptr_t MCAS_FAIL_CONST = static_cast<uintptr_t>(0x1);
+  static constexpr int bla0 = 1;
+  static constexpr void * MCAS_FAIL_CONST = reinterpret_cast<void *>(bla0);
+  // static constexpr T MCAS_FAIL_CONST = reinterpret_cast<T>(1);
 
   explicit MCAS<T>(int max_rows)
         : cas_rows_(new CasRow<T>[max_rows])
@@ -81,6 +83,15 @@ class MCAS : public util::OpRecord {
    */
   bool mcas_complete(int start_pos, bool wfmode = false);
 
+  /**
+   * Same as above, but it calculates the start_pos based on the current row
+   * then calls the above mcas_complete.
+   *
+   * @param current_row the last known completed row
+   * @return where or not the mcas succedded
+   */
+  bool mcas_complete(CasRow<T> *current_row);
+
   /** 
    * This function is used to cleanup a completed MCAS operation
    * It removes each MCH placed during this operation, replacing it with the
@@ -111,6 +122,9 @@ class MCAS : public util::OpRecord {
   std::atomic<MCAS_STATE> state_ {MCAS_STATE::IN_PROGRESS};
   int row_count_ {0};
   int max_rows_;
+
+  friend Helper<T>;
+  friend CasRow<T>;
 };  // MCAS class
 
 template<class T>
@@ -140,8 +154,8 @@ bool MCAS<T>::add_cas_triple(std::atomic<T> *address, T expected_value,
          * integer type.
          */
         cas_rows_[row_count_].address_ = nullptr;
-        cas_rows_[row_count_].expected_value_ = reinterpret_cast<T>(nullptr);
-        cas_rows_[row_count_].new_value_ = reinterpret_cast<T>(nullptr);
+        cas_rows_[row_count_].expected_value_ = nullptr;
+        cas_rows_[row_count_].new_value_ = nullptr;
         return false;
       }
     }
@@ -155,6 +169,13 @@ bool MCAS<T>::execute() {
   bool res = mcas_complete(0);
   cleanup(res);
   return res;
+}
+
+template<class T>
+bool MCAS<T>::mcas_complete(CasRow<T> *current_row) {
+  int start_pos = reinterpret_cast<uintptr_t>(&cas_rows_[0]);
+  start_pos -= reinterpret_cast<uintptr_t>(current_row);
+  return mcas_complete(start_pos, false);
 }
 
 
@@ -248,7 +269,7 @@ bool MCAS<T>::mcas_complete(int start_pos, bool wfmode) {
       }  else {
         /* Else the current_value matches the expected_value_ */
         Helper<T>* helper = tervel::util::memory::rc::get_descriptor<
-            Helper<T> >(row, this);
+            Helper<T> >(this, row);
         if (row->address_->compare_exchange_strong(current_value,
                 reinterpret_cast<T>(util::memory::rc::mark_first(helper)))) {
           /* helper was successfully placed at the address */
@@ -317,12 +338,11 @@ T MCAS<T>::mcas_remove(const int pos, T value) {
      * this row is already done, so we need to go to the next row.
      */
     if (this->cas_rows_[pos].helper_.load() != nullptr) {
-      return reinterpret_cast<T>(nullptr);  // Does not matter, it wont be used.
+      return static_cast<T>(nullptr);  // Does not matter, it wont be used.
     }
-  } else {
-    // watch failed do to the value at the address changing, return new value
-    return reinterpret_cast<T>(address->load());
   }
+  // watch failed do to the value at the address changing, return new value
+  return reinterpret_cast<T>(address->load());
 }
 
 template<class T>
@@ -336,7 +356,7 @@ void MCAS<T>::cleanup(bool success) {
     Helper<T> * temp_helper = row->helper_.load();
     T marked_helper = reinterpret_cast<T>(
           util::memory::rc::mark_first(temp_helper));
-    if (marked_helper == static_cast<T>(MCAS_FAIL_CONST)) {
+    if (marked_helper == MCAS_FAIL_CONST) {
       // There can not be any any associated rows beyond this position.
       return;
     } else {

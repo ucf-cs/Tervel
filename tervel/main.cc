@@ -12,6 +12,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <stdint.h>
+
 #include <sys/time.h>
 #include <time.h>
 #include <vector>
@@ -40,7 +42,7 @@ class TestObject {
       , num_threads_(num_threads)
       , mcas_size_(mcas_size)
       , operation_type_(test_type) {
-        shared_memory_ = new std::atomic<uint64_t>[array_length];
+        shared_memory_ = new std::atomic<void *>[array_length];
       }
 
   void atomic_add(int passed_count, int failed_count) {
@@ -59,7 +61,7 @@ class TestObject {
 
   std::atomic<uint64_t> passed_count_ {0};
   std::atomic<uint64_t> failed_count_ {0};
-  std::atomic<uint64_t>* shared_memory_;
+  std::atomic<void *>* shared_memory_;
 
   std::atomic<int> ready_count_ {0};
   std::atomic<bool> running_ {true};
@@ -114,7 +116,7 @@ int main(int argc, char** argv) {
             test_data.shared_memory_[0].load()) {
       printf("Mismatch(0, %d)::>", i);
       for (int i = 0; i < test_data.array_length_; i++) {
-        printf("[%d:%llu] ", i, test_data.shared_memory_[i].load());
+        printf("[%d:%p] ", i, test_data.shared_memory_[i].load());
       }
       printf("\n");
       break;
@@ -150,26 +152,30 @@ void run(int thread_id, tervel::Tervel* tervel_obj, TestObject * test_data) {
   }
 }
 
-
+void * calc_next_value(void * value) {
+  uintptr_t temp = reinterpret_cast<uintptr_t>(value);
+  temp = (temp + 2) & (~3);
+  return reinterpret_cast<void *>(temp);
+}
 
 void run_update_object(int thread_id, int start_pos, TestObject * test_data) {
   int failed_count = 0;
   int passed_count = 0;
 
-  tervel::mcas::MCAS<uint64_t> *mcas;
+  tervel::mcas::MCAS<void *> *mcas;
 
   test_data->ready_count_.fetch_add(1);
   while (test_data->wait_flag_.load()) {}
 
   while (test_data->running_.load()) {
-    mcas = new tervel::mcas::MCAS<uint64_t>(test_data->mcas_size_);
+    mcas = new tervel::mcas::MCAS<void *>(test_data->mcas_size_);
 
     for (int i = 0; i < test_data->mcas_size_; i++) {
       int var = start_pos + i;
 
-      std::atomic<uint64_t> *address = (&(test_data->shared_memory_)[var]);
-      uint64_t expected_value = tervel::util::Descriptor::read(address);
-      uint64_t new_value = (expected_value + 0x16) & (~3);
+      std::atomic<void *> *address = (&(test_data->shared_memory_)[var]);
+      void * expected_value = tervel::util::Descriptor::read(address);
+      void * new_value = calc_next_value(expected_value);
 
       bool success = mcas->add_cas_triple(address, expected_value, new_value);
       assert(success);
@@ -196,21 +202,21 @@ void run_update_multible_objects(int thread_id, TestObject * test_data) {
   boost::mt19937 rng(thread_id);
   boost::uniform_int<> memory_pos_rand(0, max_start_pos-1);
 
-  tervel::mcas::MCAS<uint64_t> *mcas;
+  tervel::mcas::MCAS<void *> *mcas;
 
   test_data->ready_count_.fetch_add(1);
   while (test_data->wait_flag_.load()) {}
 
   while (test_data->running_.load()) {
-    mcas = new tervel::mcas::MCAS<uint64_t>(test_data->mcas_size_);
+    mcas = new tervel::mcas::MCAS<void *>(test_data->mcas_size_);
     int start_pos = memory_pos_rand(rng) * test_data->mcas_size_;
 
     for (int i = 0; i < mcas_size; i++) {
       int var = start_pos + i;
 
-      std::atomic<uint64_t> *address = (&(test_data->shared_memory_)[var]);
-      uint64_t expected_value = tervel::util::Descriptor::read(address);
-      uint64_t new_value = (expected_value + 0x16) & (~3);
+      std::atomic<void *> *address = (&(test_data->shared_memory_)[var]);
+      void * expected_value = tervel::util::Descriptor::read(address);
+      void * new_value = calc_next_value(expected_value);
 
       bool success = mcas->add_cas_triple(address, expected_value, new_value);
       assert(success);
@@ -235,21 +241,21 @@ void run_RandomOverlaps(int thread_id, TestObject * test_data) {
 
   boost::mt19937 rng(thread_id);
   boost::uniform_int<> memory_pos_rand(0, test_data->array_length_);
-  tervel::mcas::MCAS<uint64_t> *mcas;
+  tervel::mcas::MCAS<void *> *mcas;
 
   test_data->ready_count_.fetch_add(1);
   while (test_data->wait_flag_.load()) {}
 
   while (test_data->running_.load()) {
-    mcas = new tervel::mcas::MCAS<uint64_t>(test_data->mcas_size_);
+    mcas = new tervel::mcas::MCAS<void *>(test_data->mcas_size_);
 
     bool success;
     for (int i = 0; i < mcas_size; i++) {
       do {
         int var = memory_pos_rand(rng);
-        std::atomic<uint64_t> *address = (&(test_data->shared_memory_)[var]);
-        uint64_t expected_value = tervel::util::Descriptor::read(address);
-        uint64_t new_value = (expected_value + 0x16) & (~3);
+        std::atomic<void *> *address = (&(test_data->shared_memory_)[var]);
+        void * expected_value = tervel::util::Descriptor::read(address);
+        void * new_value = calc_next_value(expected_value);
 
         success = mcas->add_cas_triple(address, expected_value, new_value);
       }while(!success);

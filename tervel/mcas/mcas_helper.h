@@ -19,16 +19,12 @@ template<class T>
  * replace the expected value of the specified address. 
  */
 class Helper : public util::Descriptor {
-typedef CasRow<T> t_CasRow;
-typedef Helper<T> t_Helper;
-typedef MCAS<T> t_MCAS;
-
  public:
   /**
-   * @param mcas_op the t_MCAS which contains the referenced cas_row
-   * @param cas_row the referenced row in the t_MCAS.
+   * @param mcas_op the MCAS<T> which contains the referenced cas_row
+   * @param cas_row the referenced row in the MCAS<T>.
    */
-  Helper<T>(t_MCAS *mcas_op, t_CasRow *cas_row)
+  Helper<T>(MCAS<T> *mcas_op, CasRow<T> *cas_row)
     : cas_row_(cas_row), mcas_op_(mcas_op) {}
 
   /**
@@ -68,7 +64,7 @@ typedef MCAS<T> t_MCAS;
    * @params last_row an identifier of the current MCAS operation 
    * @return the current value of the address
    */
-  static T mcas_remove(std::atomic<T> *address, T value, t_CasRow *last_row);
+  static T mcas_remove(std::atomic<T> *address, T value, CasRow<T> *last_row);
 
   /**
    * Attempts to complete acquiring a memory watch on a Helper object
@@ -88,9 +84,9 @@ typedef MCAS<T> t_MCAS;
        * be freed while we check to make sure this Helper is assocaited with
        * it.
        */
-      t_Helper *curr_mch = cas_row_->helper.load();
+      Helper<T> *curr_mch = cas_row_->helper_.load();
       if (curr_mch == nullptr) {
-         if (cas_row_->helper.compare_exchange_strong(curr_mch, this)) {
+         if (cas_row_->helper_.compare_exchange_strong(curr_mch, this)) {
            /* If this passed then curr_mch == nullptr, so we set it to be == this
             */
             curr_mch = this;
@@ -100,7 +96,7 @@ typedef MCAS<T> t_MCAS;
         /* This Helper was placed in error, remove it and replace it with the
          * logic value of this object (expected_value)
          */
-        address->compare_exchange_strong(value, cas_row_->expected_value);
+        address->compare_exchange_strong(value, cas_row_->expected_value_);
         success = false;
       }
     }  // End Successfull watch
@@ -114,26 +110,24 @@ typedef MCAS<T> t_MCAS;
   }
 
   void * complete(void *value, std::atomic<void *> *address) {
-    t_Helper* temp_null = nullptr;
-    this->cas_row_->helper.compare_exchange_strong(temp_null, this);
+    Helper<T>* temp_null = nullptr;
+    this->cas_row_->helper_.compare_exchange_strong(temp_null, this);
 
     bool success = false;
     if (temp_null == nullptr || temp_null == this) {
       /* This implies it was successfully associated
          So call the complete function of the MCAS operation */
-      success = t_MCAS::mcas_complete(this->mcas_op_, this->cas_row_);
+      success = this->mcas_op_->mcas_complete(this->cas_row_);
       if (tervel::tl_thread_info->recursive_return()) {
-        /* If the thread is performing a recursive return back to its own operation
-           Then just return null, it will be ignored. */
+        /* If the thread is performing a recursive return back to its own 
+           operation, then just return null, it will be ignored. */
         return nullptr;
       }
-      assert(this->last_row->helper.load() !=  nullptr);
     }
 
     if (success) {
     /* If the MCAS op was successfull then remove the Helper by replacing 
         it with the new_value */
-      assert(this->last_row->helper.load() != t_MCAS::MCAS_FAIL_CONST);
       address->compare_exchange_strong(value,
           reinterpret_cast<void *>(this->cas_row_->new_value_));
     } else {
@@ -145,11 +139,26 @@ typedef MCAS<T> t_MCAS;
     return address->load();
   }
 
+  /**
+   * This function is only called on helpers which are associated with its
+   * mcas operation, if it is not, then the call to on_watch would have failed
+   * and this would not have been called.
+   * 
+   * @return the logicial value of this descriptor object.
+   */
+  void * get_logical_value() {
+    if (this->mcas_op_->state_ ==  MCAS<T>::MCAS_STATE::PASS) {
+      return this->cas_row_->new_value_;
+    }
+
+    return this->cas_row_->expected_value_;
+  }
+
  private:
   // The Row in the MCAS operation this MCH was placed for
-  t_CasRow *cas_row_;
+  CasRow<T> *cas_row_;
   // The MCAS which contains the cas_row_
-  t_MCAS *mcas_op_;
+  MCAS<T> *mcas_op_;
 };  // Helper
 
 }  // namespace mcas
