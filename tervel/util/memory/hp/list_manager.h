@@ -38,9 +38,7 @@ class ListManager {
 
  private:
   struct ManagedPool {
-    // std::unique_ptr<ElementList> pool {nullptr};
     Element * element_list_ {nullptr};
-    // char padding[CACHE_LINE_SIZE - sizeof(element_list_)];
   };
 
   void recieve_element_list(uint64_t tid, Element * element_list) {
