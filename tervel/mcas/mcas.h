@@ -23,8 +23,6 @@ template<class T>
  * This function is wait-free.
  */
 class MCAS : public util::OpRecord {
-  typedef CasRow<T> t_CasRow;
-  typedef Helper<T> t_Helper;
 
  private:
   enum class MCAS_STATE : std::int8_t {IN_PROGRESS = 0, PASS = 0 , FAIL = 0};
@@ -33,12 +31,12 @@ class MCAS : public util::OpRecord {
   static constexpr uintptr_t MCAS_FAIL_CONST = static_cast<uintptr_t>(0x1);
 
   explicit MCAS<T>(int max_rows)
-        : cas_rows_(new t_CasRow[max_rows])
+        : cas_rows_(new CasRow<T>[max_rows])
         , max_rows_ {max_rows} {}
 
   ~MCAS<T>() {
     for (int i = 0; i < row_count_; i++) {
-      t_Helper* helper = cas_rows_[i].helper_.load();
+      Helper<T>* helper = cas_rows_[i].helper_.load();
       // The No check flag is true because each was check prior
       // to the call of this descructor.
       util::memory::rc::free_descriptor(helper, true);
@@ -112,7 +110,7 @@ class MCAS : public util::OpRecord {
   }
 
 
-  std::unique_ptr<t_CasRow[]> cas_rows_;
+  std::unique_ptr<CasRow<T>[]> cas_rows_;
   std::atomic<MCAS_STATE> state_ {MCAS_STATE::IN_PROGRESS};
   int row_count_ {0};
   int max_rows_;
@@ -180,7 +178,7 @@ bool MCAS<T>::mcas_complete(int start_pos, bool wfmode) {
   for (int pos = start_pos; pos < row_count_; pos++) {
     size_t fcount = 0;  // Tracks the number of failures.
 
-    t_CasRow * row = &cas_rows_[pos];
+    CasRow<T> * row = &cas_rows_[pos];
 
     /* Read the current value of the address */
     T current_value = row->address_->load();
@@ -234,11 +232,11 @@ bool MCAS<T>::mcas_complete(int start_pos, bool wfmode) {
         /* Current value does not match the expected value and it is a non 
          * descriptor type, the mcas operation should fail.
          */
-        t_Helper* temp_null = nullptr;
+        Helper<T>* temp_null = nullptr;
         /* First try to disable row by assigning a failed constant */
         if (row->helper_.compare_exchange_strong(temp_null,
-              reinterpret_cast<t_Helper *>(MCAS_FAIL_CONST))
-              || temp_null == reinterpret_cast<t_Helper *>(MCAS_FAIL_CONST)) {
+              reinterpret_cast<Helper<T> *>(MCAS_FAIL_CONST))
+              || temp_null == reinterpret_cast<Helper<T> *>(MCAS_FAIL_CONST)) {
           /* if row was disabled then set the state to FAILED */
           MCAS_STATE temp_state = MCAS_STATE::IN_PROGRESS;
           this->state_.compare_exchange_strong(temp_state, MCAS_STATE::FAIL);
@@ -252,12 +250,12 @@ bool MCAS<T>::mcas_complete(int start_pos, bool wfmode) {
         }
       }  else {
         /* Else the current_value matches the expected_value_ */
-        t_Helper *helper = util::memory::rc::get_descriptor<t_Helper>(
+        Helper<T> *helper = util::memory::rc::get_descriptor<Helper<T>>(
               row, this);
         if (row->address_->compare_exchange_strong(current_value,
                 util::memory::rc::mark_first(helper))) {
           /* helper was successfully placed at the address */
-          t_Helper * temp_null = nullptr;
+          Helper<T> * temp_null = nullptr;
           if (row->helper_.compare_exchange_strong(temp_null, helper)
                 || temp_null == helper) {
             /* We successfully associated the helper the row */
@@ -284,7 +282,7 @@ bool MCAS<T>::mcas_complete(int start_pos, bool wfmode) {
       }  // End Else Try to replace
     }  // End While Current helper is null
 
-    if (row->helper_.load() == reinterpret_cast<t_Helper *>(MCAS_FAIL_CONST)) {
+    if (row->helper_.load() == reinterpret_cast<Helper<T> *>(MCAS_FAIL_CONST)) {
       MCAS_STATE temp_state = MCAS_STATE::IN_PROGRESS;
       this->state_.compare_exchange_strong(temp_state, MCAS_STATE::FAIL);
       assert(this->state_.load() == MCAS_STATE::FAIL);
@@ -333,7 +331,7 @@ template<class T>
 void MCAS<T>::cleanup(bool success) {
   for (int pos = 0; pos < row_count_; pos++) {
     /* Loop for each row in the op*/
-    t_CasRow * row = &cas_rows_[pos];
+    CasRow<T> * row = &cas_rows_[pos];
 
     assert(row->helper_.load() != nullptr);
 
