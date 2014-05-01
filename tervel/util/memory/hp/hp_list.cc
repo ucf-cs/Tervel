@@ -1,5 +1,7 @@
 #include "tervel/util/memory/hp/hp_list.h"
+#include "tervel/util/memory/hp/list_manager.h"
 #include "tervel/util/memory/hp/hp_element.h"
+#include "tervel/util/memory/hp/hazard_pointer.h"
 
 
 namespace tervel {
@@ -9,8 +11,8 @@ namespace hp {
 
 void ElementList::send_to_manager() {
   this->try_to_free_elements(false);
-  this->manager.free_lists_[tervel::tl_thread_info->get_thread_id()]
-          .element_list_ = element_list_;
+  const uint64_t tid = tervel::tl_thread_info->get_thread_id();
+  this->manager_->recieve_element_list(tid, element_list_);
   element_list_ = nullptr;
 }
 
@@ -32,9 +34,9 @@ void ElementList::try_to_free_elements(bool dont_check) {
     Element *temp = element_list_->next();
 
     while (temp) {
-      PoolElement *temp_next = temp->next();
+      Element *temp_next = temp->next();
 
-      bool watched = is_watched(temp);
+      bool watched = HazardPointer::is_watched(temp);
       if (!dont_check && watched) {
         prev = temp;
         temp = temp_next;
@@ -49,7 +51,7 @@ void ElementList::try_to_free_elements(bool dont_check) {
      * We check the first element last to allow for cleaner looping code.
      */
     temp = element_list_->next();
-    bool watched = is_watched(temp);
+    bool watched = HazardPointer::is_watched(temp);
     if (dont_check || !watched) {
       temp->~Element();
       element_list_ = temp;

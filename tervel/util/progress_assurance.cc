@@ -1,9 +1,10 @@
 #include "tervel/util/progress_assurance.h"
+#include "tervel/util/memory/hp/hazard_pointer.h"
 
 namespace tervel {
 namespace util {
 
-void ProgressAssurance::p_try_to_help() {
+void ProgressAssurance::p_check_for_announcement() {
   // Internally, delay_count is incremented and set to 0 when ever HELP_DELAY
   // is reached
   size_t delay_count = tl_thread_info->delay_count(HELP_DELAY);
@@ -15,8 +16,9 @@ void ProgressAssurance::p_try_to_help() {
       std::atomic<void *> *address = reinterpret_cast<std::atomic<void *> *>(
               &(op_table_[help_id]));
 
-      int pos =  HazardPointer::SlotID::OPREC;
-      bool res = HazardPointer::watch(pos, op, address, op);
+      typedef memory::hp::HazardPointer::SlotID SlotID;
+      SlotID pos = SlotID::SHORTUSE;
+      bool res = memory::hp::HazardPointer::watch(pos, op, address, op);
       if (res) {
         op->help_complete();
       }
@@ -24,7 +26,7 @@ void ProgressAssurance::p_try_to_help() {
   }
 }
 
-void ProgressAssurance::p_make_annoucment(OpRecord *op, int tid) {
+void ProgressAssurance::p_make_announcement(OpRecord *op, int tid) {
   op_table_[tid].store(op);
   op->help_complete();
   op_table_[tid].store(nullptr);

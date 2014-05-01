@@ -108,7 +108,7 @@ int main(int argc, char** argv) {
       t.join();
   });
 
-  printf("Completed[Passed: %llu, Failed: %llu]\n",
+  printf("Completed[Passed: %lu, Failed: %lu]\n",
     test_data.passed_count_.load(), test_data.failed_count_.load());
 
   for (int i = 1; i < test_data.array_length_; i++) {
