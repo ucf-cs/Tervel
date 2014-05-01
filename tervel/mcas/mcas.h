@@ -248,7 +248,7 @@ bool MCAS<T>::mcas_complete(int start_pos, bool wfmode) {
       }  else {
         /* Else the current_value matches the expected_value_ */
         Helper<T>* helper = tervel::util::memory::rc::get_descriptor<
-            Helper<T>>(row, this);
+            Helper<T> >(row, this);
         if (row->address_->compare_exchange_strong(current_value,
                 util::memory::rc::mark_first(helper))) {
           /* helper was successfully placed at the address */
