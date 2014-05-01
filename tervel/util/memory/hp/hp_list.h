@@ -61,7 +61,7 @@ class ElementList {
    * Tries to free elements from the unsafe list.
    * @param dont_check If true, it ignores safty checks 
    */
-  void try_to_free_Elements(bool dont_check = false);
+  void try_to_free_elements(bool dont_check = false);
 
 
   // -------

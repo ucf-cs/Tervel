@@ -21,9 +21,9 @@ namespace rc {
  * on the returned pointer when they are done with it to avoid memory leaks.
  */
 template<typename DescrType, typename... Args>
-inline tervel::util::Descriptor * get_descriptor(Args&&... args) {
+inline DescrType * get_descriptor(Args&&... args) {
   auto rc_descr_pool = tervel::tl_thread_info->get_rc_descriptor_pool();
-  return rc_descr_pool->get_descriptor<DescrType>(std::forward<Args>(args));
+  return rc_descr_pool->get_descriptor<DescrType>(std::forward<Args>(args)...);
 }
 
 /**
