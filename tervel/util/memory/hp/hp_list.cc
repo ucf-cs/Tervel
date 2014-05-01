@@ -7,15 +7,6 @@ namespace util {
 namespace memory {
 namespace hp {
 
-void ElementList::free_descriptor(Element *descr, bool dont_check) {
-  if (!dont_check && is_watched(descr)) {
-    this->add_to_unsafe(descr);
-  } else {
-    delete descr;
-  }
-}
-
-
 void ElementList::send_to_manager() {
   this->try_to_free_elements(false);
   this->manager.free_lists_[tervel::tl_thread_info->get_thread_id()]
@@ -26,7 +17,6 @@ void ElementList::send_to_manager() {
 
 
 void ElementList::add_to_unsafe(Element* elem) {
-  this->try_to_free_elements(false);
   elem->next(element_list_);
   element_list_ = elem;
 }

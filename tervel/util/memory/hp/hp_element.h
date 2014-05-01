@@ -47,7 +47,7 @@ class Element {
     } else {
       element_list->add_to_unsafe(this);
     }
-    element_list->try_to_free_Elements();
+    element_list->try_to_free_elements();
   }
 
   /**
