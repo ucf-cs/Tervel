@@ -164,7 +164,7 @@ class HazardPointer {
    * @return true is the table contains the specified value
    */
   bool contains(void *value) {
-    for (int i = 0; i < num_slots_; i++) {
+    for (size_t i = 0; i < num_slots_; i++) {
       if (watches_[i].load() == value) {
         return true;
       }

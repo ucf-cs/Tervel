@@ -1,4 +1,4 @@
-CXX      ?= g++-4.7
+CXX      = g++-4.8
 CXXFLAGS = -Wall -g -std=c++11 -march=native -m64 -pthread -fno-strict-aliasing
 CPPFLAGS = -DDEBUG=1 -DINTEL
 

@@ -67,7 +67,7 @@ class ThreadContext {
    * @param  max_delay
    * @return current delay count
    */
-  int help_id(int num_threads) {
+  size_t help_id(size_t num_threads) {
     if (help_id_ == num_threads) {
       help_id_ = 0;
     }
@@ -81,7 +81,7 @@ class ThreadContext {
    * @param  max_delay
    * @return current delay count
    */
-  int delay_count(int max_delay) {
+  size_t delay_count(size_t max_delay) {
     if (delay_count_ == max_delay) {
       delay_count_ = 0;
     }
@@ -162,7 +162,7 @@ class ThreadContext {
    * has been called, this is incremented at the start of Descriptor::remove
    * and decremented upon return.
    */
-  uint64_t recursive_depth_ {0};
+  size_t recursive_depth_ {0};
 
   /** 
    * help_id_ is a variable used to track which thread to check for an
@@ -171,7 +171,7 @@ class ThreadContext {
    * This is used exclusively by the annoucement table function tryHelpAnother*
    *    *(unless function has been renamed)
    */
-  uint64_t help_id_ {0};
+  size_t help_id_ {0};
 
   /** 
    * delay_count_ is a variable used to delay how often a thread checks for an
@@ -180,7 +180,7 @@ class ThreadContext {
    *  This is used exclusively by the annoucement table function tryHelpAnother*
    *    *(unless function has been renamed)
    */
-  uint64_t delay_count_ {0};
+  size_t delay_count_ {0};
 
   /**
    * Tervel provides a link to the shared Tervel object. This object contians

@@ -1,4 +1,4 @@
-#ifndef TERVEL_MEMORY_RC_UTIL_DESCRIPTOR_H_
+  #ifndef TERVEL_MEMORY_RC_UTIL_DESCRIPTOR_H_
 #define TERVEL_MEMORY_RC_UTIL_DESCRIPTOR_H_
 
 #include "tervel/util/info.h"
