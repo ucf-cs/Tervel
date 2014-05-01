@@ -7,9 +7,8 @@ namespace util {
 namespace memory {
 namespace rc {
 
-DescriptorPool * PoolManager::allocate_pool(int pos) {
-  DescriptorPool *pool = new DescriptorPool(pos, this);
-  pools_[pos].pool.reset(pool);
+DescriptorPool * PoolManager::allocate_pool() {
+  DescriptorPool *pool = new DescriptorPool(this);
   return pool;
 }
 

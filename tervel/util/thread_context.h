@@ -2,6 +2,7 @@
 #define TERVEL_UTIL_THREAD_CONTEXT_H
 
 #include <stddef.h>
+#include <stdint.h>
 
 #include "tervel/util/util.h"
 
@@ -187,18 +188,18 @@ class ThreadContext {
    * Tervel provides a link to the shared Tervel object. This object contians
    * number of threads, hazard_pointer, and other shared structures.
    */
-  const Tervel *tervel_;
+  Tervel *tervel_;
 
  public:
   /**
    * This is a link to the threads pool of reference counted descriptor objects.
    */
-  const util::memory::rc::DescriptorPool* rc_descriptor_pool_;
+  util::memory::rc::DescriptorPool* rc_descriptor_pool_;
 
   /**
    * THis is a link to the threads pool of hp protected elements
    */
-  const util::memory::hp::ElementList* hp_element_list_;
+  util::memory::hp::ElementList* hp_element_list_;
 
  private:
   DISALLOW_COPY_AND_ASSIGN(ThreadContext);
