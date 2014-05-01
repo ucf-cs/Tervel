@@ -29,6 +29,7 @@ class HazardPointer;
 class Element {
  public:
   Element() {}
+  virtual ~Element() {}
 
   /**
    * This function is used to free a hazard pointer protected object if it is

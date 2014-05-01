@@ -38,7 +38,7 @@ class MCAS : public util::OpRecord {
 
   ~MCAS<T>() {
     for (int i = 0; i < row_count_; i++) {
-      t_Helper* helper = cas_rows_[i].helper.load();
+      t_Helper* helper = cas_rows_[i].helper_.load();
       // The No check flag is true because each was check prior
       // to the call of this descructor.
       util::memory::rc::free_descriptor(helper, true);

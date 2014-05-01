@@ -14,6 +14,7 @@
 #include <unistd.h>
 #include <sys/time.h>
 #include <time.h>
+#include <vector>
 #include <thread>
 
 #include <iostream>
@@ -68,7 +69,7 @@ class TestObject {
 
 int array_length, mcas_size;
 
-void run(int thread_id, TestObject* test, TestObject * test_object);
+void run(int thread_id, tervel::Tervel* tervel_obj, TestObject * test_object);
 
 DEFINE_int32(num_threads, 1, "The number of threads to spawn.");
 DEFINE_int32(execution_time, 5, "The amount of time to run the tests");
@@ -88,11 +89,10 @@ int main(int argc, char** argv) {
 
   tervel::Tervel tervel_obj(test_data.num_threads_);
 
-  std::thread** thread_list;
-  thread_list = new std::thread *[test_data.num_threads_];
-
+  std::vector<std::thread> thread_list;
   for (int i = 0; i < test_data.num_threads_; i++) {
-    thread_list[i] = new std::thread(run, i, &tervel_obj, &test_data);
+    std::thread temp_thread(run, i, &tervel_obj, &test_data);
+    thread_list.push_back(std::move(temp_thread));
   }
 
   while (test_data.ready_count_.load() < test_data.num_threads_) {}
@@ -102,9 +102,9 @@ int main(int argc, char** argv) {
   test_data.running_.store(false);
   std::this_thread::sleep_for(std::chrono::seconds(1));
 
-  for (int i = 0; i < test_data.num_threads_; i++) {
-    thread_list[i]->join();
-  }
+  std::for_each(thread_list.begin(), thread_list.end(), [](std::thread &t) {
+      t.join();
+  });
 
   printf("Completed[Passed: %llu, Failed: %llu]\n",
     test_data.passed_count_.load(), test_data.failed_count_.load());
