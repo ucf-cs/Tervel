@@ -13,7 +13,6 @@
 namespace tervel {
 namespace mcas {
 
-template<class T>
 // REVIEW(carlos): class does not follow class naming conventions
 // RESPONSE(steven): Should it be MultiWordCompareAndSwap instead?
 /**
@@ -22,15 +21,14 @@ template<class T>
  * update, then call execute();
  * This function is wait-free.
  */
+template<class T>
 class MCAS : public util::OpRecord {
  public:
-  static constexpr int bla0 = 1;
-  static constexpr void * MCAS_FAIL_CONST = reinterpret_cast<void *>(bla0);
-  // static constexpr T MCAS_FAIL_CONST = reinterpret_cast<T>(1);
+  static constexpr T MCAS_FAIL_CONST = reinterpret_cast<T>(1);
 
   explicit MCAS<T>(int max_rows)
-        : cas_rows_(new CasRow<T>[max_rows])
-        , max_rows_ {max_rows} {}
+      : cas_rows_(new CasRow<T>[max_rows])
+      , max_rows_ {max_rows} {}
 
   ~MCAS<T>() {
     for (int i = 0; i < row_count_; i++) {
