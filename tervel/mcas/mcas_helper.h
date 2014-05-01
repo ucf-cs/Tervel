@@ -84,9 +84,9 @@ class Helper : public util::Descriptor {
        * be freed while we check to make sure this Helper is assocaited with
        * it.
        */
-      Helper<T> *curr_mch = cas_row_->helper.load();
+      Helper<T> *curr_mch = cas_row_->helper_.load();
       if (curr_mch == nullptr) {
-         if (cas_row_->helper.compare_exchange_strong(curr_mch, this)) {
+         if (cas_row_->helper_.compare_exchange_strong(curr_mch, this)) {
            /* If this passed then curr_mch == nullptr, so we set it to be == this
             */
             curr_mch = this;
@@ -96,7 +96,7 @@ class Helper : public util::Descriptor {
         /* This Helper was placed in error, remove it and replace it with the
          * logic value of this object (expected_value)
          */
-        address->compare_exchange_strong(value, cas_row_->expected_value);
+        address->compare_exchange_strong(value, cas_row_->expected_value_);
         success = false;
       }
     }  // End Successfull watch
@@ -111,25 +111,23 @@ class Helper : public util::Descriptor {
 
   void * complete(void *value, std::atomic<void *> *address) {
     Helper<T>* temp_null = nullptr;
-    this->cas_row_->helper.compare_exchange_strong(temp_null, this);
+    this->cas_row_->helper_.compare_exchange_strong(temp_null, this);
 
     bool success = false;
     if (temp_null == nullptr || temp_null == this) {
       /* This implies it was successfully associated
          So call the complete function of the MCAS operation */
-      success = MCAS<T>::mcas_complete(this->mcas_op_, this->cas_row_);
+      success = this->mcas_op_->mcas_complete(this->cas_row_);
       if (tervel::tl_thread_info->recursive_return()) {
         /* If the thread is performing a recursive return back to its own 
            operation, then just return null, it will be ignored. */
         return nullptr;
       }
-      assert(this->last_row->helper.load() !=  nullptr);
     }
 
     if (success) {
     /* If the MCAS op was successfull then remove the Helper by replacing 
         it with the new_value */
-      assert(this->last_row->helper.load() != MCAS<T>::MCAS_FAIL_CONST);
       address->compare_exchange_strong(value,
           reinterpret_cast<void *>(this->cas_row_->new_value_));
     } else {
@@ -149,7 +147,7 @@ class Helper : public util::Descriptor {
    * @return the logicial value of this descriptor object.
    */
   void * get_logical_value() {
-    if (this->mcas_op_->state_ ==  MCAS::MCAS_STATE::PASS) {
+    if (this->mcas_op_->state_ ==  MCAS<T>::MCAS_STATE::PASS) {
       return this->cas_row_->new_value_;
     }
 

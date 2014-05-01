@@ -35,6 +35,7 @@ namespace hp {
 class OpRecord : public memory::hp::Element {
  public:
   OpRecord() {}
+
   /**
    * Implementations of this function that upon its return the operation 
    * described in the OpRecord has been completed.
