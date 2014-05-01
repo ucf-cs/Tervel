@@ -12,7 +12,8 @@
 namespace tervel {
 class ThreadContext;
 
-extern thread_local ThreadContext * tl_thread_info;
+// Needs to be __thread for OSX compatability.
+__thread ThreadContext * tl_thread_info {nullptr};
 }  // namespace tervel
 
 
