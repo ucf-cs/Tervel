@@ -3,7 +3,7 @@
 
 #include <atomic>
 #include <utility>
-#include <iostream>  
+#include <iostream>
 
 #include <assert.h>
 #include <stdint.h>
@@ -20,7 +20,8 @@ namespace memory {
 namespace rc {
 
 const int DEBUG_EXPECTED_STAMP = 0xDEADBEEF;
-/** 
+
+/**
  * This class is used to hold the memory management information (Header) and
  * a descriptor object. It is important to sepearte them to prevent the case
  * where a thread attempts to dereference an object while its type id is being
@@ -37,23 +38,19 @@ class PoolElement {
     std::atomic<uint64_t> ref_count {0};
 
 #ifdef DEBUG_POOL
-    std::atomic<bool> descriptor_in_use_ {false};
+    std::atomic<bool> descriptor_in_use {false};
 
     std::atomic<uint64_t> allocation_count {1};
     std::atomic<uint64_t> free_count {0};
 
     // This stamp is checked when doing memory pool shenanigans to make sure
     // that a given descriptor actually belongs to a memory pool.
-    int debug_pool_stamp_ {DEBUG_EXPECTED_STAMP};
+    int debug_pool_stamp {DEBUG_EXPECTED_STAMP};
 #endif
   };
 
   explicit PoolElement(PoolElement *next=nullptr) {
     this->header().next = next;
-    std::cout << "New Pool Element: " <<  reinterpret_cast<void*>(this)
-        << " Header: " <<  reinterpret_cast<void*>(&(this->header()))
-        << " Descriptor: " <<  reinterpret_cast<void*>(this->descriptor())
-        << " .\n";
   }
 
   // TODO(carlos) add const versions of these accessors
@@ -62,9 +59,12 @@ class PoolElement {
    * Returns a pointer to the associated descriptor of this element. This
    * pointer may or may not refrence a constructed object.
    */
-  tervel::util::Descriptor * descriptor();
+  Descriptor * descriptor() { return reinterpret_cast<Descriptor*>(this); }
 
-  Header & header() { return *reinterpret_cast<Header*>(padding_); }
+  /**
+   * @return A refrence to the header which houses all the 
+   */
+  Header & header() { return header_; }
 
   /**
    * Helper method for getting the next pointer.
@@ -94,71 +94,15 @@ class PoolElement {
    */
   void cleanup_descriptor();
 
-  /**
-   * Calculates padding between header and descriptor
-   * @return [description]
-   */
-  static size_t get_header_pad() {
-    // TODO(carlos) This assumes that cache is aligned to 4 bytes. Should grab
-    // the cache alignment size of the target system and use that instead.
-    return (4 - sizeof(Header) % 4);
-  }
-
  private:
-  /**
-   * This object should have 2 members: a header and a descriptor, but the
-   * memory layout of classes is system-dependent, so we explicitly construct
-   * everything in-place inside this padding.
-   *
-   * This is possibly a horrible idea, and it might be safer (but slower) to use
-   * back-pointers.
-   */
-  
-  char padding_[CACHE_LINE_SIZE];
+  char padding_[CACHE_LINE_SIZE - sizeof(Header)];
+  Header header_;
 
   DISALLOW_COPY_AND_ASSIGN(PoolElement);
 };
 static_assert(sizeof(PoolElement) == CACHE_LINE_SIZE,
     "Pool elements should be cache-aligned. Padding calculation is probably"
     " wrong.");
-
-
-
-// IMPLEMENTATIONS
-// ===============
-inline tervel::util::Descriptor * PoolElement::descriptor() {
-  tervel::util::Descriptor *descr = reinterpret_cast<Descriptor*>(padding_ +
-    sizeof(Header) + get_header_pad());
-
-  // algorithms expect descriptors to be mem-aligned, so the LSB's should not be
-  // taken up.
-  assert((reinterpret_cast<uintptr_t>(descr) & 0x03) == 0);
-
-  return descr;
-}
-
-
-template<typename DescrType, typename... Args>
-void PoolElement::init_descriptor(Args&&... args) {
-  static_assert(sizeof(DescrType) <= sizeof(padding_),
-      "Descriptor is too large to use in a pool element");
-// TODO(Steven) Carlos make sure the 4byte alligment is factored in to the above
-#ifdef DEBUG_POOL
-  assert(!this->header().descriptor_in_use_.load());
-  this->header().descriptor_in_use_.store(true);
-#endif
-  new(descriptor()) DescrType(std::forward<Args>(args)...);
-}
-
-
-inline void PoolElement::cleanup_descriptor() {
-#ifdef DEBUG_POOL
-  assert(this->header().descriptor_in_use_.load());
-  this->header().descriptor_in_use_.store(false);
-#endif
-  this->descriptor()->~Descriptor();
-}
-
 
 /**
  * If the given descriptor was allocated through a DescriptorPool, then it has
@@ -167,20 +111,47 @@ inline void PoolElement::cleanup_descriptor() {
  * Use with caution as Descriptors not allocated from a pool will not have an
  * associated header, and, thus, the returned value will be to some random
  * place in memory.
+ *
+ * @param descr The Descriptor pointer allocated through a descriptor pool which
+ *   thus has an associated PoolElement.
+ * @return The associated PoolElement.
  */
-inline PoolElement * get_elem_from_descriptor(tervel::util::Descriptor *descr) {
-  uintptr_t tmp = reinterpret_cast<uintptr_t>(descr);
-  tmp -= sizeof(PoolElement::Header);
-  tmp -= PoolElement::get_header_pad();
+inline PoolElement * get_elem_from_descriptor(tervel::util::Descriptor *descr);
 
+
+// IMPLEMENTATIONS
+// ===============
+template<typename DescrType, typename... Args>
+void PoolElement::init_descriptor(Args&&... args) {
+  static_assert(sizeof(DescrType) <= sizeof(padding_),
+      "Descriptor is too large to use in a pool element");
 #ifdef DEBUG_POOL
-  // If this fails, then the given descriptor is not part of a PoolElement. This
-  // probably means the user passed in a descriptor that wasn't allocated
-  // through a memory pool.
-  PoolElement::Header* tmp2 = reinterpret_cast<PoolElement::Header *>(tmp);
-  assert(tmp2->debug_pool_stamp_ == DEBUG_EXPECTED_STAMP);
+  assert(!this->header().descriptor_in_use.load());
+  this->header().descriptor_in_use.store(true);
 #endif
-  return reinterpret_cast<PoolElement *>(tmp);
+  new(descriptor()) DescrType(std::forward<Args>(args)...);
+}
+
+
+inline void PoolElement::cleanup_descriptor() {
+#ifdef DEBUG_POOL
+  assert(this->header().descriptor_in_use.load());
+  this->header().descriptor_in_use.store(false);
+#endif
+  this->descriptor()->~Descriptor();
+}
+
+
+inline PoolElement * get_elem_from_descriptor(Descriptor *descr) {
+  PoolElement *elem = reinterpret_cast<PoolElement *>(descr);
+#ifdef DEBUG_POOL
+  assert(elem->header().debug_pool_stamp == DEBUG_EXPECTED_STAMP &&
+      "Tried to get a PoolElement from a descriptor which does not have an "
+      "associated one.  This probably means the user is attempting to free the "
+      "descriptor through a DescriptorPool but the descriptorwasn't allocated "
+      "through a DescriptorPool to begin with.");
+#endif
+  return reinterpret_cast<PoolElement *>(elem);
 }
 
 
