@@ -210,7 +210,7 @@ bool MCAS<T>::mcas_complete(int start_pos, bool wfmode) {
 
     CasRow<T> * row = &(cas_rows_[pos]);
 
-    assert(pos==0 || cas_rows_[pos-1].helper_.load());
+    assert(pos == 0 || cas_rows_[pos-1].helper_.load());
 
     /* Read the current value of the address */
     T current_value = row->address_->load();
@@ -302,7 +302,7 @@ bool MCAS<T>::mcas_complete(int start_pos, bool wfmode) {
                   row->expected_value_);
             util::memory::rc::free_descriptor(helper);
 
-            assert(state_.load() == MCasState::IN_PROGRESS);
+            assert(state_.load() != MCasState::IN_PROGRESS);
             return (state_.load() == MCasState::PASS);
           }
         } else {

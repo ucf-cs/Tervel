@@ -62,13 +62,14 @@ class Helper : public util::Descriptor {
         address->compare_exchange_strong(value, cas_row_->expected_value_);
         success = false;
       }
+      assert(cas_row_->helper_.load());
+      /* No longer need HP protection, if we have RC protection on an associated
+       * Helper. If we don't it, the value at this address must have changed and 
+       * we don't need it either way.
+       */
+      util::memory::hp::HazardPointer::unwatch(t_SlotID::SHORTUSE);
     }  // End Successfull watch
 
-    /* No longer need HP protection, if we have RC protection on an associated
-     * Helper. If we don't it, the value at this address must have changed and 
-     * we don't need it either way.
-     */
-    util::memory::hp::HazardPointer::unwatch(t_SlotID::SHORTUSE);
     return success;
   };
 

@@ -51,7 +51,7 @@ class DescriptorPool {
    * and left untouched when they're returned to the pool. This allows the user
    * to view associations. Entirely for debug purposes.
    */
-  static constexpr bool NO_REUSE_MEM {false};
+  static constexpr bool NO_REUSE_MEM {true};
 
  public:
   DescriptorPool(PoolManager *manager, int prefill = 4,

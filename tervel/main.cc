@@ -33,16 +33,17 @@
 #include "tervel/util/memory/hp/hp_element.h"
 #include "tervel/util/memory/hp/hp_list.h"
 
-DEFINE_int32(num_threads, 8, "The number of threads to spawn.");
-DEFINE_int32(execution_time, 50, "The amount of time to run the tests");
-DEFINE_int32(array_length, 64, "The size of the region to test on.");
-DEFINE_int32(mcas_size, 2, "The number of words in a mcas operation.");
+DEFINE_int32(num_threads, 64, "The number of threads to spawn.");
+DEFINE_int32(execution_time, 30, "The amount of time to run the tests");
+DEFINE_int32(array_length, 32, "The size of the region to test on.");
+DEFINE_int32(mcas_size, 16, "The number of words in a mcas operation.");
 DEFINE_int32(operation_type, 0, "The type of test to execute"
     "(0: updating sinlge multi-word object"
     ", 1: updating multiple objects"
     ", 2: updating overlapping mult-word updates)");
 
-enum class TestType : size_t {UPDATEOBJECT, UPDATEMULTIOBJECT, RANDOMOVERLAPS};
+enum class TestType : size_t {UPDATEOBJECT = 0, UPDATEMULTIOBJECT = 1, 
+      RANDOMOVERLAPS = 2};
 
 class TestObject {
  public:
@@ -109,6 +110,7 @@ int main(int argc, char** argv) {
   std::this_thread::sleep_for(std::chrono::seconds(test_data.execution_time_));
   test_data.running_.store(false);
   std::this_thread::sleep_for(std::chrono::seconds(1));
+  printf("Singled Stop!\n");
 
   std::for_each(thread_list.begin(), thread_list.end(), [](std::thread &t) {
       t.join();
@@ -117,16 +119,8 @@ int main(int argc, char** argv) {
   printf("Completed[Passed: %lu, Failed: %lu]\n",
     test_data.passed_count_.load(), test_data.failed_count_.load());
 
-  for (int i = 1; i < test_data.array_length_; i++) {
-    if (test_data.shared_memory_[i].load() !=
-            test_data.shared_memory_[0].load()) {
-      printf("Mismatch(0, %d)::>", i);
-      for (int i = 0; i < test_data.array_length_; i++) {
-        printf("[%d:%p] ", i, test_data.shared_memory_[i].load());
-      }
-      printf("\n");
-      break;
-    }
+  for (int i = 0; i < test_data.array_length_; i++) {
+    printf("[%d: %p] ", i, test_data.shared_memory_[i].load());
   }
 
   return 1;
@@ -160,7 +154,7 @@ void run(int thread_id, tervel::Tervel* tervel_obj, TestObject * test_data) {
 
 void * calc_next_value(void * value) {
   uintptr_t temp = reinterpret_cast<uintptr_t>(value);
-  temp = (temp + 2) & (~3);
+  temp = (temp + 0x16) & (~3);
   return reinterpret_cast<void *>(temp);
 }
 
@@ -225,9 +219,7 @@ void run_update_object(int start_pos, TestObject * test_data) {
       failed_count++;
     }
 
-    tervel::util::memory::hp::ElementList *element_list;
-    element_list = tervel::tl_thread_info->get_hp_element_list();
-    mcas->safe_delete(false, element_list);
+    mcas->safe_delete();
   }  // End Execution Loop
 
   test_data->atomic_add(passed_count, failed_count);
