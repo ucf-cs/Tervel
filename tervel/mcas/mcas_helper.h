@@ -80,7 +80,7 @@ class Helper : public util::Descriptor {
    * @return the logicial value of this descriptor object.
    */
   void * get_logical_value() {
-    if (this->mcas_op_->state_ ==  MCAS<T>::MCAS_STATE::PASS) {
+    if (this->mcas_op_->state_ ==  MCAS<T>::MCasState::PASS) {
       return this->cas_row_->new_value_;
     }
 
