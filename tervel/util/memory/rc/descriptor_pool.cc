@@ -36,7 +36,7 @@ PoolElement * DescriptorPool::get_from_pool(bool allocate_new) {
   PoolElement *ret {nullptr};
 
   // safe pool has something in it. pop the next item from the head of the list.
-  if (!NO_REUSE_MEM && safe_pool_ != nullptr) {
+  if (!NO_REUSE_RC_DESCR && safe_pool_ != nullptr) {
     ret = safe_pool_;
     safe_pool_ = safe_pool_->next();
     ret->next(nullptr);

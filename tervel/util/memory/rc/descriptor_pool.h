@@ -44,15 +44,6 @@ class PoolManager;
  * TODO(steven) Need to implement logic to attempt to get elements from manager
  */
 class DescriptorPool {
- private:
-  /**
-   * If true, then DescriptorPool shouldn't reuse old pool elements when being
-   * asked, even if it's safe to fo so. Instead, elements should be stock-piled
-   * and left untouched when they're returned to the pool. This allows the user
-   * to view associations. Entirely for debug purposes.
-   */
-  static constexpr bool NO_REUSE_MEM {true};
-
  public:
   DescriptorPool(PoolManager *manager, int prefill = 4,
           uint64_t pool_id = tl_thread_info->get_thread_id())

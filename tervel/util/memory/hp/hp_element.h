@@ -42,7 +42,7 @@ class Element {
    */
   void safe_delete(bool no_check = false, ElementList *element_list
           = tervel::tl_thread_info->get_hp_element_list()) {
-    if (no_check && !NO_FREE_MEM) {
+    if (no_check && !NO_DELETE_HP_ELEMENTS) {
         delete this;
     } else {
       element_list->add_to_unsafe(this);

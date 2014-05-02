@@ -16,7 +16,7 @@ namespace tervel {
 namespace util {
 namespace memory {
 namespace hp {
-static constexpr bool NO_FREE_MEM {true};
+
 class Element;
 class ListManager;
 
