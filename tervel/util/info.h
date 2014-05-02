@@ -12,7 +12,7 @@
 
 namespace tervel {
 
-extern thread_local ThreadContext * tl_thread_info;
+extern __thread ThreadContext * tl_thread_info;
 
 }  // namespace tervel
 

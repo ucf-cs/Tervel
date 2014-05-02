@@ -139,8 +139,8 @@ class MCAS : public util::OpRecord {
 template<class T>
 bool MCAS<T>::add_cas_triple(std::atomic<T> *address, T expected_value,
       T new_value) {
-  if (tervel::util::isValid(reinterpret_cast<void *>(expected_value)) ||
-        tervel::util::isValid(reinterpret_cast<void *>(new_value))) {
+  if (!tervel::util::isValid(reinterpret_cast<void *>(expected_value)) ||
+        !tervel::util::isValid(reinterpret_cast<void *>(new_value))) {
     return false;
   } else if (row_count_ == max_rows_) {
     return false;
