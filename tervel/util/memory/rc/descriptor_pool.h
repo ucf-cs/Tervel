@@ -57,7 +57,11 @@ class DescriptorPool {
   DescriptorPool(PoolManager *manager, int prefill = 4,
           uint64_t pool_id = tl_thread_info->get_thread_id())
       : manager_(manager)
-      , pool_id_(pool_id) {
+      , pool_id_(pool_id)
+      , safe_pool_{nullptr}
+      , unsafe_pool_{nullptr}
+      , safe_pool_count_(0)
+      , unsafe_pool_count_(0) {
     this->reserve(prefill);
   }
   ~DescriptorPool() { this->send_to_manager(); }

@@ -3,6 +3,7 @@
 
 #include <atomic>
 #include <utility>
+#include <iostream>  
 
 #include <assert.h>
 #include <stdint.h>
@@ -49,6 +50,10 @@ class PoolElement {
 
   explicit PoolElement(PoolElement *next=nullptr) {
     this->header().next = next;
+    std::cout << "New Pool Element: " <<  reinterpret_cast<void*>(this)
+        << " Header: " <<  reinterpret_cast<void*>(&(this->header()))
+        << " Descriptor: " <<  reinterpret_cast<void*>(this->descriptor())
+        << " .\n";
   }
 
   // TODO(carlos) add const versions of these accessors
@@ -89,6 +94,16 @@ class PoolElement {
    */
   void cleanup_descriptor();
 
+  /**
+   * Calculates padding between header and descriptor
+   * @return [description]
+   */
+  static size_t get_header_pad() {
+    // TODO(carlos) This assumes that cache is aligned to 4 bytes. Should grab
+    // the cache alignment size of the target system and use that instead.
+    return (4 - sizeof(Header) % 4);
+  }
+
  private:
   /**
    * This object should have 2 members: a header and a descriptor, but the
@@ -98,6 +113,7 @@ class PoolElement {
    * This is possibly a horrible idea, and it might be safer (but slower) to use
    * back-pointers.
    */
+  
   char padding_[CACHE_LINE_SIZE];
 
   DISALLOW_COPY_AND_ASSIGN(PoolElement);
@@ -111,14 +127,8 @@ static_assert(sizeof(PoolElement) == CACHE_LINE_SIZE,
 // IMPLEMENTATIONS
 // ===============
 inline tervel::util::Descriptor * PoolElement::descriptor() {
-  // Extra padding is added to ensure that the descriptor pointer returned is
-  // cache-aligned.
-  //
-  // TODO(carlos) This assumes that cache is aligned to 4 bytes. Should grab
-  // the cache alignment size of the target system and use that instead.
-  constexpr size_t header_pad = 4 - sizeof(Header) % 4;
   tervel::util::Descriptor *descr = reinterpret_cast<Descriptor*>(padding_ +
-    sizeof(Header) + header_pad);
+    sizeof(Header) + get_header_pad());
 
   // algorithms expect descriptors to be mem-aligned, so the LSB's should not be
   // taken up.
@@ -159,12 +169,16 @@ inline void PoolElement::cleanup_descriptor() {
  * place in memory.
  */
 inline PoolElement * get_elem_from_descriptor(tervel::util::Descriptor *descr) {
-  PoolElement::Header *tmp = reinterpret_cast<PoolElement::Header *>(descr) - 1;
+  uintptr_t tmp = reinterpret_cast<uintptr_t>(descr);
+  tmp -= sizeof(PoolElement::Header);
+  tmp -= PoolElement::get_header_pad();
+
 #ifdef DEBUG_POOL
   // If this fails, then the given descriptor is not part of a PoolElement. This
   // probably means the user passed in a descriptor that wasn't allocated
   // through a memory pool.
-  assert(tmp->debug_pool_stamp_ == DEBUG_EXPECTED_STAMP);
+  PoolElement::Header* tmp2 = reinterpret_cast<PoolElement::Header *>(tmp);
+  assert(tmp2->debug_pool_stamp_ == DEBUG_EXPECTED_STAMP);
 #endif
   return reinterpret_cast<PoolElement *>(tmp);
 }

@@ -54,7 +54,7 @@ bool HazardPointer::is_watched(Element *descr, HazardPointer *hazard_pointer) {
   if (hazard_pointer->contains(descr)) {
     return descr->on_is_watched();
   }
-  return true;
+  return false;
 }
 
 bool HazardPointer::is_watched(void *value, HazardPointer *hazard_pointer) {
