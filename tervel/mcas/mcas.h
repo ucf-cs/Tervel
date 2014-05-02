@@ -47,6 +47,9 @@ class MCAS : public util::OpRecord {
       Helper<T>* helper = cas_rows_[i].helper_.load();
       // The No check flag is true because each was check prior
       // to the call of this descructor.
+      if (helper == MCAS_FAIL_CONST) {
+        break;
+      }
       util::memory::rc::free_descriptor(helper, true);
     }
   }

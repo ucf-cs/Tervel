@@ -30,6 +30,8 @@
 #include "tervel/util/info.h"
 #include "tervel/util/thread_context.h"
 #include "tervel/util/tervel.h"
+#include "tervel/util/memory/hp/hp_element.h"
+#include "tervel/util/memory/hp/hp_list.h"
 
 enum class TestType : size_t {UPDATEOBJECT, UPDATEMULTIOBJECT, RANDOMOVERLAPS};
 
@@ -72,6 +74,7 @@ class TestObject {
 int array_length, mcas_size;
 
 void run(int thread_id, tervel::Tervel* tervel_obj, TestObject * test_object);
+void run_update_object(int start_pos, TestObject * test_data);
 
 DEFINE_int32(num_threads, 1, "The number of threads to spawn.");
 DEFINE_int32(execution_time, 1, "The amount of time to run the tests");
@@ -92,7 +95,9 @@ int main(int argc, char** argv) {
   tervel::Tervel tervel_obj(test_data.num_threads_);
   tervel::ThreadContext tervel_thread(&tervel_obj);
 
-  std::vector<std::thread> thread_list;
+  run_update_object(0, &test_data);
+
+  /* std::vector<std::thread> thread_list;
   for (int i = 0; i < test_data.num_threads_; i++) {
     std::thread temp_thread(run, i, &tervel_obj, &test_data);
     thread_list.push_back(std::move(temp_thread));
@@ -108,7 +113,7 @@ int main(int argc, char** argv) {
   std::for_each(thread_list.begin(), thread_list.end(), [](std::thread &t) {
       t.join();
   });
-
+ */
   printf("Completed[Passed: %lu, Failed: %lu]\n",
     test_data.passed_count_.load(), test_data.failed_count_.load());
 
@@ -188,6 +193,41 @@ void run_update_object(int thread_id, int start_pos, TestObject * test_data) {
       failed_count++;
     }
     mcas->safe_delete();
+  }  // End Execution Loop
+
+  test_data->atomic_add(passed_count, failed_count);
+  return;
+}
+
+void run_update_object(int start_pos, TestObject * test_data) {
+  int failed_count = 0;
+  int passed_count = 0;
+
+  tervel::mcas::MCAS<void *> *mcas;
+
+  for (int i = 0; i < 20000; i++) {
+    mcas = new tervel::mcas::MCAS<void *>(test_data->mcas_size_);
+
+    for (int i = 0; i < test_data->mcas_size_; i++) {
+      int var = start_pos + i;
+
+      std::atomic<void *> *address = (&(test_data->shared_memory_)[var]);
+      void * expected_value = tervel::mcas::read<void *>(address);
+      void * new_value = calc_next_value(expected_value);
+
+      bool success = mcas->add_cas_triple(address, expected_value, new_value);
+      assert(success);
+    }
+
+    if (mcas->execute()) {
+      passed_count++;
+    } else {
+      failed_count++;
+    }
+
+    tervel::util::memory::hp::ElementList *element_list;
+    element_list = tervel::tl_thread_info->get_hp_element_list();
+    mcas->safe_delete(false, element_list);
   }  // End Execution Loop
 
   test_data->atomic_add(passed_count, failed_count);

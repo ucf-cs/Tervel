@@ -8,6 +8,8 @@ namespace rc {
 
 void DescriptorPool::free_descriptor(tervel::util::Descriptor *descr,
       bool dont_check) {
+  uintptr_t safty_check = reinterpret_cast<uintptr_t>(descr);
+  assert((safty_check & 0x3) == 0x0);
   if (!dont_check && util::memory::rc::is_watched(descr)) {
     this->add_to_unsafe(descr);
   } else {
@@ -21,6 +23,7 @@ void DescriptorPool::reserve(int num_descriptors) {
     PoolElement *elem = new PoolElement();
     elem->next(safe_pool_);
     safe_pool_ = elem;
+    safe_pool_count_++;
   }
 }
 
@@ -46,6 +49,7 @@ PoolElement * DescriptorPool::get_from_pool(bool allocate_new) {
 #endif
 
     safe_pool_count_--;
+    assert(safe_pool_count_ >=0);
   }
 
   // allocate a new element if needed
