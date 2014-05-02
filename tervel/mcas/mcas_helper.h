@@ -36,31 +36,42 @@ class Helper : public util::Descriptor {
    * @param address the address this MCH was read from
    * @param value the bitmarked value of this MCH
    * @return returns whether or not the watch was successfull.
-   *
-   * Defined in Descriptor.h
    */
-  // bool on_watch(std::atomic<void *> *address, void *value);
+  using util::Descriptor::on_watch;
+  bool on_watch(std::atomic<void *> *address, void * value) {
+    typedef util::memory::hp::HazardPointer::SlotID t_SlotID;
+    bool success = util::memory::hp::HazardPointer::watch(
+          t_SlotID::SHORTUSE, mcas_op_, address, value);
+    if (success) {
+      /* Success, means that the MCAS object referenced by this Helper can not
+       * be freed while we check to make sure this Helper is assocaited with
+       * it.
+       */
+      Helper<T> *curr_mch = cas_row_->helper_.load();
+      if (curr_mch == nullptr) {
+         if (cas_row_->helper_.compare_exchange_strong(curr_mch, this)) {
+           /* If this passed then curr_mch == nullptr, so we set it to be == this
+            */
+            curr_mch = this;
+         }
+      }
+      if (curr_mch != this) {
+        /* This Helper was placed in error, remove it and replace it with the
+         * logic value of this object (expected_value)
+         */
+        address->compare_exchange_strong(value, cas_row_->expected_value_);
+        success = false;
+      }
+    }  // End Successfull watch
 
-  /** 
-   * This function is called to remove an MCH by completing its associated
-   * operation.
-   *
-   * @params address the location where the MCH resides
-   * @params value the value of this MCH as it was read at the address
-   * @return the current value of the address
-   *
-   * Defined in Descriptor.h
-   */
-  // void * complete(std::atomic<void *> *address, void * value);
+    /* No longer need HP protection, if we have RC protection on an associated
+     * Helper. If we don't it, the value at this address must have changed and 
+     * we don't need it either way.
+     */
+    util::memory::hp::HazardPointer::unwatch(t_SlotID::SHORTUSE);
+    return success;
+  };
 
-  /**
-   * Attempts to complete acquiring a memory watch on a Helper object
-   * Declared in util/Descriptor.h
-   * @param  address the location value was read form
-   * @param  value the last known value of address
-   * @return true if succesful acquiring the watch
-   */
-  bool on_watch(std::atomic<void *> *address, void * value);
 
   /**
    * This function completes the mcas operation associated with this helper.
@@ -70,7 +81,36 @@ class Helper : public util::Descriptor {
    * @param address the location value was read from
    * @return the new current value of the address
    */
-  void * complete(void *value, std::atomic<void *> *address);
+  using util::Descriptor::complete;
+  void * complete(void *value, std::atomic<void *> *address) {
+    Helper<T>* temp_null = nullptr;
+    this->cas_row_->helper_.compare_exchange_strong(temp_null, this);
+
+    bool success = false;
+    if (temp_null == nullptr || temp_null == this) {
+      /* This implies it was successfully associated
+         So call the complete function of the MCAS operation */
+      success = this->mcas_op_->mcas_complete(this->cas_row_);
+      if (tervel::tl_thread_info->recursive_return()) {
+        /* If the thread is performing a recursive return back to its own 
+           operation, then just return null, it will be ignored. */
+        return nullptr;
+      }
+    }
+
+    if (success) {
+    /* If the MCAS op was successfull then remove the Helper by replacing 
+        it with the new_value */
+      address->compare_exchange_strong(value,
+          reinterpret_cast<void *>(this->cas_row_->new_value_));
+    } else {
+      /*Otherwise remove the Helper by replacing it with the expected_value*/
+      address->compare_exchange_strong(value,
+          reinterpret_cast<void *>(this->cas_row_->expected_value_));
+    }
+    // Return the new current value of the position
+    return address->load();
+  };
 
   /**
    * This function is only called on helpers which are associated with its
@@ -79,6 +119,7 @@ class Helper : public util::Descriptor {
    * 
    * @return the logicial value of this descriptor object.
    */
+  using util::Descriptor::get_logical_value;
   void * get_logical_value() {
     if (this->mcas_op_->state_ ==  MCAS<T>::MCasState::PASS) {
       return this->cas_row_->new_value_;
@@ -94,72 +135,7 @@ class Helper : public util::Descriptor {
   MCAS<T> *mcas_op_;
 };  // Helper
 
-template<class T>
-bool Helper<T>::on_watch(std::atomic<void *> *address, void * value) {
-  typedef util::memory::hp::HazardPointer::SlotID t_SlotID;
-  bool success = util::memory::hp::HazardPointer::watch(
-          t_SlotID::SHORTUSE, mcas_op_, address, value);
 
-  if (success) {
-    /* Success, means that the MCAS object referenced by this Helper can not
-     * be freed while we check to make sure this Helper is assocaited with
-     * it.
-     */
-    Helper<T> *curr_mch = cas_row_->helper_.load();
-    if (curr_mch == nullptr) {
-       if (cas_row_->helper_.compare_exchange_strong(curr_mch, this)) {
-         /* If this passed then curr_mch == nullptr, so we set it to be == this
-          */
-          curr_mch = this;
-       }
-    }
-    if (curr_mch != this) {
-      /* This Helper was placed in error, remove it and replace it with the
-       * logic value of this object (expected_value)
-       */
-      address->compare_exchange_strong(value, cas_row_->expected_value_);
-      success = false;
-    }
-  }  // End Successfull watch
-
-  /* No longer need HP protection, if we have RC protection on an associated
-   * Helper. If we don't it, the value at this address must have changed and 
-   * we don't need it either way.
-   */
-  util::memory::hp::HazardPointer::unwatch(t_SlotID::SHORTUSE);
-  return success;
-}
-
-template<class T>
-void * Helper<T>::complete(void *value, std::atomic<void *> *address) {
-  Helper<T>* temp_null = nullptr;
-  this->cas_row_->helper_.compare_exchange_strong(temp_null, this);
-
-  bool success = false;
-  if (temp_null == nullptr || temp_null == this) {
-    /* This implies it was successfully associated
-       So call the complete function of the MCAS operation */
-    success = this->mcas_op_->mcas_complete(this->cas_row_);
-    if (tervel::tl_thread_info->recursive_return()) {
-      /* If the thread is performing a recursive return back to its own 
-         operation, then just return null, it will be ignored. */
-      return nullptr;
-    }
-  }
-
-  if (success) {
-  /* If the MCAS op was successfull then remove the Helper by replacing 
-      it with the new_value */
-    address->compare_exchange_strong(value,
-        reinterpret_cast<void *>(this->cas_row_->new_value_));
-  } else {
-    /*Otherwise remove the Helper by replacing it with the expected_value*/
-    address->compare_exchange_strong(value,
-        reinterpret_cast<void *>(this->cas_row_->expected_value_));
-  }
-  // Return the new current value of the position
-  return address->load();
-}
 
 }  // namespace mcas
 }  // namespace tervel

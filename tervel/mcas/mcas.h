@@ -127,7 +127,7 @@ class MCAS : public util::OpRecord {
   T mcas_remove(const int pos, T value);
 
   void help_complete() {
-    mcas_complete(0);
+    mcas_complete(0, true);
   }
 
   std::unique_ptr<CasRow<T>[]> cas_rows_;
@@ -185,8 +185,8 @@ bool MCAS<T>::execute() {
 
 template<class T>
 bool MCAS<T>::mcas_complete(CasRow<T> *current_row) {
-  int start_pos = reinterpret_cast<uintptr_t>(&cas_rows_[0]);
-  start_pos -= reinterpret_cast<uintptr_t>(current_row);
+  int start_pos = 0;
+  // TODO(steven): implement position calculation.
   return mcas_complete(start_pos, false);
 }
 
@@ -208,7 +208,9 @@ bool MCAS<T>::mcas_complete(int start_pos, bool wfmode) {
   for (int pos = start_pos; pos < row_count_; pos++) {
     size_t fcount = 0;  // Tracks the number of failures.
 
-    CasRow<T> * row = &cas_rows_[pos];
+    CasRow<T> * row = &(cas_rows_[pos]);
+
+    assert(pos==0 || cas_rows_[pos-1].helper_.load());
 
     /* Read the current value of the address */
     T current_value = row->address_->load();
@@ -225,7 +227,7 @@ bool MCAS<T>::mcas_complete(int start_pos, bool wfmode) {
         if (tervel::tl_thread_info->get_recursive_depth() == 0) {
           /* If this is our operation then make an annoucnement */
           tervel::util::ProgressAssurance::make_announcement(this);
-          assert(state_.load() == MCasState::FAIL);
+          assert(state_.load() != MCasState::IN_PROGRESS);
           return (state_.load() == MCasState::PASS);
         } else {
           /* Otherwise perform a recursive return */

@@ -6,7 +6,7 @@
 
 #include <stddef.h>
 
-#define DEBUG_POOL true
+//#define DEBUG_POOL true
 
 namespace tervel {
 namespace util {

@@ -33,6 +33,15 @@
 #include "tervel/util/memory/hp/hp_element.h"
 #include "tervel/util/memory/hp/hp_list.h"
 
+DEFINE_int32(num_threads, 8, "The number of threads to spawn.");
+DEFINE_int32(execution_time, 50, "The amount of time to run the tests");
+DEFINE_int32(array_length, 64, "The size of the region to test on.");
+DEFINE_int32(mcas_size, 2, "The number of words in a mcas operation.");
+DEFINE_int32(operation_type, 0, "The type of test to execute"
+    "(0: updating sinlge multi-word object"
+    ", 1: updating multiple objects"
+    ", 2: updating overlapping mult-word updates)");
+
 enum class TestType : size_t {UPDATEOBJECT, UPDATEMULTIOBJECT, RANDOMOVERLAPS};
 
 class TestObject {
@@ -76,15 +85,6 @@ int array_length, mcas_size;
 void run(int thread_id, tervel::Tervel* tervel_obj, TestObject * test_object);
 void run_update_object(int start_pos, TestObject * test_data);
 
-DEFINE_int32(num_threads, 1, "The number of threads to spawn.");
-DEFINE_int32(execution_time, 1, "The amount of time to run the tests");
-DEFINE_int32(array_length, 64, "The size of the region to test on.");
-DEFINE_int32(mcas_size, 2, "The number of words in a mcas operation.");
-DEFINE_int32(operation_type, 0, "The type of test to execute"
-    "(0: updating sinlge multi-word object"
-    ", 1: updating multiple objects"
-    ", 2: updating overlapping mult-word updates)");
-
 int main(int argc, char** argv) {
   gflags::ParseCommandLineFlags(&argc, &argv, true);
 
@@ -95,9 +95,9 @@ int main(int argc, char** argv) {
   tervel::Tervel tervel_obj(test_data.num_threads_);
   tervel::ThreadContext tervel_thread(&tervel_obj);
 
-  run_update_object(0, &test_data);
+  // run_update_object(0, &test_data);
 
-  /* std::vector<std::thread> thread_list;
+  std::vector<std::thread> thread_list;
   for (int i = 0; i < test_data.num_threads_; i++) {
     std::thread temp_thread(run, i, &tervel_obj, &test_data);
     thread_list.push_back(std::move(temp_thread));
@@ -113,7 +113,7 @@ int main(int argc, char** argv) {
   std::for_each(thread_list.begin(), thread_list.end(), [](std::thread &t) {
       t.join();
   });
- */
+ 
   printf("Completed[Passed: %lu, Failed: %lu]\n",
     test_data.passed_count_.load(), test_data.failed_count_.load());
 
