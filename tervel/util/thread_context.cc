@@ -8,10 +8,10 @@ namespace tervel {
 
 ThreadContext::ThreadContext(Tervel* tervel)
     : thread_id_ {tervel->get_thread_id()}
-    , tervel_ {tervel}
-    , rc_descriptor_pool_(tervel_->rc_pool_manager_.allocate_pool())
-    , hp_element_list_(tervel_->hp_list_manager_.allocate_list()) {
+    , tervel_ {tervel} {
   tl_thread_info = this;
+  rc_descriptor_pool_ = tervel->rc_pool_manager_.allocate_pool();
+  hp_element_list_ = tervel->hp_list_manager_.allocate_list();
 }
 
 util::memory::hp::HazardPointer* ThreadContext::get_hazard_pointer() {

@@ -1,4 +1,4 @@
-CXX      ?= g++-4.8
+CXX      = g++-4.7
 CXXFLAGS = -Wall -g -std=c++11 -march=native -m64 -pthread \
   -fno-strict-aliasing
   #-Wfatal-errors -Werror

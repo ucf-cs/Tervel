@@ -2,6 +2,6 @@
 
 namespace tervel {
 
-thread_local ThreadContext * tl_thread_info;
+__thread ThreadContext * tl_thread_info;
 
 }  // namespace tervel

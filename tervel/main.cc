@@ -74,7 +74,7 @@ int array_length, mcas_size;
 void run(int thread_id, tervel::Tervel* tervel_obj, TestObject * test_object);
 
 DEFINE_int32(num_threads, 1, "The number of threads to spawn.");
-DEFINE_int32(execution_time, 5, "The amount of time to run the tests");
+DEFINE_int32(execution_time, 1, "The amount of time to run the tests");
 DEFINE_int32(array_length, 64, "The size of the region to test on.");
 DEFINE_int32(mcas_size, 2, "The number of words in a mcas operation.");
 DEFINE_int32(operation_type, 0, "The type of test to execute"
@@ -90,6 +90,7 @@ int main(int argc, char** argv) {
         static_cast<TestType>(FLAGS_operation_type) );
 
   tervel::Tervel tervel_obj(test_data.num_threads_);
+  tervel::ThreadContext tervel_thread(&tervel_obj);
 
   std::vector<std::thread> thread_list;
   for (int i = 0; i < test_data.num_threads_; i++) {

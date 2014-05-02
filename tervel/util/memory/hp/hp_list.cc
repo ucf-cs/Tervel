@@ -41,7 +41,7 @@ void ElementList::try_to_free_elements(bool dont_check) {
         prev = temp;
         temp = temp_next;
       } else {
-        temp->~Element();
+        delete temp;
         prev->next(temp_next);
         temp = temp_next;
       }
@@ -51,9 +51,9 @@ void ElementList::try_to_free_elements(bool dont_check) {
      * We check the first element last to allow for cleaner looping code.
      */
     temp = element_list_->next();
-    bool watched = HazardPointer::is_watched(temp);
+    bool watched = HazardPointer::is_watched(element_list_);
     if (dont_check || !watched) {
-      temp->~Element();
+      delete element_list_;
       element_list_ = temp;
     }
   }

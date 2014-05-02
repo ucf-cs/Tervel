@@ -77,7 +77,7 @@ class MCAS : public util::OpRecord {
   bool execute();
 
  private:
-  enum class MCAS_STATE : std::int8_t {IN_PROGRESS = 0, PASS = 0 , FAIL = 0};
+  enum class MCasState : std::int8_t {IN_PROGRESS = 0, PASS = 1 , FAIL = 2};
   /** 
    * This function is used to complete a currently executing MCAS operation
    * It is most likely that this operation is in conflict with some other
@@ -128,7 +128,7 @@ class MCAS : public util::OpRecord {
   }
 
   std::unique_ptr<CasRow<T>[]> cas_rows_;
-  std::atomic<MCAS_STATE> state_ {MCAS_STATE::IN_PROGRESS};
+  std::atomic<MCasState> state_ {MCasState::IN_PROGRESS};
   int row_count_ {0};
   int max_rows_;
 
@@ -139,8 +139,8 @@ class MCAS : public util::OpRecord {
 template<class T>
 bool MCAS<T>::add_cas_triple(std::atomic<T> *address, T expected_value,
       T new_value) {
-  if (tervel::util::isValid(reinterpret_cast<void *>(expected_value)) ||
-        tervel::util::isValid(reinterpret_cast<void *>(new_value))) {
+  if (!tervel::util::isValid(reinterpret_cast<void *>(expected_value)) ||
+        !tervel::util::isValid(reinterpret_cast<void *>(new_value))) {
     return false;
   } else if (row_count_ == max_rows_) {
     return false;
@@ -213,17 +213,17 @@ bool MCAS<T>::mcas_complete(int start_pos, bool wfmode) {
     while (row->helper_.load() == nullptr) {
       /* Loop until this row's helper is no longer null */
 
-      if (state_.load() != MCAS_STATE::IN_PROGRESS) {
+      if (state_.load() != MCasState::IN_PROGRESS) {
         /* Checks if the operation has been completed */
-        return (state_.load() == MCAS_STATE::PASS);
+        return (state_.load() == MCasState::PASS);
       } else if (!wfmode &&
               fcount++ == util::ProgressAssurance::MAX_FAILURES) {
         /* Check if we need to enter wf_mode */
         if (tervel::tl_thread_info->get_recursive_depth() == 0) {
           /* If this is our operation then make an annoucnement */
           tervel::util::ProgressAssurance::make_announcement(this);
-          assert(state_.load() == MCAS_STATE::FAIL);
-          return (state_.load() == MCAS_STATE::PASS);
+          assert(state_.load() == MCasState::FAIL);
+          return (state_.load() == MCasState::PASS);
         } else {
           /* Otherwise perform a recursive return */
           tervel::tl_thread_info->set_recursive_return();
@@ -265,9 +265,9 @@ bool MCAS<T>::mcas_complete(int start_pos, bool wfmode) {
               reinterpret_cast<Helper<T> *>(MCAS_FAIL_CONST))
               || temp_null == reinterpret_cast<Helper<T> *>(MCAS_FAIL_CONST)) {
           /* if row was disabled then set the state to FAILED */
-          MCAS_STATE temp_state = MCAS_STATE::IN_PROGRESS;
-          this->state_.compare_exchange_strong(temp_state, MCAS_STATE::FAIL);
-          assert(this->state_.load() == MCAS_STATE::FAIL);
+          MCasState temp_state = MCasState::IN_PROGRESS;
+          this->state_.compare_exchange_strong(temp_state, MCasState::FAIL);
+          assert(this->state_.load() == MCasState::FAIL);
           return false;
         } else {
           /* the row was associated, this implies the operation is over. We
@@ -297,8 +297,8 @@ bool MCAS<T>::mcas_complete(int start_pos, bool wfmode) {
                   row->expected_value_);
             util::memory::rc::free_descriptor(helper);
 
-            assert(state_.load() == MCAS_STATE::IN_PROGRESS);
-            return (state_.load() == MCAS_STATE::PASS);
+            assert(state_.load() == MCasState::IN_PROGRESS);
+            return (state_.load() == MCasState::PASS);
           }
         } else {
           /* We failed to place helper, re-evaluate the current_value
@@ -311,20 +311,20 @@ bool MCAS<T>::mcas_complete(int start_pos, bool wfmode) {
     }  // End While Current helper is null
 
     if (row->helper_.load() == reinterpret_cast<Helper<T> *>(MCAS_FAIL_CONST)) {
-      MCAS_STATE temp_state = MCAS_STATE::IN_PROGRESS;
-      this->state_.compare_exchange_strong(temp_state, MCAS_STATE::FAIL);
-      assert(this->state_.load() == MCAS_STATE::FAIL);
+      MCasState temp_state = MCasState::IN_PROGRESS;
+      this->state_.compare_exchange_strong(temp_state, MCasState::FAIL);
+      assert(this->state_.load() == MCasState::FAIL);
       return false;
     }
   }  // End For Loop on CasRows
 
   /* All rows have been associated, so set the state to passed! */
-  MCAS_STATE temp_state = MCAS_STATE::IN_PROGRESS;
-  if (this->state_.compare_exchange_strong(temp_state, MCAS_STATE::PASS)) {
-    temp_state = MCAS_STATE::PASS;
+  MCasState temp_state = MCasState::IN_PROGRESS;
+  if (this->state_.compare_exchange_strong(temp_state, MCasState::PASS)) {
+    temp_state = MCasState::PASS;
   }
-  assert(this->state_.load() != MCAS_STATE::IN_PROGRESS);
-  return (temp_state == MCAS_STATE::PASS);
+  assert(this->state_.load() != MCasState::IN_PROGRESS);
+  return (temp_state == MCasState::PASS);
 }  // End Complete function.
 
 template<class T>
