@@ -43,6 +43,7 @@ class MCAS : public util::OpRecord {
       , max_rows_ {max_rows} {}
 
   ~MCAS<T>() {
+    state_.store(MCasState::DELETED);
     for (int i = 0; i < row_count_; i++) {
       Helper<T>* helper = cas_rows_[i].helper_.load();
       // The No check flag is true because each was check prior
@@ -79,8 +80,8 @@ class MCAS : public util::OpRecord {
    */
   bool execute();
 
- private:
-  enum class MCasState : std::int8_t {IN_PROGRESS = 0, PASS = 1 , FAIL = 2};
+ // private: TODO Uncomment
+  enum class MCasState : std::int8_t {IN_PROGRESS = 0, PASS = 1 , FAIL = 2, DELETED = 3};
   /** 
    * This function is used to complete a currently executing MCAS operation
    * It is most likely that this operation is in conflict with some other
@@ -129,8 +130,22 @@ class MCAS : public util::OpRecord {
   void help_complete() {
     mcas_complete(0, true);
   }
+  bool on_is_watched() {
+    for (int i = 0; i < row_count_; i++) {
+      Helper<T>* helper = cas_rows_[i].helper_.load();
+      // The No check flag is true because each was check prior
+      // to the call of this descructor.
+      if (helper == MCAS_FAIL_CONST) {
+        break;
+      } else if (util::memory::rc::is_watched(helper)) {
+        return true;
+      }
+    }
+    return false;
+  }
 
-  std::unique_ptr<CasRow<T>[]> cas_rows_;
+  //std::unique_ptr<CasRow<T>[]> cas_rows_;
+  CasRow<T> *cas_rows_;
   std::atomic<MCasState> state_ {MCasState::IN_PROGRESS};
   int row_count_ {0};
   int max_rows_;
@@ -185,7 +200,9 @@ bool MCAS<T>::execute() {
 
 template<class T>
 bool MCAS<T>::mcas_complete(CasRow<T> *current_row) {
-  int start_pos = 0;
+  int start_pos = 1;
+  assert(cas_rows_[0].helper_.load() != nullptr);
+  assert(current_row->helper_.load() != nullptr);
   // TODO(steven): implement position calculation.
   return mcas_complete(start_pos, false);
 }
@@ -272,6 +289,7 @@ bool MCAS<T>::mcas_complete(int start_pos, bool wfmode) {
           /* if row was disabled then set the state to FAILED */
           MCasState temp_state = MCasState::IN_PROGRESS;
           this->state_.compare_exchange_strong(temp_state, MCasState::FAIL);
+          assert(row->helper_.load());
           assert(this->state_.load() == MCasState::FAIL);
           return false;
         } else {
@@ -298,10 +316,18 @@ bool MCAS<T>::mcas_complete(int start_pos, bool wfmode) {
              */
             T temp_helper = reinterpret_cast<T>(
                   util::memory::rc::mark_first(helper));
+
             row->address_->compare_exchange_strong(temp_helper,
                   row->expected_value_);
+
             util::memory::rc::free_descriptor(helper);
 
+            if(row->helper_.load() == reinterpret_cast<Helper<T> *>(
+                  MCAS_FAIL_CONST)) {
+              MCasState temp_state = MCasState::IN_PROGRESS;
+              this->state_.compare_exchange_strong(temp_state, MCasState::FAIL);
+            }
+            assert(row->helper_.load());
             assert(state_.load() != MCasState::IN_PROGRESS);
             return (state_.load() == MCasState::PASS);
           }

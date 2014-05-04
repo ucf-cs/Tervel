@@ -35,22 +35,22 @@ class PoolElement {
    */
   struct Header {
     PoolElement *next;
-    std::atomic<uint64_t> ref_count {0};
+    std::atomic<int64_t> ref_count {0};
 
 #ifdef DEBUG_POOL
     std::atomic<bool> descriptor_in_use {false};
 
     std::atomic<uint64_t> allocation_count {1};
     std::atomic<uint64_t> free_count {0};
-
+#endif
     // This stamp is checked when doing memory pool shenanigans to make sure
     // that a given descriptor actually belongs to a memory pool.
     int debug_pool_stamp {DEBUG_EXPECTED_STAMP};
-#endif
   };
 
   explicit PoolElement(PoolElement *next=nullptr) {
     this->header().next = next;
+    assert(this->header().ref_count.load() == 0);
   }
 
   // TODO(carlos) add const versions of these accessors

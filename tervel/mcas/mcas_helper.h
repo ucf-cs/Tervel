@@ -70,6 +70,10 @@ class Helper : public util::Descriptor {
       util::memory::hp::HazardPointer::unwatch(t_SlotID::SHORTUSE);
     }  // End Successfull watch
 
+    if (success) {
+      //assert(util::memory::hp::HazardPointer::is_watched(mcas_op_));
+    }
+
     return success;
   };
 

@@ -20,7 +20,7 @@ namespace rc {
  * and left untouched when they're returned to the pool. This allows the user
  * to view associations. Entirely for debug purposes.
  */
-constexpr bool NO_REUSE_RC_DESCR {true};
+constexpr bool NO_REUSE_RC_DESCR {false};
 }
 }
 /**

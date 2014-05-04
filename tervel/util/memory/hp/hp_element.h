@@ -42,8 +42,10 @@ class Element {
    */
   void safe_delete(bool no_check = false, ElementList *element_list
           = tervel::tl_thread_info->get_hp_element_list()) {
-    if (no_check && !NO_DELETE_HP_ELEMENTS) {
-        delete this;
+    if (no_check && NO_DELETE_HP_ELEMENTS) {
+      this->~Element();
+    } else if (no_check) {
+      delete this;
     } else {
       element_list->add_to_unsafe(this);
     }
@@ -68,10 +70,7 @@ class Element {
    *
    * @return whether or not the element is watched.
    */
-  virtual bool on_is_watched() {
-    return false;
-  }
-
+  virtual bool on_is_watched() = 0;
   /**
    * This function is used to remove a strong watch on an Element.
    * Classes wishing to express this should override this function.

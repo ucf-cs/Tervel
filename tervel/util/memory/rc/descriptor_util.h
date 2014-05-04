@@ -60,14 +60,16 @@ inline bool watch(tervel::util::Descriptor *descr, std::atomic<void *> *address,
   PoolElement *elem = get_elem_from_descriptor(descr);
   elem->header().ref_count.fetch_add(1);
   if (address->load() != value) {
-    elem->header().ref_count.fetch_add(-1);
+    int temp = elem->header().ref_count.fetch_add(-1);
+    assert(temp > 0);
     return false;
   } else {
     bool res = descr->on_watch(address, value);
     if (res) {
       return true;
     } else {
-      elem->header().ref_count.fetch_add(-1);
+      int temp = elem->header().ref_count.fetch_add(-1);
+      assert(temp > 0);
       return false;
     }
   }
@@ -83,7 +85,8 @@ inline bool watch(tervel::util::Descriptor *descr, std::atomic<void *> *address,
 */
 inline void unwatch(tervel::util::Descriptor *descr) {
   PoolElement *elem = get_elem_from_descriptor(descr);
-  elem->header().ref_count.fetch_add(-1);
+  int temp = elem->header().ref_count.fetch_add(-1);
+  assert(temp > 0);
   descr->on_unwatch();
 }
 
@@ -97,7 +100,9 @@ inline void unwatch(tervel::util::Descriptor *descr) {
 */
 inline bool is_watched(tervel::util::Descriptor *descr) {
   PoolElement * elem = get_elem_from_descriptor(descr);
-  if (elem->header().ref_count.load() == 0) {
+  int ref_count = elem->header().ref_count.load();
+  assert(ref_count >=0);
+  if (ref_count == 0) {
     return descr->on_is_watched();
   } else {
     return true;
