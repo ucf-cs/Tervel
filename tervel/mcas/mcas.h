@@ -144,8 +144,8 @@ class MCAS : public util::OpRecord {
     return false;
   }
 
-  //std::unique_ptr<CasRow<T>[]> cas_rows_;
-  CasRow<T> *cas_rows_;
+  std::unique_ptr<CasRow<T>[]> cas_rows_;
+
   std::atomic<MCasState> state_ {MCasState::IN_PROGRESS};
   int row_count_ {0};
   int max_rows_;
@@ -368,9 +368,11 @@ T MCAS<T>::mcas_remove(const int pos, T value) {
   // First get a watch on the object.
   bool watched = util::memory::rc::watch(descr, address,
           reinterpret_cast<void *>(value));
-  // Now unwatch it, crazy right? But there is a reason...
-  util::memory::rc::unwatch(descr);
+  
   if (watched) {
+    // Now unwatch it, crazy right? But there is a reason...
+    util::memory::rc::unwatch(descr);
+
     /* If we watched it and it is a MCH for this operation, then act of 
      * watching will call the MCH's on_watch function, which will associate it
      * with this cas row...thus if cas_rows_[pos].helper != nullprt, then this

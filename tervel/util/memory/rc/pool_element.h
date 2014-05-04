@@ -42,10 +42,11 @@ class PoolElement {
 
     std::atomic<uint64_t> allocation_count {1};
     std::atomic<uint64_t> free_count {0};
-#endif
+    
     // This stamp is checked when doing memory pool shenanigans to make sure
     // that a given descriptor actually belongs to a memory pool.
-    int debug_pool_stamp {DEBUG_EXPECTED_STAMP};
+    int debug_pool_stamp2 {DEBUG_EXPECTED_STAMP};
+#endif
   };
 
   explicit PoolElement(PoolElement *next=nullptr) {

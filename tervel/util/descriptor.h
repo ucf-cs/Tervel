@@ -74,7 +74,6 @@ class Descriptor {
    * @return true if successfull, false otherwise
    */
   virtual bool on_watch(std::atomic<void *>* /*address*/, void * /*expected*/) {
-    assert(false); // TODO(steven): delete this assert
     return true;
   }
 
