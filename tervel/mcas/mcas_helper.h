@@ -15,6 +15,11 @@ namespace tervel {
 namespace mcas {
 
 template<class T>
+class MCAS;
+template<class T>
+class CasRow;
+
+template<class T>
 /**
  * This class is the MCAS operation's helper. The Helper or MCH is used to 
  * replace the expected value of the specified address. 
