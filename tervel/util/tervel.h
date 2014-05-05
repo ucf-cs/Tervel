@@ -2,6 +2,7 @@
 #define TERVEL_UTIL_TERVEL_H
 
 #include "tervel/util/util.h"
+#include "tervel/util/thread_context.h"
 #include "tervel/util/progress_assurance.h"
 #include "tervel/util/memory/hp/hazard_pointer.h"
 #include "tervel/util/memory/hp/list_manager.h"
@@ -25,6 +26,7 @@ class Tervel {
     // TODO(steven) implement
   }
 
+ private:
   uint64_t get_thread_id() {
     return active_threads_.fetch_add(1);
   }
@@ -46,6 +48,8 @@ class Tervel {
 
   // Shared Progress Assurance Object
   util::ProgressAssurance progress_assurance_;
+
+  friend ThreadContext;
 
   DISALLOW_COPY_AND_ASSIGN(Tervel);
 };

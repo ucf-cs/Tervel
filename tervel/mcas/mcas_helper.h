@@ -22,6 +22,9 @@ template<class T>
 class Helper : public util::Descriptor {
  public:
   /**
+   * The Helper object contains a reference to the row it is associated with and
+   * the mcas operation that contains the row.
+   * 
    * @param mcas_op the MCAS<T> which contains the referenced cas_row
    * @param cas_row the referenced row in the MCAS<T>.
    */
@@ -47,13 +50,12 @@ class Helper : public util::Descriptor {
     if (success) {
       /* Success, means that the MCAS object referenced by this Helper can not
        * be freed while we check to make sure this Helper is assocaited with
-       * it.
-       */
+       * it. */
       Helper<T> *curr_mch = cas_row_->helper_.load();
       if (curr_mch == nullptr) {
          if (cas_row_->helper_.compare_exchange_strong(curr_mch, this)) {
-           /* If this passed then curr_mch == nullptr, so we set it to be == this
-            */
+           /* If this passed then curr_mch == nullptr, so we set it to be == 
+            * this */
             curr_mch = this;
          }
       }

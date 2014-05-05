@@ -80,8 +80,44 @@ class MCAS : public util::OpRecord {
    */
   bool execute();
 
- // private: TODO Uncomment
-  enum class MCasState : std::int8_t {IN_PROGRESS = 0, PASS = 1 , FAIL = 2, DELETED = 3};
+  /**
+   * THis function overrides the virtual function in the OpRecord class
+   * It is called by the progress aurrance scheme. Upon its return the MCAS
+   * operation must be completed
+   */
+  void help_complete() {
+    mcas_complete(0, true);
+  }
+
+  /**
+   * This function overrides the virtual function in the HP::Element class
+   * It returns whether or not this mcas class is being referenced by another
+   * threaded. It is being referenced if any associated descriptor has a 
+   * positive reference count or if there is a hazard point watch on it.
+   * 
+   * @return True if watecd
+   */
+  bool on_is_watched() {
+    for (int i = 0; i < row_count_; i++) {
+      Helper<T>* helper = cas_rows_[i].helper_.load();
+      // The No check flag is true because each was check prior
+      // to the call of this descructor.
+      if (helper == MCAS_FAIL_CONST) {
+        break;
+      } else if (util::memory::rc::is_watched(helper)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+ private:
+  /**
+   * This enum is used to indicate the state of an mcas operation
+   * DELETED is used in debugging procedures
+   */
+  enum class MCasState : std::int8_t {IN_PROGRESS = 0, PASS = 1 , FAIL = 2,
+      DELETED = 3};
   /** 
    * This function is used to complete a currently executing MCAS operation
    * It is most likely that this operation is in conflict with some other
@@ -114,12 +150,12 @@ class MCAS : public util::OpRecord {
   void cleanup(bool success);
 
   /**
-   * This function insures that upon its return that *(cas_rows_[pos].address) no 
-   * longer equals value. Where value is an object that holds an RC bit mark.
+   * This function insures that upon its return that *(cas_rows_[pos].address) 
+   * no longer equals value. Where value is an object that holds an RC bit mark.
    * If the object is not a Helper for this operation, then the standard
    * descriptor remove function is called. This is important to prevent the case
-   * where the stack increases beyond reasonable levels when multiple threads are
-   * helping to complete the same operation.
+   * where the stack increases beyond reasonable levels when multiple threads
+   * are helping to complete the same operation.
    *
    * @param pos the cas_row which is blocked from completing its operaiton
    * @param value the value read at the position
@@ -127,27 +163,17 @@ class MCAS : public util::OpRecord {
    **/
   T mcas_remove(const int pos, T value);
 
-  void help_complete() {
-    mcas_complete(0, true);
-  }
-  bool on_is_watched() {
-    for (int i = 0; i < row_count_; i++) {
-      Helper<T>* helper = cas_rows_[i].helper_.load();
-      // The No check flag is true because each was check prior
-      // to the call of this descructor.
-      if (helper == MCAS_FAIL_CONST) {
-        break;
-      } else if (util::memory::rc::is_watched(helper)) {
-        return true;
-      }
-    }
-    return false;
-  }
+  // ------
+  // Member Data
+  // ------
 
+  /* THe array of CAS triples to complete*/
   std::unique_ptr<CasRow<T>[]> cas_rows_;
-
+  /* The state of the mcas operation */
   std::atomic<MCasState> state_ {MCasState::IN_PROGRESS};
+  /* The number of cas rows */
   int row_count_ {0};
+  /* The max number of rows supported this instance is expecting*/
   int max_rows_;
 
   friend Helper<T>;
@@ -157,6 +183,7 @@ class MCAS : public util::OpRecord {
 template<class T>
 bool MCAS<T>::add_cas_triple(std::atomic<T> *address, T expected_value,
       T new_value) {
+  //First checm to make sure the values do not have any reserved bitss
   if (!tervel::util::isValid(reinterpret_cast<void *>(expected_value)) ||
         !tervel::util::isValid(reinterpret_cast<void *>(new_value))) {
     return false;
@@ -168,6 +195,8 @@ bool MCAS<T>::add_cas_triple(std::atomic<T> *address, T expected_value,
     cas_rows_[row_count_].new_value_ = new_value;
     cas_rows_[row_count_++].helper_.store(nullptr);
 
+    //Sort them
+    // Probally can be done more efficent
     for (int i = (row_count_ - 1); i > 0; i--) {
       if (cas_rows_[i] > cas_rows_[i-1]) {
         swap(cas_rows_[i], cas_rows_[i-1]);
@@ -177,9 +206,7 @@ bool MCAS<T>::add_cas_triple(std::atomic<T> *address, T expected_value,
         }
         row_count_--;
 
-        /* We use reinterpret_cast in the event the specied data type is an
-         * integer type.
-         */
+        /* We  remove the row because the address already exists */
         cas_rows_[row_count_].address_ = nullptr;
         cas_rows_[row_count_].expected_value_ = nullptr;
         cas_rows_[row_count_].new_value_ = nullptr;
@@ -262,26 +289,21 @@ bool MCAS<T>::mcas_complete(int start_pos, bool wfmode) {
         current_value = this->mcas_remove(pos, current_value);
 
         /* Check if we are executing a recurisve return and if so determine
-         * if we are at our own operation or need to return farther.
-         */
+         * if we are at our own operation or need to return farther. */
         if (tervel::tl_thread_info->recursive_return()) {
           if (tervel::tl_thread_info->get_recursive_depth() == 0) {
             /* we are back to our own operation so re-read process the
-             * current value
-             */
+             * current value */
             tervel::tl_thread_info->clear_recursive_return();
             current_value = row->address_->load();
-            continue;
           } else {
             /* we need to return some more */
             return false;
           }
         }
-        continue;
       } else if (current_value != row->expected_value_) {
         /* Current value does not match the expected value and it is a non 
-         * descriptor type, the mcas operation should fail.
-         */
+         * descriptor type, the mcas operation should fail. */
         Helper<T>* temp_null = nullptr;
         /* First try to disable row by assigning a failed constant */
         if (row->helper_.compare_exchange_strong(temp_null,
@@ -290,13 +312,10 @@ bool MCAS<T>::mcas_complete(int start_pos, bool wfmode) {
           /* if row was disabled then set the state to FAILED */
           MCasState temp_state = MCasState::IN_PROGRESS;
           this->state_.compare_exchange_strong(temp_state, MCasState::FAIL);
-          assert(row->helper_.load());
           assert(this->state_.load() == MCasState::FAIL);
           return false;
         } else {
-          /* the row was associated, this implies the operation is over. We
-           * will re-loop and observe the value of this->state_
-           */
+          /* the row was associated, lets re-evaluate the current state */
           continue;
         }
       }  else {
@@ -363,13 +382,13 @@ template<class T>
 T MCAS<T>::mcas_remove(const int pos, T value) {
   std::atomic<void *> *address = reinterpret_cast<std::atomic<void *>*>(
             cas_rows_[pos].address_);
-    tervel::util::Descriptor *descr = util::memory::rc::unmark_first(
+    util::Descriptor *descr = util::memory::rc::unmark_first(
           reinterpret_cast<void *>(value));
 
   // First get a watch on the object.
   bool watched = util::memory::rc::watch(descr, address,
           reinterpret_cast<void *>(value));
-  
+
   if (watched) {
     // Now unwatch it, crazy right? But there is a reason...
     util::memory::rc::unwatch(descr);
@@ -402,7 +421,7 @@ void MCAS<T>::cleanup(bool success) {
     Helper<T> * temp_helper = row->helper_.load();
     T marked_helper = reinterpret_cast<T>(
           util::memory::rc::mark_first(temp_helper));
-    if (marked_helper == MCAS_FAIL_CONST) {
+    if (temp_helper == MCAS_FAIL_CONST) {
       // There can not be any any associated rows beyond this position.
       return;
     } else {

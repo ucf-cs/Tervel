@@ -79,15 +79,6 @@ class Element {
 
 
  private:
-  // REVIEW(carlos): the getter and setter for next were public in
-  //   DescriptorElement because they defined a public interface to the class.
-  //   Here, since the next_ pointer is a the same access level as the
-  //   getter/setter, the methods are not particularly useful. For interface
-  //   compatibility, I would suggest moving them to the public section.
-  // RESPONSE(steven): Unlike pool_element, classes are expected to extend this
-  // class, which was why i thought it was best to make them private and to make
-  // hp_list a friend.
-
   /**
    * Helper method for getting the next pointer.
    */

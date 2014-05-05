@@ -143,6 +143,17 @@ class ThreadContext {
    * @return number of threads
    */
   uint64_t get_num_threads();
+
+  /**
+   * This is a link to the threads pool of reference counted descriptor objects.
+   */
+  util::memory::rc::DescriptorPool* rc_descriptor_pool_;
+
+  /**
+   * THis is a link to the threads pool of hp protected elements
+   */
+  util::memory::hp::ElementList* hp_element_list_;
+
  private:
    /**
    * A unique ID among all active threads.
@@ -189,17 +200,6 @@ class ThreadContext {
    * number of threads, hazard_pointer, and other shared structures.
    */
   Tervel *tervel_;
-
- public:
-  /**
-   * This is a link to the threads pool of reference counted descriptor objects.
-   */
-  util::memory::rc::DescriptorPool* rc_descriptor_pool_;
-
-  /**
-   * THis is a link to the threads pool of hp protected elements
-   */
-  util::memory::hp::ElementList* hp_element_list_;
 
  private:
   DISALLOW_COPY_AND_ASSIGN(ThreadContext);
