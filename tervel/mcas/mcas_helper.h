@@ -7,6 +7,7 @@
 #include "tervel/util/info.h"
 #include "tervel/util/descriptor.h"
 #include "tervel/util/memory/hp/hazard_pointer.h"
+#include "tervel/util/memory/rc/descriptor_util.h"
 
 #include <atomic>
 
@@ -42,7 +43,10 @@ class Helper : public util::Descriptor {
     typedef util::memory::hp::HazardPointer::SlotID t_SlotID;
     bool success = util::memory::hp::HazardPointer::watch(
           t_SlotID::SHORTUSE, mcas_op_, address, value);
+
     if (success) {
+      assert(util::memory::hp::HazardPointer::is_watched(mcas_op_));
+
       /* Success, means that the MCAS object referenced by this Helper can not
        * be freed while we check to make sure this Helper is assocaited with
        * it.
@@ -55,6 +59,9 @@ class Helper : public util::Descriptor {
             curr_mch = this;
          }
       }
+
+      assert(cas_row_->helper_.load() == curr_mch);
+
       if (curr_mch != this) {
         /* This Helper was placed in error, remove it and replace it with the
          * logic value of this object (expected_value)
@@ -62,7 +69,6 @@ class Helper : public util::Descriptor {
         address->compare_exchange_strong(value, cas_row_->expected_value_);
         success = false;
       }
-      assert(cas_row_->helper_.load());
       /* No longer need HP protection, if we have RC protection on an associated
        * Helper. If we don't it, the value at this address must have changed and 
        * we don't need it either way.
@@ -71,7 +77,9 @@ class Helper : public util::Descriptor {
     }  // End Successfull watch
 
     if (success) {
-      //assert(util::memory::hp::HazardPointer::is_watched(mcas_op_));
+      assert(cas_row_->helper_.load() != nullptr);
+      assert(util::memory::rc::is_watched(this));
+      assert(util::memory::hp::HazardPointer::is_watched(mcas_op_));
     }
 
     return success;
@@ -88,6 +96,9 @@ class Helper : public util::Descriptor {
    */
   using util::Descriptor::complete;
   void * complete(void *value, std::atomic<void *> *address) {
+    assert(cas_row_->helper_.load());
+    assert(util::memory::rc::is_watched(this));
+    assert(util::memory::hp::HazardPointer::is_watched(this->mcas_op_));
     Helper<T>* temp_null = nullptr;
     this->cas_row_->helper_.compare_exchange_strong(temp_null, this);
 

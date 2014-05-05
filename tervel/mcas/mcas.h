@@ -135,6 +135,7 @@ class MCAS : public util::OpRecord {
       Helper<T>* helper = cas_rows_[i].helper_.load();
       // The No check flag is true because each was check prior
       // to the call of this descructor.
+      assert(helper);
       if (helper == MCAS_FAIL_CONST) {
         break;
       } else if (util::memory::rc::is_watched(helper)) {
@@ -201,6 +202,7 @@ bool MCAS<T>::execute() {
 template<class T>
 bool MCAS<T>::mcas_complete(CasRow<T> *current_row) {
   int start_pos = 1;
+  assert(util::memory::hp::HazardPointer::is_watched(this));
   assert(cas_rows_[0].helper_.load() != nullptr);
   assert(current_row->helper_.load() != nullptr);
   // TODO(steven): implement position calculation.

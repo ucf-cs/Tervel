@@ -77,6 +77,7 @@ inline bool watch(tervel::util::Descriptor *descr, std::atomic<void *> *address,
         void *value) {
   PoolElement *elem = get_elem_from_descriptor(descr);
   elem->header().ref_count.fetch_add(1);
+
   if (address->load() != value) {
     int64_t temp = elem->header().ref_count.fetch_add(-1);
     assert(temp > 0);
