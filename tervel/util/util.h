@@ -11,7 +11,7 @@ namespace hp {
    * attempted to be freed This allows the user to view associations.
    * Entirely for debug purposes.
    */
-constexpr bool NO_DELETE_HP_ELEMENTS {true};
+constexpr bool NO_DELETE_HP_ELEMENTS {false};
 }
 namespace rc {
 /**

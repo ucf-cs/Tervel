@@ -45,8 +45,6 @@ class Helper : public util::Descriptor {
           t_SlotID::SHORTUSE, mcas_op_, address, value);
 
     if (success) {
-      assert(util::memory::hp::HazardPointer::is_watched(mcas_op_));
-
       /* Success, means that the MCAS object referenced by this Helper can not
        * be freed while we check to make sure this Helper is assocaited with
        * it.
