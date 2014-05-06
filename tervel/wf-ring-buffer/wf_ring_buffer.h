@@ -1,5 +1,5 @@
-#ifndef TERVEL_WFRB_WFRB_H_
-#define TERVEL_WFRB_WFRB_H_
+#ifndef TERVEL_WFRB_RINGBUFFER_H_
+#define TERVEL_WFRB_RINGBUFFER_H_
 
 #include "tervel/wf-ring-buffer/wf_ring_buffer_helper.h"
 #include "tervel/util/info.h"
@@ -12,23 +12,20 @@
 namespace tervel {
 namespace wf_ring_buffer {
 /**
- * This is the MCAS class, it is used to perform a Multi-Word Compare-and-Swap
- * To execute an MCAS, simply call addCASTriple for each address you want to
- * update, then call execute();
- * This function is wait-free.
+ * TODO class desc
  */
 template<class T>
 class RingBuffer : public util::memory::hp::Element {
  public:
   static constexpr T MCAS_FAIL_CONST = reinterpret_cast<T>(0x1L);
 
-  explicit RingBuffer<T>(int max_rows)
-      : cas_rows_(new CasRow<T>[max_rows])
-      , max_rows_ {max_rows} {}
+  explicit RingBuffer<T>(int capacity, int num_threads)
+      : capacity_(capacity)
+      , num_threads_(num_threads) {}
 
-  ~MCAS<T>() {
-    for (int i = 0; i < row_count_; i++) {
-      Helper<T>* helper = cas_rows_[i].helper_.load();
+  ~RingBuffer<T>() {
+    for (int i = 0; i < num_threads_; i++) {
+      Helper<T>* helper = helper_table_[i].helper_.load();
       // The No check flag is true because each was check prior
       // to the call of this descructor.
       if (helper == MCAS_FAIL_CONST) {
@@ -37,9 +34,50 @@ class RingBuffer : public util::memory::hp::Element {
       util::memory::rc::free_descriptor(helper, true);
     }
   }
+
+  /**
+   * TODO: Initializes buffer...
+   */
+  bool init();
+
+  /**
+   * TODO: Enqueues buffer element...
+   */
+  bool enqueues();
+
+  /**
+   * TODO: Dequeues buffer element...
+   */
+  bool dequeue();
+
+private:
+  int capacity_;
+  int num_threads_;
 };  // RingBuffer class
+
+template<class T>
+RingBuffer::init() {
+  buffer_ = new T[capacity_];
+  for (int i = 0; i < capacity_; i++) {
+    buffer_[i] = new EmptyHelper(i);
+  }
+  rec_table_ = new OpRec[num_threads_];
+  for (int i = 0; i < num_threads_; i++) {
+    rec_table_[i] = new OpRec();
+  }
+}
+
+template<class T>
+bool RingBuffer::enqueue() {
+
+}
+
+template<class T>
+bool RingBuffer::dequeue() {
+
+}
 
 }  // namespace mcas
 }  // namespace tervel
 
-#endif  // TERVEL_MCAS_MCAS_H_
+#endif  // TERVEL_WFRB_RINGBUFFER_H_
