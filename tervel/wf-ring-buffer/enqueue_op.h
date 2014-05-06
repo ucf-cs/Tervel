@@ -12,6 +12,10 @@
 namespace tervel {
 namespace wf_ring_buffer {
 
+/**
+ * Class used for placement in the Op Table to complete an operation that failed
+ *    to complete in a bounded number of steps
+ */
 template<class T>
 class EnqueueOp : public util::OpRecord {
  public:
@@ -20,20 +24,17 @@ class EnqueueOp : public util::OpRecord {
 
   ~EnqueueOp<T>() {}
 
-  /**
-   * Todo: Enqueues a value
-   */
   bool execute();
 
   /**
    * This function overrides the virtual function in the OpRecord class
-   * It is called by the progress aurrance scheme.
+   * It is called by the progress assurance scheme.
    */
   void help_complete();
 
   /**
    *
-   * @return True if watecd
+   * @return True if watched
    */
   bool on_is_watched();
 
@@ -45,8 +46,7 @@ class EnqueueOp : public util::OpRecord {
  */
 template<class T>
 EnqueueOp::execute() {
-    tervel::util::ProgressAssurance::check_for_announcement();
-  // TODO enqueue
+  RingBuffer::wf_enqueue(this);
 }
 
 }  // namespace wf_ring_buffer

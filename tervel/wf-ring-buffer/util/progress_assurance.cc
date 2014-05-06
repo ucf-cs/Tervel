@@ -4,6 +4,14 @@
 namespace tervel {
 namespace util {
 
+bool OpRecord::didSucceed() {
+  if (this->helper != nullptr) {
+    if (this->helper->op == this)
+      return true;
+  }
+  return false;
+}
+
 /**
  * @return Returns if the given thread enqueued a value or successfully
  *    associated
@@ -30,7 +38,8 @@ void ProgressAssurance::enqueuer_check_for_announcement() {
   }
 }
 
-void ProgressAssurance::dequeuer_check_for_announcement() {
+template<class T>
+bool ProgressAssurance::dequeuer_check_for_announcement(T *val) {
   // Internally, delay_count is incremented and set to 0 when ever HELP_DELAY
   // is reached
   size_t delay_count = tl_thread_info->delay_count(HELP_DELAY);
@@ -46,11 +55,12 @@ void ProgressAssurance::dequeuer_check_for_announcement() {
       SlotID pos = SlotID::PROG_ASSUR;
       bool res = memory::hp::HazardPointer::watch(pos, op, address, op);
       if (res) {
-        T res = op->help_complete();
-        if (op->)
+        *val = op->help_complete();
+        return true;
       }
     }
   }
+  return false;
 }
 
 void ProgressAssurance::p_make_announcement(OpRecord *op, int tid) {

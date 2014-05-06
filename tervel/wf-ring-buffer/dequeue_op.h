@@ -12,6 +12,10 @@
 namespace tervel {
 namespace wf_ring_buffer {
 
+/**
+ * Class used for placement in the Op Table to complete an operation that failed
+ *    to complete in a bounded number of steps
+ */
 template<class T>
 class DequeueOp : public util::OpRecord {
  public:
@@ -20,9 +24,6 @@ class DequeueOp : public util::OpRecord {
 
   ~DequeueOp<T>() {}
 
-  /**
-   * Todo: Dequeues a value
-   */
   bool execute();
 
   /**
@@ -45,8 +46,8 @@ class DequeueOp : public util::OpRecord {
  */
 template<class T>
 EnqueueOp::execute() {
-  tervel::util::ProgressAssurance::check_for_announcement();
-  // TODO dequeue
+  Node value;
+  RingBuffer::wf_dequeue(this, &value);
 }
 
 }  // namespace wf_ring_buffer
