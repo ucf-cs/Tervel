@@ -43,6 +43,24 @@ inline void free_descriptor(tervel::util::Descriptor *descr,
 }
 
 /**
+* This method is used to determine if the passed descriptor is under rc
+* rc protection.
+* Internally calls on_is_watched
+*
+* @param descr the descriptor to be checked for rc protection.
+*/
+inline bool is_watched(tervel::util::Descriptor *descr) {
+  PoolElement * elem = get_elem_from_descriptor(descr);
+  int64_t ref_count = elem->header().ref_count.load();
+  assert(ref_count >=0);
+  if (ref_count == 0) {
+    return descr->on_is_watched();
+  } else {
+    return true;
+  }
+}
+
+/**
 * This method is used to increment the reference count of the passed descriptor
 * object. If after increming the reference count the object is still at the
 * address (indicated by *a == value), it will call on_watch.
@@ -59,15 +77,19 @@ inline bool watch(tervel::util::Descriptor *descr, std::atomic<void *> *address,
         void *value) {
   PoolElement *elem = get_elem_from_descriptor(descr);
   elem->header().ref_count.fetch_add(1);
+
   if (address->load() != value) {
-    elem->header().ref_count.fetch_add(-1);
+    int64_t temp = elem->header().ref_count.fetch_add(-1);
+    assert(temp > 0);
     return false;
   } else {
     bool res = descr->on_watch(address, value);
     if (res) {
+      assert(is_watched(descr));
       return true;
     } else {
-      elem->header().ref_count.fetch_add(-1);
+      int64_t temp = elem->header().ref_count.fetch_add(-1);
+      assert(temp > 0);
       return false;
     }
   }
@@ -83,25 +105,9 @@ inline bool watch(tervel::util::Descriptor *descr, std::atomic<void *> *address,
 */
 inline void unwatch(tervel::util::Descriptor *descr) {
   PoolElement *elem = get_elem_from_descriptor(descr);
-  elem->header().ref_count.fetch_add(-1);
+  int64_t temp = elem->header().ref_count.fetch_add(-1);
+  assert(temp > 0);
   descr->on_unwatch();
-}
-
-
-/**
-* This method is used to determine if the passed descriptor is under rc
-* rc protection.
-* Internally calls on_is_watched
-*
-* @param descr the descriptor to be checked for rc protection.
-*/
-inline bool is_watched(tervel::util::Descriptor *descr) {
-  PoolElement * elem = get_elem_from_descriptor(descr);
-  if (elem->header().ref_count.load() == 0) {
-    return descr->on_is_watched();
-  } else {
-    return true;
-  }
 }
 
 /**

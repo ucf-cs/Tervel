@@ -37,11 +37,15 @@ void ElementList::try_to_free_elements(bool dont_check) {
       Element *temp_next = temp->next();
 
       bool watched = HazardPointer::is_watched(temp);
-      if (NO_DELETE_HP_ELEMENTS  || (!dont_check && watched)) {
+      if (!dont_check && watched) {
         prev = temp;
         temp = temp_next;
       } else {
+        if (NO_DELETE_HP_ELEMENTS) {
+          temp->~Element();
+        } else {
           delete temp;
+        }
         prev->next(temp_next);
         temp = temp_next;
       }
@@ -52,8 +56,12 @@ void ElementList::try_to_free_elements(bool dont_check) {
      */
     temp = element_list_->next();
     bool watched = HazardPointer::is_watched(element_list_);
-    if (!NO_DELETE_HP_ELEMENTS && (dont_check || !watched)) {
-      delete element_list_;
+    if (dont_check || !watched) {
+      if (NO_DELETE_HP_ELEMENTS) {
+        element_list_->~Element();
+      } else {
+        delete element_list_; 
+      }
       element_list_ = temp;
     }
   }

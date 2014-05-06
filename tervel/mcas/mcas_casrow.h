@@ -3,16 +3,12 @@
 
 #include "tervel/util/info.h"
 #include "tervel/util/util.h"
-#include "tervel/mcas/mcas.h"
 #include "tervel/mcas/mcas_helper.h"
 
 #include <algorithm>
 
 namespace tervel {
 namespace mcas {
-
-template<class T>
-class MCAS;
 
 template<class T>
 class Helper;
@@ -24,12 +20,6 @@ class Helper;
  */
 template<class T>
 class CasRow {
-  // REVIEW(carlos): this won't work like you expect it to.
-  // RESPONSE(steven): you mean typedefing?
-  typedef CasRow<T> t_CasRow;
-  typedef Helper<T> t_Helper;
-  typedef MCAS<T> t_MCAS;
-
   public:
     CasRow<T>() {}
 
@@ -41,25 +31,25 @@ class CasRow {
     ~CasRow<T>() {}
 
 
-    friend bool operator<(const t_CasRow& a, const t_CasRow& b) {
+    friend bool operator<(const CasRow<T>& a, const CasRow<T>& b) {
       return ((uintptr_t)a.address_) < ((uintptr_t)b.address_);
     };
-    friend bool operator>(const t_CasRow& a, const t_CasRow& b) {
+    friend bool operator>(const CasRow<T>& a, const CasRow<T>& b) {
       return ((uintptr_t)a.address_) > ((uintptr_t)b.address_);
     };
-    friend bool operator==(const t_CasRow& a, const t_CasRow& b) {
+    friend bool operator==(const CasRow<T>& a, const CasRow<T>& b) {
       return ((uintptr_t)a.address_) == ((uintptr_t)b.address_);
     };
-    friend bool operator!=(const t_CasRow& a, const t_CasRow& b) {
+    friend bool operator!=(const CasRow<T>& a, const CasRow<T>& b) {
       return ((uintptr_t)a.address_) != ((uintptr_t)b.address_);
     };
 
     /**
      * This funciton is used when the MCAS operation is sorted to re-arrange
      * the CasRows so they are sorted in a decsending manner.
-     * Sorting is important to prevent cyclic dependices between MCAS operations.
-     * We choose descedning as a secondary bound on the number of MCAS operations.
-     * That could interfer with this operation.
+     * Sorting is important to prevent cyclic dependices between MCAS 
+     * operations. We choose descedning as a secondary bound on the number of
+     * MCAS operations. That could interfer with this operation.
      */
     friend void swap(CasRow& a, CasRow& b) {
       using std::swap;
@@ -71,8 +61,8 @@ class CasRow {
     std::atomic<T> *address_;
     T expected_value_;
     T new_value_;
-    std::atomic<t_Helper *>helper_;
-};
+    std::atomic<Helper<T> *>helper_;
+};  // Class CasRow
 
 }  // namespace mcas
 }  // namespace tervel

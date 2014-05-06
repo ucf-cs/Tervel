@@ -42,8 +42,10 @@ class Element {
    */
   void safe_delete(bool no_check = false, ElementList *element_list
           = tervel::tl_thread_info->get_hp_element_list()) {
-    if (no_check && !NO_DELETE_HP_ELEMENTS) {
-        delete this;
+    if (no_check && NO_DELETE_HP_ELEMENTS) {
+      this->~Element();
+    } else if (no_check) {
+      delete this;
     } else {
       element_list->add_to_unsafe(this);
     }
@@ -68,10 +70,7 @@ class Element {
    *
    * @return whether or not the element is watched.
    */
-  virtual bool on_is_watched() {
-    return false;
-  }
-
+  virtual bool on_is_watched() = 0;
   /**
    * This function is used to remove a strong watch on an Element.
    * Classes wishing to express this should override this function.
@@ -80,15 +79,6 @@ class Element {
 
 
  private:
-  // REVIEW(carlos): the getter and setter for next were public in
-  //   DescriptorElement because they defined a public interface to the class.
-  //   Here, since the next_ pointer is a the same access level as the
-  //   getter/setter, the methods are not particularly useful. For interface
-  //   compatibility, I would suggest moving them to the public section.
-  // RESPONSE(steven): Unlike pool_element, classes are expected to extend this
-  // class, which was why i thought it was best to make them private and to make
-  // hp_list a friend.
-
   /**
    * Helper method for getting the next pointer.
    */

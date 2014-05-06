@@ -17,7 +17,7 @@ void ProgressAssurance::p_check_for_announcement() {
               &(op_table_[help_id]));
 
       typedef memory::hp::HazardPointer::SlotID SlotID;
-      SlotID pos = SlotID::SHORTUSE;
+      SlotID pos = SlotID::PROG_ASSUR;
       bool res = memory::hp::HazardPointer::watch(pos, op, address, op);
       if (res) {
         op->help_complete();

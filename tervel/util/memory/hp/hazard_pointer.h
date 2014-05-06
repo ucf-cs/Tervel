@@ -30,7 +30,7 @@ class Element;
  */
 class HazardPointer {
  public:
-  enum class SlotID : size_t {SHORTUSE = 0 , END = 1};
+  enum class SlotID : size_t {SHORTUSE = 0 , PROG_ASSUR = 1, END = 2};
 
   explicit HazardPointer(int num_threads)
       // The total number of slots needed is equal to the number of threads
