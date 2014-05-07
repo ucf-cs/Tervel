@@ -21,7 +21,13 @@ class RingBuffer : public util::memory::hp::Element {
 
   explicit RingBuffer<T>(int capacity, int num_threads)
       : capacity_(capacity)
-      , num_threads_(num_threads) {}
+      , num_threads_(num_threads)
+  {
+    buffer_ = new T[capacity_];
+    for (int i = 0; i < capacity_; i++) {
+      buffer_[i] = new Node(i);
+    }
+  }
 
   ~RingBuffer<T>() {
     for (int i = 0; i < num_threads_; i++) {
@@ -36,19 +42,14 @@ class RingBuffer : public util::memory::hp::Element {
   }
 
   /**
-   * TODO: Initializes buffer...
-   */
-  bool init();
-
-  /**
    * TODO: Enqueues buffer element...
    */
-  bool enqueue();
+  bool enqueue(T *val);
 
   /**
    * TODO: Dequeues buffer element...
    */
-  bool dequeue();
+  bool dequeue(T *result);
 
   /**
    * @return whether the buffer is empty
@@ -82,14 +83,6 @@ private:
   long tail_;
 };  // RingBuffer class
 
-
-template<class T>
-RingBuffer::init() {
-  buffer_ = new T[capacity_];
-  for (int i = 0; i < capacity_; i++) {
-    buffer_[i] = new Node(i);
-  }
-}
 
 template<class T>
 bool RingBuffer::enqueue(T* value) {
