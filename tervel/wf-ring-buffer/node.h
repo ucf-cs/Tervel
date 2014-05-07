@@ -17,8 +17,7 @@ class Node : public util::Descriptor {
       , seq_(seq) {}
 
   ~Node<T>() {
-    OpRecord *node_op = op_rec_.load();
-    node_op->safe_delete(true);
+
   }
 
   virtual bool is_ElemNode() = 0;

@@ -12,12 +12,16 @@ namespace wf_ring_buffer {
 template<class T>
 class ElemNode : public Node {
  public:
-  explicit ElemNode<T>(T val, long seq)
+  explicit ElemNode<T>(T val, long seq, OpRecord *op_rec = nullptr)
       : val_(val)
-      , seq_(seq) {}
+      , seq_(seq)
+      , op_rec_(op_rec) {}
 
   ~ElemNode<T>() {
-    // TODO call OpRec safeFree(true) if not null
+    OpRecord *node_op = op_rec_.load();
+    if (node_op != nullptr) {
+      node_op->safe_delete(true);
+    }
   }
 
   using util::Descriptor::on_watch;
@@ -49,7 +53,21 @@ class ElemNode : public Node {
     return false;
   }
 
-  bool is_owned() { return op_rec_  == nullptr; }
+  void associate() {
+    Node *assoc_node = op_rec_->node_.load();
+    if (assoc_node == nullptr) {
+      bool cas_succ = (op_rec_->node_).compare_exchange_strong(assoc_node,
+                                                               this);
+      if (cas_succ) {
+        assoc_node =  this;
+      }
+    }
+    if (assoc_node != this) {
+      op_rec_.store(nullptr);
+    }
+  }
+
+  bool is_owned() { return op_rec_ == nullptr; }
 
   bool is_EmptyNode() { return false; }
   bool is_NullNode() { return true; }

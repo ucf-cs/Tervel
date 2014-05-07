@@ -20,34 +20,34 @@ template<class T>
 class EnqueueOp : public util::OpRecord {
  public:
 
-  explicit EnqueueOp<T>() {}
+  explicit EnqueueOp<T>(RingBuffer *buffer, T value)
+        : buffer_(buffer)
+        , value_(value) {}
 
   ~EnqueueOp<T>() {}
-
-  bool execute();
 
   /**
    * This function overrides the virtual function in the OpRecord class
    * It is called by the progress assurance scheme.
    */
-  void help_complete();
+  void help_complete() {
+    buffer_->wf_enqueue(this, value_);
+  }
 
-  /**
-   *
-   * @return True if watched
-   */
-  bool on_is_watched();
+  using util::memory::hp::Element;
+  bool on_watch(std::atomic<void*> *address, void *value) {
+    // TODO try to associate
+    // if not associated
+    //  then remove per wf_enqueue function methodology
+  }
 
- //private:
+
+ private:
+  RingBuffer *buffer_ { nullptr };
+  atomic<ElemNode*> node_ { nullptr };
+  T value_;
+  static constexpr ElemNode *FAILED = reinterpret_cast<T>(0x1L);
 };  // EnqueueOp class
-
-/**
- *
- */
-template<class T>
-EnqueueOp::execute() {
-  RingBuffer::wf_enqueue(this);
-}
 
 }  // namespace wf_ring_buffer
 }  // namespace tervel

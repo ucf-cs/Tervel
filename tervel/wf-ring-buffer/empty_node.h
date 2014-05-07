@@ -20,7 +20,6 @@ class EmptyNode : public Node {
     // TODO call OpRec safeFree(true) if not null
   }
 
-
   bool is_EmptyNode() { return true; }
   bool is_NullNode() { return false; }
 

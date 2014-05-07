@@ -20,35 +20,38 @@ template<class T>
 class DequeueOp : public util::OpRecord {
  public:
 
-  explicit DequeueOp<T>() {}
+  explicit DequeueOp<T>(RingBuffer *buffer)
+      : buffer_(buffer) {}
 
   ~DequeueOp<T>() {}
 
-  bool execute();
-
   /**
    * This function overrides the virtual function in the OpRecord class
-   * It is called by the progress aurrance scheme.
+   * It is called by the progress assurance scheme.
    */
-  void help_complete();
+  void help_complete() {
+    buffer_->wf_dequeue(this);
+  }
 
-  /**
-   *
-   * @return True if watecd
-   */
-  bool on_is_watched();
+  bool result(T *val) {
+    if (node_.load() == FAILED) {
+      return false;
+    } else {
+      *val = node_.load()->val();
+      return true;
+    }
+  }
 
- //private:
+  void try_set_failed() {
+    Node *temp = nullptr;
+    node_.compare_and_exchange(temp, FAILED);
+  }
+
+ private:
+  RingBuffer *buffer_ { nullptr };
+  atomic<ElemNode*> node_ { nullptr };
+  static constexpr ElemNode *FAILED = reinterpret_cast<T>(0x1L);
 };  // DequeueOp class
-
-/**
- *
- */
-template<class T>
-EnqueueOp::execute() {
-  Node value;
-  RingBuffer::wf_dequeue(this, &value);
-}
 
 }  // namespace wf_ring_buffer
 }  // namespace tervel
