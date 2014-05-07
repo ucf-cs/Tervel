@@ -10,27 +10,21 @@ namespace wf_ring_buffer {
  * TODO(ATB) insert class description
  */
 template<class T>
-class Node : public util::Descriptor {
+class EmptyNode : public Node {
  public:
-  explicit Node<T>(T val, long seq)
-      : val_(val)
+  explicit EmptyNode<T>(long seq)
+      : val_(nullptr)
       , seq_(seq) {}
 
-  ~Node<T>() {
-
+  ~EmptyNode<T>() {
+    // TODO call OpRec safeFree(true) if not null
   }
 
-  virtual bool is_ElemNode() = 0;
-  virtual bool is_EmptyNode() = 0;
+  bool is_EmptyNode() { return true; }
+  bool is_NullNode() { return false; }
 
-  T val() { return val_; }
-  long seq() { return seq_; }
-
- private:
-  T val_;
-  long seq_;
-};  // Node class
-
+ //private:
+};  // EmptyNode class
 
 }  // namespace wf_ring_buffer
 }  // namespace tervel
