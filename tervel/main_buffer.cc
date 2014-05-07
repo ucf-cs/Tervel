@@ -106,6 +106,7 @@ int main(int argc, char** argv) {
 
   while (test_data.ready_count_.load() < test_data.num_threads_) {}
 
+  printf("Beginning Test.\n");
   test_data.wait_flag_.store(false);
   std::this_thread::sleep_for(std::chrono::seconds(test_data.execution_time_));
   test_data.running_.store(false);
