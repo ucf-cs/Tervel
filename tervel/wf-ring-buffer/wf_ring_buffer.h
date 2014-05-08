@@ -66,18 +66,19 @@ private:
   /**
    * TODO: Performs an enqueue..
    */
-  bool lf_enqueue();
+  bool lf_enqueue(T value);
 
   /**
    * TODO: Performs a dequeue...
    */
-  bool lf_dequeue();
+  bool lf_dequeue(T *result);
 
   long next_head_seq();
   long next_tail_seq();
   long get_position();
 
   int capacity_;
+  int size_mask_;
   int num_threads_;
   T *buffer_;
   long head_;
