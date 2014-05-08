@@ -78,13 +78,13 @@ private:
 
 template<class T>
 bool RingBuffer::enqueue(T* value) {
-  ProgressAssurance::check_for_announcement();
+  util::ProgressAssurance::check_for_announcement();
   return lf_enqueue(value);
 }
 
 template<class T>
 bool RingBuffer::dequeue(T *result) {
-  ProgressAssurance::check_for_announcement();
+  util::ProgressAssurance::check_for_announcement();
   return lf_dequeue(result);
 }
 
