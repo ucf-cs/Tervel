@@ -418,11 +418,11 @@ long next_tail_seq() {
 }
 
 long get_head_seq() {
-  return head.load();
+  return head_.load();
 }
 
 long get_tail_seq() {
-  return tail.load();
+  return tail_.load();
 }
 
 long get_position(long seq) {
