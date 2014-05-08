@@ -1,7 +1,7 @@
 #ifndef TERVEL_WFRB_RINGBUFFER_H_
 #define TERVEL_WFRB_RINGBUFFER_H_
 
-#include "tervel/wf-ring-buffer/wf_ring_buffer_helper.h"
+#include "tervel/wf-ring-buffer/node.h"
 #include "tervel/util/info.h"
 #include "tervel/util/progress_assurance.h"
 #include "tervel/util/memory/rc/descriptor_util.h"
