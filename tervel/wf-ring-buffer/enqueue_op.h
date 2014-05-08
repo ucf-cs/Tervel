@@ -36,7 +36,7 @@ class EnqueueOp : public util::OpRecord {
     buffer_->wf_enqueue(this, value_);
   }
 
-  using util::memory::hp::Element;
+  using util::memory::hp::Element::on_watch;
   bool on_watch(std::atomic<void*> *address, void *value) {
     // TODO try to associate
     // if not associated
@@ -46,10 +46,10 @@ class EnqueueOp : public util::OpRecord {
 
 
  private:
-  RingBuffer *buffer_ { nullptr };
-  std::atomic<ElemNode*> node_ { nullptr };
+  RingBuffer<T> *buffer_ {nullptr};
+  std::atomic<ElemNode<T> *> node_ {nullptr};
   T value_;
-  static constexpr ElemNode *FAILED = reinterpret_cast<T>(0x1L);
+  static constexpr ElemNode<T> *FAILED = reinterpret_cast<T>(0x1L);
 };  // EnqueueOp class
 
 }  // namespace wf_ring_buffer

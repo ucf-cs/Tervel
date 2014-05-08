@@ -31,7 +31,7 @@ class RingBuffer : public util::memory::hp::Element {
     size_mask_ = capacity_ - 1;
     buffer_ = new T[capacity_];
     for (int i = 0; i < capacity_; i++) {
-      buffer_[i] = util::memory::rc::get_descriptor<EmptyNode>(i);
+      buffer_[i] = util::memory::rc::get_descriptor<EmptyNode<T>>(i);
     }
   }
 
@@ -67,6 +67,10 @@ private:
    * TODO: Performs a dequeue...
    */
   bool lf_dequeue(T *result);
+
+  bool RingBuffer<T>::wf_enqueue(EnqueueOp<T> *op);
+
+  bool RingBuffer<T>::wf_dequeue(DequeueOp<T> *op);
 
   long next_head_seq();
   long next_tail_seq();
@@ -105,12 +109,12 @@ bool RingBuffer<T>::lf_enqueue(T val) {
     long pos = get_position(seq);
     while (true) {
       if (fail_count++ == util::ProgressAssurance::MAX_FAILURES) {
-        EnqueueOp *op = new EnqueueOp(this, val);
-        ProgressAssurance::make_announcement(op);
+        EnqueueOp<T> *op = new EnqueueOp<T>(this, val);
+        util::ProgressAssurance::make_announcement(op);
         return op->result();
       }
-      Node *curr_node = buffer_[pos].load();
-      Node *unmarked_curr_node = util::memory::rc::unmark_first(curr_node);
+      Node<T> *curr_node = buffer_[pos].load();
+      Node<T> *unmarked_curr_node = util::memory::rc::unmark_first(curr_node);
       bool watch_succ = util::memory::rc::watch(unmarked_curr_node,
                                                 &(buffer_[pos],
                                                 curr_node));
@@ -123,7 +127,7 @@ bool RingBuffer<T>::lf_enqueue(T val) {
       } else {  // curr_node isnt marked skipped
         if (unmarked_curr_node->seq() == seq) {
           assert(unmarked_curr_node->is_EmptyNode());
-          Node *new_node = util::memory::rc::get_descriptor<ElemNode>(seq, val);
+          Node<T> *new_node = util::memory::rc::get_descriptor<ElemNode<T>>(seq, val);
           bool cas_success = buffer_[pos].compare_exchange_strong(
                 unmarked_curr_node, new_node);
           if (cas_success) {
@@ -141,7 +145,7 @@ bool RingBuffer<T>::lf_enqueue(T val) {
         util::backoff();
         if (curr_node == buffer_[pos].load()) {  // curr_node hasnt changed
           if (curr_node->is_EmptyNode()) {
-            Node *new_node = util::memory::rc::get_descriptor<ElemNode>(seq, val);
+            Node<T> *new_node = util::memory::rc::get_descriptor<ElemNode<T>>(seq, val);
             bool cas_success = buffer_[pos].compare_exchange_strong(
                   unmarked_curr_node, new_node);
             if (cas_success) {
@@ -169,12 +173,12 @@ bool RingBuffer<T>::lf_dequeue(T *result) {
     long pos = get_position(seq);
     while (true) {
       if (fail_count++ == util::ProgressAssurance::MAX_FAILURES) {
-        DequeueOp *op = new DequeueOp(this);
-        ProgressAssurance::make_announcement(op);
+        DequeueOp<T> *op = new DequeueOp<T>(this);
+        util::ProgressAssurance::make_announcement(op);
         return op->result(result);
       }
-      Node *curr_node = buffer_[pos].load();
-      Node *unmarked_curr_node = util::memory::rc::unmark_first(curr_node);
+      Node<T> *curr_node = buffer_[pos].load();
+      Node<T> *unmarked_curr_node = util::memory::rc::unmark_first(curr_node);
       bool watch_succ = util::memory::rc::watch(unmarked_curr_node,
                                                 &(buffer_[pos],
                                                 curr_node));
@@ -183,7 +187,7 @@ bool RingBuffer<T>::lf_dequeue(T *result) {
       }
       if (curr_node != unmarked_curr_node) {  // curr_node is marked skipped
         if (unmarked_curr_node->is_EmptyNode()) {
-          Node *new_node = new NullNode(seq + capacity_);
+          Node<T> *new_node = new NullNode<T>(seq + capacity_);
           bool cas_success = buffer_[pos].compare_exchange_strong(curr_node,
                                                                   new_node);
           if (cas_success) {
@@ -194,7 +198,7 @@ bool RingBuffer<T>::lf_dequeue(T *result) {
             continue;
           }
         } else {  // curr_node is ElemNode
-          ElemNode *elem_node = reinterpret_cast<ElemNode*>(unmarked_curr_node);
+          ElemNode<T> *elem_node = reinterpret_cast<ElemNode<T>*>(unmarked_curr_node);
           if (elem_node->is_owned()) {
             // We cant take an element that is already associated with another
             // thread's OpRecord
@@ -219,7 +223,7 @@ bool RingBuffer<T>::lf_dequeue(T *result) {
             // However, this node may be removed by a copy with an OpRecord.
             // Since no other thread can remove the value, we CAS to be able
             // to determine if the position has been bitmarked..
-            Node *new_node = new NullNode(seq + capacity_);
+            Node<T> *new_node = new NullNode<T>(seq + capacity_);
             bool cas_succ = buffer_[pos].compare_exchange_strong(
                   unmarked_curr_node, new_node);
             if (cas_succ) {
@@ -248,7 +252,7 @@ bool RingBuffer<T>::lf_dequeue(T *result) {
 }  // lf_dequeue(T result)
 
 template<class T>
-void RingBuffer<T>::wf_enqueue(EnqueueOp *op) {
+bool RingBuffer<T>::wf_enqueue(EnqueueOp<T> *op) {
   while (true) {
     if (is_full()) {
       op->try_set_failed();
@@ -260,8 +264,8 @@ void RingBuffer<T>::wf_enqueue(EnqueueOp *op) {
       if (op->helper_.load() != nullptr) {
         return;
       }
-      Node *curr_node = buffer_[pos].load();
-      Node *unmarked_curr_node = util::memory::rc::unmark_first(curr_node);
+      Node<T> *curr_node = buffer_[pos].load();
+      Node<T> *unmarked_curr_node = util::memory::rc::unmark_first(curr_node);
       bool watch_succ = util::memory::rc::watch(unmarked_curr_node,
                                                 &(buffer_[pos],
                                                 curr_node));
@@ -275,13 +279,13 @@ void RingBuffer<T>::wf_enqueue(EnqueueOp *op) {
         if (unmarked_curr_node->seq() == seq) {  // abstract contents to a
                                                  // function c(%*%)
           assert(unmarked_curr_node->is_EmptyNode());
-          Node *new_node = util::memory::rc::get_descriptor<ElemNode>(seq, val, op);
+          Node<T> *new_node = util::memory::rc::get_descriptor<ElemNode<T>>(seq, val, op);
           bool cas_success = buffer_[pos].compare_exchange_strong(
                 unmarked_curr_node, new_node);
           if (cas_success) {
             bool assoc_succ = op->associate();
             if (!assoc_succ) {
-              Node *empty_node = util::memory::rc::get_descriptor<EmptyNode>(seq + capacity_);
+              Node<T> *empty_node = util::memory::rc::get_descriptor<EmptyNode<T>>(seq + capacity_);
               curr_node = new_node;
               cas_success = buffer_[pos].compare_exchange_strong(
                     curr_node, empty_node);
@@ -304,7 +308,7 @@ void RingBuffer<T>::wf_enqueue(EnqueueOp *op) {
             util::memory::rc::free_descriptor(new_node, true);
             break;
           }
-        } else if (curr_node->seq() > seq)) {
+        } else if (curr_node->seq() > seq) {
           break;
         }
         // Otherwise, (curr_node->seq() < seq) and we must set skipped if no
@@ -321,7 +325,7 @@ void RingBuffer<T>::wf_enqueue(EnqueueOp *op) {
 }  // wf_enqueue()
 
 template<class T>
-void RingBuffer<T>::wf_dequeue(DequeueOp *op) {
+bool RingBuffer<T>::wf_dequeue(DequeueOp<T> *op) {
   long seq = get_head_seq()-1;
   while (true) {
     if (is_empty()) {
@@ -334,8 +338,8 @@ void RingBuffer<T>::wf_dequeue(DequeueOp *op) {
       if (op->node_.load() != nullptr) {
         return;
       }
-      Node *curr_node = buffer_[pos].load();
-      Node *unmarked_curr_node = util::memory::rc::unmark_first(curr_node);
+      Node<T> *curr_node = buffer_[pos].load();
+      Node<T> *unmarked_curr_node = util::memory::rc::unmark_first(curr_node);
       bool watch_succ = util::memory::rc::watch(unmarked_curr_node,
                                                 &(buffer_[pos],
                                                 curr_node));
@@ -344,7 +348,7 @@ void RingBuffer<T>::wf_dequeue(DequeueOp *op) {
       }
       if (curr_node != unmarked_curr_node) {  // curr_node is marked skipped
         if (unmarked_curr_node->is_EmptyNode()) {
-          Node *new_node = new NullNode(seq + capacity_);
+          Node<T> *new_node = new NullNode<T>(seq + capacity_);
           bool cas_success = buffer_[pos].compare_exchange_strong(curr_node,
                                                                   new_node);
           if (cas_success) {
@@ -364,7 +368,7 @@ void RingBuffer<T>::wf_dequeue(DequeueOp *op) {
           if (unmarked_curr_node->is_ElemNode()) {
             // The current node is an ElemNode and we are using its seq
             // number. We also are sure it is not associated with an OpRecord.
-            Node *new_node = util::memory::rc::get_descriptor<ElemNode>(seq, unmarked_curr_node->val(), op);
+            Node<T> *new_node = util::memory::rc::get_descriptor<ElemNode<T>>(seq, unmarked_curr_node->val(), op);
             // ..Since no other thread can remove the value, we CAS to be able
             // to determine if the position has been bitmarked..
             bool cas_succ = buffer_[pos].compare_exchange_strong(
@@ -378,7 +382,7 @@ void RingBuffer<T>::wf_dequeue(DequeueOp *op) {
             }
           }
 
-        } else if (curr_node->seq() > seq)) {
+        } else if (curr_node->seq() > seq) {
           break;
         }
         // Otherwise, (curr_node->seq() < seq) and we must set skipped if no

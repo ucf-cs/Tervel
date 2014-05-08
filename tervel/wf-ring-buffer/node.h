@@ -3,6 +3,7 @@
 
 #include "tervel/util/info.h"
 #include "tervel/util/util.h"
+#include "tervel/util/descriptor.h"
 
 namespace tervel {
 namespace wf_ring_buffer {
