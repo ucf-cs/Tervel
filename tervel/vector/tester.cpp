@@ -1,4 +1,4 @@
-#include <limits>  
+#include <limits>
 #include <iostream>
 #include <stdio.h>      /* printf, scanf, puts, NULL */
 #include <stdlib.h>     /* srand, rand */
@@ -57,23 +57,23 @@ void * runThread( void *tid) {
 	boost::uniform_int<> posRand(0,  std::numeric_limits<int>::max());
 	p_attachThread();
 
-	
+
 	long count=0;
-	
+
 	long vcount=(0x100 + 0x10*(long)tid);
 
-	
+
 	while (wait.load()) {};
 
 
 	while (!stop.load()) {
-		
+
 		//p_printVector();
-		
+
 
 		int op=opRand(rng);
 
-		int opId=0;	
+		int opId=0;
 
 		if (op==opId++) {
 			p_pushBack((void *)vcount);
@@ -96,7 +96,7 @@ void * runThread( void *tid) {
 			}
 			else {
 				int pos=posRand(rng)%s;
-				bool res=p_insertAt(pos, (void *)vcount);	
+				bool res=p_insertAt(pos, (void *)vcount);
 				if(res){
 					c->inserts++;
 				}
@@ -111,16 +111,16 @@ void * runThread( void *tid) {
 				//printf("Pushing: %p.\n", (void *)vcount);
 			}
 			else {
-				
+
 				int pos=posRand(rng)%s;
 				void *temp=NULL;;
-				p_eraseAt(pos, temp);	
+				p_eraseAt(pos, temp);
 				if(temp != NULL)
 					c->erases++;
 				//printf("Erased : %p at %d.\n", temp, pos);
 			}
 		}
-		
+
 		else if (op==opId++) {
 
 			int s=p_getSize();
@@ -153,10 +153,10 @@ void * runThread( void *tid) {
 			assert(false);
 		}
 
-		
+
 		count++;
 		vcount=vcount+0x10*nThreads;
-		
+
 	}
 
 	p_dettachThread();
@@ -167,82 +167,24 @@ void * runThread( void *tid) {
 	return c;
 };
 
-/*
-void* runPushOnly( void *tid) {
-
-	p_attachThread();
-
-	while(wait) {};
-	long count=0;
-	
-	long vcount=(0x100 + 0x10*(long)tid);
-
-	int pos;
-	while(!stop) {
-
-		int res=p_pushBack((void *)vcount);
-		if(res != -1) {
-			vcount=vcount+0x10*nThreads;
-		}
-		else{
-			assert(false);
-		}
-		
-		
-		count++;
-	}
-
-	p_dettachThread();
-
-
-	return (void *)count;
-};
-
-
-void* runPopOnly( void *tid) {
-
-	p_attachThread();
-
-	while(wait) {};
-	long count=0;
-	
-	while(!stop) {
-
-		void * res=p_popBack();
-		if(res != NULL) {
-			count++;
-		}
-		else{
-			break;
-		}
-		
-	}
-
-	p_dettachThread();
-
-
-	return (void *)count;
-};
-*/
-
 int main(int argc, char **argv) {
 	int apos=1;
 	int exeTime;
 	if(argc == 3) {
 		exeTime=atoi(argv[apos++]);
 		nThreads=atoi(argv[apos++]);
-		
+
 	}
 	else{
 		printf("Order: Time, NThreads (%d args)\n",argc);
 		int i;
 		for (i=0; i<argc; i++) {
 			printf("[%d] %s\n",i, argv[i]);
-			
+
 		}
 		return -1;
-	}	
-	
+	}
+
 	int pfill=100;
 
 	int size=1024;
@@ -255,15 +197,15 @@ int main(int argc, char **argv) {
 		value=value+0x10;
 		p_pushBack((void *)value);
 	}
-	
-	
+
+
 
 	pthread_t *thread_list=(pthread_t *)malloc(sizeof(pthread_t)*nThreads);
 
 	printf("Commencing\n");
 	//p_printVector();
 	long t=0;
-	wait.store(true); 
+	wait.store(true);
 	stop.store(false);
 
 	for (t=0; t<nThreads; t++) {
@@ -275,7 +217,7 @@ int main(int argc, char **argv) {
 	sleep(exeTime);
 	stop.store(true);
 	printf("Awakened\n");
-	
+
 	//long total=0;
 
 	struct counter *c=(struct counter *)malloc(sizeof(struct counter));;
@@ -291,9 +233,9 @@ int main(int argc, char **argv) {
 	p_printVector();
 	c->print(0);
 	printf("Vec Size: %d .\n", p_getSize());
-	
+
 	p_destroyVector();
-	
+
 	return 0;
-	
+
 };
