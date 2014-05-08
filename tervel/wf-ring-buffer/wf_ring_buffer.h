@@ -23,6 +23,7 @@ class RingBuffer : public util::memory::hp::Element {
       : capacity_(capacity)
       , num_threads_(num_threads)
   {
+    size_mask_ = capacity_ - 1;
     buffer_ = new T[capacity_];
     for (int i = 0; i < capacity_; i++) {
       buffer_[i] = new Node(i);
@@ -54,12 +55,12 @@ class RingBuffer : public util::memory::hp::Element {
   /**
    * @return whether the buffer is empty
    */
-  bool isEmpty();
+  bool is_empty();
 
   /**
    * @return whether the buffer is full
    */
-  bool isFull();
+  bool is_full();
 
 private:
   /**
@@ -236,7 +237,7 @@ bool RingBuffer::lf_dequeue(T *result) {
             }
           }
 
-        } else if (curr_node->seq() > seq)) {
+        } else if (curr_node->seq() > seq) {
           break;
         }
         // Otherwise, (curr_node->seq() < seq) and we must set skipped if no
@@ -405,11 +406,11 @@ bool is_full() {
 }
 
 long next_head_seq() {
-  return __sync_fetch_and_add(&head, 1);
+  return __sync_fetch_and_add(&head_, 1);
 }
 
 long next_tail_seq() {
-  long seq = __sync_fetch_and_add(&tail, 1);
+  long seq = __sync_fetch_and_add(&tail_, 1);
   // TODO(ATB) branch pred. expect false
   if (seq < 0) {
     // TODO(ATB) handle rollover -- after rb paper
@@ -418,11 +419,11 @@ long next_tail_seq() {
 }
 
 long get_head_seq() {
-  return head.load();
+  return head_.load();
 }
 
 long get_tail_seq() {
-  return tail.load();
+  return tail_.load();
 }
 
 long get_position(long seq) {

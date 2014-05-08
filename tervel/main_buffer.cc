@@ -115,7 +115,7 @@ int main(int argc, char** argv) {
   });
 
   printf("Completed[Passed: %lu, Failed: %lu]\n",
-    test_data.passed_count_.load(), test_data.failed_count_.load());
+    test_data.enqueue_count_.load(), test_data.dequeue_count_.load());
 
   for (int i = 0; i < test_data.buffer_length_; i++) {
     printf("[%d: %p] ", i, test_data.shared_memory_[i].load());
