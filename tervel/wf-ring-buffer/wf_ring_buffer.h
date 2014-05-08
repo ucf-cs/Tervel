@@ -30,17 +30,7 @@ class RingBuffer : public util::memory::hp::Element {
     }
   }
 
-  ~RingBuffer<T>() {
-    for (int i = 0; i < num_threads_; i++) {
-      Helper<T>* helper = helper_table_[i].helper_.load();
-      // The No check flag is true because each was check prior
-      // to the call of this descructor.
-      if (helper == FAIL_CONST) {
-        break;
-      }
-      util::memory::rc::free_descriptor(helper, true);
-    }
-  }
+  ~RingBuffer<T>() {}
 
   /**
    * TODO: Enqueues buffer element...
@@ -398,19 +388,19 @@ void RingBuffer::wf_dequeue(DequeueOp *op) {
   }  // while (true)
 }  // wf_dequeue(DequeueOp *op)
 
-bool is_empty() {
+bool RingBuffer::is_empty() {
   return head_ >= tail_;
 }
 
-bool is_full() {
+bool RingBuffer::is_full() {
   return tail_ >= head_+capacity_;
 }
 
-long next_head_seq() {
+long RingBuffer::next_head_seq() {
   return __sync_fetch_and_add(&head_, 1);
 }
 
-long next_tail_seq() {
+long RingBuffer::next_tail_seq() {
   long seq = __sync_fetch_and_add(&tail_, 1);
   // TODO(ATB) branch pred. expect false
   if (seq < 0) {
@@ -419,15 +409,15 @@ long next_tail_seq() {
   return seq;
 }
 
-long get_head_seq() {
+long RingBuffer::get_head_seq() {
   return head_.load();
 }
 
-long get_tail_seq() {
+long RingBuffer::get_tail_seq() {
   return tail_.load();
 }
 
-long get_position(long seq) {
+long RingBuffer::get_position(long seq) {
   return seq & size_mask_  // quickly take seq modulo capacity_ with size_mask_
 }
 

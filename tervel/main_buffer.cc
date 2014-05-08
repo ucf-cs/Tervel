@@ -163,13 +163,13 @@ void run_enqueue_dequeue(int thread_id, TestObject * test_data) {
   while (test_data->running_.load()) {
     val++;
     if (val & op_mask) {
-      bool succ = test_data->rb.enqueue(val);
+      bool succ = test_data->rb_.enqueue(val);
       if (succ) {
         enqueue_count++;
       }
     } else {
       long res = -1;
-      bool succ = test_data->rb.dequeue(&res);
+      bool succ = test_data->rb_.dequeue(&res);
       if (succ) {
         assert(res != -1);
         dequeue_count++;
@@ -190,7 +190,7 @@ void run_enqueue_only(int start_pos, TestObject * test_data) {
   long val = thread_id << 20;
   while (test_data->running_.load()) {
     val++;
-    bool succ = test_data->rb.enqueue(val);
+    bool succ = test_data->rb_.enqueue(val);
     if (succ) {
       enqueue_count++;
     }
@@ -211,7 +211,7 @@ void run_dequeue_only(int thread_id, TestObject * test_data) {
   while (test_data->running_.load()) {
     val++;
     long res = -1;
-    bool succ = test_data->rb.dequeue(&res);
+    bool succ = test_data->rb_.dequeue(&res);
     if (succ) {
       assert(res != -1);
       dequeue_count++;
