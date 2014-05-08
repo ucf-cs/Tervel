@@ -1,12 +1,14 @@
 #ifndef TERVEL_WFRB_ENQUEUEOP_H_
 #define TERVEL_WFRB_ENQUEUEOP_H_
 
-#include "tervel/wf-ring-buffer/helper.h"
+#include "tervel/wf-ring-buffer/elem_node.h"
+#include "tervel/wf-ring-buffer/wf_ring_buffer.h"
 #include "tervel/util/info.h"
 #include "tervel/util/progress_assurance.h"
 #include "tervel/util/memory/rc/descriptor_util.h"
 
 #include <algorithm>
+#include <atomic>
 #include <cstdint>
 
 namespace tervel {
@@ -20,7 +22,7 @@ template<class T>
 class EnqueueOp : public util::OpRecord {
  public:
 
-  explicit EnqueueOp<T>(RingBuffer *buffer, T value)
+  explicit EnqueueOp<T>(RingBuffer<T> *buffer, T value)
         : buffer_(buffer)
         , value_(value) {}
 
@@ -39,12 +41,13 @@ class EnqueueOp : public util::OpRecord {
     // TODO try to associate
     // if not associated
     //  then remove per wf_enqueue function methodology
+    return false;
   }
 
 
  private:
   RingBuffer *buffer_ { nullptr };
-  atomic<ElemNode*> node_ { nullptr };
+  std::atomic<ElemNode*> node_ { nullptr };
   T value_;
   static constexpr ElemNode *FAILED = reinterpret_cast<T>(0x1L);
 };  // EnqueueOp class
