@@ -29,7 +29,8 @@ template<class T>
 class DequeueOp : public BufferOp<T> {
  public:
   explicit DequeueOp<T>(RingBuffer<T> *buffer)
-      : buffer_(buffer) {}
+      : BufferOp<T>(buffer, nullptr) {}
+      //buffer_(buffer) {} 
 
   ~DequeueOp<T>() {}
 
@@ -37,6 +38,7 @@ class DequeueOp : public BufferOp<T> {
    * This function overrides the virtual function in the OpRecord class
    * It is called by the progress assurance scheme.
    */
+//  friend bool RingBuffer<T>::wf_dequeue(DequeueOp<T> *op);
   void help_complete() {
     buffer_->wf_dequeue(this);
   }

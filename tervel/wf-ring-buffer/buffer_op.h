@@ -23,8 +23,9 @@ class ElemNode;
 template <class T>
 class BufferOp : public util::OpRecord {
   public:
-    explicit BufferOp<T>(RingBuffer<T> *buffer)
-      : buffer_(buffer) {}
+    explicit BufferOp<T>(RingBuffer<T> *buffer, ElemNode<T> *node)
+      : buffer_(buffer) 
+      , node_(node) {}
 
   protected:
     RingBuffer<T> *buffer_;

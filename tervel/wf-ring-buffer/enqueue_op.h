@@ -26,9 +26,10 @@ class EnqueueOp : public BufferOp<T> {
  public:
 
   explicit EnqueueOp<T>(RingBuffer<T> *buffer, T value)
-        : buffer_(buffer)
+        : BufferOp<T>(buffer, value) {}
+        /*buffer_(buffer)
         , value_(value) {}
-
+        */
   ~EnqueueOp<T>() {}
 
   /**

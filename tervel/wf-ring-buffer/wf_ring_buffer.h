@@ -123,7 +123,7 @@ bool RingBuffer<T>::lf_enqueue(T val) {
     long pos = get_position(seq);
     while (true) {
       if (fail_count++ == util::ProgressAssurance::MAX_FAILURES) {
-        EnqueueOp<T>* op = new EnqueueOp<T>(this, val);
+        EnqueueOp<T> *op = new EnqueueOp<T>(this, val);
         util::ProgressAssurance::make_announcement(
               reinterpret_cast<tervel::util::OpRecord *>(op));
         return op->result();
