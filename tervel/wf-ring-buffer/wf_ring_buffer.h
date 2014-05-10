@@ -122,8 +122,9 @@ bool RingBuffer<T>::lf_enqueue(T val) {
     long pos = get_position(seq);
     while (true) {
       if (fail_count++ == util::ProgressAssurance::MAX_FAILURES) {
-        OpRecord* op = reinterpret_cast<OpRecord *>(new EnqueueOp<T>(this, val));
-        util::ProgressAssurance::make_announcement(op);
+        EnqueueOp<T>* op = new EnqueueOp<T>(this, val);
+        util::ProgressAssurance::make_announcement(
+              reinterpret_cast<tervel::util::OpRecord *>(op));
         return op->result();
       }
       Node<T> *curr_node = buffer_[pos].load();
@@ -186,15 +187,16 @@ bool RingBuffer<T>::lf_dequeue(T *result) {
     long pos = get_position(seq);
     while (true) {
       if (fail_count++ == util::ProgressAssurance::MAX_FAILURES) {
-        OpRecord *op = reinterpret_cast<OpRecord *>(new DequeueOp<T>(this));
-        util::ProgressAssurance::make_announcement(op);
+
+        DequeueOp<T> *op = new DequeueOp<T>(this);
+        util::ProgressAssurance::make_announcement(reinterpret_cast<tervel::util::OpRecord *>(op));
         return op->result(result);
       }
       Node<T> *curr_node = buffer_[pos].load();
       Node<T> *unmarked_curr_node = reinterpret_cast<Node<T> *>(util::memory::rc::unmark_first(curr_node));
       bool watch_succ = util::memory::rc::watch(unmarked_curr_node,
-                                                &(buffer_[pos],
-                                                curr_node));
+                                                reinterpret_cast<std::atomic<void*> *>(&(buffer_[pos])),
+                                                curr_node);
       if (!watch_succ) {
         continue;
       }
@@ -220,7 +222,7 @@ bool RingBuffer<T>::lf_dequeue(T *result) {
             if (unmarked_curr_node->seq() == seq) {
               // We must mark the node as out of sync
               Node<T> *new_node = reinterpret_cast<Node<T> *>(util::memory::rc::get_descriptor<EmptyNode<T>>(seq + capacity_));
-              buffer_[pos].store(make_skipped(new_node));
+              buffer_[pos].store(tervel::util::memory::rc::mark_first(new_node));
               *result = unmarked_curr_node->val();
               util::memory::rc::free_descriptor(unmarked_curr_node);
               return true;
