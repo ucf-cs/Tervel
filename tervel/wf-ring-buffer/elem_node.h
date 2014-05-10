@@ -1,5 +1,5 @@
-#ifndef TERVEL_WFRB_NODE_H_
-#define TERVEL_WFRB_NODE_H_
+#ifndef TERVEL_WFRB_ELEMNODE_H_
+#define TERVEL_WFRB_ELEMNODE_H_
 
 #include "node.h"
 
@@ -78,4 +78,4 @@ class ElemNode : public Node {
 
 }  // namespace wf_ring_buffer
 }  // namespace tervel
-#endif  // TERVEL_WFRB_NODE_H_
+#endif  // TERVEL_WFRB_ELEMNODE_H_

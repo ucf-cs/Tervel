@@ -1,5 +1,5 @@
-#ifndef TERVEL_WFRB_ENQUEUEOP_H_
-#define TERVEL_WFRB_ENQUEUEOP_H_
+#ifndef TERVEL_WFRB_DEQUEUEOP_H_
+#define TERVEL_WFRB_DEQUEUEOP_H_
 
 #include "tervel/util/info.h"
 #include "tervel/util/progress_assurance.h"
@@ -55,4 +55,4 @@ class DequeueOp : public util::OpRecord {
 }  // namespace wf_ring_buffer
 }  // namespace tervel
 
-#endif  // TERVEL_WFRB_ENQUEUEOP_H_
+#endif  // TERVEL_WFRB_DEQUEUEOP_H_

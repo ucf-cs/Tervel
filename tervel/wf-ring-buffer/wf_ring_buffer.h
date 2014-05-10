@@ -89,6 +89,7 @@ private:
   long get_head_seq();
   long get_tail_seq();
   long get_position(long seq);
+  Node* make_skipped(Node* node);
 
   int capacity_;
   int size_mask_;
