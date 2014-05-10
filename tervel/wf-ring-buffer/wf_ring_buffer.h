@@ -122,7 +122,7 @@ bool RingBuffer<T>::lf_enqueue(T val) {
     long pos = get_position(seq);
     while (true) {
       if (fail_count++ == util::ProgressAssurance::MAX_FAILURES) {
-        EnqueueOp<T> *op = new EnqueueOp<T>(this, val);
+        OpRecord* op = reinterpret_cast<OpRecord *>(new EnqueueOp<T>(this, val));
         util::ProgressAssurance::make_announcement(op);
         return op->result();
       }
@@ -186,7 +186,7 @@ bool RingBuffer<T>::lf_dequeue(T *result) {
     long pos = get_position(seq);
     while (true) {
       if (fail_count++ == util::ProgressAssurance::MAX_FAILURES) {
-        DequeueOp<T> *op = new DequeueOp<T>(this);
+        OpRecord *op = reinterpret_cast<OpRecord *>(new DequeueOp<T>(this));
         util::ProgressAssurance::make_announcement(op);
         return op->result(result);
       }

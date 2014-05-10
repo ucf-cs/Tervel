@@ -35,7 +35,7 @@ class EnqueueOp : public util::OpRecord {
    * It is called by the progress assurance scheme.
    */
   void help_complete() {
-    buffer_->wf_enqueue(this, value_);
+    buffer_->wf_enqueue(this);
   }
 
   using util::memory::hp::Element::on_watch;

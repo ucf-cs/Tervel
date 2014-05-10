@@ -27,7 +27,6 @@ class RingBuffer;
 template<class T>
 class DequeueOp : public util::OpRecord {
  public:
-
   explicit DequeueOp<T>(RingBuffer<T> *buffer)
       : buffer_(buffer) {}
 
