@@ -80,22 +80,24 @@ private:
    */
   bool lf_dequeue(T *result);
 
-  bool wf_enqueue(EnqueueOp<T> *op);
+  void wf_enqueue(EnqueueOp<T> *op);
 
-  bool wf_dequeue(DequeueOp<T> *op);
+  void wf_dequeue(DequeueOp<T> *op);
 
   long next_head_seq();
   long next_tail_seq();
   long get_head_seq();
   long get_tail_seq();
   long get_position(long seq);
-  Node<T>* make_skipped(Node<T>* node);
 
   int capacity_;
   int size_mask_;
   std::atomic<Node<T> *> *buffer_;
   std::atomic<long> head_;
   std::atomic<long> tail_;
+
+  friend DequeueOp<T>;
+  friend EnqueueOp<T>;
 };  // RingBuffer class
 
 
@@ -269,7 +271,7 @@ bool RingBuffer<T>::lf_dequeue(T *result) {
 }  // lf_dequeue(T result)
 
 template<class T>
-bool RingBuffer<T>::wf_enqueue(EnqueueOp<T> *op) {
+void RingBuffer<T>::wf_enqueue(EnqueueOp<T> *op) {
   while (true) {
     if (is_full()) {
       op->try_set_failed();
@@ -278,11 +280,12 @@ bool RingBuffer<T>::wf_enqueue(EnqueueOp<T> *op) {
     long seq = next_tail_seq();
     long pos = get_position(seq);
     while (true) {
-      if (op->helper_.load() != nullptr) {
+      if (op->node_.load() != nullptr) {
         return;
       }
       Node<T> *curr_node = buffer_[pos].load();
-      Node<T> *unmarked_curr_node = util::memory::rc::unmark_first(curr_node);
+      Node<T> *unmarked_curr_node = reinterpret_cast<Node<T> *>(
+            util::memory::rc::unmark_first(curr_node));
       bool watch_succ = util::memory::rc::watch(unmarked_curr_node,
                                                 &(buffer_[pos],
                                                 curr_node));
@@ -300,7 +303,7 @@ bool RingBuffer<T>::wf_enqueue(EnqueueOp<T> *op) {
           bool cas_success = buffer_[pos].compare_exchange_strong(
                 unmarked_curr_node, new_node);
           if (cas_success) {
-            bool assoc_succ = op->associate();
+            bool assoc_succ = op->associate(new_node);
             if (!assoc_succ) {
               Node<T> *empty_node = reinterpret_cast<Node<T> *>(util::memory::rc::get_descriptor<EmptyNode<T>>(seq + capacity_));
               curr_node = new_node;
@@ -342,7 +345,7 @@ bool RingBuffer<T>::wf_enqueue(EnqueueOp<T> *op) {
 }  // wf_enqueue()
 
 template<class T>
-bool RingBuffer<T>::wf_dequeue(DequeueOp<T> *op) {
+void RingBuffer<T>::wf_dequeue(DequeueOp<T> *op) {
   long seq = get_head_seq()-1;
   while (true) {
     if (is_empty()) {
@@ -356,10 +359,13 @@ bool RingBuffer<T>::wf_dequeue(DequeueOp<T> *op) {
         return;
       }
       Node<T> *curr_node = buffer_[pos].load();
-      Node<T> *unmarked_curr_node = util::memory::rc::unmark_first(curr_node);
+      Node<T> *unmarked_curr_node = reinterpret_cast<Node<T> *>(
+            util::memory::rc::unmark_first(curr_node));
+
       bool watch_succ = util::memory::rc::watch(unmarked_curr_node,
-                                                &(buffer_[pos],
-                                                curr_node));
+            reinterpret_cast<std::atomic<void *> *>(&(buffer_[pos])),
+            reinterpret_cast<void *>(curr_node));
+
       if (!watch_succ) {
         continue;
       }
@@ -385,17 +391,17 @@ bool RingBuffer<T>::wf_dequeue(DequeueOp<T> *op) {
           if (unmarked_curr_node->is_ElemNode()) {
             // The current node is an ElemNode and we are using its seq
             // number. We also are sure it is not associated with an OpRecord.
-            Node<T> *new_node = reinterpret_cast<Node<T> *>(util::memory::rc::get_descriptor<ElemNode<T>>(seq, unmarked_curr_node->val(), op));
+            ElemNode<T> *new_node = util::memory::rc::get_descriptor<ElemNode<T>>(seq, unmarked_curr_node->val(), op);
             // ..Since no other thread can remove the value, we CAS to be able
             // to determine if the position has been bitmarked..
             bool cas_succ = buffer_[pos].compare_exchange_strong(
-                  unmarked_curr_node, new_node);
+                  unmarked_curr_node, reinterpret_cast<Node<T> *>(new_node));
             if (cas_succ) {
               util::memory::rc::free_descriptor(unmarked_curr_node);
-              new_node->associate();
+              op->associate(new_node);
               return;
             } else {
-              buffer_[pos].store(util::memory::rc::mark_first(new_node));
+              util::memory::rc::free_descriptor(new_node);
             }
           }
 
@@ -406,7 +412,8 @@ bool RingBuffer<T>::wf_dequeue(DequeueOp<T> *op) {
         // progress occurs after backoff
         util::backoff();
         if (curr_node == buffer_[pos].load()) {
-          util::memory::rc::atomic_mark_first(&(buffer_[pos]));
+          util::memory::rc::atomic_mark_first(
+              reinterpret_cast<std::atomic<void *> *>(&(buffer_[pos])));
         }
       }  // else (is not skipped)
     }  // while (true)

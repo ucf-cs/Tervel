@@ -1,10 +1,7 @@
 #ifndef TERVEL_WFRB_NODE_H_
 #define TERVEL_WFRB_NODE_H_
 
-#include "tervel/util/info.h"
-#include "tervel/util/util.h"
 #include "tervel/util/descriptor.h"
-#include "tervel/util/progress_assurance.h"
 
 namespace tervel {
 namespace wf_ring_buffer {
@@ -24,6 +21,15 @@ class Node : public util::Descriptor {
 
   virtual bool is_ElemNode() = 0;
   virtual bool is_EmptyNode() = 0;
+
+  void* complete(void*, std::atomic<void*>*) {
+    assert(false);
+  }
+
+  void* get_logical_value() {
+    assert(false);
+  }
+
 
   T val() { return val_; }
   long seq() { return seq_; }

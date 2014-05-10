@@ -20,7 +20,7 @@ class ElemNode : public Node<T> {
   explicit ElemNode<T>(T val, long seq, BufferOp<T> *op_rec = nullptr)
       : Node<T>(val, seq)
       , op_rec_(op_rec) {}
-      
+
       /*val_(val)
       , seq_(seq)
       , op_rec_(op_rec) {}
@@ -35,16 +35,22 @@ class ElemNode : public Node<T> {
 
   using util::Descriptor::on_watch;
   bool on_watch(std::atomic<void*> *address, void *value) {
-    BufferOp<T> node_op = op_rec_.load();
+    BufferOp<T> *node_op = op_rec_.load();
     if (node_op != nullptr) {
       typedef util::memory::hp::HazardPointer::SlotID t_SlotID;
+      tervel::util::memory::hp::Element *temp_op = reinterpret_cast<
+          tervel::util::memory::hp::Element *>(node_op);
+      std::atomic<void *> * temp_address = reinterpret_cast<
+          std::atomic<void *>* >(&op_rec_);
+      void *temp_expected = reinterpret_cast<void *>(node_op);
+
       bool success = util::memory::hp::HazardPointer::watch(t_SlotID::SHORTUSE,
-                                                            node_op,
-                                                            &op_rec_,
-                                                            node_op);
+                                                            temp_op,
+                                                            temp_address,
+                                                            temp_expected);
       if (success) {
-        Node<T> *temp = nullptr;
-        bool did_assoc = node_op.helper.compare_exchange_strong(temp, this);
+        ElemNode<T> *temp = nullptr;
+        bool did_assoc = node_op->node_.compare_exchange_strong(temp, this);
         if (!did_assoc && this != temp) {
           op_rec_.store(nullptr);
         }
@@ -79,7 +85,7 @@ class ElemNode : public Node<T> {
   bool is_owned() { return op_rec_ == nullptr; }
 
   bool is_EmptyNode() { return false; }
-  bool is_NullNode() { return true; }
+  bool is_ElemNode() { return true; }
 
  private:
   std::atomic<BufferOp<T>*> op_rec_ {nullptr};

@@ -15,14 +15,14 @@ template<class T>
 class EmptyNode : public Node<T> {
  public:
   explicit EmptyNode<T>(long seq)
-      : Node<T>(nullptr, seq) {}
+      : Node<T>(reinterpret_cast<T>(nullptr), seq) {}
 
   ~EmptyNode<T>() {
     // TODO call OpRec safeFree(true) if not null
   }
 
   bool is_EmptyNode() { return true; }
-  bool is_NullNode() { return false; }
+  bool is_ElemNode() { return false; }
 
  //private:
 };  // EmptyNode class
