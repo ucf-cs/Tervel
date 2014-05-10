@@ -1,8 +1,9 @@
 #ifndef TERVEL_WFRB_DEQUEUEOP_H_
 #define TERVEL_WFRB_DEQUEUEOP_H_
 
-#include "tervel/wf-ring-buffer/wf_ring_buffer.h"
+#include "tervel/wf-ring-buffer/buffer_op.h"
 #include "tervel/wf-ring-buffer/elem_node.h"
+#include "tervel/wf-ring-buffer/wf_ring_buffer.h"
 #include "tervel/util/info.h"
 #include "tervel/util/progress_assurance.h"
 #include "tervel/util/memory/rc/descriptor_util.h"
@@ -25,7 +26,7 @@ class RingBuffer;
  *    to complete in a bounded number of steps
  */
 template<class T>
-class DequeueOp : public util::OpRecord {
+class DequeueOp : public BufferOp<T> {
  public:
   explicit DequeueOp<T>(RingBuffer<T> *buffer)
       : buffer_(buffer) {}

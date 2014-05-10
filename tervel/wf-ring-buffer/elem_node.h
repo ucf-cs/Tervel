@@ -3,6 +3,7 @@
 
 #include "node.h"
 #include "tervel/wf-ring-buffer/dequeue_op.h"
+#include "tervel/wf-ring-buffer/buffer_op.h"
 #include "tervel/util/progress_assurance.h"
 #include "tervel/util/memory/hp/hazard_pointer.h"
 
@@ -16,7 +17,7 @@ namespace wf_ring_buffer {
 template<class T>
 class ElemNode : public Node<T> {
  public:
-  explicit ElemNode<T>(T val, long seq, util::OpRecord *op_rec = nullptr)
+  explicit ElemNode<T>(T val, long seq, BufferOp<T> *op_rec = nullptr)
       : Node<T>(val, seq)
       , op_rec_(op_rec) {}
       
@@ -26,7 +27,7 @@ class ElemNode : public Node<T> {
       */
 
   ~ElemNode<T>() {
-    util::OpRecord *node_op = op_rec_.load();
+    BufferOp<T> *node_op = op_rec_.load();
     if (node_op != nullptr) {
       node_op->safe_delete(true);
     }
@@ -34,7 +35,7 @@ class ElemNode : public Node<T> {
 
   using util::Descriptor::on_watch;
   bool on_watch(std::atomic<void*> *address, void *value) {
-    util::OpRecord node_op = op_rec_.load();
+    BufferOp<T> node_op = op_rec_.load();
     if (node_op != nullptr) {
       typedef util::memory::hp::HazardPointer::SlotID t_SlotID;
       bool success = util::memory::hp::HazardPointer::watch(t_SlotID::SHORTUSE,
@@ -54,7 +55,7 @@ class ElemNode : public Node<T> {
 
   using util::Descriptor::on_is_watched;
   bool on_is_watched() {
-    util::OpRecord *node_op = op_rec_.load();
+    BufferOp<T> *node_op = op_rec_.load();
     if (node_op != nullptr) {
       return util::memory::hp::HazardPointer::is_watched(node_op);
     }
@@ -62,7 +63,7 @@ class ElemNode : public Node<T> {
   }
 
   void associate() {
-    Node *assoc_node = op_rec_->node_.load();
+    Node<T> *assoc_node = op_rec_->node_.load();
     if (assoc_node == nullptr) {
       bool cas_succ = (op_rec_->node_).compare_exchange_strong(assoc_node,
                                                                this);
@@ -81,7 +82,7 @@ class ElemNode : public Node<T> {
   bool is_NullNode() { return true; }
 
  private:
-  std::atomic<util::OpRecord*> op_rec_ {nullptr};
+  std::atomic<BufferOp<T>*> op_rec_ {nullptr};
 };  // ElemNode class
 
 

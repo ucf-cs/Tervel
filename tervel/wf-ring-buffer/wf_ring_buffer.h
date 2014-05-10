@@ -89,7 +89,7 @@ private:
   long get_head_seq();
   long get_tail_seq();
   long get_position(long seq);
-  Node* make_skipped(Node* node);
+  Node<T>* make_skipped(Node<T>* node);
 
   int capacity_;
   int size_mask_;
@@ -223,7 +223,7 @@ bool RingBuffer<T>::lf_dequeue(T *result) {
             if (unmarked_curr_node->seq() == seq) {
               // We must mark the node as out of sync
               Node<T> *new_node = reinterpret_cast<Node<T> *>(util::memory::rc::get_descriptor<EmptyNode<T>>(seq + capacity_));
-              buffer_[pos].store(tervel::util::memory::rc::mark_first(new_node));
+              buffer_[pos].store(reinterpret_cast<Node<T> *>(tervel::util::memory::rc::mark_first(new_node)));
               *result = unmarked_curr_node->val();
               util::memory::rc::free_descriptor(unmarked_curr_node);
               return true;

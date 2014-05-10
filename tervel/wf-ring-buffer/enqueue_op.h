@@ -1,6 +1,7 @@
 #ifndef TERVEL_WFRB_ENQUEUEOP_H_
 #define TERVEL_WFRB_ENQUEUEOP_H_
 
+#include "tervel/wf-ring-buffer/buffer_op.h"
 #include "tervel/wf-ring-buffer/elem_node.h"
 #include "tervel/wf-ring-buffer/wf_ring_buffer.h"
 #include "tervel/util/info.h"
@@ -21,7 +22,7 @@ template<class T> class ElemNode;
  *    to complete in a bounded number of steps
  */
 template<class T>
-class EnqueueOp : public util::OpRecord {
+class EnqueueOp : public BufferOp<T> {
  public:
 
   explicit EnqueueOp<T>(RingBuffer<T> *buffer, T value)
