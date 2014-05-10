@@ -50,14 +50,14 @@ class DequeueOp : public util::OpRecord {
   }
 
   void try_set_failed() {
-    ElemNode* *temp = nullptr;
+    ElemNode<T> *temp = nullptr;
     node_.compare_and_exchange(temp, FAILED);
   }
 
  private:
   RingBuffer<T> *buffer_ { nullptr };
-  std::atomic<ElemNode*> node_ { nullptr };
-  static constexpr ElemNode *FAILED = reinterpret_cast< ElemNode<T> *>(0x1L);
+  std::atomic<ElemNode<T> *> node_ { nullptr };
+  static constexpr ElemNode<T> *FAILED = reinterpret_cast<ElemNode<T> *>(0x1L);
 };  // DequeueOp class
 
 }  // namespace wf_ring_buffer

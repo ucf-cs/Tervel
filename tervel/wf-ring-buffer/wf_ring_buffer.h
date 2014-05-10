@@ -22,7 +22,7 @@ class EnqueueOp;
 template<class T>
 class DequeueOp;
 template<class T>
-class NodeOp;
+class Node;
 template<class T>
 class ElemNode;
 template<class T>

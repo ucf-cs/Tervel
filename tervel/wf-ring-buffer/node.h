@@ -28,7 +28,7 @@ class Node : public util::Descriptor {
   T val() { return val_; }
   long seq() { return seq_; }
 
- private:
+ protected:
   T val_;
   long seq_;
 };  // Node class

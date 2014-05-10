@@ -3,17 +3,19 @@
 
 #include "node.h"
 
+template<class T>
+class Node;
+
 namespace tervel {
 namespace wf_ring_buffer {
 /**
  * TODO(ATB) insert class description
  */
 template<class T>
-class EmptyNode : public Node {
+class EmptyNode : public Node<T> {
  public:
   explicit EmptyNode<T>(long seq)
-      : val_(nullptr)
-      , seq_(seq) {}
+      : Node<T>(nullptr, seq) {}
 
   ~EmptyNode<T>() {
     // TODO call OpRec safeFree(true) if not null
