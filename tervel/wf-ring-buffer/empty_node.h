@@ -1,5 +1,5 @@
-#ifndef TERVEL_WFRB_NODE_H_
-#define TERVEL_WFRB_NODE_H_
+#ifndef TERVEL_WFRB_EMPTYNODE_H_
+#define TERVEL_WFRB_EMPTYNODE_H_
 
 #include "node.h"
 
@@ -27,4 +27,4 @@ class EmptyNode : public Node {
 
 }  // namespace wf_ring_buffer
 }  // namespace tervel
-#endif  // TERVEL_WFRB_NODE_H_
+#endif  // TERVEL_WFRB_EMPTYNODE_H_
