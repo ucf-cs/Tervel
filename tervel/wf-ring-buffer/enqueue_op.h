@@ -35,7 +35,7 @@ class EnqueueOp : public util::OpRecord {
    * It is called by the progress assurance scheme.
    */
   void help_complete() {
-    buffer_->wf_enqueue(this, value_);
+    buffer_->wf_enqueue(this);
   }
 
   using util::memory::hp::Element::on_watch;
@@ -58,7 +58,7 @@ class EnqueueOp : public util::OpRecord {
   RingBuffer<T> *buffer_ {nullptr};
   std::atomic<ElemNode<T> *> node_ {nullptr};
   T value_;
-  static constexpr ElemNode<T> *FAILED = reinterpret_cast<T>(0x1L);
+  static constexpr ElemNode<T> *FAILED = reinterpret_cast< ElemNode<T> *>(0x1L);
 };  // EnqueueOp class
 
 }  // namespace wf_ring_buffer

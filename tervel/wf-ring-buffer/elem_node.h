@@ -2,12 +2,16 @@
 #define TERVEL_WFRB_ELEMNODE_H_
 
 #include "node.h"
+#include "tervel/wf-ring-buffer/dequeue_op.h"
+
 
 namespace tervel {
 namespace wf_ring_buffer {
 /**
  * TODO(ATB) insert class description
  */
+
+
 template<class T>
 class ElemNode : public Node {
  public:
@@ -72,7 +76,7 @@ class ElemNode : public Node {
   bool is_NullNode() { return true; }
 
  private:
-  atomic<OpRecord*> op_rec_ {nullptr};
+  std::atomic<OpRecord*> op_rec_ {nullptr};
 };  // ElemNode class
 
 

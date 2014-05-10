@@ -4,6 +4,7 @@
 #include "tervel/util/info.h"
 #include "tervel/util/util.h"
 #include "tervel/util/descriptor.h"
+#include "tervel/util/progress_assurance.h"
 
 namespace tervel {
 namespace wf_ring_buffer {
