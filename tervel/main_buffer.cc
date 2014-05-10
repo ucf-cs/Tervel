@@ -3,6 +3,7 @@
 //  mCAS
 //
 //  Created by Steven Feldman on 11/1/12.
+//  Perfected by Andrew Barrington :p
 //  Copyright (c) 2012 Steven FELDMAN. All rights reserved.
 //
 
@@ -33,9 +34,11 @@
 #include "tervel/util/memory/hp/hp_element.h"
 #include "tervel/util/memory/hp/hp_list.h"
 
+using namespace tervel::wf_ring_buffer;
+
 DEFINE_int32(num_threads, 8, "The number of threads to spawn.");
 DEFINE_int32(execution_time, 1, "The amount of time to run the tests");
-DEFINE_int32(buffer_length, 256, "The size of the region to test on.");
+DEFINE_int64(buffer_length, 256, "The size of the region to test on.");
 DEFINE_int32(operation_type, 0, "The type of test to execute"
     "(0: Both enqueue and dequeue"
     ", 1: Only Enqueue"
@@ -46,12 +49,12 @@ enum class TestType : size_t {ENQUEUEDEQUEUE = 0, ENQUEUE = 1, DEQUEUE = 2};
 class TestObject {
  public:
   TestObject(int num_threads, int execution_time, int buffer_length,
-             TestType test_type, RingBuffer *ring_buffer)
+             TestType test_type, RingBuffer<long> *ring_buffer)
       : execution_time_(execution_time)
       , buffer_length_(buffer_length)
       , num_threads_(num_threads)
       , operation_type_(test_type)
-      , rb_(*ring_buffer) {}
+      , rb_(ring_buffer) {}
 
   void atomic_add(int enqueue_count, int dequeue_count) {
     enqueue_count_.fetch_add(enqueue_count);
@@ -60,12 +63,13 @@ class TestObject {
 
 
 
-  RingBuffer rb_;
 
   const int execution_time_;
   const int buffer_length_;
   const int num_threads_;
   const TestType operation_type_;
+
+  RingBuffer<long> *rb_;
 
   std::atomic<uint64_t> enqueue_count_ {0};
   std::atomic<uint64_t> dequeue_count_ {0};
@@ -85,9 +89,9 @@ void run_update_object(int start_pos, TestObject * test_data);
 int main(int argc, char** argv) {
   gflags::ParseCommandLineFlags(&argc, &argv, true);
 
+  RingBuffer<long> *rb = new RingBuffer<long>(FLAGS_buffer_length);
   TestObject test_data(FLAGS_num_threads, FLAGS_execution_time,
-        FLAGS_buffer_length, static_cast<TestType>(FLAGS_operation_type),
-        new RingBuffer(FLAGS_buffer_length, FLAGS_num_threads));
+        FLAGS_buffer_length, static_cast<TestType>(FLAGS_operation_type), rb);
 
   tervel::Tervel tervel_obj(test_data.num_threads_);
   tervel::ThreadContext tervel_thread(&tervel_obj);
@@ -163,13 +167,13 @@ void run_enqueue_dequeue(int thread_id, TestObject * test_data) {
   while (test_data->running_.load()) {
     val++;
     if (val & op_mask) {
-      bool succ = test_data->rb_.enqueue(val);
+      bool succ = test_data->rb_->enqueue(val);
       if (succ) {
         enqueue_count++;
       }
     } else {
       long res = -1;
-      bool succ = test_data->rb_.dequeue(&res);
+      bool succ = test_data->rb_->dequeue(&res);
       if (succ) {
         assert(res != -1);
         dequeue_count++;
@@ -178,10 +182,9 @@ void run_enqueue_dequeue(int thread_id, TestObject * test_data) {
   }  // End Execution Loop
 
   test_data->atomic_add(enqueue_count, dequeue_count);
-  return;
 }
 
-void run_enqueue_only(int start_pos, TestObject * test_data) {
+void run_enqueue_only(int thread_id, TestObject * test_data) {
   int enqueue_count = 0;
 
   test_data->ready_count_.fetch_add(1);
@@ -190,14 +193,13 @@ void run_enqueue_only(int start_pos, TestObject * test_data) {
   long val = thread_id << 20;
   while (test_data->running_.load()) {
     val++;
-    bool succ = test_data->rb_.enqueue(val);
+    bool succ = test_data->rb_->enqueue(val);
     if (succ) {
       enqueue_count++;
     }
   }  // End Execution Loop
 
   test_data->atomic_add(enqueue_count, 0);
-  return;
 }
 
 
@@ -211,7 +213,7 @@ void run_dequeue_only(int thread_id, TestObject * test_data) {
   while (test_data->running_.load()) {
     val++;
     long res = -1;
-    bool succ = test_data->rb_.dequeue(&res);
+    bool succ = test_data->rb_->dequeue(&res);
     if (succ) {
       assert(res != -1);
       dequeue_count++;
@@ -219,5 +221,4 @@ void run_dequeue_only(int thread_id, TestObject * test_data) {
   }  // End Execution Loop
 
   test_data->atomic_add(0, dequeue_count);
-  return;
 }

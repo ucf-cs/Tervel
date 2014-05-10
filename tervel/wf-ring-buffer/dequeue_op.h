@@ -19,7 +19,7 @@ template<class T>
 class DequeueOp : public util::OpRecord {
  public:
 
-  explicit DequeueOp<T>(RingBuffer *buffer)
+  explicit DequeueOp<T>(RingBuffer<T> *buffer)
       : buffer_(buffer) {}
 
   ~DequeueOp<T>() {}
@@ -47,7 +47,7 @@ class DequeueOp : public util::OpRecord {
   }
 
  private:
-  RingBuffer *buffer_ { nullptr };
+  RingBuffer<T> *buffer_ { nullptr };
   atomic<ElemNode*> node_ { nullptr };
   static constexpr ElemNode *FAILED = reinterpret_cast<T>(0x1L);
 };  // DequeueOp class

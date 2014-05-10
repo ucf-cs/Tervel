@@ -32,6 +32,12 @@ constexpr bool NO_REUSE_RC_DESCR {false};
 inline bool isValid(void * value) {
   return true;
 }
+/**
+ * TODO comment
+ */
+inline void backoff(int duration = 10) {
+  std::this_thread::sleep_for(std::chrono::microseconds(duration));
+}
 
 }  // namespace util
 }  // namespace tervel

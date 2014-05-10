@@ -14,6 +14,8 @@
 namespace tervel {
 namespace wf_ring_buffer {
 
+template<class T> class RingBuffer;
+template<class T> class ElemNode;
 /**
  * Class used for placement in the Op Table to complete an operation that failed
  *    to complete in a bounded number of steps
@@ -44,6 +46,13 @@ class EnqueueOp : public util::OpRecord {
     return false;
   }
 
+  void try_set_failed() {
+    // try to set node to FAILED
+  }
+
+  bool result() {
+    return node_.load() == FAILED;
+  }
 
  private:
   RingBuffer<T> *buffer_ {nullptr};

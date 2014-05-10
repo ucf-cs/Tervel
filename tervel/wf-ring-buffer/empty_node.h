@@ -1,8 +1,7 @@
 #ifndef TERVEL_WFRB_NODE_H_
 #define TERVEL_WFRB_NODE_H_
 
-#include "tervel/util/info.h"
-#include "tervel/util/util.h"
+#include "node.h"
 
 namespace tervel {
 namespace wf_ring_buffer {

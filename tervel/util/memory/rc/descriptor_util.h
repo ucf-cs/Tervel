@@ -121,6 +121,11 @@ inline void * mark_first(tervel::util::Descriptor *descr) {
   return reinterpret_cast<void *>(reinterpret_cast<uintptr_t>(descr) | 0x1L);
 }
 
+inline void atomic_mark_first(std::atomic<void*> *address) {
+  std::atomic<uintptr_t> *temp = reinterpret_cast<std::atomic<uintptr_t> *>(address);
+  temp->fetch_or(0x1);
+}
+
 /**
  * This returns an unbitmarked reference
  *
