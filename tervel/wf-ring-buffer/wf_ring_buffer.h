@@ -287,8 +287,8 @@ void RingBuffer<T>::wf_enqueue(EnqueueOp<T> *op) {
       Node<T> *unmarked_curr_node = reinterpret_cast<Node<T> *>(
             util::memory::rc::unmark_first(curr_node));
       bool watch_succ = util::memory::rc::watch(unmarked_curr_node,
-                                                &(buffer_[pos],
-                                                curr_node));
+                                                reinterpret_cast<std::atomic<void*> *>(&(buffer_[pos])),
+                                                curr_node);
       if (!watch_succ) {
         continue;
       }
@@ -299,7 +299,7 @@ void RingBuffer<T>::wf_enqueue(EnqueueOp<T> *op) {
         if (unmarked_curr_node->seq() == seq) {  // abstract contents to a
                                                  // function c(%*%)
           assert(unmarked_curr_node->is_EmptyNode());
-          Node<T> *new_node = reinterpret_cast<Node<T> *>(util::memory::rc::get_descriptor<ElemNode<T>>(seq, op->val, op));
+          Node<T> *new_node = reinterpret_cast<Node<T> *>(util::memory::rc::get_descriptor<ElemNode<T>>(seq, op->value(), op));
           bool cas_success = buffer_[pos].compare_exchange_strong(
                 unmarked_curr_node, new_node);
           if (cas_success) {

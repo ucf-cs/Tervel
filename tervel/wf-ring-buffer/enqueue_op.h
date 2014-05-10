@@ -28,7 +28,7 @@ class EnqueueOp : public BufferOp<T> {
 
   explicit EnqueueOp<T>(RingBuffer<T> *buffer, T value)
         : BufferOp<T>(buffer)
-        , value_(value) {}
+        , val_(value) {}
 
   ~EnqueueOp<T>() {}
 
@@ -48,8 +48,10 @@ class EnqueueOp : public BufferOp<T> {
     return false;
   }
 
+  T value() { return val_; }
+
  private:
-  T value_;
+  T val_;
 };  // EnqueueOp class
 
 }  // namespace wf_ring_buffer

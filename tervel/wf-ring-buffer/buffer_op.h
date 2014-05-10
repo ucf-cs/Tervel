@@ -37,11 +37,13 @@ class BufferOp : public util::OpRecord {
     associate(FAILED);
   }
 
-  void associate(ElemNode<T> * node) {
+  bool associate(ElemNode<T> * node) {
     ElemNode<T> * temp = node_.load();
     if (temp == nullptr) {
-      node_.compare_exchange_strong(temp, node);
+      bool succ = node_.compare_exchange_strong(temp, node);
+      return succ;
     }
+    return false;
   }
 
   virtual bool result() {
@@ -49,7 +51,7 @@ class BufferOp : public util::OpRecord {
   }
   virtual void help_complete();
 
- public:
+ private:
   RingBuffer<T> *buffer_;
   std::atomic<ElemNode<T> *> node_ {nullptr};
   static constexpr ElemNode<T> *FAILED = reinterpret_cast<ElemNode<T> *>(0x1L);
