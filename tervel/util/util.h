@@ -1,13 +1,16 @@
 #ifndef TERVEL_UTIL_H_
 #define TERVEL_UTIL_H_
 
+#include <chrono>
+#include <thread>
+
 namespace tervel {
 namespace util {
 namespace memory {
 namespace hp {
 /**
    * If true, then ElementList will never delete any HP protected elements.
-   * Instead, elements should be stock-piled and left untouched when they're 
+   * Instead, elements should be stock-piled and left untouched when they're
    * attempted to be freed This allows the user to view associations.
    * Entirely for debug purposes.
    */
