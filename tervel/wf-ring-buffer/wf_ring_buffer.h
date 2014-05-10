@@ -187,14 +187,15 @@ bool RingBuffer<T>::lf_dequeue(T *result) {
     while (true) {
       if (fail_count++ == util::ProgressAssurance::MAX_FAILURES) {
         DequeueOp<T> *op = new DequeueOp<T>(this);
-        util::ProgressAssurance::make_announcement(op);
+        util::ProgressAssurance::make_announcement(reinterpret_cast<tervel::util::OpRecord *>(op));
+//       util::ProgressAssurance::make_announcement(op);
         return op->result(result);
       }
       Node<T> *curr_node = buffer_[pos].load();
       Node<T> *unmarked_curr_node = reinterpret_cast<Node<T> *>(util::memory::rc::unmark_first(curr_node));
       bool watch_succ = util::memory::rc::watch(unmarked_curr_node,
-                                                &(buffer_[pos],
-                                                curr_node));
+                                                reinterpret_cast<std::atomic<void*> *>(&(buffer_[pos])),
+                                                curr_node);
       if (!watch_succ) {
         continue;
       }
