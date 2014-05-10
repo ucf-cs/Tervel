@@ -58,7 +58,7 @@ class EnqueueOp : public util::OpRecord {
   RingBuffer<T> *buffer_ {nullptr};
   std::atomic<ElemNode<T> *> node_ {nullptr};
   T value_;
-  static constexpr ElemNode<T> *FAILED = reinterpret_cast<T>(0x1L);
+  static constexpr ElemNode<T> *FAILED = reinterpret_cast< ElemNode<T> *>(0x1L);
 };  // EnqueueOp class
 
 }  // namespace wf_ring_buffer

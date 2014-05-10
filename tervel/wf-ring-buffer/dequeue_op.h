@@ -1,15 +1,24 @@
 #ifndef TERVEL_WFRB_ENQUEUEOP_H_
 #define TERVEL_WFRB_ENQUEUEOP_H_
 
+#include "tervel/wf-ring-buffer/wf_ring_buffer.h"
+#include "tervel/wf-ring-buffer/elem_node.h"
 #include "tervel/util/info.h"
 #include "tervel/util/progress_assurance.h"
 #include "tervel/util/memory/rc/descriptor_util.h"
 
 #include <algorithm>
+#include <atomic>
 #include <cstdint>
 
 namespace tervel {
 namespace wf_ring_buffer {
+
+template<class T>
+class ElemNode;
+
+template<class T>
+class RingBuffer;
 
 /**
  * Class used for placement in the Op Table to complete an operation that failed
@@ -42,14 +51,14 @@ class DequeueOp : public util::OpRecord {
   }
 
   void try_set_failed() {
-    Node *temp = nullptr;
+    ElemNode* *temp = nullptr;
     node_.compare_and_exchange(temp, FAILED);
   }
 
  private:
   RingBuffer<T> *buffer_ { nullptr };
-  atomic<ElemNode*> node_ { nullptr };
-  static constexpr ElemNode *FAILED = reinterpret_cast<T>(0x1L);
+  std::atomic<ElemNode*> node_ { nullptr };
+  static constexpr ElemNode *FAILED = reinterpret_cast< ElemNode<T> *>(0x1L);
 };  // DequeueOp class
 
 }  // namespace wf_ring_buffer
