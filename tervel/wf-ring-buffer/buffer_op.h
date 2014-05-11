@@ -49,14 +49,18 @@ class BufferOp : public util::OpRecord {
   virtual bool result() {
     return node_.load() == FAILED;
   }
-  virtual void help_complete();
+  virtual void help_complete() {
+    assert(false);
+  };
 
- private:
+ protected:
   RingBuffer<T> *buffer_;
   std::atomic<ElemNode<T> *> node_ {nullptr};
   static constexpr ElemNode<T> *FAILED = reinterpret_cast<ElemNode<T> *>(0x1L);
 
+  friend class RingBuffer<T>;
   friend class DequeueOp<T>;
+  friend class ElemNode<T>;
   friend class EnqueueOp<T>;
 };  // BufferOp class
 

@@ -299,9 +299,10 @@ void RingBuffer<T>::wf_enqueue(EnqueueOp<T> *op) {
         if (unmarked_curr_node->seq() == seq) {  // abstract contents to a
                                                  // function c(%*%)
           assert(unmarked_curr_node->is_EmptyNode());
-          Node<T> *new_node = reinterpret_cast<Node<T> *>(util::memory::rc::get_descriptor<ElemNode<T>>(seq, op->value(), op));
+          ElemNode<T> *new_node = util::memory::rc::get_descriptor<ElemNode<T>>(
+                seq, op->value(), op);
           bool cas_success = buffer_[pos].compare_exchange_strong(
-                unmarked_curr_node, new_node);
+                unmarked_curr_node, reinterpret_cast<Node<T> *>(new_node));
           if (cas_success) {
             bool assoc_succ = op->associate(new_node);
             if (!assoc_succ) {
@@ -314,7 +315,8 @@ void RingBuffer<T>::wf_enqueue(EnqueueOp<T> *op) {
               } else if (curr_node == util::memory::rc::mark_first(new_node)) {
                 // CAS failed due to a bitmark
                 cas_success = buffer_[pos].compare_exchange_strong(
-                    curr_node, util::memory::rc::mark_first(empty_node));
+                    curr_node, reinterpret_cast<Node<T> *>(
+                    util::memory::rc::mark_first(empty_node)));
                 if (cas_success) {
                   util::memory::rc::free_descriptor(new_node);
                 } else {
