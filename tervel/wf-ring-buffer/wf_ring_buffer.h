@@ -193,7 +193,14 @@ bool RingBuffer<T>::lf_dequeue(T *result) {
 
         DequeueOp<T> *op = new DequeueOp<T>(this);
         util::ProgressAssurance::make_announcement(reinterpret_cast<tervel::util::OpRecord *>(op));
-        return op->result(result);
+        bool op_succ = op->result(result);
+        op->safeFree();
+        /* TODO:
+                can you do me a favor and either add code or write me a TODO
+                on wf_ring_buffer.h approx. line 194 at the return op->result()
+                to set the parameter result equal to op->value if successful
+        */
+        return op_succ;
       }
       Node<T> *curr_node = buffer_[pos].load();
       Node<T> *unmarked_curr_node = reinterpret_cast<Node<T> *>(util::memory::rc::unmark_first(curr_node));
