@@ -88,13 +88,14 @@ void run_update_object(int start_pos, TestObject * test_data);
 
 int main(int argc, char** argv) {
   gflags::ParseCommandLineFlags(&argc, &argv, true);
+  
+  tervel::Tervel tervel_obj(FLAGS_num_threads);
+  tervel::ThreadContext tervel_thread(&tervel_obj);
 
   RingBuffer<long> *rb = new RingBuffer<long>(FLAGS_buffer_length);
   TestObject test_data(FLAGS_num_threads, FLAGS_execution_time,
         FLAGS_buffer_length, static_cast<TestType>(FLAGS_operation_type), rb);
-
-  tervel::Tervel tervel_obj(test_data.num_threads_);
-  tervel::ThreadContext tervel_thread(&tervel_obj);
+  
 
   // run_update_object(0, &test_data);
 
