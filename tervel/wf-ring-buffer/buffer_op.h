@@ -23,20 +23,23 @@ class EnqueueOp;
 template<class T>
 class DequeueOp;
 /**
- *
+ * // REVIEW(steven) missing descriptionn of class
  */
 template <class T>
 class BufferOp : public util::OpRecord {
  public:
   explicit BufferOp<T>(RingBuffer<T> *buffer)
-      : buffer_(buffer){}
+      : buffer_(buffer){} // REVIEW(steven) missing white space before {}
 
   ~BufferOp<T>() {}
 
+  // REVIEW(steven) missing description
   void try_set_failed() {
     associate(FAILED);
   }
 
+  // REVIEW(steven) missing description
+  // Should be redifined to suite being called from on_watch to fixup Enqueueop
   bool associate(ElemNode<T> * node) {
     ElemNode<T> * temp = node_.load();
     if (temp == nullptr) {
@@ -46,9 +49,12 @@ class BufferOp : public util::OpRecord {
     return false;
   }
 
+  // REVIEW(steven) missing description
   virtual bool result() {
+    assert(node_.load());
     return node_.load() == FAILED;
   }
+  // REVIEW(steven) missing description and space between functions
   virtual void help_complete() {
     assert(false);
   };

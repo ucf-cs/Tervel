@@ -34,11 +34,11 @@ class DequeueOp : public BufferOp<T> {
    * This function overrides the virtual function in the OpRecord class
    * It is called by the progress assurance scheme.
    */
-//  friend bool RingBuffer<T>::wf_dequeue(DequeueOp<T> *op);
   void help_complete() {
     this->buffer_->wf_dequeue(this);
   }
 
+  // REVIEW(steven) missing description
   bool result(T *val) {
     if (this->node_.load() != BufferOp<T>::FAILED) {
       *val = this->node_.load()->val();

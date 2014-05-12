@@ -21,10 +21,13 @@ class EmptyNode : public Node<T> {
     // TODO call OpRec safeFree(true) if not null
   }
 
+  // REVIEW(steven) missing description
   bool is_EmptyNode() { return true; }
+
+  // REVIEW(steven) missing description
   bool is_ElemNode() { return false; }
 
- //private:
+ //private: // just delete the code
 };  // EmptyNode class
 
 }  // namespace wf_ring_buffer
