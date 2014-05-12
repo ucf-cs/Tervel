@@ -160,49 +160,37 @@ bool RingBuffer<T>::lf_enqueue(T val) {
       if (!watch_succ) {
         continue;
       }
-      if (curr_node != unmarked_curr_node) {  // curr_node is marked skipped
+      else if (curr_node != unmarked_curr_node) {  // curr_node is skipped marked
         // Enqueues do not modify marked nodes
         break;
       } else {  // curr_node isnt marked skipped
-        if (unmarked_curr_node->seq() == seq) {
-          assert(unmarked_curr_node->is_EmptyNode());
+        if (curr_node->seq() < seq) {
+            util::backoff();
+            if (curr_node != buffer_[pos].load()) {  // curr_node has changed
+              continue;  // reprocess the current value.
+            }
+        }
+        if (curr_node->seq() <= seq && curr_node->is_EmptyNode()) {
+          if (curr_node->is_EmptyNode() && curr_node->seq() == seq) {
+            assert(curr_node->is_EmptyNode());
+          }
 
           Node<T> *new_node = reinterpret_cast<Node<T> *>(
                 util::memory::rc::get_descriptor< ElemNode<T> >(seq, val));
 
           bool cas_success = buffer_[pos].compare_exchange_strong(
-                unmarked_curr_node, new_node);
+                curr_node, new_node);
 
           if (cas_success) {
-            util::memory::rc::free_descriptor(unmarked_curr_node);
+            util::memory::rc::free_descriptor(curr_node);
             return true;
           } else {
             util::memory::rc::free_descriptor(new_node, true);
             break;
           }
-        } else if (curr_node->seq() > seq) {
+        } else {  // (curr_node->seq() > seq) {
           break;
         }
-        // Otherwise, (curr_node->seq() < seq) and we must set skipped if no
-        // progress occurs after backoff
-        util::backoff();
-        if (curr_node == buffer_[pos].load()) {  // curr_node hasnt changed
-          if (curr_node->is_EmptyNode()) {
-            Node<T> *new_node = reinterpret_cast<Node<T> *>(
-                  util::memory::rc::get_descriptor< ElemNode<T> >(seq, val));
-
-            bool cas_success = buffer_[pos].compare_exchange_strong(
-                  unmarked_curr_node, new_node);
-
-            if (cas_success) {
-              util::memory::rc::free_descriptor(unmarked_curr_node);
-              return true;
-            } else {  // CAS fail
-              util::memory::rc::free_descriptor(new_node, true);
-              continue;
-            }
-          }  // curr_node isnt NullNode
-        }  // curr_node changed during backoff
       }  // else (curr_node isnt marked skipped)
     }  // while (true)
   }  // while (true)
@@ -253,7 +241,7 @@ bool RingBuffer<T>::lf_dequeue(T *result) {
             util::memory::rc::free_descriptor(new_node, true);
             continue;
           }
-        } else {  // curr_node is ElemNode
+        } else {  // curr_node is ElemNode and Skipped Marked
           ElemNode<T> *elem_node = reinterpret_cast<ElemNode<T>*>(
                 unmarked_curr_node);
 
