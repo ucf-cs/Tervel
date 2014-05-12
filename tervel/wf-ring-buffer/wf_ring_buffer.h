@@ -365,8 +365,11 @@ void RingBuffer<T>::wf_enqueue(EnqueueOp<T> *op) {
           }  // curr_node changed during backoff
         }
 
-        if (unmarked_curr_node->seq() <= seq) {
-          assert(unmarked_curr_node->is_EmptyNode());
+        if (unmarked_curr_node->seq() <= seq &&
+              unmarked_curr_node->is_EmptyNode()) {
+          if (unmarked_curr_node->seq() == seq) {
+            assert(unmarked_curr_node->is_EmptyNode());
+          }
 
           ElemNode<T> *new_node = util::memory::rc::get_descriptor<ElemNode<T>>(
                 seq, op->value(), op);
