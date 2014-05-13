@@ -81,6 +81,7 @@ private:
   bool lf_dequeue(T *result);
 
   void wf_enqueue(EnqueueOp<T> *op);
+  bool attempt_wf_enqueue(EnqueueOp<T> *op, Node<T> *curr_node, long seq);
 
   void wf_dequeue(DequeueOp<T> *op);
 
@@ -296,38 +297,11 @@ void RingBuffer<T>::wf_enqueue(EnqueueOp<T> *op) {
         // Enqueues do not modify marked nodes
         break;
       } else {  // curr_node isnt marked skipped
-        if (unmarked_curr_node->seq() == seq) {  // abstract contents to a
-                                                 // function c(%*%)
-          assert(unmarked_curr_node->is_EmptyNode());
-          ElemNode<T> *new_node = util::memory::rc::get_descriptor<ElemNode<T>>(
-                seq, op->value(), op);
-          bool cas_success = buffer_[pos].compare_exchange_strong(
-                unmarked_curr_node, reinterpret_cast<Node<T> *>(new_node));
-          if (cas_success) {
-            bool assoc_succ = op->associate(new_node);
-            if (!assoc_succ) {
-              Node<T> *empty_node = reinterpret_cast<Node<T> *>(util::memory::rc::get_descriptor<EmptyNode<T>>(seq + capacity_));
-              curr_node = new_node;
-              cas_success = buffer_[pos].compare_exchange_strong(
-                    curr_node, empty_node);
-              if (cas_success) {
-                util::memory::rc::free_descriptor(new_node);
-              } else if (curr_node == util::memory::rc::mark_first(new_node)) {
-                // CAS failed due to a bitmark
-                cas_success = buffer_[pos].compare_exchange_strong(
-                    curr_node, reinterpret_cast<Node<T> *>(
-                    util::memory::rc::mark_first(empty_node)));
-                if (cas_success) {
-                  util::memory::rc::free_descriptor(new_node);
-                } else {
-                  util::memory::rc::free_descriptor(empty_node, true);
-                }
-              }
-            }
-            util::memory::rc::free_descriptor(unmarked_curr_node);
+        if (unmarked_curr_node->seq() == seq) {
+          bool success = attempt_wf_enqueue(op, curr_node, seq);
+          if (success) {
             return;
           } else {
-            util::memory::rc::free_descriptor(new_node, true);
             break;
           }
         } else if (curr_node->seq() > seq) {
@@ -338,13 +312,57 @@ void RingBuffer<T>::wf_enqueue(EnqueueOp<T> *op) {
         util::backoff();
         if (curr_node == buffer_[pos].load()) {  // curr_node hasnt changed
           if (curr_node->is_EmptyNode()) {
-            // TODO - use above abstracted code c(%*%)
+            bool success = attempt_wf_enqueue(op, curr_node, seq);
+            if (success) {
+              return;
+            } else {
+              break;
+            }
           }  // curr_node isnt EmptyNode
         }  // curr_node changed during backoff
       }  // else (curr_node isnt marked skipped)
     }  // while (true)
   }  // while (true)
 }  // wf_enqueue()
+
+template<class T>
+bool RingBuffer<T>::attempt_wf_enqueue(EnqueueOp<T> *op, Node<T> *curr_node, long seq) {
+  assert(curr_node->is_EmptyNode());
+  ElemNode<T> *new_node = util::memory::rc::get_descriptor<ElemNode<T>>(
+        seq, op->value(), op);
+  long pos = get_position(seq);
+  bool cas_success = buffer_[pos].compare_exchange_strong(
+        curr_node, reinterpret_cast<Node<T> *>(new_node));
+  if (cas_success) {
+    bool assoc_succ = op->associate(new_node);
+    if (!assoc_succ) {
+      Node<T> *empty_node = reinterpret_cast<Node<T> *>(
+            util::memory::rc::get_descriptor<EmptyNode<T>>(seq + capacity_));
+      curr_node = new_node;
+      cas_success = buffer_[pos].compare_exchange_strong(
+            curr_node, empty_node);
+      if (cas_success) {
+        util::memory::rc::free_descriptor(new_node);
+      } else if (curr_node == util::memory::rc::mark_first(new_node)) {
+        // CAS failed due to a bitmark
+        cas_success = buffer_[pos].compare_exchange_strong(
+            curr_node, reinterpret_cast<Node<T> *>(
+            util::memory::rc::mark_first(empty_node)));
+        if (cas_success) {
+          util::memory::rc::free_descriptor(new_node);
+        } else {
+          util::memory::rc::free_descriptor(empty_node, true);
+        }
+      }
+    }
+    util::memory::rc::free_descriptor(curr_node);
+    return true;
+  } else {
+    util::memory::rc::free_descriptor(new_node, true);
+    return false;
+  }
+  
+}
 
 template<class T>
 void RingBuffer<T>::wf_dequeue(DequeueOp<T> *op) {

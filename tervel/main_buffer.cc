@@ -96,9 +96,7 @@ int main(int argc, char** argv) {
   TestObject test_data(FLAGS_num_threads, FLAGS_execution_time,
         FLAGS_buffer_length, static_cast<TestType>(FLAGS_operation_type), rb);
   
-
   // run_update_object(0, &test_data);
-
 
   std::vector<std::thread> thread_list;
   for (int i = 0; i < test_data.num_threads_; i++) {
@@ -123,7 +121,8 @@ int main(int argc, char** argv) {
     test_data.enqueue_count_.load(), test_data.dequeue_count_.load());
 
   for (int i = 0; i < test_data.buffer_length_; i++) {
-    printf("[%d: %p] ", i, test_data.shared_memory_[i].load());
+    //TODO(ATB) make a get function of the ring_buffer to make the contents printable
+    //printf("[%d: %p] ", i, test_data.shared_memory_[i].load());
   }
 
   return 1;
