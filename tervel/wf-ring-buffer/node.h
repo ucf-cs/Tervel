@@ -15,23 +15,26 @@ class Node : public util::Descriptor {
       : val_(val)
       , seq_(seq) {}
 
-  ~Node<T>() {
+  ~Node<T>() {}
 
-  }
-
+  // REVIEW(steven) missing description
   virtual bool is_ElemNode() = 0;
+  // REVIEW(steven) missing description and space between functions
   virtual bool is_EmptyNode() = 0;
 
+  // REVIEW(steven) missing description
   void* complete(void*, std::atomic<void*>*) {
     assert(false);
   }
 
+  // REVIEW(steven) missing description
   void* get_logical_value() {
     assert(false);
   }
 
-
+  // REVIEW(steven) missing description
   T val() { return val_; }
+  // REVIEW(steven) missing description and space between functions
   long seq() { return seq_; }
 
  protected:

@@ -1,7 +1,7 @@
 #ifndef TERVEL_WFRB_ENQUEUEOP_H_
 #define TERVEL_WFRB_ENQUEUEOP_H_
 
-#include "tervel/util/memory/hp/hp_element.h"
+#include "tervel/util/memory/hp/hp_element.h" // REVIEW(steven) not needed
 #include "tervel/wf-ring-buffer/buffer_op.h"
 #include "tervel/wf-ring-buffer/wf_ring_buffer.h"
 
@@ -39,15 +39,17 @@ class EnqueueOp : public BufferOp<T> {
   void help_complete() {
     this->buffer_->wf_enqueue(this);
   }
-
-  using util::memory::hp::Element::on_watch;
-  bool on_watch(std::atomic<void*> *address, void *value) {
-    // TODO try to associate
-    // if not associated
-    //  then remove per wf_enqueue function methodology
+    
+  bool associate(ElemNode<T> *node) {
+    ElemNode<T> * temp = node_.load();
+    if (temp == nullptr) {
+      bool succ = node_.compare_exchange_strong(temp, node);
+      return succ;
+    }
     return false;
   }
 
+  // REVIEW(steven) missing description
   T value() { return val_; }
 
  private:

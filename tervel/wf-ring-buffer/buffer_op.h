@@ -23,39 +23,46 @@ class EnqueueOp;
 template<class T>
 class DequeueOp;
 /**
- *
+ * // REVIEW(steven) missing descriptionn of class
  */
 template <class T>
 class BufferOp : public util::OpRecord {
  public:
   explicit BufferOp<T>(RingBuffer<T> *buffer)
-      : buffer_(buffer){}
+      : buffer_(buffer){} // REVIEW(steven) missing white space before {}
 
   ~BufferOp<T>() {}
 
+  // REVIEW(steven) missing description
   void try_set_failed() {
     associate(FAILED);
   }
 
-  bool associate(ElemNode<T> * node) {
+  // REVIEW(steven) missing description
+  // Should be redifined to suite being called from on_watch to fixup Enqueueop
+  virtual bool associate(ElemNode<T> *node) = 0;  /* {
     ElemNode<T> * temp = node_.load();
     if (temp == nullptr) {
       bool succ = node_.compare_exchange_strong(temp, node);
       return succ;
     }
     return false;
-  }
+  }*/
 
+  // REVIEW(steven) missing description
   virtual bool result() {
+    assert(node_.load());
     return node_.load() == FAILED;
   }
+
+  // REVIEW(steven) missing description
   virtual void help_complete() {
     assert(false);
   };
 
  protected:
   RingBuffer<T> *buffer_;
-  std::atomic<ElemNode<T> *> node_ {nullptr};
+  std::atomic<ElemNode<T> *> node_ {nullptr}; // helper
   static constexpr ElemNode<T> *FAILED = reinterpret_cast<ElemNode<T> *>(0x1L);
 
   friend class RingBuffer<T>;
