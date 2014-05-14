@@ -1,5 +1,5 @@
 CXX      = g++-4.7
-CXXFLAGS = -Wall -g -std=c++11 -march=native -m64 -pthread \
+CXXFLAGS = -Wall -Wunused-function -g -std=c++11 -march=native -m64 -pthread \
   -fno-strict-aliasing
   #-Wfatal-errors -Werror
 CPPFLAGS = -DDEBUG=1 -DINTEL

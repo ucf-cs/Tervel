@@ -43,14 +43,7 @@ class BufferOp : public util::OpRecord {
 
   // REVIEW(steven) missing description
   // Should be redifined to suite being called from on_watch to fixup Enqueueop
-  virtual bool associate(ElemNode<T> *node, std::atomic<Node<T>*> *address) = 0;  /* {
-    ElemNode<T> * temp = helper_.load();
-    if (temp == nullptr) {
-      bool succ = helper_.compare_exchange_strong(temp, node);
-      return succ;
-    }
-    return false;
-  }*/
+  virtual bool associate(ElemNode<T> *node, std::atomic<Node<T>*> *address) = 0;
 
   // REVIEW(steven) missing description
   virtual bool result() {

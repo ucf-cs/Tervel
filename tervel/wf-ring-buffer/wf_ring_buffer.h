@@ -73,6 +73,18 @@ class RingBuffer : public util::memory::hp::Element {
    */
   bool is_full();
 
+
+  /**
+   * METHODS BEYOND THIS POINT ARE FOR TESTING PURPOSE ONLY
+   */
+  #if DEBUG
+  bool content_is_full() __attribute__((used));
+
+  bool content_is_empty() __attribute__((used));
+
+  void print_invalid_nodes() __attribute__((used));
+  #endif  // DEBUG
+
   int capacity()  {return capacity_;} // REVIEW(steven) could be a const
 private:
   /**
@@ -109,8 +121,8 @@ private:
   int capacity_;  // REVIEW(steven) could be a const
   int size_mask_; // if done in the initilization list
   std::atomic<Node<T> *> *buffer_;
-  std::atomic<long> head_; // REVIEW(steven) should be initlized
-  std::atomic<long> tail_; // REVIEW(steven) should be initilized
+  std::atomic<long> head_ {0}; // REVIEW(steven) should be initlized
+  std::atomic<long> tail_ {0}; // REVIEW(steven) should be initilized
 
   friend DequeueOp<T>;
   friend EnqueueOp<T>;
@@ -137,7 +149,7 @@ bool RingBuffer<T>::lf_enqueue(T val) {
       return false;
     }
 
-    long seq = next_head_seq();
+    long seq = next_tail_seq();
     long pos = get_position(seq);
 
     // REVIEW(steven) describe loop
@@ -338,7 +350,6 @@ void RingBuffer<T>::wf_enqueue(EnqueueOp<T> *op) {
 
     seq++;
     long pos = get_position(seq);
-
     while (true) {
       if (op->helper_.load() != nullptr) {
         return;
@@ -514,6 +525,58 @@ template <class T>
 bool RingBuffer<T>::is_full() {
   return tail_ >= head_+capacity_;
 }
+
+#if DEBUG
+
+template <class T>
+bool RingBuffer<T>::content_is_full() {
+  int num_elem = 0, num_empty = 0;
+  for (int i=0; i<capacity_; i++) {
+    Node<T> *curr_node = buffer_[i].load();
+    if (curr_node->is_EmptyNode()) {
+      num_empty++;
+    } else {
+      num_elem++;
+    }
+  }
+  printf("%s\n", (num_empty==0) ? "True" : "False");
+  printf("ElemNode count: %d\nEmptyNode count: %d\n", num_elem, num_empty);
+  return (num_empty == 0);
+}
+
+template <class T>
+bool RingBuffer<T>::content_is_empty() {
+  int num_elem = 0, num_empty = 0;
+  for (int i=0; i<capacity_; i++) {
+    Node<T> *curr_node = buffer_[i].load();
+    if (curr_node->is_ElemNode()) {
+      num_elem++;
+    } else {
+      num_empty++;
+    }
+  }
+  printf("%s\n", (num_elem==0) ? "True" : "False");
+  printf("ElemNode count:\t%d\nEmptyNode count:\t%d\n", num_elem, num_empty);
+  return (num_elem == 0);
+}
+
+template <class T>
+void RingBuffer<T>::print_invalid_nodes() {
+  for (int i=0; i<capacity_; i++) {
+    Node<T> *curr_node = buffer_[i].load();
+    if (get_position(curr_node->seq()) != i) {
+      if (curr_node->is_ElemNode()) {
+        printf("Node is ElemNode:\tTrue\n");
+        printf("Val:\t%ld\n", (reinterpret_cast<ElemNode<T> *>(curr_node))->val());
+      } else {
+        printf("Node is ElemNode:\tFalse\n");
+      }
+      printf("Seq:\t%ld\nPos:\t%d\n", curr_node->seq(), i);
+    }
+  }
+}
+
+#endif  // DEBUG
 
 template <class T>
 long RingBuffer<T>::next_head_seq() {
