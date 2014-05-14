@@ -173,7 +173,7 @@ bool RingBuffer<T>::lf_enqueue(T val) {
         }
         if (curr_node->seq() <= seq && curr_node->is_EmptyNode()) {
           Node<T> *new_node = reinterpret_cast<Node<T> *>(
-                util::memory::rc::get_descriptor< ElemNode<T> >(seq, val));
+                util::memory::rc::get_descriptor< ElemNode<T> >(val, seq));
 
           bool cas_success = buffer_[pos].compare_exchange_strong(
                 curr_node, new_node);
@@ -347,7 +347,7 @@ void RingBuffer<T>::wf_enqueue(EnqueueOp<T> *op) {
 
         if (curr_node->seq() <= seq && curr_node->is_EmptyNode()) {
           ElemNode<T> *new_node = util::memory::rc::get_descriptor<ElemNode<T>>(
-                seq, op->value(), op);
+                op->value(), seq,  op);
 
           bool cas_success = buffer_[pos].compare_exchange_strong(curr_node,
                 reinterpret_cast<Node<T> *>(new_node));
@@ -418,7 +418,7 @@ void RingBuffer<T>::wf_dequeue(DequeueOp<T> *op) {
           if (unmarked_curr_node->is_ElemNode()) {
 
             ElemNode<T> *new_node = util::memory::rc::get_descriptor<
-                ElemNode<T> >(seq, unmarked_curr_node->val(), op);
+                ElemNode<T> >(unmarked_curr_node->val(), seq, op);
 
             bool cas_succ = buffer_[pos].compare_exchange_strong(
                   unmarked_curr_node, reinterpret_cast<Node<T> *>(new_node));
