@@ -381,6 +381,7 @@ void RingBuffer<T>::wf_dequeue(DequeueOp<T> *op) {
 
     seq++;
     long pos = get_position(seq);
+
     while (op->helper_.load() == nullptr) {
       Node<T> *curr_node = buffer_[pos].load();
       Node<T> *unmarked_curr_node = reinterpret_cast<Node<T> *>(

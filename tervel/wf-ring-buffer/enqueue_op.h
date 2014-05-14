@@ -48,6 +48,7 @@ class EnqueueOp : public BufferOp<T> {
     this->buffer_->wf_enqueue(this);
   }
 
+  // REVIEW(steven): missing description
   bool associate(ElemNode<T> *node, std::atomic<Node<T>*> *address) {
     ElemNode<T> *null_node = nullptr;
     bool success = this->helper_.compare_exchange_strong(null_node, node);

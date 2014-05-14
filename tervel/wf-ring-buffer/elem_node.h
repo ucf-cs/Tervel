@@ -56,7 +56,6 @@ class ElemNode : public Node<T> {
   void clear_op() {
     op_rec_.store(nullptr);
   }
-
   // REVIEW(steven) missing description
   bool is_EmptyNode() { return false; }
 
