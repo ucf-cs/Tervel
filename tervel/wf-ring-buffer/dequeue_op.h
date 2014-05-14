@@ -40,8 +40,10 @@ class DequeueOp : public BufferOp<T> {
 
   // REVIEW(steven) missing description
   bool result(T *val) {
-    if (this->node_.load() != BufferOp<T>::FAILED) {
-      *val = this->node_.load()->val();
+    if (this->helper_.load() != BufferOp<T>::FAILED) {
+      if (this->helper_ != nullptr) {
+        *val = this->helper_.load()->val();
+      }
       return true;
     }
     return false;
