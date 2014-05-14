@@ -61,31 +61,6 @@ class DequeueOp : public BufferOp<T> {
   void help_complete() {
     this->buffer_->wf_dequeue(this);
   }
- 
-  bool associate(ElemNode<T> *node, std::atomic<Node<T>*> *address) {
-    Node<T> *null_node = nullptr;
-    bool success = this->helper_.compare_exchange_strong(null_node, node);
-    if (this->helper_.load() == node || success) {  // NOTE: must we really check success?
-      Node<T> *curr_node = reinterpret_cast<Node<T> *>(node);
-      Node<T> *new_node = reinterpret_cast<Node<T> *>(
-      util::memory::rc::get_descriptor<EmptyNode<T>>(curr_node->seq() +
-                                            this->buffer_->capacity()));
-      success = address->compare_exchange_strong(curr_node, new_node);
-      if (!success) { // node may have been marked as skipped
-        util::memory::rc::atomic_mark_first(
-              reinterpret_cast<std::atomic<void*> *>(curr_node));
-        if (address->load() == curr_node) {
-          util::memory::rc::atomic_mark_first(
-                reinterpret_cast<std::atomic<void*> *>(new_node));
-          address->compare_exchange_strong(curr_node, new_node);
-        }
-      }
-      return true;
-    } else {
-      node->delete_op();
-      return false;
-    }
-  }
 
   // Review(steven): missing description
   bool associate(ElemNode<T> *node, std::atomic<Node<T>*> *address) {
