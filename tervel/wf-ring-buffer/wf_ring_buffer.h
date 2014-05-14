@@ -73,6 +73,7 @@ class RingBuffer : public util::memory::hp::Element {
    */
   bool is_full();
 
+  int capacity()  {return capacity_;} // REVIEW(steven) could be a const
 private:
   /**
    * TODO: Performs an enqueue..
@@ -105,7 +106,7 @@ private:
   // REVIEW(steven) missing description
   long get_position(long seq);
 
-  int capacity_; // REVIEW(steven) could be a const
+  int capacity_;  // REVIEW(steven) could be a const
   int size_mask_; // if done in the initilization list
   std::atomic<Node<T> *> *buffer_;
   std::atomic<long> head_; // REVIEW(steven) should be initlized
@@ -331,7 +332,7 @@ void RingBuffer<T>::wf_enqueue(EnqueueOp<T> *op) {
 
   while (true) {
     if (is_full()) {
-      op->try_set_failed();
+      //op->try_set_failed();
       return;
     }
 
@@ -339,7 +340,7 @@ void RingBuffer<T>::wf_enqueue(EnqueueOp<T> *op) {
     long pos = get_position(seq);
 
     while (true) {
-      if (op->node_.load() != nullptr) {
+      if (op->helper_.load() != nullptr) {
         return;
       }
 
@@ -382,7 +383,7 @@ void RingBuffer<T>::wf_enqueue(EnqueueOp<T> *op) {
 
             // REVIEW(steven): this code should be replaced by the association
             // code calledfrom on_watch.
-            bool assoc_succ = op->associate(new_node);
+            bool assoc_succ = op->associate(new_node, &(buffer_[pos]));
             if (!assoc_succ) {
               Node<T> *empty_node = reinterpret_cast<Node<T> *>(
                 util::memory::rc::get_descriptor<EmptyNode<T>>(seq+capacity_));
@@ -424,14 +425,14 @@ void RingBuffer<T>::wf_dequeue(DequeueOp<T> *op) {
 
   while (true) {
     if (is_empty()) {
-      op->try_set_failed();
+      //op->try_set_failed();
       return;
     }
 
     seq++;
     long pos = get_position(seq);
     while (true) {
-      if (op->node_.load() != nullptr) {
+      if (op->helper_.load() != nullptr) {
         return;
       }
 
@@ -481,7 +482,7 @@ void RingBuffer<T>::wf_dequeue(DequeueOp<T> *op) {
                   unmarked_curr_node, reinterpret_cast<Node<T> *>(new_node));
             if (cas_succ) {
               util::memory::rc::free_descriptor(unmarked_curr_node);
-              op->associate(new_node);
+              op->associate(new_node, &(buffer_[pos]));
               return;
             } else {
               util::memory::rc::free_descriptor(new_node);

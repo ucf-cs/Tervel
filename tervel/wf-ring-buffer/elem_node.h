@@ -53,8 +53,8 @@ class ElemNode : public Node<T> {
                                                             temp_expected);
       if (success) {
         // REVIEW(steven) you should use associate function instead
-        ElemNode<T> *temp = nullptr;
-        bool did_assoc = node_op->node_.compare_exchange_strong(temp, this);
+        Node<T> *temp = nullptr;
+        bool did_assoc = node_op->helper_.compare_exchange_strong(temp, this);
         if (!did_assoc && this != temp) {
           op_rec_.store(nullptr);
         }
@@ -82,9 +82,9 @@ class ElemNode : public Node<T> {
 
   // REVIEW(steven) missing description
   void associate() {
-    Node<T> *assoc_node = op_rec_->node_.load();
+    Node<T> *assoc_node = op_rec_->helper_.load();
     if (assoc_node == nullptr) {
-      bool cas_succ = (op_rec_->node_).compare_exchange_strong(assoc_node,
+      bool cas_succ = (op_rec_->helper_).compare_exchange_strong(assoc_node,
                                                                this);
       if (cas_succ) {
         assoc_node =  this;
@@ -93,6 +93,10 @@ class ElemNode : public Node<T> {
     if (assoc_node != this) {
       op_rec_.store(nullptr);
     }
+  }
+
+  void delete_op() {
+    op_rec_.store(nullptr);
   }
 
   // REVIEW(steven) missing description

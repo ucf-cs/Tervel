@@ -2,6 +2,8 @@
 #define TERVEL_WFRB_DEQUEUEOP_H_
 
 #include "tervel/wf-ring-buffer/buffer_op.h"
+#include "tervel/wf-ring-buffer/node.h"
+#include "tervel/wf-ring-buffer/elem_node.h"
 #include "tervel/wf-ring-buffer/wf_ring_buffer.h"
 
 #include <algorithm>
@@ -18,6 +20,11 @@ class RingBuffer;
 template<class T>
 class BufferOp;
 
+template<class T>
+class Node;
+
+template<class T>
+class ElemNode;
 /**
  * Class used for placement in the Op Table to complete an operation that failed
  *    to complete in a bounded number of steps
@@ -37,11 +44,36 @@ class DequeueOp : public BufferOp<T> {
   void help_complete() {
     this->buffer_->wf_dequeue(this);
   }
+ 
+  bool associate(ElemNode<T> *node, std::atomic<Node<T>*> *address) {
+    Node<T> *null_node = nullptr;
+    bool success = this->helper_.compare_exchange_strong(null_node, node);
+    if (this->helper_.load() == node || success) {  // NOTE: must we really check success?
+      Node<T> *curr_node = reinterpret_cast<Node<T> *>(node);
+      Node<T> *new_node = reinterpret_cast<Node<T> *>(
+      util::memory::rc::get_descriptor<EmptyNode<T>>(curr_node->seq() +
+                                            this->buffer_->capacity()));
+      success = address->compare_exchange_strong(curr_node, new_node);
+      if (!success) { // node may have been marked as skipped
+        util::memory::rc::atomic_mark_first(
+              reinterpret_cast<std::atomic<void*> *>(curr_node));
+        if (address->load() == curr_node) {
+          util::memory::rc::atomic_mark_first(
+                reinterpret_cast<std::atomic<void*> *>(new_node));
+          address->compare_exchange_strong(curr_node, new_node);
+        }
+      }
+      return true;
+    } else {
+      node->delete_op();
+      return false;
+    }
+  }
 
   // REVIEW(steven) missing description
   bool result(T *val) {
-    if (this->node_.load() != BufferOp<T>::FAILED) {
-      *val = this->node_.load()->val();
+    if (this->helper_.load() != BufferOp<T>::FAILED) {
+      *val = this->helper_.load()->val();
       return true;
     }
     return false;

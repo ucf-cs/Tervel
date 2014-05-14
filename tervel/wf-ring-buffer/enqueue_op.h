@@ -1,10 +1,13 @@
 #ifndef TERVEL_WFRB_ENQUEUEOP_H_
 #define TERVEL_WFRB_ENQUEUEOP_H_
 
-#include "tervel/util/memory/hp/hp_element.h" // REVIEW(steven) not needed
 #include "tervel/wf-ring-buffer/buffer_op.h"
+#include "tervel/wf-ring-buffer/node.h"
+#include "tervel/wf-ring-buffer/elem_node.h"
 #include "tervel/wf-ring-buffer/wf_ring_buffer.h"
-
+#include "tervel/util/memory/rc/descriptor_util.h"
+//#include "tervel/util/info.h"
+//#include "tervel/util/progress_assurance.h"
 
 #include <algorithm>
 #include <atomic>
@@ -18,6 +21,12 @@ class RingBuffer;
 
 template<class T>
 class BufferOp;
+
+template<class T>
+class Node;
+
+template<class T>
+class ElemNode;
 /**
  * Class used for placement in the Op Table to complete an operation that failed
  *    to complete in a bounded number of steps
@@ -40,13 +49,28 @@ class EnqueueOp : public BufferOp<T> {
     this->buffer_->wf_enqueue(this);
   }
     
-  bool associate(ElemNode<T> *node) {
-    ElemNode<T> * temp = node_.load();
-    if (temp == nullptr) {
-      bool succ = node_.compare_exchange_strong(temp, node);
-      return succ;
+  bool associate(ElemNode<T> *node, std::atomic<Node<T>*> *address) {
+    Node<T> *null_node = nullptr;
+    bool success = this->helper_.compare_exchange_strong(null_node, node);
+    if (this->helper_.load() == node || success) {
+      node->delete_op();
+      return true;
+    } else {
+      Node<T> *curr_node = reinterpret_cast<Node<T> *>(node);
+      Node<T> *new_node = reinterpret_cast<Node<T> *>(
+            util::memory::rc::get_descriptor<EmptyNode<T>>(node->seq()));
+      success = address->compare_exchange_strong(curr_node, new_node);
+      if (!success) {  // node may have been marked as skipped
+        util::memory::rc::atomic_mark_first(
+              reinterpret_cast<std::atomic<void*> *>(curr_node));
+        if (address->load() == curr_node) {
+          util::memory::rc::atomic_mark_first(
+                reinterpret_cast<std::atomic<void*> *>(new_node));
+          address->compare_exchange_strong(curr_node, new_node);
+        }
+      }
+      return false;
     }
-    return false;
   }
 
   // REVIEW(steven) missing description

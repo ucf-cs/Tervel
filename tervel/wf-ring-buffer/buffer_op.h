@@ -3,6 +3,7 @@
 
 
 #include "tervel/util/progress_assurance.h"
+#include "tervel/wf-ring-buffer/node.h"
 #include "tervel/wf-ring-buffer/elem_node.h"
 #include "tervel/wf-ring-buffer/dequeue_op.h"
 #include "tervel/wf-ring-buffer/enqueue_op.h"
@@ -16,6 +17,8 @@ namespace wf_ring_buffer {
 
 template<class T>
 class RingBuffer;
+template<class T>
+class Node;
 template<class T>
 class ElemNode;
 template<class T>
@@ -40,10 +43,10 @@ class BufferOp : public util::OpRecord {
 
   // REVIEW(steven) missing description
   // Should be redifined to suite being called from on_watch to fixup Enqueueop
-  virtual bool associate(ElemNode<T> *node) = 0;  /* {
-    ElemNode<T> * temp = node_.load();
+  virtual bool associate(ElemNode<T> *node, std::atomic<Node<T>*> *address) = 0;  /* {
+    ElemNode<T> * temp = helper_.load();
     if (temp == nullptr) {
-      bool succ = node_.compare_exchange_strong(temp, node);
+      bool succ = helper_.compare_exchange_strong(temp, node);
       return succ;
     }
     return false;
@@ -51,8 +54,8 @@ class BufferOp : public util::OpRecord {
 
   // REVIEW(steven) missing description
   virtual bool result() {
-    assert(node_.load());
-    return node_.load() == FAILED;
+    assert(helper_.load());
+    return helper_.load() == FAILED;
   }
 
   // REVIEW(steven) missing description
@@ -62,7 +65,7 @@ class BufferOp : public util::OpRecord {
 
  protected:
   RingBuffer<T> *buffer_;
-  std::atomic<ElemNode<T> *> node_ {nullptr}; // helper
+  std::atomic<Node<T> *> helper_ {nullptr}; // helper
   static constexpr ElemNode<T> *FAILED = reinterpret_cast<ElemNode<T> *>(0x1L);
 
   friend class RingBuffer<T>;
