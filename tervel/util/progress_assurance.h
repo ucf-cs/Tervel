@@ -37,7 +37,7 @@ class OpRecord : public memory::hp::Element {
   OpRecord() {}
 
   /**
-   * Implementations of this function that upon its return the operation 
+   * Implementations of this function that upon its return the operation
    * described in the OpRecord has been completed.
    * As such it must be thread-safe and the extending class must contain all the
    * information necessary to complete the operation.

@@ -35,7 +35,24 @@ class DequeueOp : public BufferOp<T> {
   explicit DequeueOp<T>(RingBuffer<T> *buffer)
       : BufferOp<T>(buffer) {}
 
-  ~DequeueOp<T>() {}
+  ~DequeueOp<T>() {
+    ElemNode<T> *temp = this->helper_.load();
+    assert(temp);
+    if (temp != BufferOp<T>::FAILED) {
+      util::memory::rc::free_descriptor(temp, true);
+    }
+  }
+
+  bool on_is_watched() {
+    // Not should only be called by reclaimation scheme after this op has been
+    // completed
+    ElemNode<T> *temp = this->helper_.load();
+    assert(temp);
+    if (temp != BufferOp<T>::FAILED) {
+      return util::memory::rc::is_watched(temp);
+    }
+    return false;
+  }
 
   /**
    * This function overrides the virtual function in the OpRecord class
@@ -44,28 +61,36 @@ class DequeueOp : public BufferOp<T> {
   void help_complete() {
     this->buffer_->wf_dequeue(this);
   }
- 
+
+  // Review(steven): missing description
   bool associate(ElemNode<T> *node, std::atomic<Node<T>*> *address) {
-    Node<T> *null_node = nullptr;
+    ElemNode<T> *null_node = nullptr;
     bool success = this->helper_.compare_exchange_strong(null_node, node);
-    if (this->helper_.load() == node || success) {  // NOTE: must we really check success?
+    if (success || null_node == node) {
       Node<T> *curr_node = reinterpret_cast<Node<T> *>(node);
+
       Node<T> *new_node = reinterpret_cast<Node<T> *>(
-      util::memory::rc::get_descriptor<EmptyNode<T>>(curr_node->seq() +
-                                            this->buffer_->capacity()));
+          util::memory::rc::get_descriptor< EmptyNode<T> >(curr_node->seq() +
+          this->buffer_->capacity()));
+
       success = address->compare_exchange_strong(curr_node, new_node);
-      if (!success) { // node may have been marked as skipped
-        util::memory::rc::atomic_mark_first(
-              reinterpret_cast<std::atomic<void*> *>(curr_node));
+      if (!success) {  // node may have been marked as skipped
+        curr_node = reinterpret_cast<Node<T> *>(
+                    tervel::util::memory::rc::mark_first(curr_node));
+
         if (address->load() == curr_node) {
-          util::memory::rc::atomic_mark_first(
-                reinterpret_cast<std::atomic<void*> *>(new_node));
-          address->compare_exchange_strong(curr_node, new_node);
+          Node<T> *marked_node = reinterpret_cast<Node<T> *>(
+                    tervel::util::memory::rc::mark_first(new_node));
+
+          success = address->compare_exchange_strong(curr_node, marked_node);
+          if (!success) {
+            util::memory::rc::free_descriptor(new_node, true);
+          }
         }
       }
       return true;
     } else {
-      node->delete_op();
+      node->clear_op();
       return false;
     }
   }
@@ -73,7 +98,9 @@ class DequeueOp : public BufferOp<T> {
   // REVIEW(steven) missing description
   bool result(T *val) {
     if (this->helper_.load() != BufferOp<T>::FAILED) {
-      *val = this->helper_.load()->val();
+      if (this->helper_ != nullptr) {
+        *val = this->helper_.load()->val();
+      }
       return true;
     }
     return false;

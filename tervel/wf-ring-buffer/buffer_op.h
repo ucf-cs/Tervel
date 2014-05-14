@@ -3,7 +3,6 @@
 
 
 #include "tervel/util/progress_assurance.h"
-#include "tervel/wf-ring-buffer/node.h"
 #include "tervel/wf-ring-buffer/elem_node.h"
 #include "tervel/wf-ring-buffer/dequeue_op.h"
 #include "tervel/wf-ring-buffer/enqueue_op.h"
@@ -18,8 +17,6 @@ namespace wf_ring_buffer {
 template<class T>
 class RingBuffer;
 template<class T>
-class Node;
-template<class T>
 class ElemNode;
 template<class T>
 class EnqueueOp;
@@ -32,17 +29,22 @@ template <class T>
 class BufferOp : public util::OpRecord {
  public:
   explicit BufferOp<T>(RingBuffer<T> *buffer)
-      : buffer_(buffer){} // REVIEW(steven) missing white space before {}
+      : buffer_(buffer) {}
 
   ~BufferOp<T>() {}
 
   // REVIEW(steven) missing description
   void try_set_failed() {
-    associate(FAILED);
+    ElemNode<T> *null_node = nullptr;
+    this->helper_.compare_exchange_strong(null_node, FAILED);
   }
 
-  // REVIEW(steven) missing description
-  // Should be redifined to suite being called from on_watch to fixup Enqueueop
+  /**
+   * [associate description]
+   * @param  node    [description]
+   * @param  address [description]
+   * @return whether or not this function changed the value at the address
+   */
   virtual bool associate(ElemNode<T> *node, std::atomic<Node<T>*> *address) = 0;
 
   // REVIEW(steven) missing description
@@ -58,7 +60,7 @@ class BufferOp : public util::OpRecord {
 
  protected:
   RingBuffer<T> *buffer_;
-  std::atomic<Node<T> *> helper_ {nullptr}; // helper
+  std::atomic<ElemNode<T> *> helper_ {nullptr};
   static constexpr ElemNode<T> *FAILED = reinterpret_cast<ElemNode<T> *>(0x1L);
 
   friend class RingBuffer<T>;

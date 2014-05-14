@@ -34,7 +34,6 @@ class ElemNode;
 template<class T>
 class EnqueueOp : public BufferOp<T> {
  public:
-
   explicit EnqueueOp<T>(RingBuffer<T> *buffer, T value)
         : BufferOp<T>(buffer)
         , val_(value) {}
@@ -48,29 +47,40 @@ class EnqueueOp : public BufferOp<T> {
   void help_complete() {
     this->buffer_->wf_enqueue(this);
   }
-    
+
+  // REVIEW(steven): missing description
   bool associate(ElemNode<T> *node, std::atomic<Node<T>*> *address) {
-    Node<T> *null_node = nullptr;
+    ElemNode<T> *null_node = nullptr;
     bool success = this->helper_.compare_exchange_strong(null_node, node);
-    if (this->helper_.load() == node || success) {
-      node->delete_op();
-      return true;
+    if (success || null_node == node) {
+      node->clear_op();
+      return false;
     } else {
       Node<T> *curr_node = reinterpret_cast<Node<T> *>(node);
+
       Node<T> *new_node = reinterpret_cast<Node<T> *>(
-            util::memory::rc::get_descriptor<EmptyNode<T>>(node->seq()));
+            util::memory::rc::get_descriptor< EmptyNode<T> >(node->seq()));
+
       success = address->compare_exchange_strong(curr_node, new_node);
       if (!success) {  // node may have been marked as skipped
-        util::memory::rc::atomic_mark_first(
-              reinterpret_cast<std::atomic<void*> *>(curr_node));
+        curr_node = reinterpret_cast<Node<T> *>(
+              tervel::util::memory::rc::mark_first(curr_node));
+
         if (address->load() == curr_node) {
-          util::memory::rc::atomic_mark_first(
-                reinterpret_cast<std::atomic<void*> *>(new_node));
-          address->compare_exchange_strong(curr_node, new_node);
+          Node<T> *marked_node = reinterpret_cast<Node<T> *>(
+                tervel::util::memory::rc::mark_first(new_node));
+
+          success = address->compare_exchange_strong(curr_node, marked_node);
+          if (!success) {
+            util::memory::rc::free_descriptor(new_node, true);
+          }
         }
       }
-      return false;
+      if (success) {
+        util::memory::rc::free_descriptor(node, false);
+      }
     }
+    return true;
   }
 
   // REVIEW(steven) missing description
