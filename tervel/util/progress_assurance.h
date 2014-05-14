@@ -61,13 +61,13 @@ class ProgressAssurance {
   /**
    * Const used to delay an announcement
    */
-  static constexpr size_t MAX_FAILURES = -1;
+  static constexpr size_t MAX_FAILURES = 1;
 
   /**
    * Const used to reduce the number of times a thread checks the table
    * Reduces memory loads at the cost of a higher upper bound
    */
-  static constexpr size_t HELP_DELAY = -1;
+  static constexpr size_t HELP_DELAY = 1;
 
   explicit ProgressAssurance(int num_threads)
       : op_table_(new std::atomic<OpRecord *>[num_threads] )

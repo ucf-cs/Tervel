@@ -396,7 +396,7 @@ void RingBuffer<T>::wf_dequeue(DequeueOp<T> *op) {
       }
       if (curr_node != unmarked_curr_node) {  // curr_node is marked skipped
         if (unmarked_curr_node->is_EmptyNode()) {
-          Node<T> *new_node = reinterpret_cast<Node<T> *>(
+          /*Node<T> *new_node = reinterpret_cast<Node<T> *>(
               util::memory::rc::get_descriptor<EmptyNode<T>>(seq + capacity_));
 
           bool cas_success = buffer_[pos].compare_exchange_strong(curr_node,
@@ -407,7 +407,15 @@ void RingBuffer<T>::wf_dequeue(DequeueOp<T> *op) {
           } else {
             util::memory::rc::free_descriptor(new_node, true);
             continue;
-          }
+          } */
+            // If the thread was delayed after getting ths position, but before
+            // dereferencing the current node, then the above could allow an old
+            // seqid to be reused. Which is bad!
+            //
+            // For now, lets just get a new position and mellow on how to handle
+            // this
+            //
+            break;
         } else {  // curr_node is ElemNode
           // curr_node is a skipped ElemNode. It must be removed by a thread
           // with the values seq number so it may be corrected.
