@@ -21,18 +21,7 @@ class ElemNode : public Node<T> {
       : Node<T>(val, seq)
       , op_rec_(op_rec) {}
 
-      /*val_(val) // REVIEW(steven) just delete the code
-      , seq_(seq)
-      , op_rec_(op_rec) {}
-      */
-
-  // REVIEW(steven) missing description
-  ~ElemNode<T>() {
-    BufferOp<T> *node_op = op_rec_.load();
-    if (node_op != nullptr) {
-      node_op->safe_delete(true);
-    }
-  }
+  ~ElemNode<T>() {}
 
   // REVIEW(steven) missing description
   using util::Descriptor::on_watch;
@@ -52,53 +41,21 @@ class ElemNode : public Node<T> {
                                                             temp_address,
                                                             temp_expected);
       if (success) {
-        // REVIEW(steven) you should use associate function instead
-        ElemNode<T> *temp = nullptr;
-        bool did_assoc = node_op->node_.compare_exchange_strong(temp, this);
-        if (!did_assoc && this != temp) {
-          op_rec_.store(nullptr);
-        }
-        // REVIEW(steven) this is the correct logic for dequeue op, but not for
-        // enqueue op. Enqueue op if the association fails the node should be
-        // replaced by an EmpytNode
-        // this can be accomplished by moving the above code/association
-        // function into the operation records. you will need to pass the
-        // address/value to be able to remvoe the node as well
+        bool res = node_op->associate(this,
+            reinterpret_cast<std::atomic< Node<T> *> *>(address));
+        util::memory::hp::HazardPointer::unwatch(t_SlotID::SHORTUSE);
+        // Note: the returned result of associate is whether or not the value at
+        // the address changed, if it has changed then this watch should fail
+        return res;
       }
-
     }
     return true;
   }
 
-  // REVIEW(steven)  missing discription
-  using util::Descriptor::on_is_watched;
-  bool on_is_watched() {
-    BufferOp<T> *node_op = op_rec_.load();
-    if (node_op != nullptr) {
-      return util::memory::hp::HazardPointer::is_watched(node_op);
-    }
-    return false;
+
+  void clear_op() {
+    op_rec_.store(nullptr);
   }
-
-  // REVIEW(steven) missing description
-  void associate() {
-    Node<T> *assoc_node = op_rec_->node_.load();
-    if (assoc_node == nullptr) {
-      bool cas_succ = (op_rec_->node_).compare_exchange_strong(assoc_node,
-                                                               this);
-      if (cas_succ) {
-        assoc_node =  this;
-      }
-    }
-    if (assoc_node != this) {
-      op_rec_.store(nullptr);
-    }
-  }
-
-  // REVIEW(steven) missing description
-  // REVIEW(steven) should be op_rec_.load()
-  bool is_owned() { return op_rec_ == nullptr; }
-
   // REVIEW(steven) missing description
   bool is_EmptyNode() { return false; }
 
