@@ -137,7 +137,7 @@ bool RingBuffer<T>::lf_enqueue(T val) {
       return false;
     }
 
-    long seq = next_head_seq();
+    long seq = next_tail_seq();
     long pos = get_position(seq);
 
     // REVIEW(steven) describe loop
@@ -310,7 +310,7 @@ bool RingBuffer<T>::lf_dequeue(T *result) {
 
 template<class T>
 void RingBuffer<T>::wf_enqueue(EnqueueOp<T> *op) {
-  long seq = next_tail_seq() - 1;
+  long seq = get_tail_seq() - 1;
 
   while (true) {
     if (is_full()) {
