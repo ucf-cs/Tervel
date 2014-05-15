@@ -50,7 +50,7 @@ class BufferOp : public util::OpRecord {
   // REVIEW(steven) missing description
   virtual bool result() {
     assert(helper_.load());
-    return helper_.load() == FAILED;
+    return helper_.load() != FAILED;
   }
 
   // REVIEW(steven) missing description

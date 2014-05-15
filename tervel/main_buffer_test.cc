@@ -124,7 +124,7 @@ int main(int argc, char** argv) {
     printf("[%d: %p] ", i, test_data.shared_memory_[i].load());
   }
 
-  return 1;
+  return 0;
 }
 
 

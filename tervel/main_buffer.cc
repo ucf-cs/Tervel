@@ -37,8 +37,8 @@
 using namespace tervel::wf_ring_buffer;
 
 DEFINE_int32(num_threads, 8, "The number of threads to spawn.");
-DEFINE_int32(execution_time, 1, "The amount of time to run the tests");
-DEFINE_int64(buffer_length, 256, "The size of the region to test on.");
+DEFINE_int32(execution_time, 3, "The amount of time to run the tests");
+DEFINE_int64(buffer_length, 65536, "The size of the region to test on.");
 DEFINE_int32(operation_type, 0, "The type of test to execute"
     "(0: Both enqueue and dequeue"
     ", 1: Only Enqueue"
@@ -96,7 +96,13 @@ int main(int argc, char** argv) {
   TestObject test_data(FLAGS_num_threads, FLAGS_execution_time,
         FLAGS_buffer_length, static_cast<TestType>(FLAGS_operation_type), rb);
 
-  // run_update_object(0, &test_data);
+  // prefill the buffer if needed
+  if (test_data.operation_type_ == TestType::ENQUEUEDEQUEUE) {
+    for (int i = 0; i < test_data.buffer_length_/2; i++) {
+      rb->enqueue(i);
+    }
+    printf("Prefilled buffer to half capacity\n");
+  }
 
   std::vector<std::thread> thread_list;
   for (int i = 0; i < test_data.num_threads_; i++) {
@@ -117,16 +123,15 @@ int main(int argc, char** argv) {
       t.join();
   });
 
+  #if DEBUG
+  rb->print_buffer_contents()
+  rb->print_lost_nodes();
+  #endif  // DEBUG
+  
   printf("Completed[Enqueues: %lu, Dequeues: %lu]\n",
     test_data.enqueue_count_.load(), test_data.dequeue_count_.load());
 
-  for (int i = 0; i < test_data.buffer_length_; i++) {
-    //TODO(ATB) make a get function of the ring_buffer to make the contents printable
-    //printf("[%d: %p] ", i, test_data.shared_memory_[i].load());
-  }
-  rb->print_lost_nodes();
-
-  return 1;
+  return 0;
 }
 
 
@@ -169,7 +174,7 @@ void run_enqueue_dequeue(int thread_id, TestObject * test_data) {
     val++;
     // printf("%ld\n", val);
     if (val & op_mask) {
-      bool succ = test_data->rb_->enqueue(val);
+      bool succ = test_data->rb_->enqueue(-1*val);
       if (succ) {
         enqueue_count++;
       }
@@ -195,7 +200,7 @@ void run_enqueue_only(int thread_id, TestObject * test_data) {
   long val = thread_id << 20;
   while (test_data->running_.load()) {
     val++;
-    bool succ = test_data->rb_->enqueue(val);
+    bool succ = test_data->rb_->enqueue(-1*val);
     if (succ) {
       enqueue_count++;
     }
