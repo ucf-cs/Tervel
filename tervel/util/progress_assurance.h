@@ -63,9 +63,9 @@ class ProgressAssurance {
    */
   #ifdef NO_WAIT_FREE
     static constexpr size_t MAX_FAILURES = -1;
-  #elseif SET_WAIT_FREE
+  #elif SET_WAIT_FREE
     static constexpr size_t MAX_FAILURES = SET_WAIT_FREE;
-  #elseif HIGH_WAIT_FREE
+  #elif HIGH_WAIT_FREE
     static constexpr size_t MAX_FAILURES = 1;
   #else
     static constexpr size_t MAX_FAILURES = 1000;
@@ -77,7 +77,7 @@ class ProgressAssurance {
    */
   #ifdef HIGH_WAIT_FREE
    static constexpr size_t HELP_DELAY = 1;
-  #elseif SET_HELP_DELAY
+  #elif SET_HELP_DELAY
     static constexpr size_t MAX_FAILURES = SET_HELP_DELAY;
   #else
     static constexpr size_t HELP_DELAY = 1000;
