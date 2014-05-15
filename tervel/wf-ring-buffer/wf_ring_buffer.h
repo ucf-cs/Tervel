@@ -479,9 +479,9 @@ void RingBuffer<T>::wf_dequeue(DequeueOp<T> *op) {
         // number
         util::backoff();
         if (curr_node == buffer_[pos].load()) {
-          //break;
+          break;
         }
-      }  // else (is not skipped)
+        // else (is not skipped)
     }  // while (true)
   }  // while (true)
 }  // wf_dequeue(DequeueOp *op)
