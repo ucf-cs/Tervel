@@ -89,7 +89,7 @@ class RingBuffer : public util::memory::hp::Element {
   bool content_is_empty() __attribute__((used));
 
   void print_invalid_nodes() __attribute__((used));
-  
+
   void print_lost_nodes() __attribute__((used));
 
   #endif  // DEBUG
@@ -134,8 +134,10 @@ private:
   std::atomic<long> tail_ {0}; // REVIEW(steven) should be initilized
 
   #if DEBUG
-  std::map<T, bool> log;
-  std::mutex log_mutex;
+  std::map<T, int> log_dequeue;
+  std::map<T, int> log_enqueue;
+  std::mutex log_mutex_enqueue;
+  std::mutex log_mutex_dequeue;
   #endif  // DEBUG
 
   friend DequeueOp<T>;
@@ -148,9 +150,11 @@ bool RingBuffer<T>::enqueue(T value) {
   util::ProgressAssurance::check_for_announcement();
   bool succ = lf_enqueue(value);
   if (succ) {
-    log_mutex.lock();
-    log[value] = false;
-    log_mutex.unlock();
+    log_mutex_enqueue.lock();
+    int temp = log_enqueue[value];
+    assert(temp == 0);
+    log_enqueue[value]++;
+    log_mutex_enqueue.unlock();
   }
   return succ;
 }
@@ -160,9 +164,11 @@ bool RingBuffer<T>::dequeue(T *result) {
   util::ProgressAssurance::check_for_announcement();
   bool succ = lf_dequeue(result);
   if (succ) {
-    log_mutex.lock();
-    log[*result] = true;
-    log_mutex.unlock();
+    log_mutex_dequeue.lock();
+    int temp = log_dequeue[*result];
+    assert(temp == 0);
+    log_dequeue[*result]++;
+    log_mutex_dequeue.unlock();
   }
   return succ;
 }
@@ -353,7 +359,7 @@ void RingBuffer<T>::wf_enqueue(EnqueueOp<T> *op) {
 
     seq++;
     long pos = get_position(seq);
-    
+
     while (op->helper_.load() == nullptr) {
       Node<T> *curr_node = buffer_[pos].load();
       Node<T> *unmarked_curr_node = reinterpret_cast<Node<T> *>(
@@ -481,7 +487,7 @@ void RingBuffer<T>::wf_dequeue(DequeueOp<T> *op) {
         if (curr_node == buffer_[pos].load()) {
           break;
         }
-        // else (is not skipped)
+      }  // else (is not skipped)
     }  // while (true)
   }  // while (true)
 }  // wf_dequeue(DequeueOp *op)
@@ -563,15 +569,17 @@ void RingBuffer<T>::print_lost_nodes() {
           util::memory::rc::unmark_first(curr_node));
     if (unmarked_curr_node->is_ElemNode()) {
       T val = unmarked_curr_node->val();
-      log[val] = true;
-    } 
+      log_dequeue[val]++;
+    }
   }
-  std::cout << "Lost Nodes [tid, tid&val]" << std::endl;
+  std::cout << "Lost Nodes [tid, tid&val, dequeue log, enqueue log]" << std::endl;
   std::cout << "==========================" << std::endl;
-  for (std::map<long, bool>::iterator it=log.begin(); it!=log.end(); ++it) {
-    if (it->second == false) {
-      int thread_id = it->first >> 20;
-      std::cout << "[" << thread_id << "," <<  it->first << "]" << std::endl;
+  for (auto it=log_dequeue.begin(); it!=log_dequeue.end(); ++it) {
+    T key = it->first;
+    if(log_dequeue[key] != 1 || log_enqueue[key] != 1) {
+      int thread_id = key >> 20;
+      std::cout << "[" << thread_id << "," <<  key << "," << log_dequeue[key]  <<
+        "," <<   log_enqueue[key]  << "]" << std::endl;
     }
   }
 }

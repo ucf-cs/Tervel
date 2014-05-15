@@ -65,12 +65,12 @@ class ThreadContext {
   /**
    * This function returns the id of the next thread to helper. If the max
    * has been reached it is reset to 0.
-   * 
+   *
    * @param  max_delay
    * @return current delay count
    */
   size_t help_id(size_t num_threads) {
-    if (help_id_ == num_threads) {
+    if (help_id_ >= num_threads) {
       help_id_ = 0;
     }
     return ++help_id_;
@@ -79,12 +79,12 @@ class ThreadContext {
   /**
    * This function returns the next delay_count, and if it reaches the limit
    * it is reset to 0.
-   * 
+   *
    * @param  max_delay
    * @return current delay count
    */
   size_t delay_count(size_t max_delay) {
-    if (delay_count_ == max_delay) {
+    if (delay_count_ >= max_delay) {
       delay_count_ = 0;
     }
     return ++delay_count_;
@@ -160,8 +160,8 @@ class ThreadContext {
    */
   const uint64_t thread_id_;
 
-  /** 
-   * Recurive_return: Used to indicate a thread must return to its own 
+  /**
+   * Recurive_return: Used to indicate a thread must return to its own
    * operation and re-evaualte its state. This is set to true in the event
    * 1) The thread reasons that the dependncy between the current op it is
    * Trying to help has changed and a result it must re-examine its op
@@ -177,7 +177,7 @@ class ThreadContext {
    */
   size_t recursive_depth_ {0};
 
-  /** 
+  /**
    * help_id_ is a variable used to track which thread to check for an
    * announcement.
    *
@@ -186,10 +186,10 @@ class ThreadContext {
    */
   size_t help_id_ {0};
 
-  /** 
+  /**
    * delay_count_ is a variable used to delay how often a thread checks for an
    * annoucnement
-   * 
+   *
    *  This is used exclusively by the annoucement table function tryHelpAnother*
    *    *(unless function has been renamed)
    */
