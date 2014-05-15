@@ -84,6 +84,7 @@ class RingBuffer : public util::memory::hp::Element {
    * METHODS BEYOND THIS POINT ARE FOR TESTING PURPOSE ONLY
    */
   #if DEBUG
+  void print_content_count() __attribute__((used));
   bool content_is_full() __attribute__((used));
 
   bool content_is_empty() __attribute__((used));
@@ -378,7 +379,7 @@ void RingBuffer<T>::wf_enqueue(EnqueueOp<T> *op) {
       } else {  // curr_node isnt marked skipped
         if (unmarked_curr_node->seq() < seq) {
           util::backoff();
-          if (curr_node == buffer_[pos].load()) {  // curr_node has changed
+          if (curr_node != buffer_[pos].load()) {  // curr_node has changed
             continue;  // re-process the current value
           }  // curr_node changed during backoff
         }
@@ -505,21 +506,32 @@ bool RingBuffer<T>::is_full() {
 #if DEBUG
 
 template <class T>
-bool RingBuffer<T>::content_is_full() {
+void RingBuffer<T>::print_content_count() {
   int num_elem = 0, num_empty = 0;
+  int m_num_elem = 0, m_num_empty = 0;
   for (int i=0; i<capacity_; i++) {
     Node<T> *curr_node = buffer_[i].load();
     Node<T> *unmarked_curr_node = reinterpret_cast<Node<T> *>(
           util::memory::rc::unmark_first(curr_node));
     if (unmarked_curr_node->is_EmptyNode()) {
-      num_empty++;
+      if (curr_node == unmarked_curr_node) {
+        num_empty++;
+      }
+      else {
+        m_num_empty++;
+      }
     } else {
-      num_elem++;
+      if(curr_node == unmarked_curr_node){
+        num_elem++;
+      }
+      else {
+        m_num_empty++;
+      }
     }
   }
   printf("%s\n", (num_empty==0) ? "True" : "False");
-  printf("ElemNode count: %d\nEmptyNode count: %d\n", num_elem, num_empty);
-  return (num_empty == 0);
+  printf("Unmarked: ElemNode count: %d\tEmptyNode count: %d\n", num_elem, num_empty);
+  printf("Marked:   ElemNode count: %d\tEmptyNode count: %d\n", m_num_elem, m_num_empty);
 }
 
 template <class T>

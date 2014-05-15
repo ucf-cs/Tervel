@@ -169,7 +169,7 @@ void run_enqueue_dequeue(int thread_id, TestObject * test_data) {
     val++;
     // printf("%ld\n", val);
     if (val & op_mask) {
-      bool succ = test_data->rb_->enqueue(val);
+      bool succ = test_data->rb_->enqueue(-1*val);
       if (succ) {
         enqueue_count++;
       }
@@ -195,7 +195,7 @@ void run_enqueue_only(int thread_id, TestObject * test_data) {
   long val = thread_id << 20;
   while (test_data->running_.load()) {
     val++;
-    bool succ = test_data->rb_->enqueue(val);
+    bool succ = test_data->rb_->enqueue(-1*val);
     if (succ) {
       enqueue_count++;
     }
