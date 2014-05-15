@@ -22,9 +22,11 @@ class ElemNode : public Node<T> {
       , op_rec_(op_rec) {}
 
   ~ElemNode<T>() {
-    if (op_rec_ != nullptr) {
+    /* @Steven, should this really be here?
+    if (op_rec_ != nullptr && op_rec_.load() != nullptr) {
       op_rec_.load()->safe_delete();
     }
+    */
   }
 
   // REVIEW(steven) missing description
