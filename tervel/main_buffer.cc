@@ -117,7 +117,7 @@ int main(int argc, char** argv) {
       t.join();
   });
 
-  printf("Completed[Passed: %lu, Failed: %lu]\n",
+  printf("Completed[Enqueues: %lu, Dequeues: %lu]\n",
     test_data.enqueue_count_.load(), test_data.dequeue_count_.load());
 
   for (int i = 0; i < test_data.buffer_length_; i++) {
@@ -166,6 +166,7 @@ void run_enqueue_dequeue(int thread_id, TestObject * test_data) {
   int op_mask = 0x1;
   while (test_data->running_.load()) {
     val++;
+    // printf("%ld\n", val);
     if (val & op_mask) {
       bool succ = test_data->rb_->enqueue(val);
       if (succ) {

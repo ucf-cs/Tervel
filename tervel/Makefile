@@ -5,7 +5,7 @@ CXXFLAGS = -Wall -Wunused-function -g -std=c++11 -march=native -m64 -pthread \
 CPPFLAGS = -DDEBUG=1 -DINTEL
 
 INC = -I../
-LIB = -ldl -lgflags -lpthread -lboost_system -lboost_regex -lrt# -lllalloc
+LIB = -ldl -lgflags -lpthread -lboost_system -lboost_regex -lrt -ltbb# -lllalloc
 
 SOURCES = main_buffer.cc \
   util/progress_assurance.cc util/memory/hp/hazard_pointer.cc \

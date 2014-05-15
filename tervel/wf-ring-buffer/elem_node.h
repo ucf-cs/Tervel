@@ -21,7 +21,11 @@ class ElemNode : public Node<T> {
       : Node<T>(val, seq)
       , op_rec_(op_rec) {}
 
-  ~ElemNode<T>() {}
+  ~ElemNode<T>() {
+    if (op_rec_ != nullptr) {
+      op_rec_.load()->safe_delete();
+    }
+  }
 
   // REVIEW(steven) missing description
   using util::Descriptor::on_watch;

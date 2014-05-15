@@ -17,9 +17,7 @@ class EmptyNode : public Node<T> {
   explicit EmptyNode<T>(long seq)
       : Node<T>(reinterpret_cast<T>(nullptr), seq) {}
 
-  ~EmptyNode<T>() {
-    // TODO call OpRec safeFree(true) if not null
-  }
+  ~EmptyNode<T>() {}
 
   // REVIEW(steven) missing description
   bool is_EmptyNode() { return true; }
