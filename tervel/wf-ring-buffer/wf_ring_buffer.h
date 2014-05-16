@@ -212,11 +212,13 @@ bool RingBuffer<T>::lf_enqueue(T val) {
       }
       else if (curr_node != unmarked_curr_node) {  // curr_node is skipped marked
         // Enqueues do not modify marked nodes
+        util::memory::rc::unwatch(unmarked_curr_node);
         break;
       } else {  // curr_node isnt marked skipped
         if (curr_node->seq() < seq) {
             util::backoff();
             if (curr_node != buffer_[pos].load()) {  // curr_node has changed
+              util::memory::rc::unwatch(unmarked_curr_node);
               continue;  // reprocess the current value.
             }
         }
@@ -226,9 +228,11 @@ bool RingBuffer<T>::lf_enqueue(T val) {
                 curr_node, new_node);
 
           if (cas_success) {
+            util::memory::rc::unwatch(unmarked_curr_node);
             util::memory::rc::free_descriptor(curr_node);
             return true;
           } else {
+            util::memory::rc::unwatch(unmarked_curr_node);
             util::memory::rc::free_descriptor(new_node, true);
             break;
           }
@@ -279,9 +283,11 @@ bool RingBuffer<T>::lf_dequeue(T *result) {
                                                                   new_node);
           if (cas_success) {
             util::memory::rc::free_descriptor(unmarked_curr_node);
+            util::memory::rc::unwatch(unmarked_curr_node);
             break;
           } else {
             util::memory::rc::free_descriptor(new_node, true);
+            util::memory::rc::unwatch(unmarked_curr_node);
             continue;
           }
         } else {  // curr_node is ElemNode and Skipped Marked
@@ -298,6 +304,7 @@ bool RingBuffer<T>::lf_dequeue(T *result) {
 
             if (cas_success) {
               util::memory::rc::free_descriptor(unmarked_curr_node);
+              util::memory::rc::unwatch(unmarked_curr_node);
               *result = unmarked_curr_node->val();
               return true;
             } else {
@@ -326,16 +333,19 @@ bool RingBuffer<T>::lf_dequeue(T *result) {
             if (cas_succ) {
               *result = curr_node->val();
               util::memory::rc::free_descriptor(unmarked_curr_node);
+              util::memory::rc::unwatch(unmarked_curr_node);
               return true;
             } else {
               // The value may have been bitmarked or been replaced by a copy
               // with an OpRecord
               util::memory::rc::free_descriptor(new_node, true);
+              util::memory::rc::unwatch(unmarked_curr_node);
               continue;
             }
           }  // if is elemnode
 
         } else if (curr_node->seq() > seq) {
+          util::memory::rc::unwatch(unmarked_curr_node);
           break;
         } else {
           // Otherwise, (curr_node->seq() < seq) and we must set skipped if no
@@ -379,11 +389,13 @@ void RingBuffer<T>::wf_enqueue(EnqueueOp<T> *op) {
       }
       if (curr_node != unmarked_curr_node) {  // curr_node is marked skipped
         // Enqueues do not modify marked nodes
+        util::memory::rc::unwatch(unmarked_curr_node);
         break;
       } else {  // curr_node isnt marked skipped
         if (unmarked_curr_node->seq() < seq) {
           util::backoff();
           if (curr_node != buffer_[pos].load()) {  // curr_node has changed
+            util::memory::rc::unwatch(unmarked_curr_node);
             continue;  // re-process the current value
           }  // curr_node changed during backoff
         }
@@ -396,11 +408,13 @@ void RingBuffer<T>::wf_enqueue(EnqueueOp<T> *op) {
 
           if (cas_success) {
             util::memory::rc::free_descriptor(curr_node);
+            util::memory::rc::unwatch(unmarked_curr_node);
             op->associate(new_node, &(buffer_[pos]));
             assert(op->helper_.load() != nullptr);
             return;
           } else {  // failed to place the new node
             util::memory::rc::free_descriptor(new_node, true);
+            util::memory::rc::unwatch(unmarked_curr_node);
           }
         } else {  // (curr_node->seq() > seq)
           break;  // break inner loop and get a new sequence number
@@ -457,10 +471,12 @@ void RingBuffer<T>::wf_dequeue(DequeueOp<T> *op) {
             // For now, lets just get a new position and mellow on how to handle
             // this
             //
+            util::memory::rc::unwatch(unmarked_curr_node);
             break;
         } else {  // curr_node is ElemNode
           // curr_node is a skipped ElemNode. It must be removed by a thread
           // with the values seq number so it may be corrected.
+          util::memory::rc::unwatch(unmarked_curr_node);
           break;
         }
       } else {  // curr_node isnt marked skipped
@@ -474,15 +490,18 @@ void RingBuffer<T>::wf_dequeue(DequeueOp<T> *op) {
                   unmarked_curr_node, new_node);
             if (cas_succ) {
               util::memory::rc::free_descriptor(unmarked_curr_node);
+              util::memory::rc::unwatch(unmarked_curr_node);
               op->associate(reinterpret_cast<ElemNode<T> *>(new_node), &(buffer_[pos]));
               return;
             } else {
               util::memory::rc::free_descriptor(new_node, true);
+              util::memory::rc::unwatch(unmarked_curr_node);
               continue;
             }
           }
 
         } else if (curr_node->seq() > seq) {
+          util::memory::rc::unwatch(unmarked_curr_node);
           break;
         }
         // Otherwise, (curr_node->seq() < seq) and do not set skipped if no
@@ -490,6 +509,7 @@ void RingBuffer<T>::wf_dequeue(DequeueOp<T> *op) {
         // number
         util::backoff();
         if (curr_node == buffer_[pos].load()) {
+          util::memory::rc::unwatch(unmarked_curr_node);
           break;
         }
       }  // else (is not skipped)

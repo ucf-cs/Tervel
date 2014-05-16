@@ -167,12 +167,13 @@ void run_enqueue_dequeue(int thread_id, TestObject * test_data) {
   test_data->ready_count_.fetch_add(1);
   while (test_data->wait_flag_.load()) {}
 
-  long val = (thread_id << 20) + 1; // give a unique id number and add one to
-                                    // force an enqueue op to occur first
+  // Give a unique id number and add one to force an enqueue op to occur
+  // first. This shift should make enqueues ID'ed for up to 256 threads.
+  long val = (thread_id << 24) + 1;
+
   int op_mask = 0x1;
   while (test_data->running_.load()) {
     val++;
-    // printf("%ld\n", val);
     if (val & op_mask) {
       bool succ = test_data->rb_->enqueue(-1*val);
       if (succ) {
