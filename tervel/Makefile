@@ -2,7 +2,7 @@ CXX      = g++-4.7
 CXXFLAGS = -Wall -Wunused-function -g -std=c++11 -march=native -m64 -pthread \
   -fno-strict-aliasing -pg
   #-Wfatal-errors -Werror
-CPPFLAGS = -DINTEL #-DDEBUG=1 #-DHIGH_WAIT_FREE=1
+CPPFLAGS = -DINTEL -DNOMEMORY #-DDEBUG=1 #-DHIGH_WAIT_FREE=1
 
 INC = -I../
 LIB = -ldl -lgflags -lpthread -lboost_system -lboost_regex -lrt -ltbb# -lllalloc

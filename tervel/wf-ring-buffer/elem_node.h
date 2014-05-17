@@ -32,6 +32,10 @@ class ElemNode : public Node<T> {
   // REVIEW(steven) missing description
   using util::Descriptor::on_watch;
   bool on_watch(std::atomic<void*> *address, void *value) {
+    #ifdef NOMEMORY
+    return true;
+    #endif  // NOMEMORY
+
     BufferOp<T> *node_op = op_rec_.load();
 
     if (node_op != nullptr) {

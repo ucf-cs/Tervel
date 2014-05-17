@@ -44,6 +44,9 @@ class DequeueOp : public BufferOp<T> {
   }
 
   bool on_is_watched() {
+    #ifdef NOMEMORY
+    return true;
+    #endif  // NOMEMORY
     // Not should only be called by reclaimation scheme after this op has been
     // completed
     ElemNode<T> *temp = this->helper_.load();

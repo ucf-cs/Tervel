@@ -38,6 +38,9 @@ inline DescrType * get_descriptor(Args&&... args) {
  */
 inline void free_descriptor(tervel::util::Descriptor *descr,
       bool dont_check = false) {
+  #ifdef NOMEMORY
+  return;
+  #endif  // NOMEMORY
   tervel::tl_thread_info->get_rc_descriptor_pool()->free_descriptor(descr,
         dont_check);
 }
@@ -75,6 +78,10 @@ inline bool is_watched(tervel::util::Descriptor *descr) {
 */
 inline bool watch(tervel::util::Descriptor *descr, std::atomic<void *> *address,
         void *value) {
+  #ifdef NOMEMORY
+  return true;
+  #endif  // NOMEMORY
+  
   PoolElement *elem = get_elem_from_descriptor(descr);
   elem->header().ref_count.fetch_add(1);
 
@@ -104,6 +111,9 @@ inline bool watch(tervel::util::Descriptor *descr, std::atomic<void *> *address,
 * @param descr the descriptor which no longer needs rc protection.
 */
 inline void unwatch(tervel::util::Descriptor *descr) {
+  #ifdef NOMEMORY
+  return;
+  #endif  // NOMEMORY
   PoolElement *elem = get_elem_from_descriptor(descr);
   int64_t temp = elem->header().ref_count.fetch_add(-1);
   assert(temp > 0);
