@@ -1,11 +1,14 @@
-#ifndef TERVEL_UTIL_NODE_H
-#define TERVEL_UTIL_NODE_H
+//REVIEW(steven) each class should have its own file.
+//
+#ifndef TERVEL_UTIL_NODE_H //REVIEW(steven) this should be the file path
+#define TERVEL_UTIL_NODE_H  // TERVEL_HASHMAP_NODE_H
 
-using namespace std;
+using namespace std; //REVIEW(steven) dont do this, specify std when needed
 template <typename K, typename V>
-
+//REVIEW(steven) no space here
 class Node {
 private:
+	//REVIEW(steven) this class should only havevirtual isPairNode/isArrayNode
 	K key;
 	V value;
 	Node *next;
@@ -25,6 +28,8 @@ public:
 
 
 };
+
+//REVIEW(steven) PairNode should extend Node and util::memory::rc::Descriptor
 class PairNode {
 private:
 	K key;
@@ -40,9 +45,11 @@ public:
 	}
 };
 
+//REVIEW(steven) PairNode should extend Node
 class ArrayNode {
 private:
-	K key;
+	K key;//Not needed by this class, should have an array like the hashmpa
+	// the constructor should specify the length of the array.
 	V value
 	Node *next;
 public:
@@ -55,14 +62,18 @@ public:
 	}
 
 };
+
+//REVIEW(steven) should be in its own file
+//should take several templates
+//Key, Value, and a comparator,
 class HashMap{
 private:
-	Node **table;
+	Node **table; //REVIEW(steven) should be std::atomic<Node *> *
 public:
 	HashMap(){
 		table = new Node*[array_length];
 		for (int i = 0; i < array_length; i++){
-			table[i] = NULL;
+			table[i] = NULL; //REVIEW(steven) use nullptr instead
 		}
 	}
 	int get(int key) {
