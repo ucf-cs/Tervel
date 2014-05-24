@@ -74,6 +74,7 @@ class ElemNode : public Node<T> {
 
  private:
   std::atomic<BufferOp<T>*> op_rec_ {nullptr};
+  int pad __attribute__((aligned(64)));
 };  // ElemNode class
 
 

@@ -58,8 +58,12 @@ class EnqueueOp : public BufferOp<T> {
     } else {
       Node<T> *curr_node = reinterpret_cast<Node<T> *>(node);
 
+      #ifdef NOMEMORY
+      Node<T> *new_node = new EmptyNode<T>(node->seq());
+      #else
       Node<T> *new_node = reinterpret_cast<Node<T> *>(
             util::memory::rc::get_descriptor< EmptyNode<T> >(node->seq()));
+      #endif  // NOMEMORY
 
       success = address->compare_exchange_strong(curr_node, new_node);
       if (!success) {  // node may have been marked as skipped
