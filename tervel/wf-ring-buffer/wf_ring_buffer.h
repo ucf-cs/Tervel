@@ -207,7 +207,7 @@ bool RingBuffer<T>::lf_enqueue(T val) {
         return result;
       }
 
-      Node<T> *curr_node = buffer_[pos].load();
+      Node<T> *curr_node = buffer_[pos].load(std::memory_order_relaxed);
       Node<T> *unmarked_curr_node = reinterpret_cast<Node<T> *>(
             util::memory::rc::unmark_first(curr_node));
       bool watch_succ = util::memory::rc::watch(unmarked_curr_node,
@@ -274,7 +274,7 @@ bool RingBuffer<T>::lf_dequeue(T *result) {
         return op_succ;
       }
 
-      Node<T> *curr_node = buffer_[pos].load();
+      Node<T> *curr_node = buffer_[pos].load(std::memory_order_relaxed);
       Node<T> *unmarked_curr_node = reinterpret_cast<Node<T> *>(
             util::memory::rc::unmark_first(curr_node));
 
@@ -386,7 +386,7 @@ void RingBuffer<T>::wf_enqueue(EnqueueOp<T> *op) {
     long pos = get_position(seq);
 
     while (op->helper_.load() == nullptr) {
-      Node<T> *curr_node = buffer_[pos].load();
+      Node<T> *curr_node = buffer_[pos].load(std::memory_order_relaxed);
       Node<T> *unmarked_curr_node = reinterpret_cast<Node<T> *>(
             util::memory::rc::unmark_first(curr_node));
 
@@ -449,7 +449,7 @@ void RingBuffer<T>::wf_dequeue(DequeueOp<T> *op) {
     long pos = get_position(seq);
 
     while (op->helper_.load() == nullptr) {
-      Node<T> *curr_node = buffer_[pos].load();
+      Node<T> *curr_node = buffer_[pos].load(std::memory_order_relaxed);
       Node<T> *unmarked_curr_node = reinterpret_cast<Node<T> *>(
             util::memory::rc::unmark_first(curr_node));
 
