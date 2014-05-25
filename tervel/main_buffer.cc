@@ -61,15 +61,21 @@ class TestObject {
     dequeue_count_.fetch_add(dequeue_count);
   }
 
+  void print_test() {
+    printf("Execution Time: %d\n", execution_time_);
+    printf("Num Threads: %d\n", num_threads_);
+    printf("Buffer Length: %ld\n", buffer_length_);
+    printf("Operation Type: %d\n", static_cast<int>(operation_type_));
+  };
 
 
 
   const int execution_time_;
-  const int buffer_length_;
+  const int64_t buffer_length_;
   const int num_threads_;
   const TestType operation_type_;
 
-  RingBuffer<long> *rb_;
+  RingBuffer<int64_t> *rb_;
 
   std::atomic<uint64_t> enqueue_count_ {0};
   std::atomic<uint64_t> dequeue_count_ {0};
