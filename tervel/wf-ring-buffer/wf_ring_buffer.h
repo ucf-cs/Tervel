@@ -91,12 +91,6 @@ class RingBuffer : public util::memory::hp::Element {
    */
   #if DEBUG
   void print_content_count() __attribute__((used));
-  bool content_is_full() __attribute__((used));
-
-  bool content_is_empty() __attribute__((used));
-
-  void print_invalid_nodes() __attribute__((used));
-
   void print_lost_nodes() __attribute__((used));
 
   #endif  // DEBUG
@@ -568,44 +562,6 @@ void RingBuffer<T>::print_content_count() {
   printf("Marked:   ElemNode count: %d\tEmptyNode count: %d\n", m_num_elem, m_num_empty);
 }
 
-template <class T>
-bool RingBuffer<T>::content_is_empty() {
-  int num_elem = 0, num_empty = 0;
-  for (int i=0; i<capacity_; i++) {
-    Node<T> *curr_node = buffer_[i].load();
-    Node<T> *unmarked_curr_node = reinterpret_cast<Node<T> *>(
-          util::memory::rc::unmark_first(curr_node));
-    if (unmarked_curr_node->is_ElemNode()) {
-      num_elem++;
-    } else {
-      num_empty++;
-    }
-  }
-  printf("%s\n", (num_elem==0) ? "True" : "False");
-  printf("ElemNode count:\t%d\nEmptyNode count:\t%d\n", num_elem, num_empty);
-  return (num_elem == 0);
-}
-
-template <class T>
-void RingBuffer<T>::print_invalid_nodes() {
-  std::cout << "Invalid Nodes" << std::endl;
-  std::cout << "==============" << std::endl;
-  for (int i=0; i<capacity_; i++) {
-    Node<T> *curr_node = buffer_[i].load();
-    Node<T> *unmarked_curr_node = reinterpret_cast<Node<T> *>(
-          util::memory::rc::unmark_first(curr_node));
-    if (get_position(unmarked_curr_node->seq()) != i) {
-      if (unmarked_curr_node->is_ElemNode()) {
-        printf("Node is ElemNode:\tTrue\n");
-        printf("Val:\t%ld\n", (reinterpret_cast<ElemNode<T> *>(
-              unmarked_curr_node))->val());
-      } else {
-        printf("Node is ElemNode:\tFalse\n");
-      }
-      printf("Seq:\t%ld\nPos:\t%d\n", curr_node->seq(), i);
-    }
-  }
-}
 
 template <class T>
 void RingBuffer<T>::print_lost_nodes() {
