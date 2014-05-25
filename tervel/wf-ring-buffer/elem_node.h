@@ -21,21 +21,11 @@ class ElemNode : public Node<T> {
       : Node<T>(val, seq)
       , op_rec_(op_rec) {}
 
-  ~ElemNode<T>() {
-    /* @Steven, should this really be here?
-    if (op_rec_ != nullptr && op_rec_.load() != nullptr) {
-      op_rec_.load()->safe_delete();
-    }
-    */
-  }
+  ~ElemNode<T>() {}
 
   // REVIEW(steven) missing description
   using util::Descriptor::on_watch;
   bool on_watch(std::atomic<void*> *address, void *value) {
-    #ifdef NOMEMORY
-    return true;
-    #endif  // NOMEMORY
-
     BufferOp<T> *node_op = op_rec_.load();
 
     if (node_op != nullptr) {
@@ -74,7 +64,6 @@ class ElemNode : public Node<T> {
 
  private:
   std::atomic<BufferOp<T>*> op_rec_ {nullptr};
-  int pad __attribute__((aligned(64)));
 };  // ElemNode class
 
 

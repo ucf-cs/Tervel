@@ -44,9 +44,6 @@ class DequeueOp : public BufferOp<T> {
   }
 
   bool on_is_watched() {
-    #ifdef NOMEMORY
-    return true;
-    #endif  // NOMEMORY
     // Not should only be called by reclaimation scheme after this op has been
     // completed
     ElemNode<T> *temp = this->helper_.load();
@@ -71,16 +68,11 @@ class DequeueOp : public BufferOp<T> {
     bool success = this->helper_.compare_exchange_strong(null_node, node);
     if (success || null_node == node) {
       Node<T> *curr_node = reinterpret_cast<Node<T> *>(node);
-    
-      #ifdef NOMEMORY
-      Node<T> *new_node = new EmptyNode<T>(curr_node->seq() +
-          this->buffer_->capacity());
-      #else
+
       Node<T> *new_node = reinterpret_cast<Node<T> *>(
           util::memory::rc::get_descriptor< EmptyNode<T> >(curr_node->seq() +
           this->buffer_->capacity()));
-      #endif  // NOMEMORY
-       
+
       success = address->compare_exchange_strong(curr_node, new_node);
       if (!success) {  // node may have been marked as skipped
         curr_node = reinterpret_cast<Node<T> *>(

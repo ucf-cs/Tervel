@@ -38,17 +38,9 @@ class Node : public util::Descriptor {
   // REVIEW(steven) missing description and space between functions
   long seq() { return seq_; }
 
-//  void print_vals() { printf("%ld %ld %ld %ld %ld\n", pad0_, pad1_, pad2_, pad3_, pad4_); }
-
-
  protected:
   T val_;
   long seq_;
-  /*long pad0_ {100};
-  long pad1_ {100};
-  long pad2_ {100};
-  long pad3_ {100};
-  long pad4_ {100};*/
 };  // Node class
 
 
