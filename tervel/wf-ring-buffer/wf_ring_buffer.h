@@ -50,15 +50,13 @@ class RingBuffer : public util::memory::hp::Element {
  public:
   static constexpr T FAIL_CONST = reinterpret_cast<T>(0x1L);
 
-  explicit RingBuffer<T>(int capacity)
+  explicit RingBuffer<T>(size_t capacity)
       : capacity_(capacity)
-  {
-    // REVIEW(steven) need min capacity check
-    size_mask_ = capacity_ - 1;
-    buffer_ = new util::PaddedAtomic<Node<T> *>[capacity_];
-
-    for (long i = 0; i < capacity_; i++) {
-      Node<T> *empty_node = util::memory::rc::get_descriptor<EmptyNode<T>>(i);
+      , size_mask_(capacity_ - 1)
+      , buffer_(new util::PaddedAtomic<Node<T> *>[capacity_]) {
+    assert(capacity_ != 0);
+    for (int64_t i = 0; i < capacity_; i++) {
+      Node<T> *empty_node = util::memory::rc::get_descriptor< EmptyNode<T> >(i);
       buffer_[i].store(empty_node);
     }
   }
@@ -95,7 +93,7 @@ class RingBuffer : public util::memory::hp::Element {
 
   #endif  // DEBUG
 
-  int capacity()  {return capacity_;} // REVIEW(steven) could be a const
+  const int capacity()  {return capacity_;}
 private:
   /**
    * TODO: Performs an enqueue..
@@ -114,26 +112,26 @@ private:
   void wf_dequeue(DequeueOp<T> *op);
 
   // REVIEW(steven) missing description
-  long next_head_seq();
+  int64_t next_head_seq();
 
   // REVIEW(steven) missing description
-  long next_tail_seq();
+  int64_t next_tail_seq();
 
   // REVIEW(steven) missing description
-  long get_head_seq();
+  int64_t get_head_seq();
 
   // REVIEW(steven) missing description
-  long get_tail_seq();
+  int64_t get_tail_seq();
 
   // REVIEW(steven) missing description
-  long get_position(long seq);
+  int64_t get_position(int64_t seq);
 
-  int capacity_;  // REVIEW(steven) could be a const
-  int size_mask_; // if done in the initilization list
-  util::PaddedAtomic<Node<T> *> *buffer_;
+  const int capacity_;
+  const int size_mask_;
+  std::unique_ptr<util::PaddedAtomic<Node<T> *>[]> buffer_;
 
-  std::atomic<long> head_ {0}; // REVIEW(steven) should be initlized
-  std::atomic<long> tail_ {0}; // REVIEW(steven) should be initilized
+  std::atomic<int64_t> head_ {0}; // REVIEW(steven) should be initlized
+  std::atomic<int64_t> tail_ {0}; // REVIEW(steven) should be initilized
 
   #if DEBUG
   std::map<T, int> log_dequeue;
@@ -187,8 +185,8 @@ bool RingBuffer<T>::lf_enqueue(T val) {
       return false;
     }
 
-    long seq = next_tail_seq();
-    long pos = get_position(seq);
+    int64_t seq = next_tail_seq();
+    int64_t pos = get_position(seq);
 
     // REVIEW(steven) describe loop
     while (true) {
@@ -255,8 +253,8 @@ bool RingBuffer<T>::lf_dequeue(T *result) {
       return false;
     }
 
-    long seq = next_head_seq();
-    long pos = get_position(seq);
+    int64_t seq = next_head_seq();
+    int64_t pos = get_position(seq);
     while (true) { // REVIEW(steven) describe loop
       if (fail_count++ == util::ProgressAssurance::MAX_FAILURES) {
 
@@ -367,7 +365,7 @@ bool RingBuffer<T>::lf_dequeue(T *result) {
 
 template<class T>
 void RingBuffer<T>::wf_enqueue(EnqueueOp<T> *op) {
-  long seq = get_tail_seq() - 1;
+  int64_t seq = get_tail_seq() - 1;
 
   while (true) {
     if (is_full()) {
@@ -377,7 +375,7 @@ void RingBuffer<T>::wf_enqueue(EnqueueOp<T> *op) {
     }
 
     seq++;
-    long pos = get_position(seq);
+    int64_t pos = get_position(seq);
 
     while (op->helper_.load() == nullptr) {
       Node<T> *curr_node = buffer_[pos].load(std::memory_order_relaxed);
@@ -430,7 +428,7 @@ void RingBuffer<T>::wf_enqueue(EnqueueOp<T> *op) {
 
 template<class T>
 void RingBuffer<T>::wf_dequeue(DequeueOp<T> *op) {
-  long seq = get_head_seq() - 1;
+  int64_t seq = get_head_seq() - 1;
 
   while (true) {
     if (is_empty()) {
@@ -440,7 +438,7 @@ void RingBuffer<T>::wf_dequeue(DequeueOp<T> *op) {
     }
 
     seq++;
-    long pos = get_position(seq);
+    int64_t pos = get_position(seq);
 
     while (op->helper_.load() == nullptr) {
       Node<T> *curr_node = buffer_[pos].load(std::memory_order_relaxed);
@@ -589,13 +587,13 @@ void RingBuffer<T>::print_lost_nodes() {
 #endif  // DEBUG
 
 template <class T>
-long RingBuffer<T>::next_head_seq() {
+int64_t RingBuffer<T>::next_head_seq() {
   return head_.fetch_add(1);
 }
 
 template <class T>
-long RingBuffer<T>::next_tail_seq() {
-  long seq = tail_.fetch_add(1);
+int64_t RingBuffer<T>::next_tail_seq() {
+  int64_t seq = tail_.fetch_add(1);
   // TODO(ATB) branch pred. expect false
   if (seq < 0) {
     // TODO(ATB) handle rollover -- after rb paper
@@ -604,17 +602,17 @@ long RingBuffer<T>::next_tail_seq() {
 }
 
 template <class T>
-long RingBuffer<T>::get_head_seq() {
+int64_t RingBuffer<T>::get_head_seq() {
   return head_.load();
 }
 
 template <class T>
-long RingBuffer<T>::get_tail_seq() {
+int64_t RingBuffer<T>::get_tail_seq() {
   return tail_.load();
 }
 
 template <class T>
-long RingBuffer<T>::get_position(long seq) {
+int64_t RingBuffer<T>::get_position(int64_t seq) {
   return seq & size_mask_;  // quickly take seq modulo capacity_ with size_mask_
 }
 
