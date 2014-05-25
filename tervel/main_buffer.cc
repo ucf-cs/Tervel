@@ -81,8 +81,6 @@ class TestObject {
 };
 
 
-int buffer_length;
-
 void run(int thread_id, tervel::Tervel* tervel_obj, TestObject * test_object);
 void run_update_object(int start_pos, TestObject * test_data);
 
