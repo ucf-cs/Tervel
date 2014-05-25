@@ -17,7 +17,7 @@
 #include "tervel/util/memory/rc/descriptor_util.h"
 
 #include <stdlib.h>
-#include <malloc.h>
+
 #include <unistd.h>
 
 #include <atomic>
@@ -50,40 +50,16 @@ class RingBuffer : public util::memory::hp::Element {
  public:
   static constexpr T FAIL_CONST = reinterpret_cast<T>(0x1L);
 
-
-  /*
-  template<std::size_t Len, std::size_t Align=util::CACHE_LINE_SIZE>
-  struct aligned_storage {
-    struct type {
-      unsigned char data[Len];
-    };
-  };*/
-
   explicit RingBuffer<T>(int capacity)
       : capacity_(capacity)
   {
     // REVIEW(steven) need min capacity check
     size_mask_ = capacity_ - 1;
-    buffer_ = new std::atomic<Node<T> *>[capacity_];
+    buffer_ = new util::PaddedAtomic<Node<T> *>[capacity_];
 
-    // REVIEW(steven)
     for (long i = 0; i < capacity_; i++) {
       Node<T> *empty_node = util::memory::rc::get_descriptor<EmptyNode<T>>(i);
-
       buffer_[i].store(empty_node);
-      if (i==0) {
-        util::PaddedAtomic<Node<T> *> foo = new util::PaddedAtomic<Node<T> *>(empty_node);
-
-        printf("EmptyNode size: %ld\n", sizeof(empty_node));
-        printf("EmptyNode size: %ld\n", sizeof(*buffer_[0]));
-        //std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::high_resolution_clock::now());
-        int t1 = (int) std::time(NULL);
-        int t2 = (int) std::time(NULL);
-
-        (reinterpret_cast<EmptyNode<T> *>(empty_node))->math(t1);
-        (reinterpret_cast<EmptyNode<T> *>(empty_node))->math(t2);
-        (reinterpret_cast<EmptyNode<T> *>(empty_node))->print();
-      }
     }
   }
 
@@ -160,7 +136,8 @@ private:
 
   int capacity_;  // REVIEW(steven) could be a const
   int size_mask_; // if done in the initilization list
-  std::atomic<Node<T> *> *buffer_;
+  util::PaddedAtomic<Node<T> *> *buffer_;
+
   std::atomic<long> head_ {0}; // REVIEW(steven) should be initlized
   std::atomic<long> tail_ {0}; // REVIEW(steven) should be initilized
 
@@ -442,7 +419,7 @@ void RingBuffer<T>::wf_enqueue(EnqueueOp<T> *op) {
           if (cas_success) {
             util::memory::rc::free_descriptor(curr_node);
             util::memory::rc::unwatch(unmarked_curr_node);
-            op->associate(new_node, &(buffer_[pos]));
+            op->associate(new_node, &(buffer_[pos].atomic));
             assert(op->helper_.load() != nullptr);
             return;
           } else {  // failed to place the new node
@@ -524,7 +501,7 @@ void RingBuffer<T>::wf_dequeue(DequeueOp<T> *op) {
               util::memory::rc::free_descriptor(unmarked_curr_node);
               util::memory::rc::unwatch(unmarked_curr_node);
               op->associate(reinterpret_cast<ElemNode<T> *>(new_node),
-                    &(buffer_[pos]));
+                    &(buffer_[pos].atomic));
               return;
             } else {
               util::memory::rc::free_descriptor(new_node, true);

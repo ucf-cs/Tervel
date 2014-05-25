@@ -127,7 +127,7 @@ int main(int argc, char** argv) {
   rb->print_buffer_contents()
   rb->print_lost_nodes();
   #endif  // DEBUG
-  
+
   printf("Completed[Enqueues: %lu, Dequeues: %lu]\n",
     test_data.enqueue_count_.load(), test_data.dequeue_count_.load());
 
