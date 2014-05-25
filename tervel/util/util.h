@@ -38,8 +38,8 @@ inline bool isValid(void * value) {
 /**
  * TODO comment
  */
-inline void backoff(int duration = 10) {
-  std::this_thread::sleep_for(std::chrono::microseconds(duration));
+inline void backoff(int duration = 1) {
+  std::this_thread::sleep_for(std::chrono::nanoseconds(duration));
 }
 
 }  // namespace util

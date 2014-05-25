@@ -203,7 +203,7 @@ bool RingBuffer<T>::lf_enqueue(T val) {
       Node<T> *unmarked_curr_node = reinterpret_cast<Node<T> *>(
             util::memory::rc::unmark_first(curr_node));
       bool watch_succ = util::memory::rc::watch(unmarked_curr_node,
-            reinterpret_cast<std::atomic<void *> *>(&(buffer_[pos])),
+            reinterpret_cast<std::atomic<void *> *>(&(buffer_[pos].atomic)),
             curr_node);
 
       if (!watch_succ) {
@@ -221,6 +221,7 @@ bool RingBuffer<T>::lf_enqueue(T val) {
               continue;  // reprocess the current value.
             }
         }
+
         if (curr_node->seq() <= seq && curr_node->is_EmptyNode()) {
           Node<T> *new_node = util::memory::rc::get_descriptor< ElemNode<T> >(
                 val, seq);
@@ -230,7 +231,7 @@ bool RingBuffer<T>::lf_enqueue(T val) {
 
           if (cas_success) {
             util::memory::rc::unwatch(unmarked_curr_node);
-            util::memory::rc::free_descriptor(curr_node);
+            util::memory::rc::free_descriptor(unmarked_curr_node);
             return true;
           } else {
             util::memory::rc::unwatch(unmarked_curr_node);
@@ -238,6 +239,7 @@ bool RingBuffer<T>::lf_enqueue(T val) {
             break;
           }
         } else {  // (curr_node->seq() > seq) {
+          util::memory::rc::unwatch(unmarked_curr_node);
           break;
         }
       }  // else (curr_node isnt marked skipped)
@@ -271,7 +273,8 @@ bool RingBuffer<T>::lf_dequeue(T *result) {
             util::memory::rc::unmark_first(curr_node));
 
       bool watch_succ = util::memory::rc::watch(unmarked_curr_node,
-            reinterpret_cast<std::atomic<void*> *>(&(buffer_[pos])), curr_node);
+            reinterpret_cast<std::atomic<void*> *>(&(buffer_[pos].atomic)),
+            curr_node);
 
       if (!watch_succ) {
         continue;
@@ -305,16 +308,19 @@ bool RingBuffer<T>::lf_dequeue(T *result) {
                   marked_new_node);
 
             if (cas_success) {
-              util::memory::rc::free_descriptor(unmarked_curr_node);
               util::memory::rc::unwatch(unmarked_curr_node);
+              util::memory::rc::free_descriptor(unmarked_curr_node);
+
               *result = unmarked_curr_node->val();
               return true;
             } else {
+              util::memory::rc::unwatch(unmarked_curr_node);
               util::memory::rc::free_descriptor(new_node, true);
               continue;
             }
           } else {
             // REVIEW(steven): explain this break statement
+            util::memory::rc::unwatch(unmarked_curr_node);
             break;
           }
         }
@@ -330,18 +336,18 @@ bool RingBuffer<T>::lf_dequeue(T *result) {
                   seq + capacity_);
 
             bool cas_succ = buffer_[pos].compare_exchange_strong(
-                  unmarked_curr_node, new_node);
+                  curr_node, new_node);
 
             if (cas_succ) {
               *result = curr_node->val();
-              util::memory::rc::free_descriptor(unmarked_curr_node);
               util::memory::rc::unwatch(unmarked_curr_node);
+              util::memory::rc::free_descriptor(unmarked_curr_node);
               return true;
             } else {
               // The value may have been bitmarked or been replaced by a copy
               // with an OpRecord
-              util::memory::rc::free_descriptor(new_node, true);
               util::memory::rc::unwatch(unmarked_curr_node);
+              util::memory::rc::free_descriptor(new_node, true);
               continue;
             }
           }  // if is elemnode
@@ -349,16 +355,18 @@ bool RingBuffer<T>::lf_dequeue(T *result) {
         } else if (curr_node->seq() > seq) {
           util::memory::rc::unwatch(unmarked_curr_node);
           break;
-        } else {
-          // Otherwise, (curr_node->seq() < seq) and we must set skipped if no
-          // progress occurs after backoff
-          util::backoff();
-          if (curr_node == buffer_[pos].load()) {
-            util::memory::rc::atomic_mark_first(
-                  reinterpret_cast<std::atomic<void*> *>(&(buffer_[pos])));
-          }
-        }  // else curr_node->seq() < seq
+        }
+        // Otherwise, (curr_node->seq() < seq) and we must set skipped if no
+        // progress occurs after backoff
+        util::backoff();
+        if (curr_node == buffer_[pos].load()) {
+          util::memory::rc::atomic_mark_first(
+                reinterpret_cast<std::atomic<void*> *>(&(buffer_[pos]).atomic));
+        }
+        util::memory::rc::unwatch(unmarked_curr_node);
+        continue;
       }  // else (is not skipped)
+      assert(false);
     }  // while (true)
   }  // while (true)
 }  // lf_dequeue(T result)
@@ -383,7 +391,7 @@ void RingBuffer<T>::wf_enqueue(EnqueueOp<T> *op) {
             util::memory::rc::unmark_first(curr_node));
 
       bool watch_succ = util::memory::rc::watch(unmarked_curr_node,
-            reinterpret_cast<std::atomic<void*> *>(&(buffer_[pos])),
+            reinterpret_cast<std::atomic<void*> *>(&(buffer_[pos].atomic)),
             curr_node);
 
       if (!watch_succ) {
@@ -406,19 +414,21 @@ void RingBuffer<T>::wf_enqueue(EnqueueOp<T> *op) {
           ElemNode<T> *new_node = util::memory::rc::get_descriptor<ElemNode<T>>(
                 op->value(), seq,  op);
 
-          bool cas_success = buffer_[pos].compare_exchange_strong(curr_node, new_node);
+          bool cas_success = buffer_[pos].compare_exchange_strong(curr_node,
+                new_node);
 
           if (cas_success) {
-            util::memory::rc::free_descriptor(curr_node);
             util::memory::rc::unwatch(unmarked_curr_node);
+            util::memory::rc::free_descriptor(unmarked_curr_node);
             op->associate(new_node, &(buffer_[pos].atomic));
             assert(op->helper_.load() != nullptr);
             return;
           } else {  // failed to place the new node
-            util::memory::rc::free_descriptor(new_node, true);
             util::memory::rc::unwatch(unmarked_curr_node);
+            util::memory::rc::free_descriptor(new_node, true);
           }
         } else {  // (curr_node->seq() > seq)
+          util::memory::rc::unwatch(unmarked_curr_node);
           break;  // break inner loop and get a new sequence number
         }
       }  // else (curr_node isnt marked skipped)
@@ -446,7 +456,7 @@ void RingBuffer<T>::wf_dequeue(DequeueOp<T> *op) {
             util::memory::rc::unmark_first(curr_node));
 
       bool watch_succ = util::memory::rc::watch(unmarked_curr_node,
-            reinterpret_cast<std::atomic<void *> *>(&(buffer_[pos])),
+            reinterpret_cast<std::atomic<void *> *>(&(buffer_[pos].atomic)),
             reinterpret_cast<void *>(curr_node));
 
       if (!watch_succ) {
@@ -488,16 +498,16 @@ void RingBuffer<T>::wf_dequeue(DequeueOp<T> *op) {
                   ElemNode<T> >(unmarked_curr_node->val(), seq, op);
 
             bool cas_succ = buffer_[pos].compare_exchange_strong(
-                  unmarked_curr_node, new_node);
+                  curr_node, new_node);
             if (cas_succ) {
-              util::memory::rc::free_descriptor(unmarked_curr_node);
               util::memory::rc::unwatch(unmarked_curr_node);
+              util::memory::rc::free_descriptor(unmarked_curr_node);
               op->associate(reinterpret_cast<ElemNode<T> *>(new_node),
                     &(buffer_[pos].atomic));
               return;
             } else {
-              util::memory::rc::free_descriptor(new_node, true);
               util::memory::rc::unwatch(unmarked_curr_node);
+              util::memory::rc::free_descriptor(new_node, true);
               continue;
             }
           }
@@ -514,6 +524,7 @@ void RingBuffer<T>::wf_dequeue(DequeueOp<T> *op) {
           util::memory::rc::unwatch(unmarked_curr_node);
           break;
         }
+        util::memory::rc::unwatch(unmarked_curr_node);
       }  // else (is not skipped)
     }  // while (true)
   }  // while (true)

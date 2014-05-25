@@ -84,7 +84,7 @@ class ThreadContext {
    * @return current delay count
    */
   size_t delay_count(size_t max_delay) {
-    if (delay_count_ >= max_delay) {
+    if (delay_count_ >= max_delay && max_delay != 0) {
       delay_count_ = 0;
     }
     return ++delay_count_;
