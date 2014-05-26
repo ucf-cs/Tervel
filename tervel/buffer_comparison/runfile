@@ -1,0 +1,84 @@
+echo "tbb"
+echo -n "1"
+./Executables_v2/tbb_tester_v2.x 3 65536 32768 1 1 50 50
+echo
+echo -n "4"
+./Executables_v2/tbb_tester_v2.x 3 65536 32768 4 4 50 50
+echo
+echo -n "8"
+./Executables_v2/tbb_tester_v2.x 3 65536 32768 8 8 50 50
+echo
+echo -n "32"
+./Executables_v2/tbb_tester_v2.x 3 65536 32768 32 32 50 50
+echo
+echo -n "64"
+./Executables_v2/tbb_tester_v2.x 3 65536 32768 64 64 50 50
+echo
+
+echo "tsigas"
+echo -n "1"
+./Executables_v2/tsigas_tester_v2.x 3 65536 32768 1 1 50 50
+echo
+echo -n "4"
+./Executables_v2/tsigas_tester_v2.x 3 65536 32768 4 4 50 50
+echo
+echo -n "8"
+./Executables_v2/tsigas_tester_v2.x 3 65536 32768 8 8 50 50
+echo
+echo -n "32"
+./Executables_v2/tsigas_tester_v2.x 3 65536 32768 32 32 50 50
+echo
+echo -n "64"
+./Executables_v2/tsigas_tester_v2.x 3 65536 32768 64 64 50 50
+echo
+
+echo "atomics"
+echo -n "1"
+./Executables_v2/atomics_tester_v2.x 3 65536 32768 1 1 50 50
+echo
+echo -n "4"
+./Executables_v2/atomics_tester_v2.x 3 65536 32768 4 4 50 50
+echo
+echo -n "8"
+./Executables_v2/atomics_tester_v2.x 3 65536 32768 8 8 50 50
+echo
+echo -n "32"
+./Executables_v2/atomics_tester_v2.x 3 65536 32768 32 32 50 50
+echo
+echo -n "64"
+./Executables_v2/atomics_tester_v2.x 3 65536 32768 64 64 50 50
+echo
+
+echo "coarse"
+echo -n "1"
+./Executables_v2/coarse_lock_tester_v2.x 3 65536 32768 1 1 50 50
+echo
+echo -n "4"
+./Executables_v2/coarse_lock_tester_v2.x 3 65536 32768 4 4 50 50
+echo
+echo -n "8"
+./Executables_v2/coarse_lock_tester_v2.x 3 65536 32768 8 8 50 50
+echo
+echo -n "32"
+./Executables_v2/coarse_lock_tester_v2.x 3 65536 32768 32 32 50 50
+echo
+echo -n "64"
+./Executables_v2/coarse_lock_tester_v2.x 3 65536 32768 64 64 50 50
+echo
+
+echo "mcas"
+echo -n "1"
+./Executables_v2/mcas_tester_v2.x 3 65536 32768 1 1 50 50
+echo
+echo -n "4"
+./Executables_v2/mcas_tester_v2.x 3 65536 32768 4 4 50 50
+echo
+echo -n "8"
+./Executables_v2/mcas_tester_v2.x 3 65536 32768 8 8 50 50
+echo
+echo -n "32"
+./Executables_v2/mcas_tester_v2.x 3 65536 32768 32 32 50 50
+echo
+echo -n "64"
+./Executables_v2/mcas_tester_v2.x 3 65536 32768 64 64 50 50
+echo

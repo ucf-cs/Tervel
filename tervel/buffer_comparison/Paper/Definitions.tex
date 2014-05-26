@@ -1,0 +1,76 @@
+% !TEX root = WaitFreeRingBuffer.tex
+
+Structures:
+%Warning: Lstlisting does not ignore white space
+\begin{itemize}
+
+\item RingBuffer:
+\begin{lstlisting}
+{atomic array[],  atomic int head,
+atomic int tail}
+\end{lstlisting}
+
+\item NullNode
+\begin{lstlisting}
+{const long seqid}
+\end{lstlisting}
+
+\item ElemNode
+\begin{lstlisting}
+{const long seqid, const Element element}
+\end{lstlisting}
+
+\item Helper
+\begin{lstlisting}
+{const Op *op, const long seqid, Node *old}
+\end{lstlisting}
+
+\item EnqueueOp
+\begin{lstlisting}
+{const Element, atomic Helper *helper}
+\end{lstlisting}
+
+\item DequeueOp
+\begin{lstlisting}
+{atomic Helper *helper}
+\end{lstlisting}
+
+\end{itemize}
+
+Supporting Functions:
+\TODO{Add 1-2 sentence descriptions}
+\begin{itemize}
+\item isNull():
+\item isElement():
+\item isSkipped():
+\item setSkipped():
+\item makeSkipped():
+\item isHelper():
+\item getNextTail():
+\item getNextHead():
+\item getPosition():
+\item BackOff():
+\end{itemize}
+
+
+
+\subsection{Progress Assurance}
+	\label{sec:definitions:progress_assurance}
+
+For a design to be wait-free, a thread must not be continually denied access to a necessary resource.
+This design employs a progress assurance scheme to prevent thread starvation.
+Without this progress assurance scheme, the design presented may encounter a rare condition in which threads starve.
+With larger ring buffer sizes, this possibility can be reduced further.
+
+The progress assurance scheme is designed similar to the announcement table presented by Herlihy~\cite{herlihy_table}.
+Threads will check the table incrementally at the start of every operation and help complete any operation found as presented by Kogan~\cite{kogan_fpsp}.
+Our design is inpired by the design presented by Feldman, which is based on these two designs~\cite{feldman_vector}. % yes??
+This design uses an announcement table of \emph{OpRec} which contains a \SYN{control word} indicating an operations state.
+When the control word is a reference to a descriptor object the operation has been completed, otherwise, threads will continue to help.
+
+
+
+\TODO{Describe it, cite Bible's Annoucement Table, Kogans method, Vector's Descriptor Association}
+
+%What I want you to do is read the Progresss Assurance scheme section from my vector.
+%Do a 5 sentences or less summary, then present a ring buffer specific implementation.
