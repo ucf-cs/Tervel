@@ -12,7 +12,7 @@ namespace wf_ring_buffer {
 template<class T>
 class Node : public util::Descriptor {
  public:
-  explicit Node<T>(T val, long seq)
+  explicit Node<T>(T val, int64_t seq)
       : val_(val)
       , seq_(seq) {}
 
@@ -36,19 +36,11 @@ class Node : public util::Descriptor {
   // REVIEW(steven) missing description
   T val() { return val_; }
   // REVIEW(steven) missing description and space between functions
-  long seq() { return seq_; }
-
-//  void print_vals() { printf("%ld %ld %ld %ld %ld\n", pad0_, pad1_, pad2_, pad3_, pad4_); }
-
+  int64_t seq() { return seq_; }
 
  protected:
   T val_;
-  long seq_;
-  /*long pad0_ {100};
-  long pad1_ {100};
-  long pad2_ {100};
-  long pad3_ {100};
-  long pad4_ {100};*/
+  int64_t seq_;
 };  // Node class
 
 

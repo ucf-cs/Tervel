@@ -2,8 +2,6 @@
 #define TERVEL_UTIL_PADDEDATOMIC_H
 
 #include "tervel/util/system.h"
-#include "tervel/wf-ring-buffer/node.h"
-
 #include <atomic>
 
 namespace tervel {
@@ -12,16 +10,48 @@ namespace util {
 template<class T>
 class PaddedAtomic {
  public:
-  explicit PaddedAtomic(wf_ring_buffer::Node<T> *atomic) {
-    this.atomic.store(atomic);
-    this.padding = new char[CACHE_LINE_SIZE-sizeof(atomic)];
+  explicit PaddedAtomic() {}
+  explicit PaddedAtomic(T value) : atomic(value) {}
+
+  T load(std::memory_order memory_order = std::memory_order_seq_cst) {
+    return atomic.load(memory_order);
+  }
+  void store(T value, std::memory_order memory_order
+        = std::memory_order_seq_cst) {
+    atomic.store(value, memory_order);
   }
 
-  std::atomic<wf_ring_buffer::Node<T> *> atomic;
+  T exchange(T value, std::memory_order memory_order
+        = std::memory_order_seq_cst) {
+    return atomic.exchange(value, memory_order);
+  }
+
+  bool compare_exchange_weak(T& expected, T desired,
+        std::memory_order success, std::memory_order failure ) {
+    return atomic.compare_exchange_weak(expected, desired, success, failure);
+  }
+
+  bool compare_exchange_weak(T& expected, T desired,
+        std::memory_order order = std::memory_order_seq_cst ) {
+    return atomic.compare_exchange_weak(expected, desired, order);
+  }
+
+  bool compare_exchange_strong(T& expected, T desired,
+       std::memory_order success, std::memory_order failure ) {
+    return atomic.compare_exchange_strong(expected, desired, success, failure);
+  }
+
+  bool compare_exchange_strong(T& expected, T desired, std::memory_order order =
+        std::memory_order_seq_cst ) {
+    return atomic.compare_exchange_strong(expected, desired, order);
+  }
+
+  std::atomic<T> atomic;
 
  private:
-  char padding[];
+  char padding[CACHE_LINE_SIZE-sizeof(std::atomic<T>)];
 };
+
 
 }  // namespace util
 }  // namespace tervel

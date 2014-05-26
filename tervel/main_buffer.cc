@@ -36,6 +36,7 @@
 
 using namespace tervel::wf_ring_buffer;
 
+DEFINE_int32(prefill, 50, "The prefill percent 0-100 (default 50).");
 DEFINE_int32(num_threads, 8, "The number of threads to spawn.");
 DEFINE_int32(execution_time, 3, "The amount of time to run the tests");
 DEFINE_int64(buffer_length, 65536, "The size of the region to test on.");
@@ -48,11 +49,12 @@ enum class TestType : size_t {ENQUEUEDEQUEUE = 0, ENQUEUE = 1, DEQUEUE = 2};
 
 class TestObject {
  public:
-  TestObject(int num_threads, int execution_time, int buffer_length,
+  TestObject(int num_threads, int prefill, int execution_time, int buffer_length,
              TestType test_type, RingBuffer<long> *ring_buffer)
       : execution_time_(execution_time)
       , buffer_length_(buffer_length)
       , num_threads_(num_threads)
+      , prefill_(prefill)
       , operation_type_(test_type)
       , rb_(ring_buffer) {}
 
@@ -61,15 +63,23 @@ class TestObject {
     dequeue_count_.fetch_add(dequeue_count);
   }
 
+  void print_test() {
+    printf("Execution Time: %d\n", execution_time_);
+    printf("Num Threads: %d\n", num_threads_);
+    printf("Buffer Length: %ld\n", buffer_length_);
+    printf("Prefill: %d\n", prefill_);
+    printf("Operation Type: %d\n", static_cast<int>(operation_type_));
+  };
 
 
 
   const int execution_time_;
-  const int buffer_length_;
+  const int64_t buffer_length_;
   const int num_threads_;
+  const int prefill_;
   const TestType operation_type_;
 
-  RingBuffer<long> *rb_;
+  RingBuffer<int64_t> *rb_;
 
   std::atomic<uint64_t> enqueue_count_ {0};
   std::atomic<uint64_t> dequeue_count_ {0};
@@ -81,8 +91,6 @@ class TestObject {
 };
 
 
-int buffer_length;
-
 void run(int thread_id, tervel::Tervel* tervel_obj, TestObject * test_object);
 void run_update_object(int start_pos, TestObject * test_data);
 
@@ -93,19 +101,20 @@ int main(int argc, char** argv) {
   tervel::ThreadContext tervel_thread(&tervel_obj);
 
   RingBuffer<long> *rb = new RingBuffer<long>(FLAGS_buffer_length);
-  TestObject test_data(FLAGS_num_threads, FLAGS_execution_time,
+  TestObject test_data(FLAGS_num_threads, FLAGS_prefill, FLAGS_execution_time,
         FLAGS_buffer_length, static_cast<TestType>(FLAGS_operation_type), rb);
+  test_data.print_test();
 
   // prefill the buffer if needed
   if (test_data.operation_type_ == TestType::ENQUEUEDEQUEUE) {
-    for (int i = 0; i < test_data.buffer_length_/2; i++) {
+    for (long i = 0; i < test_data.buffer_length_ * (test_data.prefill_/100.0);
+          i++) {
       rb->enqueue(i);
     }
-    printf("Prefilled buffer to half capacity\n");
   }
 
   std::vector<std::thread> thread_list;
-  for (int i = 0; i < test_data.num_threads_; i++) {
+  for (long i = 0; i < test_data.num_threads_; i++) {
     std::thread temp_thread(run, i, &tervel_obj, &test_data);
     thread_list.push_back(std::move(temp_thread));
   }
@@ -127,7 +136,7 @@ int main(int argc, char** argv) {
   rb->print_buffer_contents()
   rb->print_lost_nodes();
   #endif  // DEBUG
-  
+
   printf("Completed[Enqueues: %lu, Dequeues: %lu]\n",
     test_data.enqueue_count_.load(), test_data.dequeue_count_.load());
 

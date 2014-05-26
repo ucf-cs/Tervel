@@ -13,7 +13,7 @@
 namespace tervel {
 
 extern __thread ThreadContext * tl_thread_info;
-
+extern __thread void * last_watch;  // TODO(steven) delete this
 }  // namespace tervel
 
 #endif  //  TERVEL_UTIL_INFO_H_
