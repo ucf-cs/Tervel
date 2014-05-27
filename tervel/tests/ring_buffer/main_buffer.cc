@@ -44,15 +44,14 @@ enum class TestType : size_t {ENQUEUEDEQUEUE = 0, ENQUEUE = 1, DEQUEUE = 2};
 class TestObject {
  public:
   TestObject(int num_threads, int prefill, int execution_time,
-            int buffer_length, TestType test_type,
-            RingBuffer<int64_t> *ring_buffer, int enqueue_rate)
+            int buffer_length, TestType test_type, int enqueue_rate)
       : enqueue_rate_(enqueue_rate)
       , execution_time_(execution_time)
       , buffer_length_(buffer_length)
       , num_threads_(num_threads)
       , prefill_(prefill)
       , operation_type_(test_type)
-      , rb_(buffer_length) {}
+      , rb_(buffer_length, num_threads) {}
 
   void atomic_add(int enqueue_count, int dequeue_count) {
     enqueue_count_.fetch_add(enqueue_count);
@@ -88,13 +87,13 @@ class TestObject {
 };
 
 
-void run(int thread_id, tervel::Tervel* tervel_obj, TestObject * test_object);
+void run(int thread_id, TestObject * test_object);
 void run_update_object(int start_pos, TestObject * test_data);
 
 int main(int argc, char** argv) {
   gflags::ParseCommandLineFlags(&argc, &argv, true);
 
-  TestObject test_data(FLAGS_num_threads, FLAGS_prefill, FLAGS_execution_time,
+  TestObject test_data(FLAGS_num_threads+1, FLAGS_prefill, FLAGS_execution_time,
         FLAGS_buffer_length, static_cast<TestType>(FLAGS_operation_type),
         FLAGS_enqueue_rate);
 
@@ -102,15 +101,15 @@ int main(int argc, char** argv) {
 
   // prefill the buffer if needed
   if (test_data.operation_type_ == TestType::ENQUEUEDEQUEUE) {
-    for (int64_t i = 0;
-        i < test_data.buffer_length_ * (test_data.prefill_/100.0); i++) {
-      test_data.rb.enqueue(i);
+    const int64_t items = test_data.buffer_length_ * (test_data.prefill_/100.0);
+    for (int64_t i = 1; i < items ; i++) {
+      test_data.rb_.enqueue(i);
     }
   }
 
   std::vector<std::thread> thread_list;
   for (int64_t i = 0; i < test_data.num_threads_; i++) {
-    std::thread temp_thread(run, i, &tervel_obj, &test_data);
+    std::thread temp_thread(run, i, &test_data);
     thread_list.push_back(std::move(temp_thread));
   }
 
@@ -143,9 +142,8 @@ void run_enqueue_dequeue(int thread_id, TestObject * test_data);
 void run_enqueue_only(int thread_id, TestObject * test_data);
 void run_dequeue_only(int thread_id, TestObject * test_data);
 
-void run(TestObject * test_data) {
-  test_data->rb_.attach_thread()
-  tervel::ThreadContext tervel_thread(tervel_obj);
+void run(int thread_id, TestObject * test_data) {
+  test_data->rb_.attach_thread();
 
   switch (test_data->operation_type_) {
     case TestType::ENQUEUEDEQUEUE:
@@ -164,7 +162,7 @@ void run(TestObject * test_data) {
       printf("Error Non Recongized State Test\n");
   }
 
-  test_data->rb_.dettach_thread()
+  test_data->rb_.detach_thread();
 }
 
 void run_enqueue_dequeue(int thread_id, TestObject * test_data) {
@@ -172,7 +170,7 @@ void run_enqueue_dequeue(int thread_id, TestObject * test_data) {
   int dequeue_count = 0;
   int64_t val = (thread_id << 24) + 1;
 
-  boost::mt19937 rng((int64_t)tid);
+  boost::mt19937 rng((int64_t)thread_id);
   boost::uniform_int<> opRand(1, 100);
 
   test_data->ready_count_.fetch_add(1);
@@ -181,16 +179,16 @@ void run_enqueue_dequeue(int thread_id, TestObject * test_data) {
   while (test_data->running_.load()) {
     int op = opRand(rng);
 
-    if (op <= enqRate) {
-      bool succ = test_data->rb_.enqueue(-1*(val++));
+    if (op <= test_data->enqueue_rate_) {
+      bool succ = test_data->rb_.enqueue(val++);
       if (succ) {
         enqueue_count++;
       }
     } else {
-      int64_t res = -1;
-      bool succ = test_data->rb_.dequeue(&res);
+      int64_t res = 0;
+      bool succ = test_data->rb_.dequeue(res);
       if (succ) {
-        assert(res != -1);
+        assert(res != 0);
         dequeue_count++;
       }
     }
@@ -208,7 +206,7 @@ void run_enqueue_only(int thread_id, TestObject * test_data) {
   int64_t val = thread_id << 20;
   while (test_data->running_.load()) {
     val++;
-    bool succ = test_data->rb_.enqueue(-1*val);
+    bool succ = test_data->rb_.enqueue(val);
     if (succ) {
       enqueue_count++;
     }
@@ -227,10 +225,10 @@ void run_dequeue_only(int thread_id, TestObject * test_data) {
   int64_t val = thread_id << 20;
   while (test_data->running_.load()) {
     val++;
-    int64_t res = -1;
-    bool succ = test_data->rb_.dequeue(&res);
+    int64_t res = 0;
+    bool succ = test_data->rb_.dequeue(res);
     if (succ) {
-      assert(res != -1);
+      assert(res != 0);
       dequeue_count++;
     }
   }  // End Execution Loop

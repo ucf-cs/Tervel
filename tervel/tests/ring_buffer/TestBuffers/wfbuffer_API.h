@@ -11,9 +11,11 @@
 template<class T>
 class TestBuffer {
  public:
-  void TestBuffer(size_t capacity) {
-    queue_ = new tervel::RingBuffer<T>(capacity);
-    tervel_obj = new tervel::Tervel(FLAGS_num_threads);
+  TestBuffer(size_t capacity, size_t num_threads) {
+    tervel_obj = new tervel::Tervel(num_threads);
+    attach_thread();
+    queue_ = new tervel::wf_ring_buffer::RingBuffer<T>(capacity);
+
   }
 
   char * name() {
@@ -21,24 +23,23 @@ class TestBuffer {
   }
 
   void attach_thread() {
-    tervel::ThreadContext* thread_context =
-      new tervel::ThreadContext(tervel_obj);
+    tervel::ThreadContext* thread_context __attribute__((unused));
+    thread_context = new tervel::ThreadContext(tervel_obj);
   }
 
   void detach_thread() {}
 
-  bool enqueue(T * val) {
+  bool enqueue(T val) {
     return queue_->enqueue(val);
   }
 
-  bool dequeue() {
-    T val = NULL;
+  bool dequeue(T &val) {
     return queue_->dequeue(val);
   }
 
  private:
-  tervel::Tervel* tervel_obj,
-  tervel::RingBuffer<T> *queue_;
+  tervel::Tervel* tervel_obj;
+  tervel::wf_ring_buffer::RingBuffer<T> *queue_;
 };
 
 

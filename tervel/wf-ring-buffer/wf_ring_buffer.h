@@ -71,7 +71,7 @@ class RingBuffer : public util::memory::hp::Element {
   /**
    * TODO: Dequeues buffer element...
    */
-  bool dequeue(T *result);
+  bool dequeue(T &result);
 
   /**
    * @return whether the buffer is empty
@@ -163,15 +163,15 @@ bool RingBuffer<T>::enqueue(T value) {
 }
 
 template<class T>
-bool RingBuffer<T>::dequeue(T *result) {
+bool RingBuffer<T>::dequeue(T &result) {
   util::ProgressAssurance::check_for_announcement();
-  bool succ = lf_dequeue(result);
+  bool succ = lf_dequeue(&result);
   #if DEBUG
   if (succ) {
     log_mutex_dequeue.lock();
-    int temp = log_dequeue[*result];
+    int temp = log_dequeue[result];
     assert(temp == 0);
-    log_dequeue[*result]++;
+    log_dequeue[result]++;
     log_mutex_dequeue.unlock();
   }
   #endif  // DEBUG

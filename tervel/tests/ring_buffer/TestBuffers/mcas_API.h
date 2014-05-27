@@ -6,8 +6,8 @@
 template<class T>
 class TestBuffer {
  public:
-  void TestBuffer(size_t capacity) {
-    Init_RingBuffer_Memory_Management();
+  TestBuffer(size_t capacity, size_t num_threads)) {
+    Init_RingBuffer_Memory_Management(num_threads);
     INIT_THREAD_ID();
     queue_ = new RingBuffer(capacity);
   };
@@ -23,11 +23,10 @@ class TestBuffer {
   void detach_thread() {
   };
 
-  bool enqueue(T * val) {
+  bool enqueue(T val) {
     return queue_->enqueue(val);
   };
-  bool dequeue() {
-    T val = NULL;
+  bool dequeue(T &val) {
     return queue_->dequeue(val);
   };
 

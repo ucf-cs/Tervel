@@ -3,21 +3,22 @@
 
 #include <atomic>
 
+template<class T>
 class TestBuffer {
  public:
-    TestBuffer()
+    TestBuffer(size_t capacity, size_t num_threads))
      : head_(0)
      , tail_(0) { }
 
     char * name() {
       return "FAA Test";
     }
-    bool enqueue() {
+    bool enqueue(T value) {
         fetchTailSeq();
         return true;
     };
 
-    bool dequeue() {
+    bool dequeue(T &val) {
         fetchHeadSeq();
         return true;
     };

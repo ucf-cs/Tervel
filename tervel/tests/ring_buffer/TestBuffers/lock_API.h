@@ -6,7 +6,7 @@
 template<class T>
 class TestBuffer {
  public:
-  void TestBuffer(size_t capacity)
+  TestBuffer(size_t capacity, size_t num_threads))
     : capacity_(capacity)
     , size_mask_(capacity_)
     , head_(0)
@@ -37,11 +37,11 @@ class TestBuffer {
     return res;
   }
 
-  bool dequeue() {
+  bool dequeue(T &val) {
     pthread_mutex_lock(&queue_lock_);
     bool res = false;
     if (!isEmpty()) {
-      T val = queue_[fetchTailSeq() & size_mask_];
+      val = queue_[fetchTailSeq() & size_mask_];
       res = true;
     }
 

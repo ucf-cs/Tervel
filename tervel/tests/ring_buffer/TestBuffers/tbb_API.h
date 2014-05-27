@@ -6,7 +6,7 @@
 template<class T>
 class TestBuffer {
  public:
-  void TestBuffer(size_t capacity) {
+  TestBuffer(size_t capacity, size_t num_threads)) {
     queue_ = new tbb::concurrent_bounded_queue<T>(capacity);
   };
 
@@ -18,11 +18,10 @@ class TestBuffer {
 
   void detach_thread() {};
 
-  bool enqueue(T * val) {
+  bool enqueue(T val) {
     return queue_->try_push(val);
   };
-  bool dequeue() {
-    T val = NULL;
+  bool dequeue(T &val) {
     return queue_->try_pop(val);
   };
 
