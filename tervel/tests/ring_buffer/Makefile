@@ -4,8 +4,8 @@ CXXFLAGS =  $(BUFFERTYPE) -Wall -Wunused-function -g -pg -std=c++11 \
             -march=native -m64 -pthread -fno-strict-aliasing -pg
 
 CPPFLAGS = -DINTEL -DNO_WAIT_FREE #-DDEBUG=1
-INC = -I../../../
-LIB += -ldl -lgflags -lpthread -lboost_system -lboost_regex -lrt -lllalloc
+INC += $(TINC) -I../../../
+LIB += $(TLIB) -ldl -lgflags -lpthread -lboost_system -lboost_regex -lrt -lllalloc
 CPPFLAGS += $(INC)
 
 SOURCES = main_buffer.cc $(TSOURCES)
@@ -13,7 +13,7 @@ EXECUTABLE ?=main
 OBJECTS = $(SOURCES:.cc=.o)
 
 
-all: WFBuffer  FAATest LockBuffer MCASBuffer TBBBuffer TsigasBuffer
+all: WFBuffer FAATest LockBuffer TBBBuffer TsigasBuffer #MCASBuffer
 
 
 test: $(SOURCES) $(EXECUTABLE)
@@ -42,12 +42,12 @@ MCASBuffer:
 TBBBuffer:
 	$(MAKE) test BUFFERTYPE=-DUSE_TBB_QUEUE \
 	EXECUTABLE=tbbbuffer \
-	LIB=-ltbb
+	TLIB=-ltbb
 
 TsigasBuffer:
 	$(MAKE) test BUFFERTYPE=-DUSE_TSIGAS_QUEUE \
 	EXECUTABLE=tsigasbuffer \
-	LIB=-lcds
+	TLIB=-lcds TINC=-I/Libraries/cds-1.2.0/
 
 
 LinuxBuffer:

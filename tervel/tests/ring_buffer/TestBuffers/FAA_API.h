@@ -19,7 +19,7 @@ class TestBuffer {
     };
 
     bool dequeue(T &val) {
-        fetchHeadSeq();
+        val = fetchHeadSeq() + 1;
         return true;
     };
 

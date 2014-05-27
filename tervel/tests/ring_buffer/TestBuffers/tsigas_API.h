@@ -2,7 +2,11 @@
 #define __TSIGAS_BUFFER_H__
 
 #include <cds/container/tsigas_cycle_queue.h>
+#include <cds/init.h>       // for cds::Initialize and cds::Terminate
+#include <cds/gc/hp.h>      // for cds::HP (Hazard Pointer) garbage collector
+
 #define USING_CDS_LIB 1
+
 
 
 template<class T>

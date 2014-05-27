@@ -31,6 +31,7 @@ class TestBuffer {
     bool res = false;
     if (!isFull()) {
       queue_[fetchHeadSeq() & size_mask_] = val;
+      res = true;
     }
 
     pthread_mutex_unlock(&queue_lock_);

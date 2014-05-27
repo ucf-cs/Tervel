@@ -62,13 +62,14 @@ class TestObject {
     printf("Execution Time: %d\n", execution_time_);
     printf("Num Threads: %d\n", num_threads_);
     printf("Buffer Length: %ld\n", buffer_length_);
+    printf("Enqueue Rate: %d\n", enqueue_rate_);
     printf("Prefill: %d\n", prefill_);
     printf("Operation Type: %d\n", static_cast<int>(operation_type_));
     printf("Buffer Type: %s\n", rb_.name() );
   };
 
 
-  const float enqueue_rate_;
+  const int enqueue_rate_;
   const int execution_time_;
   const int64_t buffer_length_;
   const int num_threads_;
@@ -98,6 +99,17 @@ int main(int argc, char** argv) {
         FLAGS_enqueue_rate);
 
   test_data.print_test();
+
+#ifdef USING_CDS_LIB
+  // Initialize libcds
+  cds::Initialize() ;
+  {
+    // Initialize Hazard Pointer singleton
+    cds::gc::HP hpGC ;
+    // If main thread uses lock-free containers
+    // the main thread should be attached to libcds infrastructure
+    cds::threading::Manager::attachThread() ;
+#endif
 
   // prefill the buffer if needed
   if (test_data.operation_type_ == TestType::ENQUEUEDEQUEUE) {
@@ -134,6 +146,9 @@ int main(int argc, char** argv) {
   printf("Completed[Enqueues: %lu, Dequeues: %lu]\n",
     test_data.enqueue_count_.load(), test_data.dequeue_count_.load());
 
+#ifdef USING_CDS_LIB
+  }
+#endif
   return 0;
 }
 
