@@ -1,8 +1,8 @@
 CC = g++-4.7 -g
 OUTDIR = Executables_v2
-CXXFLAGS = -std=c++11 -mcx16  -m64  
+CXXFLAGS = -std=c++11 -mcx16  -m64
 LIBFLAGS = -pthread -lllalloc -lrt -ltbb -lcds
-OFLAGS = -fno-strict-aliasing #-std=c++0x  #-O3 -DNDEBUG 
+OFLAGS = -fno-strict-aliasing #-std=c++0x  #-O3 -DNDEBUG
 LDFLAGS = -pg -L/Libraries/cds-1.2.0/bin/gcc-amd64-linux-64 -lrt -I/Libraries/cds-1.2.0/ -lrt
 INCLUDES = -I/home/andrew/lib/boost_1_55_0
 
@@ -20,7 +20,7 @@ PaddedWFRingBuffer: tester_v2.cpp
 
 CoarseLockBuffer: tester_v2.cpp
 	$(CC) $(OFLAGS) -DUSE_COARSE_LOCK=1 $(CXXFLAGS) $(INCLUDES) tester_v2.cpp coarse_lock_buffer/coarse_lock_buffer.cpp -o $(OUTDIR)/coarse_lock_tester_v2.x $(LIBFLAGS)
-   
+
 OnlyAtomicFAA: tester_v2.cpp
 	$(CC) $(OFLAGS) -DUSE_ATOMIC_ONLY=1 $(CXXFLAGS) $(INCLUDES) tester_v2.cpp only_atomic_FAA/only_atomic_FAA.cpp -o $(OUTDIR)/atomics_tester_v2.x $(LIBFLAGS)
 
@@ -38,6 +38,6 @@ LinuxBuffer: tester_v2.cpp
 
 LinuxBufferRecreate: tester_v2.cpp
 	$(CC) $(OFLAGS) -DUSE_LINUX_BUFFER_RECREATE=1 $(CXXFLAGS) $(INCLUDES) tester_v2.cpp linux_buffer_recreate/linux_buffer_recreate.cpp -o $(OUTDIR)/linux_buffer_recreate.x $(LIBFLAGS)
-	
+
 clean:
 	rm  $(OUTDIR)/*.x
