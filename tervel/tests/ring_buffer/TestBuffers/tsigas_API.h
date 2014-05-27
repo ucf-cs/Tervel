@@ -8,7 +8,7 @@
 template<class T>
 class TestBuffer {
  public:
-  TestBuffer(size_t capacity, size_t num_threads)) {
+  TestBuffer(size_t capacity, size_t num_threads) {
     queue_ = new TQueue(capacity);
   };
 

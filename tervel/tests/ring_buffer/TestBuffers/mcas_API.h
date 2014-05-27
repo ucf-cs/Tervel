@@ -24,10 +24,11 @@ class TestBuffer {
   };
 
   bool enqueue(T val) {
-    return queue_->enqueue(val);
+    return queue_->enqueue(reinterpret_cast<void *>(val));
   };
   bool dequeue(T &val) {
-    return queue_->dequeue(val);
+    void * tval;
+    return queue_->dequeue(tval);
   };
 
  private:

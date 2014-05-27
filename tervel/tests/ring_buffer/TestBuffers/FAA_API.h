@@ -6,7 +6,7 @@
 template<class T>
 class TestBuffer {
  public:
-    TestBuffer(size_t capacity, size_t num_threads))
+    TestBuffer(size_t capacity, size_t num_threads)
      : head_(0)
      , tail_(0) { }
 
@@ -33,11 +33,11 @@ class TestBuffer {
 
  private:
     uint64_t fetchHeadSeq() {
-        return head.fetch_add(1);
+        return head_.fetch_add(1);
     };
 
     uint64_t fetchTailSeq() {
-        return tail.fetch_add(1);
+        return tail_.fetch_add(1);
     };
 
     std::atomic<uint64_t> head_;

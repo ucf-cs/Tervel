@@ -6,7 +6,7 @@
 template<class T>
 class TestBuffer {
  public:
-  TestBuffer(size_t capacity, size_t num_threads)) {
+  TestBuffer(size_t capacity, size_t num_threads) {
     queue_ = new tbb::concurrent_bounded_queue<T>(capacity);
   };
 

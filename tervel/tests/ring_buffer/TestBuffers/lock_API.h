@@ -6,15 +6,15 @@
 template<class T>
 class TestBuffer {
  public:
-  TestBuffer(size_t capacity, size_t num_threads))
+  TestBuffer(size_t capacity, size_t num_threads)
     : capacity_(capacity)
     , size_mask_(capacity_)
     , head_(0)
     , tail_(0)
-    , queue_ = new std::atomic<T>[capacity_] {
+    , queue_(new std::atomic<T>[capacity_]) {
     pthread_mutex_init(&queue_lock_, NULL);
     for (size_t i = 0; i < capacity_; i++) {
-        queue_[i].store(nullptr);
+        queue_[i].store(reinterpret_cast<T>(nullptr));
     }
   };
 
@@ -30,7 +30,7 @@ class TestBuffer {
     pthread_mutex_lock(&queue_lock_);
     bool res = false;
     if (!isFull()) {
-      queue_[fetchHeadSeq() & size_mask_] = node;
+      queue_[fetchHeadSeq() & size_mask_] = val;
     }
 
     pthread_mutex_unlock(&queue_lock_);
@@ -46,6 +46,8 @@ class TestBuffer {
     }
 
     pthread_mutex_unlock(&queue_lock_);
+
+    return res;
   }
 
  private:
