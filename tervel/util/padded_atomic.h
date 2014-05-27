@@ -46,6 +46,11 @@ class PaddedAtomic {
     return atomic.compare_exchange_strong(expected, desired, order);
   }
 
+  T fetch_add(T arg, std::memory_order memory_order =
+        std::memory_order_seq_cst ) {
+    return atomic.fetch_add(arg, memory_order);
+  }
+
   std::atomic<T> atomic;
 
  private:

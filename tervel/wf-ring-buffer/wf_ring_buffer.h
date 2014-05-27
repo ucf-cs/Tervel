@@ -130,8 +130,9 @@ private:
   const int size_mask_;
   std::unique_ptr<util::PaddedAtomic<Node<T> *>[]> buffer_;
 
-  std::atomic<int64_t> head_ {0}; // REVIEW(steven) should be initlized
-  std::atomic<int64_t> tail_ {0}; // REVIEW(steven) should be initilized
+
+  util::PaddedAtomic<int64_t> head_ {0};
+  util::PaddedAtomic<int64_t> tail_ {0};
 
   #if DEBUG
   std::map<T, int> log_dequeue;
@@ -532,12 +533,12 @@ void RingBuffer<T>::wf_dequeue(DequeueOp<T> *op) {
 
 template <class T>
 bool RingBuffer<T>::is_empty() {
-  return head_ >= tail_;
+  return head_.load() >= tail_.load();
 }
 
 template <class T>
 bool RingBuffer<T>::is_full() {
-  return tail_ >= head_+capacity_;
+  return tail_.load() >= head_.load()+capacity_;
 }
 
 #if DEBUG

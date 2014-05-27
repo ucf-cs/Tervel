@@ -76,7 +76,7 @@ class ProgressAssurance {
    * Reduces memory loads at the cost of a higher upper bound
    */
   #ifdef MAX_WAIT_FREE
-   static constexpr size_t HELP_DELAY = 1;
+    static constexpr size_t HELP_DELAY = 1;
   #elif SET_HELP_DELAY
     static constexpr size_t MAX_FAILURES = SET_HELP_DELAY;
   #else
@@ -92,8 +92,14 @@ class ProgressAssurance {
    * If one is found it will call its help_complete function.
    */
   static void check_for_announcement(ProgressAssurance *progress_assuarance =
-          tervel::tl_thread_info->get_progress_assurance()) {
-    progress_assuarance->p_check_for_announcement();
+        nullptr) {
+    size_t delay_count = tl_thread_info->delay_count(HELP_DELAY);
+    if (delay_count == 0) {
+      if (progress_assuarance ==  nullptr) {
+          progress_assuarance =tervel::tl_thread_info->get_progress_assurance();
+      }
+      progress_assuarance->p_check_for_announcement();
+    }
   }
 
   /**

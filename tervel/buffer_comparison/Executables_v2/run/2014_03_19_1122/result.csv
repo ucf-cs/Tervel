@@ -1,2 +1,0 @@
-Size, Execution Time, Prefill, Total Threads, Distribution, Algorithm, Enqueues, Dequeues, Successful Enqueues, Successful Dequeues
-4194304,1,0,"64","[64, 0, 100]",wf_tester,0.0,0.0,0.0,0.0
