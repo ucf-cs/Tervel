@@ -7,85 +7,77 @@ import glob
 import time
 
 os.chdir("Executables/")
+outFolder = os.path.join("Results/");
+if not os.path.exists(outFolder):
+  os.makedirs(outFolder)
 
 while True:
-    now = datetime.now()
-    outFolder = os.path.join("run", now.strftime('%Y_%m_%d_%H%M'))
-    if not os.path.exists(outFolder):
-        os.makedirs(outFolder)
-        break
-    else:
-        print("Error Time Stamp alreayd exists???")
+  now = datetime.now()
+  fname = now.strftime('%Y_%m_%d_%H%M')
 
+  if os.path.isfile(fname):
+    print("Error Time Stamp alreayd exists???")
+  else:
+    break
 
+fout = open(outFolder+"/"+fname, 'w')
 
+header="ExeTime\tCapacity\tPrefill\tEnqueueRate\tExecutable\tThreads\tEnqueues\tDequeues"
+fout.write(header+"\n")
 
 threads=[2, 4, 8, 16, 32, 64, 96, 128, 160, 198, 256]
-#enq, deq
-#dists=[[100,0], [0,100], [50,50]] #[45,45,0,10,0,0], [40,40,0,20,0,0], [20,40,15,25,0,0], [40,40,5,15,0,0], [25,25,20,30,0,0], [40,40,0,20,0,0],[10,10,30,50,0,0],[15,15,5,65,0,0], [0,0,0,100,0,0] ]
-dists=[[50, 50]]
-prefills=[2097152]
+enqueue_rates=[50]
+prefill_percents=[50]
 capacitys=[4194304]
 
-exeTimes=[5]
+exeTimes=[1]
 reps=3
 
 fileList=glob.glob("*.x")
-#fileList = ('linux_tester.x')
 
 fcount=len(fileList)
 
-time=reps*len(threads)*(fcount)*sum(exeTimes)*len(dists)*len(prefills)
-print("Estimate Time: %d\n" %time, file=sys.stderr)
+time=reps*len(threads)*(fcount)*sum(exeTimes)*len(prefill_percents)*len(capacitys)*len(enqueue_rates)
+
+print("Estimate Time: %d (seconds)\n" %time, file=sys.stderr)
 sys.stdout.flush()
 
-header="Threads\t"
-header+="\t".join(fileList)
-print(header)
+for prefill in prefill_percents:
+  for capacity in capacitys:
+    for enqueue_rate in enqueue_rates:
+      for exeTime in exeTimes:
+        for t in threads:
+          for currFile in fileList:
 
-for prefill in prefills:
-    for capacity in capacitys:
-        for dist in dists:
-            for exeTime in exeTimes:
-                infoStr=("#Exe Time: {}, Capacity: {},  Prefill: {}, Enqueue: {}, Dequeue: {} ".format(exeTime, capacity, prefill, *dist) )
-                print(infoStr)
+            infoStr=("#Exe Time: {}, Capacity: {},  Prefill: {}, Enqueue Rate: {}, File: {}, Threads: {}."
+                .format(exeTime, capacity, prefill, enqueue_rate, currFile, t) )
+            print(infoStr)
+            enqueues=0.0
+            dequeues=0.0
+            try:
+              total=0
+              for r in xrange(reps):
+                cmd = ["./"+currFile]
+                cmd.append("-execution_time="+str(exeTime))
+                cmd.append("-num_threads="+str(t))
+                cmd.append("-buffer_length="+str(capacity))
+                cmd.append("-enqueue_rate="+str(enqueue_rate))
+                cmd.append("-prefill="+str(prefill))
 
+                p = subprocess.Popen([str(_) for _ in cmd], stdout=subprocess.PIPE)
+                out, err = p.communicate()
+                result = out.split("\t")
 
-                fname=("T{}_C{}_P{}_E{}_D{}".format(exeTime, capacity, prefill, *dist) )
-                fout = open(outFolder+"/"+fname, 'w')
-                fout.write(infoStr+"\n")
-                fout.write(header+"\n")
-                for t in threads:
-                    fout.write(str(t)+"\t")
-                    for currFile in fileList:
-                        #fout.write ("=((0")
-                        vSum=0.0
-                        try:
-                            total=0
-                            for r in xrange(reps):
-                                cmd = ["./"+currFile, exeTime, t, capacity]
-                                cmd.extend(dist)
-                                cmd.append(prefill)
-                                p = subprocess.Popen([str(_) for _ in cmd], stdout=subprocess.PIPE)
-                                out, err = p.communicate()
-                                vSum+=float(out)
-#                            fout.write("+"+out)
-                        except Exception as e:
-                            print("Exception was thrown" + str(cmd) + str(e))
-                        finally:
-     #                       fout.write(")/"+str(reps)+")\t")
-                             vSum/=float(reps)
-                             fout.write((str(vSum)+"\t"))
-
-                    fout.write("\n")
-                fout.flush()
-                fout.close()
-
-                command="gnuplot -e \"file='"+outFolder+"/"+fname+"'\" ../barplot.gp"
-                #print(command)
-                p = os.popen(command, "r")
-                while 1:
-                    line = p.readline()
-                    if not line: break
-                    print( line)
-
+                enqueues += float(result[0]);
+                dequeues += float(result[1]);
+            except Exception as e:
+              print("Exception was thrown" + str(cmd) + str(e))
+            finally:
+              enqueues/=float(reps)
+              dequeues/=float(reps)
+              infoStr=("{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\n"
+                .format(exeTime, capacity, prefill, enqueue_rate, currFile, t
+                  ,enqueues, dequeues) )
+              fout.write(infoStr)
+              fout.flush()
+fout.close()

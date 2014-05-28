@@ -97,8 +97,9 @@ int main(int argc, char** argv) {
   TestObject test_data(FLAGS_num_threads+1, FLAGS_prefill, FLAGS_execution_time,
         FLAGS_buffer_length, static_cast<TestType>(FLAGS_operation_type),
         FLAGS_enqueue_rate);
-
+#ifdef DEBUG
   test_data.print_test();
+#endif
 
 #ifdef USING_CDS_LIB
   // Initialize libcds
@@ -127,12 +128,16 @@ int main(int argc, char** argv) {
 
   while (test_data.ready_count_.load() < test_data.num_threads_) {}
 
+#ifdef DEBUG
   printf("Beginning Test.\n");
+#endif
   test_data.wait_flag_.store(false);
   std::this_thread::sleep_for(std::chrono::seconds(test_data.execution_time_));
   test_data.running_.store(false);
   std::this_thread::sleep_for(std::chrono::seconds(1));
+#ifdef DEBUG
   printf("Signaled Stop!\n");
+#endif
 
   std::for_each(thread_list.begin(), thread_list.end(), [](std::thread &t) {
       t.join();
@@ -143,8 +148,13 @@ int main(int argc, char** argv) {
   rb->print_lost_nodes();
   #endif  // DEBUG
 
+#ifdef DEBUG
   printf("Completed[Enqueues: %lu, Dequeues: %lu]\n",
     test_data.enqueue_count_.load(), test_data.dequeue_count_.load());
+#else
+  printf("%lu\t%lu", test_data.enqueue_count_.load(),
+          test_data.dequeue_count_.load());
+#endif
 
 #ifdef USING_CDS_LIB
   }
