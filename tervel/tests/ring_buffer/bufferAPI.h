@@ -56,16 +56,7 @@
 
 
 #ifdef USE_LINUX_BUFFER
-    #include "TestBuffers/linux_buffer_API.h"
-    #ifdef V_API_SANITY
-        #error TWO or more buffer APIs enabled
-    #else
-        #define V_API_SANITY
-    #endif
-#endif
-
-#ifdef USE_LINUX_BUFFER_RECREATE
-    #include "TestBuffers/linux_buffer_recreate_API.h"
+    #include "TestBuffers/linux_API.h"
     #ifdef V_API_SANITY
         #error TWO or more buffer APIs enabled
     #else

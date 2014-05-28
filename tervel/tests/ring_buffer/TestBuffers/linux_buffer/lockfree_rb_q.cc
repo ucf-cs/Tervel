@@ -154,7 +154,7 @@ private:
  * 1-producer 1-consumer ring-buffer from Tim Blechmann:
  *	http://tim.klingt.org/boost_lockfree/
  *	git://tim.klingt.org/boost_lockfree.git
- * 
+ *
  * See See Intel 64 and IA-32 Architectures Software Developer's Manual,
  * Volume 3, Chapter 8.2 Memory Ordering for x86 memory ordering guarantees.
  * ------------------------------------------------------------------------
@@ -164,14 +164,12 @@ static size_t __thread __thr_id;
 /**
  * @return continous thread IDs starting from 0 as opposed to pthread_self().
  */
-inline size_t
-thr_id()
+inline size_t thr_id()
 {
 	return __thr_id;
 }
 
-inline void
-set_thr_id(size_t id)
+inline void set_thr_id(size_t id)
 {
 	__thr_id = id;
 }
@@ -204,11 +202,11 @@ public:
 		// Set per thread tail and head to ULONG_MAX.
 		::memset((void *)thr_p_, 0xFF, sizeof(ThrPos) * n);
 
-		ptr_array_ = (T **)::memalign(getpagesize(),
+		ptr_array_ = (T *)::memalign(getpagesize(),
 				capacity_ * sizeof(void *));
 		assert(ptr_array_);
 	}
-	
+
     LockFreeQueue( ) {}
 
 	~LockFreeQueue()
@@ -217,38 +215,37 @@ public:
 		::free(thr_p_);
 	}
 
-    void init(size_t num_threads, unsigned long capacity) {
-        //n_consumers_ = num_threads/2;
-        //n_consumers_ = num_threads/2;
-        //std::cout << "begin init" << std::endl;
-        n_producers_ = num_threads;
-        n_producers_ = num_threads;
-        capacity_ = capacity;
-        mask_ = (capacity-1);
-		head_ = 0;
-		tail_ = 0;
-		last_head_ = 0;
-		last_tail_ = 0;
-		
-        auto n = std::max(n_consumers_, n_producers_);
-		thr_p_ = (ThrPos *)::memalign(getpagesize(), sizeof(ThrPos) * n);
-		assert(thr_p_);
-		// Set per thread tail and head to ULONG_MAX.
-		::memset((void *)thr_p_, 0xFF, sizeof(ThrPos) * n);
+  void init(size_t num_threads, unsigned long capacity) {
+      //n_consumers_ = num_threads/2;
+      //n_consumers_ = num_threads/2;
+      //std::cout << "begin init" << std::endl;
+      n_producers_ = num_threads;
+      n_producers_ = num_threads;
+      capacity_ = capacity;
+      mask_ = (capacity-1);
+	head_ = 0;
+	tail_ = 0;
+	last_head_ = 0;
+	last_tail_ = 0;
 
-		ptr_array_ = (T **)::memalign(getpagesize(),
-				capacity_ * sizeof(void *));
-		assert(ptr_array_);
-        //std::cout << "finish init" << std::endl;
-    }
+      auto n = std::max(n_consumers_, n_producers_);
+	thr_p_ = (ThrPos *)::memalign(getpagesize(), sizeof(ThrPos) * n);
+	assert(thr_p_);
+	// Set per thread tail and head to ULONG_MAX.
+	::memset((void *)thr_p_, 0xFF, sizeof(ThrPos) * n);
 
-	ThrPos&
-	thr_pos() const
+	ptr_array_ = (T *)::memalign(getpagesize(),
+			capacity_ * sizeof(void *));
+	assert(ptr_array_);
+      //std::cout << "finish init" << std::endl;
+  }
+
+	ThrPos& thr_pos() const
 	{
 		assert(ThrId() < std::max(n_consumers_, n_producers_));
 		return thr_p_[ThrId()];
 	}
-	void push(T *ptr)
+	void push(T ptr)
 	{
 		/*
 		 * Request next place to push.
@@ -302,8 +299,7 @@ public:
 		thr_pos().head = ULONG_MAX;
 	}
 
-	T *
-	pop()
+	T pop()
 	{
 		/*
 		 * Request next place from which to pop.
@@ -344,7 +340,7 @@ public:
 			_mm_pause();
 		}
 
-		T *ret = ptr_array_[thr_pos().tail & mask_];
+		T ret = ptr_array_[thr_pos().tail & mask_];
 		// Allow producers rewrite the slot.
 		thr_pos().tail = ULONG_MAX;
 		return ret;
@@ -367,7 +363,7 @@ private:
 	// last not-processed consumer's pointer
 	unsigned long	last_tail_ ____cacheline_aligned;
 	ThrPos		*thr_p_;
-	T		**ptr_array_;
+	T	*ptr_array_;
 };
 
 

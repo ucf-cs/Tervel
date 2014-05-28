@@ -54,10 +54,6 @@ LinuxBuffer:
 	$(MAKE) test BUFFERTYPE=-DUSE_LINUX_BUFFER \
 	EXECUTABLE=linuxbuffer
 
-LinuxBufferRecreate:
-	$(MAKE) test BUFFERTYPE=-DUSE_LINUX_BUFFER_RECREATE \
-	EXECUTABLE=linuxbufferrecreate
-
 $(EXECUTABLE): $(OBJECTS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -o $@ $^ $(LIB)
 
