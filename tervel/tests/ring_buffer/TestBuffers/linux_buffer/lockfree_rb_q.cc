@@ -455,12 +455,12 @@ run_test(Q &&q)
 
 	::usleep(10 * 1000); // sleep to wait the queue is full
 
-	/*
+
 	 * Run consumers.
 	 * Create consumers with the same thread IDs as producers.
 	 * The IDs are used for queue head and tail indexing only,
 	 * so we  care only about different IDs for threads of the same type.
-	 */ /*
+
 	for (auto i = 0; i < CONSUMERS; ++i)
 		thr[PRODUCERS + i] = std::thread(Consumer<Q>(&q, i));
 
