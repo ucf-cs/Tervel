@@ -1,6 +1,6 @@
 
 #ifdef USE_WF_BUFFER
-    #include "TestBuffers/wfbuffer_API.h"
+    #include "test_buffers/wfbuffer_API.h"
     #ifdef V_API_SANITY
         #error TWO or more buffer APIs enabled
     #else
@@ -10,7 +10,7 @@
 
 
 #ifdef USE_ATOMIC_ONLY
-    #include "TestBuffers/FAA_API.h"
+    #include "test_buffers/FAA_API.h"
     #ifdef V_API_SANITY
         #error TWO or more buffer APIs enabled
     #else
@@ -19,7 +19,7 @@
 #endif
 
 #ifdef USE_COARSE_LOCK
-    #include "TestBuffers/lock_API.h"
+    #include "test_buffers/lock_API.h"
     #ifdef V_API_SANITY
         #error TWO or more buffer APIs enabled
     #else
@@ -28,7 +28,7 @@
 #endif
 
 #ifdef USE_MCAS_BUFFER
-    #include "TestBuffers/mcas_API.h"
+    #include "test_buffers/mcas_API.h"
     #ifdef V_API_SANITY
         #error TWO or more buffer APIs enabled
     #else
@@ -37,7 +37,7 @@
 #endif
 
 #ifdef USE_TBB_QUEUE
-    #include "TestBuffers/tbb_API.h"
+    #include "test_buffers/tbb_API.h"
     #ifdef V_API_SANITY
         #error TWO or more buffer APIs enabled
     #else
@@ -46,7 +46,7 @@
 #endif
 
 #ifdef USE_TSIGAS_QUEUE
-    #include "TestBuffers/tsigas_API.h"
+    #include "test_buffers/tsigas_API.h"
     #ifdef V_API_SANITY
         #error TWO or more buffer APIs enabled
     #else
@@ -56,7 +56,7 @@
 
 
 #ifdef USE_LINUX_BUFFER
-    #include "TestBuffers/linux_API.h"
+    #include "test_buffers/linux_API.h"
     #ifdef V_API_SANITY
         #error TWO or more buffer APIs enabled
     #else
