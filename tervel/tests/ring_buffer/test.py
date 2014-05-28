@@ -56,7 +56,7 @@ for prefill in prefill_percents:
             dequeues=0.0
             try:
               total=0
-              for r in xrange(reps):
+              for r in range(reps):
                 cmd = ["./"+currFile]
                 cmd.append("-execution_time="+str(exeTime))
                 cmd.append("-num_threads="+str(t))
@@ -64,9 +64,10 @@ for prefill in prefill_percents:
                 cmd.append("-enqueue_rate="+str(enqueue_rate))
                 cmd.append("-prefill="+str(prefill))
 
-                p = subprocess.Popen([str(_) for _ in cmd], stdout=subprocess.PIPE)
-                out, err = p.communicate()
-                result = out.split("\t")
+                out = subprocess.check_output([str(_) for _ in cmd], timeout=exeTime+15)
+
+                out = str(out).split("'")[1]
+                result = out.split("\\t")
 
                 enqueues += float(result[0]);
                 dequeues += float(result[1]);
