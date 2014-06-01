@@ -6,7 +6,7 @@
 //  Copyright (c) 2012 Steven FELDMAN. All rights reserved.
 //
 
-// #define KILL_THREAD 1
+//  #define KILL_THREAD 1
 
 #include <errno.h>
 #include <stdio.h>
