@@ -1,23 +1,29 @@
 #ifndef TERVEL_WFHM_HASHPAIR_H
-#define TERVEL_WFHM_HASHPAIR_H 
+#define TERVEL_WFHM_HASHPAIR_H
 
-#include "node.h"
+#include "tervel/wf-hash-map/node.h"  // full path
+#include "tervel/util/descriptor.h"
 
-template <class V, class T>
-class HashPair : public Node {
-public:
-	V get_value() {
-		return value;
-	}
-	Key<T> get_key() {
-		return key;
-	}
+template <typename V, typename T, typename hash, typename compare>
+class HashPair : public Node, public util::memory::rc::Descriptor {
+  // http://www.cprogramming.com/tutorial/multiple_inheritance.html
+ public:
+  HashPair(V value, T key)
+    : value_(value)
+    , key_(key) {};
 
-	bool isPairNode() { return true; }
-	bool isArrayNode() { return false; }
+  V& value() {
+    return value_;
+  }
+  T& key() {
+    return key_.key();
+  }
 
-private:
-	Key<T> key;
-	V value;
-	Node *next;
+  bool isPairNode() { return true; }
+  bool isArrayNode() { return false; }
+
+ private:  // added under scores
+  Key<T, hash, compare> key_;
+  V value_;
+  Node *next_;  // Whats this for?
 };
