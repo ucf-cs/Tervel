@@ -19,7 +19,7 @@ class Key {
     return hash_;
   };
 
-  void index(depth) {
+  int index(HashMap object, T key) {
     // Should take the hash map object and based on its initial capacity
     // and expansion rate (size of each allocated array)
     // return the position it belongs at the specified depth
@@ -27,14 +27,25 @@ class Key {
     // representation of the hash value of the key into chunks
     // where the length of the first chunck is equal to the 2^X=initial capacity
     // and each subsequenet chunck is equal to 2^Y=sizeof the sub arrays
+	
+	//WIP
+	int length = object.arrayLength / 4;
+	
+	
+	int num = 0; 
+	for (int i : bitString)
+	  num = (num << 1) | (i - 0);
+	return num;
+
+
+
   };
 
-  bool operator==(const Key &other) const {  // only need class name when it is defined outside of the class
-    // return (*this == other); // this is ciruclar logic.
+  bool operator==(const Key &other) const {
     return compare(key_, other.key);
   }
   bool operator!=(const Key &other) const {
-    return !(*this == other);
+    return !(compare(key_, other.key));
   }
 
  private:
