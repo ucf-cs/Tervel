@@ -10,13 +10,13 @@
 #include <atomic>
 
 const std::atomic<Node *> array[64];
-const int maxFailCount = 100000;
+const int MAX_FAIL_COUNT = 100000;
 //need to implement thread-local variable threadID as well as global array watchedNodes.
 class HashMap{
  public:
   HashMap(){
-     table = new Node*[arrayLength];
-       for (int i = 0; i < arrayLength; i++){
+     table = new Node*[array_length];
+       for (int i = 0; i < array_length; i++){
          table[i] = nullptr;
        }
    }
@@ -24,138 +24,139 @@ class HashMap{
 
    }
   //head and arrayPow is not implemented yet. neither is markDataNode() not sure even which file this function belongs in. 
-  int get(T Key) {
+  int Get(T key) {
     //not 100% sure if hashKey(key) means to do Key.hash() or not.
-    uint64_t hash = currHash = Key.hash();
+    uint64_t hash = curr_hash = key.Hash();
     std::atomic<Node *> local = head;
     int result = null;
-    for (int r = 0; r < keySize - arrayPow; r += arrayPow){
-      int pos = hash&(arrayLength - 1);
-      hash = hash << arrayPow;
-      node = getNode(local, pos);
-      if (isArrayNode(node))
+    for (int r = 0; r < key_size - array_pow; r += array_pow){
+      int pos = hash&(array_length - 1);
+      hash = hash << array_pow;
+      node = GetNode(local, pos);
+      if (node.IsArrayNode())
       local = node;
       else if (node == null)
         break;
       else {
-        watch(node);
-        if (node != getNode(local, pos) {
-          int failCount = 0;
-          while (node != getNode(local, pos)) {
-            node = getNode(local, pos);
-            watch(node);
-            failCount++;
-            if (failCount > maxFailCount) {
-              markDataNode(local, pos);
-              local = expandMap(local, pos, r);
+        Watch(node);
+        if (node != GetNode(local, pos) {
+          int fail_count = 0;
+          while (node != GetNode(local, pos)) {
+            node = GetNode(local, pos);
+            Watch(node);
+            fail_count++;
+            if (fail_count > MAX_FAIL_COUNT) {
+              MarkDataNode(local, pos);
+              local = ExpandMap(local, pos, r);
               break;
             }
           }
-          if (isArrayNode(node) {
+          if (node.IsArrayNode()) {
             local = node;
             continue;
           }
-          else if (isMarked(node)) {
-            local = expandMap(local, pos, r);
+          else if (IsMarked(node)) {
+            local = ExpandMap(local, pos, r);
             continue;
           }
           else if (node == null) {
             break;
           }
         }
-        if(node -> hash == currHash)
-          result = node -> value;
+        if(node->hash == curr_hash)
+          result = node->value;
         break;
       }
     }
-    if (r >= keySize - arrayPow) {
-      pos = hash&(arrayLength-1);
+    if (r >= key_size - array_pow) {
+      pos = hash&(array_length-1);
       result = local[pos];
     }
-    watch(null);
+    Watch(null);
     return result;
   }
   //CAS and markDataNode, isMarked, free not implemented yet.
-  bool insert(T Key,int value){
-    uint64_t hash = Key.hash();
-    std::atomic<Node *> insertThis = allocateNode(value,hash);
+  bool Insert(T key,int value){
+    uint64_t hash = key.Hash();
+    std::atomic<Node *> insert_this = AllocateNode(value,hash);
     std::atomic<Node *> local = head;
-    for (int r=0; r < keySize - arrayPow; r+=arrayPow) {
+    for (int r=0; r < key_size - array_pow; r+=array_pow) {
       //pos is an int or is it uin64_t?
-      int pos = hash&(arrayLength - 1);
-      uint64_t hash = hash >> arrayPow;
-      int failCount = 0;
-      std::atomic<Node *> node = getNode(local, pos);
+      int pos = hash&(array_length - 1);
+      uint64_t hash = hash >> array_pow;
+      int fail_count = 0;
+      std::atomic<Node *> node = GetNode(local, pos);
       while (true) {
-        if (failCount > maxFailCount) {
-          node = markDataNode(local, pos);
+        if (fail_count > MAX_FAIL_COUNT) {
+          node = MarkDataNode(local, pos);
         if (node == null)
-          if ((node = CAS(local[pos], null, insertThis)) == null) {
-            watch(null);
+          if ((node = CAS(local[pos], null, insert_this)) == null) {
+            Watch(null);
             return true;
           }
-        if (isMarked(node)) 
-          node = expandMap(local, pos, r);
-        if (isArrayNode(node)) {
+        //IsMarked is TODO
+        if (IsMarked(node)) 
+          node = ExpandMap(local, pos, r);
+        if (Node.IsArrayNode()) {
           local = node;
           break;
         else {
-          watch(node);
-          std::atomic<Node *> node2 = getNode(local, pos);
+          Watch(node);
+          std::atomic<Node *> node2 = GetNode(local, pos);
           if (node != node2) {
-            failCount++;
+            fail_count++;
             node = node2;
             continue;
           }
-          else if (node -> hash == insertThis -> hash) {
-            watch(null);
-            free(insertThis);
+          else if (node->hash == insert_this->hash) {
+            Watch(null);
+            Free(insert_this);
             return false;
           }
           else {
-            node = expandMap(local, pos, r);
-            if(isArrayNode(node)) {
+            node = ExpandMap(local, pos, r);
+            if(node.IsArrayNode()) {
               local = node;
               break;
             else {
-              failCount++;
+              fail_count++;
             }
           }
         }
       }
     }
-    free(insertThis);
-    watch(null);
-    pos = hash&(arrayLength - 1);
-    int currValue = local[pos];
-    if (currValue == null) 
+    Free(insert_this);
+    Watch(null);
+    pos = hash&(array_length - 1);
+    int curr_value = local[pos];
+    if (curr_value == null) 
       return (CAS(local[pos], null, value) == null);
     else
       return false;
   }
-  bool update(T Key,int oldValue,int newValue){
+  bool Update(T key,int old_value,int new_value){
 
   }
-  bool remove(T Key,int value){
+  bool Remove(T key,int value){
 
   }
-  std::atomic<Node *> expandMap ( std::atomic<Node *> local, int pos, int right){
+  std::atomic<Node *> ExpandMap ( std::atomic<Node *> local, int pos, int right){
      
   }
   //unsure what datatype value should be
-  void watch(int value) {
-    watchedNodes[threadID] = value;
+  void Watch(int value) {
+    watchedNodes[thread_id] = value;
   }
   
-  std::atomic<Node *> allocateNode(int value, uint64_t hash) {
-    //WIP
+  std::atomic<Node *> AllocateNode(int value, uint64_t hash) {
+    //TODO
     return node;
   }
-  void safeFreeNode(std::atomic<Node *> nodeToFree) {
-  //WIP
+  void SafeFreeNode(std::atomic<Node *> node_to_free) {
+  //TODO
   }
   
  private:
-  int arrayLength_
-  int arrayPow_
+  int array_length_
+  int array_pow_
 };

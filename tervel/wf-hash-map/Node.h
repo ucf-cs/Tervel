@@ -3,8 +3,7 @@
 
 class Node {
 public:
-
-	virtual bool isPairNode() = 0;
-	virtual bool isArrayNode() = 0;
+  virtual bool IsPairNode() = 0;
+  virtual bool IsArrayNode() = 0;
 };
 

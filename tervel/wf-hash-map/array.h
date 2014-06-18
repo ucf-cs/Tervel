@@ -11,11 +11,15 @@ class Array : public Node {
     : array_(new std::atomic<Node *>[size]() )
     , length_(size) {}
 
-  Node get_node(size_t pos) {  // use size_t not int.
+  Node GetNode(size_t pos) {  // use size_t not int.
     return array_[pos];
   }
-  bool isPair() { return false; }
-  bool isArray() { return true; }
+  bool IsPairNode() { 
+    return false;
+  }
+  bool IsArrayNode() { 
+    return true; 
+  }
 
 
  private:

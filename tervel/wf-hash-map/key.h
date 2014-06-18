@@ -11,15 +11,15 @@ class Key {
 
   ~Key<T>() {}
 
-  T& key() {  // one space before {
+  T& Key() {  // one space before {
     return key_;
   };
 
-  uint64_t& hash() {
+  uint64_t& Hash() {
     return hash_;
   };
 
-  int index(HashMap object, T key) {
+  int Index(HashMap object, T key) {
     // Should take the hash map object and based on its initial capacity
     // and expansion rate (size of each allocated array)
     // return the position it belongs at the specified depth

@@ -12,15 +12,19 @@ class HashPair : public Node, public util::memory::rc::Descriptor {
     : value_(value)
     , key_(key) {};
 
-  V& value() {
+  V& Value() {
     return value_;
   }
-  T& key() {
+  T& Key() {
     return key_.key();
   }
 
-  bool isPairNode() { return true; }
-  bool isArrayNode() { return false; }
+  bool IsPairNode() { 
+    return true; 
+  }
+  bool IsArrayNode() { 
+    return false; 
+  }
 
  private:  // added under scores
   Key<T, hash, compare> key_;
