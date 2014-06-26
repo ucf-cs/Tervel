@@ -5,11 +5,9 @@
 #include <atomic>
 #include <cmath>
 
-#include "tervel/wf-hash-map/node.h"
-#include "tervel/wf-hash-map/pair_node.h"
-#include "tervel/wf-hash-map/array_node.h"
-
-
+namespace tervel {
+namespace containers {
+namespace wf {
 /**
  * A default functor implementation
  *
@@ -33,6 +31,8 @@ typedef struct {
 /**
  * A wait-free hash map implementation.
  *
+ * TODO(steven): Provide general overview
+ *
  * functor should have the following functions:
  *   -Key hash(Key k) (where hash(a) == (hash(b) implies a == b
  *   -bool value_equals(Value a, Value b)
@@ -50,14 +50,55 @@ class HashMap {
     , secondary_array_pow_(expansion_rate)
     , primary_array_(new Location[primary_array_size_]) {}
 
+    // Todo: implement log2, round_to next functions
+    // Add Memory management
+    // progress assurance
+    // comment stuff
+
+  /**
+   * TODO(steven): Provide general overview
+   * @param  key   [description]
+   * @param  value [description]
+   * @return       [description]
+   */
   bool find(Key key, const Value &value);
+
+  /**
+   * TODO(steven): Provide general overview
+   * @param  key   [description]
+   * @param  value [description]
+   * @return       [description]
+   */
   bool insert(Key key, const Value &value);
+
+  /**
+   * TODO(steven): Provide general overview
+   * @param  key            [description]
+   * @param  value_expected [description]
+   * @param  value_new      [description]
+   * @return                [description]
+   */
   bool update(Key key, const Value &value_expected, Value value_new);
+
+  /**
+   * TODO(steven): Provide general overview
+   * @param  key            [description]
+   * @param  value_expected [description]
+   * @return                [description]
+   */
   bool remove(Key key, const Value &value_expected);
 
  private:
+  /**
+   * TODO(steven): Provide general overview
+   */
   class Hash {
    public:
+    /**
+     * TODO(steven): Provide general overview
+     * @param  depth [description]
+     * @return       [description]
+     */
     uint64_t get_position(size_t depth) {
       const uint64_t *long_array = static_cast<uint64_t *>(&data);
       if (depth == 0) {
@@ -78,27 +119,55 @@ class HashMap {
     char data[sizeof(Key)];
   };
 
+  /**
+   * TODO(steven): Provide general overview
+   */
   class Node {
     Node() {}
     virtual ~Node() {}
 
+    /**
+     * TODO(steven): Provide general overview
+     * @return [description]
+     */
     virtual bool is_array() = 0;
+
+    /**
+     * TODO(steven): Provide general overview
+     * @return [description]
+     */
     virtual bool is_data() = 0;
   };
 
+  /**
+   * TODO(steven): Provide general overview
+   */
   class ArrayNode : public Node {
    public:
     explicit ArrayNode(uint64_t len)
       : internal_array_(new Location[len]) {}
 
-
+    /**
+     * TODO(steven): Provide general overview
+     * @param  pos [description]
+     * @return     [description]
+     */
     Location *access(uint64_t pos) {
       return &(internal_array_[pos]);
     }
 
+    /**
+     * TODO(steven): Provide general overview
+     * @return [description]
+     */
     bool is_array() {
       return true;
     }
+
+    /**
+     * TODO(steven): Provide general overview
+     * @return [description]
+     */
     bool is_data() {
       return false;
     }
@@ -107,15 +176,27 @@ class HashMap {
     std::unique_ptr<Location[]> internal_array_;
   };
 
+  /**
+   * TODO(steven): Provide general overview
+   */
   class DataNode : public Node {
    public:
     explicit DataNode(Key k, Value v)
       : key_(k)
       , value_(v) {}
 
+    /**
+     * TODO(steven): Provide general overview
+     * @return [description]
+     */
     bool is_array() {
       return false;
     }
+
+    /**
+     * TODO(steven): Provide general overview
+     * @return [description]
+     */
     bool is_data() {
       return true;
     }
@@ -124,7 +205,23 @@ class HashMap {
     Value value_;
   };
 
+  /**
+   * TODO(steven): Provide general overview
+   * @param loc           [description]
+   * @param curr_value    [description]
+   * @param next_position [description]
+   */
   void expand(Location * loc, Node * curr_value, uint64_t next_position);
+
+  /**
+   * TODO(steven): Provide general overview
+   * @param array    [description]
+   * @param position [description]
+   * @param current  [description]
+   * @param depth    [description]
+   * @param key      [description]
+   * @param expand   [description]
+   */
   void search(ArrayNode * &array, const uint64_t &position, Node * &current,
     const size_t &depth, Key &key, bool expand);
 
@@ -164,7 +261,7 @@ find(Key key, const Value &value) {
     value = data_node->value_;
     return true;
   }
-};
+}  // find
 
 template<class Key, class Value, class functor>
 bool HashMap<Key, Value, functor>::
@@ -203,7 +300,7 @@ insert(Key key, const Value &value) {
       return false;
     }
   }
-};
+}  // insert
 
 template<class Key, class Value, class functor>
 bool HashMap<Key, Value, functor>::
@@ -248,7 +345,7 @@ update(Key key, const Value &value_expected, Value value_new) {
       }
     }
   }
-};
+}  // update
 
 
 template<class Key, class Value, class functor>
@@ -290,7 +387,7 @@ remove(Key key, const Value &expected) {
       }
     }
   }
-};
+}  // remove
 
 template<class Key, class Value, class functor>
 void HashMap<Key, Value, functor>::
@@ -347,4 +444,8 @@ expand(Location * loc, Node * curr_value, uint64_t next_position) {
   } else {
     delete array_node;
   }
-}
+}  // expand
+
+}  // namespace wf
+}  // namespace containers
+}  // namespace tervel
