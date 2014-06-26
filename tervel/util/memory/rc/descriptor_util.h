@@ -1,4 +1,4 @@
-  #ifndef TERVEL_MEMORY_RC_UTIL_DESCRIPTOR_H_
+#ifndef TERVEL_MEMORY_RC_UTIL_DESCRIPTOR_H_
 #define TERVEL_MEMORY_RC_UTIL_DESCRIPTOR_H_
 
 #include "tervel/util/info.h"
@@ -38,6 +38,9 @@ inline DescrType * get_descriptor(Args&&... args) {
  */
 inline void free_descriptor(tervel::util::Descriptor *descr,
       bool dont_check = false) {
+  #ifdef NOMEMORY
+  return;
+  #endif  // NOMEMORY
   tervel::tl_thread_info->get_rc_descriptor_pool()->free_descriptor(descr,
         dont_check);
 }
@@ -50,6 +53,9 @@ inline void free_descriptor(tervel::util::Descriptor *descr,
 * @param descr the descriptor to be checked for rc protection.
 */
 inline bool is_watched(tervel::util::Descriptor *descr) {
+  #ifdef NOMEMORY
+  return false;
+  #endif  // NOMEMORY
   PoolElement * elem = get_elem_from_descriptor(descr);
   int64_t ref_count = elem->header().ref_count.load();
   assert(ref_count >=0);
@@ -67,14 +73,19 @@ inline bool is_watched(tervel::util::Descriptor *descr) {
 * If that returns true then it will return true.
 * Otherwise it decrements the reference count and returns false
 * Internally calls on_watch
-* 
+*
 * @param descr the descriptor which needs rc protection
 * @param address address it was derferenced from
 * @param val the read value of the address
 * @return true if succesffully acquired a wat
 */
+
 inline bool watch(tervel::util::Descriptor *descr, std::atomic<void *> *address,
         void *value) {
+  #ifdef NOMEMORY
+  return true;
+  #endif  // NOMEMORY
+
   PoolElement *elem = get_elem_from_descriptor(descr);
   elem->header().ref_count.fetch_add(1);
 
@@ -86,6 +97,7 @@ inline bool watch(tervel::util::Descriptor *descr, std::atomic<void *> *address,
     bool res = descr->on_watch(address, value);
     if (res) {
       assert(is_watched(descr));
+      last_watch = descr;  // TODO(steven) delete this
       return true;
     } else {
       int64_t temp = elem->header().ref_count.fetch_add(-1);
@@ -100,10 +112,15 @@ inline bool watch(tervel::util::Descriptor *descr, std::atomic<void *> *address,
 * object.
 * Then it will call on_unwatch and decrement any related objects necessary
 * Internally calls on_unwatch
-* 
+*
 * @param descr the descriptor which no longer needs rc protection.
 */
 inline void unwatch(tervel::util::Descriptor *descr) {
+  #ifdef NOMEMORY
+  return;
+  #endif  // NOMEMORY
+  assert(last_watch == descr);
+  last_watch = nullptr;  // TODO(steven) delete this
   PoolElement *elem = get_elem_from_descriptor(descr);
   int64_t temp = elem->header().ref_count.fetch_add(-1);
   assert(temp > 0);
@@ -119,6 +136,11 @@ inline void unwatch(tervel::util::Descriptor *descr) {
  */
 inline void * mark_first(tervel::util::Descriptor *descr) {
   return reinterpret_cast<void *>(reinterpret_cast<uintptr_t>(descr) | 0x1L);
+}
+
+inline void atomic_mark_first(std::atomic<void*> *address) {
+  std::atomic<uintptr_t> *temp = reinterpret_cast<std::atomic<uintptr_t> *>(address);
+  temp->fetch_or(0x1);
 }
 
 /**
@@ -145,13 +167,13 @@ inline bool is_descriptor_first(void *descr) {
 /**
 * This method is used to remove a descriptor object that is conflict with
 * another threads operation.
-* It first checks the recursive depth before proceding. 
+* It first checks the recursive depth before proceding.
 * Next it protects against the object being reused else where by acquiring
 * either HP or RC watch on the object.
 * Then once it is safe it will call the objects complete function
 * This function must gurantee that after its return the object has been removed
 * It returns the value.
-* 
+*
 * @param expected a marked reference to the object
 * @param address the location expected was read from
 * dereferenced from.
@@ -179,7 +201,7 @@ inline void * remove_descriptor(void *expected, std::atomic<void *> *address) {
  * either a RC descriptor or a normal value.
  *
  * TODO(steven): implement a progress assurance on this to achieve wait-freedom
- * 
+ *
  * @param address to read
  * @return the current logical value
  */

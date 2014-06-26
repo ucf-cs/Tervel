@@ -9,6 +9,9 @@ namespace hp {
 bool HazardPointer::watch(SlotID slot, Element *descr,
       std::atomic<void *> *address, void *expected,
       HazardPointer *hazard_pointer) {
+  #ifdef NOMEMORY
+    return true;
+  #endif
   hazard_pointer->watch(slot, descr);
 
   if (address->load() != expected) {
@@ -29,6 +32,10 @@ bool HazardPointer::watch(SlotID slot, Element *descr,
 bool HazardPointer::watch(SlotID slot, void *value,
       std::atomic<void *> *address, void *expected,
       HazardPointer *hazard_pointer) {
+  #ifdef NOMEMORY
+    return true;
+  #endif
+
   hazard_pointer->watch(slot, value);
 
   if (address->load() != expected) {
@@ -41,16 +48,25 @@ bool HazardPointer::watch(SlotID slot, void *value,
 
 void HazardPointer::unwatch(SlotID slot, Element *descr
       , HazardPointer *hazard_pointer) {
+  #ifdef NOMEMORY
+    return;
+  #endif
   hazard_pointer->clear_watch(slot);
   descr->on_unwatch();
 }
 
 void HazardPointer::unwatch(SlotID slot, HazardPointer *hazard_pointer) {
+  #ifdef NOMEMORY
+    return;
+  #endif
   hazard_pointer->clear_watch(slot);
 }
 
 
 bool HazardPointer::is_watched(Element *descr, HazardPointer *hazard_pointer) {
+  #ifdef NOMEMORY
+    return false;
+  #endif
   if (hazard_pointer->contains(descr)) {
     return true;
   }
@@ -58,6 +74,9 @@ bool HazardPointer::is_watched(Element *descr, HazardPointer *hazard_pointer) {
 }
 
 bool HazardPointer::is_watched(void *value, HazardPointer *hazard_pointer) {
+  #ifdef NOMEMORY
+    return false;
+  #endif
   return hazard_pointer->contains(value);
 }
 

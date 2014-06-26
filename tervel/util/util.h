@@ -1,13 +1,16 @@
 #ifndef TERVEL_UTIL_H_
 #define TERVEL_UTIL_H_
 
+#include <chrono>
+#include <thread>
+
 namespace tervel {
 namespace util {
 namespace memory {
 namespace hp {
 /**
    * If true, then ElementList will never delete any HP protected elements.
-   * Instead, elements should be stock-piled and left untouched when they're 
+   * Instead, elements should be stock-piled and left untouched when they're
    * attempted to be freed This allows the user to view associations.
    * Entirely for debug purposes.
    */
@@ -31,6 +34,12 @@ constexpr bool NO_REUSE_RC_DESCR {false};
  */
 inline bool isValid(void * value) {
   return true;
+}
+/**
+ * TODO comment
+ */
+inline void backoff(int duration = 1) {
+  std::this_thread::sleep_for(std::chrono::nanoseconds(duration));
 }
 
 }  // namespace util

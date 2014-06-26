@@ -6,7 +6,7 @@
 //  Copyright (c) 2012 Steven FELDMAN. All rights reserved.
 //
 
-// #define KILL_THREAD 1
+//  #define KILL_THREAD 1
 
 #include <errno.h>
 #include <stdio.h>
@@ -14,8 +14,7 @@
 #include <unistd.h>
 #include <stdint.h>
 
-#include <sys/time.h>
-#include <time.h>
+#include <chrono>
 #include <vector>
 #include <thread>
 
@@ -42,7 +41,7 @@ DEFINE_int32(operation_type, 0, "The type of test to execute"
     ", 1: updating multiple objects"
     ", 2: updating overlapping mult-word updates)");
 
-enum class TestType : size_t {UPDATEOBJECT = 0, UPDATEMULTIOBJECT = 1, 
+enum class TestType : size_t {UPDATEOBJECT = 0, UPDATEMULTIOBJECT = 1,
       RANDOMOVERLAPS = 2};
 
 class TestObject {
@@ -62,9 +61,9 @@ class TestObject {
     failed_count_.fetch_add(failed_count);
   }
 
-  
 
-  
+
+
   const int execution_time_;
   const int array_length_;
   const int num_threads_;
@@ -115,7 +114,7 @@ int main(int argc, char** argv) {
   std::for_each(thread_list.begin(), thread_list.end(), [](std::thread &t) {
       t.join();
   });
- 
+
   printf("Completed[Passed: %lu, Failed: %lu]\n",
     test_data.passed_count_.load(), test_data.failed_count_.load());
 
