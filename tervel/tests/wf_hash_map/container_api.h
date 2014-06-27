@@ -1,5 +1,5 @@
 #ifdef USE_WF_HASHMAP
-    #include "api/wf_hash_map.h"
+    #include "api/wf_hashmap_api.h"
     #ifdef V_API_SANITY
         #error TWO or more buffer APIs enabled
     #else

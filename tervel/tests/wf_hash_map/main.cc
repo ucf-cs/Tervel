@@ -29,14 +29,16 @@
 
 #include "container_api.h"
 
-DEFINE_int32(FLAGS_capacity, 1024, "The initial capacity of the hash map");
-DEFINE_int32(FLAGS_num_threads, 1, "The number of executing threads.");
+DEFINE_int32(capacity, 1024, "The initial capacity of the hash map");
+DEFINE_int32(num_threads, 1, "The number of executing threads.");
+DEFINE_int32(execution_time, 1, "The amount of time to run the tests");
 
 class TestObject {
  public:
-  TestObject(int num_threads, int capacity)
+  TestObject(int num_threads, int capacity, int execution_time)
       : test_class_(num_threads, capacity)
-      , num_threads_(num_threads) {}
+      , num_threads_(num_threads)
+      , execution_time_(execution_time) {}
 
   void print_test() {
     printf("Not Implemented...\n");
@@ -56,6 +58,7 @@ class TestObject {
 
   TestClass<int64_t> test_class_;
   const int num_threads_;
+  const int execution_time_;
 };
 
 
@@ -64,7 +67,8 @@ void run(int thread_id, TestObject * test_object);
 int main(int argc, char** argv) {
   gflags::ParseCommandLineFlags(&argc, &argv, true);
 
-  TestObject test_data(FLAGS_num_threads+1, FLAGS_capacity);
+  TestObject test_data(FLAGS_num_threads+1, FLAGS_capacity,
+      FLAGS_execution_time);
 
 #ifdef DEBUG
   test_data.print_test();
@@ -90,11 +94,8 @@ int main(int argc, char** argv) {
   printf("Signaled Stop!\n");
 #endif
 
-  std::for_each(
-    thread_list.begin(), thread_list.end(), [](const std::thread &t) {
-      t.join();
-    }
-  );
+  std::for_each(thread_list.begin(), thread_list.end(), [](std::thread &t)
+    { t.join(); });
 
   test_data.print_results();
 
@@ -104,6 +105,7 @@ int main(int argc, char** argv) {
 void run(int thread_id, TestObject * test_data) {
   test_data->test_class_.attach_thread();
 
+  test_data->ready_count_.fetch_add(1);
 
   test_data->test_class_.detach_thread();
 }

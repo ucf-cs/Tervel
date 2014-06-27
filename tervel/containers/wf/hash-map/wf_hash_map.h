@@ -1,19 +1,38 @@
-#ifndef TERVEL_WFHM_HASHMAP_H
-#define TERVEL_WFHM_HASHMAP_H
+#ifndef TERVEL_CONTAINER_WF_HASH_MAP_WFHM_HASHMAP_H
+#define TERVEL_CONTAINER_WF_HASH_MAP_WFHM_HASHMAP_H
 
 #include <stdlib.h>
 #include <atomic>
 #include <cmath>
 
+
+// Todo:
+// Add Memory management
+// progress assurance
+// comment stuff
+
+
 namespace tervel {
+
+namespace util {
+  int round_to_next_power_of_two(uint64_t value) {
+    double val = std::log2(value);
+    int int_val = static_cast<int>(val);
+    if (int_val < val) {
+      int_val++;
+    }
+    return int_val;
+  };
+}
+
 namespace containers {
 namespace wf {
 /**
- * A default functor implementation
+ * A default Functor implementation
  *
  */
 template<class Key, class Value>
-typedef struct {
+struct default_functor {
   Key hash(Key k) {
     return k;
   }
@@ -22,10 +41,11 @@ typedef struct {
     return a == b;
   }
 
-  bool key_equals(Key a, key b) {
+  bool key_equals(Key a, Key b) {
     return a == b;
   }
-} default_functor;
+};
+
 
 
 /**
@@ -33,27 +53,22 @@ typedef struct {
  *
  * TODO(steven): Provide general overview
  *
- * functor should have the following functions:
+ * Functor should have the following functions:
  *   -Key hash(Key k) (where hash(a) == (hash(b) implies a == b
  *   -bool value_equals(Value a, Value b)
  *   -bool key_equals (Key a, Key b)
  *       Important Note: the hashed value of keys will be passed in.
  *
  */
-template<class Key, class Value, class functor = default_functor>
+template< class Key, class Value, class Functor = default_functor<Key, Value> >
 class HashMap {
  public:
   HashMap(uint64_t capacity, uint64_t expansion_rate = 4)
-    : primary_array_size_(round_to_next_power_of_two(capacity))
-    , primary_array_pow_(log2(primary_array_size_))
+    : primary_array_size_(tervel::util::round_to_next_power_of_two(capacity))
+    , primary_array_pow_(std::log2(primary_array_size_))
     , secondary_array_size_(std::pow(2, expansion_rate))
     , secondary_array_pow_(expansion_rate)
     , primary_array_(new Location[primary_array_size_]) {}
-
-    // Todo: implement log2, round_to next functions
-    // Add Memory management
-    // progress assurance
-    // comment stuff
 
   /**
    * TODO(steven): Provide general overview
@@ -89,35 +104,9 @@ class HashMap {
   bool remove(Key key, const Value &value_expected);
 
  private:
-  /**
-   * TODO(steven): Provide general overview
-   */
-  class Hash {
-   public:
-    /**
-     * TODO(steven): Provide general overview
-     * @param  depth [description]
-     * @return       [description]
-     */
-    uint64_t get_position(size_t depth) {
-      const uint64_t *long_array = static_cast<uint64_t *>(&data);
-      if (depth == 0) {
-        // We need the first 'primary_array_pow_' bits
-        assert(primary_array_pow_ < 64);
-
-        uint64_t position = long_array[0] >> (64 - primary_array_pow_);
-        return position;
-      } else {
-        // Start of Relevant bits:
-        //  (depth-1)*secondary_array_pow_ + primary_array_pow_
-        // End of Relevant bits
-        //  (depth)*secondary_array_pow_ + primary_array_pow_
-        assert(false);  // Todo implement
-      }
-    };
-   private:
-    char data[sizeof(Key)];
-  };
+  class Node;
+  typedef std::atomic<Node *> Location;
+  friend class Node;
 
   /**
    * TODO(steven): Provide general overview
@@ -222,27 +211,33 @@ class HashMap {
    * @param key      [description]
    * @param expand   [description]
    */
-  void search(ArrayNode * &array, const uint64_t &position, Node * &current,
-    const size_t &depth, Key &key, bool expand);
+  void search(ArrayNode * &array, uint64_t &position, Node * &current,
+    size_t &depth, Key &key, bool expand);
 
-
+  /**
+   * TODO(steven): Provide general overview
+   * @param  k     [description]
+   * @param  depth [description]
+   * @return       [description]
+   */
+  uint64_t get_position(Key &k, size_t depth);
 
   const size_t primary_array_size_;
   const size_t primary_array_pow_;
   const size_t secondary_array_size_;
   const size_t secondary_array_pow_;
 
-  typedef std::atomic<Node *> Location;
+
   std::unique_ptr<Location[]> primary_array_;
 };
 
-template<class Key, class Value, class functor>
-bool HashMap<Key, Value, functor>::
+template<class Key, class Value, class Functor>
+bool HashMap<Key, Value, Functor>::
 find(Key key, const Value &value) {
+  Functor functor;
   key = functor.hash(key);
 
-  const Hash *hashed = static_cast<Hash *>(&key);
-  uint64_t position = hashed->get_position(0);
+  uint64_t position = get_position(key, 0);
 
   Node *curr_value = primary_array_[position].load();
 
@@ -263,16 +258,16 @@ find(Key key, const Value &value) {
   }
 }  // find
 
-template<class Key, class Value, class functor>
-bool HashMap<Key, Value, functor>::
+template<class Key, class Value, class Functor>
+bool HashMap<Key, Value, Functor>::
 insert(Key key, const Value &value) {
+  Functor functor;
   key = functor.hash(key);
-  const Hash *hashed = static_cast<Hash *>(&key);
 
   DataNode * new_node = new DataNode(key, value);
 
   size_t depth = 0;
-  uint64_t position = hashed->get_position(depth);
+  uint64_t position = get_position(key, depth);
 
   Location *loc = &(primary_array_[position]);
   Node *curr_value = loc.load();
@@ -302,16 +297,16 @@ insert(Key key, const Value &value) {
   }
 }  // insert
 
-template<class Key, class Value, class functor>
-bool HashMap<Key, Value, functor>::
+template<class Key, class Value, class Functor>
+bool HashMap<Key, Value, Functor>::
 update(Key key, const Value &value_expected, Value value_new) {
+  Functor functor;
   key = functor.hash(key);
-  const Hash *hashed = static_cast<Hash *>(&key);
 
   DataNode * new_node = new DataNode(key, value_new);
 
   size_t depth = 0;
-  uint64_t position = hashed->get_position(depth);
+  uint64_t position = get_position(key, depth);
 
   Location *loc = &(primary_array_[position]);
   Node *curr_value = loc.load();
@@ -331,7 +326,7 @@ update(Key key, const Value &value_expected, Value value_new) {
       DataNode * data_node = reinterpret_cast<DataNode *>(curr_value);
       assert(functor.key_equals(data_node->key_, key));
 
-      if (functor->value__equals(value_expected, data_node->value_) {
+      if (functor.value__equals(value_expected, data_node->value_)) {
         if (loc->compare_exchange_strong(curr_value, new_node)) {
           delete data_node;
           return true;
@@ -348,14 +343,14 @@ update(Key key, const Value &value_expected, Value value_new) {
 }  // update
 
 
-template<class Key, class Value, class functor>
-bool HashMap<Key, Value, functor>::
+template<class Key, class Value, class Functor>
+bool HashMap<Key, Value, Functor>::
 remove(Key key, const Value &expected) {
+  Functor functor;
   key = functor.hash(key);
-  const Hash *hashed = static_cast<Hash *>(&key);
 
   size_t depth = 0;
-  uint64_t position = hashed->get_position(depth);
+  uint64_t position = get_position(key, depth);
 
   Location *loc = &(primary_array_[position]);
   Node *curr_value = loc.load();
@@ -374,7 +369,7 @@ remove(Key key, const Value &expected) {
       DataNode * data_node = reinterpret_cast<DataNode *>(curr_value);
       assert(functor.key_equals(data_node->key_, key));
 
-      if (functor->value__equals(expected, data_node->value_) {
+      if (functor.value__equals(expected, data_node->value_)) {
         if (loc->compare_exchange_strong(curr_value, nullptr)) {
           delete data_node;
           return true;
@@ -389,23 +384,23 @@ remove(Key key, const Value &expected) {
   }
 }  // remove
 
-template<class Key, class Value, class functor>
-void HashMap<Key, Value, functor>::
-search(ArrayNode * &array, const uint64_t &position, Node * &curr_value,
-    const size_t &depth, Key &key, bool expand) {
+template<class Key, class Value, class Functor>
+void HashMap<Key, Value, Functor>::
+search(ArrayNode * &array, uint64_t &position, Node * &curr_value,
+    size_t &depth, Key &key, bool expand) {
+  Functor functor;
   // First update the depth
   depth++;
-  const Hash *hashed = static_cast<Hash *>(&key);
 
   while (true) {
-    position = hashed->get_position(depth);
+    position = get_position(key, depth);
     Location *loc = array->access(position);
     curr_value = loc.load();
 
     if (curr_value == nullptr) {
       // Null is a terminating condition
       return;
-    } else if (curr_value->is_array() {
+    } else if (curr_value->is_array()) {
       // Need to examine the next array, so update array reference and the depth
       // count. Position and curr_value will be update at the start of the loop
       array = reinterpret_cast<ArrayNode *>(curr_value);
@@ -425,17 +420,16 @@ search(ArrayNode * &array, const uint64_t &position, Node * &curr_value,
       } else {
         // A key miss match data node is found, need to expand and re-examine
         // the current value.
-        const Hash *hashed_other = static_cast<Hash *>(&(data_node->key_));
-        const uint64_t next_position =  hashed_other->get_position(depth+1);
+        const uint64_t next_position =  get_position(data_node->key_, depth+1);
         expand(loc, curr_value, next_position);
         continue;
       }
-    }
+    }  // else its a data node
   }  // while
 }  // search
 
-template<class Key, class Value, class functor>
-void  HashMap<Key, Value, functor>::
+template<class Key, class Value, class Functor>
+void  HashMap<Key, Value, Functor>::
 expand(Location * loc, Node * curr_value, uint64_t next_position) {
   ArrayNode * array_node = new ArrayNode(secondary_array_size_);
   array_node->access(next_position)->store(curr_value);
@@ -446,6 +440,53 @@ expand(Location * loc, Node * curr_value, uint64_t next_position) {
   }
 }  // expand
 
+template<class Key, class Value, class Functor>
+uint64_t HashMap<Key, Value, Functor>::
+get_position(Key &key, size_t depth) {
+  const uint64_t *long_array = static_cast<uint64_t *>(&key);
+  const size_t max_length = sizeof(Key) / (64 / 8);
+  if (depth == 0) {
+    // We need the first 'primary_array_pow_' bits
+    assert(primary_array_pow_ < 64);
+
+    uint64_t position = long_array[0] >> (64 - primary_array_pow_);
+    return position;
+  } else {
+    assert(false);  // Todo implement
+    const int start_bit_offset = (depth-1)*secondary_array_pow_ +
+        primary_array_pow_;  // Inclusive
+    const int end_bit_offset = (depth)*secondary_array_pow_ +
+        primary_array_pow_;   // Not inclusive
+
+    const int start_idx = start_bit_offset / 64;
+    const int start_idx_offset = start_bit_offset % 64;
+    const int end_idx = end_bit_offset / 64;
+    const int end_idx_offset = end_bit_offset % 64;
+
+    assert(start_idx == end_idx || start_idx + 1 = end_idx);
+    assert(end_idx <= max_length);
+    // TODO(steven): add 0 padding to fill extra bits if the bits don't divide evenly.
+    if (start_idx == end_idx) {
+      uint64_t value = long_array[start_idx];
+      value = value << start_idx_offset;
+      value = value >> (64 - secondary_array_pow_);
+      return value;
+    } else {
+      uint64_t value = long_array[start_idx];
+      value = value << start_idx_offset;
+      value = value >> (64 - secondary_array_pow_);
+      value = value << end_idx_offset;
+
+      uint64_t value2 = long_array[end_idx];
+      value2 = value2 >> (64 - end_idx_offset);
+
+      return (value | value2);
+    }
+  }
+}  // get_position
+
 }  // namespace wf
 }  // namespace containers
 }  // namespace tervel
+
+#endif  // TERVEL_CONTAINER_WF_HASH_MAP_WFHM_HASHMAP_H

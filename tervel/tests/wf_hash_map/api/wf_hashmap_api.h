@@ -1,7 +1,7 @@
 #ifndef WF_HASHMAP_API_H_
 #define WF_HASHMAP_API_H_
 
-#include "tervel/hashmap/wf_hash_map.h"
+#include "tervel/containers/wf/hash-map/wf_hash_map.h"
 #include "tervel/util/info.h"
 #include "tervel/util/thread_context.h"
 #include "tervel/util/tervel.h"
@@ -31,7 +31,7 @@ class TestClass {
 
  private:
   tervel::Tervel* tervel_obj;
-  tervel::containers::wf::HashMap<uint64_t, uint64_t> *container;
+  tervel::containers::wf::HashMap<T, T> *container;
 };
 
 #endif  // WF_HASHMAP_API_H_

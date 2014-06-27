@@ -23,6 +23,7 @@ all: WFBuffer FAATest LockBuffer TBBBuffer TsigasBuffer LinuxBuffer #MCASBuffer
 
 
 test: $(SOURCES) $(EXECUTABLE)
+	mkdir -p $(EXECUTABLE)
 	rm main_buffer.o
 	mv $(EXECUTABLE) $(OUTPUT)
 
