@@ -70,13 +70,8 @@ class HashMap {
     , secondary_array_pow_(expansion_rate)
     , primary_array_(new Location[primary_array_size_]) {}
 
-  /**
-   * TODO(steven): Provide general overview
-   * @param  key   [description]
-   * @param  value [description]
-   * @return       [description]
-   */
-  bool find(Key key, const Value &value);
+  // TODO(implement).
+  ~HashMap() {  }
 
   /**
    * TODO(steven): Provide general overview
@@ -84,7 +79,15 @@ class HashMap {
    * @param  value [description]
    * @return       [description]
    */
-  bool insert(Key key, const Value &value);
+  bool find(Key key, Value &value);
+
+  /**
+   * TODO(steven): Provide general overview
+   * @param  key   [description]
+   * @param  value [description]
+   * @return       [description]
+   */
+  bool insert(Key key, Value &value);
 
   /**
    * TODO(steven): Provide general overview
@@ -93,7 +96,7 @@ class HashMap {
    * @param  value_new      [description]
    * @return                [description]
    */
-  bool update(Key key, const Value &value_expected, Value value_new);
+  bool update(Key key, Value &value_expected, Value value_new);
 
   /**
    * TODO(steven): Provide general overview
@@ -101,7 +104,15 @@ class HashMap {
    * @param  value_expected [description]
    * @return                [description]
    */
-  bool remove(Key key, const Value &value_expected);
+  bool remove(Key key, Value &value_expected);
+
+  /**
+   * [size description]
+   * @return [description]
+   */
+  size_t size() {
+    return size_.load();
+  };
 
  private:
   class Node;
@@ -112,6 +123,7 @@ class HashMap {
    * TODO(steven): Provide general overview
    */
   class Node {
+   public:
     Node() {}
     virtual ~Node() {}
 
@@ -135,6 +147,8 @@ class HashMap {
    public:
     explicit ArrayNode(uint64_t len)
       : internal_array_(new Location[len]) {}
+
+    ~ArrayNode() {}  // TODO(implement)
 
     /**
      * TODO(steven): Provide general overview
@@ -174,6 +188,8 @@ class HashMap {
       : key_(k)
       , value_(v) {}
 
+    ~DataNode() { }  // TODO(implement)
+
     /**
      * TODO(steven): Provide general overview
      * @return [description]
@@ -200,7 +216,7 @@ class HashMap {
    * @param curr_value    [description]
    * @param next_position [description]
    */
-  void expand(Location * loc, Node * curr_value, uint64_t next_position);
+  void expand_map(Location * loc, Node * curr_value, uint64_t next_position);
 
   /**
    * TODO(steven): Provide general overview
@@ -227,13 +243,14 @@ class HashMap {
   const size_t secondary_array_size_;
   const size_t secondary_array_pow_;
 
+  std::atomic<uint64_t> size_;
 
   std::unique_ptr<Location[]> primary_array_;
 };
 
 template<class Key, class Value, class Functor>
 bool HashMap<Key, Value, Functor>::
-find(Key key, const Value &value) {
+find(Key key, Value &value) {
   Functor functor;
   key = functor.hash(key);
 
@@ -260,7 +277,7 @@ find(Key key, const Value &value) {
 
 template<class Key, class Value, class Functor>
 bool HashMap<Key, Value, Functor>::
-insert(Key key, const Value &value) {
+insert(Key key, Value &value) {
   Functor functor;
   key = functor.hash(key);
 
@@ -270,7 +287,7 @@ insert(Key key, const Value &value) {
   uint64_t position = get_position(key, depth);
 
   Location *loc = &(primary_array_[position]);
-  Node *curr_value = loc.load();
+  Node *curr_value = loc->load();
 
   while (true) {
     if (curr_value->is_array()) {
@@ -282,6 +299,7 @@ insert(Key key, const Value &value) {
     assert(curr_value == nullptr || curr_value->is_data());
     if (curr_value == nullptr) {
       if (loc->compare_exchange_strong(curr_value, new_node)) {
+        size_.fetch_add(1);
         return true;
       } else {
         continue;
@@ -291,7 +309,7 @@ insert(Key key, const Value &value) {
       assert(functor.key_equals(data_node->key_, key));
       value = data_node->value_;
 
-      delete new_node;
+      // delete new_node;
       return false;
     }
   }
@@ -299,7 +317,7 @@ insert(Key key, const Value &value) {
 
 template<class Key, class Value, class Functor>
 bool HashMap<Key, Value, Functor>::
-update(Key key, const Value &value_expected, Value value_new) {
+update(Key key, Value &value_expected, Value value_new) {
   Functor functor;
   key = functor.hash(key);
 
@@ -309,7 +327,7 @@ update(Key key, const Value &value_expected, Value value_new) {
   uint64_t position = get_position(key, depth);
 
   Location *loc = &(primary_array_[position]);
-  Node *curr_value = loc.load();
+  Node *curr_value = loc->load();
 
   while (true) {
     if (curr_value->is_array()) {
@@ -320,22 +338,22 @@ update(Key key, const Value &value_expected, Value value_new) {
 
     assert(curr_value == nullptr || curr_value->is_data());
     if (curr_value == nullptr) {
-      delete new_node;
+      // delete new_node;
       return false;
     } else {  // it is a data node
       DataNode * data_node = reinterpret_cast<DataNode *>(curr_value);
       assert(functor.key_equals(data_node->key_, key));
 
-      if (functor.value__equals(value_expected, data_node->value_)) {
+      if (functor.value_equals(value_expected, data_node->value_)) {
         if (loc->compare_exchange_strong(curr_value, new_node)) {
-          delete data_node;
+          // delete data_node;
           return true;
         } else {
           continue;
         }
       } else {
         value_expected = data_node->value_;
-        delete new_node;
+        // delete new_node;
         return false;
       }
     }
@@ -345,7 +363,7 @@ update(Key key, const Value &value_expected, Value value_new) {
 
 template<class Key, class Value, class Functor>
 bool HashMap<Key, Value, Functor>::
-remove(Key key, const Value &expected) {
+remove(Key key, Value &expected) {
   Functor functor;
   key = functor.hash(key);
 
@@ -353,7 +371,7 @@ remove(Key key, const Value &expected) {
   uint64_t position = get_position(key, depth);
 
   Location *loc = &(primary_array_[position]);
-  Node *curr_value = loc.load();
+  Node *curr_value = loc->load();
 
   while (true) {
     if (curr_value->is_array()) {
@@ -371,7 +389,8 @@ remove(Key key, const Value &expected) {
 
       if (functor.value__equals(expected, data_node->value_)) {
         if (loc->compare_exchange_strong(curr_value, nullptr)) {
-          delete data_node;
+          // delete data_node;
+          size_.fetch_add(-1);
           return true;
         } else {
           continue;
@@ -395,7 +414,7 @@ search(ArrayNode * &array, uint64_t &position, Node * &curr_value,
   while (true) {
     position = get_position(key, depth);
     Location *loc = array->access(position);
-    curr_value = loc.load();
+    curr_value = loc->load();
 
     if (curr_value == nullptr) {
       // Null is a terminating condition
@@ -421,7 +440,7 @@ search(ArrayNode * &array, uint64_t &position, Node * &curr_value,
         // A key miss match data node is found, need to expand and re-examine
         // the current value.
         const uint64_t next_position =  get_position(data_node->key_, depth+1);
-        expand(loc, curr_value, next_position);
+        expand_map(loc, curr_value, next_position);
         continue;
       }
     }  // else its a data node
@@ -430,13 +449,13 @@ search(ArrayNode * &array, uint64_t &position, Node * &curr_value,
 
 template<class Key, class Value, class Functor>
 void  HashMap<Key, Value, Functor>::
-expand(Location * loc, Node * curr_value, uint64_t next_position) {
+expand_map(Location * loc, Node * curr_value, uint64_t next_position) {
   ArrayNode * array_node = new ArrayNode(secondary_array_size_);
   array_node->access(next_position)->store(curr_value);
   if (loc->compare_exchange_strong(curr_value, array_node)) {
     return;
   } else {
-    delete array_node;
+    // delete array_node;
   }
 }  // expand
 
@@ -458,12 +477,12 @@ get_position(Key &key, size_t depth) {
     const int end_bit_offset = (depth)*secondary_array_pow_ +
         primary_array_pow_;   // Not inclusive
 
-    const int start_idx = start_bit_offset / 64;
-    const int start_idx_offset = start_bit_offset % 64;
-    const int end_idx = end_bit_offset / 64;
-    const int end_idx_offset = end_bit_offset % 64;
+    const size_t start_idx = start_bit_offset / 64;
+    const size_t start_idx_offset = start_bit_offset % 64;
+    const size_t end_idx = end_bit_offset / 64;
+    const size_t end_idx_offset = end_bit_offset % 64;
 
-    assert(start_idx == end_idx || start_idx + 1 = end_idx);
+    assert(start_idx == end_idx || start_idx + 1 == end_idx);
     assert(end_idx <= max_length);
     // TODO(steven): add 0 padding to fill extra bits if the bits don't divide evenly.
     if (start_idx == end_idx) {

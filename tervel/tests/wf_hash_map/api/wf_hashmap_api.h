@@ -8,13 +8,13 @@
 #include "tervel/util/memory/hp/hp_element.h"
 #include "tervel/util/memory/hp/hp_list.h"
 
-template<class T>
+template<class Key, class Value>
 class TestClass {
  public:
   TestClass(size_t num_threads, size_t capacity) {
     tervel_obj = new tervel::Tervel(num_threads);
     attach_thread();
-    container = new tervel::containers::wf::HashMap<T, T>(capacity);
+    container = new tervel::containers::wf::HashMap<Key, Value>(capacity);
   }
 
   char * name() {
@@ -28,10 +28,29 @@ class TestClass {
 
   void detach_thread() {}
 
+  bool find(Key key, Value &value) {
+    return container->find(key, value);
+  }
+
+  bool insert(Key key, Value &value) {
+    return container->insert(key, value);
+  }
+
+  bool update(Key key, Value &value_expected, Value value_new) {
+    return container->update(key, value_expected, value_new);
+  }
+
+  bool remove(Key key, Value &value_expected) {
+    return container->remove(key, value_expected);
+  }
+
+  size_t size() {
+    return container->size();
+  }
 
  private:
   tervel::Tervel* tervel_obj;
-  tervel::containers::wf::HashMap<T, T> *container;
+  tervel::containers::wf::HashMap<Key, Value> *container;
 };
 
 #endif  // WF_HASHMAP_API_H_

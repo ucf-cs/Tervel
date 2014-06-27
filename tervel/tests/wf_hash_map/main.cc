@@ -56,7 +56,7 @@ class TestObject {
   std::atomic<bool> running_{true};
   std::atomic<bool> wait_flag_{true};
 
-  TestClass<int64_t> test_class_;
+  TestClass<uint64_t, uint64_t> test_class_;
   const int num_threads_;
   const int execution_time_;
 };
@@ -106,6 +106,21 @@ void run(int thread_id, TestObject * test_data) {
   test_data->test_class_.attach_thread();
 
   test_data->ready_count_.fetch_add(1);
+
+  bool res;
+  uint64_t key = 2;
+  uint64_t value = 4;
+  res = test_data->test_class_.insert(key, value);
+  assert(res);
+
+  uint64_t value2 = 0;
+  res = test_data->test_class_.find(key, value2);
+  assert(res && value == value2);
+
+  uint64_t value3 = 6;
+  res = test_data->test_class_.update(key, value2, value3);
+  assert(res && value == value2);
+
 
   test_data->test_class_.detach_thread();
 }
