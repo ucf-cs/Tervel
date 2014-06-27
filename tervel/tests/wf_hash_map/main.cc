@@ -76,12 +76,12 @@ int main(int argc, char** argv) {
 
 
   std::vector<std::thread> thread_list;
-  for (int64_t i = 0; i < test_data.num_threads_; i++) {
+  for (int64_t i = 0; i < FLAGS_num_threads; i++) {
     std::thread temp_thread(run, i, &test_data);
     thread_list.push_back(std::move(temp_thread));
   }
 
-  while (test_data.ready_count_.load() < test_data.num_threads_) {}
+  while (test_data.ready_count_.load() < FLAGS_num_threads) {}
 
 #ifdef DEBUG
   printf("Beginning Test.\n");

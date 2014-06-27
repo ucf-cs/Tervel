@@ -258,21 +258,23 @@ find(Key key, Value &value) {
 
   Node *curr_value = primary_array_[position].load();
 
-  if (curr_value->is_array()) {
+  if (curr_value == nullptr) {
+    return false;
+  } else if (curr_value->is_array()) {
     size_t depth = 0;
     ArrayNode * array_node = reinterpret_cast<ArrayNode *>(curr_value);
     search(array_node, position, curr_value, depth, key, false);
+
+    if (curr_value == nullptr) {
+      return false;
+    }
   }
 
-  assert(curr_value == nullptr || curr_value->is_data());
-  if (curr_value == nullptr) {
-    return false;
-  } else {  // it is a data node
-    DataNode * data_node = reinterpret_cast<DataNode *>(curr_value);
-    assert(functor.key_equals(data_node->key_, key));
-    value = data_node->value_;
-    return true;
-  }
+  assert(curr_value->is_data());
+  DataNode * data_node = reinterpret_cast<DataNode *>(curr_value);
+  assert(functor.key_equals(data_node->key_, key));
+  value = data_node->value_;
+  return true;
 }  // find
 
 template<class Key, class Value, class Functor>
@@ -290,13 +292,6 @@ insert(Key key, Value &value) {
   Node *curr_value = loc->load();
 
   while (true) {
-    if (curr_value->is_array()) {
-      ArrayNode * array_node = reinterpret_cast<ArrayNode *>(curr_value);
-      search(array_node, position, curr_value, depth, key, true);
-      loc = array_node->access(position);
-    }
-
-    assert(curr_value == nullptr || curr_value->is_data());
     if (curr_value == nullptr) {
       if (loc->compare_exchange_strong(curr_value, new_node)) {
         size_.fetch_add(1);
@@ -304,7 +299,13 @@ insert(Key key, Value &value) {
       } else {
         continue;
       }
+    } else if (curr_value->is_array()) {
+      ArrayNode * array_node = reinterpret_cast<ArrayNode *>(curr_value);
+      search(array_node, position, curr_value, depth, key, true);
+      loc = array_node->access(position);
+      continue;
     } else {  // it is a data node
+      assert(curr_value->is_data());
       DataNode * data_node = reinterpret_cast<DataNode *>(curr_value);
       assert(functor.key_equals(data_node->key_, key));
       value = data_node->value_;
@@ -330,17 +331,16 @@ update(Key key, Value &value_expected, Value value_new) {
   Node *curr_value = loc->load();
 
   while (true) {
-    if (curr_value->is_array()) {
-      ArrayNode * array_node = reinterpret_cast<ArrayNode *>(curr_value);
-      search(array_node, position, curr_value, depth, key, true);
-      loc = array_node->access(position);
-    }
-
-    assert(curr_value == nullptr || curr_value->is_data());
     if (curr_value == nullptr) {
       // delete new_node;
       return false;
+    } else if (curr_value->is_array()) {
+      ArrayNode * array_node = reinterpret_cast<ArrayNode *>(curr_value);
+      search(array_node, position, curr_value, depth, key, true);
+      loc = array_node->access(position);
+      continue;
     } else {  // it is a data node
+      assert(curr_value->is_data());
       DataNode * data_node = reinterpret_cast<DataNode *>(curr_value);
       assert(functor.key_equals(data_node->key_, key));
 
@@ -374,16 +374,15 @@ remove(Key key, Value &expected) {
   Node *curr_value = loc->load();
 
   while (true) {
-    if (curr_value->is_array()) {
+    if (curr_value == nullptr) {
+      return false;
+    } else if (curr_value->is_array()) {
       ArrayNode * array_node = reinterpret_cast<ArrayNode *>(curr_value);
       search(array_node, position, curr_value, depth, key, true);
       loc = array_node->access(position);
-    }
-
-    assert(curr_value == nullptr || curr_value->is_data());
-    if (curr_value == nullptr) {
-      return false;
+      continue;
     } else {  // it is a data node
+      assert(curr_value->is_data());
       DataNode * data_node = reinterpret_cast<DataNode *>(curr_value);
       assert(functor.key_equals(data_node->key_, key));
 

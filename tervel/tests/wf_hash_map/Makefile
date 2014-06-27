@@ -3,7 +3,7 @@ CONTAINERTYPE ?= -DUSE_WF_HASHMAP
 CXXFLAGS =  $(CONTAINERTYPE) -Wall -Wunused-function -std=c++11 \
             -march=native -m64 -pthread -fno-strict-aliasing
 
-DEBUG = -DDEBUG=1 -p -pg
+DEBUG = -DDEBUG=1 -p -pg -g
 RELEASE = -O3 -DNDEBUG
 
 CXXFLAGS += $(DEBUG)
