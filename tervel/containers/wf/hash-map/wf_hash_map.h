@@ -63,7 +63,7 @@ struct default_functor {
 template< class Key, class Value, class Functor = default_functor<Key, Value> >
 class HashMap {
  public:
-  HashMap(uint64_t capacity, uint64_t expansion_rate = 4)
+  HashMap(uint64_t capacity, uint64_t expansion_rate = 3)
     : primary_array_size_(tervel::util::round_to_next_power_of_two(capacity))
     , primary_array_pow_(std::log2(primary_array_size_))
     , secondary_array_size_(std::pow(2, expansion_rate))
@@ -113,6 +113,9 @@ class HashMap {
   size_t size() {
     return size_.load();
   };
+
+  uint64_t max_depth();
+  void print_key(Key &key);
 
  private:
   class Node;
@@ -272,14 +275,18 @@ find(Key key, Value &value) {
 
   assert(curr_value->is_data());
   DataNode * data_node = reinterpret_cast<DataNode *>(curr_value);
-  assert(functor.key_equals(data_node->key_, key));
-  value = data_node->value_;
-  return true;
+  if (functor.key_equals(data_node->key_, key)) {
+    value = data_node->value_;
+    return true;
+  } else {
+    return false;
+  }
 }  // find
 
 template<class Key, class Value, class Functor>
 bool HashMap<Key, Value, Functor>::
 insert(Key key, Value &value) {
+
   Functor functor;
   key = functor.hash(key);
 
@@ -307,13 +314,19 @@ insert(Key key, Value &value) {
     } else {  // it is a data node
       assert(curr_value->is_data());
       DataNode * data_node = reinterpret_cast<DataNode *>(curr_value);
-      assert(functor.key_equals(data_node->key_, key));
-      value = data_node->value_;
-
-      // delete new_node;
-      return false;
+      if (functor.key_equals(data_node->key_, key)) {
+        value = data_node->value_;
+        delete new_node;
+        return false;
+      } else {
+        const uint64_t next_position =  get_position(data_node->key_, depth+1);
+        expand_map(loc, curr_value, next_position);
+        curr_value = loc->load();
+        continue;
+      }
     }
-  }
+    assert(false);
+  }  // while true
 }  // insert
 
 template<class Key, class Value, class Functor>
@@ -336,27 +349,29 @@ update(Key key, Value &value_expected, Value value_new) {
       return false;
     } else if (curr_value->is_array()) {
       ArrayNode * array_node = reinterpret_cast<ArrayNode *>(curr_value);
-      search(array_node, position, curr_value, depth, key, true);
+      search(array_node, position, curr_value, depth, key, false);
       loc = array_node->access(position);
       continue;
     } else {  // it is a data node
       assert(curr_value->is_data());
       DataNode * data_node = reinterpret_cast<DataNode *>(curr_value);
-      assert(functor.key_equals(data_node->key_, key));
-
-      if (functor.value_equals(value_expected, data_node->value_)) {
-        if (loc->compare_exchange_strong(curr_value, new_node)) {
-          // delete data_node;
-          return true;
-        } else {
-          continue;
+      if (functor.key_equals(data_node->key_, key)) {
+        if (functor.value_equals(value_expected, data_node->value_)) {
+          if (loc->compare_exchange_strong(curr_value, new_node)) {
+            // delete data_node;
+            return true;
+          } else {
+            continue;
+          }
+        } else {  // else its not a value match
+          value_expected = data_node->value_;
+          // delete new_node;
+          return false;
         }
-      } else {
-        value_expected = data_node->value_;
-        // delete new_node;
+      } else {  // else its not a key match
         return false;
       }
-    }
+    }  // else its a data node
   }
 }  // update
 
@@ -378,28 +393,30 @@ remove(Key key, Value &expected) {
       return false;
     } else if (curr_value->is_array()) {
       ArrayNode * array_node = reinterpret_cast<ArrayNode *>(curr_value);
-      search(array_node, position, curr_value, depth, key, true);
+      search(array_node, position, curr_value, depth, key, false);
       loc = array_node->access(position);
       continue;
     } else {  // it is a data node
       assert(curr_value->is_data());
       DataNode * data_node = reinterpret_cast<DataNode *>(curr_value);
-      assert(functor.key_equals(data_node->key_, key));
-
-      if (functor.value__equals(expected, data_node->value_)) {
-        if (loc->compare_exchange_strong(curr_value, nullptr)) {
-          // delete data_node;
-          size_.fetch_add(-1);
-          return true;
-        } else {
-          continue;
-        }
+      if (functor.key_equals(data_node->key_, key)) {
+        if (functor.value_equals(expected, data_node->value_)) {
+          if (loc->compare_exchange_strong(curr_value, nullptr)) {
+            // delete data_node;
+            size_.fetch_add(-1);
+            return true;
+          } else {
+            continue;
+          }
+        } else {  // else its not a value match
+          expected = data_node->value_;
+          return false;
+        }  // else its not a value match
       } else {
-        expected = data_node->value_;
         return false;
       }
-    }
-  }
+    }  // it is a data node
+  }  // while
 }  // remove
 
 template<class Key, class Value, class Functor>
@@ -411,6 +428,8 @@ search(ArrayNode * &array, uint64_t &position, Node * &curr_value,
   depth++;
 
   while (true) {
+    assert(depth <= max_depth());
+
     position = get_position(key, depth);
     Location *loc = array->access(position);
     curr_value = loc->load();
@@ -461,16 +480,17 @@ expand_map(Location * loc, Node * curr_value, uint64_t next_position) {
 template<class Key, class Value, class Functor>
 uint64_t HashMap<Key, Value, Functor>::
 get_position(Key &key, size_t depth) {
-  const uint64_t *long_array = static_cast<uint64_t *>(&key);
+  const uint64_t *long_array = reinterpret_cast<uint64_t *>(&key);
   const size_t max_length = sizeof(Key) / (64 / 8);
   if (depth == 0) {
     // We need the first 'primary_array_pow_' bits
     assert(primary_array_pow_ < 64);
 
     uint64_t position = long_array[0] >> (64 - primary_array_pow_);
+
+    assert(position < primary_array_size_);
     return position;
   } else {
-    assert(false);  // Todo implement
     const int start_bit_offset = (depth-1)*secondary_array_pow_ +
         primary_array_pow_;  // Inclusive
     const int end_bit_offset = (depth)*secondary_array_pow_ +
@@ -492,16 +512,47 @@ get_position(Key &key, size_t depth) {
     } else {
       uint64_t value = long_array[start_idx];
       value = value << start_idx_offset;
-      value = value >> (64 - secondary_array_pow_);
-      value = value << end_idx_offset;
+      value = value >> (64 - secondary_array_pow_ + end_idx_offset);
+      value = value << (end_idx_offset);
 
-      uint64_t value2 = long_array[end_idx];
+
+      uint64_t value2;
+      if (end_idx == max_length) {
+        value2 = 0;
+      } else {
+        value2 = long_array[end_idx];
+      }
       value2 = value2 >> (64 - end_idx_offset);
 
-      return (value | value2);
+      uint64_t position = (value | value2);
+      assert(position < secondary_array_size_);
+      return position;
     }
   }
 }  // get_position
+
+template<class Key, class Value, class Functor>
+uint64_t HashMap<Key, Value, Functor>::
+max_depth() {
+  uint64_t max_depth_ = sizeof(Key)*8;
+  max_depth_ -= primary_array_pow_;
+  max_depth_ = std::ceil(max_depth_ / secondary_array_pow_);
+  max_depth_++;
+
+  return max_depth_;
+}
+
+template<class Key, class Value, class Functor>
+void HashMap<Key, Value, Functor>::
+print_key(Key &key) {
+  size_t max_depth_ = max_depth();
+  std::cout << "K(" << key << ") :";
+  for (size_t i = 0; i <= max_depth_; i++) {
+    uint64_t temp = get_position(key, i);
+    std::cout << temp << "-";
+  }
+  std::cout << "\n" << std::endl;
+}  // print_key
 
 }  // namespace wf
 }  // namespace containers

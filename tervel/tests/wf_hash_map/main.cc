@@ -29,7 +29,7 @@
 
 #include "container_api.h"
 
-DEFINE_int32(capacity, 1024, "The initial capacity of the hash map");
+DEFINE_int32(capacity, 64, "The initial capacity of the hash map");
 DEFINE_int32(num_threads, 1, "The number of executing threads.");
 DEFINE_int32(execution_time, 1, "The amount of time to run the tests");
 
@@ -56,7 +56,7 @@ class TestObject {
   std::atomic<bool> running_{true};
   std::atomic<bool> wait_flag_{true};
 
-  TestClass<uint64_t, uint64_t> test_class_;
+  TestClass<int64_t, int64_t> test_class_;
   const int num_threads_;
   const int execution_time_;
 };
@@ -103,23 +103,52 @@ int main(int argc, char** argv) {
 }
 
 void run(int thread_id, TestObject * test_data) {
+  const int64_t num_threads = test_data->num_threads_;
   test_data->test_class_.attach_thread();
 
   test_data->ready_count_.fetch_add(1);
 
   bool res;
-  uint64_t key = 2;
-  uint64_t value = 4;
-  res = test_data->test_class_.insert(key, value);
-  assert(res);
 
-  uint64_t value2 = 0;
-  res = test_data->test_class_.find(key, value2);
-  assert(res && value == value2);
+  int64_t i;
+  for (i = thread_id; test_data->running_.load(); i += num_threads) {
+    res = test_data->test_class_.insert(i, i);
+    assert(res);
+  }
 
-  uint64_t value3 = 6;
-  res = test_data->test_class_.update(key, value2, value3);
-  assert(res && value == value2);
+  const int64_t max_value = i;
+
+  for (i = thread_id; i < max_value; i += num_threads) {
+    int64_t temp = -1;
+    res = test_data->test_class_.find(i, temp);
+    assert(res && temp == i);
+  }
+
+  for (i = thread_id; i < max_value; i += num_threads) {
+    int64_t temp = i;
+    res = test_data->test_class_.update(i, temp, i+2);
+    assert(res && temp == i);
+  }
+
+  for (i = thread_id; i < max_value; i += num_threads) {
+    int64_t temp = -1;
+    res = test_data->test_class_.find(i, temp);
+    assert(res && temp == (i+2));
+  }
+
+  for (i = thread_id; i < max_value; i += num_threads) {
+    int64_t temp = i+2;
+    res = test_data->test_class_.remove(i, temp);
+    assert(res && temp == i+2);
+  }
+
+  for (i = thread_id; i < max_value; i += num_threads) {
+    int64_t temp = -1;
+    res = test_data->test_class_.find(i, temp);
+    assert(!res && temp == -1);
+  }
+
+
 
 
   test_data->test_class_.detach_thread();
