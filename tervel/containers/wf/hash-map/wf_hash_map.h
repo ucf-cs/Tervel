@@ -5,13 +5,19 @@
 #include <atomic>
 #include <cmath>
 
+#include "tervel/util/info.h"
+#include "tervel/util/memory/hp/hp_element.h"
+#include "tervel/util/memory/hp/hazard_pointer.h"
 
-// Todo:
-// Add Memory management
-// progress assurance
-// comment stuff
-
-
+// TODO(Steven):
+//
+// Document code
+//
+// Implement Progress Assurance.
+//
+// Test get_position function on keys > 64 bits
+// Stronger Correctness Tests
+//
 namespace tervel {
 
 namespace util {
@@ -68,10 +74,26 @@ class HashMap {
     , primary_array_pow_(std::log2(primary_array_size_))
     , secondary_array_size_(std::pow(2, expansion_rate))
     , secondary_array_pow_(expansion_rate)
-    , primary_array_(new Location[primary_array_size_]) {}
+    , primary_array_(new Location[primary_array_size_]()) { }
 
-  // TODO(implement).
-  ~HashMap() {  }
+  /**
+   * Not Thread Safe!
+   * May create a very large stack!
+   *   Note: should implement a better way...
+   *   If it is a node type then the node will be freed
+   *   If it is an array node then the destructor of the array node will free
+   *     any nodes that are referenced it.
+   */
+  ~HashMap() {
+    for (size_t i = 0; i < primary_array_size_; i++) {
+      Node * temp = primary_array_[i].load();
+      if (temp != nullptr) {
+        delete temp;
+      }
+    }
+  }  // ~ HashMap
+
+  class ValueAccessor;
 
   /**
    * TODO(steven): Provide general overview
@@ -79,7 +101,7 @@ class HashMap {
    * @param  value [description]
    * @return       [description]
    */
-  bool find(Key key, Value &value);
+  bool at(Key key, ValueAccessor &va);
 
   /**
    * TODO(steven): Provide general overview
@@ -87,24 +109,14 @@ class HashMap {
    * @param  value [description]
    * @return       [description]
    */
-  bool insert(Key key, Value &value);
+  bool insert(Key key, Value value);
 
   /**
    * TODO(steven): Provide general overview
    * @param  key            [description]
-   * @param  value_expected [description]
-   * @param  value_new      [description]
    * @return                [description]
    */
-  bool update(Key key, Value &value_expected, Value value_new);
-
-  /**
-   * TODO(steven): Provide general overview
-   * @param  key            [description]
-   * @param  value_expected [description]
-   * @return                [description]
-   */
-  bool remove(Key key, Value &value_expected);
+  bool remove(Key key);
 
   /**
    * [size description]
@@ -113,6 +125,55 @@ class HashMap {
   size_t size() {
     return size_.load();
   };
+
+
+  class ValueAccessor {
+   public:
+    ValueAccessor()
+      : access_count_(nullptr)
+      , value_(nullptr) {}
+
+    void init(Value * value, std::atomic<int64_t> *access_count) {
+      if (access_count_) {
+        // In case they reuse the object
+        access_count_->fetch_add(-1);
+      }
+
+      value_ =value;
+      access_count_ = access_count;
+    }
+
+    ~ValueAccessor() {
+      if (access_count_) {
+        access_count_->fetch_add(-1);
+      }
+    }
+
+    Value *value() {
+      return value_;
+    }
+
+    std::atomic<Value> *atomic_value() {
+      return (std::atomic<Value> *)(value_);
+    }
+
+    bool valid() {
+      return (value_ != nullptr);
+    }
+
+   private:
+    std::atomic<int64_t> *access_count_;
+    Value * value_;
+  };
+
+
+  /**
+   * TODO(steven): Provide general overview
+   * @param  k     [description]
+   * @param  depth [description]
+   * @return       [description]
+   */
+  uint64_t get_position(Key &k, size_t depth);
 
   uint64_t max_depth();
   void print_key(Key &key);
@@ -149,9 +210,25 @@ class HashMap {
   class ArrayNode : public Node {
    public:
     explicit ArrayNode(uint64_t len)
-      : internal_array_(new Location[len]) {}
+      : len_(len)
+      , internal_array_(new Location[len]()) {
+        for (size_t i = 0; i < len_; i++) {
+          internal_array_[i].store(nullptr);
+        }
+      }
 
-    ~ArrayNode() {}  // TODO(implement)
+    /**
+     * See Notes on hash map destructor.
+     */
+    ~ArrayNode() {
+      for (size_t i = 0; i < len_; i++) {
+        Node * temp = internal_array_[i].load();
+        if (temp != nullptr) {
+          delete temp;
+        }
+      }
+    }  // ~ArrayNode
+
 
     /**
      * TODO(steven): Provide general overview
@@ -159,6 +236,7 @@ class HashMap {
      * @return     [description]
      */
     Location *access(uint64_t pos) {
+      assert(pos < len_ && pos >=0);
       return &(internal_array_[pos]);
     }
 
@@ -179,19 +257,21 @@ class HashMap {
     }
 
    private:
+    uint64_t len_;
     std::unique_ptr<Location[]> internal_array_;
   };
 
   /**
    * TODO(steven): Provide general overview
    */
-  class DataNode : public Node {
+  class DataNode : public Node, public tervel::util::memory::hp::Element {
    public:
     explicit DataNode(Key k, Value v)
       : key_(k)
-      , value_(v) {}
+      , value_(v)
+      , access_count_(0) {}
 
-    ~DataNode() { }  // TODO(implement)
+    ~DataNode() { }
 
     /**
      * TODO(steven): Provide general overview
@@ -211,6 +291,7 @@ class HashMap {
 
     Key key_;
     Value value_;
+    std::atomic<int64_t> access_count_;
   };
 
   /**
@@ -231,15 +312,12 @@ class HashMap {
    * @param expand   [description]
    */
   void search(ArrayNode * &array, uint64_t &position, Node * &current,
-    size_t &depth, Key &key, bool expand);
+    size_t &depth, Key &key);
 
-  /**
-   * TODO(steven): Provide general overview
-   * @param  k     [description]
-   * @param  depth [description]
-   * @return       [description]
-   */
-  uint64_t get_position(Key &k, size_t depth);
+
+
+  bool hp_watch_and_get_value(Location * loc, Node * &value);
+  void hp_unwatch();
 
   const size_t primary_array_size_;
   const size_t primary_array_pow_;
@@ -249,44 +327,84 @@ class HashMap {
   std::atomic<uint64_t> size_;
 
   std::unique_ptr<Location[]> primary_array_;
-};
+};  // class wf hash map
 
 template<class Key, class Value, class Functor>
 bool HashMap<Key, Value, Functor>::
-find(Key key, Value &value) {
+hp_watch_and_get_value(Location * loc, Node * &value) {
+  std::atomic<void *> *temp_address =
+      reinterpret_cast<std::atomic<void *> *>(loc);
+
+  void * temp = temp_address->load();
+
+  bool is_watched = tervel::util::memory::hp::HazardPointer::watch(
+        tervel::util::memory::hp::HazardPointer::SlotID::SHORTUSE,
+        temp, temp_address, temp);
+
+  if (is_watched) {
+    value = reinterpret_cast<Node *>(temp);
+  }
+  return is_watched;
+}  // hp_watch_and_get_value
+
+template<class Key, class Value, class Functor>
+void HashMap<Key, Value, Functor>::
+hp_unwatch() {
+  tervel::util::memory::hp::HazardPointer::unwatch(
+          tervel::util::memory::hp::HazardPointer::SlotID::SHORTUSE);
+}  // hp_unwatch
+
+
+template<class Key, class Value, class Functor>
+bool HashMap<Key, Value, Functor>::
+at(Key key, ValueAccessor &va) {
   Functor functor;
   key = functor.hash(key);
 
   uint64_t position = get_position(key, 0);
 
-  Node *curr_value = primary_array_[position].load();
-
-  if (curr_value == nullptr) {
-    return false;
-  } else if (curr_value->is_array()) {
-    size_t depth = 0;
-    ArrayNode * array_node = reinterpret_cast<ArrayNode *>(curr_value);
-    search(array_node, position, curr_value, depth, key, false);
+  while (true) {
+    Location *loc = &(primary_array_[position]);
+    Node *curr_value;
+    if (!hp_watch_and_get_value(loc, curr_value)) {
+      continue;
+    }
 
     if (curr_value == nullptr) {
       return false;
-    }
-  }
+    } else if (curr_value->is_array()) {
+      size_t depth = 0;
+      ArrayNode * array_node = reinterpret_cast<ArrayNode *>(curr_value);
 
-  assert(curr_value->is_data());
-  DataNode * data_node = reinterpret_cast<DataNode *>(curr_value);
-  if (functor.key_equals(data_node->key_, key)) {
-    value = data_node->value_;
-    return true;
-  } else {
-    return false;
-  }
-}  // find
+      // Internally watches curr_value
+      search(array_node, position, curr_value, depth, key);
+
+      if (curr_value == nullptr) {
+        return false;
+      }
+    }
+
+    assert(curr_value->is_data());
+    DataNode * data_node = reinterpret_cast<DataNode *>(curr_value);
+
+    bool op_res = false;
+    if (functor.key_equals(data_node->key_, key)) {
+      int64_t res = data_node->access_count_.fetch_add(1);
+      if (res >= 0) {  // its not deleted.
+        va.init(&(data_node->value_), &(data_node->access_count_));
+        op_res = true;
+      }
+    }
+
+    hp_unwatch();
+    return op_res;
+  }  // while true
+}  // at
+
 
 template<class Key, class Value, class Functor>
 bool HashMap<Key, Value, Functor>::
-insert(Key key, Value &value) {
-
+insert(Key key, Value value) {
   Functor functor;
   key = functor.hash(key);
 
@@ -296,184 +414,171 @@ insert(Key key, Value &value) {
   uint64_t position = get_position(key, depth);
 
   Location *loc = &(primary_array_[position]);
-  Node *curr_value = loc->load();
+  Node *curr_value;
+  while (true) {
+    if (hp_watch_and_get_value(loc, curr_value)) {
+      break;
+    }
+  }
 
+  bool op_res;
   while (true) {
     if (curr_value == nullptr) {
       if (loc->compare_exchange_strong(curr_value, new_node)) {
         size_.fetch_add(1);
-        return true;
-      } else {
-        continue;
+        op_res = true;
+        break;
       }
     } else if (curr_value->is_array()) {
       ArrayNode * array_node = reinterpret_cast<ArrayNode *>(curr_value);
-      search(array_node, position, curr_value, depth, key, true);
+      search(array_node, position, curr_value, depth, key);
       loc = array_node->access(position);
-      continue;
     } else {  // it is a data node
       assert(curr_value->is_data());
       DataNode * data_node = reinterpret_cast<DataNode *>(curr_value);
-      if (functor.key_equals(data_node->key_, key)) {
-        value = data_node->value_;
-        delete new_node;
-        return false;
+
+      if (data_node->access_count_.load() < 0) {
+        if (loc->compare_exchange_strong(curr_value, new_node)) {
+          // data_node->safe_delete(); // TODO(steven) safely free the node
+          size_.fetch_add(1);
+          op_res = true;
+          break;
+        }
+      } else if (functor.key_equals(data_node->key_, key)) {
+        op_res = false;
+        break;
       } else {
+        // Key differs, needs to expand...
         const uint64_t next_position =  get_position(data_node->key_, depth+1);
         expand_map(loc, curr_value, next_position);
-        curr_value = loc->load();
-        continue;
-      }
-    }
-    assert(false);
+
+        while (true) {
+          if (hp_watch_and_get_value(loc, curr_value)) {
+            break;
+          }
+        }
+      }   // else key differs
+    }  // else it is a data node
   }  // while true
+
+  hp_unwatch();
+
+  if (!op_res) {
+    assert(loc->load() != new_node);
+    // delete new_node;
+  }
+  return op_res;
 }  // insert
 
+
 template<class Key, class Value, class Functor>
 bool HashMap<Key, Value, Functor>::
-update(Key key, Value &value_expected, Value value_new) {
+remove(Key key) {
   Functor functor;
   key = functor.hash(key);
-
-  DataNode * new_node = new DataNode(key, value_new);
 
   size_t depth = 0;
   uint64_t position = get_position(key, depth);
 
   Location *loc = &(primary_array_[position]);
-  Node *curr_value = loc->load();
+  Node *curr_value;
 
   while (true) {
-    if (curr_value == nullptr) {
-      // delete new_node;
-      return false;
-    } else if (curr_value->is_array()) {
-      ArrayNode * array_node = reinterpret_cast<ArrayNode *>(curr_value);
-      search(array_node, position, curr_value, depth, key, false);
-      loc = array_node->access(position);
-      continue;
-    } else {  // it is a data node
-      assert(curr_value->is_data());
-      DataNode * data_node = reinterpret_cast<DataNode *>(curr_value);
-      if (functor.key_equals(data_node->key_, key)) {
-        if (functor.value_equals(value_expected, data_node->value_)) {
-          if (loc->compare_exchange_strong(curr_value, new_node)) {
-            // delete data_node;
-            return true;
-          } else {
-            continue;
-          }
-        } else {  // else its not a value match
-          value_expected = data_node->value_;
-          // delete new_node;
-          return false;
-        }
-      } else {  // else its not a key match
-        return false;
-      }
-    }  // else its a data node
+    if (hp_watch_and_get_value(loc, curr_value)) {
+      break;
+    }
   }
-}  // update
 
-
-template<class Key, class Value, class Functor>
-bool HashMap<Key, Value, Functor>::
-remove(Key key, Value &expected) {
-  Functor functor;
-  key = functor.hash(key);
-
-  size_t depth = 0;
-  uint64_t position = get_position(key, depth);
-
-  Location *loc = &(primary_array_[position]);
-  Node *curr_value = loc->load();
-
+  bool op_res = false;
   while (true) {
     if (curr_value == nullptr) {
-      return false;
+      op_res = false;
+      break;
     } else if (curr_value->is_array()) {
       ArrayNode * array_node = reinterpret_cast<ArrayNode *>(curr_value);
-      search(array_node, position, curr_value, depth, key, false);
+      search(array_node, position, curr_value, depth, key);
       loc = array_node->access(position);
       continue;
     } else {  // it is a data node
       assert(curr_value->is_data());
       DataNode * data_node = reinterpret_cast<DataNode *>(curr_value);
-      if (functor.key_equals(data_node->key_, key)) {
-        if (functor.value_equals(expected, data_node->value_)) {
-          if (loc->compare_exchange_strong(curr_value, nullptr)) {
-            // delete data_node;
-            size_.fetch_add(-1);
-            return true;
-          } else {
-            continue;
-          }
-        } else {  // else its not a value match
-          expected = data_node->value_;
-          return false;
-        }  // else its not a value match
-      } else {
-        return false;
+      int64_t temp_expected = 0;
+      if (functor.key_equals(data_node->key_, key) &&
+          data_node->access_count_.compare_exchange_strong(temp_expected,
+                  -1*tl_thread_info->get_num_threads())
+                                                      ) {
+        op_res = true;
+        size_.fetch_add(-1);
+        // data_node is a key match, value match, and we set it to dead
+        if (loc->compare_exchange_strong(curr_value, nullptr)) {
+            assert(loc->load() != data_node);
+            assert(data_node->access_count_.load() < 0);
+            // data_node->safe_delete(); TODO(steven) safely free this node
+        } else {
+          // It is logically deleted, and some other thread will/has already
+          // will delete it.
+        }
       }
+      break;
     }  // it is a data node
   }  // while
+
+  hp_unwatch();
+
+  return op_res;
 }  // remove
 
 template<class Key, class Value, class Functor>
 void HashMap<Key, Value, Functor>::
 search(ArrayNode * &array, uint64_t &position, Node * &curr_value,
-    size_t &depth, Key &key, bool expand) {
-  Functor functor;
+    size_t &depth, Key &key) {
   // First update the depth
   depth++;
 
+  ArrayNode * last_array = array;
+  Node * last_curr_value = curr_value;
+  uint64_t last_pos = position;
+  uint64_t iter_count = 0;
   while (true) {
+    iter_count++;
     assert(depth <= max_depth());
 
     position = get_position(key, depth);
     Location *loc = array->access(position);
-    curr_value = loc->load();
+    if (!hp_watch_and_get_value(loc, curr_value)) {
+      continue;
+    }
 
-    if (curr_value == nullptr) {
-      // Null is a terminating condition
+    if (curr_value == nullptr || curr_value->is_data()) {
+      // Both Data_Node and Null are a terminating condition
       return;
-    } else if (curr_value->is_array()) {
+    } else {
+      assert(curr_value->is_array());
       // Need to examine the next array, so update array reference and the depth
       // count. Position and curr_value will be update at the start of the loop
+      last_array = array;
+      last_curr_value = curr_value;
+      last_pos = position;
       array = reinterpret_cast<ArrayNode *>(curr_value);
       depth++;
-      continue;
-    } else {  // its a data_node
-      DataNode * data_node = reinterpret_cast<DataNode *>(curr_value);
-      if (functor.key_equals(data_node->key_, key)) {
-        // A key matching data node is a terminating condition
-        return;
-      } else if (expand == false) {
-        // This occurs when search is called by 'find', since it is data node
-        // that does not match the key, then curr_valu == nullptr indicates the
-        // key is not in the hash map
-        curr_value = nullptr;
-        return;
-      } else {
-        // A key miss match data node is found, need to expand and re-examine
-        // the current value.
-        const uint64_t next_position =  get_position(data_node->key_, depth+1);
-        expand_map(loc, curr_value, next_position);
-        continue;
-      }
-    }  // else its a data node
+    }
   }  // while
 }  // search
 
 template<class Key, class Value, class Functor>
 void  HashMap<Key, Value, Functor>::
 expand_map(Location * loc, Node * curr_value, uint64_t next_position) {
+  assert(curr_value->is_data());
+
   ArrayNode * array_node = new ArrayNode(secondary_array_size_);
   array_node->access(next_position)->store(curr_value);
+  assert(array_node->is_array());
+
   if (loc->compare_exchange_strong(curr_value, array_node)) {
     return;
   } else {
-    // delete array_node;
+    assert(loc->load() != array_node);
+    delete array_node;
   }
 }  // expand
 
@@ -503,11 +608,15 @@ get_position(Key &key, size_t depth) {
 
     assert(start_idx == end_idx || start_idx + 1 == end_idx);
     assert(end_idx <= max_length);
-    // TODO(steven): add 0 padding to fill extra bits if the bits don't divide evenly.
+
+    // TODO(steven): add 0 padding to fill extra bits if the bits don't
+    // divide evenly.
     if (start_idx == end_idx) {
       uint64_t value = long_array[start_idx];
       value = value << start_idx_offset;
       value = value >> (64 - secondary_array_pow_);
+
+      assert(value < secondary_array_size_);
       return value;
     } else {
       uint64_t value = long_array[start_idx];

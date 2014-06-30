@@ -116,6 +116,7 @@ void run(int thread_id, TestObject * test_data) {
     assert(res);
   }
 
+
   const int64_t max_value = i;
 
   for (i = thread_id; i < max_value; i += num_threads) {
@@ -137,9 +138,8 @@ void run(int thread_id, TestObject * test_data) {
   }
 
   for (i = thread_id; i < max_value; i += num_threads) {
-    int64_t temp = i+2;
-    res = test_data->test_class_.remove(i, temp);
-    assert(res && temp == i+2);
+    res = test_data->test_class_.remove(i);
+    assert(res);
   }
 
   for (i = thread_id; i < max_value; i += num_threads) {

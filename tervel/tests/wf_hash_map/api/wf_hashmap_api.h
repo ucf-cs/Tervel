@@ -11,10 +11,13 @@
 template<class Key, class Value>
 class TestClass {
  public:
+  typedef typename tervel::containers::wf::HashMap<Key, Value> Map;
+  typedef typename tervel::containers::wf::HashMap<Key, Value>::ValueAccessor Accessor;
+
   TestClass(size_t num_threads, size_t capacity) {
     tervel_obj = new tervel::Tervel(num_threads);
     attach_thread();
-    container = new tervel::containers::wf::HashMap<Key, Value>(capacity);
+    container = new Map(capacity);
   }
 
   char * name() {
@@ -29,19 +32,30 @@ class TestClass {
   void detach_thread() {}
 
   bool find(Key key, Value &value) {
-    return container->find(key, value);
+    typename tervel::containers::wf::HashMap<Key, Value>::ValueAccessor va;
+    bool res = container->at(key, va);
+    if (res) {
+      value = (va.atomic_value())->load();
+    }
+    return res;
   }
 
-  bool insert(Key key, Value &value) {
-    return container->insert(key, value);
+  bool insert(Key key, Value value) {
+    bool res = container->insert(key, value);
+    return res;
   }
 
   bool update(Key key, Value &value_expected, Value value_new) {
-    return container->update(key, value_expected, value_new);
+    typename tervel::containers::wf::HashMap<Key, Value>::ValueAccessor va;
+    if (container->at(key, va)) {
+      return va.atomic_value()->compare_exchange_strong(value_expected, value_new);
+    }
+    return false;
   }
 
-  bool remove(Key key, Value &value_expected) {
-    return container->remove(key, value_expected);
+  bool remove(Key key) {
+    bool res = container->remove(key);
+    return res;
   }
 
   size_t size() {
@@ -50,7 +64,7 @@ class TestClass {
 
  private:
   tervel::Tervel* tervel_obj;
-  tervel::containers::wf::HashMap<Key, Value> *container;
+  Map *container;
 };
 
 #endif  // WF_HASHMAP_API_H_
