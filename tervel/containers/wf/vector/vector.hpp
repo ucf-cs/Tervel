@@ -9,8 +9,8 @@
 #include <stdint.h>
 #include <memory>
 
-#include "vector_array.h"
-#include "array_array.h"
+#include "tervel/containers/wf/vector_array.h"
+#include "tervel/containers/wf/array_array.h"
 
 
 template<class T>

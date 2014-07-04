@@ -1,66 +1,47 @@
 CXX      = g++-4.7
-BUFFERTYPE ?= -DUSE_WF_BUFFER
-CXXFLAGS =  $(BUFFERTYPE) -Wall -Wunused-function -std=c++11 \
+CONTAINERTYPE ?= -DUSE_WF_HASHMAP
+CXXFLAGS =  $(CONTAINERTYPE) -Wall -Wunused-function -std=c++11 \
             -march=native -m64 -pthread -fno-strict-aliasing
 
-DEBUG = -DDEBUG=1 -p -pg
+DEBUG = -DDEBUG=1 -p -pg -g
 RELEASE = -O3 -DNDEBUG
 
-CXXFLAGS += $(RELEASE)
+CXXFLAGS += $(DEBUG)
 
 CPPFLAGS = -DINTEL -DNO_WAIT_FREE #-DDEBUG=1
 INC += $(TINC) -I../../../
 LIB += $(TLIB) -ldl -lgflags -lpthread -lboost_system -lboost_regex -lrt -lllalloc
 CPPFLAGS += $(INC)
 
-SOURCES = main_buffer.cc $(TSOURCES)
+SOURCES = main.cc $(TSOURCES)
 OUTPUT =Executables/
 EXECUTABLE ?=main
 OBJECTS = $(SOURCES:.cc=.o)
 
 
-all: WFBuffer FAATest LockBuffer TBBBuffer TsigasBuffer LinuxBuffer #MCASBuffer
+all: WFTEST_DEBUG
 
 
 test: $(SOURCES) $(EXECUTABLE)
-	mkdir -p $(EXECUTABLE)
-	rm main_buffer.o
+	mkdir -p $(OUTPUT)
+	rm main.o
 	mv $(EXECUTABLE) $(OUTPUT)
 
-WFBuffer:
-	$(MAKE) test BUFFERTYPE=-DUSE_WF_BUFFER \
+WFTEST:
+	$(MAKE) test CONTAINERTYPE=-DUSE_WF_HASHMAP \
 	TSOURCES="../../util/progress_assurance.cc \
 	../../util/memory/hp/hazard_pointer.cc ../../util/memory/hp/hp_list.cc \
 	../../util/memory/rc/descriptor_pool.cc ../../util/thread_context.cc \
 	../../util/memory/rc/pool_manager.cc ../../util/info.cc" \
-	EXECUTABLE=wfbuffer.x
+	EXECUTABLE=wfhashmap.x
 
-FAATest:
-	$(MAKE) test BUFFERTYPE=-DUSE_ATOMIC_ONLY \
-	EXECUTABLE=faatest.x
-
-LockBuffer:
-	$(MAKE) test BUFFERTYPE=-DUSE_COARSE_LOCK \
-	EXECUTABLE=lockbuffer.x
-
-MCASBuffer:
-	$(MAKE) test BUFFERTYPE=-DUSE_MCAS_BUFFER \
-	EXECUTABLE=mcasbuffer.x
-
-TBBBuffer:
-	$(MAKE) test BUFFERTYPE=-DUSE_TBB_QUEUE \
-	EXECUTABLE=tbbbuffer.x \
-	TLIB=-ltbb
-
-TsigasBuffer:
-	$(MAKE) test BUFFERTYPE=-DUSE_TSIGAS_QUEUE \
-	EXECUTABLE=tsigasbuffer.x \
-	TLIB=-lcds TINC=-I/Libraries/cds-1.2.0/
-
-
-LinuxBuffer:
-	$(MAKE) test BUFFERTYPE=-DUSE_LINUX_BUFFER \
-	EXECUTABLE=linuxbuffer.x
+WFTEST_DEBUG:
+	$(MAKE) test CONTAINERTYPE=-DUSE_WF_HASHMAP \
+	TSOURCES="../../util/progress_assurance.cc \
+	../../util/memory/hp/hazard_pointer.cc ../../util/memory/hp/hp_list.cc \
+	../../util/memory/rc/descriptor_pool.cc ../../util/thread_context.cc \
+	../../util/memory/rc/pool_manager.cc ../../util/info.cc" \
+	EXECUTABLE=wfhashmap.x
 
 $(EXECUTABLE): $(OBJECTS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -o $@ $^ $(LIB)
