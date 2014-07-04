@@ -1,13 +1,8 @@
 #ifndef __VECTOR_ARRAY_H
 #define __VECTOR_ARRAY_H
 
-#include "cas_op.h"
-#include "pop_op.h"
-#include "push_op.h"
-#include "read_op.h"
-#include "eraseat_op.h"
-#include "insertat_op.h"
-
+#include "tervel/containers/wf/single_array.hpp"
+#include "tervel/containers/wf/array_array.hpp"
 
 
 template<class T>
@@ -24,17 +19,6 @@ class VectorArray {
    */
   virtual std::atomic<T> * get_spot(size_t pos) = 0;
 
-  bool is_descriptor(T, std::atomic<T> * spot) {
-    if (util::memory::rc::is_descriptor_first(
-            reinterpret_cast<void *>(T))) {
-
-
-      return true;
-    } else {
-      // TODO(steven): add asserts
-      return false;
-    }
-  }
 };  // class Vector Array
 
 #endif  // __VECTOR_ARRAY_H

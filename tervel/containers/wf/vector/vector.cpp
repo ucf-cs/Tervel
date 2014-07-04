@@ -1,12 +1,10 @@
-#ifndef __VECTOR_IMP_
-#define __VECTOR_IMP_
-
-#include "vector_array.h"
+#ifndef __TERVEL_CONTAINERS_WF_VECTOR_VECTOR_CPP_
+#define __TERVEL_CONTAINERS_WF_VECTOR_VECTOR_CPP_
 
 
-#ifdef DEBUG
-  #include "vector_debug.hpp"
-#endif
+#include "tervel/containers/wf/write_op.h"
+#include "tervel/containers/wf/read_op.h"
+#include "tervel/containers/wf/vector_array.h"
 
 template<class T>
 size_t Vector::push_back_only(T value) {
@@ -32,7 +30,7 @@ size_t Vector::push_back_w_ra(T value) {
   }
 
   size_t placed_pos = size();
-  while (true) {
+  while (true) {  // TODO(steven): TO BOUND
     ArrayElement *spot = internal_array.get_spot(placed_pos);
 
     T expected=  spot->load();
@@ -89,6 +87,7 @@ bool Vector::pop_back_w_ra(T &value) {
   }  // while not complete
 }  // pop_back_w_ra
 
+/*
 template<class T>
 size_t Vector::push_back(T value) {
   tervel::util::ProgressAssurance::check_for_announcement();
@@ -118,7 +117,7 @@ bool Vector::pop_back(const T &value) {
     size(-1);
   }
   return op_succ;
-}
+} */
 
 template<class T>
 bool Vector::at(int idx, const T &value) {
@@ -208,6 +207,7 @@ bool Vector::cas(int idx, const T &expected, const T val) {
   return false;
 };
 
+/*
 template<class T>
 bool Vector::insertAt(int idx, T value){
   tervel::util::ProgressAssurance::check_for_announcement();
@@ -242,7 +242,7 @@ bool Vector::eraseAt(int idx, T &value){
 
   op->safe_delete();
   return res;
-};
+}; */
 
 
-#endif  // __VECTOR_IMP_
+#endif  // __TERVEL_CONTAINERS_WF_VECTOR_VECTOR_CPP_

@@ -9,7 +9,7 @@ void ProgressAssurance::p_check_for_announcement() {
   // is reached
   // size_t delay_count = tl_thread_info->delay_count(HELP_DELAY); Moved to the
   // Static function to decrease thread_local loads
-  //if (delay_count == 0) {
+  // if (delay_count == 0) {
     // Internally, help_id is incremented and wrapped to number of threads.
     size_t help_id = tl_thread_info->help_id(num_threads_);
     OpRecord *op = op_table_[help_id].load();
@@ -24,7 +24,7 @@ void ProgressAssurance::p_check_for_announcement() {
         op->help_complete();
       }
     }
-  //}
+  // }
 }
 
 void ProgressAssurance::p_make_announcement(OpRecord *op, int tid) {

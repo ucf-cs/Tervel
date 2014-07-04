@@ -1,8 +1,12 @@
-#ifndef __SINGLE_ARRAY_H
-#define __SINGLE_ARRAY_H
+#ifndef __ARRAY_ARRAY_H
+#define __ARRAY_ARRAY_H
+
+
+#include "tervel/containers/wf/vector_array.hpp"
 
 template<class T>
-class SingleArray : public VectorArray {
+class ArrayArray : public VectorArray {
+typedef std::atomic<T> ArrayElement;
 typedef ArrayElement * ArraySegement
  /**
   * This class contains code related to managing elements stored in the vector
@@ -10,7 +14,7 @@ typedef ArrayElement * ArraySegement
   * global vector.
   */
  public:
-  SingleArray(size_t capacity, T default_value = nullptr)
+  ArrayArray(size_t capacity, T default_value = nullptr)
    : default_value_(default_value) {
     if (capacity < 2) {
       capacity = 2;
@@ -32,37 +36,12 @@ typedef ArrayElement * ArraySegement
 
   }
 
-  ~SingleArray() {
+  ~ArrayArray() {
     int i;
     for (i = 0; i < c_max_array_segements; i++) {
       delete [] array_of_arrays[i];
     }
   }
-
-  /**
-   * TODO(steven): complete this function
-   * @param  T    [description]
-   * @param  spot [description]
-   * @return      [description]
-   */
-  bool is_descriptor(T, std::atomic<T> * spot) {
-    if (util::memory::rc::is_descriptor_second(
-            reinterpret_cast<void *>(T))) {
-
-
-      return true;
-    } else if (util::memory::rc::is_descriptor_first(
-            reinterpret_cast<void *>(T))) {
-
-
-      return true;
-    } else {
-      // TODO(steven): add asserts
-      return false;
-    }
-  }
-
-
 
   /**
    * This function adds an array segement to the arrays used to hold additional
@@ -132,4 +111,4 @@ typedef ArrayElement * ArraySegement
 };  // class Vector Array
 
 
-#endif  // __SINGLE_ARRAY_H
+#endif  // __ARRAY_ARRAY_H

@@ -1,89 +1,36 @@
-class ReadOp: public OpRecord{
-public:
-    std::atomic<void *>value;
-    int pos;
-    ReadOp(int p){
-        assert(sizeof(RcObject) <= ALIGNLEN);
-        type=dt_readop;
-        pos=p;
-        value.store(NULL);
-    };
+#ifndef __TERVEL_CONTAINERS_WF_VECTOR_READ_OP_H
+#define __TERVEL_CONTAINERS_WF_VECTOR_READ_OP_H
 
-    bool s_execute(WFVector *vec, void *&v){
-
-        ArrayElement *spot=vec->getSpot(pos);
-
-        void * aValue=value.load();
-        while (aValue == NULL){
-            void *cvalue=spot->load(std::memory_order_relaxed);
-
-            if (Helper::isHelper(cvalue)){
-                Helper *tHelper=Helper::unmark(cvalue);
-                if (tHelper->watch(cvalue, spot)){
-                    Helper::remove(vec, pos, cvalue);
-                    tHelper->unwatch();
-                }
-                aValue=value.load();
-            }
-            else if (cvalue== NOT_VALUE){
-                value.compare_exchange_strong(aValue, (void *)(0x1));
-                break;
-            }
-            else{
-                assert(Value::isValid(cvalue));
-                value.compare_exchange_strong(aValue, cvalue);
-                break;
-            }
-        }
-
-        aValue=value.load();
-        if (aValue == (void *)0x1){
-            return false;
-        }
-        else{
-            assert(aValue != NOT_VALUE);
-            v=aValue;
-            return true;
-        }
-
-    };
+#include "tervel/containers/wf/vector.hpp"
+#include "tervel/util/memory/rc/descriptor.h"
+#include "tervel/util/memory/rc/descriptor_util.h"
+#include "tervel/util/progress_assurance.h"
 
 
-    void execute(WFVector *vec){
-        void *g;
-        s_execute(vec, g);
-    };
+template<typename T>
+class ReadOp: public tervel::util::OpRecord {
+  const static uint64_t FAIL = ~0L;
+ public:
+  class ReadOp(Vector<T> *vec, size_t idx)
+    : vec_(vec)
+    , idx_(idx)
+    , expected_(expected)
+    , val_(val) {}
 
-    bool tryFree();
+  void help_complete() {
 
-    bool watch(void *p, ArrayElement *a){
+  }
 
-        rc_count.fetch_add(1);
+  bool result(T &expected) {
 
-        if (a->load() != p){
-            rc_count.fetch_add(-1);
-            return false;
-        }
-        return true;
-    };
+  }
 
-    void unwatch(){
-        rc_count.fetch_add(-1);
-    };
-    bool isWatched(){
-        return (rc_count.load() !=0);
-    };
-
+ private:
+  Vector<T> *vec_;
+  size_t idx_;
+  T expected_, T val_;
+  std::atomic<T> value_{nullptr};
 };
 
 
-bool ReadOp::tryFree(){
-    if(this->isWatched()){
-        return false;
-    }
-    else{
-        this->unsafeFree();
-        return true;
-    }
-}
-
+#endif  //__TERVEL_CONTAINERS_WF_VECTOR_READ_OP_H
