@@ -42,8 +42,18 @@ inline void backoff(int duration = 1) {
   std::this_thread::sleep_for(std::chrono::nanoseconds(duration));
 }
 
+int round_to_next_power_of_two(uint64_t value) {
+  double val = std::log2(value);
+  int int_val = static_cast<int>(val);
+  if (int_val < val) {
+    int_val++;
+  }
+  return int_val;
+};
+
 }  // namespace util
 }  // namespace tervel
+
 
 // A macro to disallow the copy constructor and operator= functions.  This
 // should be used in the `private` declarations for a class. Use unless you have
