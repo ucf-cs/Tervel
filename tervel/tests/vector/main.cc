@@ -8,7 +8,6 @@
 //
 
 // #define KILL_THREAD 1
-
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -108,12 +107,16 @@ void run(int thread_id, TestObject * test_data) {
 
   test_data->ready_count_.fetch_add(1);
 
-  int64_t i;
+  int64_t i, temp;
   for (i = thread_id; test_data->running_.load(); i += num_threads) {
     size_t pos = test_data->test_class_.push_back(i);
-    int64_t temp = -1;
+    temp = -1;
     bool res = test_data->test_class_.at(pos, temp);
     assert(res && temp == i);
+    res = test_data->test_class_.cas(pos, temp, temp+2);
+    assert(res && temp == i);
+    res = test_data->test_class_.at(pos, temp);
+    assert(res && temp == i+2);
   }
 
   test_data->test_class_.detach_thread();

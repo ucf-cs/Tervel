@@ -1,8 +1,9 @@
-#ifndef TERVEL_UTIL_H_
-#define TERVEL_UTIL_H_
+#ifndef __TERVEL_UTIL_UTIL_H_
+#define __TERVEL_UTIL_UTIL_H_
 
 #include <chrono>
 #include <thread>
+#include <cmath>
 
 namespace tervel {
 namespace util {
@@ -42,7 +43,7 @@ inline void backoff(int duration = 1) {
   std::this_thread::sleep_for(std::chrono::nanoseconds(duration));
 }
 
-int round_to_next_power_of_two(uint64_t value) {
+inline int round_to_next_power_of_two(uint64_t value) {
   double val = std::log2(value);
   int int_val = static_cast<int>(val);
   if (int_val < val) {
@@ -65,4 +66,4 @@ int round_to_next_power_of_two(uint64_t value) {
   TypeName(const TypeName&) = delete;       \
   void operator=(const TypeName&) = delete
 
-#endif  // TERVEL_UTIL_H_
+#endif  // __TERVEL_UTIL_UTIL_H_

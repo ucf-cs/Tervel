@@ -63,10 +63,10 @@ class ProgressAssurance {
    */
   #ifdef NO_WAIT_FREE
     static constexpr size_t MAX_FAILURES = -1;
-  #elif SET_WAIT_FREE
+  #elif defined (SET_WAIT_FREE)
     static constexpr size_t MAX_FAILURES = SET_WAIT_FREE;
-  #elif MAX_WAIT_FREE
-    static constexpr size_t MAX_FAILURES = 1;
+  #elif defined (MAX_WAIT_FREE)
+    static constexpr size_t MAX_FAILURES = 0;
   #else
     static constexpr size_t MAX_FAILURES = 1000;
   #endif
@@ -76,8 +76,8 @@ class ProgressAssurance {
    * Reduces memory loads at the cost of a higher upper bound
    */
   #ifdef MAX_WAIT_FREE
-    static constexpr size_t HELP_DELAY = 1;
-  #elif SET_HELP_DELAY
+    static constexpr size_t HELP_DELAY = 0;
+  #elif defined (SET_HELP_DELAY)
     static constexpr size_t MAX_FAILURES = SET_HELP_DELAY;
   #else
     static constexpr size_t HELP_DELAY = 1000;

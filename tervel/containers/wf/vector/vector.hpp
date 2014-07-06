@@ -47,7 +47,7 @@ class Vector {
   };
 
   static const T c_not_value_ {reinterpret_cast<T>(0x1L)};
- private:
+
   size_t size(size_t val) {
     return current_size_.fetch_add(val);
   }

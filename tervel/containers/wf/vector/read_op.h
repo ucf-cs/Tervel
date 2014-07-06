@@ -11,8 +11,6 @@ namespace containers {
 namespace wf {
 namespace vector {
 
-template<typename T>
-class Vector;
 
 template<typename T>
 class ReadOp: public tervel::util::OpRecord {
@@ -23,12 +21,36 @@ class ReadOp: public tervel::util::OpRecord {
 
   void help_complete() {
     tervel::tl_control_word = reinterpret_cast< std::atomic<void *> *>(&value_);
-    assert(false);
+    if (idx_ < vec_->capacity()) {
+      std::atomic<T> *spot = vec_->internal_array.get_spot(idx_, false);
+
+      while (value_.load() == Vector<T>::c_not_value_) {
+        T cvalue = spot->load();
+
+        if (vec_->internal_array.is_descriptor(cvalue, spot)) {
+          continue;
+        } else if (cvalue == Vector<T>::c_not_value_) {
+          value_.store(c_fail_value_);
+          return;
+        } else {
+          assert(vec_->internal_array.is_valid(cvalue));
+          value_.store(cvalue);
+          return;
+        }
+      }  // while value_ is c_not_value
+    }  // if idx < capacity()
+
+    value_.store(c_fail_value_);
   };
 
-  bool result(const T &expected) {
-    assert(false);
-    return false;
+  bool result(T &expected) {
+    T temp = value_.load();
+    if (temp == c_fail_value_) {
+      return false;
+    } else {
+      expected = temp;
+      return true;
+    }
   };
 
 
@@ -36,7 +58,7 @@ class ReadOp: public tervel::util::OpRecord {
   Vector<T> *vec_;
   size_t idx_;
   std::atomic<T> value_ {Vector<T>::c_not_value_};
-  static const uint64_t FAIL = ~0L;
+  static const T c_fail_value_ {reinterpret_cast<T>(~0x1L)};
 };  // class ReadOp
 }  // namespace vector
 }  // namespace wf
