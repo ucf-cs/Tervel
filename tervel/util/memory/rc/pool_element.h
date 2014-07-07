@@ -39,13 +39,8 @@ class PoolElement {
 
 #ifdef DEBUG_POOL
     std::atomic<bool> descriptor_in_use {false};
-
     std::atomic<uint64_t> allocation_count {1};
     std::atomic<uint64_t> free_count {0};
-    
-    // This stamp is checked when doing memory pool shenanigans to make sure
-    // that a given descriptor actually belongs to a memory pool.
-    int debug_pool_stamp2 {DEBUG_EXPECTED_STAMP};
 #endif
   };
 
@@ -63,7 +58,7 @@ class PoolElement {
   Descriptor * descriptor() { return reinterpret_cast<Descriptor*>(this); }
 
   /**
-   * @return A refrence to the header which houses all the 
+   * @return A refrence to the header which houses all the
    */
   Header & header() { return header_; }
 

@@ -1,0 +1,273 @@
+#ifndef __TERVEL_CONTAINERS_WF_VECTOR_VECTOR_IMP_
+#define __TERVEL_CONTAINERS_WF_VECTOR_VECTOR_IMP_
+
+#include "tervel/util/info.h"
+#include "tervel/util/descriptor.h"
+
+#include "tervel/containers/wf/vector/vector.hpp"
+#include "tervel/containers/wf/vector/vector_array.h"
+
+#include "tervel/containers/wf/vector/read_op.h"
+#include "tervel/containers/wf/vector/write_op.h"
+#include "tervel/containers/wf/vector/pushback_op.h"
+
+
+
+
+
+namespace tervel {
+namespace containers {
+namespace wf {
+namespace vector {
+
+template<typename T>
+size_t Vector<T>::push_back_only(T value) {
+  if (!internal_array.is_valid(value)) {
+    assert(false);
+    return -1;
+  }
+
+  size_t placed_pos = size(1);
+  std::atomic<T> *spot = internal_array.get_spot(placed_pos);
+
+  spot->store(value, std::memory_order_relaxed);
+  return placed_pos;
+}  // push_back_only
+
+template<typename T>
+size_t Vector<T>::push_back_w_ra(T value) {
+  tervel::util::ProgressAssurance::check_for_announcement();
+
+  if (!internal_array.is_valid(value)) {
+    assert(false);
+    return -1;
+  }
+
+  size_t placed_pos = size();
+  while (true) {  // TODO(steven): TO BOUND
+    std::atomic<T> *spot = internal_array.get_spot(placed_pos);
+
+    T expected = spot->load();
+
+    if ( (expected ==  Vector<T>::c_not_value_) &&
+                  spot->compare_exchange_weak(expected, value) ) {
+      size(1);
+      return placed_pos;
+    } else if (internal_array.is_descriptor(expected, spot)) {
+      continue;
+    }
+    placed_pos++;
+  }  // while not complete
+}  // push_back_w_ra
+
+template<typename T>
+bool Vector<T>::pop_back_only(T &value) {
+  size_t poped_pos = size(-1);
+
+  if (poped_pos <= 0) {
+    size(1);
+    return false;
+  } else {
+    std::atomic<T> *spot = internal_array.get_spot(poped_pos);
+    value = spot->load(std::memory_order_relaxed);
+    spot->store(Vector<T>::c_not_value_, std::memory_order_relaxed);
+
+    return true;
+  }
+}  // pop_back_only
+
+template<typename T>
+bool Vector<T>::pop_back_w_ra(T &value) {
+  tervel::util::ProgressAssurance::check_for_announcement();
+
+  size_t poped_pos = size();
+
+  while (true) {  // TODO(steven): TO BOUND
+    if (poped_pos <= 0) {
+      return false;
+    }
+
+    // TODO(steven) after working, optimize the below load  in the event the
+    // value chancges
+    std::atomic<T> *spot = internal_array.get_spot(poped_pos - 1);
+    T current = spot->load();
+
+    if (current == Vector<T>::c_not_value_) {
+      poped_pos--;
+      continue;
+    } else if (internal_array.is_descriptor(current, spot)) {
+      continue;
+    } else if (spot->compare_exchange_weak(current, Vector<T>::c_not_value_)) {
+      size(-1);
+      value = current;
+      return true;
+    } else {
+      poped_pos--;
+    }
+  }  // while not complete
+}  // pop_back_w_ra
+
+
+template<typename T>
+size_t Vector<T>::push_back(T value) {
+  tervel::util::ProgressAssurance::check_for_announcement();
+
+  if(!internal_array.is_valid(value)){
+    assert(false);
+    return -1;
+  }
+
+  PushOp<T> *op = new PushOp<T>(this, value);
+  size_t pos = op->begin(this);
+  op->safe_delete();
+
+  size(1);
+  return pos;
+}
+
+/*
+template<typename T>
+bool Vector<T>::pop_back(const T &value) {
+  tervel::util::ProgressAssurance::check_for_announcement();
+
+  PopOp<T> *op = new PopOp<T>(this);
+  bool op_succ = op->begin(value);
+  op->safe_delete();
+
+  if (op_succ) {
+    size(-1);
+  }
+  return op_succ;
+} */
+
+template<typename T>
+bool Vector<T>::at(size_t idx, T &value) {
+  tervel::util::ProgressAssurance::check_for_announcement();
+
+  std::atomic<void *> control_address(nullptr);
+  tervel::tl_control_word = &control_address;
+
+  if (idx < capacity()) {
+    std::atomic<T> *spot = internal_array.get_spot(idx, false);
+
+    size_t fcount = 0;
+    while (fcount++ < util::ProgressAssurance::MAX_FAILURES) {
+      T cvalue = spot->load(std::memory_order_relaxed);
+
+      if (cvalue == Vector<T>::c_not_value_) {
+        return false;
+      }else if (internal_array.is_descriptor(cvalue, spot)) {
+        continue;
+      } else {
+        assert(internal_array.is_valid(cvalue));
+        value = cvalue;
+        return true;
+      }
+    }  // while fail threshold has not been reached
+
+    ReadOp<T> *op = new ReadOp<T>(this, idx);
+
+
+    util::ProgressAssurance::make_announcement(
+          reinterpret_cast<tervel::util::OpRecord *>(op));
+
+    bool op_succ = op->result(value);
+    op->safe_delete();
+
+    return op_succ;
+  }  // if idx < capacity()
+
+  return false;
+};
+
+template<typename T>
+bool Vector<T>::cas(size_t idx, T &expected, const T val) {
+  assert(internal_array.is_valid(expected));
+  assert(internal_array.is_valid(val));
+
+  tervel::util::ProgressAssurance::check_for_announcement();
+
+  std::atomic<void *> control_address(nullptr);
+  tervel::tl_control_word = &control_address;
+
+  if (idx < capacity()) {
+    std::atomic<T> *spot = internal_array.get_spot(idx, false);
+
+    size_t fcount = 0;
+    while (fcount++ < util::ProgressAssurance::MAX_FAILURES) {
+      T cvalue = spot->load(std::memory_order_relaxed);
+
+      if (cvalue == c_not_value_) {
+        return false;
+      } else if (internal_array.is_descriptor(cvalue, spot)) {
+        continue;
+      } else if (cvalue == expected) {
+        T temp = expected;
+        bool suc = spot->compare_exchange_strong(temp, val);
+        if (suc) {
+          return suc;
+        }
+      } else {
+        expected = cvalue;
+        return false;
+      }
+    }  // while fail threshold has not been reached
+
+    WriteOp<T> *op = new WriteOp<T>(this, idx, expected, val);
+
+    util::ProgressAssurance::make_announcement(
+          reinterpret_cast<tervel::util::OpRecord *>(op));
+
+    bool op_succ = op->result(expected);
+    op->safe_delete();
+
+    return op_succ;
+  }  // if idx < capacity()
+
+  expected = Vector<T>::c_not_value_;
+  return false;
+};
+
+/*
+template<typename T>
+bool Vector<T>::insertAt(int idx, T value){
+  tervel::util::ProgressAssurance::check_for_announcement();
+
+  InsertAt<T>* op = new InsertAt<T>(idx, value);
+  tl_control_word = &(op->state);
+
+  bool res=op->begin(this);
+
+  if (res) {
+    op->cleanup(this, idx);
+    size(1);
+  }
+
+  op->safe_delete();
+  return res;
+};
+
+template<typename T>
+bool Vector<T>::eraseAt(int idx, T &value){
+  tervel::util::ProgressAssurance::check_for_announcement();
+
+  EraseAt<T>* op = new EraseAt<T>(idx);
+  tl_control_word = &(op->state);
+
+  bool res=op->begin(this, value);
+
+  if (res) {
+    op->cleanup(this, idx);
+    size(-1);
+  }
+
+  op->safe_delete();
+  return res;
+}; */
+
+}  // namespace vector
+}  // namespace wf
+}  // namespace containers
+}  // namespace tervel
+
+#endif // __TERVEL_CONTAINERS_WF_VECTOR_VECTOR_IMP_

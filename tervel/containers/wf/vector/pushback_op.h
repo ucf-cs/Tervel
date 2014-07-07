@@ -1,0 +1,405 @@
+#ifndef __TERVEL_CONTAINERS_WF_VECTOR_PUSH_OP_H
+#define __TERVEL_CONTAINERS_WF_VECTOR_PUSH_OP_H
+
+
+#include "tervel/util/info.h"
+#include "tervel/util/descriptor.h"
+#include "tervel/util/progress_assurance.h"
+#include "tervel/util/memory/hp/hazard_pointer.h"
+#include "tervel/util/memory/rc/descriptor_util.h"
+
+
+#include "tervel/containers/wf/vector/vector.hpp"
+
+namespace tervel {
+namespace containers {
+namespace wf {
+namespace vector {
+
+template<typename T>
+class PushHelper;
+
+template<typename T>
+class PushDescr;
+
+
+template<typename T>
+class PushOp: public tervel::util::OpRecord {
+ public:
+  PushOp(Vector<T> *vec, T val)
+    : vec_(vec)
+    , new_val_(val) {}
+
+  ~PushOp() {
+    PushHelper<T> * temp = helper_.load();
+    assert(temp != nullptr);
+    util::memory::rc::free_descriptor(temp, true);
+  }
+
+  static size_t execute(Vector<T> *vec, T val) {
+    PushDescr<T> *helper = tervel::util::memory::rc::get_descriptor<
+            PushDescr<T> >(val, vec);
+    T help_t = reinterpret_cast<T>(util::memory::rc::mark_first(helper));
+    helper->set_control_word();
+
+    size_t placed_pos = vec->size();
+
+    std::atomic<T> *spot = vec->internal_array.get_spot(placed_pos);
+
+    T current = spot->load();
+
+    size_t fcount = 0;
+    while (fcount++ < util::ProgressAssurance::MAX_FAILURES) {
+      if (current ==  Vector<T>::c_not_value_) {
+        if (placed_pos == 0) {
+          if (spot->compare_exchange_strong(current, val)) {
+            util::memory::rc::free_descriptor(helper, true);
+            return 0;
+          } else {
+            continue;
+          }
+        }
+
+        helper->set_prev_spot(vec->internal_array.get_spot(placed_pos));
+        if (!spot->compare_exchange_strong(current, help_t)) {
+          continue;
+        }
+        helper->complete(help_t, spot);
+        bool op_res = helper->result();
+        util::memory::rc::free_descriptor(helper);
+
+        if (op_res) {
+          return placed_pos;
+        } else {  // it failed
+          helper = tervel::util::memory::rc::get_descriptor<
+                  PushDescr<T> >(val, vec);
+          help_t = reinterpret_cast<T>(util::memory::rc::mark_first(helper));
+          helper->set_control_word();
+          // It was not placed correctly, so the vector must have shrunk
+          placed_pos--;
+          spot = vec->internal_array.get_spot(placed_pos);
+          current = spot->load();
+        }
+      } else if (vec->internal_array.is_descriptor(current, spot)) {
+          continue;
+      } else {  // its a valid value
+        placed_pos++;
+        spot = vec->internal_array.get_spot(placed_pos);
+        current = spot->load();
+      }
+    }  // while not complete
+
+    util::memory::rc::free_descriptor(helper, true);
+    // Wait-Free code
+    PushOp<T> * pushOp = new PushOp<T>(vec, val);
+    util::ProgressAssurance::make_announcement(reinterpret_cast<
+          tervel::util::OpRecord *>(pushOp));
+    placed_pos = pushOp->result();
+    pushOp->safe_free();
+    return placed_pos;
+  };
+
+  uint64_t result() {
+    PushHelper<T> *temp = helper_.load();
+    assert(temp != nullptr);
+    return temp->idx();
+  }
+
+  void help_complete() {
+    PushHelper<T> *helper = tervel::util::memory::rc::get_descriptor<
+            PushHelper<T> >(this);
+    T help_t = reinterpret_cast<T>(util::memory::rc::mark_first(helper));
+    tervel::tl_control_word = &helper_;
+
+    size_t placed_pos = vec_->size();
+
+    std::atomic<T> *spot = vec_->internal_array.get_spot(placed_pos);
+    T current = spot->load();
+
+    while (helper_.load() == nullptr) {
+      if (current == Vector<T>::c_not_value_) {
+        helper->idx(placed_pos);
+        if (!spot->compare_exchange_strong(current, help_t)) {
+          continue;
+        }
+        helper->complete();
+
+        bool op_res = helper->result();
+        if (op_res) {
+          return;
+        } else {
+          util::memory::rc::free_descriptor(helper);
+          helper = tervel::util::memory::rc::get_descriptor<
+                  PushDescr<T> >(this);
+          help_t = reinterpret_cast<T>(util::memory::rc::mark_first(helper));
+
+          // It was not placed correctly, so the vector must have shrunk
+          placed_pos--;
+          spot = vec_->internal_array.get_spot(placed_pos);
+          current = spot->load();
+        }
+      } else if (vec_->internal_array.is_descriptor(current, spot)) {
+          continue;
+      } else {  // its a valid value
+        placed_pos++;
+        spot = vec_->internal_array.get_spot(placed_pos);
+        current = spot->load();
+      }
+    }  // while not complete
+
+    util::memory::rc::free_descriptor(helper, true);
+  };
+
+  bool is_watched() {
+    PushHelper<T> * temp = helper_.load();
+
+    if (temp == nullptr) {
+      assert(false);  // THis state should not be reached
+      return false;
+    }
+    return temp->is_watched();
+  }
+
+ private:
+  friend class PushHelper<T>;
+  Vector<T> *vec_;
+  T new_val_;
+  std::atomic<PushHelper<T> *> helper_ {nullptr};
+};  // class PushOp
+
+template<typename T>
+class PushDescr: public tervel::util::Descriptor {
+ public:
+  explicit PushDescr(T val, Vector<T> * vec)
+    : val_(val)
+    , vec_(vec) {}
+
+  void set_prev_spot(std::atomic<T> * prev_spot) {
+    prev_spot_ = prev_spot;
+  }
+
+  bool in_progress() {
+    return success_.load() == 0;
+  }
+
+  bool result() {
+    assert(success_.load() != 0);
+    return success_.load() == 1;
+  }
+
+  bool success() {
+    uint64_t temp = 0;
+    bool res = success_.compare_exchange_strong(temp, 1);
+    return res || temp == 1;
+  }
+
+  bool fail() {
+    uint64_t temp = 0;
+    bool res = success_.compare_exchange_strong(temp, 2);
+    return temp == 1;
+  }
+
+  using util::Descriptor::get_logical_value;
+  void * get_logical_value() {
+    uint64_t state = success_.load();
+    if (state == 1) {
+      return reinterpret_cast<T>(val_);
+    } else {
+      return nullptr;
+    }
+  }
+
+  using util::Descriptor::complete;
+  void * complete(void *value, std::atomic<void *> *address) {
+    std::atomic<T> * spot = reinterpret_cast<std::atomic<T> *>(address);
+    T help_t = reinterpret_cast<T>(util::memory::rc::mark_first(this));
+
+    T current_prev = prev_spot_->load();
+
+    bool op_res;
+    int64_t fcount = 0;
+    while (in_progress() && fcount++ < util::ProgressAssurance::MAX_FAILURES) {
+      if (current_prev == Vector<T>::c_not_value_) {
+        op_res = fail();
+        break;
+      } else if (vec_->internal_array.is_descriptor(current_prev, prev_spot_)) {
+        continue;
+      } else {
+        op_res = success();
+        break;
+      }
+    }
+
+    if (in_progress()) {
+      op_res = fail();
+    }
+
+    T new_current;
+    if (op_res) {
+      if (spot->compare_exchange_strong(help_t, val_)) {
+        new_current = val_;
+      }
+    } else {
+      if (spot->compare_exchange_strong(help_t, nullptr)) {
+        new_current = nullptr;
+      }
+    }
+
+    return reinterpret_cast<void *>(new_current);
+  }
+
+  void set_control_word() {
+    tervel::tl_control_word = &success_;
+  }
+
+
+ private:
+  T val_;
+  Vector<T> *vec_;
+  std::atomic<T> * prev_spot_ {nullptr};
+  std::atomic<uint64_t> success_ {0};
+};
+
+template<typename T>
+class PushHelper: public tervel::util::Descriptor {
+ public:
+  explicit PushHelper(PushOp<T> *op)
+    : op_(op) {}
+
+  void idx(uint64_t i) {
+    idx_ = i;
+  }
+
+  uint64_t idx() {
+    return idx;
+  }
+
+  bool in_progress() {
+    return success_.load() == 0;
+  }
+
+  bool result() {
+    assert(success_.load() != 0);
+    if (success_.load() == 2) {
+      return false;
+    } else if (op_->helper_.load() == this) {
+      return true;
+    } else {
+      assert(op_->helper_.load() != nullptr);
+      return false;
+    }
+  }
+
+  bool associate() {
+    assert(success_.load() == 1);
+    PushHelper *temp_null = nullptr;
+    bool res = op_->helper_.compare_exchange_strong(temp_null, this);
+    if (res || temp_null == this) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  bool success(std::atomic<T> *spot, T help_t) {
+    uint64_t temp = 0;
+    if ( (success_.compare_exchange_strong(temp, 1) || temp == 1)
+          && associate() ) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  bool fail(std::atomic<T> *spot, T help_t) {
+    uint64_t temp = 0;
+    if (success_.compare_exchange_strong(temp, 2) || temp == 2) {
+      return false;
+    } else if (associate()) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  using util::Descriptor::complete;
+  void * complete(void *value, std::atomic<void *> *address) {
+    std::atomic<T> * spot = reinterpret_cast<std::atomic<T> *>(address);
+    T help_t = reinterpret_cast<T>(util::memory::rc::mark_first(this));
+    assert(reinterpret_cast<T>(value) == help_t);
+
+    bool op_res;
+    // Check if placed correctly.
+    if (idx_ == 0) {
+      op_res = success();
+    } else {
+      std::atomic<T> *spot_prev = op_->vec_->internal_array.get_spot(idx_);
+      T current_prev = spot_prev->load();
+
+      while (in_progress() && op_->helper_.load() == nullptr) {
+        if (current_prev == Vector<T>::c_not_value_) {
+          op_res = fail();
+        } else if (op_->vec->internal_array.is_descriptor(current_prev, spot_prev)) {
+          continue;
+        } else {
+          op_res = success();
+        }
+        break;
+      }  // while op not done
+    }  // else not first position
+
+    if (in_progress()) {
+      op_res = fail();
+    }
+
+    T new_current;
+    if (op_res) {
+      if (spot->compare_exchange_strong(help_t, op_->val_)) {
+        new_current = op_->val_;
+      }
+    } else {
+      if (spot->compare_exchange_strong(help_t, nullptr)) {
+        new_current = nullptr;
+      }
+    }
+
+    return reinterpret_cast<void *>(new_current);
+  }  // complete
+
+  using util::Descriptor::get_logical_value;
+  void * get_logical_value() {
+    if (in_progress()) {
+      return nullptr;
+    } else {
+      return reinterpret_cast<T>(op_->val_);
+    }
+  }  // get_logical_value
+
+  /**
+   * This function is called after this objects rc count was incremented.
+   * It acquires a temporary HP watch on the Writeop op, ensures that it is
+   * associated, and if so returns true.
+   *
+   * If it is not associated or it was removed, it returns false
+   *
+   * @param address the address this WriteHelper was read from
+   * @param value the bitmarked value of this WriteHelper
+   * @return returns whether or not the watch was successful.
+   */
+  using util::Descriptor::on_watch;
+  bool on_watch(std::atomic<void *> *address, void * value) {
+    assert(false);
+  };
+
+
+ private:
+  PushOp<T> *op_;
+  uint64_t idx_;
+  std::atomic<uint64_t> success_ {0};
+};  // class PushHelper
+
+}  // namespace vector
+}  // namespace wf
+}  // namespace containers
+}  // namespace tervel
+#endif  // __TERVEL_CONTAINERS_WF_VECTOR_PUSH_OP_H

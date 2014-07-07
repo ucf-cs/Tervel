@@ -35,7 +35,7 @@ class WriteOp: public tervel::util::OpRecord {
     WriteHelper<T> * temp = helper_.load();
     assert(temp != nullptr);
     if (temp != c_fail_pointer_) {
-      util::memory::rc::free_descriptor(temp);
+      util::memory::rc::free_descriptor(temp, true);
     }
   }
 

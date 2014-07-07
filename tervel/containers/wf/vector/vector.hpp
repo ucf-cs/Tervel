@@ -29,7 +29,7 @@ class Vector {
 
   size_t push_back_only(T value);
   size_t push_back_w_ra(T value);
-  // size_t push_back(T value);
+  size_t push_back(T value);
 
   bool pop_back_only(T &value);
   bool pop_back_w_ra(T &value);
