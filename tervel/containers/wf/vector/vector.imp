@@ -117,9 +117,7 @@ size_t Vector<T>::push_back(T value) {
     return -1;
   }
 
-  PushOp<T> *op = new PushOp<T>(this, value);
-  size_t pos = op->begin(this);
-  op->safe_delete();
+  size_t pos = PushOp<T>::execute(this, value);
 
   size(1);
   return pos;

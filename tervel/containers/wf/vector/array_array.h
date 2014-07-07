@@ -101,7 +101,11 @@ class ArrayArray : public VectorArray<T> {
   }  // get_pos
 
   ArrayElement *allocate_array_segment(const size_t capacity) {
-    return new ArrayElement[capacity](default_value_);
+    ArrayElement * temp = new ArrayElement[capacity];
+    for (uint64_t i = 0; i < capacity; i++) {
+      temp[i] = default_value_;
+    }
+    return temp;
   }
 
   size_t capacity() {

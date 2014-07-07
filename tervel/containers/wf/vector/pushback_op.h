@@ -64,7 +64,8 @@ class PushOp: public tervel::util::OpRecord {
         if (!spot->compare_exchange_strong(current, help_t)) {
           continue;
         }
-        helper->complete(help_t, spot);
+        helper->complete(reinterpret_cast<void *>(help_t),
+              reinterpret_cast< std::atomic<void *> *>(spot));
         bool op_res = helper->result();
         util::memory::rc::free_descriptor(helper);
 
@@ -95,7 +96,7 @@ class PushOp: public tervel::util::OpRecord {
     util::ProgressAssurance::make_announcement(reinterpret_cast<
           tervel::util::OpRecord *>(pushOp));
     placed_pos = pushOp->result();
-    pushOp->safe_free();
+    pushOp->safe_delete();
     return placed_pos;
   };
 
@@ -118,11 +119,12 @@ class PushOp: public tervel::util::OpRecord {
 
     while (helper_.load() == nullptr) {
       if (current == Vector<T>::c_not_value_) {
-        helper->idx(placed_pos);
+        helper->set_idx(placed_pos);
         if (!spot->compare_exchange_strong(current, help_t)) {
           continue;
         }
-        helper->complete();
+        helper->complete(reinterpret_cast<void *>(help_t),
+              reinterpret_cast< std::atomic<void *> *>(spot));
 
         bool op_res = helper->result();
         if (op_res) {
@@ -130,10 +132,10 @@ class PushOp: public tervel::util::OpRecord {
         } else {
           util::memory::rc::free_descriptor(helper);
           helper = tervel::util::memory::rc::get_descriptor<
-                  PushDescr<T> >(this);
+                  PushHelper<T> >(this);
           help_t = reinterpret_cast<T>(util::memory::rc::mark_first(helper));
 
-          // It was not placed correctly, so the vector must have shrunk
+          // It was not placed correctly, the vector must have shrunk
           placed_pos--;
           spot = vec_->internal_array.get_spot(placed_pos);
           current = spot->load();
@@ -189,13 +191,13 @@ class PushDescr: public tervel::util::Descriptor {
 
   bool success() {
     uint64_t temp = 0;
-    bool res = success_.compare_exchange_strong(temp, 1);
-    return res || temp == 1;
+    success_.compare_exchange_strong(temp, 1);
+    return temp == 0 || temp == 1;
   }
 
   bool fail() {
     uint64_t temp = 0;
-    bool res = success_.compare_exchange_strong(temp, 2);
+    success_.compare_exchange_strong(temp, 2);
     return temp == 1;
   }
 
@@ -203,7 +205,7 @@ class PushDescr: public tervel::util::Descriptor {
   void * get_logical_value() {
     uint64_t state = success_.load();
     if (state == 1) {
-      return reinterpret_cast<T>(val_);
+      return reinterpret_cast<void *>(val_);
     } else {
       return nullptr;
     }
@@ -240,8 +242,8 @@ class PushDescr: public tervel::util::Descriptor {
         new_current = val_;
       }
     } else {
-      if (spot->compare_exchange_strong(help_t, nullptr)) {
-        new_current = nullptr;
+      if (spot->compare_exchange_strong(help_t, reinterpret_cast<T>(nullptr))) {
+        new_current = reinterpret_cast<T>(nullptr);
       }
     }
 
@@ -266,17 +268,17 @@ class PushHelper: public tervel::util::Descriptor {
   explicit PushHelper(PushOp<T> *op)
     : op_(op) {}
 
-  void idx(uint64_t i) {
+  void set_idx(uint64_t i) {
     idx_ = i;
-  }
+  };
 
   uint64_t idx() {
-    return idx;
-  }
+    return idx_;
+  };
 
   bool in_progress() {
-    return success_.load() == 0;
-  }
+    return (success_.load() == 0);
+  };
 
   bool result() {
     assert(success_.load() != 0);
@@ -288,7 +290,7 @@ class PushHelper: public tervel::util::Descriptor {
       assert(op_->helper_.load() != nullptr);
       return false;
     }
-  }
+  };
 
   bool associate() {
     assert(success_.load() == 1);
@@ -299,9 +301,9 @@ class PushHelper: public tervel::util::Descriptor {
     } else {
       return false;
     }
-  }
+  };
 
-  bool success(std::atomic<T> *spot, T help_t) {
+  bool success() {
     uint64_t temp = 0;
     if ( (success_.compare_exchange_strong(temp, 1) || temp == 1)
           && associate() ) {
@@ -309,9 +311,9 @@ class PushHelper: public tervel::util::Descriptor {
     } else {
       return false;
     }
-  }
+  };
 
-  bool fail(std::atomic<T> *spot, T help_t) {
+  bool fail() {
     uint64_t temp = 0;
     if (success_.compare_exchange_strong(temp, 2) || temp == 2) {
       return false;
@@ -320,7 +322,7 @@ class PushHelper: public tervel::util::Descriptor {
     } else {
       return false;
     }
-  }
+  };
 
   using util::Descriptor::complete;
   void * complete(void *value, std::atomic<void *> *address) {
@@ -339,7 +341,8 @@ class PushHelper: public tervel::util::Descriptor {
       while (in_progress() && op_->helper_.load() == nullptr) {
         if (current_prev == Vector<T>::c_not_value_) {
           op_res = fail();
-        } else if (op_->vec->internal_array.is_descriptor(current_prev, spot_prev)) {
+        } else if (op_->vec_->internal_array.is_descriptor(
+              current_prev, spot_prev)) {
           continue;
         } else {
           op_res = success();
@@ -354,12 +357,12 @@ class PushHelper: public tervel::util::Descriptor {
 
     T new_current;
     if (op_res) {
-      if (spot->compare_exchange_strong(help_t, op_->val_)) {
-        new_current = op_->val_;
+      if (spot->compare_exchange_strong(help_t, op_->new_val_)) {
+        new_current = op_->new_val_;
       }
     } else {
-      if (spot->compare_exchange_strong(help_t, nullptr)) {
-        new_current = nullptr;
+      if (spot->compare_exchange_strong(help_t, reinterpret_cast<T>(nullptr))) {
+        new_current = reinterpret_cast<T>(nullptr);
       }
     }
 
@@ -371,24 +374,31 @@ class PushHelper: public tervel::util::Descriptor {
     if (in_progress()) {
       return nullptr;
     } else {
-      return reinterpret_cast<T>(op_->val_);
+      return reinterpret_cast<void *>(op_->new_val_);
     }
   }  // get_logical_value
 
   /**
    * This function is called after this objects rc count was incremented.
-   * It acquires a temporary HP watch on the Writeop op, ensures that it is
-   * associated, and if so returns true.
+   * It acquires a  HP watch on the PushOp op,
    *
-   * If it is not associated or it was removed, it returns false
-   *
-   * @param address the address this WriteHelper was read from
+   * @param address the address this PushHelper was read from
    * @param value the bitmarked value of this WriteHelper
    * @return returns whether or not the watch was successful.
    */
   using util::Descriptor::on_watch;
   bool on_watch(std::atomic<void *> *address, void * value) {
-    assert(false);
+    typedef util::memory::hp::HazardPointer::SlotID t_SlotID;
+    bool success = util::memory::hp::HazardPointer::watch(
+          t_SlotID::SHORTUSE, op_, address, value);
+
+    return success;
+  };
+
+  using util::Descriptor::on_unwatch;
+  void on_unwatch(std::atomic<void *> *address, void * value) {
+    typedef util::memory::hp::HazardPointer::SlotID t_SlotID;
+    util::memory::hp::HazardPointer::unwatch(t_SlotID::SHORTUSE);
   };
 
 
