@@ -30,7 +30,7 @@
 
 DEFINE_int32(capacity, 64, "The initial capacity of the hash map");
 DEFINE_int32(num_threads, 1, "The number of executing threads.");
-DEFINE_int32(execution_time, 1, "The amount of time to run the tests");
+DEFINE_int32(execution_time, 5, "The amount of time to run the tests");
 
 class TestObject {
  public:
@@ -61,7 +61,7 @@ class TestObject {
 };
 
 
-void run(int thread_id, TestObject * test_object);
+void run(int64_t thread_id, TestObject * test_object);
 
 int main(int argc, char** argv) {
   gflags::ParseCommandLineFlags(&argc, &argv, true);
@@ -101,14 +101,14 @@ int main(int argc, char** argv) {
   return 0;
 }
 
-void run(int thread_id, TestObject * test_data) {
-  const int64_t num_threads = test_data->num_threads_;
+void run(int64_t thread_id, TestObject * test_data) {
   test_data->test_class_.attach_thread();
 
   test_data->ready_count_.fetch_add(1);
 
   int64_t i, temp;
-  for (i = thread_id; test_data->running_.load(); i += num_threads) {
+  for (i = thread_id << 50; test_data->running_.load(); i += 0x10) {
+    assert((i & 0x1) == 0);
     size_t pos = test_data->test_class_.push_back(i);
     temp = -1;
     bool res = test_data->test_class_.at(pos, temp);

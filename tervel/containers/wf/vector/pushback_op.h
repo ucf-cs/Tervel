@@ -60,7 +60,7 @@ class PushOp: public tervel::util::OpRecord {
           }
         }
 
-        helper->set_prev_spot(vec->internal_array.get_spot(placed_pos));
+        helper->set_prev_spot(vec->internal_array.get_spot(placed_pos-1));
         if (!spot->compare_exchange_strong(current, help_t)) {
           continue;
         }
@@ -97,6 +97,7 @@ class PushOp: public tervel::util::OpRecord {
           tervel::util::OpRecord *>(pushOp));
     placed_pos = pushOp->result();
     pushOp->safe_delete();
+
     return placed_pos;
   };
 
@@ -207,7 +208,7 @@ class PushDescr: public tervel::util::Descriptor {
     if (state == 1) {
       return reinterpret_cast<void *>(val_);
     } else {
-      return nullptr;
+      return reinterpret_cast<void *>(Vector<T>::c_not_value_);
     }
   }
 
@@ -218,32 +219,40 @@ class PushDescr: public tervel::util::Descriptor {
 
     T current_prev = prev_spot_->load();
 
-    bool op_res;
-    int64_t fcount = 0;
+
+    uint64_t fcount = 0;
     while (in_progress() && fcount++ < util::ProgressAssurance::MAX_FAILURES) {
       if (current_prev == Vector<T>::c_not_value_) {
-        op_res = fail();
+        fail();
         break;
       } else if (vec_->internal_array.is_descriptor(current_prev, prev_spot_)) {
         continue;
       } else {
-        op_res = success();
+        success();
         break;
       }
     }
 
+    bool op_res;
     if (in_progress()) {
       op_res = fail();
+    } else {
+      op_res = result();
     }
 
     T new_current;
     if (op_res) {
+      assert(success());
+      assert(success_.load() == 1);
       if (spot->compare_exchange_strong(help_t, val_)) {
         new_current = val_;
       }
     } else {
-      if (spot->compare_exchange_strong(help_t, reinterpret_cast<T>(nullptr))) {
-        new_current = reinterpret_cast<T>(nullptr);
+      assert(!success());
+      assert(success_.load() == 2);
+      if (spot->compare_exchange_strong(help_t,
+            reinterpret_cast<T>(Vector<T>::c_not_value_))) {
+        new_current = reinterpret_cast<T>(Vector<T>::c_not_value_);
       }
     }
 
@@ -284,6 +293,8 @@ class PushHelper: public tervel::util::Descriptor {
     assert(success_.load() != 0);
     if (success_.load() == 2) {
       return false;
+    } else if (op_->helper_.load() == nullptr) {
+      return associate();
     } else if (op_->helper_.load() == this) {
       return true;
     } else {
@@ -297,8 +308,10 @@ class PushHelper: public tervel::util::Descriptor {
     PushHelper *temp_null = nullptr;
     bool res = op_->helper_.compare_exchange_strong(temp_null, this);
     if (res || temp_null == this) {
+      assert(op_->helper_.load() == this);
       return true;
     } else {
+      assert(op_->helper_.load() != this);
       return false;
     }
   };
@@ -307,8 +320,11 @@ class PushHelper: public tervel::util::Descriptor {
     uint64_t temp = 0;
     if ( (success_.compare_exchange_strong(temp, 1) || temp == 1)
           && associate() ) {
+      assert(op_->helper_.load() == this);
+      assert(success_.load() == 1);
       return true;
     } else {
+      assert(success_.load() == 2);
       return false;
     }
   };
@@ -317,10 +333,13 @@ class PushHelper: public tervel::util::Descriptor {
     uint64_t temp = 0;
     if (success_.compare_exchange_strong(temp, 2) || temp == 2) {
       return false;
-    } else if (associate()) {
-      return true;
     } else {
-      return false;
+      assert(success_.load() == 1);
+      if (associate()) {
+        return true;
+      } else {
+        return false;
+      }
     }
   };
 
@@ -330,29 +349,32 @@ class PushHelper: public tervel::util::Descriptor {
     T help_t = reinterpret_cast<T>(util::memory::rc::mark_first(this));
     assert(reinterpret_cast<T>(value) == help_t);
 
-    bool op_res;
+
     // Check if placed correctly.
     if (idx_ == 0) {
-      op_res = success();
+      success();
     } else {
-      std::atomic<T> *spot_prev = op_->vec_->internal_array.get_spot(idx_);
+      std::atomic<T> *spot_prev = op_->vec_->internal_array.get_spot(idx_-1);
       T current_prev = spot_prev->load();
 
       while (in_progress() && op_->helper_.load() == nullptr) {
         if (current_prev == Vector<T>::c_not_value_) {
-          op_res = fail();
+          fail();
         } else if (op_->vec_->internal_array.is_descriptor(
               current_prev, spot_prev)) {
           continue;
         } else {
-          op_res = success();
+          success();
         }
         break;
       }  // while op not done
     }  // else not first position
 
+    bool op_res;
     if (in_progress()) {
       op_res = fail();
+    } else {
+      op_res = result();
     }
 
     T new_current;
@@ -361,8 +383,9 @@ class PushHelper: public tervel::util::Descriptor {
         new_current = op_->new_val_;
       }
     } else {
-      if (spot->compare_exchange_strong(help_t, reinterpret_cast<T>(nullptr))) {
-        new_current = reinterpret_cast<T>(nullptr);
+      if (spot->compare_exchange_strong(help_t,
+            reinterpret_cast<T>(Vector<T>::c_not_value_))) {
+        new_current = reinterpret_cast<T>(Vector<T>::c_not_value_);
       }
     }
 
@@ -372,7 +395,7 @@ class PushHelper: public tervel::util::Descriptor {
   using util::Descriptor::get_logical_value;
   void * get_logical_value() {
     if (in_progress()) {
-      return nullptr;
+      return reinterpret_cast<void *>(Vector<T>::c_not_value_);
     } else {
       return reinterpret_cast<void *>(op_->new_val_);
     }

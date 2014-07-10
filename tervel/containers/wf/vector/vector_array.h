@@ -28,8 +28,8 @@ class VectorArray {
 
   virtual bool is_valid(T value) {
     uint64_t val = uint64_t(value);
-    val = val & uint64_t(~0x1);
-    return val != uint64_t(1);
+    val = val & uint64_t(0x1);
+    return val == uint64_t(0);
   }
 
   /**
@@ -38,14 +38,15 @@ class VectorArray {
    * @param  spot     [description]
    * @return          [description]
    */
-  virtual bool is_descriptor(const T &expected, std::atomic<T> *spot) {
+  virtual bool is_descriptor(T &expected, std::atomic<T> *spot) {
     void *temp = reinterpret_cast<void *>(expected);
     if (util::memory::rc::is_descriptor_first(temp)) {
        /* It is some other threads operation, so lets complete it.*/
 
       std::atomic<void *> *temp2 =
           reinterpret_cast<std::atomic<void *> *>(spot);
-      util::memory::rc::remove_descriptor(temp, temp2);
+      expected = reinterpret_cast<T>(util::memory::rc::remove_descriptor(temp,
+          temp2));
       return true;
     }
     return false;
