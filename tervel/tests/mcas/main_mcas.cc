@@ -25,7 +25,7 @@
 #include <boost/generator_iterator.hpp>
 #include <gflags/gflags.h>
 
-#include "tervel/mcas/mcas.h"
+#include "tervel/algorithms/wf/mcas/mcas.h"
 #include "tervel/util/info.h"
 #include "tervel/util/thread_context.h"
 #include "tervel/util/tervel.h"

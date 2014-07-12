@@ -1,15 +1,19 @@
 #ifndef __mcas_buffer_h__
 #define __mcas_buffer_h__
 
-#include "mcas/WFRingBuffer.h"
+#include "tervel/util/info.h"
+#include "tervel/util/thread_context.h"
+#include "tervel/util/tervel.h"
+
+#include "tervel/containers/lf/mcas-buffer/mcas_buffer.h"
 
 template<class T>
 class TestBuffer {
  public:
   TestBuffer(size_t capacity, size_t num_threads)) {
-    Init_RingBuffer_Memory_Management(num_threads);
-    INIT_THREAD_ID();
-    queue_ = new RingBuffer(capacity);
+    tervel_obj = new tervel::Tervel(num_threads);
+    attach_thread();
+    queue_ = new tervel::containers::lf::mcas_buffer::RingBuffer<T>(capacity);
   };
 
   char * name() {
@@ -17,21 +21,23 @@ class TestBuffer {
   }
 
   void attach_thread() {
-    INIT_THREAD_ID();
+    tervel::ThreadContext* thread_context __attribute__((unused));
+    thread_context = new tervel::ThreadContext(tervel_obj);
   };
 
   void detach_thread() {
   };
 
   bool enqueue(T val) {
-    return queue_->enqueue(reinterpret_cast<void *>(val));
+    return queue_->enqueue(val);
   };
+
   bool dequeue(T &val) {
-    void * tval;
-    return queue_->dequeue(tval);
+    return queue_->dequeue(val);
   };
 
  private:
-  RingBuffer *queue_;
+  tervel::containers::lf::mcas_buffer::RingBuffer<T> *queue_;
 };
-#endif
+
+#endif  // __mcas_buffer_h__

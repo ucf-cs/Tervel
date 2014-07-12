@@ -1,8 +1,8 @@
 #ifndef TERVEL_MCAS_MCAS_HELPER_H_
 #define TERVEL_MCAS_MCAS_HELPER_H_
 
-#include "tervel/mcas/mcas.h"
-#include "tervel/mcas/mcas_casrow.h"
+#include "tervel/algorithms/wf/mcas/mcas.h"
+#include "tervel/algorithms/wf/mcas/mcas_casrow.h"
 
 #include "tervel/util/info.h"
 #include "tervel/util/descriptor.h"
@@ -21,15 +21,15 @@ class CasRow;
 
 template<class T>
 /**
- * This class is the MCAS operation's helper. The Helper or MCH is used to 
- * replace the expected value of the specified address. 
+ * This class is the MCAS operation's helper. The Helper or MCH is used to
+ * replace the expected value of the specified address.
  */
 class Helper : public util::Descriptor {
  public:
   /**
    * The Helper object contains a reference to the row it is associated with and
    * the mcas operation that contains the row.
-   * 
+   *
    * @param mcas_op the MCAS<T> which contains the referenced cas_row
    * @param cas_row the referenced row in the MCAS<T>.
    */
@@ -59,7 +59,7 @@ class Helper : public util::Descriptor {
       Helper<T> *curr_mch = cas_row_->helper_.load();
       if (curr_mch == nullptr) {
          if (cas_row_->helper_.compare_exchange_strong(curr_mch, this)) {
-           /* If this passed then curr_mch == nullptr, so we set it to be == 
+           /* If this passed then curr_mch == nullptr, so we set it to be ==
             * this */
             curr_mch = this;
          }
@@ -75,7 +75,7 @@ class Helper : public util::Descriptor {
         success = false;
       }
       /* No longer need HP protection, if we have RC protection on an associated
-       * Helper. If we don't it, the value at this address must have changed and 
+       * Helper. If we don't it, the value at this address must have changed and
        * we don't need it either way.
        */
       util::memory::hp::HazardPointer::unwatch(t_SlotID::SHORTUSE);
@@ -113,14 +113,14 @@ class Helper : public util::Descriptor {
          So call the complete function of the MCAS operation */
       success = this->mcas_op_->mcas_complete(this->cas_row_);
       if (tervel::tl_thread_info->recursive_return()) {
-        /* If the thread is performing a recursive return back to its own 
+        /* If the thread is performing a recursive return back to its own
            operation, then just return null, it will be ignored. */
         return nullptr;
       }
     }
 
     if (success) {
-    /* If the MCAS op was successfull then remove the Helper by replacing 
+    /* If the MCAS op was successfull then remove the Helper by replacing
         it with the new_value */
       address->compare_exchange_strong(value,
           reinterpret_cast<void *>(this->cas_row_->new_value_));
@@ -137,7 +137,7 @@ class Helper : public util::Descriptor {
    * This function is only called on helpers which are associated with its
    * mcas operation, if it is not, then the call to on_watch would have failed
    * and this would not have been called.
-   * 
+   *
    * @return the logicial value of this descriptor object.
    */
   using util::Descriptor::get_logical_value;
