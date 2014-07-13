@@ -16,9 +16,6 @@
 
 namespace tervel {
 namespace util {
-
-class Descriptor;
-
 namespace memory {
 namespace rc {
 
@@ -197,7 +194,7 @@ class DescriptorPool {
    */
   PoolElement *unsafe_pool_ {nullptr};
 
-  /** 
+  /**
    * Two counters used to track the number of elements in the linked list.
    * this facilitates the detection of when there are too many elements.
    */

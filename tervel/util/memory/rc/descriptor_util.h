@@ -83,6 +83,7 @@ inline bool is_watched(tervel::util::Descriptor *descr) {
 inline bool watch(tervel::util::Descriptor *descr, std::atomic<void *> *address,
         void *value) {
   #ifdef NOMEMORY
+  #warning NOMEMORY is enabled
   return true;
   #endif  // NOMEMORY
 
@@ -97,7 +98,6 @@ inline bool watch(tervel::util::Descriptor *descr, std::atomic<void *> *address,
     bool res = descr->on_watch(address, value);
     if (res) {
       assert(is_watched(descr));
-      last_watch = descr;  // TODO(steven) delete this
       return true;
     } else {
       int64_t temp = elem->header().ref_count.fetch_add(-1);
@@ -117,10 +117,8 @@ inline bool watch(tervel::util::Descriptor *descr, std::atomic<void *> *address,
 */
 inline void unwatch(tervel::util::Descriptor *descr) {
   #ifdef NOMEMORY
-  return;
+    return;
   #endif  // NOMEMORY
-  assert(last_watch == descr);
-  last_watch = nullptr;  // TODO(steven) delete this
   PoolElement *elem = get_elem_from_descriptor(descr);
   int64_t temp = elem->header().ref_count.fetch_add(-1);
   assert(temp > 0);

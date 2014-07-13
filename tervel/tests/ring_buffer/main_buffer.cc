@@ -51,7 +51,7 @@ class TestObject {
       , num_threads_(num_threads)
       , prefill_(prefill)
       , operation_type_(test_type)
-      , rb_(buffer_length, num_threads) {}
+      , rb_(buffer_length, num_threads+1) {}
 
   void atomic_add(int enqueue_count, int dequeue_count) {
     enqueue_count_.fetch_add(enqueue_count);
@@ -68,6 +68,9 @@ class TestObject {
     printf("Buffer Type: %s\n", rb_.name() );
   };
 
+  void print_queue() {
+    rb_.print_queue();
+  }
 
   const int enqueue_rate_;
   const int execution_time_;
@@ -94,11 +97,12 @@ void run_update_object(int start_pos, TestObject * test_data);
 int main(int argc, char** argv) {
   gflags::ParseCommandLineFlags(&argc, &argv, true);
 
-  TestObject test_data(FLAGS_num_threads+1, FLAGS_prefill, FLAGS_execution_time,
+  TestObject test_data(FLAGS_num_threads, FLAGS_prefill, FLAGS_execution_time,
         FLAGS_buffer_length, static_cast<TestType>(FLAGS_operation_type),
         FLAGS_enqueue_rate);
 #ifdef DEBUG
   test_data.print_test();
+  test_data.print_queue();
 #endif
 
 #ifdef USING_CDS_LIB
@@ -112,6 +116,9 @@ int main(int argc, char** argv) {
     cds::threading::Manager::attachThread() ;
 #endif
 
+#ifdef DEBUG
+  printf("Prefilling...\n");
+#endif
   // prefill the buffer if needed
   if (test_data.operation_type_ == TestType::ENQUEUEDEQUEUE) {
     const int64_t items = test_data.buffer_length_ * (test_data.prefill_/100.0);
@@ -119,6 +126,10 @@ int main(int argc, char** argv) {
       test_data.rb_.enqueue(i);
     }
   }
+#ifdef DEBUG
+  printf("Fin Prefilling...\n");
+  test_data.print_queue();
+#endif
 
   std::vector<std::thread> thread_list;
   for (int64_t i = 0; i < test_data.num_threads_; i++) {
@@ -137,15 +148,18 @@ int main(int argc, char** argv) {
   std::this_thread::sleep_for(std::chrono::seconds(1));
 #ifdef DEBUG
   printf("Signaled Stop!\n");
+  test_data.print_queue();
 #endif
 
   std::for_each(thread_list.begin(), thread_list.end(), [](std::thread &t) {
       t.join();
   });
 
+  #ifdef USE_WF_BUFFER
   #if DEBUG
-  rb->print_buffer_contents()
-  rb->print_lost_nodes();
+    rb->print_buffer_contents()
+    rb->print_lost_nodes();
+  #endif  // DEBUG
   #endif  // DEBUG
 
 #ifdef DEBUG

@@ -1,38 +1,67 @@
 #ifndef __TERVEL_CONTAINERS_LF_MCAS_BUFFER_MCAS_BUFFER_H__
 #define __TERVEL_CONTAINERS_LF_MCAS_BUFFER_MCAS_BUFFER_H__
 
+#include <atomic>
+#include <cstdint>
+#include <algorithm>
+
 #include "tervel/util/info.h"
-#include "tervel/util/descriptor.h"
-#include "tervel/util/memory/hp/hazard_pointer.h"
 #include "tervel/util/memory/rc/descriptor_util.h"
+#include "tervel/util/descriptor.h"
 
 #include "tervel/algorithms/wf/mcas/mcas.h"
-
-#include <atomic>
-
 
 namespace tervel {
 namespace containers {
 namespace lf {
 namespace mcas_buffer {
 
+template<typename T>
+class Node : public util::Descriptor {
+ public:
+  explicit Node(T val)
+    : val_(val) {}
 
+  ~Node() {}
+
+  T value() {
+    return val_;
+  };
+
+  using util::Descriptor::complete;
+  void * complete(void *current, std::atomic<void *> *address) {
+    assert(false);
+    return nullptr;
+  };
+
+  using util::Descriptor::get_logical_value;
+  void * get_logical_value() {
+    assert(false);
+    return nullptr;
+  };
+
+ private:
+  const T val_;
+};  // class Node
 
 template<typename T>
 class RingBuffer {
  public:
-  explicit RingBuffer(size_t s)
-    : buff_(new std::atomic<Node *>[s](c_not_value))
-    , capacity_(s) {
+  explicit RingBuffer(uint64_t s)
+    : capacity_(s)
+    , buff_(new std::atomic<Node<T> *>[s]) {
       buff_[0].store(c_tail_value);
       buff_[1].store(c_head_value);
       head_.store(1);
       tail_.store(0);
-    }
+      for (uint64_t i = 2; i < capacity_; i++) {
+        buff_[i].store(c_not_value);
+      }
+    };
 
   ~RingBuffer() {
-    for (size_t i = 0; i < capacity_; i++) {
-      Node * cvalue = buff_[i].load();
+    for (uint64_t i = 0; i < capacity_; i++) {
+      Node<T> * cvalue = buff_[i].load();
       if (cvalue == c_tail_value) {
         continue;
       } else if (cvalue == c_head_value) {
@@ -40,52 +69,34 @@ class RingBuffer {
       } else if (cvalue == c_not_value) {
         continue;
       } else {
-        // TODO(steven) delete descriptor.
+        delete cvalue;
       }
     }
-  }
+  };
+
+
+  bool enqueue(T value);
+  bool dequeue(T &value);
 
   bool is_empty() {
-    size_t t = tail();
-    size_t h = head();
+    uint64_t t = tail();
+    uint64_t h = head();
 
     if (h > t+1) {
       return false;
     } else {
       return true;
     }
-  }
+  };
 
   bool is_full() {
-    size_t t = tail();
-    size_t h = head();
+    uint64_t t = tail();
+    uint64_t h = head();
 
     if (h+1 >= t+capacity_) {
-      return false;
-    } else {
-      return true;
-    }
-  }
-
-  bool enqueue(T value) {
-    Node *node = tervel::util::memory::rc::get_descriptor<Node>(value);
-
-    if (enqueue(node)) {
       return true;
     } else {
-      util::memory::rc::free_descriptor(node);
       return false;
-    }
-  }
-
-  bool dequeue(T &value) {
-    Node *node = dequeue();
-    if (node == c_not_value) {
-      return false;
-    } else {
-      value = node->value();
-      util::memory::rc::free_descriptor(node);
-      return true;
     }
   };
 
@@ -93,106 +104,82 @@ class RingBuffer {
     return capacity_;
   };
 
-  void printQueue() {
-    for (size_t i = 0; i < capacity_; i++) {
-      Node * cvalue = buff_[i].load();
+  void print_queue() {
+    for (uint64_t i = 0; i < capacity_; i++) {
+      Node<T> * cvalue = buff_[i].load();
       if (cvalue == c_tail_value) {
-        printf("[%u, TAIL(%p) ] ", i, cvalue);
+        printf("[%lu, TAIL(%p) ] ", i, cvalue);
       } else if (cvalue == c_head_value) {
-        printf("[%u, HEAD(%p) ] ", i, cvalue);
+        printf("[%lu, HEAD(%p) ] ", i, cvalue);
       } else if (cvalue == c_not_value) {
-        printf("[%u, NOT(%p) ] ", i, cvalue);
+        printf("[%lu, NOT(%p) ] ", i, cvalue);
       } else {
-        printf("[%u, VALU(%p)] ", i, cvalue);
+        printf("[%lu, VAL(%p)] ", i, reinterpret_cast<void *>(cvalue->value()));
       }
     }
     printf("\n");
   };
 
  private:
-  class Node : public util::Descriptor {
-   public:
-    explicit Node(T val)
-      : val_(val) {}
-
-    T value() {
-      return val_;
-    }
-
-    using util::Descriptor::complete;
-    void * complete(void *value, std::atomic<void *> *address) {
-      assert(false);
-      return nullprt;
-    }
-
-    using util::Descriptor::get_logical_value;
-    void * get_logical_value() {
-      assert(false);
-      return nullprt;
-    }
-
-   private:
-    const T val_;
-  };
-
-
-  Node *at(size_t pos) {
+  Node<T> *at(uint64_t pos) {
     if (pos >= capacity_) {
       pos = pos % capacity_;
     }
     while (true) {
-      Node *node = buff_[pos].load();
+      Node<T> *node = buff_[pos].load();
 
       if (util::memory::rc::is_descriptor_first(reinterpret_cast<void *>(
             node))) {
         util::memory::rc::remove_descriptor(reinterpret_cast<void *>(node),
-            reinterpret_cast<std::atomic<void *> *>(address));
+            reinterpret_cast<std::atomic<void *> *>(&(buff_[pos])));
       } else {
         return node;
       }
     }
   }
 
-  std::atomic<Node *> *address(size_t pos) {
+  std::atomic<Node<T> *> *address(uint64_t pos) {
     if (pos >= capacity_) {
       pos = pos % capacity_;
     }
     return &(buff_[pos]);
   }
 
-  size_t head() {
+  uint64_t head() {
     return head_.load();
   }
 
-  size_t head(size_t i) {
+  uint64_t head(uint64_t i) {
     return head_.fetch_add(i);
   }
 
-  size_t tail() {
+  uint64_t tail() {
     return tail_.load();
   }
 
-  size_t tail(size_t i) {
+  uint64_t tail(uint64_t i) {
     return tail_.fetch_add(i);
   }
 
-  bool enqueue(Node * node) {
+  bool enqueue(Node<T> * node) {
     if (is_full()) {
       return false;
     }
 
-    h = head();
+    uint64_t h = head();
 
     while (true) {
-      Node *current = at(h);
+      Node<T> *current = at(h);
       if (current == c_head_value) {
-        Node *next = at(h+1);
+        Node<T> *next = at(h+1);
 
         if (next == c_tail_value) {
           return false;
         } else {
-          tervel::mcas::MCAS<Node *> *mcas = new tervel::mcas::MCAS<Node *>(2);
-          bool success = mcas->add_cas_triple(address(h), c_head_value, node);
+          tervel::algorithms::wf::mcas::MCAS<Node<T> *> *mcas =
+              new tervel::algorithms::wf::mcas::MCAS<Node<T> *>(2);
+          bool success;
+          success = mcas->add_cas_triple(address(h), c_head_value, node);
           assert(success);
 
           success = mcas->add_cas_triple(address(h+1), c_not_value, c_head_value);
@@ -202,6 +189,7 @@ class RingBuffer {
           mcas->safe_delete();
 
           if (success) {
+            head(1);
             return true;
           } else {
             continue;
@@ -214,20 +202,19 @@ class RingBuffer {
         h++;
       }
     }
+  }  /// enqueue
 
-  }
-
-  Node * dequeue() {
+  Node<T> * dequeue() {
     if (is_empty()) {
       return c_not_value;
     }
 
-    t = tail();
+    uint64_t t = tail();
 
     while (true) {
-      Node *current = at(t);
+      Node<T> *current = at(t);
       if (current == c_tail_value) {
-        Node *next = at(t+1);
+        Node<T> *next = at(t+1);
 
         if (next == c_head_value) {
           return c_not_value;
@@ -236,18 +223,21 @@ class RingBuffer {
         } else if (next == c_not_value) {
           t = tail();
         } else {  // some node *
-          tervel::mcas::MCAS<Node *> *mcas = new tervel::mcas::MCAS<Node *>(2);
-          bool success = mcas->add_cas_triple(address(h), c_tail_value, c_not_value);
+          tervel::algorithms::wf::mcas::MCAS<Node<T> *> *mcas =
+              new tervel::algorithms::wf::mcas::MCAS<Node<T> *>(2);
+          bool success;
+          success = mcas->add_cas_triple(address(t), c_tail_value, c_not_value);
           assert(success);
 
-          success = mcas->add_cas_triple(address(h+1), next, c_tail_value);
+          success = mcas->add_cas_triple(address(t+1), next, c_tail_value);
           assert(success);
 
           success = mcas->execute();
           mcas->safe_delete();
 
           if (success) {
-            return true;
+            tail(1);
+            return next;
           } else {
             continue;
           }
@@ -259,20 +249,43 @@ class RingBuffer {
         t++;
       }
     }
+  }  // dequeue
 
-  }
+  const uint64_t capacity_;
+  std::atomic<uint64_t> head_;
+  std::atomic<uint64_t> tail_;
+  std::unique_ptr<std::atomic<Node<T> *>[]> buff_;
 
-  const size_t capacity;
-  std::atomic<long> head_;
-  std::atomic<long> tail_;
-  std::unique_ptr<std::atomic<Node *>[]> buff_;
-
-  const Node * c_not_value = reinterpret_cast<Node *>(0x0L)
-  const Node * c_head_value = reinterpret_cast<Node *>(0x10L)
-  const Node * c_tail_value = reinterpret_cast<Node *>(0x20L)
-
+  Node<T> * c_not_value = reinterpret_cast<Node<T> *>(0x0L);
+  Node<T> * c_head_value = reinterpret_cast<Node<T> *>(0x10L);
+  Node<T> * c_tail_value = reinterpret_cast<Node<T> *>(0x20L);
 };  // class RingBuffer
 
+
+
+template<typename T>
+bool RingBuffer<T>::enqueue(T value) {
+  Node<T> *node = tervel::util::memory::rc::get_descriptor<Node<T>>(value);
+
+  if (enqueue(node)) {
+    return true;
+  } else {
+    util::memory::rc::free_descriptor(node);
+    return false;
+  }
+};
+
+template<typename T>
+bool RingBuffer<T>::dequeue(T &value) {
+  Node<T> *node = dequeue();
+  if (node == c_not_value) {
+    return false;
+  } else {
+    value = node->value();
+    util::memory::rc::free_descriptor(node);
+    return true;
+  }
+};
 
 }  // namespace tervel
 }  // namespace containers

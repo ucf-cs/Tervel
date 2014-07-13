@@ -23,9 +23,8 @@ all: WFTEST_DEBUG
 
 
 test: $(SOURCES) $(EXECUTABLE)
-	mkdir -p $(OUTPUT)
 	rm main.o
-	mv $(EXECUTABLE) $(OUTPUT)
+	mv -p $(EXECUTABLE) $(OUTPUT)
 
 WFTEST:
 	$(MAKE) test CONTAINERTYPE=-DUSE_WF_VECTOR \

@@ -10,7 +10,7 @@
 template<class T>
 class TestBuffer {
  public:
-  TestBuffer(size_t capacity, size_t num_threads)) {
+  TestBuffer(size_t capacity, size_t num_threads) {
     tervel_obj = new tervel::Tervel(num_threads);
     attach_thread();
     queue_ = new tervel::containers::lf::mcas_buffer::RingBuffer<T>(capacity);
@@ -36,7 +36,12 @@ class TestBuffer {
     return queue_->dequeue(val);
   };
 
+  void print_queue() {
+    queue_->print_queue();
+  }
+
  private:
+  tervel::Tervel *tervel_obj;
   tervel::containers::lf::mcas_buffer::RingBuffer<T> *queue_;
 };
 

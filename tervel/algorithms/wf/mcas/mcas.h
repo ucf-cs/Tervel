@@ -1,16 +1,19 @@
 #ifndef TERVEL_MCAS_MCAS_H_
 #define TERVEL_MCAS_MCAS_H_
 
-#include "tervel/algorithms/wf/mcas/mcas_helper.h"
-#include "tervel/algorithms/wf/mcas/mcas_casrow.h"
+#include <cstdint>
+#include <algorithm>
+
 #include "tervel/util/info.h"
 #include "tervel/util/progress_assurance.h"
 #include "tervel/util/memory/rc/descriptor_util.h"
 
-#include <algorithm>
-#include <cstdint>
+#include "tervel/algorithms/wf/mcas/mcas_helper.h"
+#include "tervel/algorithms/wf/mcas/mcas_casrow.h"
 
 namespace tervel {
+namespace algorithms {
+namespace wf {
 namespace mcas {
 /**
  * This function determines the logical value of the address.
@@ -36,7 +39,7 @@ inline T read(std::atomic<T> *address) {
 template<class T>
 class MCAS : public util::OpRecord {
  public:
-  static constexpr T MCAS_FAIL_CONST = reinterpret_cast<T>(0x1L);
+  static constexpr void * MCAS_FAIL_CONST = reinterpret_cast<void *>(0x1L);
 
   explicit MCAS<T>(int max_rows)
       : cas_rows_(new CasRow<T>[max_rows])
@@ -48,7 +51,7 @@ class MCAS : public util::OpRecord {
       Helper<T>* helper = cas_rows_[i].helper_.load();
       // The No check flag is true because each was check prior
       // to the call of this descructor.
-      if (helper == MCAS_FAIL_CONST) {
+      if (helper == reinterpret_cast<Helper<T> *>(MCAS_FAIL_CONST)) {
         break;
       }
       util::memory::rc::free_descriptor(helper, true);
@@ -102,7 +105,7 @@ class MCAS : public util::OpRecord {
       Helper<T>* helper = cas_rows_[i].helper_.load();
       // The No check flag is true because each was check prior
       // to the call of this descructor.
-      if (helper == MCAS_FAIL_CONST) {
+      if (helper == reinterpret_cast<Helper<T> *>(MCAS_FAIL_CONST)) {
         break;
       } else if (util::memory::rc::is_watched(helper)) {
         return true;
@@ -421,7 +424,7 @@ void MCAS<T>::cleanup(bool success) {
     Helper<T> * temp_helper = row->helper_.load();
     T marked_helper = reinterpret_cast<T>(
           util::memory::rc::mark_first(temp_helper));
-    if (temp_helper == MCAS_FAIL_CONST) {
+    if (temp_helper == reinterpret_cast<Helper<T> *>(MCAS_FAIL_CONST)) {
       // There can not be any any associated rows beyond this position.
       return;
     } else {
@@ -440,6 +443,8 @@ void MCAS<T>::cleanup(bool success) {
 }  // End cleanup function.
 
 }  // namespace mcas
+}  // namespace wf
+}  // namespace algorithms
 }  // namespace tervel
 
 #endif  // TERVEL_MCAS_MCAS_H_
