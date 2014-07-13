@@ -69,7 +69,7 @@ class TestObject {
   };
 
   void print_queue() {
-    rb_.print_queue();
+   // rb_.print_queue();
   }
 
   const int enqueue_rate_;
@@ -102,7 +102,6 @@ int main(int argc, char** argv) {
         FLAGS_enqueue_rate);
 #ifdef DEBUG
   test_data.print_test();
-  test_data.print_queue();
 #endif
 
 #ifdef USING_CDS_LIB
@@ -128,7 +127,7 @@ int main(int argc, char** argv) {
   }
 #ifdef DEBUG
   printf("Fin Prefilling...\n");
-  test_data.print_queue();
+  //test_data.print_queue();
 #endif
 
   std::vector<std::thread> thread_list;
@@ -148,19 +147,19 @@ int main(int argc, char** argv) {
   std::this_thread::sleep_for(std::chrono::seconds(1));
 #ifdef DEBUG
   printf("Signaled Stop!\n");
-  test_data.print_queue();
+ // test_data.print_queue();
 #endif
 
   std::for_each(thread_list.begin(), thread_list.end(), [](std::thread &t) {
       t.join();
   });
 
-  #ifdef USE_WF_BUFFER
-  #if DEBUG
-    rb->print_buffer_contents()
-    rb->print_lost_nodes();
-  #endif  // DEBUG
-  #endif  // DEBUG
+  // #ifdef USE_WF_BUFFER
+  // #if DEBUG
+  //   test_data.rb_->print_buffer_contents()
+  //   test_data.rb_->print_lost_nodes();
+  // #endif  // DEBUG
+  // #endif  // DEBUG
 
 #ifdef DEBUG
   printf("Completed[Enqueues: %lu, Dequeues: %lu]\n",

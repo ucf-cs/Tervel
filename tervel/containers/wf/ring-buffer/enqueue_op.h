@@ -1,10 +1,10 @@
 #ifndef TERVEL_WFRB_ENQUEUEOP_H_
 #define TERVEL_WFRB_ENQUEUEOP_H_
 
-#include "tervel/wf-ring-buffer/buffer_op.h"
-#include "tervel/wf-ring-buffer/node.h"
-#include "tervel/wf-ring-buffer/elem_node.h"
-#include "tervel/wf-ring-buffer/wf_ring_buffer.h"
+#include "tervel/containers/wf/ring-buffer/buffer_op.h"
+#include "tervel/containers/wf/ring-buffer/node.h"
+#include "tervel/containers/wf/ring-buffer/elem_node.h"
+#include "tervel/containers/wf/ring-buffer/wf_ring_buffer.h"
 #include "tervel/util/memory/rc/descriptor_util.h"
 //#include "tervel/util/info.h"
 //#include "tervel/util/progress_assurance.h"
