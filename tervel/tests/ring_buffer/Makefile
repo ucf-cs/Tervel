@@ -19,7 +19,7 @@ EXECUTABLE ?=main
 OBJECTS = $(SOURCES:.cc=.o)
 
 
-all: WFBuffer FAATest LockBuffer TBBBuffer TsigasBuffer LinuxBuffer #MCASBuffer
+all: WFBuffer FAATest LockBuffer TBBBuffer TsigasBuffer LinuxBuffer MCASBuffer
 
 
 test: $(SOURCES) $(EXECUTABLE)
