@@ -6,7 +6,7 @@ CXXFLAGS =  $(BUFFERTYPE) -Wall -Wunused-function -std=c++11 \
 DEBUG = -DDEBUG=1 -g -pg
 RELEASE = -O3 -DNDEBUG
 
-CXXFLAGS += $(DEBUG)
+#CXXFLAGS += $(DEBUG)
 
 CPPFLAGS = -DINTEL -DNO_WAIT_FREE #-DDEBUG=1
 INC += $(TINC) -I../../../
