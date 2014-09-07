@@ -17,7 +17,7 @@ namespace wf {
 namespace vector {
 
 template<typename T>
-class PushHelper;
+class PushOpHelper;
 
 template<typename T>
 class PushDescr;
@@ -31,7 +31,7 @@ class PushOp: public tervel::util::OpRecord {
     , new_val_(val) {}
 
   ~PushOp() {
-    PushHelper<T> * temp = helper_.load();
+    PushOpHelper<T> * temp = helper_.load();
     assert(temp != nullptr);
     util::memory::rc::free_descriptor(temp, true);
   }
@@ -102,14 +102,14 @@ class PushOp: public tervel::util::OpRecord {
   };
 
   uint64_t result() {
-    PushHelper<T> *temp = helper_.load();
+    PushOpHelper<T> *temp = helper_.load();
     assert(temp != nullptr);
     return temp->idx();
   }
 
   void help_complete() {
-    PushHelper<T> *helper = tervel::util::memory::rc::get_descriptor<
-            PushHelper<T> >(this);
+    PushOpHelper<T> *helper = tervel::util::memory::rc::get_descriptor<
+            PushOpHelper<T> >(this);
     T help_t = reinterpret_cast<T>(util::memory::rc::mark_first(helper));
     tervel::tl_control_word = &helper_;
 
@@ -133,7 +133,7 @@ class PushOp: public tervel::util::OpRecord {
         } else {
           util::memory::rc::free_descriptor(helper);
           helper = tervel::util::memory::rc::get_descriptor<
-                  PushHelper<T> >(this);
+                  PushOpHelper<T> >(this);
           help_t = reinterpret_cast<T>(util::memory::rc::mark_first(helper));
 
           // It was not placed correctly, the vector must have shrunk
@@ -154,7 +154,7 @@ class PushOp: public tervel::util::OpRecord {
   };
 
   bool is_watched() {
-    PushHelper<T> * temp = helper_.load();
+    PushOpHelper<T> * temp = helper_.load();
 
     if (temp == nullptr) {
       assert(false);  // THis state should not be reached
@@ -164,10 +164,10 @@ class PushOp: public tervel::util::OpRecord {
   }
 
  private:
-  friend class PushHelper<T>;
+  friend class PushOpHelper<T>;
   Vector<T> *vec_;
   T new_val_;
-  std::atomic<PushHelper<T> *> helper_ {nullptr};
+  std::atomic<PushOpHelper<T> *> helper_ {nullptr};
 };  // class PushOp
 
 template<typename T>
@@ -272,9 +272,9 @@ class PushDescr: public tervel::util::Descriptor {
 };
 
 template<typename T>
-class PushHelper: public tervel::util::Descriptor {
+class PushOpHelper: public tervel::util::Descriptor {
  public:
-  explicit PushHelper(PushOp<T> *op)
+  explicit PushOpHelper(PushOp<T> *op)
     : op_(op) {}
 
   void set_idx(uint64_t i) {
@@ -305,7 +305,7 @@ class PushHelper: public tervel::util::Descriptor {
 
   bool associate() {
     assert(success_.load() == 1);
-    PushHelper *temp_null = nullptr;
+    PushOpHelper *temp_null = nullptr;
     bool res = op_->helper_.compare_exchange_strong(temp_null, this);
     if (res || temp_null == this) {
       assert(op_->helper_.load() == this);
@@ -405,7 +405,7 @@ class PushHelper: public tervel::util::Descriptor {
    * This function is called after this objects rc count was incremented.
    * It acquires a  HP watch on the PushOp op,
    *
-   * @param address the address this PushHelper was read from
+   * @param address the address this PushOpHelper was read from
    * @param value the bitmarked value of this WriteHelper
    * @return returns whether or not the watch was successful.
    */
@@ -419,7 +419,7 @@ class PushHelper: public tervel::util::Descriptor {
   };
 
   using util::Descriptor::on_unwatch;
-  void on_unwatch(std::atomic<void *> *address, void * value) {
+  void on_unwatch() {
     typedef util::memory::hp::HazardPointer::SlotID t_SlotID;
     util::memory::hp::HazardPointer::unwatch(t_SlotID::SHORTUSE);
   };
@@ -429,7 +429,7 @@ class PushHelper: public tervel::util::Descriptor {
   PushOp<T> *op_;
   uint64_t idx_;
   std::atomic<uint64_t> success_ {0};
-};  // class PushHelper
+};  // class PushOpHelper
 
 }  // namespace vector
 }  // namespace wf

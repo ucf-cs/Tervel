@@ -10,8 +10,7 @@
 #include "tervel/containers/wf/vector/read_op.h"
 #include "tervel/containers/wf/vector/write_op.h"
 #include "tervel/containers/wf/vector/pushback_op.h"
-
-
+#include "tervel/containers/wf/vector/popback_op.h"
 
 
 
@@ -123,20 +122,18 @@ size_t Vector<T>::push_back(T value) {
   return pos;
 }
 
-/*
+
 template<typename T>
-bool Vector<T>::pop_back(const T &value) {
+bool Vector<T>::pop_back(T &value) {
   tervel::util::ProgressAssurance::check_for_announcement();
 
-  PopOp<T> *op = new PopOp<T>(this);
-  bool op_succ = op->begin(value);
-  op->safe_delete();
+  bool res = PopOp<T>::execute(this, value);
 
-  if (op_succ) {
+  if (res) {
     size(-1);
   }
-  return op_succ;
-} */
+  return res;
+}
 
 template<typename T>
 bool Vector<T>::at(size_t idx, T &value) {

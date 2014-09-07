@@ -31,11 +31,12 @@ constexpr bool NO_REUSE_RC_DESCR {false};
  * Returns whether or not the passed value is has one of the reserved bits set
  * to 1.
  *
- * TODO(steven): implement this.
  */
 inline bool isValid(void * value) {
-  return true;
+  uintptr_t temp = reinterpret_cast<uintptr_t>(value);
+  return !(temp & 3);
 }
+
 /**
  * TODO comment
  */

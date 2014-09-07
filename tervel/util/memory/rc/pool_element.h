@@ -41,6 +41,7 @@ class PoolElement {
     std::atomic<bool> descriptor_in_use {false};
     std::atomic<uint64_t> allocation_count {1};
     std::atomic<uint64_t> free_count {0};
+    const int debug_pool_stamp = DEBUG_EXPECTED_STAMP;
 #endif
   };
 

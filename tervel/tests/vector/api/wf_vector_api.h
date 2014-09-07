@@ -41,9 +41,8 @@ class TestClass {
     return container->push_back(value);
   };
 
-  bool pop_back(const T &value) {
-    assert(false);
-    return false;
+  bool pop_back(T &value) {
+    return container->pop_back(value);
   };
 
   size_t size() {

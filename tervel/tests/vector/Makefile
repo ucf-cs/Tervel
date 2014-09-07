@@ -1,9 +1,9 @@
-CXX      = g++-4.7
+CXX      = g++-4.8
 CONTAINERTYPE ?= -DUSE_WF_VECTOR
 CXXFLAGS =  $(CONTAINERTYPE) -Wall -Wunused-function -std=c++11 \
             -march=native -m64 -pthread -fno-strict-aliasing
 
-DEBUG = -DDEBUG=1 -p -pg -g -fpermissive  #  -DMAX_WAIT_FREE
+DEBUG = -DDEBUG=1 -p -pg -g -fpermissive -DDEBUG_POOL=1 #  -DMAX_WAIT_FREE
 RELEASE = -O3 -DNDEBUG
 
 CXXFLAGS += $(DEBUG)

@@ -109,9 +109,6 @@ void DescriptorPool::send_unsafe_to_manager() {
 
 void DescriptorPool::add_to_safe(tervel::util::Descriptor *descr) {
   PoolElement *p = get_elem_from_descriptor(descr);
-  p->next(safe_pool_);
-  safe_pool_ = p;
-
   p->cleanup_descriptor();
 
 #ifdef DEBUG_POOL
@@ -119,6 +116,9 @@ void DescriptorPool::add_to_safe(tervel::util::Descriptor *descr) {
   assert(p->header().free_count.load() ==
       p->header().allocation_count.load());
 #endif
+
+  p->next(safe_pool_);
+  safe_pool_ = p;
   safe_pool_count_++;
 }
 
