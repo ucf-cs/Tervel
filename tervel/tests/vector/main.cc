@@ -13,6 +13,10 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <stdint.h>
+#include <mutex>
+
+std::mutex output_mutex;
+
 
 #include <sys/time.h>
 #include <time.h>
@@ -85,22 +89,43 @@ int main(int argc, char** argv) {
   while (test_data.ready_count_.load() < FLAGS_num_threads) {}
 
 #ifdef DEBUG
-  printf("Beginning Test.\n");
+  printf("Beginning Push Back Test.\n");
 #endif
   test_data.wait_flag_.store(false);
   std::this_thread::sleep_for(std::chrono::seconds(test_data.execution_time_));
   test_data.ready_count_.store(0);
+
+  #ifdef DEBUG
+    printf("Signaled Stop!\n");
+  #endif
+  test_data.wait_flag_.store(true);
   test_data.running_.store(false);
   std::this_thread::sleep_for(std::chrono::seconds(1));
 
   while (test_data.ready_count_.load() < FLAGS_num_threads) {}
+
+
+  {
+    std::cout << "Size: " << test_data.test_class_.size() << std::endl;
+    int64_t temp = -1;
+    bool temp_res;
+    temp_res = test_data.test_class_.at(test_data.test_class_.size(), temp);
+    std::cout << "Res (size): " << temp_res << " " << temp << std::endl;
+
+    temp = -1;
+    temp_res = test_data.test_class_.at(test_data.test_class_.size()-1, temp);
+    std::cout << "Res (size-1): " << temp_res << " " << temp << std::endl;
+  }
+
+
+#ifdef DEBUG
+  printf("Beginning Pop Back Test.\n");
+#endif
+
   test_data.wait_flag_.store(false);
 
   std::this_thread::sleep_for(std::chrono::seconds(test_data.execution_time_));
   std::this_thread::sleep_for(std::chrono::seconds(1));
-#ifdef DEBUG
-  printf("Signaled Stop!\n");
-#endif
 
   std::for_each(thread_list.begin(), thread_list.end(), [](std::thread &t)
     { t.join(); });
@@ -115,13 +140,15 @@ void run(int64_t thread_id, TestObject * test_data) {
 
   test_data->ready_count_.fetch_add(1);
 
+  while (test_data->wait_flag_.load()) {}
+
   int64_t i, temp, total_added;
   int lcount = 0;
   total_added = 0;
   for (i = thread_id << 50; test_data->running_.load(); i += 0x10) {
     assert((i & 0x1) == 0);
 
-    std::cout << thread_id << " " << (void *)i << std::endl;
+    // std::cout << thread_id << " " << (void *)i << std::endl;
 
     size_t pos = test_data->test_class_.push_back(i);
     temp = -1;
@@ -138,7 +165,12 @@ void run(int64_t thread_id, TestObject * test_data) {
     lcount++;
   }
 
+  output_mutex.lock();
+  std::cout << thread_id << ": " << lcount << std::endl;
   test_data->ready_count_.fetch_add(1);
+  output_mutex.unlock();
+
+  while (test_data->wait_flag_.load()) {}
 
   lcount = 0;
   int64_t total_removed = 0;
@@ -148,7 +180,9 @@ void run(int64_t thread_id, TestObject * test_data) {
     if (res) {
       total_removed +=  temp;
     } else {
-      assert(test_data->test_class_.size() == 0);
+      // assert(test_data->test_class_.size() == 0);
+      // Some thread delay can prevent it from being 0, but there are no more
+      // elements
       break;
     }
 

@@ -28,7 +28,7 @@ class VectorArray {
 
   virtual bool is_valid(T value) {
     uint64_t val = uint64_t(value);
-    val = val & uint64_t(0x1);
+    val = val & uint64_t(0x3);
     return val == uint64_t(0);
   }
 

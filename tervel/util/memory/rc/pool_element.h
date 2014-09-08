@@ -19,7 +19,7 @@ namespace util {
 namespace memory {
 namespace rc {
 
-const int DEBUG_EXPECTED_STAMP = 0xDEADBEEF;
+const long DEBUG_EXPECTED_STAMP = 0xDEADBEEF;
 
 /**
  * This class is used to hold the memory management information (Header) and
@@ -39,15 +39,19 @@ class PoolElement {
 
 #ifdef DEBUG_POOL
     std::atomic<bool> descriptor_in_use {false};
-    std::atomic<uint64_t> allocation_count {1};
+    std::atomic<uint64_t> allocation_count {0};
     std::atomic<uint64_t> free_count {0};
-    const int debug_pool_stamp = DEBUG_EXPECTED_STAMP;
+    long debug_pool_stamp = DEBUG_EXPECTED_STAMP;
 #endif
   };
 
   explicit PoolElement(PoolElement *next=nullptr) {
     this->header().next = next;
     assert(this->header().ref_count.load() == 0);
+  }
+
+  ~PoolElement() {
+    assert(false);
   }
 
   // TODO(carlos) add const versions of these accessors
@@ -123,7 +127,6 @@ void PoolElement::init_descriptor(Args&&... args) {
   static_assert(sizeof(DescrType) <= sizeof(padding_),
       "Descriptor is too large to use in a pool element");
 #ifdef DEBUG_POOL
-  assert(!this->header().descriptor_in_use.load());
   this->header().descriptor_in_use.store(true);
 #endif
   new(descriptor()) DescrType(std::forward<Args>(args)...);
@@ -145,7 +148,7 @@ inline PoolElement * get_elem_from_descriptor(Descriptor *descr) {
   assert(elem->header().debug_pool_stamp == DEBUG_EXPECTED_STAMP &&
       "Tried to get a PoolElement from a descriptor which does not have an "
       "associated one.  This probably means the user is attempting to free the "
-      "descriptor through a DescriptorPool but the descriptorwasn't allocated "
+      "descriptor through a DescriptorPool but the descriptor wasn't allocated "
       "through a DescriptorPool to begin with.");
 #endif
   return reinterpret_cast<PoolElement *>(elem);

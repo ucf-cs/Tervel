@@ -38,8 +38,10 @@ class Vector {
   // bool insertAt(size_t pos, T value);
   // bool eraseAt(size_t pos, T &value);
 
-  size_t size() {
-    return current_size_.load();
+  int64_t size() {
+    int64_t temp = current_size_.load();
+    assert(temp >= 0);
+    return temp;
   };
 
   size_t capacity() {
@@ -48,11 +50,14 @@ class Vector {
 
   static constexpr T c_not_value_ {reinterpret_cast<T>(0x1L)};
 
-  size_t size(size_t val) {
-    return current_size_.fetch_add(val);
+  int64_t size(int64_t val) {
+    int64_t temp = current_size_.fetch_add(val);
+    assert(temp >= 0);
+    assert(size() >= 0);
+    return temp;
   }
 
-  std::atomic<size_t> current_size_ {0};
+  std::atomic<int64_t> current_size_ {0};
   ArrayArray<T> internal_array;
 };  // class Vector
 }

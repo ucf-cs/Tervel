@@ -37,10 +37,6 @@ class PushOp: public tervel::util::OpRecord {
   }
 
   static size_t execute(Vector<T> *vec, T val) {
-    PushDescr<T> *helper = tervel::util::memory::rc::get_descriptor<
-            PushDescr<T> >(val, vec);
-    T help_t = reinterpret_cast<T>(util::memory::rc::mark_first(helper));
-    helper->set_control_word();
 
     size_t placed_pos = vec->size();
 
@@ -53,35 +49,38 @@ class PushOp: public tervel::util::OpRecord {
       if (current ==  Vector<T>::c_not_value_) {
         if (placed_pos == 0) {
           if (spot->compare_exchange_strong(current, val)) {
-            util::memory::rc::free_descriptor(helper, true);
+
             return 0;
           } else {
             continue;
           }
         }
 
+
+        PushDescr<T> *helper = tervel::util::memory::rc::get_descriptor<
+            PushDescr<T> >(val, vec);
+        T help_t = reinterpret_cast<T>(util::memory::rc::mark_first(helper));
         helper->set_prev_spot(vec->internal_array.get_spot(placed_pos-1));
+
         if (!spot->compare_exchange_strong(current, help_t)) {
+          util::memory::rc::free_descriptor(helper, true);
           continue;
         }
         helper->complete(reinterpret_cast<void *>(help_t),
-              reinterpret_cast< std::atomic<void *> *>(spot));
+                reinterpret_cast< std::atomic<void *> *>(spot));
         bool op_res = helper->result();
         util::memory::rc::free_descriptor(helper);
 
         if (op_res) {
           return placed_pos;
         } else {  // it failed
-          helper = tervel::util::memory::rc::get_descriptor<
-                  PushDescr<T> >(val, vec);
-          help_t = reinterpret_cast<T>(util::memory::rc::mark_first(helper));
-          helper->set_control_word();
           // It was not placed correctly, so the vector must have shrunk
           placed_pos--;
           spot = vec->internal_array.get_spot(placed_pos);
           current = spot->load();
         }
       } else if (vec->internal_array.is_descriptor(current, spot)) {
+          assert((current & 2) == 0);
           continue;
       } else {  // its a valid value
         placed_pos++;
@@ -90,12 +89,15 @@ class PushOp: public tervel::util::OpRecord {
       }
     }  // while not complete
 
-    util::memory::rc::free_descriptor(helper, true);
     // Wait-Free code
+//    std::cout << "WF mode ("<< val <<")" << std::endl;
     PushOp<T> * pushOp = new PushOp<T>(vec, val);
     util::ProgressAssurance::make_announcement(reinterpret_cast<
           tervel::util::OpRecord *>(pushOp));
     placed_pos = pushOp->result();
+
+
+
     pushOp->safe_delete();
 
     return placed_pos;
@@ -108,10 +110,12 @@ class PushOp: public tervel::util::OpRecord {
   }
 
   void help_complete() {
+    tervel::tl_control_word = &helper_;
+
     PushOpHelper<T> *helper = tervel::util::memory::rc::get_descriptor<
             PushOpHelper<T> >(this);
     T help_t = reinterpret_cast<T>(util::memory::rc::mark_first(helper));
-    tervel::tl_control_word = &helper_;
+
 
     size_t placed_pos = vec_->size();
 
@@ -215,8 +219,6 @@ class PushDescr: public tervel::util::Descriptor {
   using util::Descriptor::complete;
   void * complete(void *value, std::atomic<void *> *address) {
     std::atomic<T> * spot = reinterpret_cast<std::atomic<T> *>(address);
-    T help_t = reinterpret_cast<T>(util::memory::rc::mark_first(this));
-
     T current_prev = prev_spot_->load();
 
 
@@ -240,17 +242,18 @@ class PushDescr: public tervel::util::Descriptor {
       op_res = result();
     }
 
-    T new_current;
+    T new_current = reinterpret_cast<T>(util::memory::rc::mark_first(this));
+
     if (op_res) {
       assert(success());
       assert(success_.load() == 1);
-      if (spot->compare_exchange_strong(help_t, val_)) {
+      if (spot->compare_exchange_strong(new_current, val_)) {
         new_current = val_;
       }
     } else {
       assert(!success());
       assert(success_.load() == 2);
-      if (spot->compare_exchange_strong(help_t,
+      if (spot->compare_exchange_strong(new_current,
             reinterpret_cast<T>(Vector<T>::c_not_value_))) {
         new_current = reinterpret_cast<T>(Vector<T>::c_not_value_);
       }
@@ -346,9 +349,6 @@ class PushOpHelper: public tervel::util::Descriptor {
   using util::Descriptor::complete;
   void * complete(void *value, std::atomic<void *> *address) {
     std::atomic<T> * spot = reinterpret_cast<std::atomic<T> *>(address);
-    T help_t = reinterpret_cast<T>(util::memory::rc::mark_first(this));
-    assert(reinterpret_cast<T>(value) == help_t);
-
 
     // Check if placed correctly.
     if (idx_ == 0) {
@@ -377,13 +377,14 @@ class PushOpHelper: public tervel::util::Descriptor {
       op_res = result();
     }
 
-    T new_current;
+    T new_current = reinterpret_cast<T>(util::memory::rc::mark_first(this));
+    assert(reinterpret_cast<T>(value) == new_current);
     if (op_res) {
-      if (spot->compare_exchange_strong(help_t, op_->new_val_)) {
+      if (spot->compare_exchange_strong(new_current, op_->new_val_)) {
         new_current = op_->new_val_;
       }
     } else {
-      if (spot->compare_exchange_strong(help_t,
+      if (spot->compare_exchange_strong(new_current,
             reinterpret_cast<T>(Vector<T>::c_not_value_))) {
         new_current = reinterpret_cast<T>(Vector<T>::c_not_value_);
       }
@@ -415,13 +416,10 @@ class PushOpHelper: public tervel::util::Descriptor {
     bool success = util::memory::hp::HazardPointer::watch(
           t_SlotID::SHORTUSE, op_, address, value);
 
-    return success;
-  };
-
-  using util::Descriptor::on_unwatch;
-  void on_unwatch() {
-    typedef util::memory::hp::HazardPointer::SlotID t_SlotID;
-    util::memory::hp::HazardPointer::unwatch(t_SlotID::SHORTUSE);
+    if (success) {
+      complete(value, address);
+    }
+    return false;
   };
 
 

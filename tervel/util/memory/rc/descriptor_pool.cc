@@ -42,10 +42,9 @@ PoolElement * DescriptorPool::get_from_pool(bool allocate_new) {
     ret->next(nullptr);
 
 #ifdef DEBUG_POOL
-    // update counters to denote that an item was taken from the pool
+
     assert(ret->header().free_count.load() ==
         ret->header().allocation_count.load());
-    ret->header().allocation_count.fetch_add(1);
 #endif
 
     safe_pool_count_--;
@@ -57,6 +56,11 @@ PoolElement * DescriptorPool::get_from_pool(bool allocate_new) {
     ret = new PoolElement();
   }
 
+#ifdef DEBUG_POOL
+  // update counters to denote that an item was taken from the pool
+  ret->header().allocation_count.fetch_add(1);
+  ret->header().descriptor_in_use.store(true);
+#endif
   return ret;
 }
 
@@ -113,6 +117,7 @@ void DescriptorPool::add_to_safe(tervel::util::Descriptor *descr) {
 
 #ifdef DEBUG_POOL
   p->header().free_count.fetch_add(1);
+  p->header().descriptor_in_use.store(false);
   assert(p->header().free_count.load() ==
       p->header().allocation_count.load());
 #endif
