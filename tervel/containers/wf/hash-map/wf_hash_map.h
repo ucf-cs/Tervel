@@ -78,11 +78,10 @@ class HashMap {
 
   /**
    * Not Thread Safe!
-   * May create a very large stack!
-   *   Note: should implement a better way...
+   * May create a stack as  deep as terversal
    *   If it is a node type then the node will be freed
    *   If it is an array node then the destructor of the array node will free
-   *     any nodes that are referenced it.
+   *     any data nodes or array nodes that are referenced it.
    */
   ~HashMap() {
     for (size_t i = 0; i < primary_array_size_; i++) {
@@ -162,6 +161,26 @@ class HashMap {
     }
 
    private:
+    class ForceExpandOp : OpRecord {
+      public:
+        ForceExpandOp(HashMap<Value> *map, Location *loc, size_t depth)
+         : map_(map)
+         , loc_(loc)
+         , depth_(depth){}
+
+        void help_complete() {
+            Value *value = loc->load();
+            while (value->is_data()) {
+              map->expand_map(loc, value, depth);
+              value = loc->load();
+            }
+        }
+      private:
+        friend class HashMap<value>;
+        Location *loc_{nullptr};
+        HashMap<Value> *map_{nullptr};
+    }
+
     std::atomic<int64_t> *access_count_;
     Value * value_;
   };
@@ -300,7 +319,7 @@ class HashMap {
    * @param curr_value    [description]
    * @param next_position [description]
    */
-  void expand_map(Location * loc, Node * curr_value, uint64_t next_position);
+  void expand_map(Location * loc, DataNode * curr_value, size_t depth);
 
   bool hp_watch_and_get_value(Location * loc, Node * &value);
   void hp_unwatch();
@@ -432,8 +451,7 @@ insert(Key key, Value value) {
         break;
       } else {
         // Key differs, needs to expand...
-        const uint64_t next_position =  get_position(data_node->key_, depth+1);
-        expand_map(loc, curr_value, next_position);
+        expand_map(loc, curr_value, depth);
       }   // else key differs
     }  // else it is a data node
   }  // while true
@@ -506,9 +524,10 @@ remove(Key key) {
 
 template<class Key, class Value, class Functor>
 void  HashMap<Key, Value, Functor>::
-expand_map(Location * loc, Node * curr_value, uint64_t next_position) {
+expand_map(Location * loc, DataNode * curr_value, size_t depth) {
   assert(curr_value->is_data());
 
+  const uint64_t next_position =  get_position(curr_value->key_, depth+1);
   ArrayNode * array_node = new ArrayNode(secondary_array_size_);
   array_node->access(next_position)->store(curr_value);
   assert(array_node->is_array());
