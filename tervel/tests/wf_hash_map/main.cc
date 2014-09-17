@@ -65,6 +65,13 @@ class TestObject {
 void run(int thread_id, TestObject * test_object);
 
 int main(int argc, char** argv) {
+#ifdef USE_CDS
+  cds::Initialize() ;
+{
+  cds::gc::HP hpGC;
+  cds::gc::HP::thread_gc myThreadGC (true) ;
+#endif
+
   gflags::ParseCommandLineFlags(&argc, &argv, true);
 
   TestObject test_data(FLAGS_num_threads+1, FLAGS_capacity,
@@ -99,10 +106,20 @@ int main(int argc, char** argv) {
 
   test_data.print_results();
 
+#ifdef USE_CDS
+  }
+#endif
+
   return 0;
 }
 
 void run(int thread_id, TestObject * test_data) {
+
+#ifdef USE_CDS
+  cds::gc::HP::thread_gc myThreadGC (true) ;
+#endif
+
+
   const int64_t num_threads = test_data->num_threads_;
   test_data->test_class_.attach_thread();
 
