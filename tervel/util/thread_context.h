@@ -73,21 +73,7 @@ class ThreadContext {
     if (help_id_ >= num_threads) {
       help_id_ = 0;
     }
-    return ++help_id_;
-  }
-
-  /**
-   * This function returns the next delay_count, and if it reaches the limit
-   * it is reset to 0.
-   *
-   * @param  max_delay
-   * @return current delay count
-   */
-  size_t delay_count(size_t max_delay) {
-    if (delay_count_ >= max_delay && max_delay != 0) {
-      delay_count_ = 0;
-    }
-    return ++delay_count_;
+    return help_id_++;
   }
 
   /**

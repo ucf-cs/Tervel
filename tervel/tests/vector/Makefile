@@ -1,9 +1,9 @@
 CXX      = g++-4.8
-CONTAINERTYPE ?= -DUSE_WF_HASHMAP
+CONTAINERTYPE ?= -DUSE_WF_VECTOR
 CXXFLAGS =  $(CONTAINERTYPE) -Wall -Wunused-function -std=c++11 \
             -march=native -m64 -pthread -fno-strict-aliasing
 
-DEBUG = -DDEBUG=1 -p -pg -g -DMAX_WAIT_FREE=0 
+DEBUG = -DDEBUG=1 -p -pg -g -fpermissive -DDEBUG_POOL=1 #  -DMAX_WAIT_FREE
 RELEASE = -O3 -DNDEBUG
 
 CXXFLAGS += $(DEBUG)
@@ -28,20 +28,20 @@ test: $(SOURCES) $(EXECUTABLE)
 	mv $(EXECUTABLE) $(OUTPUT)
 
 WFTEST:
-	$(MAKE) test CONTAINERTYPE=-DUSE_WF_HASHMAP \
+	$(MAKE) test CONTAINERTYPE=-DUSE_WF_VECTOR \
 	TSOURCES="../../util/progress_assurance.cc \
 	../../util/memory/hp/hazard_pointer.cc ../../util/memory/hp/hp_list.cc \
 	../../util/memory/rc/descriptor_pool.cc ../../util/thread_context.cc \
 	../../util/memory/rc/pool_manager.cc ../../util/info.cc" \
-	EXECUTABLE=wfhashmap.x
+	EXECUTABLE=wfvector.x
 
 WFTEST_DEBUG:
-	$(MAKE) test CONTAINERTYPE=-DUSE_WF_HASHMAP \
+	$(MAKE) test  CONTAINERTYPE=-DUSE_WF_VECTOR \
 	TSOURCES="../../util/progress_assurance.cc \
 	../../util/memory/hp/hazard_pointer.cc ../../util/memory/hp/hp_list.cc \
 	../../util/memory/rc/descriptor_pool.cc ../../util/thread_context.cc \
 	../../util/memory/rc/pool_manager.cc ../../util/info.cc" \
-	EXECUTABLE=wfhashmap.x
+	EXECUTABLE=wfvector.x
 
 $(EXECUTABLE): $(OBJECTS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -o $@ $^ $(LIB)

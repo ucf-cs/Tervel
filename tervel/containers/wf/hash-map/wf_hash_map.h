@@ -8,6 +8,7 @@
 #include "tervel/util/info.h"
 #include "tervel/util/memory/hp/hp_element.h"
 #include "tervel/util/memory/hp/hazard_pointer.h"
+#include "tervel/util/progress_assurance.h"
 
 // TODO(Steven):
 //
@@ -19,17 +20,6 @@
 // Stronger Correctness Tests
 //
 namespace tervel {
-
-namespace util {
-  int round_to_next_power_of_two(uint64_t value) {
-    double val = std::log2(value);
-    int int_val = static_cast<int>(val);
-    if (int_val < val) {
-      int_val++;
-    }
-    return int_val;
-  };
-}
 
 namespace containers {
 namespace wf {
@@ -161,31 +151,10 @@ class HashMap {
     }
 
    private:
-    class ForceExpandOp : OpRecord {
-      public:
-        ForceExpandOp(HashMap<Value> *map, Location *loc, size_t depth)
-         : map_(map)
-         , loc_(loc)
-         , depth_(depth){}
-
-        void help_complete() {
-            Value *value = loc->load();
-            while (value->is_data()) {
-              map->expand_map(loc, value, depth);
-              value = loc->load();
-            }
-        }
-      private:
-        friend class HashMap<value>;
-        Location *loc_{nullptr};
-        HashMap<Value> *map_{nullptr};
-    }
-
     std::atomic<int64_t> *access_count_;
-    Value * value_;
+    Value *value_{nullptr};
+
   };
-
-
   /**
    * TODO(steven): Provide general overview
    * @param  k     [description]
@@ -201,7 +170,7 @@ class HashMap {
   class Node;
   typedef std::atomic<Node *> Location;
   friend class Node;
-
+  friend class ForceExapndOp;
   /**
    * TODO(steven): Provide general overview
    */
@@ -313,13 +282,44 @@ class HashMap {
     std::atomic<int64_t> access_count_;
   };
 
+  class ForceExpandOp : util::OpRecord {
+    public:
+      ForceExpandOp(HashMap *map, Location *loc, size_t depth)
+       : map_(map)
+       , loc_(loc)
+       , depth_(depth){}
+
+      void help_complete() {
+        if (depth_ >= map_->max_depth()) {
+            return;
+        }
+        Node *value = loc_->load();
+        while (true) {
+          if (!map_->hp_watch_and_get_value(loc_,value)) {
+             continue;
+          } else if (value == nullptr || value->is_data()) {
+            map_->expand_map(loc_, value, depth_);
+            value = loc_->load();
+          } else {
+            break;
+          }
+        }
+      };
+
+    private:
+      friend class HashMap;
+      HashMap *map_{nullptr};
+      Location *loc_{nullptr};
+      size_t depth_{0};
+   };
+
   /**
    * TODO(steven): Provide general overview
    * @param loc           [description]
    * @param curr_value    [description]
    * @param next_position [description]
    */
-  void expand_map(Location * loc, DataNode * curr_value, size_t depth);
+  void expand_map(Location * loc, Node * curr_value, size_t depth);
 
   bool hp_watch_and_get_value(Location * loc, Node * &value);
   void hp_unwatch();
@@ -368,15 +368,24 @@ hp_unwatch() {
 template<class Key, class Value, class Functor>
 bool HashMap<Key, Value, Functor>::
 at(Key key, ValueAccessor &va) {
+  tervel::util::ProgressAssurance::check_for_announcement();
   Functor functor;
   key = functor.hash(key);
 
+  size_t fcount = 0;
   size_t depth = 0;
   uint64_t position = get_position(key, depth);
   Location *loc = &(primary_array_[position]);
   Node *curr_value;
   while (true) {
-    if (!hp_watch_and_get_value(loc, curr_value)) {
+   if (fcount++ > util::ProgressAssurance::MAX_FAILURES + 1) {
+      ForceExpandOp *op = new ForceExpandOp(this, loc, depth);
+      util::ProgressAssurance::make_announcement(
+            reinterpret_cast<tervel::util::OpRecord *>(op));
+      fcount = 0;
+      continue;
+   }
+   if (!hp_watch_and_get_value(loc, curr_value)) {
       continue;
     } else if (curr_value == nullptr) {
       return false;
@@ -409,11 +418,13 @@ at(Key key, ValueAccessor &va) {
 template<class Key, class Value, class Functor>
 bool HashMap<Key, Value, Functor>::
 insert(Key key, Value value) {
+  tervel::util::ProgressAssurance::check_for_announcement();
   Functor functor;
   key = functor.hash(key);
 
   DataNode * new_node = new DataNode(key, value);
 
+  size_t fcount = 0;
   size_t depth = 0;
   uint64_t position = get_position(key, depth);
 
@@ -422,6 +433,13 @@ insert(Key key, Value value) {
 
   bool op_res;
   while (true) {
+    if (fcount++ > util::ProgressAssurance::MAX_FAILURES + 1) {
+      ForceExpandOp *op = new ForceExpandOp(this, loc, depth);
+      util::ProgressAssurance::make_announcement(
+            reinterpret_cast<tervel::util::OpRecord *>(op));
+      fcount = 0;
+      continue;
+    }
     if (!hp_watch_and_get_value(loc, curr_value)) {
       continue;
     } else if (curr_value == nullptr) {
@@ -469,6 +487,7 @@ insert(Key key, Value value) {
 template<class Key, class Value, class Functor>
 bool HashMap<Key, Value, Functor>::
 remove(Key key) {
+  tervel::util::ProgressAssurance::check_for_announcement();
   Functor functor;
   key = functor.hash(key);
 
@@ -478,9 +497,16 @@ remove(Key key) {
   Location *loc = &(primary_array_[position]);
   Node *curr_value;
 
-
+  size_t fcount = 0;
   bool op_res = false;
   while (true) {
+    if (fcount++ > util::ProgressAssurance::MAX_FAILURES +1) {
+      ForceExpandOp *op = new ForceExpandOp(this, loc, depth);
+      util::ProgressAssurance::make_announcement(
+            reinterpret_cast<tervel::util::OpRecord *>(op));
+      fcount = 0;
+      continue;
+    }
     if (!hp_watch_and_get_value(loc, curr_value)) {
       continue;
     } else if (curr_value == nullptr) {
@@ -524,12 +550,15 @@ remove(Key key) {
 
 template<class Key, class Value, class Functor>
 void  HashMap<Key, Value, Functor>::
-expand_map(Location * loc, DataNode * curr_value, size_t depth) {
-  assert(curr_value->is_data());
-
-  const uint64_t next_position =  get_position(curr_value->key_, depth+1);
+expand_map(Location * loc, Node * curr_value, size_t depth) {
+  DataNode *data_node = reinterpret_cast<DataNode *>(curr_value);
+  uint64_t next_position = 0;
   ArrayNode * array_node = new ArrayNode(secondary_array_size_);
-  array_node->access(next_position)->store(curr_value);
+  if (curr_value != nullptr) {
+    assert(curr_value->is_data());
+    next_position = get_position(data_node->key_, depth+1);
+    array_node->access(next_position)->store(curr_value);
+  }
   assert(array_node->is_array());
 
   if (loc->compare_exchange_strong(curr_value, array_node)) {
