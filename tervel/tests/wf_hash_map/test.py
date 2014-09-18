@@ -6,6 +6,11 @@ import os
 import glob
 import time
 
+py_ver = sys.version_info[0]
+if (int(py_ver) < 3):
+  print("Error: Need python >=3, Current version " + (sys.version))
+  exit()
+
 os.chdir("Executables/")
 outFolder = os.path.join("Results/");
 if not os.path.exists(outFolder):
@@ -26,12 +31,12 @@ while True:
 
 
 
-if False:
+if True:
   threads = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 16, 32, 64]
   #threads = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
   #threads = [1, 2, 3, 4, 5, 6]
   op_rates = [ [10,18,70,2], [10,70,18,2], [10,88,0,2], [25,25,25,25], [34,33,0,33], [88,8,2,2], [88,10,0,2] ]
-  prefill = [100]
+  prefill_percents = [100]
   capacitys = [1024]
   exeTimes = [5]
   reps = 30
