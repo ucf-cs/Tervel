@@ -20,7 +20,7 @@ class TestClass {
     container = new Map(capacity);
   }
 
-  char * name() {
+  std::string name() {
     return "WF Hash Map";
   }
 

@@ -7,7 +7,7 @@ class TestClass {
   TestClass(size_t num_threads, size_t capacity) {
   }
 
-  char * name() {
+  std::string name() {
     return "Blank Map";
   }
 

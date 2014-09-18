@@ -87,9 +87,9 @@ class TestClass {
     test_container = new hash_t(capacity, test_michael_map);
   }
 
-  char * name() {
+  std::string name() {
     const int t = test_michael_map;
-    return "CDS Split Map(" + std::to_string(t) + ")";
+    return "CDS MICHAEL Map(" + std::to_string(t) + ")";
   }
 
   void attach_thread() {

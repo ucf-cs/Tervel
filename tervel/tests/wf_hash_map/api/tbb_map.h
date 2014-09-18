@@ -33,7 +33,7 @@ class TestClass {
       (capacity);
   }
 
-  char * name() {
+  std::string name() {
     return "TBB Map";
   }
 

@@ -36,10 +36,10 @@ class TestClass {
  public:
   TestClass(size_t num_threads, size_t capacity) {
     test_container = new hash_t(capacity);
-    v_mutex.unlock();
+    // v_mutex.unlock();
   }
 
-  char * name() {
+  std::string name() {
     return "Locked Boost Map";
   }
 
@@ -48,26 +48,25 @@ class TestClass {
   void detach_thread() {}
 
   bool find(Key key, Value &value) {
-    v_mutex.lock();
+    boost::mutex::scoped_lock lock(v_mutex);
     bool res = false;
     typename hash_t::iterator iter = test_container->find(key);
     if(iter != test_container->end()) {
       value = iter->second;
       res = true;
     }
-    v_mutex.unlock();
+
     return res;
   }
 
   bool insert(Key key, Value value) {
-    v_mutex.lock();
+    boost::mutex::scoped_lock lock(v_mutex);
     std::pair<typename hash_t::iterator, bool> res = test_container->insert(std::make_pair(key,value));
-    v_mutex.unlock();
     return res.second;
   }
 
   bool update(Key key, Value &value_expected, Value value_new) {
-    v_mutex.lock();
+    boost::mutex::scoped_lock lock(v_mutex);
     bool res = false;
     typename hash_t::iterator iter = test_container->find(key);
     if(iter != test_container->end()) {
@@ -79,15 +78,13 @@ class TestClass {
       }
 
     }
-    v_mutex.unlock();
     return res;
   }
 
   bool remove(Key key) {
-    v_mutex.lock();
-    //boost::lock_guard<boost::mutex> lock(mutex);
+    boost::mutex::scoped_lock lock(v_mutex);
     int res= test_container->erase(key);
-    v_mutex.unlock();
+
     return res;
   }
 
