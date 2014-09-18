@@ -8,24 +8,25 @@
 //
 
 // #define KILL_THREAD 1
-
+#include <time.h>
 #include <errno.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include <unistd.h>
+#include <stdlib.h>
 #include <stdint.h>
-
 #include <sys/time.h>
-#include <time.h>
+#include <sys/mman.h>
+
+
+#include <atomic>
 #include <vector>
 #include <thread>
-
 #include <iostream>
-#include <atomic>
+
+#include <gflags/gflags.h>
 
 #include <boost/random.hpp>
 #include <boost/generator_iterator.hpp>
-#include <gflags/gflags.h>
 
 #include "container_api.h"
 
@@ -55,28 +56,52 @@ class TestObject {
       , update_rate_(update_rate)
       , remove_rate_(remove_rate) {}
 
-  void print_test() {
-    printf("Not Implemented...\n");
-  };
 
-  void print_results() {
-    std::cout << "Distribution Test:" << std::endl
+  void print_test_info() {
+    std::cout
+      << "Test Results:" << std::endl
       << "\tAlgorithm = " << std::string(test_class_.name()) << std::endl
       << "\tNumber of Threads = " << FLAGS_num_threads << std::endl
       << "\tExecution Time = " << execution_time_ << std::endl
-      << "\tPrefill = " << FLAGS_prefill << std::endl
+      << "\tPrefill % = " << FLAGS_prefill << std::endl
       << "\tFind Rate = " << find_rate_ << std::endl
       << "\tInsert Rate = " << insert_rate_ << std::endl
       << "\tUpdate Rate = " << update_rate_ << std::endl
       << "\tRemove Rate = " << remove_rate_ << std::endl
+      << std::flush;
+  }
+
+  void print_results() {
+    std::cout
       << "\tFind Count = " << afcount.load() << std::endl
       << "\tInsert Count = " << aicount.load() << std::endl
       << "\tUpdate Count = " << aucount.load() << std::endl
       << "\tRemove Count = " << arcount.load() << std::endl
+      << "-------------------/proc/meminfo-----------------------" << std::endl
       << std::flush;
+
+    system("cat /proc/meminfo");
+    std::cout << "-------------------fin-----------------------"
+      << std::endl << std::flush;
   }
 
-  void update_results(size_t fcount, size_t icount, size_t ucount, size_t rcount) {
+  void thread_print_results(size_t thread_id, size_t fcount, size_t icount,
+    size_t ucount, size_t rcount) {
+    std::cout << "Thread " << thread_id << std::endl
+      << "\tFind Count = " << fcount << std::endl
+      << "\tInsert Count = " << icount << std::endl
+      << "\tUpdate Count = " << ucount << std::endl
+      << "\tRemove Count = " << rcount << std::endl
+       << "-------------------/proc/self/status-----------------------" << std::endl
+      << std::flush;
+
+    system("cat /proc/self/status");
+    std::cout << "-------------------fin-----------------------"
+      << std::endl << std::endl << std::flush;
+  }
+
+  void update_results(size_t fcount, size_t icount, size_t ucount,
+    size_t rcount) {
     afcount.fetch_add(fcount);
     aicount.fetch_add(icount);
     aucount.fetch_add(ucount);
@@ -120,14 +145,13 @@ int main(int argc, char** argv) {
   TestObject test_data(FLAGS_num_threads+1, FLAGS_capacity,
       FLAGS_execution_time);
 
-#ifdef DEBUG
-  test_data.print_test();
-#endif
+  test_data.print_test_info();
 
 {
   boost::mt19937 rng(-1);
   boost::uniform_int<> brandValues(1, std::numeric_limits<int>::max());
-  for (int i = 0; i < FLAGS_prefill; i++) {
+  int limit = (int)((float)(FLAGS_prefill)/100.0 * FLAGS_capacity);
+  for (int i = 0; i < limit; i++) {
     int64_t key = (int64_t)brandValues(rng) >> 15;
     test_data.test_class_.insert(key, 0);
   }
@@ -141,22 +165,28 @@ int main(int argc, char** argv) {
   }
 
   while (test_data.ready_count_.load() < FLAGS_num_threads) {}
-
+  test_data.ready_count_.store(0);
 #ifdef DEBUG
   printf("Beginning Test.\n");
 #endif
+
   test_data.wait_flag_.store(false);
   std::this_thread::sleep_for(std::chrono::seconds(test_data.execution_time_));
   test_data.running_.store(false);
   std::this_thread::sleep_for(std::chrono::seconds(1));
+
 #ifdef DEBUG
   printf("Signaled Stop!\n");
 #endif
 
-  std::for_each(thread_list.begin(), thread_list.end(), [](std::thread &t)
-    { t.join(); });
+  while (test_data.ready_count_.load() < FLAGS_num_threads) {}
 
   test_data.print_results();
+
+  test_data.ready_count_.store(0);
+
+  std::for_each(thread_list.begin(), thread_list.end(), [](std::thread &t)
+    { t.join(); });
 
 #ifdef USE_CDS
   }
@@ -165,65 +195,7 @@ int main(int argc, char** argv) {
   return 0;
 }
 
-void run_correctness(int thread_id, TestObject * test_data) {
-
-#ifdef USE_CDS
-  cds::gc::HP::thread_gc myThreadGC (true) ;
-#endif
-
-
-  const int64_t num_threads = test_data->num_threads_;
-  test_data->test_class_.attach_thread();
-
-  test_data->ready_count_.fetch_add(1);
-
-  while (test_data->wait_flag_.load()) {};
-
-  bool res;
-
-  int64_t i;
-  for (i = thread_id; test_data->running_.load(); i += num_threads) {
-    res = test_data->test_class_.insert(i, i);
-    assert(res);
-  }
-
-
-  const int64_t max_value = i;
-
-  for (i = thread_id; i < max_value; i += num_threads) {
-    int64_t temp = -1;
-    res = test_data->test_class_.find(i, temp);
-    assert(res && temp == i);
-  }
-
-  for (i = thread_id; i < max_value; i += num_threads) {
-    int64_t temp = i;
-    res = test_data->test_class_.update(i, temp, i+2);
-    assert(res && temp == i);
-  }
-
-  for (i = thread_id; i < max_value; i += num_threads) {
-    int64_t temp = -1;
-    res = test_data->test_class_.find(i, temp);
-    assert(res && temp == (i+2));
-  }
-
-  for (i = thread_id; i < max_value; i += num_threads) {
-    res = test_data->test_class_.remove(i);
-    assert(res);
-  }
-
-  for (i = thread_id; i < max_value; i += num_threads) {
-    int64_t temp = -1;
-    res = test_data->test_class_.find(i, temp);
-    assert(!res && temp == -1);
-  }
-
-
-
-
-  test_data->test_class_.detach_thread();
-}
+//
 
 void run(int thread_id, TestObject * test_data) {
 
@@ -281,5 +253,72 @@ void run(int thread_id, TestObject * test_data) {
   test_data->test_class_.detach_thread();
 
   test_data->update_results(fcount, icount, ucount, rcount);
+  test_data->ready_count_.fetch_add(1);
 
+  while (test_data->ready_count_.load() < FLAGS_num_threads);
+
+  while (test_data->ready_count_.load() != thread_id);
+  test_data->thread_print_results(thread_id, fcount, icount, ucount, rcount);
+  test_data->ready_count_.fetch_add(1);
 }
+
+
+// void run_correctness(int thread_id, TestObject * test_data) {
+
+// #ifdef USE_CDS
+//   cds::gc::HP::thread_gc myThreadGC (true) ;
+// #endif
+
+
+//   const int64_t num_threads = test_data->num_threads_;
+//   test_data->test_class_.attach_thread();
+
+//   test_data->ready_count_.fetch_add(1);
+
+//   while (test_data->wait_flag_.load()) {};
+
+//   bool res;
+
+//   int64_t i;
+//   for (i = thread_id; test_data->running_.load(); i += num_threads) {
+//     res = test_data->test_class_.insert(i, i);
+//     assert(res);
+//   }
+
+
+//   const int64_t max_value = i;
+
+//   for (i = thread_id; i < max_value; i += num_threads) {
+//     int64_t temp = -1;
+//     res = test_data->test_class_.find(i, temp);
+//     assert(res && temp == i);
+//   }
+
+//   for (i = thread_id; i < max_value; i += num_threads) {
+//     int64_t temp = i;
+//     res = test_data->test_class_.update(i, temp, i+2);
+//     assert(res && temp == i);
+//   }
+
+//   for (i = thread_id; i < max_value; i += num_threads) {
+//     int64_t temp = -1;
+//     res = test_data->test_class_.find(i, temp);
+//     assert(res && temp == (i+2));
+//   }
+
+//   for (i = thread_id; i < max_value; i += num_threads) {
+//     res = test_data->test_class_.remove(i);
+//     assert(res);
+//   }
+
+//   for (i = thread_id; i < max_value; i += num_threads) {
+//     int64_t temp = -1;
+//     res = test_data->test_class_.find(i, temp);
+//     assert(!res && temp == -1);
+//   }
+
+
+
+
+//   test_data->test_class_.detach_thread();
+// }
