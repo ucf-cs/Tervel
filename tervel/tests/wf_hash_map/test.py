@@ -51,6 +51,7 @@ else:
 
 
 fileList = glob.glob("*.x")
+fileList.extend(glob.glob("*.class"))
 fcount = len(fileList)
 
 time = reps*len(threads)*(fcount)*sum(exeTimes)*len(prefill_percents)*len(capacitys)*len(op_rates)
@@ -73,17 +74,29 @@ for prefill in prefill_percents:
                 fname += "_Threads_" + str(t)
                 fname += "_Ops_" + str(op_rate)
                 fname += "-" + str(r)+ ".log"
-
                 fout = open(outFolder+fname, 'w')
-                cmd = ["./"+currFile]
-                cmd.append("--execution_time="+str(exeTime))
-                cmd.append("-num_threads="+str(t))
-                cmd.append("--capacity="+str(capacity))
-                cmd.append("--prefill="+str(prefill))
-                cmd.append("--find_rate="+str(op_rate[0]))
-                cmd.append("--insert_rate="+str(op_rate[1]))
-                cmd.append("--update_rate="+str(op_rate[2]))
-                cmd.append("--remove_rate="+str(op_rate[3]))
+ 
+                if (".class" in currFile ):
+                    cmd = ["java", "-classpath", ".:../java_hashmap/high-scale-lib/lib/high-scale-lib.jar:../java_hashmap/:"]
+                    cmd.append(currFile.split(".")[0])
+                    cmd.append(str(capacity))
+                    cmd.append(str(t))
+                    cmd.append(str(exeTime))
+                    cmd.append(str(prefill))
+                    cmd.append(str(op_rate[0]))
+                    cmd.append(str(op_rate[1]))
+                    cmd.append(str(op_rate[2]))
+                    cmd.append(str(op_rate[3]))
+                else:
+                    cmd = ["./"+currFile]
+                    cmd.append("--execution_time="+str(exeTime))
+                    cmd.append("-num_threads="+str(t))
+                    cmd.append("--capacity="+str(capacity))
+                    cmd.append("--prefill="+str(prefill))
+                    cmd.append("--find_rate="+str(op_rate[0]))
+                    cmd.append("--insert_rate="+str(op_rate[1]))
+                    cmd.append("--update_rate="+str(op_rate[2]))
+                    cmd.append("--remove_rate="+str(op_rate[3]))
 
                 out = subprocess.check_output([str(_) for _ in cmd], timeout=exeTime+15)
                 fout.write(out.decode("utf-8"))

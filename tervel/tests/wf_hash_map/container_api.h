@@ -43,6 +43,15 @@
     #endif
 #endif
 
+#ifdef USE_CLIFF_HASHMAP
+#include "api/cliff_api.h"
+    #ifdef V_API_SANITY
+        #error TWO or more buffer APIs enabled
+    #else
+        #define V_API_SANITY
+    #endif
+#endif
+
 #ifdef USE_MICHAEL_HASHMAP
 #include "api/cds_michael_map.h"
     #ifdef V_API_SANITY

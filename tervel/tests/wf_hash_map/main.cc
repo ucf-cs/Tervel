@@ -153,21 +153,25 @@ int main(int argc, char** argv) {
   int limit = (int)((float)(FLAGS_prefill)/100.0 * FLAGS_capacity);
   for (int i = 0; i < limit; i++) {
     int64_t key = (int64_t)brandValues(rng) >> 15;
-    test_data.test_class_.insert(key, 0);
+    test_data.test_class_.insert(key, key);
   }
 
 }
 
   std::vector<std::thread> thread_list;
   for (int64_t i = 0; i < FLAGS_num_threads; i++) {
-    std::thread temp_thread(run, i, &test_data);
+    #ifdef DEBUG
+      std::thread temp_thread(run_correctness, i, &test_data);
+    #else
+      std::thread temp_thread(run, i, &test_data);
+    #endif
     thread_list.push_back(std::move(temp_thread));
   }
 
   while (test_data.ready_count_.load() < FLAGS_num_threads) {}
   test_data.ready_count_.store(0);
 #ifdef DEBUG
-  printf("Beginning Test.\n");
+  printf("Beginning Debug Test.\n");
 #endif
 
   test_data.wait_flag_.store(false);
@@ -177,13 +181,14 @@ int main(int argc, char** argv) {
 
 #ifdef DEBUG
   printf("Signaled Stop!\n");
-#endif
+#else
 
   while (test_data.ready_count_.load() < FLAGS_num_threads) {}
 
   test_data.print_results();
 
   test_data.ready_count_.store(0);
+#endif
 
   std::for_each(thread_list.begin(), thread_list.end(), [](std::thread &t)
     { t.join(); });
@@ -205,7 +210,7 @@ void run(int thread_id, TestObject * test_data) {
   test_data->test_class_.attach_thread();
 
   boost::mt19937 rng(thread_id);
-  boost::uniform_int<> brandValues(1, std::numeric_limits<int>::max());
+  boost::uniform_int<> brandValues(2, std::numeric_limits<int>::max());
   boost::uniform_int<> brandOperations(1, 100);
 
   const int frate = test_data->find_rate_;
@@ -226,7 +231,7 @@ void run(int thread_id, TestObject * test_data) {
 
   while (test_data->running_.load()) {
     int op = (int)brandOperations(rng);
-    int64_t key = (int64_t)brandValues(rng) >> 15;
+    int64_t key = (int64_t)brandValues(rng) & (0x0FFFFFFFFFFFFFF0);
 
 
     if (op <= frate) {
@@ -234,7 +239,7 @@ void run(int thread_id, TestObject * test_data) {
       test_data->test_class_.find(key, temp);
       fcount++;
     } else if (op <= irate) {
-      test_data->test_class_.insert(key, thread_id);
+      test_data->test_class_.insert(key, key);
       icount++;
     } else if (op <= urate) {
       int64_t new_value = -1;
@@ -263,62 +268,77 @@ void run(int thread_id, TestObject * test_data) {
 }
 
 
-// void run_correctness(int thread_id, TestObject * test_data) {
+void run_correctness(int thread_id, TestObject * test_data) {
 
-// #ifdef USE_CDS
-//   cds::gc::HP::thread_gc myThreadGC (true) ;
-// #endif
-
-
-//   const int64_t num_threads = test_data->num_threads_;
-//   test_data->test_class_.attach_thread();
-
-//   test_data->ready_count_.fetch_add(1);
-
-//   while (test_data->wait_flag_.load()) {};
-
-//   bool res;
-
-//   int64_t i;
-//   for (i = thread_id; test_data->running_.load(); i += num_threads) {
-//     res = test_data->test_class_.insert(i, i);
-//     assert(res);
-//   }
+#ifdef USE_CDS
+  cds::gc::HP::thread_gc myThreadGC (true) ;
+#endif
 
 
-//   const int64_t max_value = i;
+  const int64_t num_threads = test_data->num_threads_;
+  test_data->test_class_.attach_thread();
 
-//   for (i = thread_id; i < max_value; i += num_threads) {
-//     int64_t temp = -1;
-//     res = test_data->test_class_.find(i, temp);
-//     assert(res && temp == i);
-//   }
+  test_data->ready_count_.fetch_add(1);
 
-//   for (i = thread_id; i < max_value; i += num_threads) {
-//     int64_t temp = i;
-//     res = test_data->test_class_.update(i, temp, i+2);
-//     assert(res && temp == i);
-//   }
+  while (test_data->wait_flag_.load()) {};
 
-//   for (i = thread_id; i < max_value; i += num_threads) {
-//     int64_t temp = -1;
-//     res = test_data->test_class_.find(i, temp);
-//     assert(res && temp == (i+2));
-//   }
+  bool res;
 
-//   for (i = thread_id; i < max_value; i += num_threads) {
-//     res = test_data->test_class_.remove(i);
-//     assert(res);
-//   }
-
-//   for (i = thread_id; i < max_value; i += num_threads) {
-//     int64_t temp = -1;
-//     res = test_data->test_class_.find(i, temp);
-//     assert(!res && temp == -1);
-//   }
+  int64_t i;
+  for (i = thread_id+1; test_data->running_.load(); i += num_threads) {
+    int64_t key = (i << 32) + (thread_id << 16);
+    int64_t value = key;
+    res = test_data->test_class_.insert(key, value);
+    assert(res);
+  }
 
 
+  const int64_t max_value = i;
+
+  for (i = thread_id+1; i < max_value; i += num_threads) {
+    int64_t temp = -1;
+    int64_t key = (i << 32) + (thread_id << 16);
+    int64_t value = key;
+
+    res = test_data->test_class_.find(key, temp);
+    assert(res && temp == value);
+  }
+
+  for (i = thread_id+1; i < max_value; i += num_threads) {
+    int64_t key = (i << 32) + (thread_id << 16);
+    int64_t temp = key;
+    int64_t temp_validate = temp;
+
+    int64_t new_value = ((i+2) << 32) + (thread_id << 16);
+
+    res = test_data->test_class_.update(key, temp, new_value);
+    assert(res && temp == temp_validate);
+  }
+
+  for (i = thread_id+1; i < max_value; i += num_threads) {
+    int64_t key = (i << 32) + (thread_id << 16);
+    int64_t temp_validate = ((i+2) << 32) + (thread_id << 16);
+
+    int64_t temp = -1;
+    res = test_data->test_class_.find(key, temp);
+    assert(res && temp == temp_validate);
+  }
+
+  for (i = thread_id+1; i < max_value; i += num_threads) {
+    int64_t key = (i << 32) + (thread_id << 16);
+    res = test_data->test_class_.remove(key);
+    assert(res);
+  }
+
+  for (i = thread_id+1; i < max_value; i += num_threads) {
+    int64_t key = (i << 32) + (thread_id << 16);
+    int64_t temp = -1;
+    res = test_data->test_class_.find(key, temp);
+    assert(!res && temp == -1);
+  }
 
 
-//   test_data->test_class_.detach_thread();
-// }
+
+
+  test_data->test_class_.detach_thread();
+}

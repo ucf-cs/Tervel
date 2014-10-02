@@ -1,9 +1,9 @@
 CXX      = g++-4.8
 CONTAINERTYPE ?= -DUSE_WF_HASHMAP
-CXXFLAGS =  $(CONTAINERTYPE) -Wall -std=c++11 \
-            -march=native -m64 -pthread -fno-strict-aliasing
+CXXFLAGS =  $(CONTAINERTYPE)  -std=c++11 \
+            -march=native -m64 -pthread -fno-strict-aliasing $(TFLAGS)
 
-#DEBUG = -DDEBUG=1 -p -pg -g -DMAX_WAIT_FREE=0
+# DEBUG = -DDEBUG=1 -p -pg -g -DMAX_WAIT_FREE=0
 RELEASE = -O3 -DNDEBUG -DSET_WAIT_FREE=10000 -DSET_HELP_DELAY=100000
 
 CXXFLAGS += $(DEBUG)
@@ -11,7 +11,7 @@ CXXFLAGS += $(DEBUG)
 CPPFLAGS = -DINTEL
 INC += $(TINC)
 LIB += $(TLIB) -ldl -lgflags -lpthread -lboost_system -lboost_regex -lrt -lllalloc
-CPPFLAGS += $(INC) $(TINC)
+
 
 SOURCES = main.cc $(TSOURCES)
 OUTPUT =Executables/
@@ -19,13 +19,19 @@ EXECUTABLE ?=main
 OBJECTS = $(SOURCES:.cc=.o)
 
 
-all: WFTEST TBB BOOST STL SPLIT MICHAEL
+all: CLIFF WFTEST TBB BOOST STL SPLIT MICHAEL
 
 
 test: $(SOURCES) $(EXECUTABLE)
 	mkdir -p $(OUTPUT)
 	rm main.o
 	mv $(EXECUTABLE) $(OUTPUT)
+
+CLIFF:
+	$(MAKE) test CONTAINERTYPE=-DUSE_CLIFF_HASHMAP \
+	TOBJS="/Libraries/nbds.0.4.3/map.o /Libraries/nbds.0.4.3/hashtable.o /Libraries/nbds.0.4.3/runtime.o /Libraries/nbds.0.4.3/rcu.o /Libraries/nbds.0.4.3/lwt.o /Libraries/nbds.0.4.3/mem.o /Libraries/nbds.0.4.3/nstring.o /Libraries/nbds.0.4.3/list.o /Libraries/nbds.0.4.3/skiplist.o" \
+	TINC="-I/Libraries/nbds.0.4.3/include/" \
+	EXECUTABLE=cliff.x
 
 TBB:
 	$(MAKE) test CONTAINERTYPE=-DUSE_TBB_HASHMAP \
@@ -75,10 +81,10 @@ WFTEST:
 	EXECUTABLE=wfhashmap.x
 
 $(EXECUTABLE): $(OBJECTS)
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -o $@ $^ $(LIB)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(INC)  -o $@ $^ $(LIB) $(TOBJS)
 
 %.o: %.cc
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c -o $@ $<
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS)  $(INC) -c -o $@ $<
 
 
 .PHONY: clean

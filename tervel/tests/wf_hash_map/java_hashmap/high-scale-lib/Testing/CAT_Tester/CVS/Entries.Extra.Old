@@ -1,0 +1,14 @@
+/AtomicCounter.java///0/1.1/HEAD//
+/build.bat///0/1.2/HEAD//
+/BUILD.sh///0/1.1/HEAD//
+/CATCounter.java///0/1.3/HEAD//
+/Counter.java///0/1.1/HEAD//
+/Harness.java///0/1.4/HEAD//
+/hash_test.java///0/1.1/HEAD//
+/LockCounter.java///0/1.1/HEAD//
+/RaceyCounter.java///0/1.1/HEAD//
+/README.txt///0/1.1/HEAD//
+/StripeLockCounter.java///0/1.1/HEAD//
+/StripeUnsafeCounter.java///0/1.1/HEAD//
+/SyncCounter.java///0/1.1/HEAD//
+/UnsafeCounter.java///0/1.3/HEAD//
