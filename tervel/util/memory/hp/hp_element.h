@@ -22,7 +22,7 @@ class HazardPointer;
  * This class is used for the creation of Hazard Pointer Protected Objects
  * Objects which extend it have the ability to call safeFree which delays
  * the calling of the objects destructor until it is safe to do so.
- * 
+ *
  * To achieve more advance functionality, the user can also extend Descriptor
  * class which will provides on_watch, on_unwatch, and on_is_watch functions.
  */
@@ -42,6 +42,9 @@ class Element {
    */
   void safe_delete(bool no_check = false, ElementList *element_list
           = tervel::tl_thread_info->get_hp_element_list()) {
+    #ifdef NOMEMORY
+    return;
+    #endif
     if (no_check && NO_DELETE_HP_ELEMENTS) {
       this->~Element();
     } else if (no_check) {
@@ -70,7 +73,7 @@ class Element {
    *
    * @return whether or not the element is watched.
    */
-  virtual bool on_is_watched() = 0;
+  virtual bool on_is_watched() {return false;}
   /**
    * This function is used to remove a strong watch on an Element.
    * Classes wishing to express this should override this function.

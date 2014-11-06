@@ -30,6 +30,9 @@ void ElementList::try_to_free_elements(bool dont_check) {
    * OR the first element is not safe to be freed
    */
   if (element_list_ != nullptr) {
+    #ifdef NOMEMORY
+    assert(false);
+    #endif
     Element *prev = element_list_;
     Element *temp = element_list_->next();
 
@@ -60,7 +63,7 @@ void ElementList::try_to_free_elements(bool dont_check) {
       if (NO_DELETE_HP_ELEMENTS) {
         element_list_->~Element();
       } else {
-        delete element_list_; 
+        delete element_list_;
       }
       element_list_ = temp;
     }

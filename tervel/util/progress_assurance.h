@@ -3,7 +3,7 @@
 
 #include <atomic>
 #include <memory>
-
+#include <assert.h>
 #include "tervel/util/info.h"
 #include "tervel/util/util.h"
 #include "tervel/util/memory/hp/hp_element.h"
@@ -37,12 +37,41 @@ class OpRecord : public memory::hp::Element {
   OpRecord() {}
 
   /**
-   * Implementations of this function that upon its return the operation 
+   * Implementations of this function that upon its return the operation
    * described in the OpRecord has been completed.
    * As such it must be thread-safe and the extending class must contain all the
    * information necessary to complete the operation.
    */
   virtual void help_complete() = 0;
+
+  /**
+   * This function is used to achieve a strong watch on an Element.
+   * Classes wishing to express this should override this function.
+   *
+   * @param address the expected was load from
+   * @param expected the last known value of address
+   * @return whether or not the element was succefully watched.
+   */
+  using memory::hp::Element::on_watch;
+  bool on_watch(std::atomic<void *> *address, void *expected) {
+    return true;
+  }
+
+  /**
+   * This function is used to check a strong watch on an Element.
+   * Classes wishing to express this should override this function.
+   *
+   * @return whether or not the element is watched.
+   */
+  using memory::hp::Element::on_is_watched;
+  bool on_is_watched() {return false;}
+  /**
+   * This function is used to remove a strong watch on an Element.
+   * Classes wishing to express this should override this function.
+   */
+  using memory::hp::Element::on_unwatch;
+  void on_unwatch() {}
+
 
  private:
   DISALLOW_COPY_AND_ASSIGN(OpRecord);
@@ -61,16 +90,32 @@ class ProgressAssurance {
   /**
    * Const used to delay an announcement
    */
-  static constexpr size_t MAX_FAILURES = 1;
+  #ifdef NO_WAIT_FREE
+    static constexpr size_t MAX_FAILURES = -1;
+  #elif defined (SET_WAIT_FREE)
+    static constexpr size_t MAX_FAILURES = SET_WAIT_FREE;
+  #elif defined (MAX_WAIT_FREE)
+    static constexpr size_t MAX_FAILURES = 0;
+  #else
+    static constexpr size_t MAX_FAILURES = 1000;
+  #endif
 
   /**
    * Const used to reduce the number of times a thread checks the table
    * Reduces memory loads at the cost of a higher upper bound
    */
-  static constexpr size_t HELP_DELAY = 1;
+  #ifdef NO_WAIT_FREE
+    static constexpr size_t HELP_DELAY = 0;
+  #elif defined(MAX_WAIT_FREE)
+    static constexpr size_t HELP_DELAY = 1;
+  #elif defined (SET_HELP_DELAY)
+    static constexpr size_t MAX_FAILURES = SET_HELP_DELAY;
+  #else
+    static constexpr size_t HELP_DELAY = 1000;
+  #endif
 
   explicit ProgressAssurance(int num_threads)
-      : op_table_(new std::atomic<OpRecord *>[num_threads] )
+      : op_table_(new std::atomic<OpRecord *>[num_threads]() )
       , num_threads_ {num_threads} {}
 
   /**
@@ -78,8 +123,17 @@ class ProgressAssurance {
    * If one is found it will call its help_complete function.
    */
   static void check_for_announcement(ProgressAssurance *progress_assuarance =
-          tervel::tl_thread_info->get_progress_assurance()) {
-    progress_assuarance->p_check_for_announcement();
+        nullptr) {
+    static __thread size_t delay_count = HELP_DELAY;
+    if (delay_count >= HELP_DELAY && HELP_DELAY != 0) {
+      delay_count = 0;
+    }
+    if (delay_count++ == 0) {
+      if (progress_assuarance ==  nullptr) {
+          progress_assuarance = tervel::tl_thread_info->get_progress_assurance();
+      }
+      progress_assuarance->p_check_for_announcement();
+    }
   }
 
   /**

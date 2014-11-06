@@ -1,5 +1,9 @@
-#ifndef TERVEL_UTIL_H_
-#define TERVEL_UTIL_H_
+#ifndef __TERVEL_UTIL_UTIL_H_
+#define __TERVEL_UTIL_UTIL_H_
+
+#include <chrono>
+#include <thread>
+#include <cmath>
 
 namespace tervel {
 namespace util {
@@ -7,7 +11,7 @@ namespace memory {
 namespace hp {
 /**
    * If true, then ElementList will never delete any HP protected elements.
-   * Instead, elements should be stock-piled and left untouched when they're 
+   * Instead, elements should be stock-piled and left untouched when they're
    * attempted to be freed This allows the user to view associations.
    * Entirely for debug purposes.
    */
@@ -27,14 +31,31 @@ constexpr bool NO_REUSE_RC_DESCR {false};
  * Returns whether or not the passed value is has one of the reserved bits set
  * to 1.
  *
- * TODO(steven): implement this.
  */
 inline bool isValid(void * value) {
-  return true;
+  uintptr_t temp = reinterpret_cast<uintptr_t>(value);
+  return !(temp & 3);
 }
+
+/**
+ * TODO comment
+ */
+inline void backoff(int duration = 1) {
+  std::this_thread::sleep_for(std::chrono::nanoseconds(duration));
+}
+
+inline int round_to_next_power_of_two(uint64_t value) {
+  double val = std::log2(value);
+  int int_val = static_cast<int>(val);
+  if (int_val < val) {
+    int_val++;
+  }
+  return int_val;
+};
 
 }  // namespace util
 }  // namespace tervel
+
 
 // A macro to disallow the copy constructor and operator= functions.  This
 // should be used in the `private` declarations for a class. Use unless you have
@@ -46,4 +67,4 @@ inline bool isValid(void * value) {
   TypeName(const TypeName&) = delete;       \
   void operator=(const TypeName&) = delete
 
-#endif  // TERVEL_UTIL_H_
+#endif  // __TERVEL_UTIL_UTIL_H_
