@@ -8,6 +8,10 @@
 #include "tervel/util/memory/hp/hp_element.h"
 #include "tervel/util/memory/hp/hp_list.h"
 
+#ifndef HASHMAP_EXPANSION_RATE
+  #define HASHMAP_EXPANSION_RATE 3
+#endif
+
 template<class Key, class Value>
 class TestClass {
  public:
@@ -17,11 +21,11 @@ class TestClass {
   TestClass(size_t num_threads, size_t capacity) {
     tervel_obj = new tervel::Tervel(num_threads);
     attach_thread();
-    container = new Map(capacity);
+    container = new Map(capacity, HASHMAP_EXPANSION_RATE);
   }
 
   std::string name() {
-    return "WF Hash Map";
+    return "WF Hash Map-"+std::to_string(HASHMAP_EXPANSION_RATE);
   }
 
   void attach_thread() {

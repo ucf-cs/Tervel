@@ -15,7 +15,7 @@ class TestClass {
     std::size_t operator()(T const &k) const{
       size_t hash_v = 0;
       char * temp = (char *)(&k);
-      for (int i = 0; i < sizeof(Key); i++) {
+      for (int i = 0; i < sizeof(T); i++) {
         hash_v += temp[i];
       }
       hash_v = hash_v + 1;

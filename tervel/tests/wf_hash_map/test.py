@@ -1,11 +1,11 @@
 from __future__ import print_function
 from datetime import datetime
+from datetime import timedelta
 import subprocess
 import sys
 import os
 import glob
 import time
-
 py_ver = sys.version_info[0]
 if (int(py_ver) < 3):
   print("Error: Need python >=3, Current version " + (sys.version))
@@ -55,10 +55,12 @@ fileList.extend(glob.glob("*.class"))
 fcount = len(fileList)
 
 time = reps*len(threads)*(fcount)*sum(exeTimes)*len(prefill_percents)*len(capacitys)*len(op_rates)
-
-print("Estimate Time: %d (seconds)\n" %time, file=sys.stderr)
+time_str = datetime.now()
+print ("Current Time %s" % str(time_str))
+print("Estimate Time: %d (seconds)" %time, file=sys.stderr)
+time_str = time_str + timedelta(0,time)
+print ("Estimate completed time: %s" % str(time_str))
 sys.stdout.flush()
-
 
 for prefill in prefill_percents:
   for capacity in capacitys:

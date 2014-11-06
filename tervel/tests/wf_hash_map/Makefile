@@ -72,13 +72,25 @@ MICHAEL:
 	EXECUTABLE=michael3.x
 
 WFTEST:
-	$(MAKE) test CONTAINERTYPE=-DUSE_WF_HASHMAP \
+	$(MAKE) WFTEST_SUB EXPAN_RATE="6"
+	$(MAKE) WFTEST_SUB EXPAN_RATE="4"
+WFTEST_SUB:
+	$(MAKE) test CONTAINERTYPE="-DUSE_WF_HASHMAP -DHASHMAP_EXPANSION_RATE=$(EXPAN_RATE)" \
 	TINC="-I../../../  " \
 	TSOURCES="../../util/progress_assurance.cc \
 	../../util/memory/hp/hazard_pointer.cc ../../util/memory/hp/hp_list.cc \
 	../../util/memory/rc/descriptor_pool.cc ../../util/thread_context.cc \
 	../../util/memory/rc/pool_manager.cc ../../util/info.cc" \
-	EXECUTABLE=wfhashmap.x
+	EXECUTABLE=wfhashmap_$(EXPAN_RATE).x
+
+WFOLD:
+	$(MAKE) WFOLD_SUB EXPAN_RATE="4"
+	$(MAKE) WFOLD_SUB EXPAN_RATE="6"
+WFOLD_SUB:
+	$(MAKE) test CONTAINERTYPE="-DUSE_WF_OLD_HASHMAP -DSUB_POW=$(EXPAN_RATE)" \
+	EXECUTABLE=wf_old_hashmap_$(EXPAN_RATE).x \
+	TSOURCES="/home/damian/archive/WFHashTable/WaitFreeHashTable.cpp"
+
 
 $(EXECUTABLE): $(OBJECTS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(INC)  -o $@ $^ $(LIB) $(TOBJS)

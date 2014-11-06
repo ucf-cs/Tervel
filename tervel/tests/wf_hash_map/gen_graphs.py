@@ -192,7 +192,7 @@ files = glob.glob(directory + "*.log")
 results = {}
 print ("Processing files.")
 for file_name in files:
-#  print ("Processing ", file_name)
+  print ("Processing ", file_name)
 
   test_data = get_global_results(file_name)
   if test_data is None:
@@ -211,6 +211,7 @@ print ("Done processing files.")
 while (directory[len(directory)-1] == "/"):
   directory = directory[0:len(directory)-1]
 
+print ("Outputing csv file.")
 with open(directory+".csv", 'w') as fout:
   fout.write(getHeader()+"\n")
   for test in results:
