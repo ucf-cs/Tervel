@@ -25,12 +25,12 @@
 #include <boost/generator_iterator.hpp>
 #include <gflags/gflags.h>
 
-#include "tervel/algorithms/wf/mcas/mcas.h"
-#include "tervel/util/info.h"
-#include "tervel/util/thread_context.h"
-#include "tervel/util/tervel.h"
-#include "tervel/util/memory/hp/hp_element.h"
-#include "tervel/util/memory/hp/hp_list.h"
+#include <tervel/algorithms/wf/mcas/mcas.h>
+#include <tervel/util/info.h>
+#include <tervel/util/thread_context.h>
+#include <tervel/util/tervel.h>
+#include <tervel/util/memory/hp/hp_element.h>
+#include <tervel/util/memory/hp/hp_list.h>
 
 DEFINE_int32(num_threads, 64, "The number of threads to spawn.");
 DEFINE_int32(execution_time, 30, "The amount of time to run the tests");
@@ -161,19 +161,19 @@ void run_update_object(int thread_id, int start_pos, TestObject * test_data) {
   int failed_count = 0;
   int passed_count = 0;
 
-  tervel::mcas::MCAS<void *> *mcas;
+  tervel::algorithms::wf::mcas::MCAS<void *> *mcas;
 
   test_data->ready_count_.fetch_add(1);
   while (test_data->wait_flag_.load()) {}
 
   while (test_data->running_.load()) {
-    mcas = new tervel::mcas::MCAS<void *>(test_data->mcas_size_);
+    mcas = new tervel::algorithms::wf::mcas::MCAS<void *>(test_data->mcas_size_);
 
     for (int i = 0; i < test_data->mcas_size_; i++) {
       int var = start_pos + i;
 
       std::atomic<void *> *address = (&(test_data->shared_memory_)[var]);
-      void * expected_value = tervel::mcas::read<void *>(address);
+      void * expected_value = tervel::algorithms::wf::mcas::read<void *>(address);
       void * new_value = calc_next_value(expected_value);
 
       bool success = mcas->add_cas_triple(address, expected_value, new_value);
@@ -196,16 +196,16 @@ void run_update_object(int start_pos, TestObject * test_data) {
   int failed_count = 0;
   int passed_count = 0;
 
-  tervel::mcas::MCAS<void *> *mcas;
+  tervel::algorithms::wf::mcas::MCAS<void *> *mcas;
 
   for (int i = 0; i < 20000; i++) {
-    mcas = new tervel::mcas::MCAS<void *>(test_data->mcas_size_);
+    mcas = new tervel::algorithms::wf::mcas::MCAS<void *>(test_data->mcas_size_);
 
     for (int i = 0; i < test_data->mcas_size_; i++) {
       int var = start_pos + i;
 
       std::atomic<void *> *address = (&(test_data->shared_memory_)[var]);
-      void * expected_value = tervel::mcas::read<void *>(address);
+      void * expected_value = tervel::algorithms::wf::mcas::read<void *>(address);
       void * new_value = calc_next_value(expected_value);
 
       bool success = mcas->add_cas_triple(address, expected_value, new_value);
@@ -234,20 +234,20 @@ void run_update_multible_objects(int thread_id, TestObject * test_data) {
   boost::mt19937 rng(thread_id);
   boost::uniform_int<> memory_pos_rand(0, max_start_pos-1);
 
-  tervel::mcas::MCAS<void *> *mcas;
+  tervel::algorithms::wf::mcas::MCAS<void *> *mcas;
 
   test_data->ready_count_.fetch_add(1);
   while (test_data->wait_flag_.load()) {}
 
   while (test_data->running_.load()) {
-    mcas = new tervel::mcas::MCAS<void *>(test_data->mcas_size_);
+    mcas = new tervel::algorithms::wf::mcas::MCAS<void *>(test_data->mcas_size_);
     int start_pos = memory_pos_rand(rng) * test_data->mcas_size_;
 
     for (int i = 0; i < mcas_size; i++) {
       int var = start_pos + i;
 
       std::atomic<void *> *address = (&(test_data->shared_memory_)[var]);
-      void * expected_value = tervel::mcas::read<void *>(address);
+      void * expected_value = tervel::algorithms::wf::mcas::read<void *>(address);
       void * new_value = calc_next_value(expected_value);
 
       bool success = mcas->add_cas_triple(address, expected_value, new_value);
@@ -273,20 +273,20 @@ void run_RandomOverlaps(int thread_id, TestObject * test_data) {
 
   boost::mt19937 rng(thread_id);
   boost::uniform_int<> memory_pos_rand(0, test_data->array_length_);
-  tervel::mcas::MCAS<void *> *mcas;
+  tervel::algorithms::wf::mcas::MCAS<void *> *mcas;
 
   test_data->ready_count_.fetch_add(1);
   while (test_data->wait_flag_.load()) {}
 
   while (test_data->running_.load()) {
-    mcas = new tervel::mcas::MCAS<void *>(test_data->mcas_size_);
+    mcas = new tervel::algorithms::wf::mcas::MCAS<void *>(test_data->mcas_size_);
 
     bool success;
     for (int i = 0; i < mcas_size; i++) {
       do {
         int var = memory_pos_rand(rng);
         std::atomic<void *> *address = (&(test_data->shared_memory_)[var]);
-        void * expected_value = tervel::mcas::read<void *>(address);
+        void * expected_value = tervel::algorithms::wf::mcas::read<void *>(address);
         void * new_value = calc_next_value(expected_value);
 
         success = mcas->add_cas_triple(address, expected_value, new_value);

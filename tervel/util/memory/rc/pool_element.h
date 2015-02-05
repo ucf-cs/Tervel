@@ -93,14 +93,7 @@ class PoolElement {
    * element is no longer needed, and it is safe to destroy it. Simply calls the
    * destructor on the internal descriptor.
    */
-  void cleanup_descriptor() {
-  #ifdef DEBUG_POOL
-    assert(this->header().descriptor_in_use.load());
-    this->header().descriptor_in_use.store(false);
-  #endif
-    this->descriptor()->~Descriptor();
-  }
-
+  void cleanup_descriptor();
  private:
   char padding_[CACHE_LINE_SIZE - sizeof(Header)];
   Header header_;
@@ -123,18 +116,7 @@ static_assert(sizeof(PoolElement) == CACHE_LINE_SIZE,
  *   thus has an associated PoolElement.
  * @return The associated PoolElement.
  */
-inline PoolElement * get_elem_from_descriptor(tervel::util::Descriptor *descr) {
-  PoolElement *elem = reinterpret_cast<PoolElement *>(descr);
-#ifdef DEBUG_POOL
-  assert(elem->header().debug_pool_stamp == DEBUG_EXPECTED_STAMP &&
-      "Tried to get a PoolElement from a descriptor which does not have an "
-      "associated one.  This probably means the user is attempting to free the "
-      "descriptor through a DescriptorPool but the descriptorwasn't allocated "
-      "through a DescriptorPool to begin with.");
-#endif
-  return reinterpret_cast<PoolElement *>(elem);
-}
-
+inline PoolElement * get_elem_from_descriptor(tervel::util::Descriptor *descr);
 
 
 // IMPLEMENTATIONS
