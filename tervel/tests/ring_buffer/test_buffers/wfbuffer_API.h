@@ -1,7 +1,7 @@
 #ifndef WFBUFFER_API_H_
 #define WFBUFFER_API_H_
 
-#include "tervel/wf-ring-buffer/wf_ring_buffer.h"
+#include "tervel/containers/wf/ring-buffer/wf_ring_buffer.h"
 #include "tervel/util/info.h"
 #include "tervel/util/thread_context.h"
 #include "tervel/util/tervel.h"

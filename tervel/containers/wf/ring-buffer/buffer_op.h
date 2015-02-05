@@ -3,10 +3,10 @@
 
 
 #include "tervel/util/progress_assurance.h"
-#include "tervel/wf-ring-buffer/elem_node.h"
-#include "tervel/wf-ring-buffer/dequeue_op.h"
-#include "tervel/wf-ring-buffer/enqueue_op.h"
-#include "tervel/wf-ring-buffer/wf_ring_buffer.h"
+#include "tervel/containers/wf/ring-buffer/elem_node.h"
+#include "tervel/containers/wf/ring-buffer/dequeue_op.h"
+#include "tervel/containers/wf/ring-buffer/enqueue_op.h"
+#include "tervel/containers/wf/ring-buffer/wf_ring_buffer.h"
 
 #include <atomic>
 

@@ -3,10 +3,10 @@ BUFFERTYPE ?= -DUSE_WF_BUFFER
 CXXFLAGS =  $(BUFFERTYPE) -Wall -Wunused-function -std=c++11 \
             -march=native -m64 -pthread -fno-strict-aliasing
 
-DEBUG = -DDEBUG=1 -p -pg
+DEBUG = -DDEBUG=1 -g -pg
 RELEASE = -O3 -DNDEBUG
 
-CXXFLAGS += $(RELEASE)
+#CXXFLAGS += $(DEBUG)
 
 CPPFLAGS = -DINTEL -DNO_WAIT_FREE #-DDEBUG=1
 INC += $(TINC) -I../../../
@@ -14,18 +14,17 @@ LIB += $(TLIB) -ldl -lgflags -lpthread -lboost_system -lboost_regex -lrt -lllall
 CPPFLAGS += $(INC)
 
 SOURCES = main_buffer.cc $(TSOURCES)
-OUTPUT =Executables/
+OUTPUT = Executables/
 EXECUTABLE ?=main
 OBJECTS = $(SOURCES:.cc=.o)
 
 
-all: WFBuffer FAATest LockBuffer TBBBuffer TsigasBuffer LinuxBuffer #MCASBuffer
+all: WFBuffer FAATest LockBuffer TBBBuffer TsigasBuffer LinuxBuffer MCASBuffer
 
 
 test: $(SOURCES) $(EXECUTABLE)
-	mkdir -p $(EXECUTABLE)
-	rm main_buffer.o
 	mv $(EXECUTABLE) $(OUTPUT)
+	rm main_buffer.o
 
 WFBuffer:
 	$(MAKE) test BUFFERTYPE=-DUSE_WF_BUFFER \
@@ -45,6 +44,10 @@ LockBuffer:
 
 MCASBuffer:
 	$(MAKE) test BUFFERTYPE=-DUSE_MCAS_BUFFER \
+	TSOURCES="../../util/progress_assurance.cc \
+	../../util/memory/hp/hazard_pointer.cc ../../util/memory/hp/hp_list.cc \
+	../../util/memory/rc/descriptor_pool.cc ../../util/thread_context.cc \
+	../../util/memory/rc/pool_manager.cc ../../util/info.cc" \
 	EXECUTABLE=mcasbuffer.x
 
 TBBBuffer:

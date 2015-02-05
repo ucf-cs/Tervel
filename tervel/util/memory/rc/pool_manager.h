@@ -11,13 +11,11 @@
 #include "tervel/util/info.h"
 #include "tervel/util/util.h"
 #include "tervel/util/system.h"
+#include "tervel/util/descriptor.h"
 
 namespace tervel {
 namespace util {
 namespace memory {
-
-class Descriptor;
-
 namespace rc {
 
 class DescriptorPool;

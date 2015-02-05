@@ -4,10 +4,12 @@
 #include <tervel/util/info.h>
 #include <tervel/util/util.h>
 #include <tervel/algorithms/wf/mcas/mcas_helper.h>
-
 #include <algorithm>
 
+
 namespace tervel {
+namespace algorithms {
+namespace wf {
 namespace mcas {
 
 template<class T>
@@ -65,5 +67,7 @@ class CasRow {
 };  // Class CasRow
 
 }  // namespace mcas
+}  // namespace wf
+}  // namespace algorithms
 }  // namespace tervel
 #endif  // TERVEL_MCAS_CASROW_H_

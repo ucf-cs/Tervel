@@ -2,8 +2,8 @@
 #define TERVEL_WFRB_ELEMNODE_H_
 
 #include "node.h"
-#include "tervel/wf-ring-buffer/dequeue_op.h" // REVIEW(steven) not used
-#include "tervel/wf-ring-buffer/buffer_op.h"
+#include "tervel/containers/wf/ring-buffer/dequeue_op.h" // REVIEW(steven) not used
+#include "tervel/containers/wf/ring-buffer/buffer_op.h"
 #include "tervel/util/progress_assurance.h" // REVIEW(steven) not used
 #include "tervel/util/memory/hp/hazard_pointer.h"
 

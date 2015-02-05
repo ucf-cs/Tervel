@@ -11,7 +11,6 @@
 
 namespace tervel {
 namespace util {
-class Descriptor;
 /**
  * This defines the Descriptor class, this class is designed to be extend
  * and be used in conjunction with primarily the RC memory pool objects.

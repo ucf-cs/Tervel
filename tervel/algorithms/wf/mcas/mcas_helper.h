@@ -1,17 +1,18 @@
 #ifndef TERVEL_MCAS_MCAS_HELPER_H_
 #define TERVEL_MCAS_MCAS_HELPER_H_
 
-#include <tervel/algorithms/wf/mcas/mcas.h>
-#include <tervel/algorithms/wf/mcas/mcas_casrow.h>
+#include <atomic>
 
 #include <tervel/util/info.h>
 #include <tervel/util/descriptor.h>
 #include <tervel/util/memory/hp/hazard_pointer.h>
 #include <tervel/util/memory/rc/descriptor_util.h>
 
-#include <atomic>
-
+#include <tervel/algorithms/wf/mcas/mcas.h>
+#include <tervel/algorithms/wf/mcas/mcas_casrow.h>
 namespace tervel {
+namespace algorithms {
+namespace wf {
 namespace mcas {
 
 template<class T>
@@ -159,6 +160,8 @@ class Helper : public util::Descriptor {
 
 
 }  // namespace mcas
+}  // namespace wf
+}  // namespace algorithms
 }  // namespace tervel
 
 #endif  // TERVEL_MCAS_MCAS_HELPER_H_
