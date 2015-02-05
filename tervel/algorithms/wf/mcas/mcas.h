@@ -1,11 +1,11 @@
 #ifndef TERVEL_MCAS_MCAS_H_
 #define TERVEL_MCAS_MCAS_H_
 
-#include "tervel/mcas/mcas_helper.h"
-#include "tervel/mcas/mcas_casrow.h"
-#include "tervel/util/info.h"
-#include "tervel/util/progress_assurance.h"
-#include "tervel/util/memory/rc/descriptor_util.h"
+#include <tervel/algorithms/wf/mcas/mcas_helper.h>
+#include <tervel/algorithms/wf/mcas/mcas_casrow.h>
+#include <tervel/util/info.h>
+#include <tervel/util/progress_assurance.h>
+#include <tervel/util/memory/rc/descriptor_util.h>
 
 #include <algorithm>
 #include <cstdint>
@@ -14,7 +14,7 @@ namespace tervel {
 namespace mcas {
 /**
  * This function determines the logical value of the address.
- * 
+ *
  * @param address the location to determine the value
  * @return the logical value
  */
@@ -75,7 +75,7 @@ class MCAS : public util::OpRecord {
   /**
    * This function is called after all the CAS triples have been added to the
    * operation. It will attempt to apply the operation.
-   * 
+   *
    * @returns true if it replaced the values at each address with a new value
    */
   bool execute();
@@ -92,9 +92,9 @@ class MCAS : public util::OpRecord {
   /**
    * This function overrides the virtual function in the HP::Element class
    * It returns whether or not this mcas class is being referenced by another
-   * threaded. It is being referenced if any associated descriptor has a 
+   * threaded. It is being referenced if any associated descriptor has a
    * positive reference count or if there is a hazard point watch on it.
-   * 
+   *
    * @return True if watecd
    */
   bool on_is_watched() {
@@ -118,7 +118,7 @@ class MCAS : public util::OpRecord {
    */
   enum class MCasState : std::int8_t {IN_PROGRESS = 0, PASS = 1 , FAIL = 2,
       DELETED = 3};
-  /** 
+  /**
    * This function is used to complete a currently executing MCAS operation
    * It is most likely that this operation is in conflict with some other
    * operation and that it was discoved by the dereferencing of an MCH
@@ -142,7 +142,7 @@ class MCAS : public util::OpRecord {
    */
   bool mcas_complete(CasRow<T> *current_row);
 
-  /** 
+  /**
    * This function is used to cleanup a completed MCAS operation
    * It removes each MCH placed during this operation, replacing it with the
    * logical value
@@ -150,7 +150,7 @@ class MCAS : public util::OpRecord {
   void cleanup(bool success);
 
   /**
-   * This function insures that upon its return that *(cas_rows_[pos].address) 
+   * This function insures that upon its return that *(cas_rows_[pos].address)
    * no longer equals value. Where value is an object that holds an RC bit mark.
    * If the object is not a Helper for this operation, then the standard
    * descriptor remove function is called. This is important to prevent the case
@@ -302,7 +302,7 @@ bool MCAS<T>::mcas_complete(int start_pos, bool wfmode) {
           }
         }
       } else if (current_value != row->expected_value_) {
-        /* Current value does not match the expected value and it is a non 
+        /* Current value does not match the expected value and it is a non
          * descriptor type, the mcas operation should fail. */
         Helper<T>* temp_null = nullptr;
         /* First try to disable row by assigning a failed constant */
@@ -393,7 +393,7 @@ T MCAS<T>::mcas_remove(const int pos, T value) {
     // Now unwatch it, crazy right? But there is a reason...
     util::memory::rc::unwatch(descr);
 
-    /* If we watched it and it is a MCH for this operation, then act of 
+    /* If we watched it and it is a MCH for this operation, then act of
      * watching will call the MCH's on_watch function, which will associate it
      * with this cas row...thus if cas_rows_[pos].helper != nullprt, then this
      * could have been a MCH to for this row but it does not matter, because

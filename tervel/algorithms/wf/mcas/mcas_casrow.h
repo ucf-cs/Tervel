@@ -1,9 +1,9 @@
 #ifndef TERVEL_MCAS_CASROW_H_
 #define TERVEL_MCAS_CASROW_H_
 
-#include "tervel/util/info.h"
-#include "tervel/util/util.h"
-#include "tervel/mcas/mcas_helper.h"
+#include <tervel/util/info.h>
+#include <tervel/util/util.h>
+#include <tervel/algorithms/wf/mcas/mcas_helper.h>
 
 #include <algorithm>
 
@@ -47,7 +47,7 @@ class CasRow {
     /**
      * This funciton is used when the MCAS operation is sorted to re-arrange
      * the CasRows so they are sorted in a decsending manner.
-     * Sorting is important to prevent cyclic dependices between MCAS 
+     * Sorting is important to prevent cyclic dependices between MCAS
      * operations. We choose descedning as a secondary bound on the number of
      * MCAS operations. That could interfer with this operation.
      */

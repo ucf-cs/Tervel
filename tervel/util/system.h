@@ -12,9 +12,9 @@ namespace tervel {
 namespace util {
 
 #if DEBUG_POOL
-constexpr size_t CACHE_LINE_SIZE = 64*2;  // bytes
+#define CACHE_LINE_SIZE 64*2
 #else
-constexpr size_t CACHE_LINE_SIZE = 64;  // bytes
+#define  CACHE_LINE_SIZE 64
 #endif
 
 }  // namespace util
