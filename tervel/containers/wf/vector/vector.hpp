@@ -9,8 +9,8 @@
 #include <stdint.h>
 #include <memory>
 
-#include "tervel/util/util.h"
-#include "tervel/containers/wf/vector/array_array.h"
+#include <tervel/util/util.h>
+#include <tervel/containers/wf/vector/array_array.h>
 
 namespace tervel {
 namespace containers {
@@ -67,4 +67,4 @@ class Vector {
 
 #endif  // __TERVEL_CONTAINERS_WF_VECTOR_VECTOR_HPP_
 
-#include "tervel/containers/wf/vector/vector.imp"
+#include <tervel/containers/wf/vector/vector.imp>
