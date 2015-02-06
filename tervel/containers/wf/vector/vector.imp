@@ -1,16 +1,16 @@
 #ifndef __TERVEL_CONTAINERS_WF_VECTOR_VECTOR_IMP_
 #define __TERVEL_CONTAINERS_WF_VECTOR_VECTOR_IMP_
 
-#include "tervel/util/info.h"
-#include "tervel/util/descriptor.h"
+#include <tervel/util/info.h>
+#include <tervel/util/descriptor.h>
 
-#include "tervel/containers/wf/vector/vector.hpp"
-#include "tervel/containers/wf/vector/vector_array.h"
+#include <tervel/containers/wf/vector/vector.hpp>
+#include <tervel/containers/wf/vector/vector_array.h>
 
-#include "tervel/containers/wf/vector/read_op.h"
-#include "tervel/containers/wf/vector/write_op.h"
-#include "tervel/containers/wf/vector/pushback_op.h"
-#include "tervel/containers/wf/vector/popback_op.h"
+#include <tervel/containers/wf/vector/read_op.h>
+#include <tervel/containers/wf/vector/write_op.h>
+#include <tervel/containers/wf/vector/pushback_op.h>
+#include <tervel/containers/wf/vector/popback_op.h>
 
 
 
@@ -87,7 +87,7 @@ bool Vector<T>::pop_back_w_ra(T &value) {
     }
 
     // TODO(steven) after working, optimize the below load  in the event the
-    // value chancges
+    // value changes
     std::atomic<T> *spot = internal_array.get_spot(poped_pos - 1);
     T current = spot->load();
 

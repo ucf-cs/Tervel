@@ -1,9 +1,9 @@
 #ifndef __TERVEL_CONTAINERS_WF_VECTOR_VECTOR_ARRAY_ARRAY_H
 #define __TERVEL_CONTAINERS_WF_VECTOR_VECTOR_ARRAY_ARRAY_H
 
-#include "tervel/util/util.h"
+#include <tervel/util/util.h>
 
-#include "tervel/containers/wf/vector/vector_array.h"
+#include <tervel/containers/wf/vector/vector_array.h>
 
 namespace tervel {
 namespace containers {

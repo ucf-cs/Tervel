@@ -1,9 +1,9 @@
 #ifndef __TERVEL_CONTAINERS_WF_VECTOR_VECTOR_ARRAY_H
 #define __TERVEL_CONTAINERS_WF_VECTOR_VECTOR_ARRAY_H
 
-#include "tervel/util/info.h"
-#include "tervel/util/descriptor.h"
-#include "tervel/util/memory/rc/descriptor_util.h"
+#include <tervel/util/info.h>
+#include <tervel/util/descriptor.h>
+#include <tervel/util/memory/rc/descriptor_util.h>
 
 namespace tervel {
 namespace containers {
@@ -33,7 +33,7 @@ class VectorArray {
   }
 
   /**
-   * Overideen by SingleArray model to detect resize.
+   * Overridden by SingleArray model to detect resize.
    * @param  expected [description]
    * @param  spot     [description]
    * @return          [description]

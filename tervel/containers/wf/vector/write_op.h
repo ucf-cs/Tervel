@@ -2,14 +2,14 @@
 #define __TERVEL_CONTAINERS_WF_VECTOR_WRITE_OP_H
 
 
-#include "tervel/util/info.h"
-#include "tervel/util/descriptor.h"
-#include "tervel/util/progress_assurance.h"
-#include "tervel/util/memory/hp/hazard_pointer.h"
-#include "tervel/util/memory/rc/descriptor_util.h"
+#include <tervel/util/info.h>
+#include <tervel/util/descriptor.h>
+#include <tervel/util/progress_assurance.h>
+#include <tervel/util/memory/hp/hazard_pointer.h>
+#include <tervel/util/memory/rc/descriptor_util.h>
 
 
-#include "tervel/containers/wf/vector/vector.hpp"
+#include <tervel/containers/wf/vector/vector.hpp>
 
 namespace tervel {
 namespace containers {

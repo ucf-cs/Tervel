@@ -1,10 +1,10 @@
 #ifndef __TERVEL_CONTAINERS_WF_VECTOR_READ_OP_H
 #define __TERVEL_CONTAINERS_WF_VECTOR_READ_OP_H
 
-#include "tervel/util/info.h"
-#include "tervel/util/progress_assurance.h"
+#include <tervel/util/info.h>
+#include <tervel/util/progress_assurance.h>
 
-#include "tervel/containers/wf/vector/vector.hpp"
+#include <tervel/containers/wf/vector/vector.hpp>
 
 namespace tervel {
 namespace containers {
