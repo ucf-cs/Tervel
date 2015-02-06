@@ -205,10 +205,26 @@ inline void * remove_descriptor(void *expected, std::atomic<void *> *address) {
  * @param address to read
  * @return the current logical value
  */
-inline void * descriptor_read_first(std::atomic<void *> *address) {
-  void *current_value = address->load();
+inline void *descriptor_read_first(std::atomic<void *> *address) {
+  util::ProgressAssurance::check_for_announcement();
+  return lf_descriptor_read_first(address);
+}
 
+inline void *lf_descriptor_read_first(std::atomic<void *> *address) {
+  void *current_value = address->load();
+  unsigned int fail_count = 0;
   while (is_descriptor_first(current_value)) {
+
+    if (fail_count++ == util::ProgressAssurance::MAX_FAILURES) {
+
+      ReadFirstOp *op = new ReadFirstOp(address);
+      util::ProgressAssurance::make_announcement(
+          reinterpret_cast<tervel::util::OpRecord *>(op));
+      current_value = op->load();
+      op->safe_delete();
+      return current_value;
+    }
+
     tervel::util::Descriptor *descr = unmark_first(current_value);
     if (watch(descr, address, current_value)) {
       current_value = descr->get_logical_value();
