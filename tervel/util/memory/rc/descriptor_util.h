@@ -195,7 +195,6 @@ inline void * remove_descriptor(void *expected, std::atomic<void *> *address) {
   }
   return newValue;
 }
-
 inline void *lf_descriptor_read_first(std::atomic<void *> *address) {
   void *current_value = address->load();
   unsigned int fail_count = 0;
