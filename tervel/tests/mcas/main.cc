@@ -86,9 +86,10 @@ void run(int thread_id, tervel::Tervel* tervel_obj, TestObject * test_object);
 void run_update_object(int start_pos, TestObject * test_data);
 
 int main(int argc, char** argv) {
+  std::cout << "start " << std::endl;
   gflags::ParseCommandLineFlags(&argc, &argv, true);
 
-  TestObject test_data(FLAGS_num_threads, FLAGS_execution_time,
+  TestObject test_data(FLAGS_num_threads+1, FLAGS_execution_time,
         FLAGS_array_length, FLAGS_mcas_size,
         static_cast<TestType>(FLAGS_operation_type) );
 
@@ -102,8 +103,11 @@ int main(int argc, char** argv) {
     std::thread temp_thread(run, i, &tervel_obj, &test_data);
     thread_list.push_back(std::move(temp_thread));
   }
+  std::cout << "before while" << std::endl;
 
   while (test_data.ready_count_.load() < test_data.num_threads_) {}
+
+  std::cout << "after while" << std::endl;  
 
   test_data.wait_flag_.store(false);
   std::this_thread::sleep_for(std::chrono::seconds(test_data.execution_time_));

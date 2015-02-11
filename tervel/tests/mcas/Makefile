@@ -1,11 +1,11 @@
 CXX      = g++-4.8
-CXXFLAGS = -Wall -Wunused-function -std=c++11 \
+CXXFLAGS = -g -Wall -Wunused-function -std=c++11
             -march=native -m64 -pthread -fno-strict-aliasing
 
 DEBUG = -DDEBUG=1 -p -pg
 RELEASE = -O3 -DNDEBUG
 
-CXXFLAGS += $(RELEASE)
+CXXFLAGS += $(DEBUG)
 
 CPPFLAGS = -DINTEL -DSET_WAIT_FREE=1 -DSET_HELP_DELAY=1
 INC += $(TINC) -I../../../../tervel-library/

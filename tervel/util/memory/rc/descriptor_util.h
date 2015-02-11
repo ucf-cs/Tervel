@@ -232,7 +232,7 @@ inline void *lf_descriptor_read_first(std::atomic<void *> *address) {
  * @return the current logical value
  */
 inline void *descriptor_read_first(std::atomic<void *> *address) {
-  tervel::util::ProgressAssurance::check_for_announcement();
+//  tervel::util::ProgressAssurance::check_for_announcement();
   return lf_descriptor_read_first(address);
 }
 
