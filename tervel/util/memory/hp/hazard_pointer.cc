@@ -11,7 +11,7 @@ bool HazardPointer::watch(SlotID slot, Element *descr,
       HazardPointer *hazard_pointer) {
   #ifdef NOMEMORY
     #error this could be it?
-	return true;
+    return true;
   #endif
   hazard_pointer->watch(slot, descr);
 
