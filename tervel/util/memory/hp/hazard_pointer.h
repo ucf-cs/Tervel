@@ -24,7 +24,7 @@ class Element;
  * Any value can be written into a slot, however we provide special
  * implementation for Elements, in that we call their on_* functions.
  * This allows for more expressive operations to be performed.
- * 
+ *
  * If an individual thread requires more than one element to be hazard pointer
  * portected at a single instance, then SlotIDs should be added.
  */
@@ -81,7 +81,7 @@ class HazardPointer {
    * @param expected The value which is to be expected at the address
    */
   static bool watch(SlotID slot_id, void *value, std::atomic<void *> *address
-      , void *expected, HazardPointer *hazard_pointer = 
+      , void *expected, HazardPointer *hazard_pointer =
       tervel::tl_thread_info->get_hazard_pointer());
 
   /**
@@ -101,7 +101,7 @@ class HazardPointer {
    * @param descr to call on_unwatch on.
    */
   static void unwatch(SlotID slot_id, Element *descr,
-          HazardPointer *hazard_pointer = 
+          HazardPointer *hazard_pointer =
           tervel::tl_thread_info->get_hazard_pointer());
 
   /**
@@ -179,8 +179,10 @@ class HazardPointer {
    * @param slot The slot id to get the position of
    */
   size_t get_slot(SlotID id) {
-    return static_cast<size_t>(id) + (static_cast<size_t>(SlotID::END) *
+    size_t s = static_cast<size_t>(id) + (static_cast<size_t>(SlotID::END) *
           tervel::tl_thread_info->get_thread_id());
+    assert(s < num_slots_);
+    return s;
   }
 
   std::unique_ptr<std::atomic<void *>[]> watches_;

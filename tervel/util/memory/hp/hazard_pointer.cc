@@ -10,6 +10,7 @@ bool HazardPointer::watch(SlotID slot, Element *descr,
       std::atomic<void *> *address, void *expected,
       HazardPointer *hazard_pointer) {
   #ifdef NOMEMORY
+    #error this could be it?
     return true;
   #endif
   hazard_pointer->watch(slot, descr);

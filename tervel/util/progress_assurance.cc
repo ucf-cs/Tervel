@@ -21,6 +21,7 @@ void ProgressAssurance::p_check_for_announcement() {
       SlotID pos = SlotID::PROG_ASSUR;
       bool res = memory::hp::HazardPointer::watch(pos, op, address, op);
       if (res) {
+        assert(memory::hp::HazardPointer::is_watched(op));
         op->help_complete();
         memory::hp::HazardPointer::unwatch(pos);
       }

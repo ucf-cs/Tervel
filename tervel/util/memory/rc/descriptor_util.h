@@ -6,6 +6,8 @@
 #include "tervel/util/recursive_action.h"
 #include "tervel/util/memory/rc/pool_element.h"
 #include "tervel/util/memory/rc/descriptor_pool.h"
+#include "tervel/util/progress_assurance.h"
+#include "descriptor_read_first_op.h"
 
 namespace tervel {
 namespace util {
@@ -193,20 +195,21 @@ inline void * remove_descriptor(void *expected, std::atomic<void *> *address) {
   }
   return newValue;
 }
-
-/**
- * This function determines the logical value of an address which may have
- * either a RC descriptor or a normal value.
- *
- * TODO(steven): implement a progress assurance on this to achieve wait-freedom
- *
- * @param address to read
- * @return the current logical value
- */
-inline void * descriptor_read_first(std::atomic<void *> *address) {
+inline void *lf_descriptor_read_first(std::atomic<void *> *address) {
   void *current_value = address->load();
-
+  unsigned int fail_count = 0;
   while (is_descriptor_first(current_value)) {
+
+    if (fail_count++ == tervel::util::ProgressAssurance::MAX_FAILURES) {
+
+      ReadFirstOp *op = new ReadFirstOp(address);
+      tervel::util::ProgressAssurance::make_announcement(
+          reinterpret_cast<tervel::util::OpRecord *>(op));
+      current_value = op->load();
+      op->safe_delete();
+      return current_value;
+    }
+
     tervel::util::Descriptor *descr = unmark_first(current_value);
     if (watch(descr, address, current_value)) {
       current_value = descr->get_logical_value();
@@ -217,6 +220,20 @@ inline void * descriptor_read_first(std::atomic<void *> *address) {
   }
 
   return current_value;
+}
+
+/**
+ * This function determines the logical value of an address which may have
+ * either a RC descriptor or a normal value.
+ *
+ * TODO(steven): implement a progress assurance on this to achieve wait-freedom
+ *
+ * @param address to read
+ * @return the current logical value
+ */
+inline void *descriptor_read_first(std::atomic<void *> *address) {
+//  tervel::util::ProgressAssurance::check_for_announcement();
+  return lf_descriptor_read_first(address);
 }
 
 }  // namespace rc

@@ -109,7 +109,7 @@ class ProgressAssurance {
   #elif defined(MAX_WAIT_FREE)
     static constexpr size_t HELP_DELAY = 1;
   #elif defined (SET_HELP_DELAY)
-    static constexpr size_t MAX_FAILURES = SET_HELP_DELAY;
+    static constexpr size_t HELP_DELAY = SET_HELP_DELAY;
   #else
     static constexpr size_t HELP_DELAY = 1000;
   #endif
