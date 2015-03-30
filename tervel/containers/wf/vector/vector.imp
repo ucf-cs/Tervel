@@ -33,31 +33,42 @@ size_t Vector<T>::push_back_only(T value) {
   return placed_pos;
 }  // push_back_only
 
-template<typename T>
-size_t Vector<T>::push_back_w_ra(T value) {
-  tervel::util::ProgressAssurance::check_for_announcement();
+ template<typename T>
+  size_t Vector<T>::push_back_w_ra(T value) {
+    tervel::util::ProgressAssurance::check_for_announcement();
 
-  if (!internal_array.is_valid(value)) {
-    assert(false);
-    return -1;
-  }
-
-  size_t placed_pos = size();
-  while (true) {  // TODO(steven): TO BOUND
-    std::atomic<T> *spot = internal_array.get_spot(placed_pos);
-
-    T expected = spot->load();
-
-    if ( (expected ==  Vector<T>::c_not_value_) &&
-                  spot->compare_exchange_weak(expected, value) ) {
-      size(1);
-      return placed_pos;
-    } else if (internal_array.is_descriptor(expected, spot)) {
-      continue;
+    if (!internal_array.is_valid(value)) {
+      assert(false);
+      return -1;
     }
-    placed_pos++;
-  }  // while not complete
-}  // push_back_w_ra
+
+    size_t placed_pos = size();
+
+
+    size_t fcount = 0;
+    while (fcount++ < util::ProgressAssurance::MAX_FAILURES) {
+      std::atomic<T> *spot = internal_array.get_spot(placed_pos);
+      T expected = spot->load();
+      if ( (expected ==  Vector<T>::c_not_value_) &&
+                    spot->compare_exchange_weak(expected, value) ) {
+        size(1);
+        return placed_pos;
+      } else if (internal_array.is_descriptor(expected, spot)) {
+        continue;
+      } else {  // its a valid value
+          placed_pos++;
+      }
+    }
+
+    PushWRAOp<T> *op = new PushWRAOp<T>(this, value);
+    util::ProgressAssurance::make_announcement(
+          reinterpret_cast<tervel::util::OpRecord *>(op));
+
+    size_t result = op->result(value);
+    op->safe_delete();
+
+    return result;
+  }  // push_back_w_ra
 
 template<typename T>
 bool Vector<T>::pop_back_only(T &value) {
@@ -75,36 +86,48 @@ bool Vector<T>::pop_back_only(T &value) {
   }
 }  // pop_back_only
 
-template<typename T>
-bool Vector<T>::pop_back_w_ra(T &value) {
-  tervel::util::ProgressAssurance::check_for_announcement();
 
-  size_t poped_pos = size();
+  template<typename T>
+  bool Vector<T>::pop_back_w_ra(T &value) {
+    tervel::util::ProgressAssurance::check_for_announcement();
 
-  while (true) {  // TODO(steven): TO BOUND
-    if (poped_pos <= 0) {
-      return false;
+    size_t poped_pos = size();
+
+
+    size_t fcount = 0;
+    while (fcount++ < util::ProgressAssurance::MAX_FAILURES) {
+      if (poped_pos <= 0) {
+        return false;
+      }
+
+      // TODO(steven) after working, optimize the below load  in the event the
+      // value changes
+      std::atomic<T> *spot = internal_array.get_spot(poped_pos - 1);
+      T current = spot->load();
+
+      if (current == Vector<T>::c_not_value_) {
+        poped_pos--;
+        continue;
+      } else if (internal_array.is_descriptor(current, spot)) {
+        continue;
+      }else if (spot->compare_exchange_weak(current, Vector<T>::c_not_value_)) {
+        size(-1);
+        value = current;
+        return true;
+      } else {
+        poped_pos--;
+      }
     }
 
-    // TODO(steven) after working, optimize the below load  in the event the
-    // value changes
-    std::atomic<T> *spot = internal_array.get_spot(poped_pos - 1);
-    T current = spot->load();
+    PopWRAOp<T> *op = new PopWRAOp<T>(this, value);
+    util::ProgressAssurance::make_announcement(
+          reinterpret_cast<tervel::util::OpRecord *>(op));
 
-    if (current == Vector<T>::c_not_value_) {
-      poped_pos--;
-      continue;
-    } else if (internal_array.is_descriptor(current, spot)) {
-      continue;
-    } else if (spot->compare_exchange_weak(current, Vector<T>::c_not_value_)) {
-      size(-1);
-      value = current;
-      return true;
-    } else {
-      poped_pos--;
-    }
-  }  // while not complete
-}  // pop_back_w_ra
+    bool result = op->result(value);
+    op->safe_delete();
+
+    return result;
+  }  // pop_back_w_ra
 
 
 template<typename T>
