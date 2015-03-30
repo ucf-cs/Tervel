@@ -11,10 +11,12 @@
 
 #include "tervel/util/info.h"
 #include "tervel/util/util.h"
-
 #include "tervel/util/system.h"
-#include "tervel/util/memory/hp/hp_element.h"
+
 #include "tervel/util/memory/hp/hp_list.h"
+#include "tervel/util/memory/hp/hp_element.h"
+
+
 
 namespace tervel {
 namespace util {
@@ -35,25 +37,7 @@ class ListManager {
       : free_lists_(new ManagedPool[number_pools])
       , number_pools_(number_pools) {}
 
-  ~ListManager() {
-    for (int i = 0; i < number_pools_; i++) {
-      Element * element = free_lists_[i].element_list_.load();
-      while (element != nullptr) {
-        Element *cur = element;
-        element = element->next();
-
-        bool watched = HazardPointer::is_watched(cur);
-        assert(!watched && "A Hazard Pointer Protected is still a watched when the list manager is being freed");
-        if (NO_DELETE_HP_ELEMENTS) {
-          cur->~Element();
-        } else {
-          delete cur;
-        }
-      }  // While elements to be freed
-    }
-
-    // delete free_lists_; // std::unique_ptr causes this array to be destroyed
-  }
+  ~ListManager();
 
   ElementList * allocate_list() {
     return new ElementList(this);

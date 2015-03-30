@@ -6,9 +6,26 @@ namespace util {
 namespace memory {
 namespace hp {
 
+HazardPointer::HazardPointer(int num_threads)
+  // The total number of slots needed is equal to the number of threads
+  // multiples by the number of slots used.
+  // Do to the potential of reordering, num_slots_ can not be used to
+  // initialize watches.
+  : watches_(new std::atomic<void *>[num_threads *
+        static_cast<size_t>(SlotID::END)])
+  , num_slots_ {num_threads * static_cast<size_t>(SlotID::END)}
+  , hp_list_manager_(num_threads) {}
+
+HazardPointer::~HazardPointer() {
+  for (int i = 0; i < num_slots_; i++) {
+    assert(watches_[i].load() != nullptr && "Some memory is still being watched and hazard pointer construct has been destroyed");
+  }
+  // delete watches_; // std::unique_ptr causes this array to be destroyed
+}
+
 bool HazardPointer::watch(SlotID slot, Element *descr,
       std::atomic<void *> *address, void *expected,
-      HazardPointer *hazard_pointer) {
+      HazardPointer * const hazard_pointer) {
   #ifdef NOMEMORY
     #error this could be it?
     return true;
@@ -32,7 +49,7 @@ bool HazardPointer::watch(SlotID slot, Element *descr,
 
 bool HazardPointer::watch(SlotID slot, void *value,
       std::atomic<void *> *address, void *expected,
-      HazardPointer *hazard_pointer) {
+      HazardPointer * const hazard_pointer) {
   #ifdef NOMEMORY
     return true;
   #endif
@@ -47,8 +64,8 @@ bool HazardPointer::watch(SlotID slot, void *value,
   }
 }
 
-void HazardPointer::unwatch(SlotID slot, Element *descr
-      , HazardPointer *hazard_pointer) {
+void HazardPointer::unwatch(SlotID slot, Element *descr,
+    HazardPointer * const hazard_pointer) {
   #ifdef NOMEMORY
     return;
   #endif
@@ -56,7 +73,7 @@ void HazardPointer::unwatch(SlotID slot, Element *descr
   descr->on_unwatch();
 }
 
-void HazardPointer::unwatch(SlotID slot, HazardPointer *hazard_pointer) {
+void HazardPointer::unwatch(SlotID slot, HazardPointer * const hazard_pointer) {
   #ifdef NOMEMORY
     return;
   #endif
@@ -64,7 +81,8 @@ void HazardPointer::unwatch(SlotID slot, HazardPointer *hazard_pointer) {
 }
 
 
-bool HazardPointer::is_watched(Element *descr, HazardPointer *hazard_pointer) {
+bool HazardPointer::is_watched(Element *descr,
+  HazardPointer * const hazard_pointer) {
   #ifdef NOMEMORY
     return false;
   #endif
@@ -74,7 +92,8 @@ bool HazardPointer::is_watched(Element *descr, HazardPointer *hazard_pointer) {
   return descr->on_is_watched();
 }
 
-bool HazardPointer::is_watched(void *value, HazardPointer *hazard_pointer) {
+bool HazardPointer::is_watched(void *value,
+  HazardPointer * const hazard_pointer) {
   #ifdef NOMEMORY
     return false;
   #endif

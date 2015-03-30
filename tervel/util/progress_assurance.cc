@@ -27,7 +27,7 @@ void ProgressAssurance::p_check_for_announcement(size_t &help_id) {
   // }
 }
 
-void ProgressAssurance::p_make_announcement(OpRecord *op, int tid) {
+void ProgressAssurance::p_make_announcement(OpRecord *op, const uint64_t tid) {
   op_table_[tid].store(op);
   op->help_complete();
   op_table_[tid].store(nullptr);

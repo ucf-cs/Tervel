@@ -14,15 +14,15 @@ namespace util {
 class RecursiveAction {
  public:
   RecursiveAction() {
-    if (tervel::tl_thread_info->get_recursive_depth() >
+    if (tervel::ThreadContext::get_recursive_depth() >
         tervel::tl_thread_info->get_num_threads() + 1) {
-      tervel::tl_thread_info->set_recursive_return();
+      tervel::ThreadContext::set_recursive_return();
     }
-    tervel::tl_thread_info->inc_recursive_depth();
+    tervel::ThreadContext::inc_recursive_depth();
   }
 
   ~RecursiveAction() {
-    tervel::tl_thread_info->dec_recursive_depth();
+    tervel::ThreadContext::dec_recursive_depth();
   }
 
  private:

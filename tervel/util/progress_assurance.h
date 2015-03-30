@@ -127,22 +127,21 @@ class ProgressAssurance {
    * delay_count_ is a variable used to delay how often a thread checks for an
    * annoucnement
   */
-  static void check_for_announcement(ProgressAssurance *progress_assuarance =
+  static void check_for_announcement(ProgressAssurance * const progress_assuarance =
         nullptr) {
     static __thread size_t delay_count = HELP_DELAY;
     static __thread size_t help_id = 0;
-
 
     if (delay_count >= HELP_DELAY && HELP_DELAY != 0) {
       delay_count = 0;
     }
     if (delay_count++ == 0) {
       if (progress_assuarance ==  nullptr) {
-          progress_assuarance = tervel::tl_thread_info->get_progress_assurance();
+        tervel::tl_thread_info->get_progress_assurance()->
+          p_check_for_announcement(help_id);
+      } else {
+        progress_assuarance->p_check_for_announcement(help_id);
       }
-
-
-      progress_assuarance->p_check_for_announcement(help_id);
     }
   }
 
@@ -151,8 +150,8 @@ class ProgressAssurance {
    * @param op an OpRecord to complete
    * @return on return the OpRecord must be completed.
    */
-  static void make_announcement(OpRecord *op, int tid =
-        tervel::tl_thread_info->get_thread_id(), ProgressAssurance *prog_assur =
+  static void make_announcement(OpRecord *op, const uint64_t tid =
+        tervel::tl_thread_info->get_thread_id(), ProgressAssurance * const prog_assur =
         tervel::tl_thread_info->get_progress_assurance()) {
     prog_assur->p_make_announcement(op, tid);
   }
@@ -169,7 +168,7 @@ class ProgressAssurance {
    * @param op an OpRecord to complete
    * @return on return the OpRecord must be completed.
    */
-  void p_make_announcement(OpRecord *op, int tid =
+  void p_make_announcement(OpRecord *op, const uint64_t tid =
         tervel::tl_thread_info->get_thread_id());
 
   /**
@@ -181,7 +180,7 @@ class ProgressAssurance {
   /**
    * The number of threads that are using this operation table
    */
-  int num_threads_;
+  const int num_threads_;
 
   DISALLOW_COPY_AND_ASSIGN(ProgressAssurance);
 };

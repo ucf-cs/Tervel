@@ -7,54 +7,60 @@
 namespace tervel {
 
 ThreadContext::ThreadContext(Tervel* tervel)
-    : tervel_ {tervel} {
-  this->get_thread_id();  // init thread id
+    : tervel_ {tervel}
+    , thread_id_(tervel_->get_thread_id())
+    , hp_element_list_(tervel_->hazard_pointer_.hp_list_manager_.allocate_list())
+    , rc_descriptor_pool_(tervel_->rc_pool_manager_.allocate_pool()) {
   tl_thread_info = this;
-  rc_descriptor_pool_ = tervel->rc_pool_manager_.allocate_pool();
-  hp_element_list_ = tervel->hp_list_manager_.allocate_list();
 }
 
-util::memory::hp::HazardPointer* ThreadContext::get_hazard_pointer() {
+util::memory::hp::HazardPointer * const ThreadContext::get_hazard_pointer() {
   return &(tervel_->hazard_pointer_);
 }
 
-util::ProgressAssurance* ThreadContext::get_progress_assurance() {
+util::ProgressAssurance * const ThreadContext::get_progress_assurance() {
   return &(tervel_->progress_assurance_);
 }
 
-
-util::memory::rc::DescriptorPool* ThreadContext::get_rc_descriptor_pool() {
-  static __thread util::memory::rc::DescriptorPool* rc_descriptor_pool_ =
-    tervel->rc_pool_manager_.allocate_pool();
+util::memory::rc::DescriptorPool * const ThreadContext::get_rc_descriptor_pool() {
   return rc_descriptor_pool_;
 }
 
-util::memory::hp::ElementList* ThreadContext::get_hp_element_list() {
-  static __thread util::memory::hp::ElementList* hp_element_list_ =
-    tervel->hp_list_manager_.allocate_list();
+util::memory::hp::ElementList * const ThreadContext::get_hp_element_list() {
   return hp_element_list_;
 }
 
-uint64_t get_thread_id() {
-  static __thread uint64_t thread_id_ = tervel->get_thread_id();
+const uint64_t ThreadContext::get_thread_id() {
   return thread_id_;
 }
 
-uint64_t ThreadContext::get_num_threads() {
+const uint64_t ThreadContext::get_num_threads() {
   return tervel_->num_threads_;
 }
 
-static size_t recrusive_depth(size_t i) {
+size_t ThreadContext::recursive_depth(size_t i) {
   static __thread size_t recursive_depth_count = 0;
   return recursive_depth_count += i;
 }
 
-static bool recursive_return(bool change) {
-  static __thread bool recrusive_return_;
+bool ThreadContext::recursive_return(bool change, bool value) {
+  static __thread bool recursive_return_;
   if (change) {
-    recrusive_return_ = value;
+    recursive_return_ = value;
   }
   return recursive_return_;
+}
+
+size_t ThreadContext::get_recursive_depth() {
+  return recursive_depth(0);
+}
+
+void ThreadContext::inc_recursive_depth() {
+  recursive_depth(1);
+}
+
+void ThreadContext::dec_recursive_depth() {
+  recursive_depth(-1);
 }
 
 }  // namespace tervel

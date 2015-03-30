@@ -31,7 +31,7 @@ class Tervel {
   }
 
   // The total number of expected threads in the system.
-  uint64_t num_threads_;
+  const uint64_t num_threads_;
 
   // The number of threads which have been assigned an thread_id
   std::atomic<uint64_t> active_threads_ {0};

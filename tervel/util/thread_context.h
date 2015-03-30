@@ -46,21 +46,21 @@ class ThreadContext {
   /**
    * @returns a reference to the HazardPointer singleton
    */
-  util::memory::hp::HazardPointer* get_hazard_pointer();
+  util::memory::hp::HazardPointer * const get_hazard_pointer();
 
   /**
    * @returns a reference to the ProgressAssurance singleton
    */
-  util::ProgressAssurance* get_progress_assurance();
+  util::ProgressAssurance * const get_progress_assurance();
 
   /**
    * @returns a reference to the hp_element_list_
    */
-  util::memory::hp::ElementList* get_hp_element_list();
+  util::memory::hp::ElementList * const get_hp_element_list();
   /**
    * @returns a reference to the rc_descriptor_pool
    */
-  util::memory::rc::DescriptorPool* get_rc_descriptor_pool();
+  util::memory::rc::DescriptorPool * const get_rc_descriptor_pool();
 
 
 
@@ -70,13 +70,13 @@ class ThreadContext {
  * This structure is designed to optimize the thread local memory access
  */
 private:
-  static size_t recrusive_depth(size_t i);
+  static size_t recursive_depth(size_t i);
 
 public:
   /**
    * Recurive_return functions: Used to indicate a thread must return to its own
-   * operation and re-evaualte its state. This is set to true in the event
-   * 1) The thread reasons that the dependncy between the current op it is
+   * operation and re-evaluate its state. This is set to true in the event
+   * 1) The thread reasons that the dependency between the current op it is
    * Trying to help has changed and a result it must re-examine its op
    * 2) Max Fail count has been reached and it needs to make an announcement
    * For its operation
@@ -89,23 +89,17 @@ public:
   /**
    * @return the current recursive depth
    */
-  static size_t get_recursive_depth() {
-    return recrusive_depth(0);
-  }
+  static size_t get_recursive_depth();
 
   /**
    * increments the recursive depth
    */
-  static void inc_recursive_depth() {
-    recrusive_depth(1);
-  }
+  static void inc_recursive_depth();
 
   /**
    * decrements the recursive depth
    */
-  static void dec_recursive_depth() {
-    recrusive_depth(-1);
-  }
+  static void dec_recursive_depth();
 
   /**
   * @return whether or not the thread is performing a recursive return.
@@ -132,19 +126,22 @@ public:
    * A unique ID among all active threads.
    * @return the threads id.
    */
-  uint64_t get_thread_id();
+  const uint64_t get_thread_id();
   /**
    * @return number of threads
    */
-  uint64_t get_num_threads();
+  const uint64_t get_num_threads();
 
  private:
 
   /**
-   * Tervel provides a link to the shared Tervel object. This object contians
+   * Tervel provides a link to the shared Tervel object. This object contains
    * number of threads, hazard_pointer, and other shared structures.
    */
-  const Tervel *tervel_;
+  Tervel * const tervel_;
+  const uint64_t thread_id_;
+  util::memory::hp::ElementList * const hp_element_list_;
+  util::memory::rc::DescriptorPool * const rc_descriptor_pool_;
 
  private:
   DISALLOW_COPY_AND_ASSIGN(ThreadContext);

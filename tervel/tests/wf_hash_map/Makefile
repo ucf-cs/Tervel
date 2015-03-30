@@ -19,8 +19,9 @@ EXECUTABLE ?=main
 OBJECTS = $(SOURCES:.cc=.o)
 
 
-all: CLIFF WFTEST TBB BOOST STL SPLIT MICHAEL WFOLD
+#all: CLIFF WFTEST TBB BOOST STL SPLIT MICHAEL WFOLD
 
+all: WFTEST 
 
 test: $(SOURCES) $(EXECUTABLE)
 	mkdir -p $(OUTPUT)
@@ -78,7 +79,7 @@ WFTEST_SUB:
 	$(MAKE) test CONTAINERTYPE="-DUSE_WF_HASHMAP -DHASHMAP_EXPANSION_RATE=$(EXPAN_RATE)" \
 	TINC="-I../../../  " \
 	TSOURCES="../../util/progress_assurance.cc \
-	../../util/memory/hp/hazard_pointer.cc ../../util/memory/hp/hp_list.cc \
+	../../util/memory/hp/list_manager.cc ../../util/memory/hp/hazard_pointer.cc ../../util/memory/hp/hp_list.cc \
 	../../util/memory/rc/descriptor_pool.cc ../../util/thread_context.cc \
 	../../util/memory/rc/pool_manager.cc ../../util/info.cc" \
 	EXECUTABLE=wfhashmap_$(EXPAN_RATE).x
@@ -101,8 +102,7 @@ $(EXECUTABLE): $(OBJECTS)
 
 .PHONY: clean
 clean:
-	$(RM) $(OUTPUT)*.x ../../util/progress_assurance.o \
-	../../util/memory/hp/hazard_pointer.o ../../util/memory/hp/hp_list.o \
-	../../util/memory/rc/descriptor_pool.o ../../util/thread_context.o \
-	../../util/memory/rc/pool_manager.o ../../util/info.o
+	$(RM) $(OUTPUT)*.x ../../util/*.o \
+	../../util/memory/hp/*.o  \
+	../../util/memory/rc/*.o
 	$(RM) $(OBJECTS)

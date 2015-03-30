@@ -40,11 +40,12 @@ class Element {
    * @param no_check if true then the object is imeditly deleted
    * @param element_list the list to append the object to until it is safe
    */
-  void safe_delete(bool no_check = false, ElementList *element_list
-          = tervel::tl_thread_info->get_hp_element_list()) {
+  void safe_delete(bool no_check = false,
+      ElementList * const element_list = tervel::tl_thread_info->get_hp_element_list()) {
     #ifdef NOMEMORY
     return;
     #endif
+
     if (no_check && NO_DELETE_HP_ELEMENTS) {
       this->~Element();
     } else if (no_check) {
