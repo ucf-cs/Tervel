@@ -11,6 +11,7 @@
 
 #include "tervel/util/info.h"
 #include "tervel/util/util.h"
+#include "tervel/util/memory/hp/list_manager.h"
 
 namespace tervel {
 namespace util {
@@ -26,7 +27,7 @@ class Element;
  * This allows for more expressive operations to be performed.
  *
  * If an individual thread requires more than one element to be hazard pointer
- * portected at a single instance, then SlotIDs should be added.
+ * protected at a single instance, then SlotIDs should be added.
  */
 class HazardPointer {
  public:
@@ -34,15 +35,19 @@ class HazardPointer {
 
   explicit HazardPointer(int num_threads)
       // The total number of slots needed is equal to the number of threads
-      // multipled by the number of slots used.
+      // multiples by the number of slots used.
       // Do to the potential of reordering, num_slots_ can not be used to
-      // inilitze watches.
-      : watches_(new std::atomic<void *>[num_threads *
+      // initialize watches.
+      : hp_list_manager_(num_threads)
+      , watches_(new std::atomic<void *>[num_threads *
             static_cast<size_t>(SlotID::END)])
       , num_slots_ {num_threads * static_cast<size_t>(SlotID::END)} {}
 
   ~HazardPointer() {
-    // TODO(steven) implement
+    for (int i = 0; i < num_slots_; i++) {
+      assert(watches_[i].load() != nullptr && "Some memory is still being watched and hazard pointer construct has been destroyed");
+    }
+    // delete watches_; // std::unique_ptr causes this array to be destroyed
   }
 
 
@@ -170,6 +175,11 @@ class HazardPointer {
     }
     return false;
   }
+
+ public:
+  // Shared HP Element list manager
+  util::memory::hp::ListManager hp_list_manager_;
+
 
  private:
   /**

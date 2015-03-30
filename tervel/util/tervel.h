@@ -5,7 +5,6 @@
 #include "tervel/util/thread_context.h"
 #include "tervel/util/progress_assurance.h"
 #include "tervel/util/memory/hp/hazard_pointer.h"
-#include "tervel/util/memory/hp/list_manager.h"
 #include "tervel/util/memory/rc/pool_manager.h"
 
 namespace tervel {
@@ -18,7 +17,6 @@ class Tervel {
   explicit Tervel(size_t num_threads)
       : num_threads_  {num_threads}
       , hazard_pointer_(num_threads)
-      , hp_list_manager_(num_threads)
       , rc_pool_manager_(num_threads)
       , progress_assurance_(num_threads) {}
 
@@ -39,9 +37,6 @@ class Tervel {
 
   // The shared hazard_pointer object
   util::memory::hp::HazardPointer hazard_pointer_;
-
-  // Shared HP Element list manager
-  util::memory::hp::ListManager hp_list_manager_;
 
   // Shared RC Descriptor Pool Manager
   util::memory::rc::PoolManager rc_pool_manager_;

@@ -32,7 +32,23 @@ class ListManager {
       , number_pools_(number_pools) {}
 
   ~ListManager() {
-    // TODO(steven): destroy pool by freeing each Element
+    for (int i = 0; i < number_pools_; i++) {
+      Element * element = free_lists_[i].element_list_.load();
+      while (element != nullptr) {
+        Element *cur = element;
+        element = element->next();
+
+        bool watched = HazardPointer::is_watched(cur);
+        assert(!watched && "A Hazard Pointer Protected is still a watched when the list manager is being freed");
+        if (NO_DELETE_HP_ELEMENTS) {
+          cur->~Element();
+        } else {
+          delete cur;
+        }
+      }  // While elements to be freed
+    }
+
+    // delete free_lists_; // std::unique_ptr causes this array to be destroyed
   }
 
   ElementList * allocate_list() {
@@ -41,11 +57,11 @@ class ListManager {
 
  private:
   struct ManagedPool {
-    Element * element_list_ {nullptr};
+    std::atomic<Element *> element_list_ {nullptr};
   };
 
   void recieve_element_list(uint64_t tid, Element * element_list) {
-    free_lists_[tid].element_list_ = element_list;
+    free_lists_[tid].element_list_.store(element_list);
   };
 
   std::unique_ptr<ManagedPool[]> free_lists_;

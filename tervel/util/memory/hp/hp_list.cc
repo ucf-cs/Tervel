@@ -23,7 +23,6 @@ void ElementList::add_to_unsafe(Element* elem) {
   element_list_ = elem;
 }
 
-
 void ElementList::try_to_free_elements(bool dont_check) {
   /**
    * Loop until no more elements can be freed from the element_list_ linked list
@@ -55,7 +54,7 @@ void ElementList::try_to_free_elements(bool dont_check) {
     }
 
     /**
-     * We check the first element last to allow for cleaner looping code.
+     * We check the first element last to allow for cleaner looping structure.
      */
     temp = element_list_->next();
     bool watched = HazardPointer::is_watched(element_list_);

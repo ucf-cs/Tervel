@@ -28,7 +28,7 @@ util::memory::rc::DescriptorPool* ThreadContext::get_rc_descriptor_pool() {
 }
 
 util::memory::hp::ElementList* ThreadContext::get_hp_element_list() {
-  return hp_element_list_;
+  return &(tervel_->hazard_pointer_->hp_element_list_);
 }
 
 uint64_t ThreadContext::get_num_threads() {
