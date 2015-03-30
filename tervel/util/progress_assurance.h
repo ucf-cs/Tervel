@@ -121,10 +121,18 @@ class ProgressAssurance {
   /**
    * This function checks at most one position in the op_table_ for an OPRecod
    * If one is found it will call its help_complete function.
-   */
+   * help_id_ is a variable used to track which thread to check for an
+   * announcement.
+
+   * delay_count_ is a variable used to delay how often a thread checks for an
+   * annoucnement
+  */
   static void check_for_announcement(ProgressAssurance *progress_assuarance =
         nullptr) {
     static __thread size_t delay_count = HELP_DELAY;
+    static __thread size_t help_id = 0;
+
+
     if (delay_count >= HELP_DELAY && HELP_DELAY != 0) {
       delay_count = 0;
     }
@@ -132,7 +140,9 @@ class ProgressAssurance {
       if (progress_assuarance ==  nullptr) {
           progress_assuarance = tervel::tl_thread_info->get_progress_assurance();
       }
-      progress_assuarance->p_check_for_announcement();
+
+
+      progress_assuarance->p_check_for_announcement(help_id);
     }
   }
 
@@ -152,7 +162,7 @@ class ProgressAssurance {
    * This function checks at most one position in the op_table_ for an OPRecod
    * If one is found it will call its help_complete function.
    */
-  void p_check_for_announcement();
+  void p_check_for_announcement(int &hpos);
 
   /**
    * This function places the

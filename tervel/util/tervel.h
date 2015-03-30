@@ -21,7 +21,8 @@ class Tervel {
       , progress_assurance_(num_threads) {}
 
   ~Tervel() {
-    // TODO(steven) implement
+    // Notice: The destructors of the member variables are called when this
+    // object is freed.
   }
 
  private:
