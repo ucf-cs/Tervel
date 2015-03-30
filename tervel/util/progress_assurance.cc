@@ -4,7 +4,7 @@
 namespace tervel {
 namespace util {
 
-void ProgressAssurance::p_check_for_announcement(int &help_id) {
+void ProgressAssurance::p_check_for_announcement(size_t &help_id) {
     help_id++;
     if (help_id >= num_threads_) {
       help_id = 0;

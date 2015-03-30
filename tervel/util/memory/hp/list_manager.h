@@ -8,6 +8,10 @@
 #include <assert.h>
 #include <stdint.h>
 
+
+#include "tervel/util/info.h"
+#include "tervel/util/util.h"
+
 #include "tervel/util/system.h"
 #include "tervel/util/memory/hp/hp_element.h"
 #include "tervel/util/memory/hp/hp_list.h"
@@ -68,7 +72,7 @@ class ListManager {
    * @param element_list The list of elements that it owned.
    */
   void recieve_element_list(uint64_t tid, Element * element_list) {
-    assert(free_lists_[tid].element_list_.load() == nullpt && "The HP shared free_lists should be empty when this function is called");
+    assert(free_lists_[tid].element_list_.load() == nullptr && "The HP shared free_lists should be empty when this function is called");
     free_lists_[tid].element_list_.store(element_list);
   };
 

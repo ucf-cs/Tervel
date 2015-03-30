@@ -162,7 +162,7 @@ class ProgressAssurance {
    * This function checks at most one position in the op_table_ for an OPRecod
    * If one is found it will call its help_complete function.
    */
-  void p_check_for_announcement(int &hpos);
+  void p_check_for_announcement(size_t &hpos);
 
   /**
    * This function places the
