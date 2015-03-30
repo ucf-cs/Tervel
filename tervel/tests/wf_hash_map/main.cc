@@ -210,8 +210,9 @@ void run(int thread_id, TestObject * test_data) {
   test_data->test_class_.attach_thread();
 
   boost::mt19937 rng(thread_id);
-  boost::uniform_int<> brandValues(2, std::numeric_limits<int>::max());
   boost::uniform_int<> brandOperations(1, 100);
+  boost::uniform_int<> brandValues(2, 1048576);
+  // boost::uniform_int<> brandValues(2, std::numeric_limits<int>::max());
 
   const int frate = test_data->find_rate_;
   const int irate = frate + test_data->insert_rate_;

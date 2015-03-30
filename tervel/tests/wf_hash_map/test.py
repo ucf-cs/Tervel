@@ -36,10 +36,10 @@ if True:
   #threads = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
   #threads = [1, 2, 3, 4, 5, 6]
   op_rates = [ [10,18,70,2], [10,70,18,2], [10,88,0,2], [25,25,25,25], [34,33,0,33], [88,8,2,2], [88,10,0,2] ]
-  prefill_percents = [100]
+  prefill_percents = [50]
   capacitys = [1024]
   exeTimes = [5]
-  reps = 30
+  reps = 3
 
 else:
   threads = [2]
