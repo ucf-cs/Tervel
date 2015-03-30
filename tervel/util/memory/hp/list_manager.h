@@ -60,7 +60,15 @@ class ListManager {
     std::atomic<Element *> element_list_ {nullptr};
   };
 
+  /**
+   * This function is called when a thread is detached. It moves elements from its
+   * private HP pool to the shared pool.
+   *
+   * @param tid          The threads tervel id
+   * @param element_list The list of elements that it owned.
+   */
   void recieve_element_list(uint64_t tid, Element * element_list) {
+    assert(free_lists_[tid].element_list_.load() == nullpt && "The HP shared free_lists should be empty when this function is called");
     free_lists_[tid].element_list_.store(element_list);
   };
 
