@@ -14,11 +14,15 @@ HazardPointer::HazardPointer(int num_threads)
   : watches_(new std::atomic<void *>[num_threads *
         static_cast<size_t>(SlotID::END)])
   , num_slots_ {num_threads * static_cast<size_t>(SlotID::END)}
-  , hp_list_manager_(num_threads) {}
+  , hp_list_manager_(num_threads) {
+    for (size_t i = 0; i < num_slots_; i++) {
+      watches_[i].store(nullptr);
+    }
+  }
 
 HazardPointer::~HazardPointer() {
   for (size_t i = 0; i < num_slots_; i++) {
-    assert(watches_[i].load() != nullptr && "Some memory is still being watched and hazard pointer construct has been destroyed");
+    assert(watches_[i].load() == nullptr && "Some memory is still being watched and hazard pointer construct has been destroyed");
   }
   // delete watches_; // std::unique_ptr causes this array to be destroyed
 }
