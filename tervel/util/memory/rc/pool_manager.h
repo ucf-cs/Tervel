@@ -46,7 +46,7 @@ class PoolManager {
   /**
    * Allocates a pool for thread-local use.
    */
-  DescriptorPool * allocate_pool();
+  DescriptorPool * allocate_pool(const uint64_t pid);
 
   const size_t number_pools_;
 

@@ -42,8 +42,7 @@ class PoolManager;
  */
 class DescriptorPool {
  public:
-  DescriptorPool(PoolManager *manager, int prefill = 4,
-          uint64_t pool_id = tl_thread_info->get_thread_id())
+  DescriptorPool(PoolManager *manager, uint64_t pool_id, int prefill = 4)
       : manager_(manager)
       , pool_id_(pool_id)
       , safe_pool_{nullptr}

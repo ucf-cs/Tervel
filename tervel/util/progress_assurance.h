@@ -114,7 +114,7 @@ class ProgressAssurance {
     static constexpr size_t HELP_DELAY = 1000;
   #endif
 
-  explicit ProgressAssurance(int num_threads)
+  explicit ProgressAssurance(size_t num_threads)
       : op_table_(new std::atomic<OpRecord *>[num_threads]() )
       , num_threads_ {num_threads} {}
 
@@ -180,7 +180,7 @@ class ProgressAssurance {
   /**
    * The number of threads that are using this operation table
    */
-  const int num_threads_;
+  const size_t num_threads_;
 
   DISALLOW_COPY_AND_ASSIGN(ProgressAssurance);
 };

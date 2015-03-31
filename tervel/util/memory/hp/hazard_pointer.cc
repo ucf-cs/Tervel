@@ -17,7 +17,7 @@ HazardPointer::HazardPointer(int num_threads)
   , hp_list_manager_(num_threads) {}
 
 HazardPointer::~HazardPointer() {
-  for (int i = 0; i < num_slots_; i++) {
+  for (size_t i = 0; i < num_slots_; i++) {
     assert(watches_[i].load() != nullptr && "Some memory is still being watched and hazard pointer construct has been destroyed");
   }
   // delete watches_; // std::unique_ptr causes this array to be destroyed

@@ -10,7 +10,7 @@ ThreadContext::ThreadContext(Tervel* tervel)
     : tervel_ {tervel}
     , thread_id_(tervel_->get_thread_id())
     , hp_element_list_(tervel_->hazard_pointer_.hp_list_manager_.allocate_list())
-    , rc_descriptor_pool_(tervel_->rc_pool_manager_.allocate_pool()) {
+    , rc_descriptor_pool_(tervel_->rc_pool_manager_.allocate_pool(thread_id_)) {
   tl_thread_info = this;
 }
 
