@@ -36,10 +36,7 @@ WFTEST:
 
 WFTEST_DEBUG:
 	$(MAKE) test  CONTAINERTYPE=-DUSE_WF_VECTOR \
-	TSOURCES="../../util/progress_assurance.cc \
-	../../util/memory/hp/hazard_pointer.cc ../../util/memory/hp/hp_list.cc \
-	../../util/memory/rc/descriptor_pool.cc ../../util/thread_context.cc \
-	../../util/memory/rc/pool_manager.cc ../../util/info.cc ../../util/memory/hp/list_manager.cc" \
+	TSOURCES:=$(shell find ../../util/ -name "*.cc")
 	EXECUTABLE=wfvector.x
 
 $(EXECUTABLE): $(OBJECTS)

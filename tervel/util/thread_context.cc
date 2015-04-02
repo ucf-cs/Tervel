@@ -38,29 +38,5 @@ const uint64_t ThreadContext::get_num_threads() {
   return tervel_->num_threads_;
 }
 
-size_t ThreadContext::recursive_depth(size_t i) {
-  static __thread size_t recursive_depth_count = 0;
-  return recursive_depth_count += i;
-}
-
-bool ThreadContext::recursive_return(bool change, bool value) {
-  static __thread bool recursive_return_;
-  if (change) {
-    recursive_return_ = value;
-  }
-  return recursive_return_;
-}
-
-size_t ThreadContext::get_recursive_depth() {
-  return recursive_depth(0);
-}
-
-void ThreadContext::inc_recursive_depth() {
-  recursive_depth(1);
-}
-
-void ThreadContext::dec_recursive_depth() {
-  recursive_depth(-1);
-}
 
 }  // namespace tervel

@@ -12,11 +12,7 @@ INC += $(TINC) -I../../../../tervel-library/
 LIB += $(TLIB) -ldl -lgflags -lpthread -lboost_system -lboost_regex -lrt -lllalloc
 CPPFLAGS += $(INC)
 
-TSOURCES=../../util/progress_assurance.cc ../../util/memory/hp/list_manager.cc \
-        ../../util/memory/hp/hazard_pointer.cc ../../util/memory/hp/hp_list.cc \
-        ../../util/memory/rc/descriptor_pool.cc ../../util/thread_context.cc \
-        ../../util/memory/rc/pool_manager.cc ../../util/info.cc \
-        ../../util/memory/rc/descriptor_read_first_op.cc
+TSOURCES := $(shell find ../../util/ -name '*.cc')
 SOURCES = main.cc $(TSOURCES)
 
 OUTPUT =Executables/

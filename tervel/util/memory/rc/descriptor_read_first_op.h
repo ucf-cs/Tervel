@@ -4,7 +4,7 @@
 #include <algorithm>
 #include <atomic>
 #include <cstdint>
-#include "tervel/util/progress_assurance.h"
+#include <tervel/util/progress_assurance.h>
 #include <tervel/util/memory/rc/descriptor_util.h>
 
 namespace tervel {

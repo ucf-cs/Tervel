@@ -113,7 +113,7 @@ class Helper : public util::Descriptor {
       /* This implies it was successfully associated
          So call the complete function of the MCAS operation */
       success = this->mcas_op_->mcas_complete(this->cas_row_);
-      if (tervel::tl_thread_info->recursive_return()) {
+      if (util::RecursiveAction::recursive_return()) {
         /* If the thread is performing a recursive return back to its own
            operation, then just return null, it will be ignored. */
         return nullptr;

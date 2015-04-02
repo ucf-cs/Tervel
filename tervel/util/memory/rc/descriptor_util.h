@@ -40,9 +40,6 @@ inline DescrType * get_descriptor(Args&&... args) {
  */
 inline void free_descriptor(tervel::util::Descriptor *descr,
       bool dont_check = false) {
-  #ifdef NOMEMORY
-  return;
-  #endif  // NOMEMORY
   tervel::tl_thread_info->get_rc_descriptor_pool()->free_descriptor(descr,
         dont_check);
 }
@@ -55,12 +52,12 @@ inline void free_descriptor(tervel::util::Descriptor *descr,
 * @param descr the descriptor to be checked for rc protection.
 */
 inline bool is_watched(tervel::util::Descriptor *descr) {
-  #ifdef NOMEMORY
+  #ifdef TERVEL_MEM_RC_NO_WATCH
   return false;
-  #endif  // NOMEMORY
+  #endif  // TERVEL_MEM_RC_NO_WATCH
   PoolElement * elem = get_elem_from_descriptor(descr);
   int64_t ref_count = elem->header().ref_count.load();
-  assert(ref_count >=0);
+  assert(ref_count >=0 && " Ref count of an object is negative, which implies some thread called unwatch multiple times on the same object");
   if (ref_count == 0) {
     return descr->on_is_watched();
   } else {
@@ -70,40 +67,39 @@ inline bool is_watched(tervel::util::Descriptor *descr) {
 
 /**
 * This method is used to increment the reference count of the passed descriptor
-* object. If after increming the reference count the object is still at the
+* object. If after incrementing the reference count the object is still at the
 * address (indicated by *a == value), it will call on_watch.
 * If that returns true then it will return true.
 * Otherwise it decrements the reference count and returns false
 * Internally calls on_watch
 *
 * @param descr the descriptor which needs rc protection
-* @param address address it was derferenced from
+* @param address address it was dereferenced from
 * @param val the read value of the address
-* @return true if succesffully acquired a wat
+* @return true if successfully acquired a watch
 */
 
 inline bool watch(tervel::util::Descriptor *descr, std::atomic<void *> *address,
         void *value) {
-  #ifdef NOMEMORY
-  #warning NOMEMORY is enabled
-  return true;
-  #endif  // NOMEMORY
+  #ifdef TERVEL_MEM_RC_NO_WATCH
+    return true;
+  #endif  // TERVEL_MEM_RC_NO_WATCH
 
   PoolElement *elem = get_elem_from_descriptor(descr);
   elem->header().ref_count.fetch_add(1);
 
   if (address->load() != value) {
     int64_t temp = elem->header().ref_count.fetch_add(-1);
-    assert(temp > 0);
+    assert(temp > 0 && " Ref count of an object is negative, which implies some thread called unwatch multiple times on the same object");
     return false;
   } else {
     bool res = descr->on_watch(address, value);
     if (res) {
-      assert(is_watched(descr));
+      assert(is_watched(descr) && "On watch returned true, but the object is not watched. Error could exist on either [on_]watch or [on_]is_watched functions");
      return true;
     } else {
       int64_t temp = elem->header().ref_count.fetch_add(-1);
-      assert(temp > 0);
+      assert(temp > 0 && " Ref count of an object is negative, which implies some thread called unwatch multiple times on the same object");
       return false;
     }
   }
@@ -118,12 +114,13 @@ inline bool watch(tervel::util::Descriptor *descr, std::atomic<void *> *address,
 * @param descr the descriptor which no longer needs rc protection.
 */
 inline void unwatch(tervel::util::Descriptor *descr) {
-  #ifdef NOMEMORY
+  #ifdef TERVEL_MEM_RC_NO_WATCH
     return;
-  #endif  // NOMEMORY
+  #endif  // TERVEL_MEM_RC_NO_WATCH
+
   PoolElement *elem = get_elem_from_descriptor(descr);
   int64_t temp = elem->header().ref_count.fetch_add(-1);
-  assert(temp > 0);
+  assert(temp > 0 && " Ref count of an object is negative, which implies some thread called unwatch multiple times on the same object");
   descr->on_unwatch();
 }
 
@@ -155,7 +152,7 @@ inline tervel::util::Descriptor * unmark_first(void *descr) {
 }
 
 /**
- * This returns whether or not the least signficant bit holds a bitmark
+ * This returns whether or not the least significant bit holds a bitmark
  *
  * @param the reference to check
  * @return whether or not it holds a bitmark
@@ -167,11 +164,11 @@ inline bool is_descriptor_first(void *descr) {
 /**
 * This method is used to remove a descriptor object that is conflict with
 * another threads operation.
-* It first checks the recursive depth before proceding.
+* It first checks the recursive depth before proceeding.
 * Next it protects against the object being reused else where by acquiring
 * either HP or RC watch on the object.
 * Then once it is safe it will call the objects complete function
-* This function must gurantee that after its return the object has been removed
+* This function must guarantee that after its return the object has been removed
 * It returns the value.
 *
 * @param expected a marked reference to the object
@@ -182,7 +179,7 @@ inline bool is_descriptor_first(void *descr) {
 inline void * remove_descriptor(void *expected, std::atomic<void *> *address) {
   tervel::util::RecursiveAction recurse;
   void *newValue;
-  if (tervel::tl_thread_info->recursive_return()) {
+  if (tervel::util::RecursiveAction::recursive_return()) {
     newValue = nullptr;  // result not used
   } else {
     tervel::util::Descriptor *descr = unmark_first(expected);
@@ -195,32 +192,6 @@ inline void * remove_descriptor(void *expected, std::atomic<void *> *address) {
   }
   return newValue;
 }
-inline void *lf_descriptor_read_first(std::atomic<void *> *address) {
-  void *current_value = address->load();
-  unsigned int fail_count = 0;
-  while (is_descriptor_first(current_value)) {
-
-    if (fail_count++ == tervel::util::ProgressAssurance::MAX_FAILURES) {
-
-      ReadFirstOp *op = new ReadFirstOp(address);
-      tervel::util::ProgressAssurance::make_announcement(
-          reinterpret_cast<tervel::util::OpRecord *>(op));
-      current_value = op->load();
-      op->safe_delete();
-      return current_value;
-    }
-
-    tervel::util::Descriptor *descr = unmark_first(current_value);
-    if (watch(descr, address, current_value)) {
-      current_value = descr->get_logical_value();
-      unwatch(descr);
-    } else {
-      current_value = address->load();
-    }
-  }
-
-  return current_value;
-}
 
 /**
  * This function determines the logical value of an address which may have
@@ -232,8 +203,29 @@ inline void *lf_descriptor_read_first(std::atomic<void *> *address) {
  * @return the current logical value
  */
 inline void *descriptor_read_first(std::atomic<void *> *address) {
-//  tervel::util::ProgressAssurance::check_for_announcement();
-  return lf_descriptor_read_first(address);
+  void *current_value = address->load();
+
+  size_t fail_count = 0;
+  while (is_descriptor_first(current_value)) {
+
+    if (fail_count++ == tervel::util::ProgressAssurance::MAX_FAILURES) {
+      ReadFirstOp *op = new ReadFirstOp(address);
+      tervel::util::ProgressAssurance::make_announcement(
+          reinterpret_cast<tervel::util::OpRecord *>(op));
+      current_value = op->load();
+      op->safe_delete();
+      return current_value;
+    } else {
+      tervel::util::Descriptor *descr = unmark_first(current_value);
+      if (watch(descr, address, current_value)) {
+        current_value = descr->get_logical_value();
+        unwatch(descr);
+      } else {
+        current_value = address->load();
+      }
+    }
+  }
+  return current_value;
 }
 
 }  // namespace rc

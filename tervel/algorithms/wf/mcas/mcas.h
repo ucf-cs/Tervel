@@ -270,14 +270,14 @@ bool MCAS<T>::mcas_complete(int start_pos, bool wfmode) {
       } else if (!wfmode &&
               fcount++ == util::ProgressAssurance::MAX_FAILURES) {
         /* Check if we need to enter wf_mode */
-        if (tervel::tl_thread_info->get_recursive_depth() == 0) {
+        if (util::RecursiveAction::recursive_depth() == 0) {
           /* If this is our operation then make an annoucnement */
           tervel::util::ProgressAssurance::make_announcement(this);
           assert(state_.load() != MCasState::IN_PROGRESS);
           return (state_.load() == MCasState::PASS);
         } else {
           /* Otherwise perform a recursive return */
-          tervel::tl_thread_info->set_recursive_return();
+          util::RecursiveAction::set_recursive_return();
           return false;
         }
       }
@@ -291,11 +291,11 @@ bool MCAS<T>::mcas_complete(int start_pos, bool wfmode) {
 
         /* Check if we are executing a recurisve return and if so determine
          * if we are at our own operation or need to return farther. */
-        if (tervel::tl_thread_info->recursive_return()) {
-          if (tervel::tl_thread_info->get_recursive_depth() == 0) {
+        if (util::RecursiveAction::recursive_return()) {
+          if (util::RecursiveAction::recursive_depth() == 0) {
             /* we are back to our own operation so re-read process the
              * current value */
-            tervel::tl_thread_info->clear_recursive_return();
+            util::RecursiveAction::clear_recursive_return();
             current_value = row->address_->load();
           } else {
             /* we need to return some more */
