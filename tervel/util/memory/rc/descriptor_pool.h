@@ -27,7 +27,7 @@ class PoolManager;
  * The pool is represented as two linked lists of descriptors: one for safe
  * elements and one for unsafe elements. The safe pool is known to only contain
  * items owned by the thread owning the DescriptorPool object, and the unsafe
- * pool contains items where other threads may still hold refrences to them.
+ * pool contains items where other threads may still hold references to them.
  *
  * Further, the pool object has a parent who is shared amongst other threads.
  * When a pool is to be destroyed, it sends its remaining elements to the
@@ -38,7 +38,6 @@ class PoolManager;
  *
  * TODO(steven) Need to implement max list size, when it is reached, elements
  * are sent to the manager list
- * TODO(steven) Need to implement logic to attempt to get elements from manager
  */
 class DescriptorPool {
  public:
@@ -52,7 +51,8 @@ class DescriptorPool {
     this->reserve(prefill);
   }
   ~DescriptorPool() {
-    this->send_to_manager();
+    this->send_unsafe_to_manager();
+    this->send_safe_to_manager();
   }
 
   /**
@@ -103,13 +103,6 @@ class DescriptorPool {
   // -------------------------
 
   /**
-   * Sends all elements managed by this pool to the parent pool. Same as:
-   *   send_safe_to_manager();
-   *   send_unsafe_to_manager();
-   */
-  void send_to_manager();
-
-  /**
    * Sends the elements from the safe pool to the corresponding safe pool in
    * this pool's manager.
    */
@@ -120,20 +113,6 @@ class DescriptorPool {
    * this pool's manager.
    */
   void send_unsafe_to_manager();
-
-  /**
-   * Gets the safe pool of the manager associated with this pool.
-   */
-  std::atomic<PoolElement *> & manager_safe_pool() {
-    return manager_->pools_[pool_id_].safe_pool;
-  }
-
-  /**
-   * Gets the unsafe pool of the manager associated with this pool.
-   */
-  std::atomic<PoolElement *> & manager_unsafe_pool() {
-    return manager_->pools_[pool_id_].unsafe_pool;
-  }
 
 
   // --------------------------------
@@ -164,7 +143,9 @@ class DescriptorPool {
    */
   void try_clear_unsafe_pool(bool dont_check = false);
 
-
+  /** verifies that the length of the linked list matches the count
+  */
+  bool verify_pool_count(PoolElement *pool, size_t count);
   // -------
   // MEMBERS
   // -------

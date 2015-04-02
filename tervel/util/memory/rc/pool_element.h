@@ -9,10 +9,10 @@
 #include <stdint.h>
 #include <stddef.h>
 
-#include "tervel/util/descriptor.h"
-#include "tervel/util/system.h"
-#include "tervel/util/util.h"
-#include "tervel/util/info.h"
+#include <tervel/util/descriptor.h>
+#include <tervel/util/system.h>
+#include <tervel/util/util.h>
+#include <tervel/util/info.h>
 
 namespace tervel {
 namespace util {
@@ -51,7 +51,7 @@ class PoolElement {
   }
 
   ~PoolElement() {
-    assert(false);
+    assert(false && "PoolElement should never be deleted, return it to Tervel please");
   }
 
   // TODO(carlos) add const versions of these accessors

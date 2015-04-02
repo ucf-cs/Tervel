@@ -6,8 +6,8 @@
 #include <assert.h>
 #include <stdint.h>
 
-#include "tervel/util/info.h"
-#include "tervel/util/util.h"
+#include <tervel/util/info.h>
+#include <tervel/util/util.h>
 
 namespace tervel {
 namespace util {
