@@ -42,7 +42,7 @@ class PoolManager;
  */
 class DescriptorPool {
  public:
-  DescriptorPool(PoolManager *manager, uint64_t pool_id, int prefill = 4)
+  DescriptorPool(PoolManager *manager, uint64_t pool_id, int prefill = TERVEL_MEM_RC_MIN_NODES)
       : manager_(manager)
       , pool_id_(pool_id)
       , safe_pool_{nullptr}
@@ -51,7 +51,9 @@ class DescriptorPool {
       , unsafe_pool_count_(0) {
     this->reserve(prefill);
   }
-  ~DescriptorPool() { this->send_to_manager(); }
+  ~DescriptorPool() {
+    this->send_to_manager();
+  }
 
   /**
    * Allocates an extra `num_descriptors` elements to the pool.
@@ -209,10 +211,13 @@ class DescriptorPool {
 template<typename DescrType, typename... Args>
 DescrType * DescriptorPool::get_descriptor(Args&&... args) {
   PoolElement *elem = this->get_from_pool();
-  elem->init_descriptor<DescrType>(std::forward<Args>(args)...);
-  DescrType * descr = reinterpret_cast<DescrType *>(elem->descriptor());
-
-  return descr;
+  if (elem == nullptr) {
+    return nullptr;
+  } else {
+    elem->init_descriptor<DescrType>(std::forward<Args>(args)...);
+    DescrType * descr = reinterpret_cast<DescrType *>(elem->descriptor());
+    return descr;
+  }
 }
 
 }  // namespace rc

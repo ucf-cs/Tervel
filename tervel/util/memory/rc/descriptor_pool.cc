@@ -33,41 +33,50 @@ PoolElement * DescriptorPool::get_from_pool(bool allocate_new) {
   // likely the safe list has something to take from.
   this->try_clear_unsafe_pool();
 
-  PoolElement *ret {nullptr};
+#ifdef TERVEL_MEM_RC_NO_FREE
+  return new PoolElement();
+#endif
 
+  PoolElement *res {nullptr};
+
+  // First if local pool is empty go to global
+  if (safe_pool_ == nullptr) {
+    assert(safe_pool_count_ == 0 && "safe pool count has diverged and no longer equals the number of elements");
+    // TODO(steven): implement this function
+  }
+
+  //
   // safe pool has something in it. pop the next item from the head of the list.
-  if (!NO_REUSE_RC_DESCR && safe_pool_ != nullptr) {
-    ret = safe_pool_;
+  if (safe_pool_ != nullptr) {
+    res = safe_pool_;
     safe_pool_ = safe_pool_->next();
-    ret->next(nullptr);
+    res->next(nullptr);
 
 #ifdef DEBUG_POOL
-
-    assert(ret->header().free_count.load() ==
-        ret->header().allocation_count.load());
+    assert(res->header().free_count.load() ==
+        res->header().allocation_count.load());
 #endif
 
     safe_pool_count_--;
-    assert(safe_pool_count_ >=0);
-  }
-
-  // allocate a new element if needed
-  if (ret == nullptr && allocate_new) {
-    ret = new PoolElement();
+    assert(safe_pool_count_ >=0 );
+  } else if (allocate_new) {  // allocate a new element if needed
+    assert(safe_pool_count_ == 0);
+    res = new PoolElement();
   }
 
 #ifdef DEBUG_POOL
   // update counters to denote that an item was taken from the pool
-  ret->header().allocation_count.fetch_add(1);
-  ret->header().descriptor_in_use.store(true);
+  res->header().allocation_count.fetch_add(1);
+  res->header().descriptor_in_use.store(true);
 #endif
-  return ret;
+
+  return res;
 }
 
 
 void DescriptorPool::send_to_manager() {
-  this->send_safe_to_manager();
   this->send_unsafe_to_manager();
+  this->send_safe_to_manager();
 }
 
 
@@ -125,6 +134,53 @@ void DescriptorPool::add_to_safe(tervel::util::Descriptor *descr) {
   p->next(safe_pool_);
   safe_pool_ = p;
   safe_pool_count_++;
+
+#if 1
+
+
+  if (safe_pool_count_ > TERVEL_MEM_RC_MAX_NODES) {
+#if DEBUG
+    PoolElement * p_temp = safe_pool_;
+    size_t c_temp = 0;
+    while (p_temp != nullptr) {
+      c_temp++;
+      p_temp = p_temp->next();
+    }
+    assert(c_temp == safe_pool_count_);
+#endif
+
+    int extra_count = 0;
+    while (safe_pool_count_ > TERVEL_MEM_RC_MIN_NODES) {
+      p = p->next();
+      extra_count++;
+      safe_pool_count_--;
+    }
+
+    PoolElement *extras = p;
+    safe_pool = p->next();
+    p->next(nullptr);
+
+#if DEBUG
+    PoolElement *p_temp = safe_pool_;
+    size_t c_temp = 0;
+    while (p_temp != nullptr) {
+      c_temp++;
+      p_temp = p_temp->next();
+    }
+    assert(c_temp == safe_pool_count_);
+
+    p_temp = extras;
+    c_temp = 0;
+    while (p_temp != nullptr) {
+      c_temp++;
+      p_temp = p_temp->next();
+    }
+    assert(c_temp == extra_count);
+#endif
+
+
+  }  //  if safe_pool_count > TERVEL_MEM_RC_MAX_NODES
+#endif
 }
 
 
