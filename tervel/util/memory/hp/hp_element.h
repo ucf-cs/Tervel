@@ -42,11 +42,11 @@ class Element {
    */
   void safe_delete(bool no_check = false,
       ElementList * const element_list = tervel::tl_thread_info->get_hp_element_list()) {
-    #ifdef NOMEMORY
-    return;
+    #ifdef TERVEL_MEM_HP_NO_FREE
+      return;
     #endif
 
-    if (no_check && NO_DELETE_HP_ELEMENTS) {
+    if (no_check) {
       this->~Element();
     } else if (no_check) {
       delete this;

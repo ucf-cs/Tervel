@@ -24,13 +24,6 @@ namespace hp {
  * some other thread's operation in the event that thread is unable to do so.
  * These objects are HP protected.
  */
-// REVIEW(carlos): why is OpRecord a subclass of Element? shouldn't we keep
-//   the two classes seperate? Otherwise, you're explicitly saying that the
-//   progress assurance relies on hazard pointere'd memory (which is fine, but
-//   if that's the case, progress assurance should be in a new namespace).
-// RESPONSE(steven) Yes Progress assurance relies on hazard pointers to access
-// elements in the optable. I moved it into the util name space, is that good?
-
 
 class OpRecord : public memory::hp::Element {
  public:
@@ -90,29 +83,14 @@ class ProgressAssurance {
   /**
    * Const used to delay an announcement
    */
-  #ifdef NO_WAIT_FREE
-    static constexpr size_t MAX_FAILURES = -1;
-  #elif defined (SET_WAIT_FREE)
-    static constexpr size_t MAX_FAILURES = SET_WAIT_FREE;
-  #elif defined (MAX_WAIT_FREE)
-    static constexpr size_t MAX_FAILURES = 0;
-  #else
-    static constexpr size_t MAX_FAILURES = 1000;
-  #endif
+  static constexpr size_t MAX_FAILURES = TERVEL_PROG_ASSUR_LIMIT;
 
   /**
    * Const used to reduce the number of times a thread checks the table
    * Reduces memory loads at the cost of a higher upper bound
    */
-  #ifdef NO_WAIT_FREE
-    static constexpr size_t HELP_DELAY = 0;
-  #elif defined(MAX_WAIT_FREE)
-    static constexpr size_t HELP_DELAY = 1;
-  #elif defined (SET_HELP_DELAY)
-    static constexpr size_t HELP_DELAY = SET_HELP_DELAY;
-  #else
-    static constexpr size_t HELP_DELAY = 1000;
-  #endif
+  static constexpr size_t HELP_DELAY = TERVEL_PROG_ASSUR_DELAY;
+
 
   explicit ProgressAssurance(size_t num_threads)
       : op_table_(new std::atomic<OpRecord *>[num_threads]() )
@@ -132,10 +110,8 @@ class ProgressAssurance {
     static __thread size_t delay_count = HELP_DELAY;
     static __thread size_t help_id = 0;
 
-    if (delay_count >= HELP_DELAY && HELP_DELAY != 0) {
-      delay_count = 0;
-    }
-    if (delay_count++ == 0) {
+    if (delay_count-- == 0) {
+      delay_count = HELP_DELAY;
       if (progress_assuarance ==  nullptr) {
         tervel::tl_thread_info->get_progress_assurance()->
           p_check_for_announcement(help_id);

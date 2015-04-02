@@ -30,8 +30,7 @@ HazardPointer::~HazardPointer() {
 bool HazardPointer::watch(SlotID slot, Element *descr,
       std::atomic<void *> *address, void *expected,
       HazardPointer * const hazard_pointer) {
-  #ifdef NOMEMORY
-    #error this could be it?
+  #ifdef TERVEL_MEM_HP_NO_WATCH
     return true;
   #endif
   hazard_pointer->watch(slot, descr);
@@ -54,7 +53,7 @@ bool HazardPointer::watch(SlotID slot, Element *descr,
 bool HazardPointer::watch(SlotID slot, void *value,
       std::atomic<void *> *address, void *expected,
       HazardPointer * const hazard_pointer) {
-  #ifdef NOMEMORY
+  #ifdef TERVEL_MEM_HP_NO_WATCH
     return true;
   #endif
 
@@ -70,7 +69,7 @@ bool HazardPointer::watch(SlotID slot, void *value,
 
 void HazardPointer::unwatch(SlotID slot, Element *descr,
     HazardPointer * const hazard_pointer) {
-  #ifdef NOMEMORY
+  #ifdef TERVEL_MEM_HP_NO_WATCH
     return;
   #endif
   hazard_pointer->clear_watch(slot);
@@ -78,7 +77,7 @@ void HazardPointer::unwatch(SlotID slot, Element *descr,
 }
 
 void HazardPointer::unwatch(SlotID slot, HazardPointer * const hazard_pointer) {
-  #ifdef NOMEMORY
+  #ifdef TERVEL_MEM_HP_NO_WATCH
     return;
   #endif
   hazard_pointer->clear_watch(slot);
@@ -87,7 +86,7 @@ void HazardPointer::unwatch(SlotID slot, HazardPointer * const hazard_pointer) {
 
 bool HazardPointer::is_watched(Element *descr,
   HazardPointer * const hazard_pointer) {
-  #ifdef NOMEMORY
+  #ifdef TERVEL_MEM_HP_NO_WATCH
     return false;
   #endif
   if (hazard_pointer->contains(descr)) {
@@ -98,7 +97,7 @@ bool HazardPointer::is_watched(Element *descr,
 
 bool HazardPointer::is_watched(void *value,
   HazardPointer * const hazard_pointer) {
-  #ifdef NOMEMORY
+  #ifdef TERVEL_MEM_HP_NO_WATCH
     return false;
   #endif
   return hazard_pointer->contains(value);

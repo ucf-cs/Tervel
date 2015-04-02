@@ -24,7 +24,7 @@ namespace util {
 
 // #define TERVEL_MEM_HP_NO_FREE
   // causes safeDelete to return without freeing the object
-  // its destructor is still called.
+  // its destructor is NOT called.
 
 // #define TERVEL_MEM_HP_NO_WATCH
 /* causes watch functions to return success

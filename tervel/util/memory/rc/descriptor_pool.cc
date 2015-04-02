@@ -135,8 +135,7 @@ void DescriptorPool::add_to_safe(tervel::util::Descriptor *descr) {
   safe_pool_ = p;
   safe_pool_count_++;
 
-#if 1
-
+#if 0
 
   if (safe_pool_count_ > TERVEL_MEM_RC_MAX_NODES) {
 #if DEBUG
@@ -149,7 +148,7 @@ void DescriptorPool::add_to_safe(tervel::util::Descriptor *descr) {
     assert(c_temp == safe_pool_count_);
 #endif
 
-    int extra_count = 0;
+    size_t extra_count = 0;
     while (safe_pool_count_ > TERVEL_MEM_RC_MIN_NODES) {
       p = p->next();
       extra_count++;
@@ -157,12 +156,12 @@ void DescriptorPool::add_to_safe(tervel::util::Descriptor *descr) {
     }
 
     PoolElement *extras = p;
-    safe_pool = p->next();
+    safe_pool_ = p->next();
     p->next(nullptr);
 
 #if DEBUG
-    PoolElement *p_temp = safe_pool_;
-    size_t c_temp = 0;
+    p_temp = safe_pool_;
+    c_temp = 0;
     while (p_temp != nullptr) {
       c_temp++;
       p_temp = p_temp->next();
@@ -178,7 +177,7 @@ void DescriptorPool::add_to_safe(tervel::util::Descriptor *descr) {
     assert(c_temp == extra_count);
 #endif
 
-
+    #error Need to implement adding extras to shared pool...
   }  //  if safe_pool_count > TERVEL_MEM_RC_MAX_NODES
 #endif
 }
