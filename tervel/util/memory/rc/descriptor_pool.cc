@@ -22,9 +22,9 @@ void DescriptorPool::free_descriptor(tervel::util::Descriptor *descr,
   this->offload();
 }
 
-bool DescriptorPool::verify_pool_count(PoolElement *pool, size_t count) {
+bool DescriptorPool::verify_pool_count(PoolElement *pool, uint64_t count) {
   PoolElement * p_temp = pool;
-  size_t c_temp = 0;
+  uint64_t c_temp = 0;
   while (p_temp != nullptr) {
     c_temp++;
     p_temp = p_temp->next();
@@ -33,27 +33,28 @@ bool DescriptorPool::verify_pool_count(PoolElement *pool, size_t count) {
 };
 
 
-void DescriptorPool::reserve(int num_descriptors = TERVEL_MEM_RC_MIN_NODES) {
+void DescriptorPool::reserve(size_t num_descriptors) {
 
-  manager_->get_safe_elements(&safe_pool_count_, &safe_pool_, num_descriptors);
+  manager_->get_safe_elements(&safe_pool_, &safe_pool_count_,
+    num_descriptors);
 
-  assert(verify_safe_pool_count(safe_pool_, safe_pool_count_));
+  assert(verify_pool_count(safe_pool_, safe_pool_count_));
 
-  while (safe_pool_count_ < num_descriptors; ++i) {
+  while (safe_pool_count_ < num_descriptors) {
     PoolElement *elem = new PoolElement();
     elem->next(safe_pool_);
     safe_pool_ = elem;
     safe_pool_count_++;
   }
 
-  assert(verify_safe_pool_count(safe_pool_, safe_pool_count_));
+  assert(verify_pool_count(safe_pool_, safe_pool_count_));
 }
 
 void DescriptorPool::offload() {
-  static_assert( TERVEL_MEM_RC_MIN_NODES >= 0 && TERVEL_MEM_RC_MIN_NODES < TERVEL_MEM_RC_MAX_NODES && "Error bad values for TERVEL_MEM_RC_MIN_NODES and TERVEL_MEM_RC_MAX_NODES");
+  static_assert( TERVEL_MEM_RC_MIN_NODES >= 0 && TERVEL_MEM_RC_MIN_NODES < TERVEL_MEM_RC_MAX_NODES, "Error bad values for TERVEL_MEM_RC_MIN_NODES and TERVEL_MEM_RC_MAX_NODES");
 
   if (safe_pool_count_ > TERVEL_MEM_RC_MAX_NODES) {
-    size_t extra_count = 0;
+    uint64_t extra_count = 0;
 
     PoolElement * tail = safe_pool_;
     while (safe_pool_count_ > TERVEL_MEM_RC_MIN_NODES) {
@@ -66,10 +67,10 @@ void DescriptorPool::offload() {
     safe_pool_ = tail->next();
     tail->next(nullptr);
 
-    assert(verify_safe_pool_count(safe_pool_, safe_pool_count_));
-    assert(verify_safe_pool_count(extras, extra_count));
+    assert(verify_pool_count(safe_pool_, safe_pool_count_));
+    assert(verify_pool_count(extras, extra_count));
 
-    add_safe_elements(pool_id_, extras, tail);
+    this->manager_->add_safe_elements(pool_id_, extras, tail);
   }
 }
 
@@ -117,7 +118,7 @@ PoolElement * DescriptorPool::get_from_pool(bool allocate_new) {
 void DescriptorPool::send_safe_to_manager() {
   if (safe_pool_ != nullptr) {
     assert(safe_pool_count_ > 0);
-    this->manager_->add_safe_elements(safe_pool_);
+    this->manager_->add_safe_elements(pool_id_, safe_pool_);
     safe_pool_count_ = 0;
     safe_pool_ = nullptr;
   }
@@ -129,9 +130,9 @@ void DescriptorPool::send_unsafe_to_manager() {
 
   if (unsafe_pool_ != nullptr) {
     assert(unsafe_pool_count_ > 0);
-    this->manager_->add_unsafe_elements(unsafe_pool_);
+    this->manager_->add_unsafe_elements(pool_id_, unsafe_pool_);
     unsafe_pool_count_ = 0;
-    unsafe_pool_ == nullptr;
+    unsafe_pool_ = nullptr;
   }
 }
 

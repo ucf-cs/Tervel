@@ -7,12 +7,12 @@
 #include <assert.h>
 #include <stdint.h>
 
-#include "tervel/util/descriptor.h"
-#include "tervel/util/info.h"
-#include "tervel/util/memory/rc/pool_element.h"
-#include "tervel/util/memory/rc/pool_manager.h"
-#include "tervel/util/system.h"
-#include "tervel/util/util.h"
+#include <tervel/util/descriptor.h>
+#include <tervel/util/info.h>
+#include <tervel/util/memory/rc/pool_element.h>
+#include <tervel/util/memory/rc/pool_manager.h>
+#include <tervel/util/system.h>
+#include <tervel/util/util.h>
 
 namespace tervel {
 namespace util {
@@ -58,7 +58,7 @@ class DescriptorPool {
   /**
    * Allocates an extra `num_descriptors` elements to the pool.
    */
-  void reserve(int num_descriptors);
+  void reserve(size_t num_descriptors = TERVEL_MEM_RC_MIN_NODES);
 
   /**
    * Constructs and returns a descriptor. Arguments are forwarded to the
@@ -114,6 +114,10 @@ class DescriptorPool {
    */
   void send_unsafe_to_manager();
 
+  /**
+   * Sends a subset of the elements to the managers pool
+   */
+  void offload();
 
   // --------------------------------
   // DEALS WITH SAFE AND UNSAFE LISTS
@@ -145,7 +149,7 @@ class DescriptorPool {
 
   /** verifies that the length of the linked list matches the count
   */
-  bool verify_pool_count(PoolElement *pool, size_t count);
+  bool verify_pool_count(PoolElement *pool, uint64_t count);
   // -------
   // MEMBERS
   // -------
