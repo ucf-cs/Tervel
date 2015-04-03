@@ -197,7 +197,6 @@ inline void * remove_descriptor(void *expected, std::atomic<void *> *address) {
  * This function determines the logical value of an address which may have
  * either a RC descriptor or a normal value.
  *
- * TODO(steven): implement a progress assurance on this to achieve wait-freedom
  *
  * @param address to read
  * @return the current logical value

@@ -232,7 +232,14 @@ bool MCAS<T>::mcas_complete(CasRow<T> *current_row) {
   assert(util::memory::hp::HazardPointer::is_watched(this));
   assert(cas_rows_[0].helper_.load() != nullptr);
   assert(current_row->helper_.load() != nullptr);
-  // TODO(steven): implement position calculation.
+
+
+  { // TODO(steven): verify this position calculation.
+    uintptr_t temp1 = reinterpret_cast<uintptr_t>(&(cas_rows_[0]));
+    uintptr_t temp2 = reinterpret_cast<uintptr_t>(current_row);
+    start_pos = temp2 - temp1;
+    assert(&(cas_rows_[start_pos]) == current_row && "if this hit, I am bad at math");
+  }
   return mcas_complete(start_pos, false);
 }
 
@@ -289,7 +296,7 @@ bool MCAS<T>::mcas_complete(int start_pos, bool wfmode) {
         /* Remove it by completing the op, try again */
         current_value = this->mcas_remove(pos, current_value);
 
-        /* Check if we are executing a recurisve return and if so determine
+        /* Check if we are executing a recursive return and if so determine
          * if we are at our own operation or need to return farther. */
         if (util::RecursiveAction::recursive_return()) {
           if (util::RecursiveAction::recursive_depth() == 0) {
