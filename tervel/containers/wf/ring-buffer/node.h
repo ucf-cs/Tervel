@@ -2,7 +2,7 @@
 #define TERVEL_WFRB_NODE_H_
 
 #include <stdio.h>
-#include "tervel/util/descriptor.h"
+#include <tervel/util/descriptor.h>
 
 namespace tervel {
 namespace wf_ring_buffer {

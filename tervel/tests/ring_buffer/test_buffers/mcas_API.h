@@ -1,11 +1,11 @@
 #ifndef __mcas_buffer_h__
 #define __mcas_buffer_h__
 
-#include "tervel/util/info.h"
-#include "tervel/util/thread_context.h"
-#include "tervel/util/tervel.h"
+#include <tervel/util/info.h>
+#include <tervel/util/thread_context.h>
+#include <tervel/util/tervel.h>
 
-#include "tervel/containers/lf/mcas-buffer/mcas_buffer.h"
+#include <tervel/containers/lf/mcas-buffer/mcas_buffer.h>
 
 template<class T>
 class TestBuffer {

@@ -204,10 +204,12 @@ inline void * remove_descriptor(void *expected, std::atomic<void *> *address) {
 inline void *descriptor_read_first(std::atomic<void *> *address) {
   void *current_value = address->load();
 
-  size_t fail_count = 0;
+  util::ProgressAssurance::Limit progAssur;
+
+
   while (is_descriptor_first(current_value)) {
 
-    if (fail_count++ == tervel::util::ProgressAssurance::MAX_FAILURES) {
+    if (progAssur.isDelayed()) {
       ReadFirstOp *op = new ReadFirstOp(address);
       tervel::util::ProgressAssurance::make_announcement(
           reinterpret_cast<tervel::util::OpRecord *>(op));

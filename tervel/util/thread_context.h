@@ -39,12 +39,7 @@ class ThreadContext {
  public:
   explicit ThreadContext(Tervel* tervel);
 
-  ~ThreadContext() {
-    delete rc_descriptor_pool_
-    delete hp_element_list_
-
-    tl_thread_info = nullptr;
-  }
+  ~ThreadContext();
 
   /**
    * @returns a reference to the HazardPointer singleton

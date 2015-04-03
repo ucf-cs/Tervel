@@ -2,19 +2,21 @@
 #define TERVEL_WFRB_RINGBUFFER_H_
 
 #ifdef DEBUG
-  #include "tbb/concurrent_hash_map.h"
+  #include <tbb/concurrent_hash_map.h>
 #endif
 
-#include "tervel/containers/wf/ring-buffer/node.h"
-#include "tervel/containers/wf/ring-buffer/empty_node.h"
-#include "tervel/containers/wf/ring-buffer/elem_node.h"
-#include "tervel/containers/wf/ring-buffer/enqueue_op.h"
-#include "tervel/containers/wf/ring-buffer/dequeue_op.h"
-#include "tervel/util/info.h"
-#include "tervel/util/padded_atomic.h"
-#include "tervel/util/progress_assurance.h"
-#include "tervel/util/system.h"
-#include "tervel/util/memory/rc/descriptor_util.h"
+#include <tervel/util/info.h>
+#include <tervel/util/system.h>
+#include <tervel/util/padded_atomic.h>
+#include <tervel/util/progress_assurance.h>
+#include <tervel/util/memory/rc/descriptor_util.h>
+
+#include <tervel/containers/wf/ring-buffer/node.h>
+#include <tervel/containers/wf/ring-buffer/empty_node.h>
+#include <tervel/containers/wf/ring-buffer/elem_node.h>
+#include <tervel/containers/wf/ring-buffer/enqueue_op.h>
+#include <tervel/containers/wf/ring-buffer/dequeue_op.h>
+
 
 #include <stdlib.h>
 
@@ -180,7 +182,8 @@ bool RingBuffer<T>::dequeue(T &result) {
 
 template<class T>
 bool RingBuffer<T>::lf_enqueue(T val) {
-  unsigned int fail_count = 0;
+  util::ProgressAssurance::Limit progAssur;
+
   while (true) { // REVIEW(steven) describe loop
     if (is_full()) {
       return false;
@@ -191,7 +194,7 @@ bool RingBuffer<T>::lf_enqueue(T val) {
 
     // REVIEW(steven) describe loop
     while (true) {
-      if (fail_count++ == util::ProgressAssurance::MAX_FAILURES) {
+      if (progAssur.isDelayed()) {
         EnqueueOp<T> *op = new EnqueueOp<T>(this, val);
         util::ProgressAssurance::make_announcement(
               reinterpret_cast<tervel::util::OpRecord *>(op));
@@ -250,7 +253,7 @@ bool RingBuffer<T>::lf_enqueue(T val) {
 
 template<class T>
 bool RingBuffer<T>::lf_dequeue(T *result) {
-  unsigned int fail_count = 0;
+  util::ProgressAssurance::Limit progAssur;
   while (true) { // REVIEW(steven) describe loop
     if (is_empty()) {
       return false;
@@ -259,7 +262,7 @@ bool RingBuffer<T>::lf_dequeue(T *result) {
     int64_t seq = next_head_seq();
     int64_t pos = get_position(seq);
     while (true) { // REVIEW(steven) describe loop
-      if (fail_count++ == util::ProgressAssurance::MAX_FAILURES) {
+      if (progAssur.isDelayed()) {
 
         DequeueOp<T> *op = new DequeueOp<T>(this);
         util::ProgressAssurance::make_announcement(

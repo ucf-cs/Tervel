@@ -1,14 +1,18 @@
 #ifndef TERVEL_WFRB_DEQUEUEOP_H_
 #define TERVEL_WFRB_DEQUEUEOP_H_
 
-#include "tervel/containers/wf/ring-buffer/buffer_op.h"
-#include "tervel/containers/wf/ring-buffer/node.h"
-#include "tervel/containers/wf/ring-buffer/elem_node.h"
-#include "tervel/containers/wf/ring-buffer/wf_ring_buffer.h"
-
-#include <algorithm>
 #include <atomic>
 #include <cstdint>
+#include <algorithm>
+
+#include <tervel/util/memory/rc/descriptor_util.h>
+
+#include <tervel/containers/wf/ring-buffer/buffer_op.h>
+#include <tervel/containers/wf/ring-buffer/node.h>
+#include <tervel/containers/wf/ring-buffer/elem_node.h>
+#include <tervel/containers/wf/ring-buffer/wf_ring_buffer.h>
+
+
 
 namespace tervel {
 namespace wf_ring_buffer {
