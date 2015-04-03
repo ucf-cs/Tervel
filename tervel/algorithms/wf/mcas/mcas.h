@@ -259,6 +259,8 @@ bool MCAS<T>::mcas_complete(int start_pos, bool wfmode) {
    * Start at last known completed row.
    */
   for (int pos = start_pos; pos < row_count_; pos++) {
+    util::ProgressAssurance::Limit progAssur();
+
     size_t fcount = 0;  // Tracks the number of failures.
 
     CasRow<T> * row = &(cas_rows_[pos]);
@@ -274,8 +276,7 @@ bool MCAS<T>::mcas_complete(int start_pos, bool wfmode) {
       if (state_.load() != MCasState::IN_PROGRESS) {
         /* Checks if the operation has been completed */
         return (state_.load() == MCasState::PASS);
-      } else if (!wfmode &&
-              fcount++ == util::ProgressAssurance::MAX_FAILURES) {
+      } else if (!wfmode && progAssur.isDelayed()) {
         /* Check if we need to enter wf_mode */
         if (util::RecursiveAction::recursive_depth() == 0) {
           /* If this is our operation then make an annoucnement */

@@ -84,7 +84,7 @@ class ProgressAssurance {
   /**
    * Const used to delay an announcement
    */
-  static constexpr size_t MAX_FAILURES = TERVEL_PROG_ASSUR_LIMIT;
+  //static constexpr size_t MAX_FAILURES = TERVEL_PROG_ASSUR_LIMIT;
 
   /**
    * Const used to reduce the number of times a thread checks the table
