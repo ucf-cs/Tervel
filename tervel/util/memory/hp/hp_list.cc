@@ -1,7 +1,7 @@
-#include "tervel/util/memory/hp/hp_list.h"
-#include "tervel/util/memory/hp/list_manager.h"
-#include "tervel/util/memory/hp/hp_element.h"
-#include "tervel/util/memory/hp/hazard_pointer.h"
+#include <tervel/util/memory/hp/hp_list.h>
+#include <tervel/util/memory/hp/list_manager.h>
+#include <tervel/util/memory/hp/hp_element.h>
+#include <tervel/util/memory/hp/hazard_pointer.h>
 
 
 namespace tervel {

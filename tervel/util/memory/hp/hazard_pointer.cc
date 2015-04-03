@@ -1,5 +1,5 @@
-#include "tervel/util/memory/hp/hazard_pointer.h"
-#include "tervel/util/memory/hp/hp_element.h"
+#include <tervel/util/memory/hp/hazard_pointer.h>
+#include <tervel/util/memory/hp/hp_element.h>
 
 namespace tervel {
 namespace util {

@@ -9,9 +9,9 @@
 #include <memory>
 #include <cstdint>
 
-#include "tervel/util/info.h"
-#include "tervel/util/util.h"
-#include "tervel/util/memory/hp/list_manager.h"
+#include <tervel/util/info.h>
+#include <tervel/util/util.h>
+#include <tervel/util/memory/hp/list_manager.h>
 
 namespace tervel {
 namespace util {

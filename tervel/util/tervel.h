@@ -1,11 +1,11 @@
 #ifndef TERVEL_UTIL_TERVEL_H
 #define TERVEL_UTIL_TERVEL_H
 
-#include "tervel/util/util.h"
-#include "tervel/util/thread_context.h"
-#include "tervel/util/progress_assurance.h"
-#include "tervel/util/memory/hp/hazard_pointer.h"
-#include "tervel/util/memory/rc/pool_manager.h"
+#include <tervel/util/util.h>
+#include <tervel/util/thread_context.h>
+#include <tervel/util/progress_assurance.h>
+#include <tervel/util/memory/hp/hazard_pointer.h>
+#include <tervel/util/memory/rc/pool_manager.h>
 
 namespace tervel {
 
@@ -21,7 +21,7 @@ class Tervel {
       , progress_assurance_(num_threads) {}
 
   ~Tervel() {
-    // Notice: The destructors of the member variables are called when this
+    // Notice: The destructor of the member variables are called when this
     // object is freed.
   }
 

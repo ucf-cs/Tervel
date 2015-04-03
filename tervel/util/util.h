@@ -133,11 +133,16 @@ inline bool isValid(void * value) {
 
 /**
  * TODO comment
+ *  TODO(steven): add the default value compile time constant documentation
  */
-inline void backoff(int duration = 1) {
+#ifndef TERVEL_DEF_BACKOFF_TIME_NS
+ #define TERVEL_DEF_BACKOFF_TIME_NS 10000
+#endif
+inline void backoff(int duration = TERVEL_DEF_BACKOFF_TIME_NS) {
   std::this_thread::sleep_for(std::chrono::nanoseconds(duration));
 }
 
+// TODO(steven): Replace with a bit hack?
 inline int round_to_next_power_of_two(uint64_t value) {
   double val = std::log2(value);
   int int_val = static_cast<int>(val);

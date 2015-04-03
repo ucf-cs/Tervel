@@ -4,7 +4,7 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#include "tervel/util/util.h"
+#include <tervel/util/util.h>
 
 
 namespace tervel {
@@ -40,7 +40,10 @@ class ThreadContext {
   explicit ThreadContext(Tervel* tervel);
 
   ~ThreadContext() {
-    // TODO(steven) delete descriptor pools, return thread id
+    delete rc_descriptor_pool_
+    delete hp_element_list_
+
+    tl_thread_info = nullptr;
   }
 
   /**

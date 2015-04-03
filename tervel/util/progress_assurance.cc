@@ -1,5 +1,5 @@
-#include "tervel/util/progress_assurance.h"
-#include "tervel/util/memory/hp/hazard_pointer.h"
+#include <tervel/util/progress_assurance.h>
+#include <tervel/util/memory/hp/hazard_pointer.h>
 
 namespace tervel {
 namespace util {
@@ -24,7 +24,6 @@ void ProgressAssurance::p_check_for_announcement(size_t &help_id) {
         memory::hp::HazardPointer::unwatch(pos);
       }
     }
-  // }
 }
 
 void ProgressAssurance::p_make_announcement(OpRecord *op, const uint64_t tid) {

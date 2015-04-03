@@ -4,9 +4,9 @@
 #include <atomic>
 #include <memory>
 #include <assert.h>
-#include "tervel/util/info.h"
-#include "tervel/util/util.h"
-#include "tervel/util/memory/hp/hp_element.h"
+#include <tervel/util/info.h>
+#include <tervel/util/util.h>
+#include <tervel/util/memory/hp/hp_element.h>
 
 
 namespace tervel {

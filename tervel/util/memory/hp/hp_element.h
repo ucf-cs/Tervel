@@ -8,9 +8,9 @@
 #include <stdint.h>
 #include <stddef.h>
 
-#include "tervel/util/info.h"
-#include "tervel/util/util.h"
-#include "tervel/util/memory/hp/hp_list.h"
+#include <tervel/util/info.h>
+#include <tervel/util/util.h>
+#include <tervel/util/memory/hp/hp_list.h>
 
 namespace tervel {
 namespace util {

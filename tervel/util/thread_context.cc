@@ -1,6 +1,6 @@
-#include "tervel/util/thread_context.h"
-#include "tervel/util/info.h"
-#include "tervel/util/tervel.h"
+#include <tervel/util/thread_context.h>
+#include <tervel/util/info.h>
+#include <tervel/util/tervel.h>
 
 #include <stdint.h>
 

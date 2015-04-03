@@ -8,7 +8,7 @@
 #include <atomic>
 #include <stdint.h>
 
-#include "tervel/util/thread_context.h"
+#include <tervel/util/thread_context.h>
 
 namespace tervel {
 extern __thread void * tl_control_word;
