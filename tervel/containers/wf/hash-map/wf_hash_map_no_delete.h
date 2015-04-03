@@ -5,11 +5,6 @@
 #include <atomic>
 #include <cmath>
 
-#include <tervel/util/info.h>
-#include <tervel/util/memory/hp/hp_element.h>
-#include <tervel/util/memory/hp/hazard_pointer.h>
-#include <tervel/util/progress_assurance.h>
-
 // TODO(Steven):
 //
 // Document code
@@ -20,6 +15,18 @@
 // Stronger Correctness Tests
 //
 namespace tervel {
+
+namespace util {
+  int round_to_next_power_of_two(uint64_t value) {
+    double val = std::log2(value);
+    int int_val = static_cast<int>(val);
+    if (int_val < val) {
+      int_val++;
+    }
+    return int_val;
+  };
+}
+
 namespace containers {
 namespace wf {
 /**
@@ -51,16 +58,22 @@ struct default_functor {
  *
  */
 template< class Key, class Value, class Functor = default_functor<Key, Value> >
-class HashMap {
+class HashMapNoDelete {
  public:
   class ValueAccessor;
 
-  HashMap(uint64_t capacity, uint64_t expansion_rate = 3)
+  HashMapNoDelete(uint64_t capacity, uint64_t expansion_rate = 3)
     : primary_array_size_(tervel::util::round_to_next_power_of_two(capacity))
     , primary_array_pow_(std::log2(primary_array_size_))
     , secondary_array_size_(std::pow(2, expansion_rate))
     , secondary_array_pow_(expansion_rate)
-    , primary_array_(new Location[primary_array_size_]()) { }
+    , primary_array_(new Location[primary_array_size_]()) {
+    size_.store(0);
+      for (size_t i = 0; i < primary_array_size_; i++) {
+	primary_array_[i].store(nullptr);
+      }
+
+   }
 
   /**
    * Not Thread Safe!
@@ -71,7 +84,7 @@ class HashMap {
    *     any nodes that are referenced it. This may cause more array node's to
    *     be freed. Stack can reach max_depth() in size.
    */
-  ~HashMap() {
+  ~HashMapNoDelete() {
     for (size_t i = 0; i < primary_array_size_; i++) {
       Node * temp = primary_array_[i].load();
       if (temp != nullptr) {
@@ -112,15 +125,6 @@ class HashMap {
    */
   bool insert(Key key, Value value);
 
-  /**
-   * Attempts to remove a key/value pair from the hash map
-   * Returns false in the event the key is not in the hash map or if the
-   * access_counter is non-zero.
-   *
-   * @param key: The key to resume
-   * @return where or not the key was removed
-   */
-  bool remove(Key key);
 
   /**
    * @return the number of keys in the hash map
@@ -132,69 +136,45 @@ class HashMap {
 
   /**
    * This class is used to safe guard access to values.
-   * Before it is initialized the referenced data_node's access counter would
-   * have been incremented.
    */
   class ValueAccessor {
    public:
-    friend class HashMap;
+    friend class HashMapNoDelete;
     ValueAccessor()
-      : access_count_(nullptr)
-      , value_(nullptr) {}
+      : value_(nullptr) {}
 
-    ~ValueAccessor() {
-      reset();
-    }
+    ~ValueAccessor() {}
 
     /**
      * @return the address of the value in the data_node.
      */
-    Value *value() {
+    Value* value() {
       return value_;
-    }
-
-    /**
-     * @return address of the value in the data_node.
-     */
-    std::atomic<Value> *atomic_value() {
-      return (std::atomic<Value> *)(value_);
-    }
+    };
 
     /**
      * @return whether or not this was initialized.
      */
     bool valid() {
-      return (value_ != nullptr && access_count_ != nullptr);
-    }
+      return (value_ != nullptr);
+    };
 
     /**
-     * Resets this value accessors, decrementing the access_count and clearing
-     * the variables.
+     * Resets this value accessors,clearing the variables.
      */
     void reset() {
-      if (access_count_) {
-        access_count_->fetch_add(-1);
-        access_count_ = nullptr;
-        value_ = nullptr;
-      }
-    }
+      value_ = nullptr;
+    };
 
    private:
     /**
-     * Initializes the value accessor.
+     * Initializes the value accessors.
      * @param value: the address of the value
-     * @param access_count: the address of the value's access_count
      */
-    void init(Value * value, std::atomic<int64_t> *access_count) {
-      if (access_count_) {  // In case they reuse the object
-        reset();
-      }
-
+    void init(Value * value) {
       value_ = value;
-      access_count_ = access_count;
-    }
+    };
 
-    std::atomic<int64_t> *access_count_;
     Value * value_;
   };
 
@@ -214,6 +194,7 @@ class HashMap {
 
   /**
    * Outputs the positions a key belongs in at each depth.
+   * Used for Debugging
    * @param key: The Key
    */
   void print_key(Key &key);
@@ -221,7 +202,6 @@ class HashMap {
  private:
   class Node;
   friend class Node;
-  friend class ForceExpandOp;
   typedef std::atomic<Node *> Location;
 
 
@@ -302,12 +282,11 @@ class HashMap {
    * This class is used to hold a key and value pair.
    * It is hazard pointer protected.
    */
-  class DataNode : public Node, public tervel::util::memory::hp::Element {
+  class DataNode : public Node {
    public:
     explicit DataNode(Key k, Value v)
       : key_(k)
-      , value_(v)
-      , access_count_(0) {}
+      , value_(v) {}
 
     ~DataNode() { }
 
@@ -327,44 +306,7 @@ class HashMap {
 
     Key key_;
     Value value_;
-    std::atomic<int64_t> access_count_;
   };
-
-
-  /**
-   * TODO(steven): add description
-   * TODO(steven): move into a file.
-   */
-  class ForceExpandOp : util::OpRecord {
-    public:
-      ForceExpandOp(HashMap *map, Location *loc, size_t depth)
-       : map_(map)
-       , loc_(loc)
-       , depth_(depth){}
-
-      void help_complete() {
-        if (depth_ >= map_->max_depth()) {
-            return;
-        }
-        Node *value = loc_->load();
-        while (true) {
-          if (!map_->hp_watch_and_get_value(loc_,value)) {
-             continue;
-          } else if (value == nullptr || value->is_data()) {
-            map_->expand_map(loc_, value, depth_);
-            value = loc_->load();
-          } else {
-            break;
-          }
-        }
-      };
-
-    private:
-      friend class HashMap;
-      HashMap *map_{nullptr};
-      Location *loc_{nullptr};
-      size_t depth_{0};
-   };
 
   /**
    * Increases the capacity of the hash map by replacing a data node reference
@@ -373,19 +315,9 @@ class HashMap {
    * @param curr_value: The current value  (data node) at the location
    * @param next_position: The position the data node belongs at the next depth.
    */
-  void expand_map(Location * loc, Node * curr_value, size_t depth);
+  void expand_map(Location * loc, Node * &curr_value, uint64_t next_position);
 
-  /**
-   * This is a wrapper for hazard pointers.
-   * If it returns true then the value has been assigned the current value
-   * of loc and it is hazard pointer protected.
-   * @param  loc   the location to dereference a Node object from
-   * @param  value the destination to write the Node objet pointer
-   * @return       whether or not it was able to dereference and hazard pointer
-   * watch a node object.
-   */
-  bool hp_watch_and_get_value(Location * loc, Node * &value);
-  void hp_unwatch();
+
 
   const size_t primary_array_size_;
   const size_t primary_array_pow_;
@@ -397,39 +329,9 @@ class HashMap {
   std::unique_ptr<Location[]> primary_array_;
 };  // class wf hash map
 
-template<class Key, class Value, class Functor>
-bool HashMap<Key, Value, Functor>::
-hp_watch_and_get_value(Location * loc, Node * &value) {
-  std::atomic<void *> *temp_address =
-      reinterpret_cast<std::atomic<void *> *>(loc);
-
-  void * temp = temp_address->load();
-
-  if (temp == nullptr) {
-    value = nullptr;
-    return true;
-  }
-
-  bool is_watched = tervel::util::memory::hp::HazardPointer::watch(
-        tervel::util::memory::hp::HazardPointer::SlotID::SHORTUSE,
-        temp, temp_address, temp);
-
-  if (is_watched) {
-    value = reinterpret_cast<Node *>(temp);
-  }
-  return is_watched;
-}  // hp_watch_and_get_value
 
 template<class Key, class Value, class Functor>
-void HashMap<Key, Value, Functor>::
-hp_unwatch() {
-  tervel::util::memory::hp::HazardPointer::unwatch(
-          tervel::util::memory::hp::HazardPointer::SlotID::SHORTUSE);
-}  // hp_unwatch
-
-
-template<class Key, class Value, class Functor>
-bool HashMap<Key, Value, Functor>::
+bool HashMapNoDelete<Key, Value, Functor>::
 at(Key key, ValueAccessor &va) {
   Functor functor;
   key = functor.hash(key);
@@ -439,22 +341,11 @@ at(Key key, ValueAccessor &va) {
   Location *loc = &(primary_array_[position]);
   Node *curr_value;
 
-
   bool op_res = false;
-
-  tervel::util::ProgressAssurance::Limit progAssur;
   while (true) {
-    if (progAssur.isDelayed()) {
-      ForceExpandOp *op = new ForceExpandOp(this, loc, depth);
-      util::ProgressAssurance::make_announcement(
-            reinterpret_cast<tervel::util::OpRecord *>(op));
-      progAssur.reset();
-      continue;
-    }
+    curr_value = loc->load();
 
-    if (!hp_watch_and_get_value(loc, curr_value)) {
-      continue;
-    } else if (curr_value == nullptr) {
+    if (curr_value == nullptr) {
       break;
     } else if (curr_value->is_array()) {
       ArrayNode * array_node = reinterpret_cast<ArrayNode *>(curr_value);
@@ -467,54 +358,34 @@ at(Key key, ValueAccessor &va) {
       DataNode * data_node = reinterpret_cast<DataNode *>(curr_value);
 
       if (functor.key_equals(data_node->key_, key)) {
-        int64_t res = data_node->access_count_.fetch_add(1);
-        if (res >= 0) {  // its not deleted.
-          va.init(&(data_node->value_), &(data_node->access_count_));
-          op_res = true;
-        } else {
-          data_node->access_count_.fetch_add(-1);
-          op_res = false;
-        }
+        va.init(&(data_node->value_));
+        op_res = true;
       }
       break;
     }
   }  // while true
 
-  hp_unwatch();
   return op_res;
 }  // at
 
 
 template<class Key, class Value, class Functor>
-bool HashMap<Key, Value, Functor>::
+bool HashMapNoDelete<Key, Value, Functor>::
 insert(Key key, Value value) {
-  tervel::util::ProgressAssurance::check_for_announcement();
-
   Functor functor;
   key = functor.hash(key);
 
   DataNode * new_node = new DataNode(key, value);
 
-  tervel::util::ProgressAssurance::Limit progAssur;
   size_t depth = 0;
   uint64_t position = get_position(key, depth);
-
   Location *loc = &(primary_array_[position]);
-  Node *curr_value;
+  Node *curr_value = loc->load();
 
   bool op_res;
   while (true) {
-    if (progAssur.isDelayed()) {
-      // TODO(steven): implement an op record.
-      // util::ProgressAssurance::make_announcement(
-      //       reinterpret_cast<tervel::util::OpRecord *>(op));
-      progAssur.reset();
-      continue;
-    }
 
-    if (!hp_watch_and_get_value(loc, curr_value)) {
-      continue;
-    } else if (curr_value == nullptr) {
+    if (curr_value == nullptr) {
       if (loc->compare_exchange_strong(curr_value, new_node)) {
         size_.fetch_add(1);
         op_res = true;
@@ -525,29 +396,21 @@ insert(Key key, Value value) {
       depth++;
       position = get_position(key, depth);
       loc = array_node->access(position);
+      curr_value = loc->load();
     } else {  // it is a data node
       assert(curr_value->is_data());
       DataNode * data_node = reinterpret_cast<DataNode *>(curr_value);
 
-      if (data_node->access_count_.load() < 0) {
-        if (loc->compare_exchange_strong(curr_value, new_node)) {
-          hp_unwatch();
-          data_node->safe_delete();
-          size_.fetch_add(1);
-          op_res = true;
-          break;
-        }
-      } else if (functor.key_equals(data_node->key_, key)) {
+      if (functor.key_equals(data_node->key_, key)) {
         op_res = false;
         break;
       } else {
         // Key differs, needs to expand...
-        expand_map(loc, curr_value, depth);
+        const uint64_t next_position =  get_position(data_node->key_, depth+1);
+        expand_map(loc, curr_value, next_position);
       }   // else key differs
     }  // else it is a data node
   }  // while true
-
-  hp_unwatch();
 
   if (!op_res) {
     assert(loc->load() != new_node);
@@ -558,84 +421,12 @@ insert(Key key, Value value) {
 
 
 template<class Key, class Value, class Functor>
-bool HashMap<Key, Value, Functor>::
-remove(Key key) {
-  Functor functor;
-  key = functor.hash(key);
-
-  size_t depth = 0;
-  uint64_t position = get_position(key, depth);
-
-  Location *loc = &(primary_array_[position]);
-  Node *curr_value;
-
-
-  tervel::util::ProgressAssurance::Limit progAssur;
-
-  bool op_res = false;
-  while (true) {
-    if (progAssur.isDelayed()) {
-      // TODO(Steven): implement op record
-      // util::ProgressAssurance::make_announcement(
-      //       reinterpret_cast<tervel::util::OpRecord *>(op));
-      progAssur.reset();
-      continue;
-    }
-
-    if (!hp_watch_and_get_value(loc, curr_value)) {
-      continue;
-    } else if (curr_value == nullptr) {
-      op_res = false;
-      break;
-    } else if (curr_value->is_array()) {
-      ArrayNode * array_node = reinterpret_cast<ArrayNode *>(curr_value);
-      depth++;
-      position = get_position(key, depth);
-      loc = array_node->access(position);
-      continue;
-    } else {  // it is a data node
-      assert(curr_value->is_data());
-      DataNode *data_node = reinterpret_cast<DataNode *>(curr_value);
-      int64_t temp_expected = 0;
-      if (functor.key_equals(data_node->key_, key) &&
-          data_node->access_count_.compare_exchange_strong(temp_expected,
-                  -1*tl_thread_info->get_num_threads())
-                                                      ) {
-        op_res = true;
-        size_.fetch_add(-1);
-        // data_node is a key match, value match, and we set it to dead
-        if (loc->compare_exchange_strong(curr_value, nullptr)) {
-            assert(loc->load() != data_node);
-            assert(data_node->access_count_.load() < 0);
-            hp_unwatch();
-            data_node->safe_delete();
-        } else {
-          // It is logically deleted, and some other thread will/has already
-          // will delete it.
-        }
-      }
-      break;
-    }  // it is a data node
-  }  // while
-
-  hp_unwatch();
-  return op_res;
-}  // remove
-
-
-template<class Key, class Value, class Functor>
-void  HashMap<Key, Value, Functor>::
-expand_map(Location * loc, Node * curr_value, size_t depth) {
-
-  uint64_t next_position = 0;
+void  HashMapNoDelete<Key, Value, Functor>::
+expand_map(Location * loc, Node * &curr_value, uint64_t next_position) {
+  assert(curr_value->is_data());
 
   ArrayNode * array_node = new ArrayNode(secondary_array_size_);
-  if (curr_value != nullptr) {
-    assert(curr_value->is_data());
-    DataNode *data_node = reinterpret_cast<DataNode *>(curr_value);
-    next_position = get_position(data_node->key_, depth+1);
-    array_node->access(next_position)->store(curr_value);
-  }
+  array_node->access(next_position)->store(curr_value);
   assert(array_node->is_array());
 
   if (loc->compare_exchange_strong(curr_value, array_node)) {
@@ -648,7 +439,7 @@ expand_map(Location * loc, Node * curr_value, size_t depth) {
 }  // expand
 
 template<class Key, class Value, class Functor>
-uint64_t HashMap<Key, Value, Functor>::
+uint64_t HashMapNoDelete<Key, Value, Functor>::
 get_position(Key &key, size_t depth) {
   const uint64_t *long_array = reinterpret_cast<uint64_t *>(&key);
   const size_t max_length = sizeof(Key) / (64 / 8);
@@ -708,7 +499,7 @@ get_position(Key &key, size_t depth) {
 }  // get_position
 
 template<class Key, class Value, class Functor>
-uint64_t HashMap<Key, Value, Functor>::
+uint64_t HashMapNoDelete<Key, Value, Functor>::
 max_depth() {
   uint64_t max_depth = sizeof(Key)*8;
   max_depth -= primary_array_pow_;
@@ -719,7 +510,7 @@ max_depth() {
 }
 
 template<class Key, class Value, class Functor>
-void HashMap<Key, Value, Functor>::
+void HashMapNoDelete<Key, Value, Functor>::
 print_key(Key &key) {
   size_t max_depth_ = max_depth();
   std::cout << "K(" << key << ") :";
