@@ -101,6 +101,10 @@ class ProgressAssurance {
     bool isDelayed(size_t val = 1) {
       return ((counter_-=1) <= 0);
     }
+
+    void reset(size_t limit = TERVEL_PROG_ASSUR_LIMIT) {
+      counter_ = limit;
+    }
    private:
     size_t counter_;
   };

@@ -372,17 +372,17 @@ at(Key key, ValueAccessor &va) {
   Functor functor;
   key = functor.hash(key);
 
-  size_t fcount = 0;
+  tervel::util::ProgressAssurance::Limit progAssur;
   size_t depth = 0;
   uint64_t position = get_position(key, depth);
   Location *loc = &(primary_array_[position]);
   Node *curr_value;
   while (true) {
-   if (fcount++ > util::ProgressAssurance::MAX_FAILURES + 1) {
+   if (progAssur.isDelayed()) {
       ForceExpandOp *op = new ForceExpandOp(this, loc, depth);
       util::ProgressAssurance::make_announcement(
             reinterpret_cast<tervel::util::OpRecord *>(op));
-      fcount = 0;
+      progAssur.reset();
       continue;
    }
    if (!hp_watch_and_get_value(loc, curr_value)) {
@@ -424,7 +424,7 @@ insert(Key key, Value value) {
 
   DataNode * new_node = new DataNode(key, value);
 
-  size_t fcount = 0;
+  tervel::util::ProgressAssurance::Limit progAssur;
   size_t depth = 0;
   uint64_t position = get_position(key, depth);
 
@@ -433,11 +433,11 @@ insert(Key key, Value value) {
 
   bool op_res;
   while (true) {
-    if (fcount++ > util::ProgressAssurance::MAX_FAILURES + 1) {
+    if (progAssur.isDelayed()) {
       ForceExpandOp *op = new ForceExpandOp(this, loc, depth);
       util::ProgressAssurance::make_announcement(
             reinterpret_cast<tervel::util::OpRecord *>(op));
-      fcount = 0;
+      progAssur.reset();
       continue;
     }
     if (!hp_watch_and_get_value(loc, curr_value)) {
@@ -497,14 +497,14 @@ remove(Key key) {
   Location *loc = &(primary_array_[position]);
   Node *curr_value;
 
-  size_t fcount = 0;
+  tervel::util::ProgressAssurance::Limit progAssur;
   bool op_res = false;
   while (true) {
-    if (fcount++ > util::ProgressAssurance::MAX_FAILURES +1) {
+    if (progAssur.isDelayed()) {
       ForceExpandOp *op = new ForceExpandOp(this, loc, depth);
       util::ProgressAssurance::make_announcement(
             reinterpret_cast<tervel::util::OpRecord *>(op));
-      fcount = 0;
+      progAssur.reset();
       continue;
     }
     if (!hp_watch_and_get_value(loc, curr_value)) {
