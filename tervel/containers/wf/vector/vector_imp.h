@@ -48,7 +48,7 @@ size_t Vector<T>::push_back_only(T value) {
 
 
     tervel::util::ProgressAssurance::Limit progAssur;
-    while (fcount++ < util::ProgressAssurance::MAX_FAILURES) {
+    while (progAssur.isDelayed()) {
       std::atomic<T> *spot = internal_array.get_spot(placed_pos);
       T expected = spot->load();
       if ( (expected ==  Vector<T>::c_not_value_) &&
@@ -97,7 +97,7 @@ bool Vector<T>::pop_back_only(T &value) {
 
 
     tervel::util::ProgressAssurance::Limit progAssur;
-    while (fcount++ < util::ProgressAssurance::MAX_FAILURES) {
+    while (progAssur.isDelayed()) {
       if (poped_pos <= 0) {
         return false;
       }
@@ -171,7 +171,7 @@ bool Vector<T>::at(size_t idx, T &value) {
     std::atomic<T> *spot = internal_array.get_spot(idx, false);
 
     tervel::util::ProgressAssurance::Limit progAssur;
-    while (fcount++ < util::ProgressAssurance::MAX_FAILURES) {
+    while (progAssur.isDelayed()) {
       T cvalue = spot->load(std::memory_order_relaxed);
 
       if (cvalue == Vector<T>::c_not_value_) {
