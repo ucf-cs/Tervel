@@ -78,10 +78,7 @@ WFTEST:
 WFTEST_SUB:
 	$(MAKE) test CONTAINERTYPE="-DUSE_WF_HASHMAP -DHASHMAP_EXPANSION_RATE=$(EXPAN_RATE)" \
 	TINC="-I../../../  " \
-	TSOURCES="../../util/progress_assurance.cc \
-	../../util/memory/hp/list_manager.cc ../../util/memory/hp/hazard_pointer.cc ../../util/memory/hp/hp_list.cc \
-	../../util/memory/rc/descriptor_pool.cc ../../util/thread_context.cc \
-	../../util/memory/rc/pool_manager.cc ../../util/info.cc" \
+        TSOURCES:=$(shell find ../../util/ -name "*.cc") \	
 	EXECUTABLE=wfhashmap_$(EXPAN_RATE).x
 
 WFOLD:
@@ -102,7 +99,5 @@ $(EXECUTABLE): $(OBJECTS)
 
 .PHONY: clean
 clean:
-	$(RM) $(OUTPUT)*.x ../../util/*.o \
-	../../util/memory/hp/*.o  \
-	../../util/memory/rc/*.o
+	$(RM) $(OUTPUT)*.x $(shell find ../../util/ -name "*.o")
 	$(RM) $(OBJECTS)

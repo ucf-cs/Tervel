@@ -28,10 +28,7 @@ test: $(SOURCES) $(EXECUTABLE)
 
 WFBuffer:
 	$(MAKE) test BUFFERTYPE=-DUSE_WF_BUFFER \
-	TSOURCES="../../util/progress_assurance.cc \
-	../../util/memory/hp/hazard_pointer.cc ../../util/memory/hp/hp_list.cc \
-	../../util/memory/rc/descriptor_pool.cc ../../util/thread_context.cc \
-	../../util/memory/rc/pool_manager.cc ../../util/info.cc" \
+	TSOURCES="$(shell find ../../util/ -name '*.cc')" \
 	EXECUTABLE=wfbuffer.x
 
 FAATest:
@@ -44,10 +41,7 @@ LockBuffer:
 
 MCASBuffer:
 	$(MAKE) test BUFFERTYPE=-DUSE_MCAS_BUFFER \
-	TSOURCES="../../util/progress_assurance.cc \
-	../../util/memory/hp/hazard_pointer.cc ../../util/memory/hp/hp_list.cc \
-	../../util/memory/rc/descriptor_pool.cc ../../util/thread_context.cc \
-	../../util/memory/rc/pool_manager.cc ../../util/info.cc" \
+	TSOURCES:="$(shell find ../../util/ -name '*.cc')" \
 	EXECUTABLE=mcasbuffer.x
 
 TBBBuffer:
@@ -74,8 +68,5 @@ $(EXECUTABLE): $(OBJECTS)
 
 .PHONY: clean
 clean:
-	$(RM) $(OUTPUT)*.x ../../util/progress_assurance.o \
-	../../util/memory/hp/hazard_pointer.o ../../util/memory/hp/hp_list.o \
-	../../util/memory/rc/descriptor_pool.o ../../util/thread_context.o \
-	../../util/memory/rc/pool_manager.o ../../util/info.o
+	$(RM) $(OUTPUT)*.x $(shell find ../../util/ -name '*.o')
 	$(RM) $(OBJECTS)

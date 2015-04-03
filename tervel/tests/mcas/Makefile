@@ -36,6 +36,5 @@ $(EXECUTABLE): $(OBJECTS)
 
 .PHONY: clean
 clean:
-	$(RM) $(OUTPUT)*.x ../../util/*.o \
-        ../../util/memory/hp/*.o ../../util/memory/rc/*.o
+	$(RM) $(OUTPUT)*.x $(shell find ../../util/ -name '*.o')
 	$(RM) $(OBJECTS)
