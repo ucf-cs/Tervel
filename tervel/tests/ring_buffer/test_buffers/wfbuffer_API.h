@@ -1,12 +1,12 @@
 #ifndef WFBUFFER_API_H_
 #define WFBUFFER_API_H_
 
-#include "tervel/containers/wf/ring-buffer/wf_ring_buffer.h"
-#include "tervel/util/info.h"
-#include "tervel/util/thread_context.h"
-#include "tervel/util/tervel.h"
-#include "tervel/util/memory/hp/hp_element.h"
-#include "tervel/util/memory/hp/hp_list.h"
+#include <tervel/containers/wf/ring-buffer/wf_ring_buffer.h>
+#include <tervel/util/info.h>
+#include <tervel/util/thread_context.h>
+#include <tervel/util/tervel.h>
+#include <tervel/util/memory/hp/hp_element.h>
+#include <tervel/util/memory/hp/hp_list.h>
 
 template<class T>
 class TestBuffer {

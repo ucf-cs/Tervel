@@ -2,19 +2,19 @@
 #define TERVEL_WFRB_RINGBUFFER_H_
 
 #ifdef DEBUG
-  #include "tbb/concurrent_hash_map.h"
+  #include <tbb/concurrent_hash_map.h>
 #endif
 
-#include "tervel/containers/wf/ring-buffer/node.h"
-#include "tervel/containers/wf/ring-buffer/empty_node.h"
-#include "tervel/containers/wf/ring-buffer/elem_node.h"
-#include "tervel/containers/wf/ring-buffer/enqueue_op.h"
-#include "tervel/containers/wf/ring-buffer/dequeue_op.h"
-#include "tervel/util/info.h"
-#include "tervel/util/padded_atomic.h"
-#include "tervel/util/progress_assurance.h"
-#include "tervel/util/system.h"
-#include "tervel/util/memory/rc/descriptor_util.h"
+#include <tervel/containers/wf/ring-buffer/node.h>
+#include <tervel/containers/wf/ring-buffer/empty_node.h>
+#include <tervel/containers/wf/ring-buffer/elem_node.h>
+#include <tervel/containers/wf/ring-buffer/enqueue_op.h>
+#include <tervel/containers/wf/ring-buffer/dequeue_op.h>
+#include <tervel/util/info.h>
+#include <tervel/util/padded_atomic.h>
+#include <tervel/util/progress_assurance.h>
+#include <tervel/util/system.h>
+#include <tervel/util/memory/rc/descriptor_util.h>
 
 #include <stdlib.h>
 
