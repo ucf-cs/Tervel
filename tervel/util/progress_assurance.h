@@ -70,9 +70,10 @@ class OpRecord : public memory::hp::Element {
   DISALLOW_COPY_AND_ASSIGN(OpRecord);
 };
 
+
 /**
  * This class represents the progress assurance scheme employed by our library.
- * For this scheme to be effective, each operation which may indefinetly prevent
+ * For this scheme to be effective, each operation which may indefinitely prevent
  * the progress of some other operation must call the static function offer_help
  * This ensures that if a thread is continually failing its operation, then
  * after a finite number of tries all thread will be helping.
@@ -91,6 +92,18 @@ class ProgressAssurance {
    */
   static constexpr size_t HELP_DELAY = TERVEL_PROG_ASSUR_DELAY;
 
+
+  class Limit {
+   public:
+    explicit Limit(size_t limit = TERVEL_PROG_ASSUR_LIMIT)
+      : counter_(limit) {}
+
+    bool isDelayed(size_t val = 1) {
+      return ((counter_-=1) <= 0);
+    }
+   private:
+    size_t counter_;
+  };
 
   explicit ProgressAssurance(size_t num_threads)
       : op_table_(new std::atomic<OpRecord *>[num_threads]() )

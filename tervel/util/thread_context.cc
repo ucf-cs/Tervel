@@ -1,6 +1,8 @@
 #include <tervel/util/thread_context.h>
 #include <tervel/util/info.h>
 #include <tervel/util/tervel.h>
+#include <tervel/util/memory/hp/hp_list.h>
+#include <tervel/util/memory/rc/descriptor_pool.h>
 
 #include <stdint.h>
 
@@ -12,6 +14,17 @@ ThreadContext::ThreadContext(Tervel* tervel)
     , hp_element_list_(tervel_->hazard_pointer_.hp_list_manager_.allocate_list())
     , rc_descriptor_pool_(tervel_->rc_pool_manager_.allocate_pool(thread_id_)) {
   tl_thread_info = this;
+}
+
+ThreadContext::~ThreadContext() {
+  if (rc_descriptor_pool_ != nullptr) {
+    delete rc_descriptor_pool_;
+  }
+  if (hp_element_list_ != nullptr) {
+    delete hp_element_list_;
+  }
+
+  tl_thread_info = nullptr;
 }
 
 util::memory::hp::HazardPointer * const ThreadContext::get_hazard_pointer() {
