@@ -1,7 +1,7 @@
-#include "tervel/util/memory/hp/hp_list.h"
-#include "tervel/util/memory/hp/list_manager.h"
-#include "tervel/util/memory/hp/hp_element.h"
-#include "tervel/util/memory/hp/hazard_pointer.h"
+#include <tervel/util/memory/hp/hp_list.h>
+#include <tervel/util/memory/hp/list_manager.h>
+#include <tervel/util/memory/hp/hp_element.h>
+#include <tervel/util/memory/hp/hazard_pointer.h>
 
 
 namespace tervel {
@@ -23,16 +23,17 @@ void ElementList::add_to_unsafe(Element* elem) {
   element_list_ = elem;
 }
 
-
 void ElementList::try_to_free_elements(bool dont_check) {
   /**
    * Loop until no more elements can be freed from the element_list_ linked list
    * OR the first element is not safe to be freed
    */
+  #ifdef TERVEL_MEM_HP_NO_WATCH
+      assert(false);
+  #endif
+
   if (element_list_ != nullptr) {
-    #ifdef NOMEMORY
-    assert(false);
-    #endif
+
     Element *prev = element_list_;
     Element *temp = element_list_->next();
 
@@ -44,27 +45,23 @@ void ElementList::try_to_free_elements(bool dont_check) {
         prev = temp;
         temp = temp_next;
       } else {
-        if (NO_DELETE_HP_ELEMENTS) {
-          temp->~Element();
-        } else {
+        #ifndef TERVEL_MEM_HP_NO_FREE
           delete temp;
-        }
+        #endif
         prev->next(temp_next);
         temp = temp_next;
       }
     }
 
     /**
-     * We check the first element last to allow for cleaner looping code.
+     * We check the first element last to allow for cleaner looping structure.
      */
     temp = element_list_->next();
     bool watched = HazardPointer::is_watched(element_list_);
     if (dont_check || !watched) {
-      if (NO_DELETE_HP_ELEMENTS) {
-        element_list_->~Element();
-      } else {
+      #ifndef TERVEL_MEM_HP_NO_FREE
         delete element_list_;
-      }
+      #endif
       element_list_ = temp;
     }
   }

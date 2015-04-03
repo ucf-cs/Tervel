@@ -7,12 +7,12 @@
 #include <assert.h>
 #include <stdint.h>
 
-#include "tervel/util/descriptor.h"
-#include "tervel/util/info.h"
-#include "tervel/util/memory/rc/pool_element.h"
-#include "tervel/util/memory/rc/pool_manager.h"
-#include "tervel/util/system.h"
-#include "tervel/util/util.h"
+#include <tervel/util/descriptor.h>
+#include <tervel/util/info.h>
+#include <tervel/util/memory/rc/pool_element.h>
+#include <tervel/util/memory/rc/pool_manager.h>
+#include <tervel/util/system.h>
+#include <tervel/util/util.h>
 
 namespace tervel {
 namespace util {
@@ -27,7 +27,7 @@ class PoolManager;
  * The pool is represented as two linked lists of descriptors: one for safe
  * elements and one for unsafe elements. The safe pool is known to only contain
  * items owned by the thread owning the DescriptorPool object, and the unsafe
- * pool contains items where other threads may still hold refrences to them.
+ * pool contains items where other threads may still hold references to them.
  *
  * Further, the pool object has a parent who is shared amongst other threads.
  * When a pool is to be destroyed, it sends its remaining elements to the
@@ -38,12 +38,10 @@ class PoolManager;
  *
  * TODO(steven) Need to implement max list size, when it is reached, elements
  * are sent to the manager list
- * TODO(steven) Need to implement logic to attempt to get elements from manager
  */
 class DescriptorPool {
  public:
-  DescriptorPool(PoolManager *manager, int prefill = 4,
-          uint64_t pool_id = tl_thread_info->get_thread_id())
+  DescriptorPool(PoolManager *manager, uint64_t pool_id, int prefill = TERVEL_MEM_RC_MIN_NODES)
       : manager_(manager)
       , pool_id_(pool_id)
       , safe_pool_{nullptr}
@@ -52,12 +50,15 @@ class DescriptorPool {
       , unsafe_pool_count_(0) {
     this->reserve(prefill);
   }
-  ~DescriptorPool() { this->send_to_manager(); }
+  ~DescriptorPool() {
+    this->send_unsafe_to_manager();
+    this->send_safe_to_manager();
+  }
 
   /**
    * Allocates an extra `num_descriptors` elements to the pool.
    */
-  void reserve(int num_descriptors);
+  void reserve(size_t num_descriptors = TERVEL_MEM_RC_MIN_NODES);
 
   /**
    * Constructs and returns a descriptor. Arguments are forwarded to the
@@ -102,13 +103,6 @@ class DescriptorPool {
   // -------------------------
 
   /**
-   * Sends all elements managed by this pool to the parent pool. Same as:
-   *   send_safe_to_manager();
-   *   send_unsafe_to_manager();
-   */
-  void send_to_manager();
-
-  /**
    * Sends the elements from the safe pool to the corresponding safe pool in
    * this pool's manager.
    */
@@ -121,19 +115,9 @@ class DescriptorPool {
   void send_unsafe_to_manager();
 
   /**
-   * Gets the safe pool of the manager associated with this pool.
+   * Sends a subset of the elements to the managers pool
    */
-  std::atomic<PoolElement *> & manager_safe_pool() {
-    return manager_->pools_[pool_id_].safe_pool;
-  }
-
-  /**
-   * Gets the unsafe pool of the manager associated with this pool.
-   */
-  std::atomic<PoolElement *> & manager_unsafe_pool() {
-    return manager_->pools_[pool_id_].unsafe_pool;
-  }
-
+  void offload();
 
   // --------------------------------
   // DEALS WITH SAFE AND UNSAFE LISTS
@@ -163,7 +147,9 @@ class DescriptorPool {
    */
   void try_clear_unsafe_pool(bool dont_check = false);
 
-
+  /** verifies that the length of the linked list matches the count
+  */
+  bool verify_pool_count(PoolElement *pool, uint64_t count);
   // -------
   // MEMBERS
   // -------
@@ -210,10 +196,13 @@ class DescriptorPool {
 template<typename DescrType, typename... Args>
 DescrType * DescriptorPool::get_descriptor(Args&&... args) {
   PoolElement *elem = this->get_from_pool();
-  elem->init_descriptor<DescrType>(std::forward<Args>(args)...);
-  DescrType * descr = reinterpret_cast<DescrType *>(elem->descriptor());
-
-  return descr;
+  if (elem == nullptr) {
+    return nullptr;
+  } else {
+    elem->init_descriptor<DescrType>(std::forward<Args>(args)...);
+    DescrType * descr = reinterpret_cast<DescrType *>(elem->descriptor());
+    return descr;
+  }
 }
 
 }  // namespace rc

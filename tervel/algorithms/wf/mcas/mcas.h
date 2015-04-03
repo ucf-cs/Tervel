@@ -232,7 +232,14 @@ bool MCAS<T>::mcas_complete(CasRow<T> *current_row) {
   assert(util::memory::hp::HazardPointer::is_watched(this));
   assert(cas_rows_[0].helper_.load() != nullptr);
   assert(current_row->helper_.load() != nullptr);
-  // TODO(steven): implement position calculation.
+
+
+  { // TODO(steven): verify this position calculation.
+    uintptr_t temp1 = reinterpret_cast<uintptr_t>(&(cas_rows_[0]));
+    uintptr_t temp2 = reinterpret_cast<uintptr_t>(current_row);
+    start_pos = temp2 - temp1;
+    assert(&(cas_rows_[start_pos]) == current_row && "if this hit, I am bad at math");
+  }
   return mcas_complete(start_pos, false);
 }
 
@@ -270,14 +277,14 @@ bool MCAS<T>::mcas_complete(int start_pos, bool wfmode) {
       } else if (!wfmode &&
               fcount++ == util::ProgressAssurance::MAX_FAILURES) {
         /* Check if we need to enter wf_mode */
-        if (tervel::tl_thread_info->get_recursive_depth() == 0) {
+        if (util::RecursiveAction::recursive_depth() == 0) {
           /* If this is our operation then make an annoucnement */
           tervel::util::ProgressAssurance::make_announcement(this);
           assert(state_.load() != MCasState::IN_PROGRESS);
           return (state_.load() == MCasState::PASS);
         } else {
           /* Otherwise perform a recursive return */
-          tervel::tl_thread_info->set_recursive_return();
+          util::RecursiveAction::set_recursive_return();
           return false;
         }
       }
@@ -289,13 +296,13 @@ bool MCAS<T>::mcas_complete(int start_pos, bool wfmode) {
         /* Remove it by completing the op, try again */
         current_value = this->mcas_remove(pos, current_value);
 
-        /* Check if we are executing a recurisve return and if so determine
+        /* Check if we are executing a recursive return and if so determine
          * if we are at our own operation or need to return farther. */
-        if (tervel::tl_thread_info->recursive_return()) {
-          if (tervel::tl_thread_info->get_recursive_depth() == 0) {
+        if (util::RecursiveAction::recursive_return()) {
+          if (util::RecursiveAction::recursive_depth() == 0) {
             /* we are back to our own operation so re-read process the
              * current value */
-            tervel::tl_thread_info->clear_recursive_return();
+            util::RecursiveAction::clear_recursive_return();
             current_value = row->address_->load();
           } else {
             /* we need to return some more */

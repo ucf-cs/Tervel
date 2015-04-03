@@ -1,8 +1,8 @@
 #ifndef TERVEL_UTIL_RECURSIVE_ACTION_H
 #define TERVEL_UTIL_RECURSIVE_ACTION_H
 
-#include "tervel/util/info.h"
-#include "tervel/util/util.h"
+#include <tervel/util/info.h>
+#include <tervel/util/util.h>
 
 namespace tervel{
 namespace util {
@@ -14,16 +14,36 @@ namespace util {
 class RecursiveAction {
  public:
   RecursiveAction() {
-    if (tervel::tl_thread_info->get_recursive_depth() >
+    if (RecursiveAction::recursive_depth(0) >
         tervel::tl_thread_info->get_num_threads() + 1) {
-      tervel::tl_thread_info->set_recursive_return();
+      RecursiveAction::recursive_return(true, true);
     }
-    tervel::tl_thread_info->inc_recursive_depth();
+    RecursiveAction::recursive_depth(1);
   }
 
   ~RecursiveAction() {
-    tervel::tl_thread_info->dec_recursive_depth();
+    RecursiveAction::recursive_depth(-1);
   }
+
+  /**
+  * @return whether or not the thread is performing a recursive return.
+  */
+  static bool recursive_return(bool change = false, bool value = false);
+
+  static void set_recursive_return() {
+    recursive_return(true, true);
+  };
+
+  static void clear_recursive_return() {
+    recursive_return(true, false);
+  };
+
+  /**
+   * Adds the passed value and returns the pre-incremented value
+   * @param  i value to increment by
+   * @return   the value before the increment
+   */
+  static size_t recursive_depth(size_t i = 0);
 
  private:
   DISALLOW_COPY_AND_ASSIGN(RecursiveAction);

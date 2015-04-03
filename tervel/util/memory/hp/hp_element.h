@@ -8,9 +8,9 @@
 #include <stdint.h>
 #include <stddef.h>
 
-#include "tervel/util/info.h"
-#include "tervel/util/util.h"
-#include "tervel/util/memory/hp/hp_list.h"
+#include <tervel/util/info.h>
+#include <tervel/util/util.h>
+#include <tervel/util/memory/hp/hp_list.h>
 
 namespace tervel {
 namespace util {
@@ -40,12 +40,13 @@ class Element {
    * @param no_check if true then the object is imeditly deleted
    * @param element_list the list to append the object to until it is safe
    */
-  void safe_delete(bool no_check = false, ElementList *element_list
-          = tervel::tl_thread_info->get_hp_element_list()) {
-    #ifdef NOMEMORY
-    return;
+  void safe_delete(bool no_check = false,
+      ElementList * const element_list = tervel::tl_thread_info->get_hp_element_list()) {
+    #ifdef TERVEL_MEM_HP_NO_FREE
+      return;
     #endif
-    if (no_check && NO_DELETE_HP_ELEMENTS) {
+
+    if (no_check) {
       this->~Element();
     } else if (no_check) {
       delete this;

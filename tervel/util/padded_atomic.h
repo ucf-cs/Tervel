@@ -1,7 +1,7 @@
 #ifndef TERVEL_UTIL_PADDEDATOMIC_H
 #define TERVEL_UTIL_PADDEDATOMIC_H
 
-#include "tervel/util/system.h"
+#include <tervel/util/system.h>
 #include <atomic>
 
 namespace tervel {

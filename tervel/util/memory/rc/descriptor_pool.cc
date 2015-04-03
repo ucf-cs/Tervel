@@ -1,5 +1,5 @@
-#include "tervel/util/memory/rc/descriptor_pool.h"
-#include "tervel/util/memory/rc/descriptor_util.h"
+#include <tervel/util/memory/rc/descriptor_pool.h>
+#include <tervel/util/memory/rc/descriptor_util.h>
 
 namespace tervel {
 namespace util {
@@ -10,104 +10,130 @@ void DescriptorPool::free_descriptor(tervel::util::Descriptor *descr,
       bool dont_check) {
   uintptr_t safty_check = reinterpret_cast<uintptr_t>(descr);
   assert((safty_check & 0x3) == 0x0);
+
+  this->try_clear_unsafe_pool();
+
   if (!dont_check && util::memory::rc::is_watched(descr)) {
     this->add_to_unsafe(descr);
   } else {
     this->add_to_safe(descr);
   }
+
+  this->offload();
 }
 
+bool DescriptorPool::verify_pool_count(PoolElement *pool, uint64_t count) {
+  PoolElement * p_temp = pool;
+  uint64_t c_temp = 0;
+  while (p_temp != nullptr) {
+    c_temp++;
+    p_temp = p_temp->next();
+  }
+  return (c_temp == count);
+};
 
-void DescriptorPool::reserve(int num_descriptors) {
-  for (int i = 0; i < num_descriptors; ++i) {
+
+void DescriptorPool::reserve(size_t num_descriptors) {
+
+  manager_->get_safe_elements(&safe_pool_, &safe_pool_count_,
+    num_descriptors);
+
+  assert(verify_pool_count(safe_pool_, safe_pool_count_));
+
+  while (safe_pool_count_ < num_descriptors) {
     PoolElement *elem = new PoolElement();
     elem->next(safe_pool_);
     safe_pool_ = elem;
     safe_pool_count_++;
   }
+
+  assert(verify_pool_count(safe_pool_, safe_pool_count_));
+}
+
+void DescriptorPool::offload() {
+  static_assert( TERVEL_MEM_RC_MIN_NODES >= 0 && TERVEL_MEM_RC_MIN_NODES < TERVEL_MEM_RC_MAX_NODES, "Error bad values for TERVEL_MEM_RC_MIN_NODES and TERVEL_MEM_RC_MAX_NODES");
+
+  if (safe_pool_count_ > TERVEL_MEM_RC_MAX_NODES) {
+    uint64_t extra_count = 0;
+
+    PoolElement * tail = safe_pool_;
+    while (safe_pool_count_ > TERVEL_MEM_RC_MIN_NODES) {
+      tail = tail->next();
+      extra_count++;
+      safe_pool_count_--;
+    }
+
+    PoolElement *extras = safe_pool_;
+    safe_pool_ = tail->next();
+    tail->next(nullptr);
+
+    assert(verify_pool_count(safe_pool_, safe_pool_count_));
+    assert(verify_pool_count(extras, extra_count));
+
+    this->manager_->add_safe_elements(pool_id_, extras, tail);
+  }
 }
 
 
 PoolElement * DescriptorPool::get_from_pool(bool allocate_new) {
-  // move any objects from the unsafe list to the safe list so that it's more
-  // likely the safe list has something to take from.
-  this->try_clear_unsafe_pool();
+#ifdef TERVEL_MEM_RC_NO_FREE
+  return new PoolElement();
+#endif
 
-  PoolElement *ret {nullptr};
+  PoolElement *res {nullptr};
 
-  // safe pool has something in it. pop the next item from the head of the list.
-  if (!NO_REUSE_RC_DESCR && safe_pool_ != nullptr) {
-    ret = safe_pool_;
+  // First if local pool is empty go to global
+  if (safe_pool_ == nullptr) {
+    assert(safe_pool_count_ == 0 && "safe pool count has diverged and no longer equals the number of elements");
+    reserve();  // uses default min nodes
+  }
+
+  // If safe pool has something in it. pop the next item from the head of the list.
+  if (safe_pool_ != nullptr) {
+    res = safe_pool_;
     safe_pool_ = safe_pool_->next();
-    ret->next(nullptr);
+    res->next(nullptr);
 
 #ifdef DEBUG_POOL
-
-    assert(ret->header().free_count.load() ==
-        ret->header().allocation_count.load());
+    assert(res->header().free_count.load() ==
+        res->header().allocation_count.load());
 #endif
 
     safe_pool_count_--;
-    assert(safe_pool_count_ >=0);
-  }
-
-  // allocate a new element if needed
-  if (ret == nullptr && allocate_new) {
-    ret = new PoolElement();
+    assert(safe_pool_count_ >=0 );
+  } else if (allocate_new) {  // allocate a new element if needed
+    assert(safe_pool_count_ == 0);
+    res = new PoolElement();
   }
 
 #ifdef DEBUG_POOL
   // update counters to denote that an item was taken from the pool
-  ret->header().allocation_count.fetch_add(1);
-  ret->header().descriptor_in_use.store(true);
+  res->header().allocation_count.fetch_add(1);
+  res->header().descriptor_in_use.store(true);
 #endif
-  return ret;
+
+  return res;
 }
-
-
-void DescriptorPool::send_to_manager() {
-  this->send_safe_to_manager();
-  this->send_unsafe_to_manager();
-}
-
-
-namespace {
-
-/**
- * Generic logic for clearing a pool and sending its elements to another,
- * shared pool. Parameters are passed by pointer because this function changes
- * their values.
- */
-void clear_pool(PoolElement **local_pool,
-    std::atomic<PoolElement *> *manager_pool) {
-  if (local_pool != nullptr) {
-    PoolElement *p1 = *local_pool;
-    PoolElement *p2 = p1->next();
-    while (p2 != nullptr) {
-      p1 = p2;
-      p2 = p1->next();
-    }
-
-    // p1->pool_next's value is updated to the current value
-    // after a failed cas. (pass by reference fun)
-    p1->next(manager_pool->load());
-    while (!manager_pool->
-        compare_exchange_strong(p1->header().next, *local_pool)) {}
-  }
-  *local_pool = nullptr;
-}
-
-}  // namespace
-
 
 void DescriptorPool::send_safe_to_manager() {
-  clear_pool(&safe_pool_, &this->manager_safe_pool());
+  if (safe_pool_ != nullptr) {
+    assert(safe_pool_count_ > 0);
+    this->manager_->add_safe_elements(pool_id_, safe_pool_);
+    safe_pool_count_ = 0;
+    safe_pool_ = nullptr;
+  }
 }
 
 
 void DescriptorPool::send_unsafe_to_manager() {
   this->try_clear_unsafe_pool(false);
-  clear_pool(&unsafe_pool_, &this->manager_unsafe_pool());
+
+  if (unsafe_pool_ != nullptr) {
+    assert(unsafe_pool_count_ > 0);
+    this->manager_->add_unsafe_elements(pool_id_, unsafe_pool_);
+    unsafe_pool_count_ = 0;
+    unsafe_pool_ = nullptr;
+  }
 }
 
 
@@ -144,7 +170,7 @@ void DescriptorPool::try_clear_unsafe_pool(bool dont_check) {
     tervel::util::Descriptor *temp_descr;
     while (temp) {
       temp_descr = temp->descriptor();
-      tervel::util::memory::rc::PoolElement *temp_next = temp->next();
+      PoolElement *temp_next = temp->next();
 
       bool watched = is_watched(temp_descr);
       if (!dont_check && watched) {

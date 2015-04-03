@@ -8,9 +8,15 @@
 #include <assert.h>
 #include <stdint.h>
 
-#include "tervel/util/system.h"
-#include "tervel/util/memory/hp/hp_element.h"
-#include "tervel/util/memory/hp/hp_list.h"
+
+#include <tervel/util/info.h>
+#include <tervel/util/util.h>
+#include <tervel/util/system.h>
+
+#include <tervel/util/memory/hp/hp_list.h>
+#include <tervel/util/memory/hp/hp_element.h>
+
+
 
 namespace tervel {
 namespace util {
@@ -31,9 +37,7 @@ class ListManager {
       : free_lists_(new ManagedPool[number_pools])
       , number_pools_(number_pools) {}
 
-  ~ListManager() {
-    // TODO(steven): destroy pool by freeing each Element
-  }
+  ~ListManager();
 
   ElementList * allocate_list() {
     return new ElementList(this);
@@ -41,11 +45,19 @@ class ListManager {
 
  private:
   struct ManagedPool {
-    Element * element_list_ {nullptr};
+    std::atomic<Element *> element_list_ {nullptr};
   };
 
+  /**
+   * This function is called when a thread is detached. It moves elements from its
+   * private HP pool to the shared pool.
+   *
+   * @param tid          The threads tervel id
+   * @param element_list The list of elements that it owned.
+   */
   void recieve_element_list(uint64_t tid, Element * element_list) {
-    free_lists_[tid].element_list_ = element_list;
+    assert(free_lists_[tid].element_list_.load() == nullptr && "The HP shared free_lists should be empty when this function is called");
+    free_lists_[tid].element_list_.store(element_list);
   };
 
   std::unique_ptr<ManagedPool[]> free_lists_;

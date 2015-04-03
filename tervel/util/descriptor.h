@@ -6,8 +6,8 @@
 #include <assert.h>
 #include <stdint.h>
 
-#include "tervel/util/info.h"
-#include "tervel/util/util.h"
+#include <tervel/util/info.h>
+#include <tervel/util/util.h>
 
 namespace tervel {
 namespace util {
@@ -88,7 +88,7 @@ class Descriptor {
    * This method is optional to implement for each sub class.
    * This function must be implemented if on_watch is implemented.
    *
-   * @return true iff the item is watched by another thread
+   * @return true if the item is watched by another thread
    */
   virtual bool on_is_watched() { return false; }
 

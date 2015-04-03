@@ -12,12 +12,8 @@ INC += $(TINC) -I../../../../tervel-library/
 LIB += $(TLIB) -ldl -lgflags -lpthread -lboost_system -lboost_regex -lrt -lllalloc
 CPPFLAGS += $(INC)
 
-TSOURCES=../../util/progress_assurance.cc \
-        ../../util/memory/hp/hazard_pointer.cc ../../util/memory/hp/hp_list.cc \
-        ../../util/memory/rc/descriptor_pool.cc ../../util/thread_context.cc \
-        ../../util/memory/rc/pool_manager.cc ../../util/info.cc \
-        ../../util/memory/rc/descriptor_read_first_op.cc
-SOURCES = main.cc $(TSOURCES)
+TSOURCES:=$(shell find ../../util/ -name '*.cc')
+SOURCES=main.cc $(TSOURCES)
 
 OUTPUT =Executables/
 EXECUTABLE ?=main
@@ -40,9 +36,5 @@ $(EXECUTABLE): $(OBJECTS)
 
 .PHONY: clean
 clean:
-	$(RM) $(OUTPUT)*.x ../../util/progress_assurance.o \
-        ../../util/memory/hp/hazard_pointer.o ../../util/memory/hp/hp_list.o \
-        ../../util/memory/rc/descriptor_pool.o ../../util/thread_context.o \
-        ../../util/memory/rc/pool_manager.o ../../util/info.o \
-        ../../util/memory/rc/descriptor_read_first_op.o
+	$(RM) $(OUTPUT)*.x
 	$(RM) $(OBJECTS)

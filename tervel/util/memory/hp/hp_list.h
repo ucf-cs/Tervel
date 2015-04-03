@@ -7,9 +7,9 @@
 #include <assert.h>
 #include <stdint.h>
 
-#include "tervel/util/info.h"
-#include "tervel/util/system.h"
-#include "tervel/util/descriptor.h"
+#include <tervel/util/info.h>
+#include <tervel/util/system.h>
+#include <tervel/util/descriptor.h>
 
 
 namespace tervel {
@@ -27,7 +27,7 @@ class ListManager;
  *
  * Further, this object has a parent who is shared amongst other threads.
  * When it is to be destroyed, it sends its remaining elements to the
- * parent, relinquishing ownership of said elements. 
+ * parent, relinquishing ownership of said elements.
  */
 class ElementList {
  public:
@@ -59,7 +59,7 @@ class ElementList {
 
   /**
    * Tries to free elements from the unsafe list.
-   * @param dont_check If true, it ignores safty checks 
+   * @param dont_check If true, it ignores safety checks
    */
   void try_to_free_elements(bool dont_check = false);
 
@@ -74,7 +74,7 @@ class ElementList {
   ListManager *manager_;
 
   /**
-   * A linked list of list elements. 
+   * A linked list of list elements.
    * Elements are freed when they are no longer referenced by other threads.
    */
   Element *element_list_ {nullptr};

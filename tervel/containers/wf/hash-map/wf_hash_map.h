@@ -5,10 +5,10 @@
 #include <atomic>
 #include <cmath>
 
-#include "tervel/util/info.h"
-#include "tervel/util/memory/hp/hp_element.h"
-#include "tervel/util/memory/hp/hazard_pointer.h"
-#include "tervel/util/progress_assurance.h"
+#include <tervel/util/info.h>
+#include <tervel/util/memory/hp/hp_element.h>
+#include <tervel/util/memory/hp/hazard_pointer.h>
+#include <tervel/util/progress_assurance.h>
 
 // TODO(Steven):
 //

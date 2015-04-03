@@ -1,12 +1,11 @@
 CXX      = g++-4.8
 CONTAINERTYPE ?= -DUSE_WF_HASHMAP
-CXXFLAGS =  $(CONTAINERTYPE)  -std=c++11 \
-            -march=native -m64 -pthread -fno-strict-aliasing $(TFLAGS)
+CXXFLAGS =  $(CONTAINERTYPE)  -std=c++11  -march=native -m64 -pthread -fno-strict-aliasing $(TFLAGS)
 
-# DEBUG = -DDEBUG=1 -p -pg -g -DMAX_WAIT_FREE=0
-RELEASE = -O3 -DNDEBUG -DSET_WAIT_FREE=10000 -DSET_HELP_DELAY=100000
+DEBUG = -DDEBUG=1 -p -pg -g 
+# RELEASE = -O3 -DNDEBUG -DSET_WAIT_FREE=10000 -DSET_HELP_DELAY=100000
 
-CXXFLAGS += $(DEBUG)
+CXXFLAGS += $(DEBUG) $(RELEASE)
 
 CPPFLAGS = -DINTEL
 INC += $(TINC)
@@ -19,8 +18,9 @@ EXECUTABLE ?=main
 OBJECTS = $(SOURCES:.cc=.o)
 
 
-all: CLIFF WFTEST TBB BOOST STL SPLIT MICHAEL WFOLD
+#all: CLIFF WFTEST TBB BOOST STL SPLIT MICHAEL WFOLD
 
+all: WFTEST 
 
 test: $(SOURCES) $(EXECUTABLE)
 	mkdir -p $(OUTPUT)
@@ -74,13 +74,11 @@ MICHAEL:
 WFTEST:
 	$(MAKE) WFTEST_SUB EXPAN_RATE="6"
 	$(MAKE) WFTEST_SUB EXPAN_RATE="4"
+
 WFTEST_SUB:
 	$(MAKE) test CONTAINERTYPE="-DUSE_WF_HASHMAP -DHASHMAP_EXPANSION_RATE=$(EXPAN_RATE)" \
-	TINC="-I../../../  " \
-	TSOURCES="../../util/progress_assurance.cc \
-	../../util/memory/hp/hazard_pointer.cc ../../util/memory/hp/hp_list.cc \
-	../../util/memory/rc/descriptor_pool.cc ../../util/thread_context.cc \
-	../../util/memory/rc/pool_manager.cc ../../util/info.cc" \
+	TINC="-I../../../../tervel-library/" \
+        TSOURCES="$(shell find ../../util/ -name '*.cc')" \
 	EXECUTABLE=wfhashmap_$(EXPAN_RATE).x
 
 WFOLD:
@@ -101,8 +99,5 @@ $(EXECUTABLE): $(OBJECTS)
 
 .PHONY: clean
 clean:
-	$(RM) $(OUTPUT)*.x ../../util/progress_assurance.o \
-	../../util/memory/hp/hazard_pointer.o ../../util/memory/hp/hp_list.o \
-	../../util/memory/rc/descriptor_pool.o ../../util/thread_context.o \
-	../../util/memory/rc/pool_manager.o ../../util/info.o
+	$(RM) $(OUTPUT)*.x $(shell find ../../util/ -name "*.o")
 	$(RM) $(OBJECTS)

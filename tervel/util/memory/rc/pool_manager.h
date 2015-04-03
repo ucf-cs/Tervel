@@ -8,10 +8,10 @@
 #include <assert.h>
 #include <stdint.h>
 
-#include "tervel/util/info.h"
-#include "tervel/util/util.h"
-#include "tervel/util/system.h"
-#include "tervel/util/descriptor.h"
+#include <tervel/util/info.h>
+#include <tervel/util/util.h>
+#include <tervel/util/system.h>
+#include <tervel/util/descriptor.h>
 
 namespace tervel {
 namespace util {
@@ -37,19 +37,19 @@ class PoolManager {
       : number_pools_(number_pools)
       , pools_(new ManagedPool[number_pools]) {}
 
-  ~PoolManager() {
-    for (size_t i = 0; i < number_pools_; i++) {
-      // TODO(steven) implement freeing
-    }
-  }
+  ~PoolManager();
 
   /**
    * Allocates a pool for thread-local use.
    */
-  DescriptorPool * allocate_pool();
+  DescriptorPool * allocate_pool(const uint64_t pid);
+
+  void get_safe_elements(PoolElement **pool, uint64_t *count, uint64_t min_elem);
+  void add_safe_elements(uint64_t pid, PoolElement *pool, PoolElement *pool_end = nullptr);
+  void add_unsafe_elements(uint64_t pid, PoolElement *pool);
+
 
   const size_t number_pools_;
-
 
  private:
   struct ManagedPool {
@@ -60,7 +60,6 @@ class PoolManager {
   };
   static_assert(sizeof(ManagedPool) == CACHE_LINE_SIZE,
       "Managed pools have to be cache aligned to prevent false sharing.");
-
 
   std::unique_ptr<ManagedPool[]> pools_;
 

@@ -1,12 +1,12 @@
 #ifndef WF_VECTOR_API_H_
 #define WF_VECTOR_API_H_
 
-#include "tervel/containers/wf/vector/vector.hpp"
-#include "tervel/util/info.h"
-#include "tervel/util/thread_context.h"
-#include "tervel/util/tervel.h"
-#include "tervel/util/memory/hp/hp_element.h"
-#include "tervel/util/memory/hp/hp_list.h"
+#include <tervel/containers/wf/vector/vector.hpp>
+#include <tervel/util/info.h>
+#include <tervel/util/thread_context.h>
+#include <tervel/util/tervel.h>
+#include <tervel/util/memory/hp/hp_element.h>
+#include <tervel/util/memory/hp/hp_list.h>
 
 template<typename T>
 class TestClass {

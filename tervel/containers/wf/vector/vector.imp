@@ -10,7 +10,9 @@
 #include <tervel/containers/wf/vector/read_op.h>
 #include <tervel/containers/wf/vector/write_op.h>
 #include <tervel/containers/wf/vector/pushback_op.h>
+#include <tervel/containers/wf/vector/pushbackwra_op.h>
 #include <tervel/containers/wf/vector/popback_op.h>
+#include <tervel/containers/wf/vector/popbackwra_op.h>
 
 
 

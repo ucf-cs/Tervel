@@ -9,8 +9,9 @@
 #include <memory>
 #include <cstdint>
 
-#include "tervel/util/info.h"
-#include "tervel/util/util.h"
+#include <tervel/util/info.h>
+#include <tervel/util/util.h>
+#include <tervel/util/memory/hp/list_manager.h>
 
 namespace tervel {
 namespace util {
@@ -26,25 +27,14 @@ class Element;
  * This allows for more expressive operations to be performed.
  *
  * If an individual thread requires more than one element to be hazard pointer
- * portected at a single instance, then SlotIDs should be added.
+ * protected at a single instance, then SlotIDs should be added.
  */
 class HazardPointer {
  public:
   enum class SlotID : size_t {SHORTUSE = 0 , PROG_ASSUR = 1, END = 2};
 
-  explicit HazardPointer(int num_threads)
-      // The total number of slots needed is equal to the number of threads
-      // multipled by the number of slots used.
-      // Do to the potential of reordering, num_slots_ can not be used to
-      // inilitze watches.
-      : watches_(new std::atomic<void *>[num_threads *
-            static_cast<size_t>(SlotID::END)])
-      , num_slots_ {num_threads * static_cast<size_t>(SlotID::END)} {}
-
-  ~HazardPointer() {
-    // TODO(steven) implement
-  }
-
+  explicit HazardPointer(int num_threads);
+  ~HazardPointer();
 
   // -------
   // Static Functions
@@ -65,7 +55,7 @@ class HazardPointer {
    * @param expected The value which is to be expected at the address
    */
   static bool watch(SlotID slot_id, Element *elem, std::atomic<void *> *address,
-        void *expected, HazardPointer *hazard_pointer =
+        void *expected, HazardPointer * const hazard_pointer =
         tervel::tl_thread_info->get_hazard_pointer());
 
   /**
@@ -81,7 +71,7 @@ class HazardPointer {
    * @param expected The value which is to be expected at the address
    */
   static bool watch(SlotID slot_id, void *value, std::atomic<void *> *address
-      , void *expected, HazardPointer *hazard_pointer =
+      , void *expected, HazardPointer * const hazard_pointer =
       tervel::tl_thread_info->get_hazard_pointer());
 
   /**
@@ -90,7 +80,7 @@ class HazardPointer {
    *
    * @param slot the slot to remove the watch
    */
-  static void unwatch(SlotID slot_id, HazardPointer *hazard_pointer =
+  static void unwatch(SlotID slot_id, HazardPointer * const hazard_pointer =
         tervel::tl_thread_info->get_hazard_pointer());
 
   /**
@@ -101,7 +91,7 @@ class HazardPointer {
    * @param descr to call on_unwatch on.
    */
   static void unwatch(SlotID slot_id, Element *descr,
-          HazardPointer *hazard_pointer =
+          HazardPointer * const hazard_pointer =
           tervel::tl_thread_info->get_hazard_pointer());
 
   /**
@@ -111,7 +101,7 @@ class HazardPointer {
    *
    * @param descr to call on_is_watched on.
    */
-  static bool is_watched(Element *descr, HazardPointer *hazard_pointer =
+  static bool is_watched(Element *descr, HazardPointer * const hazard_pointer =
         tervel::tl_thread_info->get_hazard_pointer());
 
   /**
@@ -121,7 +111,7 @@ class HazardPointer {
    *
    * @param value to check if watch
    */
-  static bool is_watched(void *value, HazardPointer *hazard_pointer =
+  static bool is_watched(void *value, HazardPointer * const hazard_pointer =
         tervel::tl_thread_info->get_hazard_pointer());
 
 
@@ -187,6 +177,11 @@ class HazardPointer {
 
   std::unique_ptr<std::atomic<void *>[]> watches_;
   const size_t num_slots_;
+
+ public:
+  // Shared HP Element list manager
+  util::memory::hp::ListManager hp_list_manager_;
+
 
   DISALLOW_COPY_AND_ASSIGN(HazardPointer);
 };  // HazardPointer
