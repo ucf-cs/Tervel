@@ -2,3 +2,7 @@
 *.o
 *.swp
 *.x
+gmon.out
+less
+*.log
+*.out
