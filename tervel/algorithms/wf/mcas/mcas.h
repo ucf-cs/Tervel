@@ -259,9 +259,7 @@ bool MCAS<T>::mcas_complete(int start_pos, bool wfmode) {
    * Start at last known completed row.
    */
   for (int pos = start_pos; pos < row_count_; pos++) {
-    util::ProgressAssurance::Limit progAssur();
-
-    size_t fcount = 0;  // Tracks the number of failures.
+    util::ProgressAssurance::Limit progAssur;
 
     CasRow<T> * row = &(cas_rows_[pos]);
 
