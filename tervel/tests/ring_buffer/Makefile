@@ -1,4 +1,4 @@
-CXX      = g++-4.7
+CXX      = g++-4.8
 BUFFERTYPE ?= -DUSE_WF_BUFFER
 CXXFLAGS =  $(BUFFERTYPE) -Wall -Wunused-function -std=c++11 \
             -march=native -m64 -pthread -fno-strict-aliasing
@@ -28,7 +28,7 @@ test: $(SOURCES) $(EXECUTABLE)
 
 WFBuffer:
 	$(MAKE) test BUFFERTYPE=-DUSE_WF_BUFFER \
-	TSOURCES="$(shell find ../../util/ -name '*.cc')" \
+        TSOURCES="$(shell find ../../util/ -name '*.cc')" \
 	EXECUTABLE=wfbuffer.x
 
 FAATest:
@@ -41,7 +41,7 @@ LockBuffer:
 
 MCASBuffer:
 	$(MAKE) test BUFFERTYPE=-DUSE_MCAS_BUFFER \
-	TSOURCES:="$(shell find ../../util/ -name '*.cc')" \
+        TSOURCES="$(shell find ../../util/ -name '*.cc')" \
 	EXECUTABLE=mcasbuffer.x
 
 TBBBuffer:

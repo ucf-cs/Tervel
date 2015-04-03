@@ -5,11 +5,11 @@
 #include <cstdint>
 #include <algorithm>
 
-#include "tervel/util/info.h"
-#include "tervel/util/memory/rc/descriptor_util.h"
-#include "tervel/util/descriptor.h"
+#include <tervel/util/info.h>
+#include <tervel/util/memory/rc/descriptor_util.h>
+#include <tervel/util/descriptor.h>
 
-#include "tervel/algorithms/wf/mcas/mcas.h"
+#include <tervel/algorithms/wf/mcas/mcas.h>
 
 namespace tervel {
 namespace containers {
