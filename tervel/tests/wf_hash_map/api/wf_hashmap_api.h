@@ -1,12 +1,12 @@
 #ifndef WF_HASHMAP_API_H_
 #define WF_HASHMAP_API_H_
 
-#include "tervel/containers/wf/hash-map/wf_hash_map.h"
-#include "tervel/util/info.h"
-#include "tervel/util/thread_context.h"
-#include "tervel/util/tervel.h"
-#include "tervel/util/memory/hp/hp_element.h"
-#include "tervel/util/memory/hp/hp_list.h"
+#include <tervel/containers/wf/hash-map/wf_hash_map.h>
+#include <tervel/util/info.h>
+#include <tervel/util/thread_context.h>
+#include <tervel/util/tervel.h>
+#include <tervel/util/memory/hp/hp_element.h>
+#include <tervel/util/memory/hp/hp_list.h>
 
 #ifndef HASHMAP_EXPANSION_RATE
   #define HASHMAP_EXPANSION_RATE 3
@@ -39,7 +39,7 @@ class TestClass {
     typename tervel::containers::wf::HashMap<Key, Value>::ValueAccessor va;
     bool res = container->at(key, va);
     if (res) {
-      value = (va.atomic_value())->load();
+      value = *(va.value());
     }
     return res;
   }
@@ -52,7 +52,8 @@ class TestClass {
   bool update(Key key, Value &value_expected, Value value_new) {
     typename tervel::containers::wf::HashMap<Key, Value>::ValueAccessor va;
     if (container->at(key, va)) {
-      return va.atomic_value()->compare_exchange_strong(value_expected, value_new);
+      std::atomic<Value> *temp = reinterpret_cast<std::atomic<Value> *>(va.value());
+      return temp->compare_exchange_strong(value_expected, value_new);
     }
     return false;
   }

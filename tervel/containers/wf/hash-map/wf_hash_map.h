@@ -154,13 +154,6 @@ class HashMap {
     }
 
     /**
-     * @return address of the value in the data_node.
-     */
-    std::atomic<Value> *atomic_value() {
-      return (std::atomic<Value> *)(value_);
-    }
-
-    /**
      * @return whether or not this was initialized.
      */
     bool valid() {
