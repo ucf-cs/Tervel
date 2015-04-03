@@ -44,8 +44,8 @@ class PushOp: public tervel::util::OpRecord {
 
     T current = spot->load();
 
-    size_t fcount = 0;
-    while (fcount++ < util::ProgressAssurance::MAX_FAILURES) {
+    tervel::util::ProgressAssurance::Limit progAssur;
+    while (progAssur.isDelayed()) {
       if (current ==  Vector<T>::c_not_value_) {
         if (placed_pos == 0) {
           if (spot->compare_exchange_strong(current, val)) {
@@ -222,8 +222,8 @@ class PushDescr: public tervel::util::Descriptor {
     T current_prev = prev_spot_->load();
 
 
-    uint64_t fcount = 0;
-    while (in_progress() && fcount++ < util::ProgressAssurance::MAX_FAILURES) {
+    tervel::util::ProgressAssurance::Limit progAssur;
+    while (in_progress() && progAssur.isDelayed()) {
       if (current_prev == Vector<T>::c_not_value_) {
         fail();
         break;

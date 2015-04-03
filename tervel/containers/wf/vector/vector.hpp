@@ -67,4 +67,4 @@ class Vector {
 
 #endif  // __TERVEL_CONTAINERS_WF_VECTOR_VECTOR_HPP_
 
-#include <tervel/containers/wf/vector/vector.imp>
+#include <tervel/containers/wf/vector/vector_imp.h>

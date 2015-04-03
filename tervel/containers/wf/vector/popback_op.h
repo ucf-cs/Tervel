@@ -55,8 +55,8 @@ class PopOp: public tervel::util::OpRecord {
 
     T current = spot->load();
 
-    size_t fcount = 0;
-    while (fcount++ < util::ProgressAssurance::MAX_FAILURES) {
+    tervel::util::ProgressAssurance::Limit progAssur;
+    while (progAssur.isDelayed()) {
       if (current ==  Vector<T>::c_not_value_) {
 
         // else placed_pos > 0
@@ -293,8 +293,8 @@ class PopOpHelper: public tervel::util::Descriptor {
 
 
 
-    uint64_t fcount = 0;
-    while (in_progress() && fcount++ < util::ProgressAssurance::MAX_FAILURES) {
+    tervel::util::ProgressAssurance::Limit progAssur;
+    while (in_progress() && progAssur.isDelayed()) {
       if (current_prev == Vector<T>::c_not_value_) {
         fail();
         break;
