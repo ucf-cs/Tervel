@@ -1,7 +1,8 @@
 #ifndef TERVEL_WFRB_EMPTYNODE_H_
 #define TERVEL_WFRB_EMPTYNODE_H_
 
-#include <node.h>
+#include <tervel/containers/wf/ring-buffer/node.h>
+
 
 template<class T>
 class Node;
