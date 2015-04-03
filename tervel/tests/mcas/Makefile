@@ -12,8 +12,8 @@ INC += $(TINC) -I../../../../tervel-library/
 LIB += $(TLIB) -ldl -lgflags -lpthread -lboost_system -lboost_regex -lrt -lllalloc
 CPPFLAGS += $(INC)
 
-TSOURCES := $(shell find ../../util/ -name '*.cc')
-SOURCES = main.cc $(TSOURCES)
+TSOURCES:=$(shell find ../../util/ -name '*.cc')
+SOURCES=main.cc $(TSOURCES)
 
 OUTPUT =Executables/
 EXECUTABLE ?=main
@@ -36,5 +36,5 @@ $(EXECUTABLE): $(OBJECTS)
 
 .PHONY: clean
 clean:
-	$(RM) $(OUTPUT)*.x $(shell find ../../util/ -name '*.o')
+	$(RM) $(OUTPUT)*.x
 	$(RM) $(OBJECTS)

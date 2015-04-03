@@ -1,9 +1,8 @@
 CXX      = g++-4.8
 CONTAINERTYPE ?= -DUSE_WF_HASHMAP
-CXXFLAGS =  $(CONTAINERTYPE)  -std=c++11 \
-            -march=native -m64 -pthread -fno-strict-aliasing $(TFLAGS)
+CXXFLAGS =  $(CONTAINERTYPE)  -std=c++11  -march=native -m64 -pthread -fno-strict-aliasing $(TFLAGS)
 
-DEBUG = -DDEBUG=1 -p -pg -g -DMAX_WAIT_FREE=0
+DEBUG = -DDEBUG=1 -p -pg -g 
 # RELEASE = -O3 -DNDEBUG -DSET_WAIT_FREE=10000 -DSET_HELP_DELAY=100000
 
 CXXFLAGS += $(DEBUG) $(RELEASE)
@@ -75,10 +74,11 @@ MICHAEL:
 WFTEST:
 	$(MAKE) WFTEST_SUB EXPAN_RATE="6"
 	$(MAKE) WFTEST_SUB EXPAN_RATE="4"
+
 WFTEST_SUB:
 	$(MAKE) test CONTAINERTYPE="-DUSE_WF_HASHMAP -DHASHMAP_EXPANSION_RATE=$(EXPAN_RATE)" \
-	TINC="-I../../../  " \
-        TSOURCES:=$(shell find ../../util/ -name "*.cc") \	
+	TINC="-I../../../../tervel-library/" \
+        TSOURCES="$(shell find ../../util/ -name '*.cc')" \
 	EXECUTABLE=wfhashmap_$(EXPAN_RATE).x
 
 WFOLD:

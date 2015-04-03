@@ -28,12 +28,12 @@ test: $(SOURCES) $(EXECUTABLE)
 
 WFTEST:
 	$(MAKE) test CONTAINERTYPE=-DUSE_WF_VECTOR \
-	TSOURCES:=$(shell find ../../util/ -name "*.cc") \
+        TSOURCES="$(shell find ../../util/ -name '*.cc')" \
 	EXECUTABLE=wfvector.x
 
 WFTEST_DEBUG:
 	$(MAKE) test  CONTAINERTYPE=-DUSE_WF_VECTOR \
-	TSOURCES:=$(shell find ../../util/ -name "*.cc") \
+        TSOURCES="$(shell find ../../util/ -name '*.cc')" \
 	EXECUTABLE=wfvector.x
 
 $(EXECUTABLE): $(OBJECTS)
