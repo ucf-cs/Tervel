@@ -1,9 +1,34 @@
-#ifndef API_LOCK_STL_H_
-#define API_LOCK_STL_H_
+/*
+#The MIT License (MIT)
+#
+#Copyright (c) 2015 University of Central Florida's Computer Software Engineering
+#Scalable & Secure Systems (CSE - S3) Lab
+#
+#Permission is hereby granted, free of charge, to any person obtaining a copy
+#of this software and associated documentation files (the "Software"), to deal
+#in the Software without restriction, including without limitation the rights
+#to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+#copies of the Software, and to permit persons to whom the Software is
+#furnished to do so, subject to the following conditions:
+#
+#The above copyright notice and this permission notice shall be included in
+#all copies or substantial portions of the Software.
+#
+#THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+#IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+#FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+#AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+#LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+#OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+#THE SOFTWARE.
+#
+*/
+
+#ifndef API_LOCK_BOOST_H_
+#define API_LOCK_BOOST_H_
 
 #include <boost/thread.hpp>
-#include <unordered_map>
-#include <tr1/unordered_map>
+#include <boost/unordered_map.hpp>
 
 template<class Key, class Value>
 class TestClass {
@@ -32,15 +57,16 @@ class TestClass {
   };
   typedef struct equal_to<Key> c_equals;
 
-  typedef typename std::tr1::unordered_map<Key, Value, c_hash, c_equals,  std::allocator<std::pair<Key, Value> > >  hash_t;
+  typedef typename boost::unordered_map<Key, Value, c_hash, c_equals,  std::allocator<std::pair<Key, Value> > >  hash_t;
+
  public:
   TestClass(size_t num_threads, size_t capacity) {
     test_container = new hash_t(capacity);
-
+    // v_mutex.unlock();
   }
 
   std::string name() {
-    return "Locked STL Map";
+    return "Locked Boost Map";
   }
 
   void attach_thread() {}
@@ -62,7 +88,6 @@ class TestClass {
   bool insert(Key key, Value value) {
     boost::mutex::scoped_lock lock(v_mutex);
     std::pair<typename hash_t::iterator, bool> res = test_container->insert(std::make_pair(key,value));
-
     return res.second;
   }
 
@@ -79,7 +104,6 @@ class TestClass {
       }
 
     }
-
     return res;
   }
 
@@ -100,4 +124,4 @@ class TestClass {
 
 };
 
-#endif  //API_LOCK_STL_H_
+#endif  //API_LOCK_BOOST_H_

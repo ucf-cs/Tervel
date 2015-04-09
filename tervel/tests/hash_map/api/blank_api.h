@@ -1,4 +1,4 @@
-#/*
+/*
 #The MIT License (MIT)
 #
 #Copyright (c) 2015 University of Central Florida's Computer Software Engineering
@@ -22,31 +22,43 @@
 #OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 #THE SOFTWARE.
 #
-#*/
+*/
 
-import os
-import sys
-import subprocess as sp
-import re
-for root, dirs, files in os.walk("Executables/run/"):
-    for fname in files:
-        full_name = os.path.join(root, fname)
-        if full_name.endswith(".pdf") or full_name.endswith(".x"):
-            #print "skipping :", full_name
-            continue
+#ifndef BLANK_MAP_API_H
+#define BLANK_MAP_API_H
 
-        values=fname.split("_")
-        values=map(lambda v: re.sub("[^0-9]", "",v), values)
+template<class Key, class Value>
+class TestClass {
+ public:
+  TestClass(size_t num_threads, size_t capacity) {
+  }
 
-        title=("Threads {}, Capacity {}, Prefill {}, Enqueue {}, Dequeue {}:"
-                .format(*values))
-        print "parsing:", full_name, title
-        cmd = [
-            'gnuplot',
-            '-e', 'set title "%s"' % title,
-            '-e', 'file="%s"' % full_name,
-            'barplot.gp',
-        ]
-        p = sp.Popen(cmd, stderr=sp.STDOUT, stdout=sp.PIPE)
-        p.wait()
-        sys.stdout.write(p.communicate()[0])
+  std::string name() {
+    return "Blank Map";
+  }
+
+  void attach_thread() {
+  }
+
+  void detach_thread() {}
+
+  bool find(Key key, Value &value) {
+  }
+
+  bool insert(Key key, Value value) {
+  }
+
+  bool update(Key key, Value &value_expected, Value value_new) {
+   }
+
+  bool remove(Key key) {
+  }
+
+  size_t size() {
+    return container->size();
+  }
+
+ private:
+};
+
+#endif  //
