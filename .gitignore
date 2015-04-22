@@ -6,3 +6,4 @@ gmon.out
 less
 *.log
 *.out
+*.class
