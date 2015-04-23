@@ -51,11 +51,12 @@ class ReadOp: public tervel::util::OpRecord {
       while (value_.load() == Vector<T>::c_not_value_) {
         T cvalue = spot->load();
 
-        if (vec_->internal_array.is_descriptor(cvalue, spot)) {
-          continue;
-        } else if (cvalue == Vector<T>::c_not_value_) {
+
+        if (cvalue == Vector<T>::c_not_value_) {
           value_.store(c_fail_value_);
           return;
+        } else if (vec_->internal_array.is_descriptor(cvalue, spot)) {
+          continue;
         } else {
           assert(vec_->internal_array.is_valid(cvalue));
           value_.store(cvalue);
@@ -82,7 +83,7 @@ class ReadOp: public tervel::util::OpRecord {
   Vector<T> *vec_;
   size_t idx_;
   std::atomic<T> value_ {Vector<T>::c_not_value_};
-  static const T c_fail_value_ {reinterpret_cast<T>(~0x1L)};
+  static const T c_fail_value_ {static_cast<T>(~0x1L)};
 };  // class ReadOp
 }  // namespace vector
 }  // namespace wf

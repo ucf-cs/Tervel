@@ -64,21 +64,24 @@ class Vector {
 
   int64_t size() {
     int64_t temp = current_size_.load();
-    assert(temp >= 0);
-    return temp;
+    if (temp < 0)
+      return 0;
+    else
+      return temp;
   };
 
   size_t capacity() {
     return internal_array.capacity();
   };
 
-  static constexpr T c_not_value_ {reinterpret_cast<T>(0x1L)};
+  static constexpr T c_not_value_ {static_cast<T>(0x1L)};
 
   int64_t size(int64_t val) {
     int64_t temp = current_size_.fetch_add(val);
-    assert(temp >= 0);
-    assert(size() >= 0);
-    return temp;
+    if (temp < 0)
+      return 0;
+    else
+      return temp;
   }
 
   std::atomic<int64_t> current_size_ {0};

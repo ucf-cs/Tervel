@@ -26,6 +26,7 @@
 
 #ifndef WF_VECTOR_API_H_
 #define WF_VECTOR_API_H_
+#include <string>
 
 #include <tervel/containers/wf/vector/vector.hpp>
 #include <tervel/util/info.h>
@@ -43,7 +44,7 @@ class TestClass {
     container = new tervel::containers::wf::vector::Vector<T>(capacity);
   }
 
-  char * name() {
+  std::string toString() {
     return "WF Vector";
   };
 

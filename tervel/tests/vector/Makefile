@@ -40,6 +40,7 @@ CPPFLAGS += $(INC)
 
 SOURCES = main.cc $(TSOURCES)
 OUTPUT =Executables/
+
 EXECUTABLE ?=main
 OBJECTS = $(SOURCES:.cc=.o)
 
@@ -49,6 +50,7 @@ all: WFTEST_DEBUG
 
 test: $(SOURCES) $(EXECUTABLE)
 	rm main.o
+	mkdir -p $(OUTPUT)
 	mv $(EXECUTABLE) $(OUTPUT)
 
 WFTEST:

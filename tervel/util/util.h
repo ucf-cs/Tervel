@@ -36,7 +36,7 @@ namespace util {
 
 // #define TERVEL_MEM_NO_FREE
 // #define TERVEL_MEM_NO_WATCH
-// casused both RC and HP versions to be defined
+// caused both RC and HP versions to be defined
 #ifdef TERVEL_MEM_NO_FREE
   #define TERVEL_MEM_HP_NO_FREE
   #define TERVEL_MEM_RC_NO_FREE
@@ -144,6 +144,7 @@ namespace util {
   #endif
   #define TERVEL_PROG_ASSUR_LIMIT 0
 #endif
+
 
 /**
  * Returns whether or not the passed value is has one of the reserved bits set
