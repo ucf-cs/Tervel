@@ -28,7 +28,7 @@ CONTAINERTYPE ?= -DUSE_WF_MCAS
 CXXFLAGS =  $(CONTAINERTYPE) -Wall -Wunused-function -std=c++11 \
             -march=native -m64 -pthread -fno-strict-aliasing
 
-DEBUG = -DDEBUG=1 -p -pg -g -fpermissive -DDEBUG_POOL=1 #  -DMAX_WAIT_FREE
+DEBUG = -DDEBUG=1 -g -fpermissive -DDEBUG_POOL=1 #  -DMAX_WAIT_FREE
 #RELEASE = -O3 -DNDEBUG
 
 CXXFLAGS += $(DEBUG) $(RELEASE)
