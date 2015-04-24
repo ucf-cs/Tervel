@@ -150,7 +150,6 @@ class HazardPointer {
    * @param value The value to watch
    **/
   void watch(SlotID slot, void *value) {
-    size_t slot_pos = get_slot(slot);
     watches_[get_slot(slot)].store(value);
   }
 
@@ -161,8 +160,7 @@ class HazardPointer {
    * @param slot The id of the slot to watch.
    */
   void clear_watch(SlotID slot) {
-    size_t slot_pos = get_slot(slot);
-    watches_[slot_pos].store(nullptr);
+    watches_[get_slot(slot)].store(nullptr);
   }
 
 
