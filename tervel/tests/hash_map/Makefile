@@ -99,6 +99,16 @@ WFTEST_SUB:
         TSOURCES="$(shell find ../../util/ -name '*.cc')" \
 	EXECUTABLE=wfhashmap_$(EXPAN_RATE).x
 
+WFTESTND:
+	$(MAKE) WFTESTND_SUB EXPAN_RATE="6"
+	$(MAKE) WFTESTND_SUB EXPAN_RATE="4"
+
+WFTESTND_SUB:
+	$(MAKE) test CONTAINERTYPE="-DUSE_WF_HASHMAP_ND -DHASHMAP_EXPANSION_RATE=$(EXPAN_RATE)" \
+	TINC="-I../../../../tervel-library/" \
+        TSOURCES="$(shell find ../../util/ -name '*.cc')" \
+	EXECUTABLE=wfhashmap_nd_$(EXPAN_RATE).x
+
 
 $(EXECUTABLE): $(OBJECTS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(INC)  -o $@ $^ $(LIB) $(TOBJS)
