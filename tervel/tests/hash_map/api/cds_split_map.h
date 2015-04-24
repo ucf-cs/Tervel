@@ -115,7 +115,7 @@ class TestClass {
     test_container = new hash_t(capacity, test_splitlist);
   }
 
-  std::string name() {
+  std::string toString() {
     const int t = test_splitlist;
     return "CDS Split Map(" + std::to_string(t) + ")";
   }

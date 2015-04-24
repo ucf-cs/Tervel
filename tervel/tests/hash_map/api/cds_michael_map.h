@@ -113,7 +113,7 @@ class TestClass {
     test_container = new hash_t(capacity, test_michael_map);
   }
 
-  std::string name() {
+  std::string toString() {
     const int t = test_michael_map;
     return "CDS MICHAEL Map(" + std::to_string(t) + ")";
   }

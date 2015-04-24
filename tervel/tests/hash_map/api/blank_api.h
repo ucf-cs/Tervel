@@ -33,7 +33,7 @@ class TestClass {
   TestClass(size_t num_threads, size_t capacity) {
   }
 
-  std::string name() {
+  std::string toString() {
     return "Blank Map";
   }
 

@@ -33,15 +33,6 @@
     #endif
 #endif
 
-#ifdef USE_WF_OLD_HASHMAP
-    #include "api/wf_hashmap_old_api.h"
-    #ifdef V_API_SANITY
-        #error TWO or more buffer APIs enabled
-    #else
-        #define V_API_SANITY
-    #endif
-#endif
-
 #ifdef USE_TBB_HASHMAP
 #include "api/tbb_map.h"
     #ifdef V_API_SANITY

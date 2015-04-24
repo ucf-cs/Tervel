@@ -27,6 +27,7 @@
 #ifndef WF_HASHMAP_API_H_
 #define WF_HASHMAP_API_H_
 
+
 #include <tervel/containers/wf/hash-map/wf_hash_map.h>
 #include <tervel/util/info.h>
 #include <tervel/util/thread_context.h>
@@ -50,7 +51,7 @@ class TestClass {
     container = new Map(capacity, HASHMAP_EXPANSION_RATE);
   }
 
-  std::string name() {
+  std::string toString() {
     return "WF Hash Map-"+std::to_string(HASHMAP_EXPANSION_RATE);
   }
 
