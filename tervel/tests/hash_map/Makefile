@@ -26,8 +26,8 @@ CXX      = g++-4.8
 CONTAINERTYPE ?= -DUSE_WF_HASHMAP
 CXXFLAGS =  $(CONTAINERTYPE)  -std=c++11  -march=native -m64 -pthread -fno-strict-aliasing $(TFLAGS)
 
-DEBUG = -DDEBUG=1 -p -pg -g 
-# RELEASE = -O3 -DNDEBUG -DSET_WAIT_FREE=10000 -DSET_HELP_DELAY=100000
+DEBUG = -DDEBUG=1 -g 
+# RELEASE = -O3 -DNDEBUG
 
 CXXFLAGS += $(DEBUG) $(RELEASE)
 
@@ -50,12 +50,6 @@ test: $(SOURCES) $(EXECUTABLE)
 	mkdir -p $(OUTPUT)
 	rm main.o
 	mv $(EXECUTABLE) $(OUTPUT)
-
-CLIFF:
-	$(MAKE) test CONTAINERTYPE=-DUSE_CLIFF_HASHMAP \
-	TOBJS="/Libraries/nbds.0.4.3/map.o /Libraries/nbds.0.4.3/hashtable.o /Libraries/nbds.0.4.3/runtime.o /Libraries/nbds.0.4.3/rcu.o /Libraries/nbds.0.4.3/lwt.o /Libraries/nbds.0.4.3/mem.o /Libraries/nbds.0.4.3/nstring.o /Libraries/nbds.0.4.3/list.o /Libraries/nbds.0.4.3/skiplist.o" \
-	TINC="-I/Libraries/nbds.0.4.3/include/" \
-	EXECUTABLE=cliff.x
 
 TBB:
 	$(MAKE) test CONTAINERTYPE=-DUSE_TBB_HASHMAP \
@@ -104,14 +98,6 @@ WFTEST_SUB:
 	TINC="-I../../../../tervel-library/" \
         TSOURCES="$(shell find ../../util/ -name '*.cc')" \
 	EXECUTABLE=wfhashmap_$(EXPAN_RATE).x
-
-WFOLD:
-	$(MAKE) WFOLD_SUB EXPAN_RATE="4"
-	$(MAKE) WFOLD_SUB EXPAN_RATE="6"
-WFOLD_SUB:
-	$(MAKE) test CONTAINERTYPE="-DUSE_WF_OLD_HASHMAP -DSUB_POW=$(EXPAN_RATE)" \
-	EXECUTABLE=wf_old_hashmap_$(EXPAN_RATE).x \
-	TSOURCES="/home/damian/archive/WFHashTable/WaitFreeHashTable.cpp"
 
 
 $(EXECUTABLE): $(OBJECTS)

@@ -85,12 +85,13 @@ void PoolManager::get_safe_elements(PoolElement **pool, uint64_t *count, uint64_
       }
 
       PoolElement *tail = temp;
+      (*count)++;
       while (tail->next() != nullptr) {
         (*count)++;
         tail = tail->next();
       }
       tail->next(*pool);
-      *pool = tail;
+      *pool = temp;
 
       if (*count >= min_elem) {
         break;

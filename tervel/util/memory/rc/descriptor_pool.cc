@@ -35,8 +35,6 @@ void DescriptorPool::free_descriptor(tervel::util::Descriptor *descr,
   uintptr_t safty_check = reinterpret_cast<uintptr_t>(descr);
   assert((safty_check & 0x3) == 0x0);
 
-  this->try_clear_unsafe_pool();
-
   if (!dont_check && util::memory::rc::is_watched(descr)) {
     this->add_to_unsafe(descr);
   } else {
@@ -81,6 +79,8 @@ void DescriptorPool::offload() {
     uint64_t extra_count = 0;
 
     PoolElement * tail = safe_pool_;
+    extra_count++;
+    safe_pool_count_--;
     while (safe_pool_count_ > TERVEL_MEM_RC_MIN_NODES) {
       tail = tail->next();
       extra_count++;
@@ -100,11 +100,12 @@ void DescriptorPool::offload() {
 
 
 PoolElement * DescriptorPool::get_from_pool(bool allocate_new) {
+  PoolElement *res {nullptr};
+
 #ifdef TERVEL_MEM_RC_NO_FREE
   return new PoolElement();
-#endif
-
-  PoolElement *res {nullptr};
+#else
+  this->try_clear_unsafe_pool();
 
   // First if local pool is empty go to global
   if (safe_pool_ == nullptr) {
@@ -129,6 +130,7 @@ PoolElement * DescriptorPool::get_from_pool(bool allocate_new) {
     assert(safe_pool_count_ == 0);
     res = new PoolElement();
   }
+#endif
 
 #ifdef DEBUG_POOL
   // update counters to denote that an item was taken from the pool
@@ -201,7 +203,7 @@ void DescriptorPool::try_clear_unsafe_pool(bool dont_check) {
         prev = temp;
         temp = temp_next;
       } else {
-        this->free_descriptor(temp_descr, true);
+        this->add_to_safe(temp_descr);
         prev->next(temp_next);
         temp = temp_next;
         unsafe_pool_count_--;
@@ -217,7 +219,7 @@ void DescriptorPool::try_clear_unsafe_pool(bool dont_check) {
     bool watched = util::memory::rc::is_watched(temp_descr);
     if (dont_check || !watched) {
       unsafe_pool_count_--;
-      this->free_descriptor(temp_descr, true);
+      this->add_to_safe(temp_descr);
       unsafe_pool_ = temp;
     }
   }  // if unsafe_pool_

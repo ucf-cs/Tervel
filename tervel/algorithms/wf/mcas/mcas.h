@@ -256,14 +256,7 @@ bool MCAS<T>::mcas_complete(CasRow<T> *current_row) {
   assert(util::memory::hp::HazardPointer::is_watched(this));
   assert(cas_rows_[0].helper_.load() != nullptr);
   assert(current_row->helper_.load() != nullptr);
-
-
-  { // TODO(steven): verify this position calculation.
-    uintptr_t temp1 = reinterpret_cast<uintptr_t>(&(cas_rows_[0]));
-    uintptr_t temp2 = reinterpret_cast<uintptr_t>(current_row);
-    start_pos = temp2 - temp1;
-    assert(&(cas_rows_[start_pos]) == current_row && "if this hit, I am bad at math");
-  }
+  start_pos = current_row - &(cas_rows_[0]);
   return mcas_complete(start_pos, false);
 }
 

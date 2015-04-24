@@ -45,7 +45,7 @@ class TestClass {
     container = map_alloc(&MAP_IMPL_HT, NULL);
   }
 
-  std::string name() {
+  std::string toString() {
     return "Cliff Click";
   }
 

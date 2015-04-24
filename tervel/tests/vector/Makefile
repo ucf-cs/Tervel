@@ -28,7 +28,7 @@ CONTAINERTYPE ?= -DUSE_WF_VECTOR
 CXXFLAGS =  $(CONTAINERTYPE) -Wall -Wunused-function -std=c++11 \
             -march=native -m64 -pthread -fno-strict-aliasing
 
-DEBUG = -DDEBUG=1 -p -pg -g -fpermissive -DDEBUG_POOL=1 #  -DMAX_WAIT_FREE
+DEBUG = -DDEBUG=1 -g -fpermissive -DDEBUG_POOL=1 #  -DMAX_WAIT_FREE
 #RELEASE = -O3 -DNDEBUG
 
 CXXFLAGS += $(DEBUG) $(RELEASE)
@@ -40,6 +40,7 @@ CPPFLAGS += $(INC)
 
 SOURCES = main.cc $(TSOURCES)
 OUTPUT =Executables/
+
 EXECUTABLE ?=main
 OBJECTS = $(SOURCES:.cc=.o)
 
@@ -49,6 +50,7 @@ all: WFTEST_DEBUG
 
 test: $(SOURCES) $(EXECUTABLE)
 	rm main.o
+	mkdir -p $(OUTPUT)
 	mv $(EXECUTABLE) $(OUTPUT)
 
 WFTEST:

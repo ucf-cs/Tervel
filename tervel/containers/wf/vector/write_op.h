@@ -68,16 +68,16 @@ class WriteOp: public tervel::util::OpRecord {
     WriteHelper<T> * c_fail_pointer_ =
         reinterpret_cast<WriteHelper<T> *>(~0x1L);
 
-    if (idx_ < vec_->capacity()) {
+    if (idx_ < vec_->size()) {
       std::atomic<T> *spot = vec_->internal_array.get_spot(idx_, false);
 
       while (helper_.load() == nullptr) {
         T cvalue = spot->load();
 
-        if (vec_->internal_array.is_descriptor(cvalue, spot)) {
-          continue;
-        } else if (cvalue == Vector<T>::c_not_value_) {
+        if (cvalue == Vector<T>::c_not_value_) {
           break;  // will set to failed
+        } else if (vec_->internal_array.is_descriptor(cvalue, spot)) {
+          continue;
         } else {
           assert(vec_->internal_array.is_valid(cvalue));
           WriteHelper<T> *helper = tervel::util::memory::rc::get_descriptor<
@@ -102,12 +102,11 @@ class WriteOp: public tervel::util::OpRecord {
             if (!res) {
               util::memory::rc::free_descriptor(helper);
             }
+            return;
 
           } else {
             util::memory::rc::free_descriptor(helper, true);
           }
-
-          return;
         }
       }  // while value_ is c_not_value
     }
@@ -239,22 +238,17 @@ class WriteHelper: public tervel::util::Descriptor {
          * logic value of this object (expected_value)
          */
         address->compare_exchange_strong(value, reinterpret_cast<void *>(val_));
-        success = false;
+      } else {
+        address->compare_exchange_strong(value, reinterpret_cast<void *>(op_->new_val_));
       }
       /* No longer need HP protection, if we have RC protection on an associated
        * Helper. If we don't it, the value at this address must have changed and
        * we don't need it either way.
        */
       util::memory::hp::HazardPointer::unwatch(t_SlotID::SHORTUSE);
-    }  // End Successfull watch
+    }  // End Successful watch
 
-    if (success) {
-      assert(op_->helper_.load() != nullptr);
-      assert(util::memory::rc::is_watched(this));
-      assert(util::memory::hp::HazardPointer::is_watched(op_));
-    }
-
-    return success;
+    return false;
   };
 
   private:

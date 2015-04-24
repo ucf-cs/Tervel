@@ -65,7 +65,7 @@ class TestClass {
 
   }
 
-  std::string name() {
+  std::string toString() {
     return "Locked STL Map";
   }
 

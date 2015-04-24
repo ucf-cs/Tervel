@@ -65,7 +65,7 @@ class TestClass {
     // v_mutex.unlock();
   }
 
-  std::string name() {
+  std::string toString() {
     return "Locked Boost Map";
   }
 

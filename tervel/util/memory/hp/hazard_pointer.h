@@ -144,29 +144,23 @@ class HazardPointer {
   // -------
   /**
    * This function takes a SlotID and stores the specified value into that
-   * the threads alloated slot for that id in the hazard pointer watch list
+   * the threads alloted slot for that id in the hazard pointer watch list
    *
    * @param slot The id of the slot to watch.
    * @param value The value to watch
    **/
   void watch(SlotID slot, void *value) {
-    // REVIEW(carlos): enum classes don't support automatic casting to int (the
-    //   return type of get_slot). Don't assign the result of get_slot to slot,
-    //   and just use the returned value directly in the operator[] of watches_:
-    //     watches_[get_slot(slot)].store(value);
-    size_t slot_pos = get_slot(slot);
-    watches_[slot_pos].store(value);
+    watches_[get_slot(slot)].store(value);
   }
 
   /**
    * This function takes a SlotID and stores null into that
-   * the threads alloated slot for that id in the hazard pointer watch list
+   * the threads alloted slot for that id in the hazard pointer watch list
    *
    * @param slot The id of the slot to watch.
    */
   void clear_watch(SlotID slot) {
-    size_t slot_pos = get_slot(slot);
-    watches_[slot_pos].store(nullptr);
+    watches_[get_slot(slot)].store(nullptr);
   }
 
 

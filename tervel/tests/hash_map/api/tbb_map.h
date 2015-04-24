@@ -59,7 +59,7 @@ class TestClass {
       (capacity);
   }
 
-  std::string name() {
+  std::string toString() {
     return "TBB Map";
   }
 
