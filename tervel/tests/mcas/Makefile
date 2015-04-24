@@ -1,4 +1,3 @@
-#/*
 #The MIT License (MIT)
 #
 #Copyright (c) 2015 University of Central Florida's Computer Software Engineering
@@ -21,35 +20,44 @@
 #LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 #OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 #THE SOFTWARE.
-# */
+#
+
+
 CXX      = g++-4.8
-CXXFLAGS = -g -Wall -Wunused-function -std=c++11
+CONTAINERTYPE ?= -DUSE_WF_MCAS
+CXXFLAGS =  $(CONTAINERTYPE) -Wall -Wunused-function -std=c++11 \
             -march=native -m64 -pthread -fno-strict-aliasing
 
-DEBUG = -DDEBUG=1 -p -pg
-RELEASE = -O3 -DNDEBUG
+DEBUG = -DDEBUG=1 -p -pg -g -fpermissive -DDEBUG_POOL=1 #  -DMAX_WAIT_FREE
+#RELEASE = -O3 -DNDEBUG
 
-CXXFLAGS += $(DEBUG)
+CXXFLAGS += $(DEBUG) $(RELEASE)
 
-CPPFLAGS = -DINTEL -DSET_WAIT_FREE=1 -DSET_HELP_DELAY=1
-INC += $(TINC) -I../../../../tervel-library/
+CPPFLAGS = -DINTEL
+INC += $(TINC) -I../../../
 LIB += $(TLIB) -ldl -lgflags -lpthread -lboost_system -lboost_regex -lrt -lllalloc
 CPPFLAGS += $(INC)
 
-TSOURCES:=$(shell find ../../util/ -name '*.cc')
-SOURCES=main.cc $(TSOURCES)
-
+SOURCES = main.cc $(TSOURCES)
 OUTPUT =Executables/
+
 EXECUTABLE ?=main
 OBJECTS = $(SOURCES:.cc=.o)
 
 
-all: test
+all: WFMCAS
 
 
 test: $(SOURCES) $(EXECUTABLE)
+	rm main.o
 	mkdir -p $(OUTPUT)
 	mv $(EXECUTABLE) $(OUTPUT)
+
+WFMCAS:
+	$(MAKE) test CONTAINERTYPE=-DUSE_WF_MCAS \
+        TSOURCES="$(shell find ../../util/ -name '*.cc')" \
+	EXECUTABLE=mcas.x
+
 
 $(EXECUTABLE): $(OBJECTS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -o $@ $^ $(LIB)
@@ -60,5 +68,5 @@ $(EXECUTABLE): $(OBJECTS)
 
 .PHONY: clean
 clean:
-	$(RM) $(OUTPUT)*.x
+	$(RM) $(OUTPUT)*.x  $(shell find ../../util/ -name "*.o")
 	$(RM) $(OBJECTS)
