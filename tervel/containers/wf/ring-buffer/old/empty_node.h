@@ -31,8 +31,10 @@ THE SOFTWARE.
 template<class T>
 class Node;
 
+
 namespace tervel {
-namespace wf_ring_buffer {
+namespace containers {
+namespace wf {
 /**
  * TODO(ATB) insert class description
  */
@@ -51,6 +53,8 @@ class EmptyNode : public Node<T> {
   bool is_ElemNode() { return false; }
 };  // EmptyNode class
 
-}  // namespace wf_ring_buffer
+}  // namespace wf
+}  // namespace containers
 }  // namespace tervel
-#endif  // TERVEL_WFRB_EMPTYNODE_H_
+
+#endif  // TERVEL_CONTAINERS_WF_RINGBUFFER_EMPTYNODE_H_

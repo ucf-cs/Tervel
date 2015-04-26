@@ -35,8 +35,10 @@ THE SOFTWARE.
 #include <atomic>
 #include <cstdint>
 
+
 namespace tervel {
-namespace wf_ring_buffer {
+namespace containers {
+namespace wf {
 
 template<class T>
 class RingBuffer;
@@ -113,7 +115,8 @@ class EnqueueOp : public BufferOp<T> {
   T val_;
 };  // EnqueueOp class
 
-}  // namespace wf_ring_buffer
+}  // namespace wf
+}  // namespace containers
 }  // namespace tervel
 
-#endif  // TERVEL_WFRB_ENQUEUEOP_H_
+#endif  // TERVEL_CONTAINERS_WF_RINGBUFFER_ENQUEUEOP_H_

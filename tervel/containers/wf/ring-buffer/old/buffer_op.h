@@ -36,7 +36,8 @@ THE SOFTWARE.
 
 
 namespace tervel {
-namespace wf_ring_buffer {
+namespace containers {
+namespace wf {
 
 
 template<class T>
@@ -94,7 +95,8 @@ class BufferOp : public util::OpRecord {
   friend class EnqueueOp<T>;
 };  // BufferOp class
 
-}  // namespace wf_ring_buffer
+}  // namespace wf
+}  // namespace containers
 }  // namespace tervel
 
-#endif  // TERVEL_WFRB_BUFFEROP_H
+#endif  // TERVEL_CONTAINERS_WF_RINGBUFFER_BUFFEROP_H

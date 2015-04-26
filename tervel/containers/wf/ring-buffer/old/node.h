@@ -29,7 +29,9 @@ THE SOFTWARE.
 #include <tervel/util/descriptor.h>
 
 namespace tervel {
-namespace wf_ring_buffer {
+namespace containers {
+namespace wf {
+
 /**
  * TODO(ATB) insert class description
  */
@@ -68,6 +70,8 @@ class Node : public util::Descriptor {
 };  // Node class
 
 
-}  // namespace wf_ring_buffer
+}  // namespace wf
+}  // namespace containers
 }  // namespace tervel
-#endif  // TERVEL_WFRB_NODE_H_
+
+#endif  // TERVEL_CONTAINERS_WF_RINGBUFFER_NODE_H_

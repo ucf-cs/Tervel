@@ -29,8 +29,10 @@ THE SOFTWARE.
 #include <tervel/containers/wf/ring-buffer/buffer_op.h>
 #include <tervel/util/memory/hp/hazard_pointer.h>
 
+
 namespace tervel {
-namespace wf_ring_buffer {
+namespace containers {
+namespace wf {
 /**
  * TODO(ATB) insert class description
  */
@@ -89,6 +91,8 @@ class ElemNode : public Node<T> {
 };  // ElemNode class
 
 
-}  // namespace wf_ring_buffer
+}  // namespace wf
+}  // namespace containers
 }  // namespace tervel
-#endif  // TERVEL_WFRB_ELEMNODE_H_
+
+#endif  // TERVEL_CONTAINERS_WF_RINGBUFFER_ELEMNODE_H_
