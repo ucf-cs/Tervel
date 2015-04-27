@@ -3,6 +3,7 @@ namespace tervel {
 namespace containers {
 namespace wf {
 
+
 template<typename T>
 RingBuffer<T>::
 RingBuffer(size_t capacity)
@@ -28,10 +29,10 @@ isEmpty() {
 }
 
 template<typename T>
-void RingBuffer<T>::
-atomic_delay_mark(std::atomic<uintptr_t> *address, uintptr_t &val) {
+uintptr_t RingBuffer<T>::
+atomic_delay_mark(std::atomic<uintptr_t> *address) {
   address->fetch_or(mark_lsb);
-  val = address->load();
+  return address->load();
 }
 
 
@@ -107,7 +108,7 @@ dequeue(T &value) {
             break;
           } else {
             // we blindly mark it and re-examine the value;
-            atomic_delay_mark(&array_[pos], val);
+            val = atomic_delay_mark(&array_[pos]);
 
             continue;
           }
@@ -122,9 +123,7 @@ dequeue(T &value) {
         // Value has changed
         continue;
       }
-
     }  // inner loop
-
   } // outer loop.
 }
 
@@ -228,7 +227,7 @@ uintptr_t RingBuffer<T>::ValueType(T value, int64_t seqid) {
 }
 
 template<typename T>
-uintptr_t RingBuffer<T>::MarkNode(uint64_t node) {
+uintptr_t RingBuffer<T>::MarkNode(uintptr_t node) {
   node = node | mark_lsb; // 3LSB now X1X
   return node;
 }
@@ -275,6 +274,8 @@ int64_t RingBuffer<T>::getPos(int64_t seqid) {
 
 template<typename T>
 bool RingBuffer<T>::backoff(std::atomic<uintptr_t> *address, uintptr_t &val) {
+  // TODO(steven): remove and replace with a call to tervels backoff
+  std::this_thread::yield();
   uintptr_t nval = address->load();
   if (nval == val) {
     return false;
@@ -344,7 +345,6 @@ std::string RingBuffer<T>::debug_string() {
   }
   return res;
 };
-
 
 }  // namespace wf
 }  // namespace containers
