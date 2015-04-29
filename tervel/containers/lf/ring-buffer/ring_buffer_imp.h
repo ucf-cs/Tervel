@@ -1,7 +1,7 @@
 
 namespace tervel {
 namespace containers {
-namespace wf {
+namespace lf {
 
 
 template<typename T>

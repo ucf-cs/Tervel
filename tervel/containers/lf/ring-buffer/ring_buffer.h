@@ -34,7 +34,7 @@ THE SOFTWARE.
 
 namespace tervel {
 namespace containers {
-namespace wf {
+namespace lf {
 
 /**
  * @brief This is a non-blocking FIFO ring buffer design
@@ -348,6 +348,6 @@ class RingBuffer {
 }  // namespace containers
 }  // namespace tervel
 
-#include <tervel/containers/wf/ring-buffer/wf_ring_buffer_imp.h>
+#include <tervel/containers/lf/ring-buffer/ring_buffer_imp.h>
 
 #endif  // TERVEL_CONTAINERS_WF_RINGBUFFER_RINGBUFFER_H_
