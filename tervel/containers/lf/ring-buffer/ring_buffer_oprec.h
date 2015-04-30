@@ -41,109 +41,189 @@ THE SOFTWARE.
 namespace tervel {
 namespace containers {
 namespace lf {
-namespace ringbuffer {
+
 
 template<typename T>
-class DequeueOp: public tervel::util::OpRecord {
-  static const Helper *fail_const = static_cast<Helper *>(0x1);
+class RingBuffer<T>::BufferOp{
  public:
-  DequeueOp(RingBuffer<T> *rb)
-    : ring_buffer_(rb) {
+  BufferOp(RingBuffer<T> *rb)
+    : rb_(rb) {}
+  ~BufferOp() {
+    Helper *h = helper_.load();
+    if (h != nullptr && h != BufferOp::fail) {
+      delete h;
+    }
+  };
 
+  bool associate(Helper *h) {
+    Helper *temp = nullptr;
+    bool res = helper_.compare_exchange_strong(temp, h);
+    if (res || temp == nullptr) { // success
+      return true;
+    } else { // fail
+      return false;
+    }
+  }
 
+  bool valid(Helper * h) {
+    return helper_.load() == h;
   }
 
   void fail() {
-    Helper * temp = nullptr;
-    helper_.compare_exchange_strong(temp, fail_const);
-  };
-
-  void notDone() {
-    return helper.load() == nullptr;
+    Helper *temp = nullptr;
+    helper_.compare_exchange_strong(temp, fail_val_);
   }
 
+  void notDone() {
+    return helper_.load() == nullptr;
+  }
+
+  // on_is_watched()
+  // This function is not needed because helpers will be removed before removing
+  // the watch on the op record
+  friend class RingBuffer<T>::EnqueueOp;
+  friend class RingBuffer<T>::DequeueOp;
+ private:
+  const Helper * fail_val_{static_cast<Helper *>(0x1)};
+  const RingBuffer<T> *rb_;
+  std::atomic<Helper *> helper_{nullptr};
+};
+
+template<typename T>
+class RingBuffer<T>::Helper { // TODO(steven): extend hp descriptor
+ public:
+  Helper(BufferOp *op, uintptr_t old_value)
+   : op_(op)
+   , old_value_(old_value) {}
+  ~Helper() {}
+
+  bool on_watch(std::atomic<void *> *address, void *expected) {
+    // TODO(steven): watch op_.
+    void *val = associate();
+    address->compare_exchange_strong(expected, val);
+    return false;
+  }
+
+  void * associate() {
+    return op_->associate(this);
+  }
+
+  bool valid() {
+    return op_->valid(this);
+  }
+
+  friend class RingBuffer::EnqueueOp;
+ private:
+  const BufferOp *op_;
+  const uintptr_t old_value_;
+
+};
+
+template<typename T>
+class RingBuffer<T>::EnqueueOp: public BufferOp {
+ public:
+  EnqueueOp(RingBuffer<T> *rb, T value)
+    : BufferOp(rb)
+    , value_(value) {
+      int64_t seqid = reinterpret_cast<int64_t>(this) * -1;
+      value_->func_seqid(seqid);
+    }
+
+  void * associate(Helper *h) {
+    bool res = BufferOp::associate(h);
+    if (res) {
+      int64_t ev_seqid = reinterpret_cast<int64_t>(this) * -1;
+      int64_t seqid = this->rb_->getEmptyNodeSeqId(h->old_value_);
+      value_->atomic_change_seqid(ev_seqid, seqid);
+
+      uintptr_t res = reinterpret_cast<uintptr_t>(value_);
+      assert((res & clear_lsb) == 0 && " reserved bits are not 0?");
+      return res;
+    } else {
+      return reinterpret_cast<void *>(h->old_value_);
+    }
+
+  }
+
+  void help_complete();
 
  private:
-  RingBuffer<T> *ring_buffer_{nullptr};
-  std::atomic<Helper *> helper_{nullptr};
+  T value_;
+};
 
+template<typename T>
+class RingBuffer<T>::DequeueOp: public BufferOp {
+ public:
+  DequeueOp(RingBuffer<T> *rb)
+    : BufferOp(rb) {}
 
-};  // class DequeueOp
+  void help_complete();
 
-void DequeueOp::
-help_complete() {
-  while(notDone()) {
-    if (rb->isEmpty()) {
+};
+
+template<typename T>
+void RingBuffer<T>::EnqueueOp::help_complete() {
+  int64_t tail = getTail();
+  while(this->BufferOp::notDone()) {
+    if (this->rb_->isFull(tail, this->rb_->getHead())) {
       this->fail();
       return;
     }
+    int64_t seqid = tail++;
+    uint64_t pos = this->rb_->getPos(seqid);
+    uintptr_t val;
+    if (!this->rb_->readValue(pos, val)) {
+      continue;
+    }
 
-    int64_t seqid = rb->getHead();
-    uint64_t pos = rb->getPos(seqid);
-    uintptr_t val = rb->array_[pos].load();
-    uintptr_t new_value = rb->EmptyNode(rb->nextSeqId(seqid));
+    int64_t val_seqid;
+    bool val_isValueType;
+    bool val_isDelayedMarked;
+    getInfo(val, val_seqid, val_isValueType, val_isDelayedMarked);
 
-    while (notDone()) {
-      int64_t val_seqid;
-      bool val_isValueType;
-      bool val_isDelayedMarked;
-      rb->getInfo(val, val_seqid, val_isValueType, val_isDelayedMarked);
 
-      if (val_seqid > seqid) {
-        break;
-      }
-      if (val_isValueType) {
-        if (val_seqid == seqid) {
-          if (val_isDelayedMarked) {
-            new_value = rb->MarkNode(new_value);
-            assert(isDelayedMarked(new_value));
-          }
-          value = getValueType(val);
+    if (seqid > tail) {
+      // We are lagging, so iterate until we find a matching seqid.
+      continue;
+    } else if (isDelayedMarked) {
+      // We don't want a delayed marked anything, too complicated, let some
+      // one else deal with it.
+      continue;
+    } else if (val_isValueType) {
+      // it is a valueType, with seqid <= to the one we are working with...
+      // skip?
+      continue;
+    } else {
+      // Its an EmptyNode with a seqid <= to the one we are working with
+      // so lets take it!
+      Helper * helper = new Helper(this, val);
+      uintptr_t helper_int = this->rb_->MakeHelper(helper);
 
-          Helper *helper = new Helper(this, value, new_value);
-          uintptr_t helper_int = MakeHelper(helper);
-          if (rb->array_[pos].compare_exchange_strong(val, helper_int)) {
-            helper->on_watch(&(rb->array_[pos]), helper_int);
-            if (this->helper_.load() != helper) {
-              delete helper;
-            }
-            return;
-          } else {
-            delete helper;
-          }
-
-        } else { // val_seqod < seqid
-          if (backoff(&array_[pos], val)) {
-            // value changed
-            continue; // process the new value.
-          }
-          // Value has not changed so lets skip it.
-          if (val_isDelayedMarked) {
-            // Its marked and the seqid is less than ours so we
-            // can skip it safely.
-            break;
-          } else {
-            // we blindly mark it and re-examine the value;
-            val = atomic_delay_mark(&array_[pos]);
-
-            continue;
-          }
+      bool res = this->rb_->array_[pos].compare_exchange_strong(val, helper_int);
+      if (res) {
+        // Success!
+        // The following line is not hacky if you ignore the function name...
+        // it associates and then removes the object.
+        // It is also called by the memory protection watch function...
+        helper->on_watch(&(this->rb_->array_[pos]), helper_int);
+        if (!helper->valid()) {
+          helper->safeDelete();
         }
-      } else { // val_isEmptyNode
-        if (val_isDelayedMarked || !backoff(&array_[pos], val)) {
-          // Value has not changed
-          if (array_[pos].compare_exchange_strong(val, new_value)) {
-            break;
-          }
-        }
-        // Value has changed
-        continue;
+      } else {
+        // Failure :(
+        delete helper;
+        tail--;  // re-examine position on the next loop
       }
-    }  // inner loop
-  } // outer loop.
+    }
+
+  }
 }
 
-}  // namespace ringbuffer
+template<typename T>
+void RingBuffer<T>::DequeueOp::help_complete() {
+  assert(false);
+}
+
 }  // namespace wf
 }  // namespace containers
 }  // namespace tervel

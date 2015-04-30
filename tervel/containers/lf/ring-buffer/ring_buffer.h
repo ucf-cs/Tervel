@@ -103,6 +103,22 @@ class RingBuffer {
     void func_seqid(int64_t s) {
       seqid_ = s;
     }
+
+    /**
+     * @brief Conditionally updates the seqid
+     * @details This function is used when multiple threads maybe enqueueing the
+     * same value
+     *
+     * @param e expected seqid (address of the oprec * -1).
+     * @param n new seqid
+     */
+    void atomic_change_seqid(int64_t e, int64_t n) {
+      std::atomic<int64_t> *a;
+      a = reinterpret_cast<std::atomic<int64_t> *>(&seqid_);
+      bool res = a->compare_exchange_strong(e, n);
+      assert( (res || e ==n) && " Seqid changed to an unexpected value in the"
+        " progress assurance scheme");
+    }
     int64_t seqid_{-1};
   };
 
@@ -122,11 +138,33 @@ class RingBuffer {
   bool isFull();
 
   /**
+   * @brief Returns whether or not the ring buffer is full.
+   * @details Returns whether or not the ring buffer is full.
+   *
+   * @param tail [description]
+   * @param head [description]
+   *
+   * @return Returns whether or not the ring buffer is full.
+   */
+  bool isFull(int64_t tail, int64_t head);
+
+
+  /**
    * @brief Returns whether or not the ring buffer is empty.
    * @details Returns whether or not the ring buffer is empty.
    * @return Returns whether or not the ring buffer is empty.
    */
   bool isEmpty();
+
+  /**
+   * @brief Returns whether or not the ring buffer is empty.
+   * @details Returns whether or not the ring buffer is empty.
+   * @param tail
+   * @param head
+   *
+   * @return Returns whether or not the ring buffer is empty.
+   */
+  bool isEmpty(int64_t tail, int64_t head);
 
   /**
    * @brief Enqueues the passed value into the buffer
@@ -158,6 +196,25 @@ class RingBuffer {
   std::string debug_string();
 
  private:
+
+  /**
+   * @brief This function attempts to load a value from the buffer
+   * @details This function encapsulates logic related to achieving hazard
+   * pointer protection on objects read from the buffer. Currently it does
+   * not protected type T objects, only Helper objects used in the progress
+   * assurance framework.
+   * If a Helper object is read it will return false, otherwise it will return
+   * a successful read.
+   *
+   * @param pos the position to load from
+   * @param val the variable to store the loaded value.
+   *
+   * @return whether or not a load was successful
+   */
+  bool readValue(int64_t pos, uintptr_t &val) {
+    val = array_[pos].load();
+    return true;
+  }
   /**
    * @brief Creates a uintptr_t that represents an emptynode
    * @details the uintptr_t is composed by
@@ -272,11 +329,36 @@ class RingBuffer {
   int64_t nextHead();
 
   /**
+   * @brief performs an atomic load on the head counter
+   * @details performs an atomic load on the head counter
+   * @return returns the value of the head counter.
+   */
+  int64_t getHead();
+
+  /**
    * @brief performs a fetch-and-add on the tail counter
    * @details atomically increments the tail
    * @return returns the pre-incremented value of the tail counter.
    */
   int64_t nextTail();
+
+  /**
+   * @brief performs an atomic load on the tail counter
+   * @details performs an atomic load on the tail counter
+   * @return returns the value of the tail counter.
+   */
+  int64_t getTail();
+
+  /**
+   * @brief utility function for incrementing counter
+   * @details contains internal checks on the returned value
+   *
+   * @param counter counter to increment
+   * @param val value by which to increment the counter
+   *
+   * @return returns the pre-incremented value of the tail counter.
+   */
+  int64_t counterAction(std::atomic<int64_t> &counter, int64_t val);
 
   /**
    * @brief Returns the next seqid
@@ -302,18 +384,17 @@ class RingBuffer {
    * @details This function is called in the event the value at position on the
    * ringbuffer is lagging behind as a result of a delayed thread.
    *
-   * It calls tervel::util::backoff() and upon its return checks whether or the value at
-   * address has changed.
+   * It calls tervel::util::backoff() and upon its return checks whether or
+   * the value at address has changed.
    * If it has, it returns true, Else it returns false.
    * If the value has changed the new value is assigned to val
    *
-   * @param address The address val was read from
-   * @param val The last read value from address. If this function returns true
-   * then val is updated, otherwise it is left unchanged.
+   * @param pos The pos val was read from
+   * @param val The last read value from address.
    *
    * @return whether or not the val changed.
    */
-  bool backoff(std::atomic<uintptr_t> *address, uintptr_t &val);
+  bool backoff(int64_t pos, uintptr_t val);
 
   /**
    * @brief This function places a bitmark on the value held at address
@@ -321,10 +402,9 @@ class RingBuffer {
    * calling address->fetch_or(mark_lsb) and then it loads the new current value
    * and assigns it to val.
    *
-   * @param address The address to perfom the blind bitmark.
-   * @return the new value at address
+   * @param pos The position to perform the blind bitmark.
    */
-  uintptr_t atomic_delay_mark(std::atomic<uintptr_t> *address);
+  void atomic_delay_mark(int64_t pos);
 
   /**
    * @brief This prints out debugging information.
@@ -335,9 +415,15 @@ class RingBuffer {
    */
   std::string debug_string(uintptr_t val);
 
+
+  class BufferOp;
+  class EnqueueOp;
+  class DequeueOp;
+  class Helper;
+
   const int64_t capacity_;
-  std::atomic<int64_t> head {0};
-  std::atomic<int64_t> tail {0};
+  std::atomic<int64_t> head_ {0};
+  std::atomic<int64_t> tail_ {0};
   std::unique_ptr<std::atomic<uintptr_t>[]> array_;
 
 };  // class RingBuffer<Value>
@@ -349,5 +435,6 @@ class RingBuffer {
 }  // namespace tervel
 
 #include <tervel/containers/lf/ring-buffer/ring_buffer_imp.h>
+#include <tervel/containers/lf/ring-buffer/ring_buffer_oprec.h>
 
 #endif  // TERVEL_CONTAINERS_WF_RINGBUFFER_RINGBUFFER_H_
