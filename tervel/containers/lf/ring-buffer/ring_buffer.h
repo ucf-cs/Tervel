@@ -212,6 +212,7 @@ class RingBuffer {
    * @return whether or not a load was successful
    */
   bool readValue(int64_t pos, uintptr_t &val) {
+    // TODO(steven): added helper type detection and removal
     val = array_[pos].load();
     return true;
   }

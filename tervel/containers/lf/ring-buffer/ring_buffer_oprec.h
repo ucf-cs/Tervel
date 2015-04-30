@@ -182,10 +182,10 @@ void RingBuffer<T>::EnqueueOp::help_complete() {
     getInfo(val, val_seqid, val_isValueType, val_isDelayedMarked);
 
 
-    if (seqid > tail) {
+    if (val_seqid > tail) {
       // We are lagging, so iterate until we find a matching seqid.
       continue;
-    } else if (isDelayedMarked) {
+    } else if (val_isDelayedMarked) {
       // We don't want a delayed marked anything, too complicated, let some
       // one else deal with it.
       continue;
@@ -221,9 +221,53 @@ void RingBuffer<T>::EnqueueOp::help_complete() {
 
 template<typename T>
 void RingBuffer<T>::DequeueOp::help_complete() {
-  assert(false);
-}
+  int64_t head = getHead();
+  while(this->BufferOp::notDone()) {
+    if (this->rb_->isEmpty(head, this->rb_->getTail())) {
+      this->fail();
+      return;
+    }
+    int64_t seqid = head++;
+    uint64_t pos = this->rb_->getPos(seqid);
+    uintptr_t val;
+    if (!this->rb_->readValue(pos, val)) {
+      continue;
+    }
 
+    int64_t val_seqid;
+    bool val_isValueType;
+    bool val_isDelayedMarked;
+    getInfo(val, val_seqid, val_isValueType, val_isDelayedMarked);
+
+
+    if (val_seqid > head) {
+      // We are lagging, so iterate until we find a matching seqid.
+      continue;
+    } else if (val_isValueType) {
+      // it is a valueType, with seqid <= to the one we are working with...
+      // so we take it or try to any way...
+      // TODO(steven): code this logic...
+    } else {
+      // Its an EmptyNode with a seqid <= to the one we are working with
+      // so lets fuck shit up and set it delayed mark that will show them...
+      // but it is the simplest way to ensure nothing gets enqueued at this pos
+      // which allows us to keep fifo.
+      // If something did get enqueued then, it will be marked and we will check
+      // it on the next round
+      if (val_isDelayedMarked) {
+        // its already been marked, so move on to the next pos;
+        continue;
+      } else {
+        atomic_delay_mark(pos);
+        head--;  // re-read/process the value
+      }
+
+
+
+    }
+
+  }
+}
 }  // namespace wf
 }  // namespace containers
 }  // namespace tervel
