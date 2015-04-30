@@ -44,9 +44,22 @@ isEmpty(int64_t tail, int64_t head) {
 template<typename T>
 void RingBuffer<T>::
 atomic_delay_mark(int64_t pos) {
-  array_[pos].fetch_or(mark_lsb);
+  array_[pos].fetch_or(delayMark_lsb);
 }
 
+template<typename T>
+bool RingBuffer<T>::
+readValue(int64_t pos, uintptr_t &val) {
+  val = array_[pos].load();
+  if (Helper::isHelperType(val)) {
+    Helper * h = Helper::getHelperType(val);
+    // TODO(steven): hp watch....
+
+    return false;
+  } else {
+    return true;
+  }
+}
 
 template<typename T>
 void RingBuffer<T>::
@@ -260,7 +273,7 @@ uintptr_t RingBuffer<T>::ValueType(T value, int64_t seqid) {
 
 template<typename T>
 uintptr_t RingBuffer<T>::DelayMarkValue(uintptr_t val) {
-  val = val | mark_lsb; // 3LSB now X1X
+  val = val | delayMark_lsb; // 3LSB now X1X
   return val;
 }
 
@@ -288,7 +301,7 @@ bool RingBuffer<T>::isValueType(uintptr_t p) {
 
 template<typename T>
 bool RingBuffer<T>::isDelayedMarked(uintptr_t p) {
-  return (p & mark_lsb) == mark_lsb;
+  return (p & delayMark_lsb) == delayMark_lsb;
 }
 
 template<typename T>

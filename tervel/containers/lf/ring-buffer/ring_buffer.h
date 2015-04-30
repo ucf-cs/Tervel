@@ -25,8 +25,19 @@ THE SOFTWARE.
 
 
 /**
- * TODO(steven): move member functions that don't depend on instance to inline
- *  functions. ie ValueType,EmptyType, MarkDelay, MakeHelper...
+ * TODO(steven):
+ *   Add calls to check for announcement
+ *   Add fail counter code
+ *   Re-Test non-wf path
+ *   Test wf-path.
+ *   Check to ensure sub types of Helper, OpRec
+ *
+ *   Add static type checking of template Type T
+ *
+ *   Document WF functions, move them out of class definition
+ *   Annotate code a bit more.
+ *   Re-organize code, break out into more files
+ *
  */
 #ifndef TERVEL_CONTAINERS_WF_RINGBUFFER_RINGBUFFER_H_
 #define TERVEL_CONTAINERS_WF_RINGBUFFER_RINGBUFFER_H_
@@ -55,7 +66,6 @@ namespace lf {
  * It can only store pointer sized objects that extend the Value class.
  * Further it reserves the 3 LSB for type identification, which makes it
  * compatible only with 64 bit systems
- * TODO(steven): add compile to check to ensure this.
  *
  * It supports enqueue, dequeue, isFull, and isEmpty operations
  *
@@ -65,7 +75,7 @@ namespace lf {
 template<typename T>
 class RingBuffer {
   static const uintptr_t num_lsb = 3;
-  static const uintptr_t mark_lsb = 0x1;
+  static const uintptr_t delayMark_lsb = 0x1;
   static const uintptr_t emptytype_lsb = 0x2;
   static const uintptr_t oprec_lsb = 0x4;
   static const uintptr_t clear_lsb = 7;
@@ -217,11 +227,8 @@ class RingBuffer {
    *
    * @return whether or not a load was successful
    */
-  bool readValue(int64_t pos, uintptr_t &val) {
-    // TODO(steven): added helper type detection and removal
-    val = array_[pos].load();
-    return true;
-  }
+  bool readValue(int64_t pos, uintptr_t &val);
+
   /**
    * @brief Creates a uintptr_t that represents an EmptyType
    * @details the uintptr_t is composed by
@@ -276,8 +283,8 @@ class RingBuffer {
   static inline int64_t getValueTypeSeqId(uintptr_t val);
 
   /**
-   * @brief Takes a uintptr_t and places a bitmark on the mark_lsb
-   * @details Takes a uintptr_t and places a bitmark on the mark_lsb
+   * @brief Takes a uintptr_t and places a bitmark on the delayMark_lsb
+   * @details Takes a uintptr_t and places a bitmark on the delayMark_lsb
    *
    * @param val The value to mark
    * @return A marked value
@@ -321,7 +328,7 @@ class RingBuffer {
   /**
    * @brief returns whether or not p has a delay mark
    * @details returns whether or not p has a delay mark by examining
-   * the mark_lsb. If it is 1 then it is delayed
+   * the delayMark_lsb. If it is 1 then it is delayed
    *
    * @param p the value to examine
    * @return whether or not it is has a delay mark.
@@ -406,7 +413,7 @@ class RingBuffer {
   /**
    * @brief This function places a bitmark on the value held at address
    * @details This function places a bitmark on the value held at address by
-   * calling address->fetch_or(mark_lsb) and then it loads the new current value
+   * calling address->fetch_or(delayMark_lsb) and then it loads the new current value
    * and assigns it to val.
    *
    * @param pos The position to perform the blind bitmark.

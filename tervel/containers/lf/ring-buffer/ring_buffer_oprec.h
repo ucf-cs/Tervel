@@ -148,10 +148,21 @@ class RingBuffer<T>::Helper { // TODO(steven): extend hp descriptor
    * @param h the pointer to OR
    * @return the result of the bitwise or.
    */
-  uintptr_t HelperType(Helper *h) {
+  static inline uintptr_t HelperType(Helper *h) {
     uintptr_t res = reinterpret_cast<uintptr_t>(h);
-    res = res | RingBuffer<T>::oprec_lsb; // 3LSB now 010
+    res = res | RingBuffer<T>::oprec_lsb; // 3LSB now 100
     return res;
+  }
+
+  static inline bool isHelperType(uintptr_t val) {
+    val = val & RingBuffer<T>::oprec_lsb;
+    return (val != 0);
+  }
+
+  static inline Helper *getHelperType(uintptr_t val) {
+    val = val & (~RingBuffer<T>::oprec_lsb);  // clear oprec_lsb
+    val = val & (~RingBuffer<T>::delayMark_lsb);  // clear delayMark_lsb
+    return reinterpret_cast<Helper *>(val);
   }
 
   friend class RingBuffer::EnqueueOp;
