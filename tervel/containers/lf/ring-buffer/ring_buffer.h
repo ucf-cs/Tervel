@@ -22,6 +22,12 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
+
+
+/**
+ * TODO(steven): move member functions that don't depend on instance to inline
+ *  functions. ie ValueType,EmptyType, MarkDelay, MakeHelper...
+ */
 #ifndef TERVEL_CONTAINERS_WF_RINGBUFFER_RINGBUFFER_H_
 #define TERVEL_CONTAINERS_WF_RINGBUFFER_RINGBUFFER_H_
 
@@ -60,7 +66,7 @@ template<typename T>
 class RingBuffer {
   static const uintptr_t num_lsb = 3;
   static const uintptr_t mark_lsb = 0x1;
-  static const uintptr_t emptynode_lsb = 0x2;
+  static const uintptr_t emptytype_lsb = 0x2;
   static const uintptr_t oprec_lsb = 0x4;
   static const uintptr_t clear_lsb = 7;
 
@@ -217,14 +223,14 @@ class RingBuffer {
     return true;
   }
   /**
-   * @brief Creates a uintptr_t that represents an emptynode
+   * @brief Creates a uintptr_t that represents an EmptyType
    * @details the uintptr_t is composed by
-   * seqid << num_lsb | empty_node_lsb
+   * seqid << num_lsb | emptytype_lsb
    *
-   * @param seqid the seqid for this emptynode
-   * @return Returns uintptr_t that represents an emptynode
+   * @param seqid the seqid for this EmptyType
+   * @return Returns uintptr_t that represents an EmptyType
    */
-  uintptr_t EmptyNode(int64_t seqid);
+  static inline uintptr_t EmptyType(int64_t seqid);
 
   /**
    * @brief Returns the seqid encoded in the passed value
@@ -235,7 +241,7 @@ class RingBuffer {
    * @param val a unitptr_t loaded from the buffer
    * @return its encoded seqid
    */
-  int64_t getEmptyNodeSeqId(uintptr_t val);
+  static inline int64_t getEmptyTypeSeqId(uintptr_t val);
 
   /**
    * @brief Creates a uintptr_t that represents an ValueType
@@ -247,7 +253,7 @@ class RingBuffer {
    * @param seqid the sequence id assigned to this value
    * @return Returns uintptr_t that represents an ValueType
    */
-  uintptr_t ValueType(T value, int64_t seqid);
+  static inline uintptr_t ValueType(T value, int64_t seqid);
 
   /**
    * @brief Returns the value type from a uintptr
@@ -256,7 +262,7 @@ class RingBuffer {
    * @param val The value to cast
    * @return val cast to type T
    */
-  T getValueType(uintptr_t val);
+  static inline T getValueType(uintptr_t val);
 
   /**
    * @brief Returns the seqid of the passed value
@@ -267,16 +273,16 @@ class RingBuffer {
    * be a ValueType
    * @return The values seqid
    */
-  int64_t getValueTypeSeqId(uintptr_t val);
+  static inline int64_t getValueTypeSeqId(uintptr_t val);
 
   /**
    * @brief Takes a uintptr_t and places a bitmark on the mark_lsb
    * @details Takes a uintptr_t and places a bitmark on the mark_lsb
    *
-   * @param node The value to mark
+   * @param val The value to mark
    * @return A marked value
    */
-  uintptr_t MarkNode(uintptr_t node);
+  static inline uintptr_t DelayMarkValue(uintptr_t val);
 
   /**
    * @brief This function is used to get information from a value read from the
@@ -293,24 +299,24 @@ class RingBuffer {
     bool &val_isValueType, bool &val_isMarked);
 
   /**
-   * @brief returns whether or not p represents an EmptyNode
-   * @details returns whether or not p represents an EmptyNode by examining
-   * the emptynode_lsb. If it is 1 then it is an EmptyNode type.
+   * @brief returns whether or not p represents an EmptyType
+   * @details returns whether or not p represents an EmptyType by examining
+   * the emptytype_lsb. If it is 1 then it is an EmptyType type.
    *
    * @param p the value to examine
-   * @return whether or not it is an EmptyNode
+   * @return whether or not it is an EmptyType
    */
-  bool isEmptyNode(uintptr_t p);
+  static inline bool isEmptyType(uintptr_t p);
 
   /**
    * @brief returns whether or not p represents an ValueType
    * @details returns whether or not p represents an ValueType by examining
-   * the emptynode_lsb. If it is 0 then it is an ValueType type.
+   * the emptytype_lsb. If it is 0 then it is an ValueType type.
    *
    * @param p the value to examine
    * @return whether or not it is an ValueType
    */
-  bool isValueType(uintptr_t p);
+  static inline bool isValueType(uintptr_t p);
 
   /**
    * @brief returns whether or not p has a delay mark
@@ -320,7 +326,7 @@ class RingBuffer {
    * @param p the value to examine
    * @return whether or not it is has a delay mark.
    */
-  bool isDelayedMarked(uintptr_t p);
+  static inline bool isDelayedMarked(uintptr_t p);
 
   /**
    * @brief performs a fetch-and-add on the head counter
@@ -359,7 +365,7 @@ class RingBuffer {
    *
    * @return returns the pre-incremented value of the tail counter.
    */
-  int64_t counterAction(std::atomic<int64_t> &counter, int64_t val);
+  static inline int64_t counterAction(std::atomic<int64_t> &counter, int64_t val);
 
   /**
    * @brief Returns the next seqid

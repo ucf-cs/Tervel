@@ -10,7 +10,7 @@ RingBuffer(size_t capacity)
   : capacity_(capacity)
   , array_(new std::atomic<uintptr_t>[capacity]) {
   for (uint64_t i = 0; i < capacity_; i++) {
-    array_[i].store(EmptyNode(i));
+    array_[i].store(EmptyType(i));
   }
 }
 
@@ -57,7 +57,7 @@ getInfo(uintptr_t val, int64_t &val_seqid,
   if (val_isValueType) {
     val_seqid = getValueTypeSeqId(val);
   } else {
-    val_seqid = getEmptyNodeSeqId(val);
+    val_seqid = getEmptyTypeSeqId(val);
   }
 }
 
@@ -80,7 +80,7 @@ dequeue(T &value) {
     int64_t seqid = nextHead();
     uint64_t pos = getPos(seqid);
     uintptr_t val;
-    uintptr_t new_value = EmptyNode(nextSeqId(seqid));
+    uintptr_t new_value = EmptyType(nextSeqId(seqid));
 
     while (true) {
       if (!readValue(pos, val)) {
@@ -97,7 +97,7 @@ dequeue(T &value) {
       if (val_isValueType) {
         if (val_seqid == seqid) {
           if (val_isDelayedMarked) {
-            new_value = MarkNode(new_value);
+            new_value = DelayMarkValue(new_value);
             assert(isDelayedMarked(new_value));
           }
           value = getValueType(val);
@@ -105,8 +105,8 @@ dequeue(T &value) {
           uintptr_t sanity_check = val;
           if (!array_[pos].compare_exchange_strong(val, new_value)) {
             assert(!val_isDelayedMarked && "This value changed unexpectedly, it should only be changeable by this thread except for bit marking");
-            assert(MarkNode(sanity_check) == val && "This value changed unexpectedly, it should only be changeable by this thread except for bit marking");
-            new_value =  MarkNode(new_value);
+            assert(DelayMarkValue(sanity_check) == val && "This value changed unexpectedly, it should only be changeable by this thread except for bit marking");
+            new_value =  DelayMarkValue(new_value);
             bool res = array_[pos].compare_exchange_strong(val, new_value);
             assert(res && " If this assert hits, then somehow another thread changed this value, when only this thread should be able to.");
           }
@@ -128,7 +128,7 @@ dequeue(T &value) {
             continue;
           }
         }
-      } else { // val_isEmptyNode
+      } else { // val_isEmptyType
         if (val_isDelayedMarked || !backoff(pos, val)) {
           // Value has not changed
           if (array_[pos].compare_exchange_strong(val, new_value)) {
@@ -179,15 +179,15 @@ enqueue(T value) {
         } else {
           break; // get a new seqid
         }
-      } else if (isEmptyNode(val)) {
-        int64_t other_seqid = getEmptyNodeSeqId(val);
+      } else if (isEmptyType(val)) {
+        int64_t other_seqid = getEmptyTypeSeqId(val);
         if (other_seqid < seqid) {
           if (backoff(pos, val)) {
             // value changed
             continue; // process the new value.
           }
         }
-        // The current value is an empty node and its seqid is <= the assigned one.
+        // The current value is an EmptyType and its seqid is <= the assigned one.
         uintptr_t new_value = ValueType(value, seqid);
         if (array_[pos].compare_exchange_strong(val, new_value)) {
           return true;
@@ -243,10 +243,10 @@ int64_t RingBuffer<T>::nextHead() {
 
 
 template<typename T>
-uintptr_t RingBuffer<T>::EmptyNode(int64_t seqid) {
+uintptr_t RingBuffer<T>::EmptyType(int64_t seqid) {
   uintptr_t res = seqid;
   res = res << num_lsb; // 3LSB now 000
-  res = res | emptynode_lsb; // 3LSB now 010
+  res = res | emptytype_lsb; // 3LSB now 010
   return res;
 }
 
@@ -259,13 +259,13 @@ uintptr_t RingBuffer<T>::ValueType(T value, int64_t seqid) {
 }
 
 template<typename T>
-uintptr_t RingBuffer<T>::MarkNode(uintptr_t node) {
-  node = node | mark_lsb; // 3LSB now X1X
-  return node;
+uintptr_t RingBuffer<T>::DelayMarkValue(uintptr_t val) {
+  val = val | mark_lsb; // 3LSB now X1X
+  return val;
 }
 
 template<typename T>
-int64_t RingBuffer<T>::getEmptyNodeSeqId(uintptr_t val) {
+int64_t RingBuffer<T>::getEmptyTypeSeqId(uintptr_t val) {
   int64_t res = (val >> num_lsb);
   return res;
 }
@@ -277,13 +277,13 @@ int64_t RingBuffer<T>::getValueTypeSeqId(uintptr_t val) {
 }
 
 template<typename T>
-bool RingBuffer<T>::isEmptyNode(uintptr_t p) {
-  return (p & emptynode_lsb) == emptynode_lsb;
+bool RingBuffer<T>::isEmptyType(uintptr_t p) {
+  return (p & emptytype_lsb) == emptytype_lsb;
 }
 
 template<typename T>
 bool RingBuffer<T>::isValueType(uintptr_t p) {
-  return !isEmptyNode(p);
+  return !isEmptyType(p);
 }
 
 template<typename T>

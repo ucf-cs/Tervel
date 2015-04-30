@@ -43,6 +43,7 @@ namespace containers {
 namespace lf {
 
 
+
 template<typename T>
 class RingBuffer<T>::BufferOp{
  public:
@@ -74,6 +75,14 @@ class RingBuffer<T>::BufferOp{
     helper_.compare_exchange_strong(temp, fail_val_);
   }
 
+  bool isFail(Helper * &h) {
+    return (h=helper_.load()) == fail_val_;
+  }
+
+  Helper * getHelper() {
+    return helper_.load();
+  }
+
   void notDone() {
     return helper_.load() == nullptr;
   }
@@ -99,8 +108,27 @@ class RingBuffer<T>::Helper { // TODO(steven): extend hp descriptor
 
   bool on_watch(std::atomic<void *> *address, void *expected) {
     // TODO(steven): watch op_.
+
+
     void *val = associate();
-    address->compare_exchange_strong(expected, val);
+    bool res = address->compare_exchange_strong(expected, val);
+    if (!res) {
+      // we failed, could be because of delayed mark.
+      void *temp = reinterpret_cast<void *>(
+          RingBuffer<T>::DelayMarkValue(HelperType(this)));
+      if (expected == temp) {
+        address->compare_exchange_strong(expected, val);
+      }
+    }
+
+    #ifdef DEBUG
+      expected = address->load();
+      assert(expected != reinterpret_cast<void *>(HelperType(this)));
+      assert(expected !=
+          reinterpret_cast<void *>(
+            RingBuffer<T>::DelayMarkValue(HelperType(this))));
+    #endif
+
     return false;
   }
 
@@ -110,6 +138,20 @@ class RingBuffer<T>::Helper { // TODO(steven): extend hp descriptor
 
   bool valid() {
     return op_->valid(this);
+  }
+
+  /**
+   * @brief Returns a uintptr_t for the passed helper object
+   * @details Returns a uintptr_t for the passed helper object by performing
+   * a bitwise OR with h and oprec_lsb
+   *
+   * @param h the pointer to OR
+   * @return the result of the bitwise or.
+   */
+  uintptr_t HelperType(Helper *h) {
+    uintptr_t res = reinterpret_cast<uintptr_t>(h);
+    res = res | RingBuffer<T>::oprec_lsb; // 3LSB now 010
+    return res;
   }
 
   friend class RingBuffer::EnqueueOp;
@@ -133,12 +175,12 @@ class RingBuffer<T>::EnqueueOp: public BufferOp {
     bool res = BufferOp::associate(h);
     if (res) {
       int64_t ev_seqid = reinterpret_cast<int64_t>(this) * -1;
-      int64_t seqid = this->rb_->getEmptyNodeSeqId(h->old_value_);
+      int64_t seqid = this->rb_->getEmptyTypeSeqId(h->old_value_);
       value_->atomic_change_seqid(ev_seqid, seqid);
 
-      uintptr_t res = reinterpret_cast<uintptr_t>(value_);
-      assert((res & clear_lsb) == 0 && " reserved bits are not 0?");
-      return res;
+      uintptr_t temp = reinterpret_cast<uintptr_t>(value_);
+      assert((temp & clear_lsb) == 0 && " reserved bits are not 0?");
+      return temp;
     } else {
       return reinterpret_cast<void *>(h->old_value_);
     }
@@ -156,6 +198,37 @@ class RingBuffer<T>::DequeueOp: public BufferOp {
  public:
   DequeueOp(RingBuffer<T> *rb)
     : BufferOp(rb) {}
+
+  void * associate(Helper *h) {
+    bool res = BufferOp::associate(h);
+    uintptr_t temp = h->old_value_;
+    if (res) {
+
+      int64_t seqid = RingBuffer<T>::getEmptyTypeSeqId(temp);
+      int64_t next_seqid = BufferOp::rb_->nextSeqId(seqid);
+      uintptr_t new_value = RingBuffer<T>::EmptyType(next_seqid);
+      if (RingBuffer<T>::isDelayedMarked(temp)) {
+        new_value = RingBuffer<T>::DelayMarkValue(temp);
+      }
+
+      return reinterpret_cast<void *>(new_value);
+    } else {
+      return reinterpret_cast<void *>(temp);
+    }
+
+  }
+
+  bool result(T &val) {
+    // TODO(steven): code this.
+    Helper * h;
+    if (BufferOp::isFail(h)) {
+      return false;
+    } else {
+      uintptr_t temp = h->old_value_;
+      val = getValueType(temp);
+      return true;
+    }
+  };
 
   void help_complete();
 
@@ -194,10 +267,10 @@ void RingBuffer<T>::EnqueueOp::help_complete() {
       // skip?
       continue;
     } else {
-      // Its an EmptyNode with a seqid <= to the one we are working with
+      // Its an EmptyType with a seqid <= to the one we are working with
       // so lets take it!
       Helper * helper = new Helper(this, val);
-      uintptr_t helper_int = this->rb_->MakeHelper(helper);
+      uintptr_t helper_int = Helper::HelperType(helper);
 
       bool res = this->rb_->array_[pos].compare_exchange_strong(val, helper_int);
       if (res) {
@@ -246,10 +319,29 @@ void RingBuffer<T>::DequeueOp::help_complete() {
     } else if (val_isValueType) {
       // it is a valueType, with seqid <= to the one we are working with...
       // so we take it or try to any way...
-      // TODO(steven): code this logic...
+
+      Helper * helper = new Helper(this, val);
+      uintptr_t helper_int = Helper::HelperType(helper);
+
+      bool res = this->rb_->array_[pos].compare_exchange_strong(val, helper_int);
+      if (res) {
+        // Success!
+        // The following line is not hacky if you ignore the function name...
+        // it associates and then removes the object.
+        // It is also called by the memory protection watch function...
+        helper->on_watch(&(this->rb_->array_[pos]), helper_int);
+        if (!helper->valid()) {
+          helper->safeDelete();
+        }
+      } else {
+        // Failure :(
+        delete helper;
+        head--;  // re-examine position on the next loop
+      }
+
     } else {
-      // Its an EmptyNode with a seqid <= to the one we are working with
-      // so lets fuck shit up and set it delayed mark that will show them...
+      // Its an EmptyType with a seqid <= to the one we are working with
+      // so lets mess shit up and set it delayed mark that will show them...
       // but it is the simplest way to ensure nothing gets enqueued at this pos
       // which allows us to keep fifo.
       // If something did get enqueued then, it will be marked and we will check
@@ -261,13 +353,9 @@ void RingBuffer<T>::DequeueOp::help_complete() {
         atomic_delay_mark(pos);
         head--;  // re-read/process the value
       }
-
-
-
-    }
-
-  }
-}
+    }  // its an EmptyType
+  }  // while notDone
+}  // void RingBuffer<T>::DequeueOp::help_complete()
 }  // namespace wf
 }  // namespace containers
 }  // namespace tervel
