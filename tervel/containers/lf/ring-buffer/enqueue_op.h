@@ -46,7 +46,7 @@ class RingBuffer<T>::EnqueueOp: public BufferOp {
 
   void * associate(Helper *h);
   void help_complete();
-  void result();
+  bool result();
 
  private:
   const T value_;

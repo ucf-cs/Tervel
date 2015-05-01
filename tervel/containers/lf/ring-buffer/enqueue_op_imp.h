@@ -32,7 +32,9 @@ namespace containers {
 namespace lf {
 
 template<typename T>
-void RingBuffer<T>::EnqueueOp::help_complete() {
+void
+RingBuffer<T>::EnqueueOp::
+help_complete() {
   int64_t tail = this->rb_->getTail();
   while(this->BufferOp::notDone()) {
     if (this->rb_->isFull(tail, this->rb_->getHead())) {
@@ -93,7 +95,9 @@ void RingBuffer<T>::EnqueueOp::help_complete() {
 }
 
 template<typename T>
-void* RingBuffer<T>::EnqueueOp::associate(Helper *h) {
+void*
+RingBuffer<T>::EnqueueOp::
+associate(Helper *h) {
   bool res = BufferOp::privAssociate(h);
   if (res) {
     int64_t ev_seqid = reinterpret_cast<int64_t>(this) * -1;
@@ -102,7 +106,7 @@ void* RingBuffer<T>::EnqueueOp::associate(Helper *h) {
 
     uintptr_t temp = reinterpret_cast<uintptr_t>(value_);
     assert((temp & clear_lsb) == 0 && " reserved bits are not 0?");
-    return temp;
+    return reinterpret_cast<void *>(temp);
   } else {
     return reinterpret_cast<void *>(h->old_value_);
   }
@@ -111,7 +115,8 @@ void* RingBuffer<T>::EnqueueOp::associate(Helper *h) {
 
 
 template<typename T>
-bool RingBuffer<T>::EnqueueOp::
+bool
+RingBuffer<T>::EnqueueOp::
 result() {
   Helper * h;
   if (BufferOp::isFail(h)) {

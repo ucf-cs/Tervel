@@ -32,7 +32,9 @@ namespace containers {
 namespace lf {
 
 template<typename T>
-void RingBuffer<T>::DequeueOp::help_complete() {
+void
+RingBuffer<T>::DequeueOp::
+help_complete() {
   int64_t head = this->rb_->getHead();
   while(this->BufferOp::notDone()) {
     if (this->rb_->isEmpty(head, this->rb_->getTail())) {
@@ -123,7 +125,8 @@ associate(Helper *h) {
 }
 
 template<typename T>
-bool RingBuffer<T>::DequeueOp::
+bool
+RingBuffer<T>::DequeueOp::
 result(T &val) {
   Helper * h;
   if (BufferOp::isFail(h)) {

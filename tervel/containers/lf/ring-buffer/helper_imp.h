@@ -35,14 +35,6 @@ namespace containers {
 namespace lf {
 
 template<typename T>
-class RingBuffer<T>::Helper : public tervel::util::memory::hp::Element {
- public:
-  Helper(BufferOp *op, uintptr_t old_value)
-   : op_(op)
-   , old_value_(old_value) {}
-  ~Helper() {}
-
-template<typename T>
 bool
 RingBuffer<T>::Helper::
 on_watch(std::atomic<void *> *address, void *expected) {
@@ -109,7 +101,7 @@ isHelperType(uintptr_t val) {
 
 
 template<typename T>
-Helper *
+typename RingBuffer<T>::Helper *
 RingBuffer<T>::Helper::
 getHelperType(uintptr_t val) {
   val = val & (~RingBuffer<T>::oprec_lsb);  // clear oprec_lsb

@@ -130,8 +130,7 @@ dequeue(T &value) {
 
     while (true) {
       if(progAssur.isDelayed()) {
-        RingBuffer<T> *temp = this;
-        DequeueOp *op = new DequeueOp(temp);
+        DequeueOp *op = new DequeueOp(this);
         tervel::util::ProgressAssurance::make_announcement(op);
         bool res = op->result(value);
         op->safe_delete();
@@ -215,8 +214,7 @@ enqueue(T value) {
 
     while (true) {
       if(progAssur.isDelayed()) {
-        RingBuffer<T> *temp = this;
-        EnqueueOp *op = new EnqueueOp(value);
+        EnqueueOp *op = new EnqueueOp(this, value);
         tervel::util::ProgressAssurance::make_announcement(op);
         bool res = op->result();
         op->safe_delete();
