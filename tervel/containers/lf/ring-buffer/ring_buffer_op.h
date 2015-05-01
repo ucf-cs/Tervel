@@ -92,7 +92,8 @@ class RingBuffer<T>::BufferOp : public util::OpRecord {
   // are removed before removing the watch on the op record
 
  // private:
-  Helper * fail_val_{static_cast<Helper *>(0x1)};
+  static constexpr Helper * fail_val_ = reinterpret_cast<Helper *>(0x1L);
+
   RingBuffer<T> * rb_;
   std::atomic<Helper *> helper_{nullptr};
   DISALLOW_COPY_AND_ASSIGN(BufferOp);
