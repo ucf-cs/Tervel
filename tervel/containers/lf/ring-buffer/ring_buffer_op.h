@@ -99,7 +99,7 @@ class RingBuffer<T>::BufferOp{
 }  // namespace tervel
 #endif  // TERVEL_CONTAINERS_WF_RINGBUFFER_RINGBUFFER_OPREC_H_
 
-#include <tervel/containers/lf/ring-buffer/buffer_help.h>
+#include <tervel/containers/lf/ring-buffer/helper.h>
 #include <tervel/containers/lf/ring-buffer/enqueue_op.h>
 #include <tervel/containers/lf/ring-buffer/dequeue_op.h>
 

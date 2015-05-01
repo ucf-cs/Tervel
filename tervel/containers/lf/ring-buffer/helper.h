@@ -25,7 +25,7 @@ THE SOFTWARE.
 #ifndef TERVEL_CONTAINERS_WF_RINGBUFFER_RINGBUFFER_HELPER_H_
 #define TERVEL_CONTAINERS_WF_RINGBUFFER_RINGBUFFER_HELPER_H_
 
-#include <tervel/containers/lf/ring-buffer/buffer_op.h>
+#include <tervel/containers/lf/ring-buffer/ring_buffer_op.h>
 
 
 namespace tervel {
@@ -112,4 +112,4 @@ class RingBuffer<T>::Helper {
 }  // namespace containers
 }  // namespace tervel
 
-#endif TERVEL_CONTAINERS_WF_RINGBUFFER_RINGBUFFER_HELPER_H_
+#endif  // TERVEL_CONTAINERS_WF_RINGBUFFER_RINGBUFFER_HELPER_H_

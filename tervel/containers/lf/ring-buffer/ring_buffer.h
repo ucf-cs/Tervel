@@ -49,6 +49,10 @@ THE SOFTWARE.
 #include <thread>
 #include <string>
 
+#include <tervel/util/info.h>
+#include <tervel/util/progress_assurance.h>
+#include <tervel/util/memory/hp/hazard_pointer.h>
+
 namespace tervel {
 namespace containers {
 namespace lf {
@@ -449,6 +453,6 @@ class RingBuffer {
 }  // namespace tervel
 
 #include <tervel/containers/lf/ring-buffer/ring_buffer_imp.h>
-#include <tervel/containers/lf/ring-buffer/ring_buffer_oprec.h>
+#include <tervel/containers/lf/ring-buffer/ring_buffer_op.h>
 
 #endif  // TERVEL_CONTAINERS_WF_RINGBUFFER_RINGBUFFER_H_
