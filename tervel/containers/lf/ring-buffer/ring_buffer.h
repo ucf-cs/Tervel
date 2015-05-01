@@ -457,6 +457,10 @@ class RingBuffer {
 #include <tervel/containers/lf/ring-buffer/enqueue_op.h>
 #include <tervel/containers/lf/ring-buffer/dequeue_op.h>
 
+#include <tervel/containers/lf/ring-buffer/helper_imp.h>
+#include <tervel/containers/lf/ring-buffer/enqueue_op_imp.h>
+#include <tervel/containers/lf/ring-buffer/dequeue_op_imp.h>
+
 #include <tervel/containers/lf/ring-buffer/ring_buffer_imp.h>
 
 

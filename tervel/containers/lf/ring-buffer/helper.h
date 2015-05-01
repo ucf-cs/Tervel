@@ -32,8 +32,6 @@ namespace tervel {
 namespace containers {
 namespace lf {
 
-
-
 template<typename T>
 class RingBuffer<T>::Helper : public tervel::util::memory::hp::Element {
  public:
@@ -42,44 +40,9 @@ class RingBuffer<T>::Helper : public tervel::util::memory::hp::Element {
    , old_value_(old_value) {}
   ~Helper() {}
 
-  bool on_watch(std::atomic<void *> *address, void *expected) {
-    typedef tervel::util::memory::hp::HazardPointer::SlotID SlotID;
-    SlotID pos = SlotID::SHORTUSE2;
-    bool res = tervel::util::memory::hp::HazardPointer::watch(pos, op_,
-        address, expected);
-    if (!res) {
-      return false;
-    }
-
-    void *val = associate();
-    res = address->compare_exchange_strong(expected, val);
-    if (!res) {
-      // we failed, could be because of delayed mark.
-      void *temp = reinterpret_cast<void *>(
-          RingBuffer<T>::DelayMarkValue(HelperType(this)));
-      if (expected == temp) {
-        address->compare_exchange_strong(expected, val);
-      }
-    }
-
-    #ifdef DEBUG
-      expected = address->load();
-      assert(expected != reinterpret_cast<void *>(HelperType(this)));
-      assert(expected !=
-          reinterpret_cast<void *>(
-            RingBuffer<T>::DelayMarkValue(HelperType(this))));
-    #endif
-
-    return false;
-  }
-
-  void * associate() {
-    return op_->associate(this);
-  }
-
-  bool valid() {
-    return op_->valid(this);
-  }
+  bool on_watch(std::atomic<void *> *address, void *expected);
+  void * associate();
+  bool valid();
 
   /**
    * @brief Returns a uintptr_t for the passed helper object
@@ -89,22 +52,11 @@ class RingBuffer<T>::Helper : public tervel::util::memory::hp::Element {
    * @param h the pointer to OR
    * @return the result of the bitwise or.
    */
-  static inline uintptr_t HelperType(Helper *h) {
-    uintptr_t res = reinterpret_cast<uintptr_t>(h);
-    res = res | RingBuffer<T>::oprec_lsb; // 3LSB now 100
-    return res;
-  }
+  static inline uintptr_t HelperType(Helper *h);
 
-  static inline bool isHelperType(uintptr_t val) {
-    val = val & RingBuffer<T>::oprec_lsb;
-    return (val != 0);
-  }
+  static inline bool isHelperType(uintptr_t val);
 
-  static inline Helper *getHelperType(uintptr_t val) {
-    val = val & (~RingBuffer<T>::oprec_lsb);  // clear oprec_lsb
-    val = val & (~RingBuffer<T>::delayMark_lsb);  // clear delayMark_lsb
-    return reinterpret_cast<Helper *>(val);
-  }
+  static inline Helper *getHelperType(uintptr_t val);
 
   BufferOp *op_;
   const uintptr_t old_value_;
