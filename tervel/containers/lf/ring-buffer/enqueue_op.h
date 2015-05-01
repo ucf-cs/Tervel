@@ -22,8 +22,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-#ifndef TERVEL_CONTAINERS_WF_RINGBUFFER_RINGBUFFER_OPREC_H_
-#define TERVEL_CONTAINERS_WF_RINGBUFFER_RINGBUFFER_OPREC_H_
+#ifndef TERVEL_CONTAINERS_WF_RINGBUFFER_RINGBUFFER_ENQUEUEOP_H_
+#define TERVEL_CONTAINERS_WF_RINGBUFFER_RINGBUFFER_ENQUEUEOP_H_
 
 #include <tervel/containers/lf/ring-buffer/ring_buffer_op.h>
 
@@ -43,14 +43,16 @@ class RingBuffer<T>::EnqueueOp: public BufferOp {
 
   void * associate(Helper *h);
   void help_complete();
+  void result();
 
  private:
   const T value_;
+  DISALLOW_COPY_AND_ASSIGN(EnqueueOp);
 };
 
 template<typename T>
 void RingBuffer<T>::EnqueueOp::help_complete() {
-  int64_t tail = getTail();
+  int64_t tail = this->rb_->getTail();
   while(this->BufferOp::notDone()) {
     if (this->rb_->isFull(tail, this->rb_->getHead())) {
       this->fail();
@@ -66,7 +68,7 @@ void RingBuffer<T>::EnqueueOp::help_complete() {
     int64_t val_seqid;
     bool val_isValueType;
     bool val_isDelayedMarked;
-    getInfo(val, val_seqid, val_isValueType, val_isDelayedMarked);
+    this->rb_->getInfo(val, val_seqid, val_isValueType, val_isDelayedMarked);
 
 
     if (val_seqid > tail) {
@@ -92,9 +94,12 @@ void RingBuffer<T>::EnqueueOp::help_complete() {
         // The following line is not hacky if you ignore the function name...
         // it associates and then removes the object.
         // It is also called by the memory protection watch function...
-        helper->on_watch(&(this->rb_->array_[pos]), helper_int);
+        std::atomic<void *> *temp1;
+        temp1 = reinterpret_cast<std::atomic<void *> *>(&(this->rb_->array_[pos]));
+        void *temp2 = reinterpret_cast<void *>(helper_int);
+        helper->on_watch(temp1, temp2);
         if (!helper->valid()) {
-          helper->safeDelete();
+          helper->safe_delete();
         }
       } else {
         // Failure :(
@@ -108,7 +113,7 @@ void RingBuffer<T>::EnqueueOp::help_complete() {
 
 template<typename T>
 void* RingBuffer<T>::EnqueueOp::associate(Helper *h) {
-  bool res = BufferOp::associate(h);
+  bool res = BufferOp::privAssociate(h);
   if (res) {
     int64_t ev_seqid = reinterpret_cast<int64_t>(this) * -1;
     int64_t seqid = this->rb_->getEmptyTypeSeqId(h->old_value_);
@@ -123,8 +128,20 @@ void* RingBuffer<T>::EnqueueOp::associate(Helper *h) {
 
 }
 
+
+template<typename T>
+bool RingBuffer<T>::EnqueueOp::
+result() {
+  Helper * h;
+  if (BufferOp::isFail(h)) {
+    return false;
+  } else {
+    return true;
+  }
+};
+
 }  // namespace wf
 }  // namespace containers
 }  // namespace tervel
 
-#endif  // TERVEL_CONTAINERS_WF_RINGBUFFER_RINGBUFFER_OPREC_H_
+#endif  // TERVEL_CONTAINERS_WF_RINGBUFFER_RINGBUFFER_ENQUEUEOP_H_

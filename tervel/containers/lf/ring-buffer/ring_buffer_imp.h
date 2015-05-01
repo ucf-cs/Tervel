@@ -130,8 +130,12 @@ dequeue(T &value) {
 
     while (true) {
       if(progAssur.isDelayed()) {
-        assert(false);
-        // TODO(steven): call op record
+        RingBuffer<T> *temp = this;
+        DequeueOp *op = new DequeueOp(temp);
+        tervel::util::ProgressAssurance::make_announcement(op);
+        bool res = op->result(value);
+        op->safe_delete();
+        return res;
       }
 
       if (!readValue(pos, val)) {
@@ -211,8 +215,12 @@ enqueue(T value) {
 
     while (true) {
       if(progAssur.isDelayed()) {
-        assert(false);
-        // TODO(steven): call op record
+        RingBuffer<T> *temp = this;
+        EnqueueOp *op = new EnqueueOp(value);
+        tervel::util::ProgressAssurance::make_announcement(op);
+        bool res = op->result();
+        op->safe_delete();
+        return res;
       }
       if (!readValue(pos, val)) {
         continue;

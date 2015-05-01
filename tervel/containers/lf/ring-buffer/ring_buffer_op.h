@@ -32,29 +32,31 @@ THE SOFTWARE.
 #include <thread>
 #include <string>
 
-#include <tervel/util/info.h>
-#include <tervel/util/descriptor.h>
 #include <tervel/util/progress_assurance.h>
+#include <tervel/util/memory/hp/hp_element.h>
 #include <tervel/util/memory/hp/hazard_pointer.h>
-#include <tervel/util/memory/rc/descriptor_util.h>
 
 namespace tervel {
 namespace containers {
 namespace lf {
 
 template<typename T>
-class RingBuffer<T>::BufferOp{
+class RingBuffer<T>::BufferOp : public util::OpRecord {
  public:
-  BufferOp(RingBuffer<T> *rb)
-    : rb_(rb) {}
+  BufferOp(RingBuffer<T> *rb) {
+    rb_ = rb;
+  };
+
   ~BufferOp() {
     Helper *h = helper_.load();
-    if (h != nullptr && h != BufferOp::fail) {
+    if (h != nullptr && h != fail_val_) {
       delete h;
     }
   };
 
-  bool associate(Helper *h) {
+  virtual void * associate(Helper *h) = 0;
+
+  bool privAssociate(Helper *h) {
     Helper *temp = nullptr;
     bool res = helper_.compare_exchange_strong(temp, h);
     if (res || temp == nullptr) { // success
@@ -62,36 +64,38 @@ class RingBuffer<T>::BufferOp{
     } else { // fail
       return false;
     }
-  }
+  };
 
   bool valid(Helper * h) {
     return helper_.load() == h;
-  }
+  };
 
   void fail() {
     Helper *temp = nullptr;
     helper_.compare_exchange_strong(temp, fail_val_);
-  }
+  };
 
   bool isFail(Helper * &h) {
     return (h=helper_.load()) == fail_val_;
-  }
+  };
+
 
   Helper * getHelper() {
     return helper_.load();
-  }
+  };
 
-  void notDone() {
+  bool notDone() {
     return helper_.load() == nullptr;
-  }
+  };
 
   // on_is_watched() function is not needed because helpers
   // are removed before removing the watch on the op record
 
- private:
-  const Helper * fail_val_{static_cast<Helper *>(0x1)};
-  const RingBuffer<T> *rb_;
+ // private:
+  Helper * fail_val_{static_cast<Helper *>(0x1)};
+  RingBuffer<T> * rb_;
   std::atomic<Helper *> helper_{nullptr};
+  DISALLOW_COPY_AND_ASSIGN(BufferOp);
 };
 
 }  // namespace wf
@@ -99,7 +103,4 @@ class RingBuffer<T>::BufferOp{
 }  // namespace tervel
 #endif  // TERVEL_CONTAINERS_WF_RINGBUFFER_RINGBUFFER_OPREC_H_
 
-#include <tervel/containers/lf/ring-buffer/helper.h>
-#include <tervel/containers/lf/ring-buffer/enqueue_op.h>
-#include <tervel/containers/lf/ring-buffer/dequeue_op.h>
 

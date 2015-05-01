@@ -22,8 +22,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-#ifndef TERVEL_CONTAINERS_WF_RINGBUFFER_RINGBUFFER_OPREC_H_
-#define TERVEL_CONTAINERS_WF_RINGBUFFER_RINGBUFFER_OPREC_H_
+#ifndef TERVEL_CONTAINERS_WF_RINGBUFFER_RINGBUFFER_DEQUEUEOP_H_
+#define TERVEL_CONTAINERS_WF_RINGBUFFER_RINGBUFFER_DEQUEUEOP_H_
 
 #include <tervel/containers/lf/ring-buffer/ring_buffer_op.h>
 
@@ -42,13 +42,14 @@ class RingBuffer<T>::DequeueOp: public BufferOp {
   bool result(T &val);
 
   void help_complete();
-
+ private:
+  DISALLOW_COPY_AND_ASSIGN(DequeueOp);
 };
 
 
 template<typename T>
 void RingBuffer<T>::DequeueOp::help_complete() {
-  int64_t head = getHead();
+  int64_t head = this->rb_->getHead();
   while(this->BufferOp::notDone()) {
     if (this->rb_->isEmpty(head, this->rb_->getTail())) {
       this->fail();
@@ -64,7 +65,7 @@ void RingBuffer<T>::DequeueOp::help_complete() {
     int64_t val_seqid;
     bool val_isValueType;
     bool val_isDelayedMarked;
-    getInfo(val, val_seqid, val_isValueType, val_isDelayedMarked);
+    this->rb_->getInfo(val, val_seqid, val_isValueType, val_isDelayedMarked);
 
 
     if (val_seqid > head) {
@@ -83,9 +84,13 @@ void RingBuffer<T>::DequeueOp::help_complete() {
         // The following line is not hacky if you ignore the function name...
         // it associates and then removes the object.
         // It is also called by the memory protection watch function...
-        helper->on_watch(&(this->rb_->array_[pos]), helper_int);
+        std::atomic<void *> *temp1;
+        temp1 = reinterpret_cast<std::atomic<void *> *>(&(this->rb_->array_[pos]));
+        void *temp2 = reinterpret_cast<void *>(helper_int);
+
+        helper->on_watch(temp1, temp2);
         if (!helper->valid()) {
-          helper->safeDelete();
+          helper->safe_delete();
         }
       } else {
         // Failure :(
@@ -104,7 +109,7 @@ void RingBuffer<T>::DequeueOp::help_complete() {
         // its already been marked, so move on to the next pos;
         continue;
       } else {
-        atomic_delay_mark(pos);
+        this->rb_->atomic_delay_mark(pos);
         head--;  // re-read/process the value
       }
     }  // its an EmptyType
@@ -115,7 +120,7 @@ template<typename T>
 void *
 RingBuffer<T>::DequeueOp::
 associate(Helper *h) {
-  bool res = BufferOp::associate(h);
+  bool res = BufferOp::privAssociate(h);
   uintptr_t temp = h->old_value_;
   if (res) {
 
@@ -150,4 +155,4 @@ result(T &val) {
 }  // namespace containers
 }  // namespace tervel
 
-#endif  // TERVEL_CONTAINERS_WF_RINGBUFFER_RINGBUFFER_OPREC_H_
+#endif  // TERVEL_CONTAINERS_WF_RINGBUFFER_RINGBUFFER_DEQUEUEOP_H_

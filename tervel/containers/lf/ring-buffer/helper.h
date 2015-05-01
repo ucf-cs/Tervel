@@ -25,16 +25,17 @@ THE SOFTWARE.
 #ifndef TERVEL_CONTAINERS_WF_RINGBUFFER_RINGBUFFER_HELPER_H_
 #define TERVEL_CONTAINERS_WF_RINGBUFFER_RINGBUFFER_HELPER_H_
 
-#include <tervel/containers/lf/ring-buffer/ring_buffer_op.h>
-
+#include <tervel/util/memory/hp/hp_element.h>
+#include <tervel/util/memory/hp/hazard_pointer.h>
 
 namespace tervel {
 namespace containers {
 namespace lf {
 
+
+
 template<typename T>
-class RingBuffer<T>::Helper {
-  // TODO(steven): extend hp descriptor
+class RingBuffer<T>::Helper : public tervel::util::memory::hp::Element {
  public:
   Helper(BufferOp *op, uintptr_t old_value)
    : op_(op)
@@ -42,11 +43,16 @@ class RingBuffer<T>::Helper {
   ~Helper() {}
 
   bool on_watch(std::atomic<void *> *address, void *expected) {
-    // TODO(steven): watch op_.
-
+    typedef tervel::util::memory::hp::HazardPointer::SlotID SlotID;
+    SlotID pos = SlotID::SHORTUSE2;
+    bool res = tervel::util::memory::hp::HazardPointer::watch(pos, op_,
+        address, expected);
+    if (!res) {
+      return false;
+    }
 
     void *val = associate();
-    bool res = address->compare_exchange_strong(expected, val);
+    res = address->compare_exchange_strong(expected, val);
     if (!res) {
       // we failed, could be because of delayed mark.
       void *temp = reinterpret_cast<void *>(
@@ -100,9 +106,7 @@ class RingBuffer<T>::Helper {
     return reinterpret_cast<Helper *>(val);
   }
 
-  friend class RingBuffer::EnqueueOp;
- private:
-  const BufferOp *op_;
+  BufferOp *op_;
   const uintptr_t old_value_;
 
 };
