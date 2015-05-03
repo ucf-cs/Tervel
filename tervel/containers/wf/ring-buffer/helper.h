@@ -22,52 +22,50 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-#ifndef TERVEL_WFRB_NODE_H_
-#define TERVEL_WFRB_NODE_H_
+#ifndef TERVEL_CONTAINERS_WF_RINGBUFFER_RINGBUFFER_HELPER_H_
+#define TERVEL_CONTAINERS_WF_RINGBUFFER_RINGBUFFER_HELPER_H_
 
-#include <stdio.h>
-#include <tervel/util/descriptor.h>
+#include <tervel/util/memory/hp/hp_element.h>
+#include <tervel/util/memory/hp/hazard_pointer.h>
 
 namespace tervel {
-namespace wf_ring_buffer {
-/**
- * TODO(ATB) insert class description
- */
-template<class T>
-class Node : public util::Descriptor {
+namespace containers {
+namespace wf {
+
+template<typename T>
+class RingBuffer<T>::Helper : public tervel::util::memory::hp::Element {
  public:
-  explicit Node<T>(T val, int64_t seq)
-      : val_(val)
-      , seq_(seq) {}
+  Helper(BufferOp *op, uintptr_t old_value)
+   : op_(op)
+   , old_value_(old_value) {}
+  ~Helper() {}
 
-  ~Node<T>() {}
+  bool on_watch(std::atomic<void *> *address, void *expected);
+  void * associate();
+  bool valid();
 
-  // REVIEW(steven) missing description
-  virtual bool is_ElemNode() = 0;
-  // REVIEW(steven) missing description and space between functions
-  virtual bool is_EmptyNode() = 0;
+  /**
+   * @brief Returns a uintptr_t for the passed helper object
+   * @details Returns a uintptr_t for the passed helper object by performing
+   * a bitwise OR with h and oprec_lsb
+   *
+   * @param h the pointer to OR
+   * @return the result of the bitwise or.
+   */
+  static inline uintptr_t HelperType(Helper *h);
 
-  // REVIEW(steven) missing description
-  void* complete(void*, std::atomic<void*>*) {
-    assert(false);
-  }
+  static inline bool isHelperType(uintptr_t val);
 
-  // REVIEW(steven) missing description
-  void* get_logical_value() {
-    assert(false);
-  }
+  static inline Helper *getHelperType(uintptr_t val);
 
-  // REVIEW(steven) missing description
-  T val() { return val_; }
-  // REVIEW(steven) missing description and space between functions
-  int64_t seq() { return seq_; }
+  BufferOp *op_;
+  const uintptr_t old_value_;
 
- protected:
-  T val_;
-  int64_t seq_;
-};  // Node class
+};
 
 
-}  // namespace wf_ring_buffer
+}  // namespace wf
+}  // namespace containers
 }  // namespace tervel
-#endif  // TERVEL_WFRB_NODE_H_
+
+#endif  // TERVEL_CONTAINERS_WF_RINGBUFFER_RINGBUFFER_HELPER_H_

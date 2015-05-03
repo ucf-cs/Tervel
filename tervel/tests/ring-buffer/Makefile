@@ -1,4 +1,3 @@
-#/*
 #The MIT License (MIT)
 #
 #Copyright (c) 2015 University of Central Florida's Computer Software Engineering
@@ -22,31 +21,47 @@
 #OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 #THE SOFTWARE.
 #
-#*/
 
-import os
-import sys
-import subprocess as sp
-import re
-for root, dirs, files in os.walk("Executables/run/"):
-    for fname in files:
-        full_name = os.path.join(root, fname)
-        if full_name.endswith(".pdf") or full_name.endswith(".x"):
-            #print "skipping :", full_name
-            continue
+CXX      = g++-4.8
+CXXFLAGS =  $(CONTAINERFILE) -Wall -Werror  -std=c++11  -march=native -m64 -pthread -fno-strict-aliasing #-DTERVEL_PROG_ASSUR_ALWAYS_ANNOUNCE -DTERVEL_PROG_ASSUR_ALWAYS_CHECK
 
-        values=fname.split("_")
-        values=map(lambda v: re.sub("[^0-9]", "",v), values)
+DEBUG = -DDEBUG=1 -g 
+# RELEASE = -O3 -DNDEBUG
 
-        title=("Threads {}, Capacity {}, Prefill {}, Enqueue {}, Dequeue {}:"
-                .format(*values))
-        print "parsing:", full_name, title
-        cmd = [
-            'gnuplot',
-            '-e', 'set title "%s"' % title,
-            '-e', 'file="%s"' % full_name,
-            'barplot.gp',
-        ]
-        p = sp.Popen(cmd, stderr=sp.STDOUT, stdout=sp.PIPE)
-        p.wait()
-        sys.stdout.write(p.communicate()[0])
+CXXFLAGS += $(DEBUG) $(RELEASE)
+
+CPPFLAGS = -DINTEL
+INC += $(TINC)
+LIB += $(TLIB) -ldl -lgflags -lpthread -lrt -lllalloc
+CPPFLAGS += $(INC)
+
+
+SOURCES = main.cc $(TSOURCES)
+OUTPUT =Executables/
+EXECUTABLE ?=main
+OBJECTS = $(SOURCES:.cc=.o)
+
+all: WFTEST 
+
+test: $(SOURCES) $(EXECUTABLE)
+	mkdir -p $(OUTPUT)
+	rm main.o
+	mv $(EXECUTABLE) $(OUTPUT)
+WFTEST:
+	$(MAKE) test CONTAINERFILE="-DCONTAINER_FILE=api/wf_ringbuffer_api.h" \
+	TINC="-I../../../" \
+        TSOURCES="$(shell find ../../util/ -name '*.cc') " \
+	EXECUTABLE=wfringbuffer.x
+
+
+$(EXECUTABLE): $(OBJECTS)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(INC)  -o $@ $^ $(LIB) $(TOBJS)
+
+%.o: %.cc
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS)  $(INC) -c -o $@ $<
+
+
+.PHONY: clean
+clean:
+	$(RM) $(OUTPUT)*.x $(shell find ../../util/ -name "*.o")
+	$(RM) $(OBJECTS)

@@ -55,7 +55,7 @@ class Element;
  */
 class HazardPointer {
  public:
-  enum class SlotID : size_t {SHORTUSE = 0 , PROG_ASSUR = 1, END = 2};
+  enum class SlotID : size_t {SHORTUSE = 0, SHORTUSE2, PROG_ASSUR, END};
 
   explicit HazardPointer(int num_threads);
   ~HazardPointer();

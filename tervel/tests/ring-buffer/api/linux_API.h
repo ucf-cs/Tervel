@@ -4,9 +4,9 @@
 #include "linux_buffer/lockfree_rb_q.cc"
 
 template<class T>
-class TestBuffer {
+class TestClass {
  public:
-    TestBuffer(size_t capacity, size_t num_threads)
+    TestClass(size_t capacity, size_t num_threads)
      : buff_(new LockFreeQueue<T>(num_threads, num_threads, capacity)) {}
 
     char * name() {
