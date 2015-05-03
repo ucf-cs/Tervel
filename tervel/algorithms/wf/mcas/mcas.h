@@ -25,13 +25,13 @@ THE SOFTWARE.
 #ifndef TERVEL_MCAS_MCAS_H_
 #define TERVEL_MCAS_MCAS_H_
 
-#include <tervel/algorithms/wf/mcas/mcas_helper.h>
-#include <tervel/algorithms/wf/mcas/mcas_casrow.h>
 #include <tervel/util/info.h>
+#include <tervel/util/util.h>
 #include <tervel/util/progress_assurance.h>
 #include <tervel/util/memory/rc/descriptor_util.h>
-#include <cstdint>
-#include <algorithm>
+
+#include <tervel/algorithms/wf/mcas/mcas_helper.h>
+#include <tervel/algorithms/wf/mcas/mcas_casrow.h>
 
 namespace tervel {
 namespace algorithms {
@@ -49,9 +49,6 @@ inline T read(std::atomic<T> *address) {
   return reinterpret_cast<T>(value);
 }
 
-
-// REVIEW(carlos): class does not follow class naming conventions
-// RESPONSE(steven): Should it be MultiWordCompareAndSwap instead?
 /**
  * MultiWordCompareAndSwap class is used to perform a Multi-Word
  * Compare-and-Swap (MCAS)

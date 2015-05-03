@@ -29,8 +29,17 @@ THE SOFTWARE.
 #ifndef TERVEL_UTIL_INFO_H_
 #define TERVEL_UTIL_INFO_H_
 
+#include <algorithm>
+#include <assert.h>
 #include <atomic>
+#include <cmath>
+#include <cstdint>
+#include <iostream>
+#include <memory>
+#include <stddef.h>
 #include <stdint.h>
+#include <stdlib.h>
+#include <utility>
 
 #include <tervel/util/thread_context.h>
 

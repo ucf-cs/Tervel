@@ -42,7 +42,7 @@ namespace memory {
 namespace rc {
 
 /**
- * Constructs and returns a descriptor. Arguments are forwarded to the
+ * @brief Constructs and returns a descriptor. Arguments are forwarded to the
  * constructor of the given descriptor type. User should call free_descriptor
  * on the returned pointer when they are done with it to avoid memory leaks.
  */
@@ -53,7 +53,7 @@ inline DescrType * get_descriptor(Args&&... args) {
 }
 
 /**
- * Once a user is done with a descriptor, they should free it with this
+ * @brief Once a user is done with a descriptor, they should free it with this
  * method.
  *
  * @param descr The descriptor to free.
@@ -69,8 +69,8 @@ inline void free_descriptor(tervel::util::Descriptor *descr,
 }
 
 /**
-* This method is used to determine if the passed descriptor is under rc
-* rc protection.
+* @brief This method is used to determine if the passed descriptor is under rc
+* protection.
 * Internally calls on_is_watched
 *
 * @param descr the descriptor to be checked for rc protection.
@@ -90,7 +90,7 @@ inline bool is_watched(tervel::util::Descriptor *descr) {
 }
 
 /**
-* This method is used to increment the reference count of the passed descriptor
+* @brief This method is used to increment the reference count of the passed descriptor
 * object. If after incrementing the reference count the object is still at the
 * address (indicated by *a == value), it will call on_watch.
 * If that returns true then it will return true.
@@ -102,7 +102,6 @@ inline bool is_watched(tervel::util::Descriptor *descr) {
 * @param val the read value of the address
 * @return true if successfully acquired a watch
 */
-
 inline bool watch(tervel::util::Descriptor *descr, std::atomic<void *> *address,
         void *value) {
   #ifdef TERVEL_MEM_RC_NO_WATCH
@@ -130,7 +129,7 @@ inline bool watch(tervel::util::Descriptor *descr, std::atomic<void *> *address,
 }
 
 /**
-* This method is used to decrement the reference count of the passed descriptor
+* @brief This method is used to decrement the reference count of the passed descriptor
 * object.
 * Then it will call on_unwatch and decrement any related objects necessary
 * Internally calls on_unwatch
@@ -149,7 +148,7 @@ inline void unwatch(tervel::util::Descriptor *descr) {
 }
 
 /**
- * This returns the passed reference with its least signifcant bit set
+ * @brief This returns the passed reference with its least signifcant bit set
  * to 1.
  *
  * @param descr the reference to bitmark
@@ -159,13 +158,19 @@ inline void * mark_first(tervel::util::Descriptor *descr) {
   return reinterpret_cast<void *>(reinterpret_cast<uintptr_t>(descr) | 0x1L);
 }
 
+/**
+ * @brief This function atomically bit marks the value at address
+ * @details This function atomically bit marks the value at address
+ *
+ * @param address the address to bitmark
+ */
 inline void atomic_mark_first(std::atomic<void*> *address) {
   std::atomic<uintptr_t> *temp = reinterpret_cast<std::atomic<uintptr_t> *>(address);
   temp->fetch_or(0x1);
 }
 
 /**
- * This returns an unbitmarked reference
+ * @brief This returns an unbitmarked reference
  *
  * @param the reference to remove the bitmark from
  * @return the unbitmarked reference
@@ -176,7 +181,7 @@ inline tervel::util::Descriptor * unmark_first(void *descr) {
 }
 
 /**
- * This returns whether or not the least significant bit holds a bitmark
+ * @brief This returns whether or not the least significant bit holds a bitmark
  *
  * @param the reference to check
  * @return whether or not it holds a bitmark
@@ -186,7 +191,7 @@ inline bool is_descriptor_first(void *descr) {
 }
 
 /**
-* This method is used to remove a descriptor object that is conflict with
+* @brief This method is used to remove a descriptor object that is conflict with
 * another threads operation.
 * It first checks the recursive depth before proceeding.
 * Next it protects against the object being reused else where by acquiring
@@ -218,7 +223,7 @@ inline void * remove_descriptor(void *expected, std::atomic<void *> *address) {
 }
 
 /**
- * This function determines the logical value of an address which may have
+ * @brief This function determines the logical value of an address which may have
  * either a RC descriptor or a normal value.
  *
  *

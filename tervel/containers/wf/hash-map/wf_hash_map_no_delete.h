@@ -92,17 +92,16 @@ class HashMapNoDelete {
     , secondary_array_size_(std::pow(2, expansion_rate))
     , secondary_array_pow_(expansion_rate)
     , primary_array_(new Location[primary_array_size_]()) {
-    size_.store(0);
+
+      size_.store(0);
       for (size_t i = 0; i < primary_array_size_; i++) {
-	primary_array_[i].store(nullptr);
+	       primary_array_[i].store(nullptr);
       }
 
    }
 
   /**
    * Not Thread Safe!
-   * May create a very large stack!
-   *   Note: should implement a better way...
    *   If it is a node type then the node will be freed
    *   If it is an array node then the destructor of the array node will free
    *     any nodes that are referenced it. This may cause more array node's to

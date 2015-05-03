@@ -25,18 +25,12 @@ THE SOFTWARE.
 #ifndef TERVEL_MEMORY_RC_DESCRIPTOR_POOL_H_
 #define TERVEL_MEMORY_RC_DESCRIPTOR_POOL_H_
 
-#include <atomic>
-#include <utility>
-
-#include <assert.h>
-#include <stdint.h>
-
-#include <tervel/util/descriptor.h>
 #include <tervel/util/info.h>
+#include <tervel/util/util.h>
+#include <tervel/util/system.h>
+#include <tervel/util/descriptor.h>
 #include <tervel/util/memory/rc/pool_element.h>
 #include <tervel/util/memory/rc/pool_manager.h>
-#include <tervel/util/system.h>
-#include <tervel/util/util.h>
 
 namespace tervel {
 namespace util {
@@ -59,9 +53,6 @@ class PoolManager;
  * parent. At the moment, it only makes sense to have a single top-level parent
  * representing the central pool for all threads, and several local pools for
  * each thread.
- *
- * TODO(steven) Need to implement max list size, when it is reached, elements
- * are sent to the manager list
  */
 class DescriptorPool {
  public:
