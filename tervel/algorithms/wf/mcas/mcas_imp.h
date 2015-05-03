@@ -32,7 +32,7 @@ namespace wf {
 namespace mcas {
 
 template<class T>
-bool MCAS<T>::add_cas_triple(std::atomic<T> *address, T expected_value,
+bool MultiWordCompareAndSwap<T>::add_cas_triple(std::atomic<T> *address, T expected_value,
       T new_value) {
   //First check to make sure the values do not have any reserved bits
   if (!tervel::util::isValid(reinterpret_cast<void *>(expected_value)) ||
@@ -69,7 +69,7 @@ bool MCAS<T>::add_cas_triple(std::atomic<T> *address, T expected_value,
 }
 
 template<class T>
-bool MCAS<T>::execute() {
+bool MultiWordCompareAndSwap<T>::execute() {
   tervel::util::ProgressAssurance::check_for_announcement();
   bool res = mcas_complete(0);
   cleanup(res);
@@ -77,7 +77,7 @@ bool MCAS<T>::execute() {
 }
 
 template<class T>
-bool MCAS<T>::mcas_complete(CasRow<T> *current_row) {
+bool MultiWordCompareAndSwap<T>::mcas_complete(CasRow<T> *current_row) {
   int start_pos = 1;
   assert(util::memory::hp::HazardPointer::is_watched(this));
   assert(cas_rows_[0].helper_.load() != nullptr);
@@ -86,17 +86,8 @@ bool MCAS<T>::mcas_complete(CasRow<T> *current_row) {
   return mcas_complete(start_pos, false);
 }
 
-
-// REVIEW(carlos): This function is way too long. If it doesn't fit in ~1 screen
-//   of code, I have trouble reading what it's doing. You should break this up
-//   into auxiliary functions. You don't need to declare said functions in the
-//   .h file, just put them into an unnamed namespace in the .cc file.
-// REVIEW(carlos): TBH, the body of this function is impenatrable to me, and I
-//   can't review the contents for correctness as-is.
-// RESPONSE(steven): I added comments, but I am unsure how to divide it into
-// sub functions.
 template<class T>
-bool MCAS<T>::mcas_complete(int start_pos, bool wfmode) {
+bool MultiWordCompareAndSwap<T>::mcas_complete(int start_pos, bool wfmode) {
   /**
    * Loop for each row in the op, if helping complete another thread's MCAS
    * Start at last known completed row.
@@ -229,7 +220,7 @@ bool MCAS<T>::mcas_complete(int start_pos, bool wfmode) {
 }  // End Complete function.
 
 template<class T>
-T MCAS<T>::mcas_remove(const int pos, T value) {
+T MultiWordCompareAndSwap<T>::mcas_remove(const int pos, T value) {
   std::atomic<void *> *address = reinterpret_cast<std::atomic<void *>*>(
             cas_rows_[pos].address_);
     util::Descriptor *descr = util::memory::rc::unmark_first(
@@ -261,7 +252,7 @@ T MCAS<T>::mcas_remove(const int pos, T value) {
 }
 
 template<class T>
-void MCAS<T>::cleanup(bool success) {
+void MultiWordCompareAndSwap<T>::cleanup(bool success) {
   for (int pos = 0; pos < row_count_; pos++) {
     /* Loop for each row in the op*/
     CasRow<T> * row = &cas_rows_[pos];
