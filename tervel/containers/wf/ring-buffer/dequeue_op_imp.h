@@ -42,7 +42,7 @@ help_complete() {
       this->fail();
       return;
     }
-    assert(head <= this->rb_->getHead());
+    // assert(head <= this->rb_->getHead()); TODO(steven): is this right?
 
     int64_t seqid = head++;
     uint64_t pos = this->rb_->getPos(seqid);
@@ -124,12 +124,13 @@ associate(Helper *h) {
   uintptr_t old_val = h->old_value_;
   if (res) {
     seqid = RingBuffer<T>::getValueTypeSeqId(old_val);
-    int64_t next_seqid = BufferOp::rb_->nextSeqId(seqid);
+    int64_t next_seqid = this->rb_->nextSeqId(seqid);
     new_val = RingBuffer<T>::EmptyType(next_seqid);
     if (RingBuffer<T>::isDelayedMarked(old_val)) {
-      new_val = RingBuffer<T>::DelayMarkValue(old_val);
+      new_val = RingBuffer<T>::DelayMarkValue(new_val);
     }
   } else {
+    new_val = old_val;
     Helper *htemp = this->helper_.load();
     if (htemp != BufferOp::fail_val_) {
       seqid = RingBuffer<T>::getEmptyTypeSeqId(htemp->old_value_);

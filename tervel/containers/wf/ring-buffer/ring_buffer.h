@@ -104,7 +104,6 @@ class RingBuffer {
      * @return Returns the items seqid
      */
     int64_t func_seqid() {
-      assert(seqid_ != -1);
       return seqid_;
     }
 

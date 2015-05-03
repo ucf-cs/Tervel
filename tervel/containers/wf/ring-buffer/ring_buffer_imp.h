@@ -447,7 +447,12 @@ std::string RingBuffer<T>::debug_string(uintptr_t val) {
     T temp = getValueType(val);
     res += "[" + temp->toString() +"]";
   }
-  assert(!val_isDelayedMarked);
+  if (val_isDelayedMarked) {
+    res += "*";
+  }
+  if (val_seqid == -1) {
+    res += "x";
+  }
   return res;
 };
 
@@ -479,11 +484,8 @@ std::string RingBuffer<T>::debug_string() {
     res += "\n";
   }
 
-  if (isEmpty()) {
-    assert(!isFull());
-  }
-  if (isFull()) {
-    assert(!isEmpty());
+  if (isEmpty() && isFull()) {
+    res += "Error: Buffer is both empty and full.";
   }
   return res;
 };
