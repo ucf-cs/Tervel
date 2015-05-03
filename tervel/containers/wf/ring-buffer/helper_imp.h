@@ -25,10 +25,10 @@ THE SOFTWARE.
 #ifndef TERVEL_CONTAINERS_WF_RINGBUFFER_RINGBUFFER_HELPER_IMP_H_
 #define TERVEL_CONTAINERS_WF_RINGBUFFER_RINGBUFFER_HELPER_IMP_H_
 
-#include <tervel/containers/lf/ring-buffer/helper.h>
-
 #include <tervel/util/memory/hp/hp_element.h>
 #include <tervel/util/memory/hp/hazard_pointer.h>
+
+#include <tervel/containers/wf/ring-buffer/helper.h>
 
 namespace tervel {
 namespace containers {

@@ -449,16 +449,16 @@ class RingBuffer {
 }  // namespace containers
 }  // namespace tervel
 
-#include <tervel/containers/lf/ring-buffer/ring_buffer_op.h>
-#include <tervel/containers/lf/ring-buffer/helper.h>
-#include <tervel/containers/lf/ring-buffer/enqueue_op.h>
-#include <tervel/containers/lf/ring-buffer/dequeue_op.h>
+#include <tervel/containers/wf/ring-buffer/ring_buffer_op.h>
+#include <tervel/containers/wf/ring-buffer/helper.h>
+#include <tervel/containers/wf/ring-buffer/enqueue_op.h>
+#include <tervel/containers/wf/ring-buffer/dequeue_op.h>
 
-#include <tervel/containers/lf/ring-buffer/helper_imp.h>
-#include <tervel/containers/lf/ring-buffer/enqueue_op_imp.h>
-#include <tervel/containers/lf/ring-buffer/dequeue_op_imp.h>
+#include <tervel/containers/wf/ring-buffer/helper_imp.h>
+#include <tervel/containers/wf/ring-buffer/enqueue_op_imp.h>
+#include <tervel/containers/wf/ring-buffer/dequeue_op_imp.h>
 
-#include <tervel/containers/lf/ring-buffer/ring_buffer_imp.h>
+#include <tervel/containers/wf/ring-buffer/ring_buffer_imp.h>
 
 
 #endif  // TERVEL_CONTAINERS_WF_RINGBUFFER_RINGBUFFER_H_
