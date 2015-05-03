@@ -23,16 +23,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
 
-      // TODO(steven): change how seqid of bit marked value is chosen.
-
 #ifndef TERVEL_CONTAINERS_WF_RINGBUFFER_RINGBUFFER_DEQUEUEOP_IMP_H_
 #define TERVEL_CONTAINERS_WF_RINGBUFFER_RINGBUFFER_DEQUEUEOP_IMP_H_
 
-#include <tervel/containers/lf/ring-buffer/dequeue_op.h>
+#include <tervel/containers/wf/ring-buffer/dequeue_op.h>
 
 namespace tervel {
 namespace containers {
-namespace lf {
+namespace wf {
 
 template<typename T>
 void

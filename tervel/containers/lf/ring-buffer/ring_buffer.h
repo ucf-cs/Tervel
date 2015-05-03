@@ -26,8 +26,6 @@ THE SOFTWARE.
 
 /**
  * TODO(steven):
- *   Test wf-path.
- *   Check to ensure sub types of Helper, OpRec
  *
  *   Add static type checking of template Type T
  *
@@ -45,13 +43,13 @@ THE SOFTWARE.
 #include <string>
 
 #include <tervel/util/info.h>
- #include <tervel/util/util.h>
+#include <tervel/util/util.h>
 #include <tervel/util/progress_assurance.h>
 #include <tervel/util/memory/hp/hazard_pointer.h>
 
 namespace tervel {
 namespace containers {
-namespace lf {
+namespace wf {
 
 /**
  * @brief This is a non-blocking FIFO ring buffer design

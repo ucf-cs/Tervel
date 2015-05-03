@@ -30,7 +30,7 @@ THE SOFTWARE.
 
 namespace tervel {
 namespace containers {
-namespace lf {
+namespace wf {
 
 template<typename T>
 class RingBuffer<T>::Helper : public tervel::util::memory::hp::Element {

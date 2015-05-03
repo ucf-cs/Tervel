@@ -25,11 +25,11 @@ THE SOFTWARE.
 #ifndef TERVEL_CONTAINERS_WF_RINGBUFFER_RINGBUFFER_ENQUEUEOP_IMP_H_
 #define TERVEL_CONTAINERS_WF_RINGBUFFER_RINGBUFFER_ENQUEUEOP_IMP_H_
 
-#include <tervel/containers/lf/ring-buffer/enqueue_op.h>
+#include <tervel/containers/wf/ring-buffer/enqueue_op.h>
 
 namespace tervel {
 namespace containers {
-namespace lf {
+namespace wf {
 
 template<typename T>
 void

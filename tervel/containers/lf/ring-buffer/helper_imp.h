@@ -32,7 +32,7 @@ THE SOFTWARE.
 
 namespace tervel {
 namespace containers {
-namespace lf {
+namespace wf {
 
 template<typename T>
 bool

@@ -25,11 +25,11 @@ THE SOFTWARE.
 #ifndef TERVEL_CONTAINERS_WF_RINGBUFFER_RINGBUFFER_DEQUEUEOP_H_
 #define TERVEL_CONTAINERS_WF_RINGBUFFER_RINGBUFFER_DEQUEUEOP_H_
 
-#include <tervel/containers/lf/ring-buffer/ring_buffer_op.h>
+#include <tervel/containers/wf/ring-buffer/ring_buffer_op.h>
 
 namespace tervel {
 namespace containers {
-namespace lf {
+namespace wf {
 
 template<typename T>
 class RingBuffer<T>::DequeueOp: public BufferOp {

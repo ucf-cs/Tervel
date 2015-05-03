@@ -27,7 +27,7 @@ THE SOFTWARE.
 #define TERVEL_CONTAINERS_WF_RINGBUFFER_RINGBUFFER_IMP_H_
 namespace tervel {
 namespace containers {
-namespace lf {
+namespace wf {
 
 template<typename T>
 RingBuffer<T>::

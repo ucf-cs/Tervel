@@ -28,7 +28,7 @@
 #define WF_RINGBUFFER_API_H_
 
 #include <string>
-#include <tervel/containers/lf/ring-buffer/ring_buffer.h>
+#include <tervel/containers/wf/ring-buffer/ring_buffer.h>
 #include <tervel/util/info.h>
 #include <tervel/util/thread_context.h>
 #include <tervel/util/tervel.h>
@@ -40,7 +40,7 @@ class TestClass {
  public:
   class WrapperType;
 
-  typedef tervel::containers::lf::RingBuffer<WrapperType *> container_t;
+  typedef tervel::containers::wf::RingBuffer<WrapperType *> container_t;
 
   class WrapperType : public container_t::Value {
    public:
