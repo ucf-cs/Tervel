@@ -45,6 +45,7 @@ THE SOFTWARE.
 #include <string>
 
 #include <tervel/util/info.h>
+ #include <tervel/util/util.h>
 #include <tervel/util/progress_assurance.h>
 #include <tervel/util/memory/hp/hazard_pointer.h>
 
@@ -56,7 +57,6 @@ namespace lf {
  * @brief This is a non-blocking FIFO ring buffer design
  * that was made wait-free by applying a progress assurance framework to it.
  *
- * TODO(steven): implement the progress assurance changes
  * If isDelayed never returns true then it will not use additional memory.
  * However, if it does, then it will allocate some objects which are protected
  * by hazard pointer protection.

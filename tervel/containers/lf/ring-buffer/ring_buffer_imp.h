@@ -418,8 +418,7 @@ int64_t RingBuffer<T>::getPos(int64_t seqid) {
 
 template<typename T>
 bool RingBuffer<T>::backoff(int64_t pos, uintptr_t val) {
-  // TODO(steven): remove and replace with a call to tervels backoff
-  std::this_thread::yield();
+  tervel::util::backoff();
   uintptr_t nval = array_[pos].load();
   if (nval == val) {
     return false;
