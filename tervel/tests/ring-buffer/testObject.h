@@ -34,8 +34,11 @@
 #include <iostream>
 #include <gflags/gflags.h>
 
-/** Change this when including a new data structure */
-#include "container_api.h"
+#define __tervel_xstr(s) __tervel_str(s)
+#define __tervel_str(s) #s
+#include __tervel_xstr(CONTAINER_FILE)
+#undef __tervel_str
+#undef __tervel_xstr
 
 /**Change these when adapting to a new data structures **/
 

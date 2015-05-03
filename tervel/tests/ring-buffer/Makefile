@@ -23,8 +23,7 @@
 #
 
 CXX      = g++-4.8
-CONTAINERTYPE ?= -DUSE_WF_RINGBUFFER
-CXXFLAGS =  $(CONTAINERTYPE) -Wall -Werror  -std=c++11  -march=native -m64 -pthread -fno-strict-aliasing -DTERVEL_PROG_ASSUR_ALWAYS_ANNOUNCE -DTERVEL_PROG_ASSUR_ALWAYS_CHECK
+CXXFLAGS =  $(CONTAINERFILE) -Wall -Werror  -std=c++11  -march=native -m64 -pthread -fno-strict-aliasing #-DTERVEL_PROG_ASSUR_ALWAYS_ANNOUNCE -DTERVEL_PROG_ASSUR_ALWAYS_CHECK
 
 DEBUG = -DDEBUG=1 -g 
 # RELEASE = -O3 -DNDEBUG
@@ -33,7 +32,7 @@ CXXFLAGS += $(DEBUG) $(RELEASE)
 
 CPPFLAGS = -DINTEL
 INC += $(TINC)
-LIB += $(TLIB) -ldl -lgflags -lpthread -lboost_system -lboost_regex -lrt -lllalloc
+LIB += $(TLIB) -ldl -lgflags -lpthread -lrt -lllalloc
 CPPFLAGS += $(INC)
 
 
@@ -49,7 +48,7 @@ test: $(SOURCES) $(EXECUTABLE)
 	rm main.o
 	mv $(EXECUTABLE) $(OUTPUT)
 WFTEST:
-	$(MAKE) test CONTAINERTYPE="-DUSE_WF_RINGBUFFER " \
+	$(MAKE) test CONTAINERFILE="-DCONTAINER_FILE=api/wf_ringbuffer_api.h" \
 	TINC="-I../../../" \
         TSOURCES="$(shell find ../../util/ -name '*.cc') " \
 	EXECUTABLE=wfringbuffer.x
@@ -64,5 +63,5 @@ $(EXECUTABLE): $(OBJECTS)
 
 .PHONY: clean
 clean:
-	$(RM) $(OUTPUT)*.x $(shell find ../../util/ -name "*.o") $(shell find ../../containers/lf/ring-buffer/ -name '*.o')
+	$(RM) $(OUTPUT)*.x $(shell find ../../util/ -name "*.o")
 	$(RM) $(OBJECTS)
