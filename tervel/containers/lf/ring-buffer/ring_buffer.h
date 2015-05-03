@@ -26,17 +26,12 @@ THE SOFTWARE.
 
 /**
  * TODO(steven):
- *   Add calls to check for announcement
- *   Add fail counter code
- *   Re-Test non-wf path
  *   Test wf-path.
  *   Check to ensure sub types of Helper, OpRec
  *
  *   Add static type checking of template Type T
  *
- *   Document WF functions, move them out of class definition
  *   Annotate code a bit more.
- *   Re-organize code, break out into more files
  *
  */
 #ifndef TERVEL_CONTAINERS_WF_RINGBUFFER_RINGBUFFER_H_
@@ -353,6 +348,8 @@ class RingBuffer {
    */
   int64_t getHead();
 
+  int64_t casHead(int64_t &expected, int64_t new_val);
+
   /**
    * @brief performs a fetch-and-add on the tail counter
    * @details atomically increments the tail
@@ -366,6 +363,8 @@ class RingBuffer {
    * @return returns the value of the tail counter.
    */
   int64_t getTail();
+
+  int64_t casTail(int64_t &expected, int64_t new_val);
 
   /**
    * @brief utility function for incrementing counter

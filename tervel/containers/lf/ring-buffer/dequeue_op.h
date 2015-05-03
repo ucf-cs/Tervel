@@ -42,6 +42,7 @@ class RingBuffer<T>::DequeueOp: public BufferOp {
   bool result(T &val);
 
   void help_complete();
+
  private:
   DISALLOW_COPY_AND_ASSIGN(DequeueOp);
 };

@@ -24,7 +24,7 @@
 
 CXX      = g++-4.8
 CONTAINERTYPE ?= -DUSE_WF_RINGBUFFER
-CXXFLAGS =  $(CONTAINERTYPE) -Wall -Werror  -std=c++11  -march=native -m64 -pthread -fno-strict-aliasing 
+CXXFLAGS =  $(CONTAINERTYPE) -Wall -Werror  -std=c++11  -march=native -m64 -pthread -fno-strict-aliasing -DTERVEL_PROG_ASSUR_ALWAYS_ANNOUNCE -DTERVEL_PROG_ASSUR_ALWAYS_CHECK
 
 DEBUG = -DDEBUG=1 -g 
 # RELEASE = -O3 -DNDEBUG

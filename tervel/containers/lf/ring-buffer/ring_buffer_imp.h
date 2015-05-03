@@ -118,9 +118,12 @@ dequeue(T &value) {
   tervel::util::ProgressAssurance::check_for_announcement();
   util::ProgressAssurance::Limit progAssur;
 
-  while(true) {
+  bool retry = true;
+  while(retry) {
     if (isEmpty()) {
       return false;
+    } else if(progAssur.isDelayed()) {
+      break;
     }
 
     int64_t seqid = nextHead();
@@ -128,18 +131,21 @@ dequeue(T &value) {
     uintptr_t val;
     uintptr_t new_value = EmptyType(nextSeqId(seqid));
 
-    while (true) {
-      if(progAssur.isDelayed()) {
-        DequeueOp *op = new DequeueOp(this);
-        tervel::util::ProgressAssurance::make_announcement(op);
-        bool res = op->result(value);
-        op->safe_delete();
-        return res;
+   bool skip_delay_check = true;
+    while (retry) {
+      if (skip_delay_check) {
+        // We skip the first iteration of this loop?
+        // Reduces a double count
+        skip_delay_check = false;
+      } else if (progAssur.isDelayed()) {
+        retry = false;
+        break;
       }
 
       if (!readValue(pos, val)) {
         continue;
       }
+
       int64_t val_seqid;
       bool val_isValueType;
       bool val_isDelayedMarked;
@@ -194,6 +200,12 @@ dequeue(T &value) {
       }
     }  // inner loop
   } // outer loop.
+
+  DequeueOp *op = new DequeueOp(this);
+  tervel::util::ProgressAssurance::make_announcement(op);
+  bool res = op->result(value);
+  op->safe_delete();
+  return res;
 }
 
 
@@ -203,23 +215,29 @@ enqueue(T value) {
   tervel::util::ProgressAssurance::check_for_announcement();
   util::ProgressAssurance::Limit progAssur;
 
-  while(true) {
+  bool retry = true;
+  while(retry) {
     if (isFull()) {
       return false;
+    } else if (progAssur.isDelayed()) {
+      break;
     }
 
     int64_t seqid = nextTail();
     uint64_t pos = getPos(seqid);
     uintptr_t val;
 
-    while (true) {
-      if(progAssur.isDelayed()) {
-        EnqueueOp *op = new EnqueueOp(this, value);
-        tervel::util::ProgressAssurance::make_announcement(op);
-        bool res = op->result();
-        op->safe_delete();
-        return res;
+    bool skip_delay_check = true;
+    while (retry) {
+      if (skip_delay_check) {
+        // We skip the first iteration of this loop?
+        // Reduces a double count
+        skip_delay_check = false;
+      } else if (progAssur.isDelayed()) {
+        retry = false;
+        break;
       }
+
       if (!readValue(pos, val)) {
         continue;
       }
@@ -270,9 +288,17 @@ enqueue(T value) {
           break;
         }
       }
-    }  // inner while(true)
-  }  // outer while(true)
+    }  // inner while(progAssur.notDelayed())
+  }  // outer while(progAssur.notDelayed())
+
+  EnqueueOp *op = new EnqueueOp(this, value);
+  tervel::util::ProgressAssurance::make_announcement(op);
+  bool res = op->result();
+  op->safe_delete();
+  return res;
+
 }
+
 
 template<typename T>
 int64_t RingBuffer<T>::counterAction(std::atomic<int64_t> &counter, int64_t val) {
@@ -284,25 +310,38 @@ int64_t RingBuffer<T>::counterAction(std::atomic<int64_t> &counter, int64_t val)
   return seqid;
 }
 
-template<typename T>
-int64_t RingBuffer<T>::getTail() {
-  return counterAction(tail_, 1);
-}
+
 template<typename T>
 int64_t RingBuffer<T>::getHead() {
-  return counterAction(head_, 1);
+  return counterAction(head_, 0);
 }
 
-
 template<typename T>
-int64_t RingBuffer<T>::nextTail() {
-  return counterAction(tail_, 1);
+int64_t RingBuffer<T>::casHead(int64_t &expected, int64_t new_val) {
+  return head_.compare_exchange_strong(expected, new_val);
 }
 
 template<typename T>
 int64_t RingBuffer<T>::nextHead() {
   return counterAction(head_, 1);
 }
+
+
+template<typename T>
+int64_t RingBuffer<T>::getTail() {
+  return counterAction(tail_, 0);
+}
+
+template<typename T>
+int64_t RingBuffer<T>::casTail(int64_t &expected, int64_t new_val) {
+  return tail_.compare_exchange_strong(expected, new_val);
+}
+
+template<typename T>
+int64_t RingBuffer<T>::nextTail() {
+  return counterAction(tail_, 1);
+}
+
 
 
 
