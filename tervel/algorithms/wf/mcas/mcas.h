@@ -69,7 +69,7 @@ class MultiWordCompareAndSwap : public util::OpRecord {
       : cas_rows_(new CasRow<T>[max_rows])
       , max_rows_ {max_rows} {}
 
-  ~MCAS<T>() {
+  ~MultiWordCompareAndSwap<T>() {
     state_.store(MCasState::DELETED);
     for (int i = 0; i < row_count_; i++) {
       Helper<T>* helper = cas_rows_[i].helper_.load();
