@@ -4,9 +4,9 @@
 #include <atomic>
 
 template<class T>
-class TestBuffer {
+class TestClass {
  public:
-  TestBuffer(size_t capacity, size_t num_threads)
+  TestClass(size_t capacity, size_t num_threads)
     : capacity_(capacity)
     , size_mask_(capacity_)
     , head_(0)

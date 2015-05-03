@@ -8,9 +8,9 @@
 #include <tervel/containers/lf/mcas-buffer/mcas_buffer.h>
 
 template<class T>
-class TestBuffer {
+class TestClass {
  public:
-  TestBuffer(size_t capacity, size_t num_threads) {
+  TestClass(size_t capacity, size_t num_threads) {
     tervel_obj = new tervel::Tervel(num_threads);
     attach_thread();
     queue_ = new tervel::containers::lf::mcas_buffer::RingBuffer<T>(capacity);

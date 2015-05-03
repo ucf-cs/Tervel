@@ -4,9 +4,9 @@
 #include "tbb/tbb.h"
 
 template<class T>
-class TestBuffer {
+class TestClass {
  public:
-  TestBuffer(size_t capacity, size_t num_threads) {
+  TestClass(size_t capacity, size_t num_threads) {
     queue_ = new tbb::concurrent_bounded_queue<T>();
   };
 
