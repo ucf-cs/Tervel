@@ -134,8 +134,7 @@ dequeue(T &value) {
    bool skip_delay_check = true;
     while (retry) {
       if (skip_delay_check) {
-        // We skip the first iteration of this loop?
-        // Reduces a double count
+        // Removes a double increment on isDelayed
         skip_delay_check = false;
       } else if (progAssur.isDelayed()) {
         retry = false;
@@ -189,7 +188,17 @@ dequeue(T &value) {
           }
         }
       } else { // val_isEmptyType
-        if (val_isDelayedMarked || !backoff(pos, val)) {
+        if (val_isDelayedMarked) {
+          int64_t cur_head = getHead();
+          int64_t temp_pos = getPos(cur_head);
+          // We want to ensure that it has not been assigned.
+          // So we move it up a head.
+          cur_head += 2*capacity_ - temp_pos + pos;
+          uintptr_t temp = EmptyType(cur_head);
+          array_[pos].compare_exchange_strong(temp, new_value);
+          continue;
+        }
+        if (!backoff(pos, val)) {
           // Value has not changed
           if (array_[pos].compare_exchange_strong(val, new_value)) {
             break;
