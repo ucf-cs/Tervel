@@ -25,18 +25,10 @@ THE SOFTWARE.
 #ifndef TERVEL_UTIL_MEMORY_RC_POOL_ELEMENT_H_
 #define TERVEL_UTIL_MEMORY_RC_POOL_ELEMENT_H_
 
-#include <atomic>
-#include <utility>
-#include <iostream>
-
-#include <assert.h>
-#include <stdint.h>
-#include <stddef.h>
-
-#include <tervel/util/descriptor.h>
-#include <tervel/util/system.h>
-#include <tervel/util/util.h>
 #include <tervel/util/info.h>
+#include <tervel/util/util.h>
+#include <tervel/util/system.h>
+#include <tervel/util/descriptor.h>
 
 namespace tervel {
 namespace util {
@@ -78,31 +70,37 @@ class PoolElement {
     assert(false && "PoolElement should never be deleted, return it to Tervel please");
   }
 
-  // TODO(carlos) add const versions of these accessors
-
   /**
-   * Returns a pointer to the associated descriptor of this element. This
-   * pointer may or may not refrence a constructed object.
+   * @brief Returns a pointer to the associated descriptor of this element. This
+   * pointer may or may not reference a constructed object.
+   * @details Returns a pointer to the associated descriptor of this element. This
+   * pointer may or may not reference a constructed object.
+   *
+   * TODO(carlos) add const versions of these accessors
+   *
+   * @return a pointer a descriptor type
    */
   Descriptor * descriptor() { return reinterpret_cast<Descriptor*>(this); }
 
   /**
-   * @return A refrence to the header which houses all the
+   * @brief A reference to the header which houses all the special info
+   * @details A reference to the header which houses all the special info
+   * @return A reference to the header which houses all the
    */
   Header & header() { return header_; }
 
   /**
-   * Helper method for getting the next pointer.
+   * @brief Helper method for getting the next pointer.
    */
   PoolElement * next() { return header().next; }
 
   /**
-   * Helper method for setting the next pointer.
+   * @brief Helper method for setting the next pointer.
    */
   void next(PoolElement *next) { header().next = next; }
 
   /**
-   * Constructs a descriptor of the given type within this pool element. Caller
+   * @brief Constructs a descriptor of the given type within this pool element. Caller
    * must be careful that there's not another descriptor already in use in this
    * element, or memory will be stomped and resources might leak.
    *
@@ -113,7 +111,7 @@ class PoolElement {
   void init_descriptor(Args&&... args);
 
   /**
-   * Should be called by the owner of this element when the descriptor in this
+   * @brief Should be called by the owner of this element when the descriptor in this
    * element is no longer needed, and it is safe to destroy it. Simply calls the
    * destructor on the internal descriptor.
    */
@@ -129,7 +127,7 @@ static_assert(sizeof(PoolElement) == CACHE_LINE_SIZE,
     " wrong.");
 
 /**
- * If the given descriptor was allocated through a DescriptorPool, then it has
+ * @brief If the given descriptor was allocated through a DescriptorPool, then it has
  * an associated PoolElement header. This methods returns that PoolElement.
  *
  * Use with caution as Descriptors not allocated from a pool will not have an

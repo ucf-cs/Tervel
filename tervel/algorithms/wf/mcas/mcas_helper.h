@@ -25,8 +25,6 @@ THE SOFTWARE.
 #ifndef TERVEL_MCAS_MCAS_HELPER_H_
 #define TERVEL_MCAS_MCAS_HELPER_H_
 
-#include <atomic>
-
 #include <tervel/util/info.h>
 #include <tervel/util/descriptor.h>
 #include <tervel/util/memory/hp/hazard_pointer.h>
@@ -34,6 +32,7 @@ THE SOFTWARE.
 
 #include <tervel/algorithms/wf/mcas/mcas.h>
 #include <tervel/algorithms/wf/mcas/mcas_casrow.h>
+
 namespace tervel {
 namespace algorithms {
 namespace wf {

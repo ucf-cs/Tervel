@@ -84,9 +84,6 @@ namespace util {
 
 // TERVEL Progress Assurance MACROS:
 
-//TODO(Steven): make a new class ProgAssur to replace fail count variable coding pattern
-// ProgAssur(int limit=TERVEL_PROG_ASSUR_LIMIT); bool ProgAssur::delayed(int rate=1)
-
 // #define TERVEL_PROG_ASSUR_DELAY
 // sets the delay between calling the check for announcement function
 #ifndef TERVEL_PROG_ASSUR_DELAY
@@ -147,27 +144,45 @@ namespace util {
 
 
 /**
- * Returns whether or not the passed value is has one of the reserved bits set
+ * @brief Returns whether or not the passed value is has one of the reserved bits set
+ * to 1.
+ * @details Returns whether or not the passed value is has one of the reserved bits set
  * to 1.
  *
+ * @param value the value to check
+ * @return whether or not value is valid
  */
 inline bool isValid(void * value) {
   uintptr_t temp = reinterpret_cast<uintptr_t>(value);
   return !(temp & 3);
 }
 
-/**
- * TODO comment
- *  TODO(steven): add the default value compile time constant documentation
- */
+
 #ifndef TERVEL_DEF_BACKOFF_TIME_NS
  #define TERVEL_DEF_BACKOFF_TIME_NS 10000
 #endif
+/**
+ * @brief Sets the amount of time in nano-seconds for a thread to backoff before
+ * re-retrying.
+ * @details Sets the amount of time in nano-seconds for a thread to backoff before
+ * re-retrying.
+ *
+ * @param duration duration
+ */
 inline void backoff(int duration = TERVEL_DEF_BACKOFF_TIME_NS) {
   std::this_thread::sleep_for(std::chrono::nanoseconds(duration));
 }
 
-// TODO(steven): Replace with a bit hack?
+/**
+ * @brief Returns the next power of two
+ * @details Returns the next power of two, if a power of two is passed, then
+ * that value is returned
+ *
+ * TODO(steven): replace with a bit function
+ *
+ * @param value the value to find the next power of two
+ * @return  the next power of two
+ */
 inline int round_to_next_power_of_two(uint64_t value) {
   double val = std::log2(value);
   int int_val = static_cast<int>(val);

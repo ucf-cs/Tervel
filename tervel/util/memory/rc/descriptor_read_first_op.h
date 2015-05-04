@@ -25,9 +25,7 @@ THE SOFTWARE.
 #ifndef DESCRIPTOR_READ_FIRST_OP_H_
 #define DESCRIPTOR_READ_FIRST_OP_H_
 
-#include <algorithm>
-#include <atomic>
-#include <cstdint>
+#include <tervel/util/info.h>
 #include <tervel/util/progress_assurance.h>
 #include <tervel/util/memory/rc/descriptor_util.h>
 

@@ -26,10 +26,7 @@ THE SOFTWARE.
 #define TERVEL_MCAS_CASROW_H_
 
 #include <tervel/util/info.h>
-#include <tervel/util/util.h>
 #include <tervel/algorithms/wf/mcas/mcas_helper.h>
-#include <algorithm>
-
 
 namespace tervel {
 namespace algorithms {
