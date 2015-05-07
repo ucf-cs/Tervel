@@ -33,7 +33,7 @@ CXXFLAGS += $(DEBUG) $(RELEASE)
 
 CPPFLAGS = -DINTEL
 INC += $(TINC)
-LIB += $(TLIB) -ldl -lgflags -lpthread -lboost_system -lboost_regex -lrt -lllalloc
+LIB += $(TLIB) -ldl -lgflags -lpthread  -lrt
 
 
 SOURCES = main.cc $(TSOURCES)
@@ -44,7 +44,7 @@ OBJECTS = $(SOURCES:.cc=.o)
 
 #all: CLIFF WFTEST TBB BOOST STL SPLIT MICHAEL WFOLD
 
-all: WFTEST 
+all: WFTEST  WFTESTND
 
 test: $(SOURCES) $(EXECUTABLE)
 	mkdir -p $(OUTPUT)

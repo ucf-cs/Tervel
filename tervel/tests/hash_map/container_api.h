@@ -24,7 +24,7 @@
 #
 */
 
-#ifdef USE_WF_HASHMAP_ND
+#ifdef USE_WF_HASHMAP
     #include "api/wf_hashmap_api.h"
     #ifdef V_API_SANITY
         #error TWO or more buffer APIs enabled
@@ -32,8 +32,8 @@
         #define V_API_SANITY
     #endif
 #endif
-#ifdef USE_WF_HASHMAP
-    #include "api/wf_hashmapi_nodel_api.h"
+#ifdef USE_WF_HASHMAP_ND
+    #include "api/wf_hashmap_nodel_api.h"
     #ifdef V_API_SANITY
         #error TWO or more buffer APIs enabled
     #else

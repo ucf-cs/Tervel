@@ -42,8 +42,8 @@
 template<class Key, class Value>
 class TestClass {
  public:
-  typedef typename tervel::containers::wf::HashMap<Key, Value> Map;
-  typedef typename tervel::containers::wf::HashMap<Key, Value>::ValueAccessor Accessor;
+  typedef typename tervel::containers::wf::HashMapNoDelete<Key, Value> Map;
+  typedef typename tervel::containers::wf::HashMapNoDelete<Key, Value>::ValueAccessor Accessor;
 
   TestClass(size_t num_threads, size_t capacity) {
     tervel_obj = new tervel::Tervel(num_threads);
@@ -63,7 +63,7 @@ class TestClass {
   void detach_thread() {}
 
   bool find(Key key, Value &value) {
-    typename tervel::containers::wf::HashMap<Key, Value>::ValueAccessor va;
+    Accessor va;
     bool res = container->at(key, va);
     if (res) {
       value = *(va.value());
@@ -77,7 +77,7 @@ class TestClass {
   }
 
   bool update(Key key, Value &value_expected, Value value_new) {
-    typename tervel::containers::wf::HashMap<Key, Value>::ValueAccessor va;
+    Accessor va;
     if (container->at(key, va)) {
       std::atomic<Value> *temp = reinterpret_cast<std::atomic<Value> *>(va.value());
       return temp->compare_exchange_strong(value_expected, value_new);
