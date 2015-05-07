@@ -28,7 +28,7 @@ THE SOFTWARE.
 #include <stdlib.h>
 #include <atomic>
 #include <cmath>
-
+#include <tervel/util/util.h>
 // TODO(Steven):
 //
 // Document code
@@ -39,18 +39,6 @@ THE SOFTWARE.
 // Stronger Correctness Tests
 //
 namespace tervel {
-
-namespace util {
-  int round_to_next_power_of_two(uint64_t value) {
-    double val = std::log2(value);
-    int int_val = static_cast<int>(val);
-    if (int_val < val) {
-      int_val++;
-    }
-    return int_val;
-  };
-}
-
 namespace containers {
 namespace wf {
 /**

@@ -35,7 +35,7 @@ CXXFLAGS += $(DEBUG) $(RELEASE)
 
 CPPFLAGS = -DINTEL
 INC += $(TINC) -I../../../
-LIB += $(TLIB) -ldl -lgflags -lpthread -lboost_system -lboost_regex -lrt -lllalloc
+LIB += $(TLIB) -ldl -lgflags -lpthread -lrt
 CPPFLAGS += $(INC)
 
 SOURCES = main.cc $(TSOURCES)

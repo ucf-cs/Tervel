@@ -32,7 +32,7 @@ CXXFLAGS += $(DEBUG) $(RELEASE)
 
 CPPFLAGS = -DINTEL
 INC += $(TINC)
-LIB += $(TLIB) -ldl -lgflags -lpthread -lrt -lllalloc
+LIB += $(TLIB) -ldl -lgflags -lpthread -lrt
 CPPFLAGS += $(INC)
 
 
