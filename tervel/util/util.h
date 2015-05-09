@@ -177,6 +177,22 @@ inline int round_to_next_power_of_two(uint64_t value) {
   return int_val;
 };
 
+template<typename T>
+inline bool is_1st_lsb_1(T * ptr) {
+  uintptr_t temp = reinterpret_cast<uintptr_t>(ptr);
+  return (temp & (0x1))  == 0x1;
+}
+
+template<typename T>
+inline T * set_1st_lsb_0(T * ptr) {
+  uintptr_t temp = reinterpret_cast<uintptr_t>(ptr);
+  return reinterpret_cast<T *>(temp & (~0x1));
+}
+template<typename T>
+inline T * set_1st_lsb_1(T * ptr) {
+  uintptr_t temp = reinterpret_cast<uintptr_t>(ptr);
+  return reinterpret_cast<T *>(temp | (0x1));
+}
 }  // namespace util
 }  // namespace tervel
 
