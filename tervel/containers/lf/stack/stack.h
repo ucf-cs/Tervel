@@ -107,17 +107,16 @@ bool Stack<T>::push(T v) {
 
   while (true) {
     Accessor access;
-    while (access.load(&_stack) == false) {};
+    if (access.load(&_stack) == false) {
+      continue;
+    };
 
     Element *cur = access.ptr();
-    if (cur != nullptr) {
-      elem->next(cur);
-    }
+    elem->next(cur);
+
 
     if (_stack.compare_exchange_strong(cur, elem)) {
       return true;
-    } else {
-      elem->next(nullptr); // This 9 minutes to figure out that I need to have this here.
     }
   }  // while (true)
 }  // bool push(T v)
@@ -126,7 +125,9 @@ template<typename T>
 bool Stack<T>::pop(T& v) {
   while (true) {
     Accessor access;
-    while (access.load(&_stack) == false) {};
+    if (access.load(&_stack) == false) {
+      continue;
+    };
 
     Element *cur = access.ptr();
     Element *next = nullptr;
@@ -140,8 +141,6 @@ bool Stack<T>::pop(T& v) {
       v = cur->value();
       cur->safe_delete();
       return true;
-    } else {
-      continue;
     }
   }  // while (true)
 }  // bool pop(T v)
@@ -160,9 +159,6 @@ class Stack<T>::Element : public tervel::util::memory::hp::Element {
   T _val;
   Element *_next {nullptr};
 };
-
-
-
 
 }  // namespace LF
 }  // namespace containers
