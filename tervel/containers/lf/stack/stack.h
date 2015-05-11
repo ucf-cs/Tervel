@@ -47,7 +47,7 @@ namespace lf {
 template<typename T>
 class Stack {
  public:
-  class Element;
+  class Node;
   class Accessor;
   Stack() {};
   ~Stack() {};
@@ -55,7 +55,7 @@ class Stack {
   bool push(T v);
   bool pop(T &v);
  private:
-  std::atomic<Element *> _stack{nullptr};  // 15 minutes to find I forgot this initialization
+  std::atomic<Node *> _stack{nullptr};
 };  // class Stack
 
 
@@ -69,8 +69,8 @@ class Stack<T>::Accessor {
     tervel::util::memory::hp::HazardPointer::unwatch(watch_pos);
   };
 
-  bool load(std::atomic<Element *> *address) {
-    Element *element = address->load();
+  bool load(std::atomic<Node *> *address) {
+    Node *element = address->load();
     bool res = true;
     if (element != nullptr) {
       res = tervel::util::memory::hp::HazardPointer::watch(
@@ -95,15 +95,15 @@ class Stack<T>::Accessor {
     }
   };
 
-  Element * ptr() { return _val; };
+  Node * ptr() { return _val; };
  private:
-  Element * _val;
+  Node * _val;
 };
 
 
 template<typename T>
 bool Stack<T>::push(T v) {
-  Element *elem = new Element(v);
+  Node *elem = new Node(v);
 
   while (true) {
     Accessor access;
@@ -111,9 +111,8 @@ bool Stack<T>::push(T v) {
       continue;
     };
 
-    Element *cur = access.ptr();
+    Node *cur = access.ptr();
     elem->next(cur);
-
 
     if (_stack.compare_exchange_strong(cur, elem)) {
       return true;
@@ -129,8 +128,8 @@ bool Stack<T>::pop(T& v) {
       continue;
     };
 
-    Element *cur = access.ptr();
-    Element *next = nullptr;
+    Node *cur = access.ptr();
+    Node *next = nullptr;
     if (cur != nullptr) {
       next = cur->next();
     }
@@ -147,17 +146,17 @@ bool Stack<T>::pop(T& v) {
 
 
 template<typename T>
-class Stack<T>::Element : public tervel::util::memory::hp::Element {
+class Stack<T>::Node : public tervel::util::memory::hp::Node {
  public:
-  Element(T &v) : _val(v) {};
-  ~Element() {};
+  Node(T &v) : _val(v) {};
+  ~Node() {};
   T value() { return _val; };
   void value(T &v) { _val = v; };
-  void next(Element *n) { _next = n; };
-  Element *next() { return _next; };
+  void next(Node *n) { _next = n; };
+  Node *next() { return _next; };
  private:
   T _val;
-  Element *_next {nullptr};
+  Node *_next {nullptr};
 };
 
 }  // namespace LF

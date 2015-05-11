@@ -125,13 +125,8 @@ class Stack<T>::PopOp: public StackOp {
       };
 
       Node *cur = access.ptr();
-      Node *next = nullptr;
-      if (cur != nullptr) {
-        next = cur->next();
-      }
-
-      helper->new_value_ = next;
       helper->old_value_ = cur;
+      helper->new_value_ = cur->next();
 
       if (cur == nullptr) {
         StackOp::fail();
@@ -166,14 +161,14 @@ class Stack<T>::PushOp: public StackOp {
   bool associate(Helper *h) {
     bool res = StackOp::associate(h);
     if (res) {
-      //TODO(steven) Should we watch elem_?
+      // TODO(steven) Does elem_ need to be watched?
       elem_->atomic_next(reinterpret_cast<Node *>(this), h->old_value_);
     }
     return res;
   }
   void help_complete() {
     Helper * helper = new Helper(this);
-    helper->new_value_ = elem_;
+    helper->new_value_ = this->elem_;
     Node *helper_marked =  reinterpret_cast<Node *>(tervel::util::set_1st_lsb_1<Helper>(helper));
 
     while (StackOp::notDone()) {

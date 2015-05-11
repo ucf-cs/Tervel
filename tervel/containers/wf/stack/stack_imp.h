@@ -54,14 +54,10 @@ bool Stack<T>::push(T v) {
     };
 
     Node *cur = access.ptr();
-    if (cur != nullptr) {
-      elem->next(cur);
-    }
+    elem->next(cur);
 
     if (lst_.compare_exchange_strong(cur, elem)) {
       return true;
-    } else {
-      elem->next(nullptr); // This 9 minutes to figure out that I need to have this here.
     }
   }  // while (true)
 
