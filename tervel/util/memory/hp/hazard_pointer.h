@@ -150,7 +150,9 @@ class HazardPointer {
    * @param value The value to watch
    **/
   void watch(SlotID slot, void *value) {
+    assert(watches_[get_slot(slot)].load() == nullptr);
     watches_[get_slot(slot)].store(value);
+    assert(watches_[get_slot(slot)].load() == value);
   }
 
   /**
