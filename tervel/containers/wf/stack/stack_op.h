@@ -126,12 +126,15 @@ class Stack<T>::PopOp: public StackOp {
 
       Node *cur = access.ptr();
       helper->old_value_ = cur;
-      helper->new_value_ = cur->next();
 
       if (cur == nullptr) {
         StackOp::fail();
         break;
-      } else if (StackOp::stack_->lst_.compare_exchange_strong(cur, helper_marked)) {
+      }
+
+      helper->new_value_ = cur->next();
+
+      if (StackOp::stack_->lst_.compare_exchange_strong(cur, helper_marked)) {
         helper->finish(&(StackOp::stack_->lst_), helper_marked);
         assert(StackOp::stack_->lst_.load() != helper_marked);
         if (StackOp::notValid(helper)) {

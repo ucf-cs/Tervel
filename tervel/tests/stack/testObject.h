@@ -86,8 +86,6 @@ class TestObject {
     set_rates();
 
     test_class_ = new TestClass<Value>(FLAGS_num_threads+1);
-    sanity_check();
-
   };
 
   ~TestObject() {
