@@ -27,7 +27,8 @@ THE SOFTWARE.
 
 #include <tervel/util/info.h>
 #include <tervel/util/progress_assurance.h>
-#include <tervel/util/memory/rc/descriptor_util.h>
+
+
 
 namespace tervel {
 namespace util {
@@ -62,6 +63,7 @@ class ReadFirstOp : public util::OpRecord {
   std::atomic<void *> *address_;
   std::atomic<void *> value_;
 };  // ReadFirstOp class
+
 
 }  // namespace rc
 }  // namespace memory

@@ -22,8 +22,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
+#include <tervel/util/memory/rc/descriptor_read_first_op.h>
 #include <tervel/util/memory/rc/descriptor_util.h>
-
 
 namespace tervel {
 namespace util {
@@ -32,6 +32,15 @@ class Descriptor;
 
 namespace memory {
 namespace rc {
+
+void *wf_descriptor_read_first(std::atomic<void *> *address) {
+  ReadFirstOp *op = new ReadFirstOp(address);
+  tervel::util::ProgressAssurance::make_announcement(
+      reinterpret_cast<tervel::util::OpRecord *>(op));
+  void *current_value = op->load();
+  op->safe_delete();
+  return current_value;
+};
 
 
 void ReadFirstOp::help_complete() {
@@ -43,7 +52,7 @@ void ReadFirstOp::help_complete() {
       tervel::util::Descriptor *descr = unmark_first(cvalue);
       if (tervel::util::memory::rc::watch(descr, address_, cvalue)) {
         cvalue = descr->get_logical_value();
-        unwatch(descr);
+        tervel::util::memory::rc::unwatch(descr);
         value_.compare_exchange_strong(aValue, cvalue);
         return;
       } else {

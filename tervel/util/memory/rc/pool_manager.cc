@@ -24,6 +24,11 @@ THE SOFTWARE.
  */
 #include <tervel/util/memory/rc/pool_manager.h>
 
+#include <tervel/util/descriptor.h>
+#include <tervel/util/memory/rc/descriptor_pool.h>
+#include <tervel/util/memory/rc/descriptor_util.h>
+#include <tervel/util/memory/rc/descriptor_util.h>
+
 namespace tervel {
 namespace util {
 namespace memory {

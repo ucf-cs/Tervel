@@ -27,11 +27,12 @@ THE SOFTWARE.
 
 #include <tervel/util/info.h>
 #include <tervel/util/descriptor.h>
-#include <tervel/util/recursive_action.h>
-#include <tervel/util/memory/rc/pool_element.h>
+
 #include <tervel/util/memory/rc/descriptor_pool.h>
+#include <tervel/util/memory/rc/pool_element.h>
+
+#include <tervel/util/recursive_action.h>
 #include <tervel/util/progress_assurance.h>
-#include <tervel/util/memory/rc/descriptor_read_first_op.h>
 
 namespace tervel {
 namespace util {
@@ -40,6 +41,7 @@ class Descriptor;
 
 namespace memory {
 namespace rc {
+
 
 /**
  * @brief Constructs and returns a descriptor. Arguments are forwarded to the
@@ -222,6 +224,7 @@ inline void * remove_descriptor(void *expected, std::atomic<void *> *address) {
   return newValue;
 }
 
+void *wf_descriptor_read_first(std::atomic<void *> *address);
 /**
  * @brief This function determines the logical value of an address which may have
  * either a RC descriptor or a normal value.
@@ -239,12 +242,8 @@ inline void *descriptor_read_first(std::atomic<void *> *address) {
   while (is_descriptor_first(current_value)) {
 
     if (progAssur.isDelayed()) {
-      ReadFirstOp *op = new ReadFirstOp(address);
-      tervel::util::ProgressAssurance::make_announcement(
-          reinterpret_cast<tervel::util::OpRecord *>(op));
-      current_value = op->load();
-      op->safe_delete();
-      return current_value;
+      return wf_descriptor_read_first(address);
+
     } else {
       tervel::util::Descriptor *descr = unmark_first(current_value);
       if (watch(descr, address, current_value)) {
