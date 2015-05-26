@@ -33,12 +33,17 @@
 #include <tervel/util/tervel.h>
 #include <tervel/containers/lf/stack/stack.h>
 
+typedef int64_t Value;
+typedef tervel::containers::wf::Stack<Value> container_t;
+
+
+#include "../testerMacros.h"
+
 DEFINE_int32(prefill, 0, "The number elements to place in the stack on init.");
 
 
 #define DS_DECLARE_CODE \
   tervel::Tervel* tervel_obj; \
-  typedef tervel::containers::lf::Stack<Value> container_t; \
   container_t *container;
 
 #define DS_DESTORY_CODE
@@ -69,45 +74,49 @@ for (int i = 0; i < FLAGS_prefill; i++) { \
   /* std::uniform_int_distribution<Value> random(1, UINT_MAX); */ \
   int ecount = 0;
 
-#define OP_0_ID 0
-#define OP_0_CODE \
-  { \
-    Value value; \
-    opRes = container->pop(value); \
-  }
+/*
+  TODO: Remove the need for the numerical argument
+  Make adding the function name and code the same step
+  DS_OP_COUNT should be set to the last passed MACRO OP
+ */
+#define OP_CODE \
+ MACRO_OP_MAKER(0, { \
+      Value value; \
+      opRes = container->pop(value); \
+    } \
+  ) \
+ MACRO_OP_MAKER(1, { \
+      /* Value value = random(); */ \
+      Value value = (thread_id << 56) | ecount; \
+      opRes = container->push(value); \
+    } \
+  )
 
-#define OP_1_ID 1
-#define OP_1_CODE \
-  { \
-    /* Value value = random(); */ \
-    Value value = (thread_id << 56) | ecount; \
-    opRes = container->push(value); \
-  }
+#define OP_NAMES "pop", "push"
 
 #define DS_OP_COUNT 2
-#define DS_OP_NAMES {"pop", "push"}
 
-// template<typename Stack, typename Value>
-// void sanity_check(Stack *stack) {
-//   bool res;
-//   Value i, j, temp;
 
-//   int limit = 100;
+inline void sanity_check(container_t *stack) {
+  bool res;
+  Value i, j, temp;
 
-//   for (i = 0; i < limit; i++) {
-//     bool res = stack->push(i);
-//     assert(res && "If this assert fails then the there is an issue with either pushing or determining that it is full");
-//   };
-//   i--;
+  int limit = 100;
 
-//   for (j = 0; j < limit; j++) {
-//     res = stack->pop(temp);
-//     assert(res && "If this assert fails then the there is an issue with either poping or determining that it is not empty");
-//     assert(temp==i && "If this assert fails then there is an issue with  determining the pop element");
-//     i--;
-//   };
+  for (i = 0; i < limit; i++) {
+    bool res = stack->push(i);
+    assert(res && "If this assert fails then the there is an issue with either pushing or determining that it is full");
+  };
+  i--;
 
-//   res = stack->pop(temp);
-//   assert(!res && "If this assert fails then there is an issue with pop or determining that it is empty");
-// };
+  for (j = 0; j < limit; j++) {
+    res = stack->pop(temp);
+    assert(res && "If this assert fails then the there is an issue with either poping or determining that it is not empty");
+    assert(temp==i && "If this assert fails then there is an issue with  determining the pop element");
+    i--;
+  };
+
+  res = stack->pop(temp);
+  assert(!res && "If this assert fails then there is an issue with pop or determining that it is empty");
+};
 #endif  // LF_STACK_API_H_

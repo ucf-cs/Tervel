@@ -47,6 +47,8 @@ DEFINE_int32(execution_time, 5, "The amount of time to run the tests");
 #undef __tervel_xstr
 
 
+#define DS_OP_NAMES { OP_NAMES }
+
 typedef struct{
   int fail_;
   int pass_;
@@ -79,8 +81,6 @@ typedef struct{
 
 }op_counter_t;
 
-
-typedef int64_t Value;
 class TestObject {
  public:
   TestObject()
@@ -98,8 +98,6 @@ class TestObject {
   void extra_end_signal() {
     /* This function is useful for enabling a blocking operation to return*/
   };
-
-  void sanity_check();
 
   void init() {
     DS_INIT_CODE
@@ -147,16 +145,7 @@ class TestObject {
 
       bool opRes;
 
-      #define MACRO_OP_SELECTOR(OP_ID, OP_CODE) \
-        if (op <= func_call_rate[ OP_ID ]) { \
-          OP_CODE \
-          \
-          op_counter[ OP_ID ].inc(opRes); \
-          continue; \
-        }
-
-      MACRO_OP_SELECTOR(OP_0_ID, OP_0_CODE)
-      MACRO_OP_SELECTOR(OP_1_ID, OP_1_CODE)
+      OP_CODE
 
       assert(false);
     }
