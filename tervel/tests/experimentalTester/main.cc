@@ -55,7 +55,7 @@ int main(int argc, char **argv) {
   gflags::ParseCommandLineFlags(&argc, &argv, true);
 
   // Create Test Object
-  TestObject test_data;
+  TestObject test_data(argc, argv);
 
   test_data.init();
 
@@ -73,6 +73,8 @@ int main(int argc, char **argv) {
 
   // Wait until Threads are ready
   while (test_data.ready_count_.load() < FLAGS_num_threads);
+
+  std::this_thread::sleep_for(std::chrono::seconds(FLAGS_main_sleep));
 
 #ifdef DEBUG
   printf("Debug: Beginning Test.\n");

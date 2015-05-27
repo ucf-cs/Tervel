@@ -67,9 +67,10 @@ for (int i = 0; i < FLAGS_prefill; i++) { \
   container->push(x); \
 }
 
+#define DS_NAME "WF Stack"
 
 #define DS_TO_STRING \
-   "WF Stack\n" "\tPrefill: " + std::to_string(FLAGS_prefill) + "\n"
+   DS_NAME "\n\tPrefill: " + std::to_string(FLAGS_prefill) + "\n"
 
 #define OP_RAND \
   /* std::uniform_int_distribution<Value> random(1, UINT_MAX); */ \

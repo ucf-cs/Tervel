@@ -36,8 +36,13 @@
 
 
 /** Arguments for Tester */
+DEFINE_int32(main_sleep, 0, "Causes the main thread to sleep before signaling go. Useful for allowing monitors to be attached.");
+
 DEFINE_int32(num_threads, 1, "The number of executing threads.");
 DEFINE_int32(execution_time, 5, "The amount of time to run the tests");
+
+
+DEFINE_bool(verbose_results, false, "If true then verbose output is used");
 
 
 #define __tervel_xstr(s) __tervel_str(s)
@@ -83,11 +88,16 @@ typedef struct{
 
 class TestObject {
  public:
-  TestObject()
+  TestObject(int argc, char **argv)
       : num_threads_(FLAGS_num_threads)
       , execution_time_(FLAGS_execution_time) {
 
         test_results_ = new op_counter_t *[num_threads_];
+
+        execution_str_ = "";
+        for (int i = 1; i < argc; i++) {
+          execution_str_ += std::to_string(atoi(argv[i])) + " ";
+        }
       };
 
   ~TestObject() {
@@ -156,7 +166,49 @@ class TestObject {
     DS_DETACH_THREAD
   };
 
-  std::string results() {
+  std::string yaml_results() {
+    std::string res("");
+    res += "AlgorithmName : " DS_NAME "\n";
+    res += "ExecutionTime : " + std::to_string(execution_time_) + "\n";
+    res += "MainDelay : " + std::to_string(FLAGS_main_sleep) + "\n";
+    res += "NumberThreads : " + std::to_string(num_threads_) + "\n";
+    res += "RunConfig : " + execution_str_ + "\n";
+
+    res += "Totals : \n";
+    for (int j = 0; j < DS_OP_COUNT; j++) {
+      int p = 0; int f = 0;
+      for (int i = 0; i < num_threads_; i++) {
+        p += test_results_[i][j].pass();
+        f += test_results_[i][j].fail();
+      }
+
+      res += "  " + op_names[j] + "_Pass : "
+            + std::to_string(p) + "\n";
+      res += "  " + op_names[j] + "_Fail : "
+            + std::to_string(f) + "\n";
+    }
+
+    res += "Threads : \n";
+    for (int i = 0; i < num_threads_; i++) {
+      res += "  - TID : "  + std::to_string(i) + "\n";
+      for (int j = 0; j < DS_OP_COUNT; j++) {
+        int p = test_results_[i][j].pass();
+        int f = test_results_[i][j].fail();
+        float r = test_results_[i][j].rate();
+
+        res += "    " + op_names[j] + "_Pass : "
+              + std::to_string(p) + "\n";
+        res += "    " + op_names[j] + "_Fail : "
+              + std::to_string(f) + "\n";
+        res += "    " + op_names[j] + "_Rate : "
+            + std::to_string(r) + "\n";
+      }
+    }
+
+    return res;
+  }
+
+  std::string verbose_results() {
     std::string res("");
     res += "Test Handler Configuration\n";
     res += "\tThreads:" + std::to_string(num_threads_) + "\n";
@@ -196,6 +248,15 @@ class TestObject {
     return res;
   }
 
+  std::string results() {
+    if (FLAGS_verbose_results) {
+      return verbose_results();
+    } else {
+      return yaml_results();
+    }
+  }
+
+
   const int num_threads_;
   const int execution_time_;
 
@@ -206,7 +267,7 @@ class TestObject {
   std::atomic<int> ready_count_{0};
 
   op_counter_t **test_results_;
-
+  std::string execution_str_;
   const std::string op_names[DS_OP_COUNT] = DS_OP_NAMES;
 };
 

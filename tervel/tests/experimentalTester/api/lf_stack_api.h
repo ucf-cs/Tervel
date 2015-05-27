@@ -34,7 +34,7 @@
 #include <tervel/containers/lf/stack/stack.h>
 
 typedef int64_t Value;
-typedef tervel::containers::wf::Stack<Value> container_t;
+typedef tervel::containers::lf::Stack<Value> container_t;
 
 
 #include "../testerMacros.h"
@@ -65,10 +65,10 @@ for (int i = 0; i < FLAGS_prefill; i++) { \
   container->push(x); \
 }
 
+#define DS_NAME "LF Stack"
 
 #define DS_TO_STRING \
-   "LF Stack\n" \
-   "\tPrefill: " + std::to_string(FLAGS_prefill)
+   DS_NAME "\nPrefill: " + std::to_string(FLAGS_prefill)
 
 #define OP_RAND \
   /* std::uniform_int_distribution<Value> random(1, UINT_MAX); */ \
