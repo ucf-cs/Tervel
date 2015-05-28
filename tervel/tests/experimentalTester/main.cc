@@ -33,7 +33,7 @@
 #include <algorithm>
 #include <iostream>
 #include <gflags/gflags.h>
-
+#include <sys/time.h>
 #include "testObject.h"
 
 void run(TestObject *t, int id, char **argv) {
@@ -75,10 +75,12 @@ int main(int argc, char **argv) {
   while (test_data.ready_count_.load() < FLAGS_num_threads);
 
   std::this_thread::sleep_for(std::chrono::seconds(FLAGS_main_sleep));
+  struct timeval start_time;
+  (void)gettimeofday(&start_time, NULL);
 
-#ifdef DEBUG
-  printf("Debug: Beginning Test.\n");
-#endif
+// #ifdef DEBUG
+//   printf("Debug: Beginning Test.\n");
+// #endif
   test_data.wait_flag_.store(false);
 
   // Wait until test is over
@@ -89,9 +91,12 @@ int main(int argc, char **argv) {
   test_data.wait_flag_.store(true);
   test_data.running_.store(false);
 
-#ifdef DEBUG
-  printf("Debug: Signaled Stop!\n");
-#endif
+  struct timeval end_time;
+  (void)gettimeofday(&end_time, NULL);
+
+// #ifdef DEBUG
+//   printf("Debug: Signaled Stop!\n");
+// #endif
   // Pause
   std::this_thread::sleep_for(std::chrono::seconds(1));
 
@@ -105,6 +110,10 @@ int main(int argc, char **argv) {
                 [](std::thread &t) { t.join(); });
 
   // Print results
+  test_data.set_start_time((double)start_time.tv_sec + (1.0/1000000) * (double)start_time.tv_usec);
+
+  test_data.set_end_time((double)end_time.tv_sec + (1.0/1000000) * (double)end_time.tv_usec);
+
   std::cout << test_data.results() << std::endl;
 
 

@@ -104,6 +104,13 @@ class TestObject {
     DS_DESTORY_CODE
   };
 
+  void set_start_time(double t) {
+    this->start_time = t;
+  }
+  void set_end_time(double t) {
+    this->end_time = t;
+  }
+
 
   void extra_end_signal() {
     /* This function is useful for enabling a blocking operation to return*/
@@ -174,6 +181,10 @@ class TestObject {
     res += "NumberThreads : " + std::to_string(num_threads_) + "\n";
     res += "RunConfig : " + execution_str_ + "\n";
 
+    res += "Time : \n";
+    res += "  start : " + std::to_string(start_time) + "\n";
+    res += "  end : " + std::to_string(end_time) + "\n";
+
     res += "Totals : \n";
     for (int j = 0; j < DS_OP_COUNT; j++) {
       int p = 0; int f = 0;
@@ -211,6 +222,7 @@ class TestObject {
   std::string verbose_results() {
     std::string res("");
     res += "Test Handler Configuration\n";
+
     res += "\tThreads:" + std::to_string(num_threads_) + "\n";
     res += "\tExecution Time: " + std::to_string(execution_time_) + "\n";
 
@@ -268,6 +280,8 @@ class TestObject {
 
   op_counter_t **test_results_;
   std::string execution_str_;
+  double start_time = 0;
+  double end_time = 0;
   const std::string op_names[DS_OP_COUNT] = DS_OP_NAMES;
 };
 
