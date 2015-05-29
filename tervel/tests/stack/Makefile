@@ -31,8 +31,8 @@ DEBUG = -DDEBUG=1 -g
 CXXFLAGS += $(DEBUG) $(RELEASE)
 
 CPPFLAGS = -DINTEL
-INC= -I../../../
-LIB += -ldl -lgflags -lpthread -lrt
+INC= -I../../../ -I/usr/local/include
+LIB += -ldl -lgflags -lpthread -lrt /usr/local/lib/libpapi.a
 
 SOURCES = main.cc $(shell find ../../util/ -name '*.cc')
 

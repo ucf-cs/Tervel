@@ -34,6 +34,7 @@
 #include <iostream>
 #include <gflags/gflags.h>
 
+
 #define __tervel_xstr(s) __tervel_str(s)
 #define __tervel_str(s) #s
 #include __tervel_xstr(CONTAINER_FILE)
@@ -51,8 +52,8 @@ const int32_t FLAGS_failpop_rate = 0;
 const int32_t FLAGS_failpush_rate = 0;
 
 /** Arguments for Tester */
-DEFINE_int32(num_threads, 1, "The number of executing threads.");
-DEFINE_int32(execution_time, 5, "The amount of time to run the tests");
+DEFINE_int32(num_threads, 60, "The number of executing threads.");
+DEFINE_int32(execution_time, 10, "The amount of time to run the tests");
 
 
 

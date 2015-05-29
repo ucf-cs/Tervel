@@ -35,6 +35,7 @@
 #include <gflags/gflags.h>
 
 #include "testObject.h"
+#include "PapiUtil.h"
 
 void run(TestObject *t, int id) {
 #ifdef USE_CDS
@@ -51,6 +52,7 @@ int main(int argc, char **argv) {
   cds::gc::HP hpGC;
   cds::gc::HP::thread_gc myThreadGC (true) ;
 #endif
+
 
   gflags::ParseCommandLineFlags(&argc, &argv, true);
 
@@ -72,6 +74,15 @@ int main(int argc, char **argv) {
 #ifdef DEBUG
   printf("Debug: Beginning Test.\n");
 #endif
+
+  //PAPI start
+  PapiUtil papiUtil;
+  std::vector<int> availableEvents;
+  bool result = papiUtil.start(papiUtil.CacheDataAHM,availableEvents);
+  if(!result)
+    std::cout << "PAPI ERROR !" << std::endl;
+  long long *counts = new long long[availableEvents.size()];
+
   test_data.wait_flag_.store(false);
 
   // Wait until test is over
@@ -81,6 +92,7 @@ int main(int argc, char **argv) {
   // Signal Stop
   test_data.wait_flag_.store(true);
   test_data.running_.store(false);
+
 
 #ifdef DEBUG
   printf("Debug: Signaled Stop!\n");
@@ -93,14 +105,19 @@ int main(int argc, char **argv) {
   // Wait until all threads are done.
   while (test_data.ready_count_.load() < FLAGS_num_threads);
 
+  // PAPI stop
+  papiUtil.stop(counts,availableEvents.size());
+
 
   std::for_each(thread_list.begin(), thread_list.end(),
                 [](std::thread &t) { t.join(); });
 
+
   // Print results
   std::cout << test_data.results() << std::endl;
 
-
+  // print PAPI results
+  papiUtil.printResults(availableEvents,counts);
 
   std::this_thread::sleep_for(std::chrono::seconds(1));
 
