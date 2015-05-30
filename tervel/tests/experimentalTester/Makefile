@@ -23,7 +23,7 @@
 #
 
 CXX      = g++-4.8
-CXXFLAGS =  -DCONTAINER_FILE=$(input) -Wall -Werror  -std=c++11  -march=native -m64 -pthread -fno-strict-aliasing -DTERVEL_PROG_ASSUR_ALWAYS_ANNOUNCE -DTERVEL_PROG_ASSUR_ALWAYS_CHECK
+CXXFLAGS =  -DCONTAINER_FILE=$(input) -Wall -Werror  -std=c++11  -march=native -m64 -pthread -fno-strict-aliasing # -DTERVEL_PROG_ASSUR_ALWAYS_ANNOUNCE -DTERVEL_PROG_ASSUR_ALWAYS_CHECK
 
 DEBUG = -DDEBUG=1 -g -g3 
 # RELEASE = -O3 -DNDEBUG
@@ -47,6 +47,7 @@ all: WFTEST LFTEST
 .PHONY: test
 test: $(SOURCES) $(EXECUTABLE)
 	mkdir -p $(OUTPUT)
+	rm main.o
 
 .PHONY: LFTEST
 LFTEST:
@@ -55,6 +56,14 @@ LFTEST:
 .PHONY: WFTEST
 WFTEST:
 	$(MAKE) test input="api/wf_stack_api.h" output="wf_stack.x"
+
+.PHONY: WFHASHMAP
+WFHASHMAP:
+	$(MAKE) test input="api/wf_hashmap.h" output="wf_hashmap.x"
+
+.PHONY: WFNODELHASHMAP
+WFNODELHASHMAP:
+	$(MAKE) test input="api/wf_hashmap_nodel.h" output="wf_hashmap_nodel.x"
 
 
 $(EXECUTABLE): $(OBJECTS)
@@ -66,5 +75,9 @@ $(EXECUTABLE): $(OBJECTS)
 
 .PHONY: clean
 clean:
+	$(RM) $(OUTPUT)*.x
+
+.PHONY: clean-all
+clean-all:
 	$(RM) $(OUTPUT)*.x
 	$(RM) $(OBJECTS)

@@ -100,6 +100,14 @@ void HazardPointer::unwatch(SlotID slot, Element *descr,
   descr->on_unwatch();
 }
 
+bool HazardPointer::hasWatch(SlotID slot,
+    HazardPointer * const hazard_pointer) {
+  #ifdef TERVEL_MEM_HP_NO_WATCH
+    return false;
+  #endif
+  return nullptr != hazard_pointer->value(slot);
+
+}
 void HazardPointer::unwatch(SlotID slot, HazardPointer * const hazard_pointer) {
   #ifdef TERVEL_MEM_HP_NO_WATCH
     return;

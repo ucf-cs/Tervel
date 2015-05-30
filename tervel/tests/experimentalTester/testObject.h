@@ -38,7 +38,7 @@
 /** Arguments for Tester */
 DEFINE_int32(main_sleep, 0, "Causes the main thread to sleep before signaling go. Useful for allowing monitors to be attached.");
 
-DEFINE_int32(num_threads, 1, "The number of executing threads.");
+DEFINE_int32(num_threads, 0, "The number of executing threads.");
 DEFINE_int32(execution_time, 5, "The amount of time to run the tests");
 
 
@@ -173,12 +173,13 @@ class TestObject {
     DS_DETACH_THREAD
   };
 
-  std::string yaml_results() {
+  std::string yaml_results(int numThreads) {
     std::string res("");
     res += "AlgorithmName : " DS_NAME "\n";
+    res += "AlgorithmConfig : \n -" DS_CONFIG_STR "\n";
     res += "ExecutionTime : " + std::to_string(execution_time_) + "\n";
     res += "MainDelay : " + std::to_string(FLAGS_main_sleep) + "\n";
-    res += "NumberThreads : " + std::to_string(num_threads_) + "\n";
+    res += "NumberThreads : " + std::to_string(numThreads) + "\n";
     res += "RunConfig : " + execution_str_ + "\n";
 
     res += "Time : \n";
@@ -188,7 +189,7 @@ class TestObject {
     res += "Totals : \n";
     for (int j = 0; j < DS_OP_COUNT; j++) {
       int p = 0; int f = 0;
-      for (int i = 0; i < num_threads_; i++) {
+      for (int i = 0; i < numThreads; i++) {
         p += test_results_[i][j].pass();
         f += test_results_[i][j].fail();
       }
@@ -200,7 +201,7 @@ class TestObject {
     }
 
     res += "Threads : \n";
-    for (int i = 0; i < num_threads_; i++) {
+    for (int i = 0; i < numThreads; i++) {
       res += "  - TID : "  + std::to_string(i) + "\n";
       for (int j = 0; j < DS_OP_COUNT; j++) {
         int p = test_results_[i][j].pass();
@@ -219,53 +220,10 @@ class TestObject {
     return res;
   }
 
-  std::string verbose_results() {
-    std::string res("");
-    res += "Test Handler Configuration\n";
-
-    res += "\tThreads:" + std::to_string(num_threads_) + "\n";
-    res += "\tExecution Time: " + std::to_string(execution_time_) + "\n";
-
-    res += "Test Class Configuration\n";
-    res += DS_TO_STRING + "\n";
 
 
-    res += "Thread Results?\n";
-    res += "TID";
-    for (int i = 0; i < DS_OP_COUNT; i++) {
-      res += "\t" + op_names[i] + "-Pass";
-      res += "\t" + op_names[i] + "-Fail";
-      res += "\t" + op_names[i] + "-Rate";
-    }
-    res += "\n";
-
-    int sum = 0;
-    for (int i = 0; i < num_threads_; i++) {
-      res += std::to_string(i);
-      for (int j = 0; j < DS_OP_COUNT; j++) {
-        int p = test_results_[i][j].pass();
-        int f = test_results_[i][j].fail();
-        float r = test_results_[i][j].rate();
-
-        res += "\t" + std::to_string(p);
-        res += "\t" + std::to_string(f);
-        res += "\t" + std::to_string(r);
-
-        sum = sum + p + f;
-      }
-      res += "\n";
-    }
-
-    res += "Total Operations: " + std::to_string(sum) + "\n";
-    return res;
-  }
-
-  std::string results() {
-    if (FLAGS_verbose_results) {
-      return verbose_results();
-    } else {
-      return yaml_results();
-    }
+  std::string results(int numThreads) {
+    return yaml_results(numThreads);
   }
 
 

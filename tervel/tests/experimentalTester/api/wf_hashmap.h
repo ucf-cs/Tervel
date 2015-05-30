@@ -24,23 +24,28 @@
 #
 */
 
-#ifndef WF_STACK_API_H_
-#define WF_STACK_API_H_
+#ifndef DS_API_H_
+#define DS_API_H_
 
 
 #include <string>
-#include <tervel/containers/wf/stack/stack.h>
+#include <tervel/containers/wf/hash-map/wf_hash_map.h>
 #include <tervel/util/info.h>
 #include <tervel/util/thread_context.h>
 #include <tervel/util/tervel.h>
 
 typedef int64_t Value;
-typedef tervel::containers::wf::Stack<Value> container_t;
+typedef int64_t Key;
+typedef typename tervel::containers::wf::HashMap<Key, Value> container_t;
+typedef typename container_t::ValueAccessor Accessor;
 
 
 #include "../testerMacros.h"
 
-DEFINE_int32(prefill, 0, "The number elements to place in the stack on init.");
+DEFINE_int32(prefill, 0, "The number elements to place in the data structure on init.");
+DEFINE_int32(capacity, 32768, "The initial capacity of the hashmap, should be a power of two.");
+DEFINE_int32(expansion_factor, 5, "The size by which the hash map expands on collision. 2^x = positions, where x is the specified value.");
+
 
 #define DS_DECLARE_CODE \
   tervel::Tervel* tervel_obj; \
@@ -57,64 +62,62 @@ thread_context = new tervel::ThreadContext(tervel_obj);
 #define DS_INIT_CODE \
 tervel_obj = new tervel::Tervel(FLAGS_num_threads+1); \
 DS_ATTACH_THREAD \
-container = new container_t(); \
-sanity_check(container); \
+container = new container_t(FLAGS_capacity, FLAGS_expansion_factor); \
 \
 std::default_random_engine generator; \
 std::uniform_int_distribution<Value> largeValue(0, UINT_MAX); \
 for (int i = 0; i < FLAGS_prefill; i++) { \
   Value x = largeValue(generator) & (~0x3); \
-  container->push(x); \
+  container->insert(x, x); \
 }
 
-#define DS_NAME "WF Stack"
+#define DS_NAME "WF Hash Map"
 
 #define DS_CONFIG_STR \
-   "Prefill : " + std::to_string(FLAGS_prefill) +""
+  "Prefill : " + std::to_string(FLAGS_prefill) \
+  + "\n  Capacity : " + std::to_string(FLAGS_capacity) \
+  + "\n  ExpansionFactor : " + std::to_string(FLAGS_expansion_factor) + ""
+
 
 #define OP_RAND \
-  /* std::uniform_int_distribution<Value> random(1, UINT_MAX); */ \
-  int ecount = 0;
+  std::uniform_int_distribution<Value> random(1, USHRT_MAX);
 
 
 #define OP_CODE \
- MACRO_OP_MAKER(0, { \
-      Value value; \
-      opRes = container->pop(value); \
+  MACRO_OP_MAKER(0, { \
+    Accessor va; \
+    Value value = random(generator); \
+    opRes = container->at(value, va); \
+    if (opRes) { \
+      value = *(va.value()); \
     } \
+  } \
   ) \
- MACRO_OP_MAKER(1, { \
-      /* Value value = random(); */ \
-      Value value = (thread_id << 56) | ecount; \
-      opRes = container->push(value); \
+  MACRO_OP_MAKER(1, { \
+    Value value = random(generator); \
+    opRes = container->insert(value, value); \
+  } \
+  ) \
+  MACRO_OP_MAKER(2, { \
+    Accessor va; \
+    Value value = random(generator); \
+    opRes = container->at(value, va); \
+    if (opRes) { \
+      std::atomic<Value> *temp = reinterpret_cast<std::atomic<Value> *>(va.value()); \
+      value = *(va.value()); \
+      opRes = temp->compare_exchange_strong(value, value * 2); \
     } \
-  )
+  } \
+  ) \
+  MACRO_OP_MAKER(3, { \
+    Value value = random(generator); \
+    opRes = container->remove(value); \
+  } \
+  ) \
 
-#define OP_NAMES "pop", "push"
 
-#define DS_OP_COUNT 2
+#define OP_NAMES "find", "insert", "update", "delete"
 
-inline void sanity_check(container_t *stack) {
-  bool res;
-  Value i, j, temp;
+#define DS_OP_COUNT 4
 
-  int limit = 100;
-
-  for (i = 0; i < limit; i++) {
-    bool res = stack->push(i);
-    assert(res && "If this assert fails then the there is an issue with either pushing or determining that it is full");
-  };
-  i--;
-
-  for (j = 0; j < limit; j++) {
-    res = stack->pop(temp);
-    assert(res && "If this assert fails then the there is an issue with either poping or determining that it is not empty");
-    assert(temp==i && "If this assert fails then there is an issue with  determining the pop element");
-    i--;
-  };
-
-  res = stack->pop(temp);
-  assert(!res && "If this assert fails then there is an issue with pop or determining that it is empty");
-};
-
-#endif  // WF_STACK_API_H_
+#endif  // DS_API_H_

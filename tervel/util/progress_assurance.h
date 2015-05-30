@@ -114,28 +114,28 @@ class ProgressAssurance {
    * Const used to reduce the number of times a thread checks the table
    * Reduces memory loads at the cost of a higher upper bound
    */
-  static constexpr size_t HELP_DELAY = TERVEL_PROG_ASSUR_DELAY;
+  static constexpr int64_t HELP_DELAY = TERVEL_PROG_ASSUR_DELAY;
 
 
   class Limit {
    public:
-    explicit Limit(size_t limit = TERVEL_PROG_ASSUR_LIMIT)
+    explicit Limit(int64_t limit = TERVEL_PROG_ASSUR_LIMIT)
       : counter_(limit) {}
 
-    bool isDelayed(size_t val = 1) {
-      size_t temp = counter_;
+    bool isDelayed(int64_t val = 1) {
+      int64_t temp = counter_;
       counter_ -= val;
       return (temp == 0);
     }
 
-    void reset(size_t limit = TERVEL_PROG_ASSUR_LIMIT) {
+    void reset(int64_t limit = TERVEL_PROG_ASSUR_LIMIT) {
       counter_ = limit;
     }
    private:
-    size_t counter_;
+    int64_t counter_;
   };
 
-  explicit ProgressAssurance(size_t num_threads)
+  explicit ProgressAssurance(int64_t num_threads)
       : op_table_(new std::atomic<OpRecord *>[num_threads]() )
       , num_threads_ {num_threads} {}
 
@@ -150,8 +150,8 @@ class ProgressAssurance {
   */
   static void check_for_announcement(ProgressAssurance * const progress_assuarance =
         nullptr) {
-    static __thread size_t delay_count = HELP_DELAY;
-    static __thread size_t help_id = 0;
+    static __thread int64_t delay_count = HELP_DELAY;
+    static __thread int64_t help_id = 0;
 
     if (delay_count-- == 0) {
       delay_count = HELP_DELAY;
@@ -180,7 +180,7 @@ class ProgressAssurance {
    * This function checks at most one position in the op_table_ for an OPRecod
    * If one is found it will call its help_complete function.
    */
-  void p_check_for_announcement(size_t &hpos);
+  void p_check_for_announcement(int64_t &hpos);
 
   /**
    * This function places the
@@ -199,7 +199,7 @@ class ProgressAssurance {
   /**
    * The number of threads that are using this operation table
    */
-  const size_t num_threads_;
+  const int64_t num_threads_;
 
   DISALLOW_COPY_AND_ASSIGN(ProgressAssurance);
 };

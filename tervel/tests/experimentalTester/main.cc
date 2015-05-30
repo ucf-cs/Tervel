@@ -57,54 +57,60 @@ int main(int argc, char **argv) {
   // Create Test Object
   TestObject test_data(argc, argv);
 
+  std::cout << "#  Initializing Tester Object and Data Structure" << std::endl;
   test_data.init();
+  std::cout << "#  Completed Tester Object and Data Structure" << std::endl;
 
   // Create Threads
   std::vector<std::thread> thread_list;
 
-  int64_t tid = 0;
+  int64_t numThreads = 0;
   for (int j = 1; j < argc; j += DS_OP_COUNT + 1) {
+
+    if (j+DS_OP_COUNT >= argc) {
+      std::cout << "#  Error: Invalid Thread Group and Rate Configuration" << std::endl;
+      exit(-1);
+    }
     int t = atoi(argv[j]);
     for (int64_t i = 0; i < t; i++) {
-      std::thread temp_thread(run, &test_data, tid++, &(argv[j+1]));
+      std::thread temp_thread(run, &test_data, numThreads++, &(argv[j+1]));
       thread_list.push_back(std::move(temp_thread));
     }
   };
 
-  // Wait until Threads are ready
-  while (test_data.ready_count_.load() < FLAGS_num_threads);
+  if (FLAGS_num_threads < numThreads) {
+    std::cout << "#  Error: Specified num_threads is greater than the number of threads specified in the thread groups" << std::endl;
+    exit(-1);
+  }
 
   std::this_thread::sleep_for(std::chrono::seconds(FLAGS_main_sleep));
+
+  // Wait until Threads are ready
+  while (test_data.ready_count_.load() < numThreads);
+
+  std::cout << "#  Threads Ready, Sleeping for " << test_data.execution_time_ << " seconds." << std::endl;
+
   struct timeval start_time;
   (void)gettimeofday(&start_time, NULL);
-
-// #ifdef DEBUG
-//   printf("Debug: Beginning Test.\n");
-// #endif
+  test_data.running_.store(true);
   test_data.wait_flag_.store(false);
 
   // Wait until test is over
   std::this_thread::sleep_for(std::chrono::seconds(test_data.execution_time_));
   test_data.ready_count_.store(0);
-
-  // Signal Stop
   test_data.wait_flag_.store(true);
+  // Signal Stop
   test_data.running_.store(false);
 
   struct timeval end_time;
   (void)gettimeofday(&end_time, NULL);
 
-// #ifdef DEBUG
-//   printf("Debug: Signaled Stop!\n");
-// #endif
-  // Pause
+  std::cout << "#  Testing Completed(1)" << std::endl;
   std::this_thread::sleep_for(std::chrono::seconds(1));
-
   test_data.extra_end_signal();
 
   // Wait until all threads are done.
-  while (test_data.ready_count_.load() < FLAGS_num_threads);
-
+  while (test_data.ready_count_.load() < numThreads);
 
   std::for_each(thread_list.begin(), thread_list.end(),
                 [](std::thread &t) { t.join(); });
@@ -114,11 +120,13 @@ int main(int argc, char **argv) {
 
   test_data.set_end_time((double)end_time.tv_sec + (1.0/1000000) * (double)end_time.tv_usec);
 
-  std::cout << test_data.results() << std::endl;
+  std::cout << test_data.results(numThreads) << std::endl;
 
 
 
   std::this_thread::sleep_for(std::chrono::seconds(1));
+
+    std::cout << "#  FIN" << std::endl;
 
 #ifdef USE_CDS
   }
