@@ -42,7 +42,7 @@ OBJECTS = $(SOURCES:.cc=.o)
 output ?= $(input).x
 OUTPUT = Executables/
 
-all: WFTEST LFTEST
+all: WFTEST LFTEST WFHASHMAP WFNODELHASHMAP
 
 .PHONY: test
 test: $(SOURCES) $(EXECUTABLE)
