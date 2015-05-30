@@ -176,7 +176,7 @@ class TestObject {
   std::string yaml_results(int numThreads) {
     std::string res("");
     res += "AlgorithmName : " DS_NAME "\n";
-    res += "AlgorithmConfig : \n -" DS_CONFIG_STR "\n";
+    res += "AlgorithmConfig : " DS_CONFIG_STR "\n";
     res += "ExecutionTime : " + std::to_string(execution_time_) + "\n";
     res += "MainDelay : " + std::to_string(FLAGS_main_sleep) + "\n";
     res += "NumberThreads : " + std::to_string(numThreads) + "\n";

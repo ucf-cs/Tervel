@@ -74,7 +74,7 @@ for (int i = 0; i < FLAGS_prefill; i++) { \
 #define DS_NAME "WF No Del Hash Map"
 
 #define DS_CONFIG_STR \
-  "Prefill : " + std::to_string(FLAGS_prefill) \
+    "\n  Prefill : " + std::to_string(FLAGS_prefill) \
   + "\n  Capacity : " + std::to_string(FLAGS_capacity) \
   + "\n  ExpansionFactor : " + std::to_string(FLAGS_expansion_factor) + ""
 
