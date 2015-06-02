@@ -46,7 +46,6 @@ all: WFTEST LFTEST WFHASHMAP WFNODELHASHMAP
 
 .PHONY: test
 test: $(SOURCES) $(EXECUTABLE)
-	mkdir -p $(OUTPUT)
 	rm main.o
 
 .PHONY: LFTEST
@@ -67,6 +66,7 @@ WFNODELHASHMAP:
 
 
 $(EXECUTABLE): $(OBJECTS)
+	mkdir -p $(OUTPUT)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(INC)  -o $(OUTPUT)$(output) $^ $(LIB) $(TOBJS)
 
 %.o: %.cc
