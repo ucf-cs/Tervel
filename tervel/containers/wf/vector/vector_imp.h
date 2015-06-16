@@ -72,7 +72,7 @@ size_t Vector<T>::push_back_only(T value) {
 
 
     tervel::util::ProgressAssurance::Limit progAssur;
-    while (progAssur.isDelayed()) {
+    while (progAssur.isDelayed() == false) {
       std::atomic<T> *spot = internal_array.get_spot(placed_pos);
       T expected = spot->load();
       if ( (expected ==  Vector<T>::c_not_value_) &&
@@ -121,7 +121,7 @@ bool Vector<T>::pop_back_only(T &value) {
 
 
     tervel::util::ProgressAssurance::Limit progAssur;
-    while (progAssur.isDelayed()) {
+    while (progAssur.isDelayed() == false) {
       if (poped_pos <= 0) {
         return false;
       }
@@ -195,7 +195,7 @@ bool Vector<T>::at(size_t idx, T &value) {
     std::atomic<T> *spot = internal_array.get_spot(idx, false);
 
     tervel::util::ProgressAssurance::Limit progAssur;
-    while (progAssur.isDelayed()) {
+    while (progAssur.isDelayed() == false) {
       T cvalue = spot->load(std::memory_order_relaxed);
 
       if (cvalue == Vector<T>::c_not_value_) {
@@ -238,7 +238,7 @@ bool Vector<T>::cas(size_t idx, T &expected, const T val) {
     std::atomic<T> *spot = internal_array.get_spot(idx, false);
 
     tervel::util::ProgressAssurance::Limit progAssur;
-    while (progAssur.isDelayed()) {
+    while (progAssur.isDelayed() == false) {
       T cvalue = spot->load(std::memory_order_relaxed);
 
       if (cvalue == c_not_value_) {
@@ -272,7 +272,7 @@ bool Vector<T>::cas(size_t idx, T &expected, const T val) {
   return false;
 };
 
-/*
+
 template<typename T>
 bool Vector<T>::insertAt(int idx, T value){
   tervel::util::ProgressAssurance::check_for_announcement();
@@ -280,7 +280,7 @@ bool Vector<T>::insertAt(int idx, T value){
   InsertAt<T>* op = new InsertAt<T>(idx, value);
   tl_control_word = &(op->state);
 
-  bool res=op->begin(this);
+  bool res = op->begin(this);
 
   if (res) {
     op->cleanup(this, idx);
@@ -307,7 +307,7 @@ bool Vector<T>::eraseAt(int idx, T &value){
 
   op->safe_delete();
   return res;
-}; */
+};
 
 }  // namespace vector
 }  // namespace wf
