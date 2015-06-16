@@ -1,25 +1,25 @@
-/* 
+/*
  * File:   Node.h
  * Author: ramin
  *
  * Created on November 18, 2014, 1:53 PM
  */
 
-#ifndef NODE_H
+#ifndef NODE_H  // ISSUE(steven): header guards should be full file path
 #define	NODE_H
 #include <atomic>
 // #include "myMemoryPool.h"
 
 // thread_local CMemPool *memoryPool;
-using namespace std;
+using namespace std;  // ISSUE(steven): this is bad habit when working with libraries, you want to be explicit which functions you use
 
-template<class T> class Node {
-public:
+template<class T> class Node {  // ISSUE(steven): should be two lines, should use typename instead of class
+public:  // ISSUE(steven): missing space
     Node(T) noexcept ;
     Node() noexcept ;
     Node(const Node& orig) noexcept;
     // virtual ~Node() noexcept {
-        
+
     // }
     T getValue(){
         return value;
@@ -29,9 +29,9 @@ public:
     }
     // void* operator new(size_t sz);
     // void operator delete(void* ptr) noexcept;
-    atomic<unsigned long> tag;    
-        
-    
+    atomic<unsigned long> tag;      // ISSUE(steven): trailing whitespace. why is this atomic? why is this not a constant?
+
+
 private:
     T value;
 
@@ -70,7 +70,7 @@ template <class T> void Node<T>::operator delete(void* ptr) noexcept
         return;
     }else{
 //        cout << " memory pool was not null for me in remove ! " << this_thread::get_id() << endl;
-    }    
+    }
 //    std::free(ptr);
 //    cout << "free" << this_thread::get_id() << endl;
 //    cout << "free " << ptr << " from " << this_thread::get_id() << endl;
