@@ -42,7 +42,7 @@ OBJECTS = $(SOURCES:.cc=.o)
 output ?= $(input).x
 OUTPUT = Executables/
 
-all: WFTEST LFTEST
+all: WFTEST LFTEST ABTEST
 
 test: $(SOURCES) $(EXECUTABLE)
 	mkdir -p $(OUTPUT)
@@ -54,6 +54,8 @@ LFTEST:
 WFTEST:
 	$(MAKE) test input="api/wf_stack_api.h" output="wf_stack.x"
 
+ABTEST:
+	$(MAKE) test input="api/ab_stack_api_NonPointer.h" output="ab_stack.x"
 
 $(EXECUTABLE): $(OBJECTS)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(INC)  -o $(OUTPUT)$(output) $^ $(LIB) $(TOBJS)

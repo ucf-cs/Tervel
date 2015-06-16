@@ -37,12 +37,40 @@
 #include "testObject.h"
 #include "PapiUtil.h"
 
-void run(TestObject *t, int id) {
+void run(TestObject *t, int id, PapiUtil *papiUtil, long long *counts) {
 #ifdef USE_CDS
   cds::gc::HP::thread_gc myThreadGC (true) ;
 #endif
 
-  return t->run(id);
+
+ 
+
+  int retval = PAPI_register_thread(  );
+  if ( retval != PAPI_OK ) {
+     std::cout << "PAPI ERROR (PAPI_register_thread) ! ( " << retval << " )" << std::endl;
+  }
+
+  //PAPI start
+  std::vector<int> availableEvents;
+  bool result = papiUtil->start(papiUtil->cacheInfo[FLAGS_PAPI_metricCacheInfo],availableEvents);
+  if(!result)
+    std::cout << "PAPI ERROR (start) !" << std::endl;
+  for(unsigned int i = 0; i < availableEvents.size(); i++){
+    counts[i] = 0;
+  } 
+  
+  t->run(id);
+
+  // PAPI stop
+  papiUtil->stop(counts,availableEvents.size());
+
+  // print PAPI results
+  // papiUtil->printResults(availableEvents,counts);  
+
+  retval = 0;
+  retval = PAPI_unregister_thread(  );
+  if ( retval != PAPI_OK )
+    std::cout << "PAPI ERROR (PAPI_unregister_thread) ! ( " << retval << " )" << std::endl;
 };
 
 int main(int argc, char **argv) {
@@ -60,11 +88,16 @@ int main(int argc, char **argv) {
   TestObject test_data;
 
   test_data.init();
-
+  
+  PapiUtil papiUtil;
+  papiUtil.init();
+  long long **threadCounters = new long long *[FLAGS_num_threads];
+  std::vector<int> availableEvents = papiUtil.filterAvailableEvents(papiUtil.cacheInfo[FLAGS_PAPI_metricCacheInfo]);  
   // Create Threads
   std::vector<std::thread> thread_list;
   for (int64_t i = 0; i < FLAGS_num_threads; i++) {
-    std::thread temp_thread(run, &test_data, i);
+    threadCounters[i] = new long long[availableEvents.size()];
+    std::thread temp_thread(run, &test_data, i, &papiUtil, threadCounters[i]);
     thread_list.push_back(std::move(temp_thread));
   }
 
@@ -75,17 +108,17 @@ int main(int argc, char **argv) {
   printf("Debug: Beginning Test.\n");
 #endif
 
-  //PAPI start
-  PapiUtil papiUtil;
-  std::vector<int> availableEvents;
-  bool result = papiUtil.start(papiUtil.CacheDataAHM,availableEvents);
-  if(!result)
-    std::cout << "PAPI ERROR !" << std::endl;
-  long long *counts = new long long[availableEvents.size()];
+
+
+  std::chrono::high_resolution_clock::time_point t1 = std::chrono::high_resolution_clock::now();
 
   test_data.wait_flag_.store(false);
 
   // Wait until test is over
+  // while(test_data.visitedCounter < 100000){
+  //   std::cout << "main : visitedCounter= " << test_data.visitedCounter << std::endl;
+  //   std::this_thread::sleep_for(std::chrono::milliseconds(500));
+  // }
   std::this_thread::sleep_for(std::chrono::seconds(test_data.execution_time_));
   test_data.ready_count_.store(0);
 
@@ -101,12 +134,12 @@ int main(int argc, char **argv) {
   std::this_thread::sleep_for(std::chrono::seconds(1));
 
   test_data.extra_end_signal();
-
   // Wait until all threads are done.
+  // std::cout << "before waiting for threads" << test_data.ready_count_.load() << std::endl;
   while (test_data.ready_count_.load() < FLAGS_num_threads);
-
-  // PAPI stop
-  papiUtil.stop(counts,availableEvents.size());
+  // std::cout << "after waiting for threads: " << test_data.ready_count_.load() << std::endl;
+  std::chrono::high_resolution_clock::time_point t2 = std::chrono::high_resolution_clock::now();
+  
 
 
   std::for_each(thread_list.begin(), thread_list.end(),
@@ -115,9 +148,27 @@ int main(int argc, char **argv) {
 
   // Print results
   std::cout << test_data.results() << std::endl;
+  unsigned long execTime = std::chrono::duration_cast<std::chrono::milliseconds>(t2 - t1).count();
+  std::cout << "execTime: " << execTime << std::endl;
 
-  // print PAPI results
-  papiUtil.printResults(availableEvents,counts);
+
+  long long *counts = new long long[availableEvents.size()];
+  for (unsigned int i = 0; i < availableEvents.size(); ++i)
+  {
+    counts[i] = 0;
+  }
+  for (int64_t i = 0; i < FLAGS_num_threads; i++) {
+    for(unsigned int j = 0; j < availableEvents.size(); j++){
+      counts[j] += threadCounters[i][j];
+    }
+  }
+  papiUtil.printResults(availableEvents,counts);  
+
+
+
+  papiUtil.shutdown();
+
+
 
   std::this_thread::sleep_for(std::chrono::seconds(1));
 
