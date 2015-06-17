@@ -34,37 +34,59 @@
 #include <iostream>
 #include <gflags/gflags.h>
 
-#include <tervel/containers/wf/vector/vector.hpp>
-#include <tervel/util/info.h>
-#include <tervel/util/thread_context.h>
-#include <tervel/util/tervel.h>
-#include <tervel/util/memory/hp/hp_element.h>
-#include <tervel/util/memory/hp/hp_list.h>
+#include <tervel/tests/vector/testObject.h>
+
+void run(TestObject *t, int id) {
+  return t->run(id);
+};
 
 int main(int argc, char **argv) {
-  int capacity = 32;
-  int num_threads = 1;
+  gflags::ParseCommandLineFlags(&argc, &argv, true);
 
-  tervel::Tervel *tervel_obj = new tervel::Tervel(num_threads);
-  tervel::ThreadContext* thread_context __attribute__((unused));
-  thread_context = new tervel::ThreadContext(tervel_obj);
+  // Create Test Object
+  TestObject test_data;
 
-  tervel::containers::wf::vector::Vector<long> *container;
-  container = new tervel::containers::wf::vector::Vector<long>(capacity);
+  test_data.init();
 
-  long temp = 0x8;
-  container->push_back(temp);
-
-  for(int i = 0; i < 15; i++) {
-    temp += 0x8;
-    container->insertAt(0,temp);
+  // Create Threads
+  std::vector<std::thread> thread_list;
+  for (int64_t i = 0; i < FLAGS_num_threads; i++) {
+    std::thread temp_thread(run, &test_data, i);
+    thread_list.push_back(std::move(temp_thread));
   }
 
-  for(int i = 0; i < 18; i+=1) {
-    long temp = -1;
-    container->at(i, temp);
-    std::cout << i << " : " << temp << std::endl;
-  }
+  // Wait until Threads are ready
+  while (test_data.ready_count_.load() < FLAGS_num_threads);
+
+#ifdef DEBUG
+  printf("Debug: Beginning Test.\n");
+#endif
+  test_data.wait_flag_.store(false);
+
+  // Wait until test is over
+  std::this_thread::sleep_for(std::chrono::seconds(test_data.execution_time_));
+  test_data.ready_count_.store(0);
+
+  // Signal Stop
+  test_data.wait_flag_.store(true);
+  test_data.running_.store(false);
+
+#ifdef DEBUG
+  printf("Debug: Signaled Stop!\n");
+#endif
+  // Pause
+  std::this_thread::sleep_for(std::chrono::seconds(1));
+
+  test_data.extra_end_signal();
+
+  // Wait until all threads are done.
+  while (test_data.ready_count_.load() < FLAGS_num_threads);
+
+  // Print results
+  std::cout << test_data.results() << std::endl;
+
+  std::for_each(thread_list.begin(), thread_list.end(),
+                [](std::thread &t) { t.join(); });
 
   return 0;
 }

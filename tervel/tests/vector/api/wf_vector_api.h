@@ -42,6 +42,7 @@ class TestClass {
     tervel_obj = new tervel::Tervel(num_threads);
     attach_thread();
     container = new tervel::containers::wf::vector::Vector<T>(capacity);
+    container->push_back(0x8);
   }
 
   std::string toString() {
@@ -71,6 +72,11 @@ class TestClass {
   bool pop_back(T &value) {
     return container->pop_back(value);
   };
+
+  bool insertAt(size_t idx, T value) {
+    return container->insertAt(idx, value);
+  };
+
 
   size_t size() {
     return container->size();

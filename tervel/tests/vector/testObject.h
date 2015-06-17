@@ -40,18 +40,20 @@
 /**Change these when adapting to a new data structures **/
 
 // Constructor Arguments
-DEFINE_int32(capacity, 64, "The initial capacity of the hash map");
+DEFINE_int32(capacity, 64, "The initial capacity of the vector");
 
 // Operation Rates
-DEFINE_int32(cas_rate, 20,
+DEFINE_int32(cas_rate, 0,
              "The chance (0-100) of the CAS operation being called.");
-DEFINE_int32(at_rate, 20,
+DEFINE_int32(at_rate, 0,
              "The chance (0-100) of the at operation being called.");
-DEFINE_int32(pushBack_rate, 20,
+DEFINE_int32(pushBack_rate, 0,
              "The chance (0-100) of pushBack operation being called.");
-DEFINE_int32(popBack_rate, 20,
+DEFINE_int32(popBack_rate, 0,
              "The chance (0-100) of popBack operation being called.");
-DEFINE_int32(size_rate, 20,
+DEFINE_int32(size_rate, 0,
+             "The chance (0-100) of size operation being called.");
+DEFINE_int32(insertAt_rate, 0,
              "The chance (0-100) of size operation being called.");
 
 /** Arguments for Tester */
@@ -61,7 +63,7 @@ DEFINE_int32(execution_time, 5, "The amount of time to run the tests");
 typedef uint64_t Value;
 class TestObject {
  public:
-  enum op_codes : int { cas = 0, at, popBack, pushBack, size, LENGTH };
+  enum op_codes : int { cas = 0, at, popBack, pushBack, size, insertAt, LENGTH };
   static const int k_num_functions = op_codes::LENGTH;
   int* func_call_rate_;
   std::string* func_name_;
@@ -80,6 +82,8 @@ class TestObject {
     MACRO_ADD_RATE(popBack)
     MACRO_ADD_RATE(size)
     MACRO_ADD_RATE(at)
+    MACRO_ADD_RATE(insertAt)
+
 
     for (int i = 0; i < k_num_functions; i++) {
       func_call_count_[i].store(0);
@@ -133,7 +137,7 @@ class TestObject {
 
     // Setup Random Number Generation
     std::default_random_engine generator;
-    std::uniform_int_distribution<int> distribution(0, max_rand);
+    std::uniform_int_distribution<int> distribution(1, max_rand);
     std::uniform_int_distribution<int> largeValue(0, UINT_MAX);
 
     // Wait for start signle
@@ -178,6 +182,17 @@ class TestObject {
       } else if (op <= func_call_rate[op_codes::size]) {
         test_class_->size();
         func_call_count[op_codes::size]++;
+      } else if (op <= func_call_rate[op_codes::insertAt]) {
+        size_t s = test_class_->size();
+        if (s == 0) {
+          continue;
+        }
+
+        Value temp = largeValue(generator) & (~0x7);
+        size_t idx = largeValue(generator) % s;
+
+        test_class_->insertAt(idx, temp);
+        func_call_count[op_codes::insertAt]++;
       } else {
         assert(false);
       }

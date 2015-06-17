@@ -74,7 +74,13 @@ class ShiftHelper: public tervel::util::Descriptor {
     }
   }
   bool associate() {
-    return prev_->associate(this);
+    ShiftHelper<T> *expected = nullptr;
+    if (prev_ == nullptr) {
+      return op_->helpers_.compare_exchange_strong(expected, this) || op_->helpers_.load() == this;
+    } else {
+      return prev_->associate(this);
+    }
+
   };
 
   bool notAssociated() {

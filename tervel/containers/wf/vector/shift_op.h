@@ -59,6 +59,9 @@ class ShiftOp: public tervel::util::OpRecord {
   bool on_is_watched() {
     ShiftHelper<T> *temp = helpers_.load();
     assert(temp != nullptr);
+    if (temp == k_fail_const) {
+      return false;
+    }
     while (temp != nullptr) {
       if (tervel::util::memory::rc::is_watched(temp)) {
         return true;
@@ -128,7 +131,9 @@ template<typename T>
 void ShiftOp<T>::fail() {
   ShiftHelper<T> *cur = helpers_.load();
   if (cur == nullptr) {
-    helpers_.compare_exchange_strong(cur, k_fail_const);
+    if (helpers_.compare_exchange_strong(cur, k_fail_const) || cur == k_fail_const) {
+      set_done();
+    }
   }
 }
 
@@ -184,6 +189,7 @@ template<typename T>
 void ShiftOp<T>::place_rest(bool announced) {
 
   ShiftHelper<T> *last_helper = helpers_.load();
+  assert(last_helper != k_fail_const);
 
   for (size_t i = idx_ + 1; ; i++) {
     assert(last_helper != nullptr);
@@ -194,7 +200,7 @@ void ShiftOp<T>::place_rest(bool announced) {
     }
 
     ShiftHelper<T> *helper = tervel::util::memory::rc::get_descriptor<
-        ShiftHelper<T> >(this);
+        ShiftHelper<T> >(this, last_helper);
     T helper_marked = reinterpret_cast<T>(util::memory::rc::mark_first(helper));
 
     std::atomic<T> *spot = vec_->internal_array.get_spot(i);
@@ -219,7 +225,7 @@ void ShiftOp<T>::place_rest(bool announced) {
         if (spot->compare_exchange_strong(expected, helper_marked)) {
           if (!last_helper->associate(helper)) {
             spot->compare_exchange_strong(helper_marked, expected);
-            assert(this->is_done());
+            assert(this->is_done() || this->isFailed());
             return;
           }
           break;

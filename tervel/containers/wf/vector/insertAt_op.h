@@ -50,7 +50,7 @@ class InsertAt : public ShiftOp<T> {
 template<typename T>
 T InsertAt<T>::getValue(ShiftHelper<T> * helper) {
   assert(this->is_done());
-  assert(helper == nullptr);
+  assert(helper != nullptr);
   if (ShiftOp<T>::helpers_.load() == helper) {
     return val_;
   } else {
