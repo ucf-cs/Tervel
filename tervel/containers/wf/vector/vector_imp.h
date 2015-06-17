@@ -275,7 +275,7 @@ bool Vector<T>::cas(size_t idx, T &expected, const T val) {
 
 
 template<typename T>
-bool Vector<T>::insertAt(int idx, T value){
+bool Vector<T>::insertAt(size_t idx, T value){
   tervel::util::ProgressAssurance::check_for_announcement();
 
   InsertAt<T>* op = new InsertAt<T>(this, idx, value);
@@ -284,7 +284,7 @@ bool Vector<T>::insertAt(int idx, T value){
   bool res = op->begin();
 
   if (res) {
-    op->cleanup(this, idx);
+    op->cleanup();
     size(1);
   }
 

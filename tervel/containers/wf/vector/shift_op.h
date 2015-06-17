@@ -40,30 +40,67 @@ namespace wf {
 namespace vector {
 
 template<typename T>
+class InsertAt;
+
+template<typename T>
 class ShiftOp: public tervel::util::OpRecord {
  public:
+  friend class InsertAt<T>;
+  friend class ShiftHelper<T>;
+
+
   ShiftOp(Vector<T> *vec, size_t idx)
     : idx_(idx)
     , vec_(vec) {};
 
+  ~ShiftOp();
+
+  using tervel::util::OpRecord::on_is_watched;
+  bool on_is_watched() {
+    ShiftHelper<T> *temp = helpers_.load();
+    assert(temp != nullptr);
+    while (temp != nullptr) {
+      if (tervel::util::memory::rc::is_watched(temp)) {
+        return true;
+      } else {
+        temp = temp->next();
+      }
+    }
+    return false;
+  };
+
   void help_complete() { begin(true); };
   bool begin(bool announced = false) {
-    place_first_idx(announced);
-    if (!isFailed()) {
-      place_rest_idx(announced);
-      return true;
-    } else {
+    if (idx_ >= vec_->capacity()) {
+      return false;
+    } else if (idx_ >= vec_->size()) {
       return false;
     }
+    place_first_idx(announced);
+    if (isFailed()) {
+      return false;
+    } else {
+      place_rest(announced);
+      return true;
+    }
   }
+
+
+  void place_first_idx(bool announced);
+  void place_rest(bool announced);
+
 
   bool is_done() { return is_done_.load(); };
   void set_done() { is_done_.store(true); };
 
   void * state() { return &is_done_; };
+  void fail();
+  bool isFailed();
+
+  virtual T getValue(ShiftHelper<T> * helper) = 0;
  private:
-  const size_t idx_;
-  Vector<T> const *vec;
+  size_t idx_;
+  Vector<T> *vec_;
   std::atomic<ShiftHelper<T> *> helpers_{nullptr};
   std::atomic<bool> is_done_{false};
 
@@ -74,8 +111,25 @@ class ShiftOp: public tervel::util::OpRecord {
 };  // class ShiftOp
 
 template<typename T>
+ShiftOp<T>::~ShiftOp() {
+  ShiftHelper<T> *helper = helpers_.load();
+  if (isFailed()) {
+    return;
+  }
+  while (helper != nullptr) {
+    ShiftHelper<T> *temp = helper;
+    helper = helper->next();
+    util::memory::rc::free_descriptor(temp, true);
+  }
+
+};
+
+template<typename T>
 void ShiftOp<T>::fail() {
-  helpers_.compare_exchange_strong(nullptr, k_fail_const);
+  ShiftHelper<T> *cur = helpers_.load();
+  if (cur == nullptr) {
+    helpers_.compare_exchange_strong(cur, k_fail_const);
+  }
 }
 
 template<typename T>
@@ -85,31 +139,19 @@ bool ShiftOp<T>::isFailed() {
 
 
 template<typename T>
-bool ShiftOp<T>::begin() {
-  if (idx_ >= vec_->capacity()) {
-    return false;
-  } else if (idx_ >= vec_->size()) {
-    return false;
-  } else if (place_first_idx(false) == false) {
-    return false;
-  } else {
-    place_rest_idx();
-    return true;
-  }
-}
+void ShiftOp<T>::place_first_idx(bool announced) {
 
-
-template<typename T>
-bool ShiftOp<T>::place_first_idx(bool announced) {
-
-  ShiftHelper<T> *helper = new ShiftHelper<T>(this); // Replace with RC
+  ShiftHelper<T> *helper = tervel::util::memory::rc::get_descriptor<
+        ShiftHelper<T> >(this);
   T helper_marked = reinterpret_cast<T>(util::memory::rc::mark_first(helper));
 
   std::atomic<T> *spot = vec_->internal_array.get_spot(idx_);
 
 
   tervel::util::ProgressAssurance::Limit progAssur;
-  while (helpers_.load() == nullptr) {
+
+  ShiftHelper<T> * cur_helper = helpers_.load();
+  while (cur_helper == nullptr) {
     if (!announced && progAssur.isDelayed()) {
       util::ProgressAssurance::make_announcement(
           reinterpret_cast<tervel::util::OpRecord *>(this));
@@ -117,28 +159,25 @@ bool ShiftOp<T>::place_first_idx(bool announced) {
     }
 
     T expected = spot->load();
-    helper->value(expected);
+    helper->set_value(expected);
     if (expected == Vector<T>::c_not_value_) {
       this->fail();
       break;
     } else if (vec_->internal_array.is_descriptor(expected, spot)) {
       // The is_descriptor function changes the value at the address
-      continue;
     } else {  // its a valid value
       if (spot->compare_exchange_strong(expected, helper_marked)) {
-        if (!helpers_.compare_exchange_strong(nullptr, helper) && helpers_.load() != helper) {
+        if (!helpers_.compare_exchange_strong(cur_helper, helper) && cur_helper != helper) {
           spot->compare_exchange_strong(helper_marked, expected);
-          // TODO: rc safe free
+          util::memory::rc::free_descriptor(helper, false);
+        } else {
           return;
         }
-        break;
-      } else {
-        continue; // value changed
       }
     }
+    cur_helper = helpers_.load();
   }
-
-  // TODO: rc un safe free
+  util::memory::rc::free_descriptor(helper, true);
 }
 
 template<typename T>
@@ -154,10 +193,11 @@ void ShiftOp<T>::place_rest(bool announced) {
       return;
     }
 
-    ShiftHelper<T> *helper = new ShiftHelper(this, last_helper);
+    ShiftHelper<T> *helper = tervel::util::memory::rc::get_descriptor<
+        ShiftHelper<T> >(this);
     T helper_marked = reinterpret_cast<T>(util::memory::rc::mark_first(helper));
 
-    std::atomic<T> *spot = vec_->internal_array.get_spot(idx_);
+    std::atomic<T> *spot = vec_->internal_array.get_spot(i);
 
 
     tervel::util::ProgressAssurance::Limit progAssur;
@@ -177,8 +217,9 @@ void ShiftOp<T>::place_rest(bool announced) {
         continue;
       } else {  // its a valid value or null
         if (spot->compare_exchange_strong(expected, helper_marked)) {
-          if (!last_helper->associate(helper) {
+          if (!last_helper->associate(helper)) {
             spot->compare_exchange_strong(helper_marked, expected);
+            assert(this->is_done());
             return;
           }
           break;

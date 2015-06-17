@@ -70,7 +70,7 @@ class Vector {
       return temp;
   };
 
-  size_t capacity() {
+  const size_t capacity() {
     return internal_array.capacity();
   };
 

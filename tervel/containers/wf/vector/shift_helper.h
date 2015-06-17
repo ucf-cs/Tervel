@@ -42,16 +42,18 @@ class ShiftOp;
 template<typename T>
 class ShiftHelper: public tervel::util::Descriptor {
  public:
+  friend ShiftOp<T>;
   ShiftHelper(ShiftOp<T> *op)
     : op_(op)
     , prev_(nullptr) {};
 
-  ShiftHelper(ShiftOp *op, ShiftHelper *prev)
+  ShiftHelper(ShiftOp<T> *op, ShiftHelper<T> *prev)
     : op_(op)
     , prev_(prev) {
       assert(prev->isAssociated());
     };
 
+  ShiftHelper * prev() { return prev_; }
   T value() { return value_; }
   bool end(T val) { return value_ == val; };
   void set_value(T value) { value_ = value; };
@@ -75,6 +77,10 @@ class ShiftHelper: public tervel::util::Descriptor {
     return prev_->associate(this);
   };
 
+  bool notAssociated() {
+    return (next_.load() == nullptr);
+  }
+
   ShiftHelper<T> * next() { return next_.load(); }
 
 
@@ -82,13 +88,18 @@ class ShiftHelper: public tervel::util::Descriptor {
   void * complete(void *value, std::atomic<void *> *address) {
     op_->help_complete();
     T val = op_->getValue(this);
-    address->compare_exchange_strong(value, reinterpret_cast<void *>(val));
+    void * new_val = reinterpret_cast<void *>(val);
+    if (address->compare_exchange_strong(value, new_val)) {
+      return new_val;
+    } else {
+      return value;
+    }
   }
 
   using util::Descriptor::get_logical_value;
   void * get_logical_value() {
     if (op_->is_done()) {
-      reinterpret_cast<void *>(op_->getValue(this));
+      return reinterpret_cast<void *>(op_->getValue(this));
     } else {
       return reinterpret_cast<void *>(value_);
     }
@@ -121,8 +132,8 @@ class ShiftHelper: public tervel::util::Descriptor {
   };
 
  private:
-  ShiftOp<T> const *op_;
-  ShiftHelper<T> const *prev_;
+  ShiftOp<T> *op_;
+  ShiftHelper<T> *prev_;
   std::atomic<ShiftHelper<T> *> next_{nullptr};
   T value_;
 };

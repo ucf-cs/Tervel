@@ -34,22 +34,53 @@ namespace wf {
 namespace vector {
 
 template<typename T>
-class InsertAtOp: public ShiftOp {
+class InsertAt : public ShiftOp<T> {
  public:
-  InsertAtOp(Vector<T> *vec, size_t idx, T val)
-    : idx_(idx)
-    , vec_(vec)
+  InsertAt(Vector<T> *vec, size_t idx, T val)
+    : ShiftOp<T>(vec, idx)
     , val_(val) {};
 
   void cleanup();
+  virtual T getValue(ShiftHelper<T> * helper);
 
  private:
   T val_;
 };
 
 template<typename T>
-void InsertAtOp::cleanup() {
-  // TODO: implement
+T InsertAt<T>::getValue(ShiftHelper<T> * helper) {
+  assert(this->is_done());
+  assert(helper == nullptr);
+  if (ShiftOp<T>::helpers_.load() == helper) {
+    return val_;
+  } else {
+    return helper->prev()->value();
+  }
+}
+
+template<typename T>
+void InsertAt<T>::cleanup() {
+  ShiftHelper<T> *helper = ShiftOp<T>::helpers_.load();
+  assert(this->is_done());
+  assert(helper != nullptr);
+
+  T helper_marked = reinterpret_cast<T>(util::memory::rc::mark_first(helper));
+  std::atomic<T> *spot = ShiftOp<T>::vec_->internal_array.get_spot(ShiftOp<T>::idx_);
+  T new_value = this->val_;
+  spot->compare_exchange_strong(helper_marked, new_value);
+
+
+  for (size_t i = ShiftOp<T>::idx_ + 1; ; i++) {
+    new_value = helper->value();
+    helper = helper->next();
+    if (helper == nullptr) {
+      return;
+    }
+
+    helper_marked = reinterpret_cast<T>(util::memory::rc::mark_first(helper));
+    spot = ShiftOp<T>::vec_->internal_array.get_spot(i);
+    spot->compare_exchange_strong(helper_marked, new_value);
+  }  // For loop
 }
 
 }  // namespace vector
