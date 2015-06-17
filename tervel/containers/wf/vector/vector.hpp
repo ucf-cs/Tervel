@@ -59,7 +59,7 @@ class Vector {
   bool pop_back_w_ra(T &value);
   bool pop_back(T &value);
 
-  // bool insertAt(size_t pos, T value);
+  bool insertAt(size_t pos, T value);
   // bool eraseAt(size_t pos, T &value);
 
   int64_t size() {

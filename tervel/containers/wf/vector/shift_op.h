@@ -32,13 +32,12 @@ THE SOFTWARE.
 #include <tervel/util/memory/hp/hazard_pointer.h>
 #include <tervel/util/memory/rc/descriptor_util.h>
 #include <tervel/containers/wf/vector/vector.hpp>
+#include <tervel/containers/wf/vector/shift_helper.h>
 
 namespace tervel {
 namespace containers {
 namespace wf {
 namespace vector {
-
-
 
 template<typename T>
 class ShiftOp: public tervel::util::OpRecord {
@@ -46,17 +45,31 @@ class ShiftOp: public tervel::util::OpRecord {
   ShiftOp(Vector<T> *vec, size_t idx)
     : idx_(idx)
     , vec_(vec) {};
-  bool begin();
-  void help_complete() {
 
-
+  void help_complete() { begin(true); };
+  bool begin(bool announced = false) {
+    place_first_idx(announced);
+    if (!isFailed()) {
+      place_rest_idx(announced);
+      return true;
+    } else {
+      return false;
+    }
   }
+
+  bool is_done() { return is_done_.load(); };
+  void set_done() { is_done_.store(true); };
+
+  void * state() { return &is_done_; };
  private:
   const size_t idx_;
   Vector<T> const *vec;
-  std::atomic<ShiftHelper *> helpers_{nullptr};
+  std::atomic<ShiftHelper<T> *> helpers_{nullptr};
+  std::atomic<bool> is_done_{false};
 
-  static constexpr ShiftHelper<T> * k_fail_const {reinterpret_cast<ShiftHelper *>(0x1L)};
+  static constexpr ShiftHelper<T> * k_fail_const {
+    reinterpret_cast<ShiftHelper<T> *>(0x1L)
+  };
 
 };  // class ShiftOp
 
@@ -86,20 +99,25 @@ bool ShiftOp<T>::begin() {
 }
 
 
-
 template<typename T>
-void ShiftOp<T>::place_first_idx(bool announced) {
+bool ShiftOp<T>::place_first_idx(bool announced) {
 
-  ShiftHelper *helper = new ShiftHelper(this);
-  T helper_marked =
+  ShiftHelper<T> *helper = new ShiftHelper<T>(this); // Replace with RC
+  T helper_marked = reinterpret_cast<T>(util::memory::rc::mark_first(helper));
+
   std::atomic<T> *spot = vec_->internal_array.get_spot(idx_);
 
 
   tervel::util::ProgressAssurance::Limit progAssur;
-  while (helpers_.load() == nullptr &&
-    (announced || progAssur.isDelayed() == false) ) {
+  while (helpers_.load() == nullptr) {
+    if (!announced && progAssur.isDelayed()) {
+      util::ProgressAssurance::make_announcement(
+          reinterpret_cast<tervel::util::OpRecord *>(this));
+      break;
+    }
 
     T expected = spot->load();
+    helper->value(expected);
     if (expected == Vector<T>::c_not_value_) {
       this->fail();
       break;
@@ -108,8 +126,10 @@ void ShiftOp<T>::place_first_idx(bool announced) {
       continue;
     } else {  // its a valid value
       if (spot->compare_exchange_strong(expected, helper_marked)) {
-        if (!helpers_.compare_exchange_strong(nullptr, helper)) {
+        if (!helpers_.compare_exchange_strong(nullptr, helper) && helpers_.load() != helper) {
           spot->compare_exchange_strong(helper_marked, expected);
+          // TODO: rc safe free
+          return;
         }
         break;
       } else {
@@ -118,9 +138,57 @@ void ShiftOp<T>::place_first_idx(bool announced) {
     }
   }
 
-  if (isFailed()) {
-    return false;
-  }
+  // TODO: rc un safe free
+}
+
+template<typename T>
+void ShiftOp<T>::place_rest(bool announced) {
+
+  ShiftHelper<T> *last_helper = helpers_.load();
+
+  for (size_t i = idx_ + 1; ; i++) {
+    assert(last_helper != nullptr);
+
+    if (last_helper->end(Vector<T>::c_not_value_)) {
+      set_done();
+      return;
+    }
+
+    ShiftHelper<T> *helper = new ShiftHelper(this, last_helper);
+    T helper_marked = reinterpret_cast<T>(util::memory::rc::mark_first(helper));
+
+    std::atomic<T> *spot = vec_->internal_array.get_spot(idx_);
+
+
+    tervel::util::ProgressAssurance::Limit progAssur;
+    while (last_helper->notAssociated()) {
+      if (!announced && progAssur.isDelayed()) {
+        util::ProgressAssurance::make_announcement(
+          reinterpret_cast<tervel::util::OpRecord *>(this));
+        return;
+      }
+
+      T expected = spot->load();
+      helper->set_value(expected);
+      if (expected != Vector<T>::c_not_value_ &&
+          vec_->internal_array.is_descriptor(expected, spot)) {
+        // TODO: detect if part of this operation???
+        // The is_descriptor function changes the value at the address
+        continue;
+      } else {  // its a valid value or null
+        if (spot->compare_exchange_strong(expected, helper_marked)) {
+          if (!last_helper->associate(helper) {
+            spot->compare_exchange_strong(helper_marked, expected);
+            return;
+          }
+          break;
+        } else {
+          continue; // value changed
+        }
+      }
+    }  // while loop
+    last_helper = last_helper->next();
+  }  // For loop
 }
 
 }  // namespace vector
