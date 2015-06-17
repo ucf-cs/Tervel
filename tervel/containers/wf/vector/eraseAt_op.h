@@ -26,14 +26,56 @@ THE SOFTWARE.
 #define __TERVEL_CONTAINERS_WF_VECTOR_ERASEAT_OP_H
 
 
-#include <tervel/containers/wf/vector/shift_op.hpp>
+#include <tervel/containers/wf/vector/shift_op.h>
 
 namespace tervel {
 namespace containers {
 namespace wf {
 namespace vector {
 
+template<typename T>
+class EraseAt : public ShiftOp<T> {
+ public:
+  EraseAt(Vector<T> *vec, size_t idx)
+    : ShiftOp<T>(vec, idx)  {};
 
+  void cleanup();
+  virtual T getValue(ShiftHelper<T> * helper);
+};
+
+template<typename T>
+T EraseAt<T>::getValue(ShiftHelper<T> * helper) {
+  assert(this->is_done());
+  assert(helper != nullptr);
+
+  helper = helper->next();
+  if (helper == nullptr) {
+    return Vector<T>::c_not_value_;
+  } else {
+    return helper->value();
+  }
+}
+
+template<typename T>
+void EraseAt<T>::cleanup() {
+  ShiftHelper<T> *helper = ShiftOp<T>::helpers_.load();
+  assert(this->is_done());
+  assert(helper != nullptr);
+
+  T new_value;
+  for (size_t i = ShiftOp<T>::idx_; helper != nullptr; i++) {
+    T helper_marked = reinterpret_cast<T>(util::memory::rc::mark_first(helper));
+    helper = helper->next();
+    if (helper == nullptr) {
+      new_value = Vector<T>::c_not_value_;
+    } else {
+      new_value = helper->value();
+    }
+
+    std::atomic<T> *spot = ShiftOp<T>::vec_->internal_array.get_spot(i);
+    spot->compare_exchange_strong(helper_marked, new_value);
+  }  // For loop
+}
 
 }  // namespace vector
 }  // namespace wf

@@ -39,6 +39,7 @@ THE SOFTWARE.
 #include <tervel/containers/wf/vector/popbackwra_op.h>
 
 #include <tervel/containers/wf/vector/insertAt_op.h>
+#include <tervel/containers/wf/vector/eraseAt_op.h>
 
 
 namespace tervel {
@@ -292,23 +293,23 @@ bool Vector<T>::insertAt(size_t idx, T value){
   return res;
 };
 
-// template<typename T>
-// bool Vector<T>::eraseAt(int idx, T &value){
-//   tervel::util::ProgressAssurance::check_for_announcement();
+template<typename T>
+bool Vector<T>::eraseAt(size_t idx, T &value){
+  tervel::util::ProgressAssurance::check_for_announcement();
 
-//   EraseAt<T>* op = new EraseAt<T>(idx);
-//   tl_control_word = &(op->state);
+  EraseAt<T>* op = new EraseAt<T>(idx);
+  tl_control_word = op->state();
 
-//   bool res=op->begin(this, value);
+  bool res=op->begin();
 
-//   if (res) {
-//     op->cleanup(this, idx);
-//     size(-1);
-//   }
+  if (res) {
+    op->cleanup();
+    size(-1);
+  }
 
-//   op->safe_delete();
-//   return res;
-// };
+  op->safe_delete();
+  return res;
+};
 
 }  // namespace vector
 }  // namespace wf
