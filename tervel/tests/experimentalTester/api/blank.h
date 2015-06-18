@@ -28,7 +28,7 @@
 #define DS_API_H_
 
 #include <atomic>
-#include "../testerMacros.h"
+#include "../src/main.h"
 
 DEFINE_int64(value, 0, "The initial value of the counter");
 

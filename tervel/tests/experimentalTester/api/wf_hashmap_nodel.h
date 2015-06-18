@@ -40,7 +40,7 @@ typedef typename tervel::containers::wf::HashMapNoDelete<Key, Value> container_t
 typedef typename container_t::ValueAccessor Accessor;
 
 
-#include "../testerMacros.h"
+#include "../main.h"
 
 DEFINE_int32(prefill, 0, "The number elements to place in the data structure on init.");
 DEFINE_int32(capacity, 32768, "The initial capacity of the hashmap, should be a power of two.");

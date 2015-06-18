@@ -37,7 +37,7 @@ typedef int64_t Value;
 typedef tervel::containers::lf::Stack<Value> container_t;
 
 
-#include "../testerMacros.h"
+#include "../main.h"
 
 DEFINE_int32(prefill, 0, "The number elements to place in the stack on init.");
 

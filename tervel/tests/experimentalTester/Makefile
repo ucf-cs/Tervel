@@ -34,44 +34,46 @@ CPPFLAGS = -DINTEL
 INC= -I../../../
 LIB += -ldl -lgflags -lpthread -lrt
 
-SOURCES = main.cc $(shell find ../../util/ -name '*.cc')
+SOURCES = $(shell find ../../util/ -name '*.cc')
 
-EXECUTABLE ?=main
+EXECUTABLE ?=src/main.cc
 OBJECTS = $(SOURCES:.cc=.o)
 
 output ?= $(input).x
-OUTPUT = Executables/
+OUTPUT = executables/
 
-all: WFTEST LFTEST WFHASHMAP WFNODELHASHMAP
+all: wfstack lfstack wfhashmap wfhashmapnodel
 
-.PHONY: test
-test: $(SOURCES) $(EXECUTABLE)
-	rm main.o
 
-.PHONY: BLANK
-BLANK:
+
+
+.PHONY: blank
+blank:
 	$(MAKE) test input="api/blank.h" output="blank.x"
 
-.PHONY: LFTEST
-LFTEST:
+.PHONY: lfstack
+lfstack:
 	$(MAKE) test input="api/lf_stack_api.h" output="lf_stack.x"
 	
-.PHONY: WFTEST
-WFTEST:
+.PHONY: wfstack
+wfstack:
 	$(MAKE) test input="api/wf_stack_api.h" output="wf_stack.x"
 
-.PHONY: WFHASHMAP
-WFHASHMAP:
+.PHONY: wfhashmap
+wfhashmap:
 	$(MAKE) test input="api/wf_hashmap.h" output="wf_hashmap.x"
 
-.PHONY: WFNODELHASHMAP
-WFNODELHASHMAP:
+.PHONY: wfhashmapnodel
+wfhashmapnodel:
 	$(MAKE) test input="api/wf_hashmap_nodel.h" output="wf_hashmap_nodel.x"
 
 
+.PHONY: test
+test: $(SOURCES) $(EXECUTABLE)
+
 $(EXECUTABLE): $(OBJECTS)
 	mkdir -p $(OUTPUT)
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(INC)  -o $(OUTPUT)$(output) $^ $(LIB) $(TOBJS)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(INC)  -o $(OUTPUT)$(output) $(EXECUTABLE) $^ $(LIB) $(TOBJS)
 
 %.o: %.cc
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(INC) -c -o $@ $<
