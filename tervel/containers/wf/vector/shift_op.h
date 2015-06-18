@@ -41,11 +41,14 @@ namespace vector {
 
 template<typename T>
 class InsertAt;
+template<typename T>
+class EraseAt;
 
 template<typename T>
 class ShiftOp: public tervel::util::OpRecord {
  public:
   friend class InsertAt<T>;
+  friend class EraseAt<T>;
   friend class ShiftHelper<T>;
 
 

@@ -54,7 +54,9 @@ DEFINE_int32(popBack_rate, 0,
 DEFINE_int32(size_rate, 0,
              "The chance (0-100) of size operation being called.");
 DEFINE_int32(insertAt_rate, 0,
-             "The chance (0-100) of size operation being called.");
+             "The chance (0-100) of insertAt operation being called.");
+DEFINE_int32(eraseAt_rate, 0,
+             "The chance (0-100) of eraseAt operation being called.");
 
 /** Arguments for Tester */
 DEFINE_int32(num_threads, 1, "The number of executing threads.");
@@ -63,7 +65,7 @@ DEFINE_int32(execution_time, 5, "The amount of time to run the tests");
 typedef uint64_t Value;
 class TestObject {
  public:
-  enum op_codes : int { cas = 0, at, popBack, pushBack, size, insertAt, LENGTH };
+  enum op_codes : int { cas = 0, at, popBack, pushBack, size, insertAt, eraseAt, LENGTH };
   static const int k_num_functions = op_codes::LENGTH;
   int* func_call_rate_;
   std::string* func_name_;
@@ -83,6 +85,7 @@ class TestObject {
     MACRO_ADD_RATE(size)
     MACRO_ADD_RATE(at)
     MACRO_ADD_RATE(insertAt)
+    MACRO_ADD_RATE(eraseAt)
 
 
     for (int i = 0; i < k_num_functions; i++) {
@@ -193,6 +196,17 @@ class TestObject {
 
         test_class_->insertAt(idx, temp);
         func_call_count[op_codes::insertAt]++;
+      } else if (op <= func_call_rate[op_codes::eraseAt]) {
+        size_t s = test_class_->size();
+        if (s == 0) {
+          continue;
+        }
+
+        Value temp;
+        size_t idx = largeValue(generator) % s;
+
+        test_class_->eraseAt(idx, temp);
+        func_call_count[op_codes::eraseAt]++;
       } else {
         assert(false);
       }

@@ -297,7 +297,7 @@ template<typename T>
 bool Vector<T>::eraseAt(size_t idx, T &value){
   tervel::util::ProgressAssurance::check_for_announcement();
 
-  EraseAt<T>* op = new EraseAt<T>(idx);
+  EraseAt<T>* op = new EraseAt<T>(this, idx);
   tl_control_word = op->state();
 
   bool res=op->begin();

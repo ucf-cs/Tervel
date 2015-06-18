@@ -77,6 +77,11 @@ class TestClass {
     return container->insertAt(idx, value);
   };
 
+  bool eraseAt(size_t idx, T& value) {
+    return container->eraseAt(idx, value);
+  };
+
+
 
   size_t size() {
     return container->size();
