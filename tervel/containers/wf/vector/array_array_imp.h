@@ -27,10 +27,9 @@ THE SOFTWARE.
 #define __TERVEL_CONTAINERS_WF_VECTOR_VECTOR_ARRAY_IMP_H
 
 #include <tervel/containers/wf/vector/shift_helper.h>
-#include <tervel/containers/wf/vector/shift_op.h>
 #include <tervel/containers/wf/vector/pushback_op.h>
 #include <tervel/containers/wf/vector/popback_op.h>
-#include <tervel/containers/wf/vector/array_array.h>
+#include <tervel/containers/wf/vector/vector_array.h>
 
 namespace tervel {
 namespace containers {
@@ -40,7 +39,7 @@ namespace vector {
 
 
 template<typename T>
-bool VectorArray<T>::shift_is_descriptor(T &expected, std::atomic<T> *spot, ShiftOp<T> *op ) {
+bool VectorArray<T>::shift_is_descriptor(T &expected, std::atomic<T> *spot, void *op ) {
   void *ptr = reinterpret_cast<void *>(expected);
   std::atomic<void *> *address = reinterpret_cast<std::atomic<void *> *>(spot);
   if (util::memory::rc::is_descriptor_first(ptr) == false) {
@@ -50,36 +49,35 @@ bool VectorArray<T>::shift_is_descriptor(T &expected, std::atomic<T> *spot, Shif
 
   tervel::util::RecursiveAction recurse;
   if (tervel::util::RecursiveAction::recursive_return()) {
-    // TODO: make recursive return actually returns!
-    expected = nullptr;  // result not used
+    expected = Vector<T>::c_not_value_;  // result not used
     return true;
   }
 
-  tervel::util::Descriptor *descr = unmark_first(temp);
-  if (watch(descr, address, prt)) {
+  tervel::util::Descriptor *descr = util::memory::rc::unmark_first(ptr);
+  if (util::memory::rc::watch(descr, address, ptr)) {
     // Prevent recursive helping on the same operation
     {
-      ShiftHelper<T> * helper = dynamic_cast<const ShiftHelper<T>*>(descr);
+      ShiftHelper<T> * helper = dynamic_cast<ShiftHelper<T>*>(descr);
       if (helper != nullptr && helper->op() == op) {
-        unwatch(descr);
+        util::memory::rc::unwatch(descr);
         return true;
       }
     }
     {
-      PushOpHelper<T> * helper = dynamic_cast<const PushOpHelper<T>*>(descr);
+      PushOpHelper<T> * helper = dynamic_cast<PushOpHelper<T>*>(descr);
       if (helper != nullptr) {
         helper->success();
       }
     }
     {
-      PopOpHelper<T> * helper = dynamic_cast<const PopOpHelper<T>*>(descr);
+      PopOpHelper<T> * helper = dynamic_cast<PopOpHelper<T>*>(descr);
       if (helper != nullptr) {
         helper->fail();
       }
     }
 
     expected = reinterpret_cast<T>(descr->complete(ptr, address));
-    unwatch(descr);
+    util::memory::rc::unwatch(descr);
   } else {
     expected = spot->load();
   }

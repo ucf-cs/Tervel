@@ -33,6 +33,7 @@ THE SOFTWARE.
 #include <tervel/util/memory/rc/descriptor_util.h>
 #include <tervel/containers/wf/vector/vector.hpp>
 #include <tervel/containers/wf/vector/shift_helper.h>
+#include <tervel/containers/wf/vector/array_array_imp.h>
 
 namespace tervel {
 namespace containers {
@@ -75,19 +76,27 @@ class ShiftOp: public tervel::util::OpRecord {
     return false;
   };
 
-  void help_complete() { begin(true); };
-  bool begin(bool announced = false) {
+  void help_complete() {
+    tl_control_word = state();
+    execute(true);
+  };
+  void execute(bool announced = false) {
     if (idx_ >= vec_->capacity() || idx_ >= vec_->size()) {
+      fail();
       if (isFailed()) {
-        return false;
+        return;
       };
     }
+
     place_first_idx(announced);
+    if (tervel::util::RecursiveAction::recursive_return()) {
+      return;
+    }
     if (isFailed()) {
-      return false;
+      return;
     } else {
       place_rest(announced);
-      return true;
+      return;
     }
   }
 
@@ -125,7 +134,7 @@ ShiftOp<T>::~ShiftOp() {
   while (helper != nullptr) {
     ShiftHelper<T> *temp = helper;
     helper = helper->next();
-    util::memory::rc::free_descriptor(temp, true);
+    util::memory::rc::unsafefree_descriptor(temp);
   }
 
 };
@@ -161,8 +170,12 @@ void ShiftOp<T>::place_first_idx(bool announced) {
   ShiftHelper<T> * cur_helper = helpers_.load();
   while (cur_helper == nullptr) {
     if (!announced && progAssur.isDelayed()) {
-      util::ProgressAssurance::make_announcement(
+      if (this == tl_control_word) {
+        util::ProgressAssurance::make_announcement(
           reinterpret_cast<tervel::util::OpRecord *>(this));
+      } else {
+        tervel::util::RecursiveAction::set_recursive_return();
+      }
       break;
     }
 
@@ -173,6 +186,9 @@ void ShiftOp<T>::place_first_idx(bool announced) {
       break;
     } else if (vec_->internal_array.is_descriptor(expected, spot)) {
       // The is_descriptor function changes the value at the address
+      if (tervel::util::RecursiveAction::recursive_return() && this != tl_control_word) {
+        return;
+      }
     } else {  // its a valid value
       if (spot->compare_exchange_strong(expected, helper_marked)) {
         if (!helpers_.compare_exchange_strong(cur_helper, helper) && cur_helper != helper) {
@@ -194,17 +210,22 @@ void ShiftOp<T>::place_rest(bool announced) {
   ShiftHelper<T> *last_helper = helpers_.load();
   assert(last_helper != k_fail_const);
 
+  ShiftHelper<T> *helper = nullptr;
+  T helper_marked;
   for (size_t i = idx_ + 1; !is_done() ; i++) {
     assert(last_helper != nullptr);
 
     if (last_helper->end(Vector<T>::c_not_value_)) {
       set_done();
-      return;
+      break;
     }
 
-    ShiftHelper<T> *helper = tervel::util::memory::rc::get_descriptor<
-        ShiftHelper<T> >(this, last_helper);
-    T helper_marked = reinterpret_cast<T>(util::memory::rc::mark_first(helper));
+    if (helper == nullptr) {
+      helper = tervel::util::memory::rc::get_descriptor<
+        ShiftHelper<T> >(this);
+      helper_marked = reinterpret_cast<T>(util::memory::rc::mark_first(helper));
+    }
+    helper->set_prev(last_helper);
 
     std::atomic<T> *spot = vec_->internal_array.get_spot(i);
 
@@ -212,24 +233,36 @@ void ShiftOp<T>::place_rest(bool announced) {
     tervel::util::ProgressAssurance::Limit progAssur;
     while (last_helper->notAssociated()) {
       if (!announced && progAssur.isDelayed()) {
-        util::ProgressAssurance::make_announcement(
-          reinterpret_cast<tervel::util::OpRecord *>(this));
+        if (this == tl_control_word) {
+          util::ProgressAssurance::make_announcement(
+            reinterpret_cast<tervel::util::OpRecord *>(this));
+        } else {
+          tervel::util::RecursiveAction::set_recursive_return();
+        }
+        util::memory::rc::safefree_descriptor(helper);
         return;
       }
 
       T expected = spot->load();
       helper->set_value(expected);
       if (expected != Vector<T>::c_not_value_ &&
-          vec_->internal_array.shift_is_descriptor(expected, spot)) {
+          vec_->internal_array.shift_is_descriptor(expected, spot, this)) {
+        if (tervel::util::RecursiveAction::recursive_return()) {
+          util::memory::rc::safefree_descriptor(helper);
+          return;
+        };
         continue;
       } else {  // its a valid value or null
         if (spot->compare_exchange_strong(expected, helper_marked)) {
           if (!last_helper->associate(helper)) {
             spot->compare_exchange_strong(helper_marked, expected);
             assert(this->is_done() || this->isFailed());
+            util::memory::rc::safefree_descriptor(helper);
             return;
+          } else {
+            helper = nullptr;
+            break;
           }
-          break;
         } else {
           continue; // value changed
         }
@@ -237,6 +270,10 @@ void ShiftOp<T>::place_rest(bool announced) {
     }  // while loop
     last_helper = last_helper->next();
   }  // For loop
+
+  if (helper != nullptr) {
+    util::memory::rc::unsafefree_descriptor(helper);
+  }
 }
 
 }  // namespace vector

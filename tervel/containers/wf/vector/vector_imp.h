@@ -280,9 +280,8 @@ bool Vector<T>::insertAt(size_t idx, T value){
 
   InsertAt<T>* op = new InsertAt<T>(this, idx, value);
   tl_control_word = op->state();
-
-  bool res = op->begin();
-
+  op->execute();
+  bool res = !op->isFailed();
   if (res) {
     op->cleanup();
     size(1);
@@ -298,9 +297,9 @@ bool Vector<T>::eraseAt(size_t idx, T &value){
 
   EraseAt<T>* op = new EraseAt<T>(this, idx);
   tl_control_word = op->state();
+  op->execute();
 
-  bool res=op->begin();
-
+  bool res = !op->isFailed();
   if (res) {
     op->cleanup();
     op->removedValue(value);

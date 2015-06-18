@@ -47,18 +47,15 @@ class ShiftHelper: public tervel::util::Descriptor {
     : op_(op)
     , prev_(nullptr) {};
 
-  ShiftHelper(ShiftOp<T> *op, ShiftHelper<T> *prev)
-    : op_(op)
-    , prev_(prev) {
-      assert(prev->isAssociated());
-    };
-
   ShiftHelper * prev() { return prev_; };
   T value() { return value_; };
   ShiftOp<T> * op() { return op_;};
   bool end(T val) { return value_ == val; };
   void set_value(T value) { value_ = value; };
-
+  void set_prev(ShiftHelper<T> *prev) {
+    assert(prev->isAssociatedWithMe());
+    prev_ = prev;
+  }
   bool associate(ShiftHelper<T> *next) {
     ShiftHelper<T> *expected = next_.load();
     if (expected == nullptr && next_.compare_exchange_strong(expected, next)) {
@@ -67,7 +64,7 @@ class ShiftHelper: public tervel::util::Descriptor {
     return expected == next;
   };
 
-  bool isAssociated() {
+  bool isAssociatedWithMe() {
     if (prev_ == nullptr) {
       return op_->helpers_.load() == this;
     } else {
@@ -93,7 +90,10 @@ class ShiftHelper: public tervel::util::Descriptor {
 
   using util::Descriptor::complete;
   void * complete(void *value, std::atomic<void *> *address) {
-    op_->help_complete();
+    op_->execute();
+    if (tervel::util::RecursiveAction::recursive_return()) {
+      return nullptr;
+    }
     T val = op_->getValue(this);
     void * new_val = reinterpret_cast<void *>(val);
     if (address->compare_exchange_strong(value, new_val)) {

@@ -72,7 +72,7 @@ class VectorArray {
    * @param  spot     [description]
    * @return          [description]
    */
-  virtual bool shift_is_descriptor(T &expected, std::atomic<T> *spot);
+  virtual bool shift_is_descriptor(T &expected, std::atomic<T> *spot, void *op);
 };  // class Vector Array
 
 template<typename T>
@@ -96,6 +96,5 @@ bool VectorArray<T>::is_descriptor(T &expected, std::atomic<T> *spot) {
 }  // namespace containers
 }  // namespace tervel
 
-#include <tervel/containers/wf/vector/array_array_imp.h>
 
 #endif  // __TERVEL_CONTAINERS_WF_VECTOR_VECTOR_ARRAY_H
