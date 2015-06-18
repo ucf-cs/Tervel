@@ -29,18 +29,18 @@
 
 
 #include <string>
-#include <tervel/containers/wf/hash-map/wf_hash_map_no_delete.h>
+#include <tervel/containers/wf/hash-map/wf_hash_map.h>
 #include <tervel/util/info.h>
 #include <tervel/util/thread_context.h>
 #include <tervel/util/tervel.h>
 
 typedef int64_t Value;
 typedef int64_t Key;
-typedef typename tervel::containers::wf::HashMapNoDelete<Key, Value> container_t;
+typedef typename tervel::containers::wf::HashMap<Key, Value> container_t;
 typedef typename container_t::ValueAccessor Accessor;
 
 
-#include "../main.h"
+#include "../src/main.h"
 
 DEFINE_int32(prefill, 0, "The number elements to place in the data structure on init.");
 DEFINE_int32(capacity, 32768, "The initial capacity of the hashmap, should be a power of two.");
@@ -71,7 +71,7 @@ for (int i = 0; i < FLAGS_prefill; i++) { \
   container->insert(x, x); \
 }
 
-#define DS_NAME "WF No Del Hash Map"
+#define DS_NAME "WF Hash Map"
 
 #define DS_CONFIG_STR \
     "\n  Prefill : " + std::to_string(FLAGS_prefill) \
@@ -109,10 +109,15 @@ for (int i = 0; i < FLAGS_prefill; i++) { \
     } \
   } \
   ) \
+  MACRO_OP_MAKER(3, { \
+    Value value = random(generator); \
+    opRes = container->remove(value); \
+  } \
+  ) \
 
 
-#define DS_OP_NAMES "find", "insert", "update"
+#define DS_OP_NAMES "find", "insert", "update", "delete"
 
-#define DS_OP_COUNT 3
+#define DS_OP_COUNT 4
 
 #endif  // DS_API_H_

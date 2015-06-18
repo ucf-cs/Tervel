@@ -53,19 +53,19 @@ blank:
 
 .PHONY: lfstack
 lfstack:
-	$(MAKE) test input="api/lf_stack_api.h" output="lf_stack.x"
+	$(MAKE) test input="tervel_api/lf_stack_api.h" output="lf_stack.x"
 	
 .PHONY: wfstack
 wfstack:
-	$(MAKE) test input="api/wf_stack_api.h" output="wf_stack.x"
+	$(MAKE) test input="tervel_api/wf_stack_api.h" output="wf_stack.x"
 
 .PHONY: wfhashmap
 wfhashmap:
-	$(MAKE) test input="api/wf_hashmap.h" output="wf_hashmap.x"
+	$(MAKE) test input="tervel_api/wf_hashmap.h" output="wf_hashmap.x"
 
 .PHONY: wfhashmapnodel
 wfhashmapnodel:
-	$(MAKE) test input="api/wf_hashmap_nodel.h" output="wf_hashmap_nodel.x"
+	$(MAKE) test input="tervel_api/wf_hashmap_nodel.h" output="wf_hashmap_nodel.x"
 
 
 .PHONY: test

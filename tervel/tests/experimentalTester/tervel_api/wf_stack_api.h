@@ -24,23 +24,23 @@
 #
 */
 
-#ifndef LF_STACK_API_H_
-#define LF_STACK_API_H_
+#ifndef WF_STACK_API_H_
+#define WF_STACK_API_H_
+
 
 #include <string>
+#include <tervel/containers/wf/stack/stack.h>
 #include <tervel/util/info.h>
 #include <tervel/util/thread_context.h>
 #include <tervel/util/tervel.h>
-#include <tervel/containers/lf/stack/stack.h>
 
 typedef int64_t Value;
-typedef tervel::containers::lf::Stack<Value> container_t;
+typedef tervel::containers::wf::Stack<Value> container_t;
 
 
-#include "../main.h"
+#include "../src/main.h"
 
 DEFINE_int32(prefill, 0, "The number elements to place in the stack on init.");
-
 
 #define DS_DECLARE_CODE \
   tervel::Tervel* tervel_obj; \
@@ -58,6 +58,8 @@ thread_context = new tervel::ThreadContext(tervel_obj);
 tervel_obj = new tervel::Tervel(FLAGS_num_threads+1); \
 DS_ATTACH_THREAD \
 container = new container_t(); \
+sanity_check(container); \
+\
 std::default_random_engine generator; \
 std::uniform_int_distribution<Value> largeValue(0, UINT_MAX); \
 for (int i = 0; i < FLAGS_prefill; i++) { \
@@ -65,20 +67,16 @@ for (int i = 0; i < FLAGS_prefill; i++) { \
   container->push(x); \
 }
 
-#define DS_NAME "LF Stack"
+#define DS_NAME "WF Stack"
 
 #define DS_CONFIG_STR \
-   "\n  Prefill : " + std::to_string(FLAGS_prefill) + ""
+   "\n  Prefill : " + std::to_string(FLAGS_prefill) +""
 
 #define OP_RAND \
   /* std::uniform_int_distribution<Value> random(1, UINT_MAX); */ \
   int ecount = 0;
 
-/*
-  TODO: Remove the need for the numerical argument
-  Make adding the function name and code the same step
-  DS_OP_COUNT should be set to the last passed MACRO OP
- */
+
 #define OP_CODE \
  MACRO_OP_MAKER(0, { \
       Value value; \
@@ -95,7 +93,6 @@ for (int i = 0; i < FLAGS_prefill; i++) { \
 #define DS_OP_NAMES "pop", "push"
 
 #define DS_OP_COUNT 2
-
 
 inline void sanity_check(container_t *stack) {
   bool res;
@@ -119,4 +116,5 @@ inline void sanity_check(container_t *stack) {
   res = stack->pop(temp);
   assert(!res && "If this assert fails then there is an issue with pop or determining that it is empty");
 };
-#endif  // LF_STACK_API_H_
+
+#endif  // WF_STACK_API_H_
