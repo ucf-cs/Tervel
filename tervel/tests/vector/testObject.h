@@ -62,7 +62,7 @@ DEFINE_int32(eraseAt_rate, 0,
 DEFINE_int32(num_threads, 1, "The number of executing threads.");
 DEFINE_int32(execution_time, 5, "The amount of time to run the tests");
 
-typedef uint64_t Value;
+typedef int64_t Value;
 class TestObject {
  public:
   enum op_codes : int { cas = 0, at, popBack, pushBack, size, insertAt, eraseAt, LENGTH };
@@ -104,6 +104,16 @@ class TestObject {
     }
   };
 
+  void print_vector() {
+    std::cout << "Vector's contents: " << std::endl;
+    for (size_t i = 0; i < test_class_->size() + 100; i++) {
+      Value temp = 0;
+      test_class_->at(i, temp);
+      uint64_t tid = temp >>  (sizeof(Value)*8-7);
+      uint64_t c = (temp << 7) >> (7+3);
+      std::cout << "\t[" << i << "] TID: " << tid << " C: " << c << std::endl;
+    }
+  }
   ~TestObject() {
     delete test_class_;
   };
@@ -132,7 +142,7 @@ class TestObject {
     // Initial Setup
     attachThread(thread_id);
 
-    int lcount = 0;
+    int lcount = 1;
     int func_call_count[k_num_functions];
     int func_call_rate[k_num_functions];
     int max_rand = 0;
@@ -182,7 +192,9 @@ class TestObject {
         if (test_class_->pop_back(temp))
           func_call_count[op_codes::popBack]++;
       } else if (op <= func_call_rate[op_codes::pushBack]) {
-        Value temp = largeValue(generator) & (~0x7);
+        Value temp = reinterpret_cast<Value>(thread_id);
+        temp = temp << (sizeof(Value)*8-7);
+        temp = temp | (lcount << 3);
 
         test_class_->push_back(temp);
         func_call_count[op_codes::pushBack]++;
@@ -195,11 +207,15 @@ class TestObject {
           continue;
         }
 
-        Value temp = largeValue(generator) & (~0x7);
+        Value temp = reinterpret_cast<Value>(thread_id);
+        temp = temp << (sizeof(Value)*8-7);
+        temp = temp | (lcount << 3);
+
         size_t idx = largeValue(generator) % s;
 
-        test_class_->insertAt(idx, temp);
-        func_call_count[op_codes::insertAt]++;
+        if (test_class_->insertAt(idx, temp)) {
+          func_call_count[op_codes::insertAt]++;
+        }
       } else if (op <= func_call_rate[op_codes::eraseAt]) {
         size_t s = test_class_->size();
         if (s == 0) {
@@ -209,8 +225,9 @@ class TestObject {
         Value temp;
         size_t idx = largeValue(generator) % s;
 
-        test_class_->eraseAt(idx, temp);
-        func_call_count[op_codes::eraseAt]++;
+        if (test_class_->eraseAt(idx, temp)) {
+          func_call_count[op_codes::eraseAt]++;
+        }
       } else {
         assert(false);
       }

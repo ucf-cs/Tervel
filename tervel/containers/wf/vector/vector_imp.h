@@ -276,6 +276,11 @@ bool Vector<T>::cas(size_t idx, T &expected, const T val) {
 
 template<typename T>
 bool Vector<T>::insertAt(size_t idx, T value){
+  if(!internal_array.is_valid(value)){
+    assert(false);
+    return false;
+  }
+
   tervel::util::ProgressAssurance::check_for_announcement();
 
   InsertAt<T>* op = new InsertAt<T>(this, idx, value);
