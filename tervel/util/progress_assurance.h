@@ -70,7 +70,7 @@ class OpRecord : public memory::hp::Element {
    * @return whether or not the element was succefully watched.
    */
   using memory::hp::Element::on_watch;
-  bool on_watch(std::atomic<void *> *address, void *expected) {
+  virtual bool on_watch(std::atomic<void *> *address, void *expected) {
     return true;
   }
 
@@ -81,13 +81,13 @@ class OpRecord : public memory::hp::Element {
    * @return whether or not the element is watched.
    */
   using memory::hp::Element::on_is_watched;
-  bool on_is_watched() {return false;}
+  virtual bool on_is_watched() { return false; }
   /**
    * This function is used to remove a strong watch on an Element.
    * Classes wishing to express this should override this function.
    */
   using memory::hp::Element::on_unwatch;
-  void on_unwatch() {}
+  virtual void on_unwatch() {}
 
 
  private:

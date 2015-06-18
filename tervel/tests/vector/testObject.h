@@ -40,28 +40,32 @@
 /**Change these when adapting to a new data structures **/
 
 // Constructor Arguments
-DEFINE_int32(capacity, 64, "The initial capacity of the hash map");
+DEFINE_int32(capacity, 64, "The initial capacity of the vector");
 
 // Operation Rates
-DEFINE_int32(cas_rate, 20,
+DEFINE_int32(cas_rate, 0,
              "The chance (0-100) of the CAS operation being called.");
-DEFINE_int32(at_rate, 20,
+DEFINE_int32(at_rate, 0,
              "The chance (0-100) of the at operation being called.");
-DEFINE_int32(pushBack_rate, 20,
+DEFINE_int32(pushBack_rate, 0,
              "The chance (0-100) of pushBack operation being called.");
-DEFINE_int32(popBack_rate, 20,
+DEFINE_int32(popBack_rate, 0,
              "The chance (0-100) of popBack operation being called.");
-DEFINE_int32(size_rate, 20,
+DEFINE_int32(size_rate, 0,
              "The chance (0-100) of size operation being called.");
+DEFINE_int32(insertAt_rate, 0,
+             "The chance (0-100) of insertAt operation being called.");
+DEFINE_int32(eraseAt_rate, 0,
+             "The chance (0-100) of eraseAt operation being called.");
 
 /** Arguments for Tester */
 DEFINE_int32(num_threads, 1, "The number of executing threads.");
 DEFINE_int32(execution_time, 5, "The amount of time to run the tests");
 
-typedef uint64_t Value;
+typedef int64_t Value;
 class TestObject {
  public:
-  enum op_codes : int { cas = 0, at, popBack, pushBack, size, LENGTH };
+  enum op_codes : int { cas = 0, at, popBack, pushBack, size, insertAt, eraseAt, LENGTH };
   static const int k_num_functions = op_codes::LENGTH;
   int* func_call_rate_;
   std::string* func_name_;
@@ -80,6 +84,9 @@ class TestObject {
     MACRO_ADD_RATE(popBack)
     MACRO_ADD_RATE(size)
     MACRO_ADD_RATE(at)
+    MACRO_ADD_RATE(insertAt)
+    MACRO_ADD_RATE(eraseAt)
+
 
     for (int i = 0; i < k_num_functions; i++) {
       func_call_count_[i].store(0);
@@ -91,8 +98,22 @@ class TestObject {
         execution_time_(FLAGS_execution_time),
         test_class_(new TestClass<Value>( (num_threads_+1), FLAGS_capacity)) {
     set_rates();
+    for (int i = 0; i < FLAGS_capacity/2; i++) {
+      test_class_->push_back( (1 + i) * 0x8 );
+      func_call_count_[op_codes::pushBack]++;
+    }
   };
 
+  void print_vector() {
+    std::cout << "Vector's contents: " << std::endl;
+    for (size_t i = 0; i < test_class_->size() + 100; i++) {
+      Value temp = 0;
+      test_class_->at(i, temp);
+      uint64_t tid = temp >>  (sizeof(Value)*8-7);
+      uint64_t c = (temp << 7) >> (7+3);
+      std::cout << "\t[" << i << "] TID: " << tid << " C: " << c << std::endl;
+    }
+  }
   ~TestObject() {
     delete test_class_;
   };
@@ -121,7 +142,7 @@ class TestObject {
     // Initial Setup
     attachThread(thread_id);
 
-    int lcount = 0;
+    int lcount = 1;
     int func_call_count[k_num_functions];
     int func_call_rate[k_num_functions];
     int max_rand = 0;
@@ -133,7 +154,7 @@ class TestObject {
 
     // Setup Random Number Generation
     std::default_random_engine generator;
-    std::uniform_int_distribution<int> distribution(0, max_rand);
+    std::uniform_int_distribution<int> distribution(1, max_rand);
     std::uniform_int_distribution<int> largeValue(0, UINT_MAX);
 
     // Wait for start signle
@@ -171,13 +192,42 @@ class TestObject {
         if (test_class_->pop_back(temp))
           func_call_count[op_codes::popBack]++;
       } else if (op <= func_call_rate[op_codes::pushBack]) {
-        Value temp = largeValue(generator) & (~0x7);
+        Value temp = reinterpret_cast<Value>(thread_id);
+        temp = temp << (sizeof(Value)*8-7);
+        temp = temp | (lcount << 3);
 
         test_class_->push_back(temp);
         func_call_count[op_codes::pushBack]++;
       } else if (op <= func_call_rate[op_codes::size]) {
         test_class_->size();
         func_call_count[op_codes::size]++;
+      } else if (op <= func_call_rate[op_codes::insertAt]) {
+        size_t s = test_class_->size();
+        if (s == 0) {
+          continue;
+        }
+
+        Value temp = reinterpret_cast<Value>(thread_id);
+        temp = temp << (sizeof(Value)*8-7);
+        temp = temp | (lcount << 3);
+
+        size_t idx = largeValue(generator) % s;
+
+        if (test_class_->insertAt(idx, temp)) {
+          func_call_count[op_codes::insertAt]++;
+        }
+      } else if (op <= func_call_rate[op_codes::eraseAt]) {
+        size_t s = test_class_->size();
+        if (s == 0) {
+          continue;
+        }
+
+        Value temp;
+        size_t idx = largeValue(generator) % s;
+
+        if (test_class_->eraseAt(idx, temp)) {
+          func_call_count[op_codes::eraseAt]++;
+        }
       } else {
         assert(false);
       }
@@ -221,8 +271,11 @@ class TestObject {
     }
     res += "Total Operations: " + std::to_string(sum) + "\n";
     res += "Reported Size: " + std::to_string(test_class_->size()) + "\n";
-    {int temp = func_call_count_[op_codes::pushBack] - func_call_count_[op_codes::popBack];
-    res += "Calculated Size: " + std::to_string(temp) + "\n";}
+    {
+      int temp = func_call_count_[op_codes::pushBack] - func_call_count_[op_codes::popBack];
+      temp += func_call_count_[op_codes::insertAt] - func_call_count_[op_codes::eraseAt];
+      res += "Calculated Size: " + std::to_string(temp) + "\n";
+    }
     return res;
   }
 

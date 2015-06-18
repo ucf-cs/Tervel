@@ -88,5 +88,6 @@ int main(int argc, char **argv) {
   std::for_each(thread_list.begin(), thread_list.end(),
                 [](std::thread &t) { t.join(); });
 
+  // test_data.print_vector();
   return 0;
 }

@@ -70,6 +70,14 @@ inline void free_descriptor(tervel::util::Descriptor *descr,
         dont_check);
 }
 
+inline void safefree_descriptor(tervel::util::Descriptor *descr) {
+  free_descriptor(descr, false);
+}
+
+inline void unsafefree_descriptor(tervel::util::Descriptor *descr) {
+  free_descriptor(descr, true);
+}
+
 /**
 * @brief This method is used to determine if the passed descriptor is under rc
 * protection.
