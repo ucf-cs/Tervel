@@ -92,7 +92,7 @@ for (int i = 0; i < FLAGS_prefill; i++) { \
     } \
   )
 
-#define OP_NAMES "pop", "push"
+#define DS_OP_NAMES "pop", "push"
 
 #define DS_OP_COUNT 2
 

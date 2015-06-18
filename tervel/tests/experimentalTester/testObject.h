@@ -24,36 +24,40 @@
 #
 */
 
-#include <climits>
-#include <assert.h>
-#include <atomic>
-#include <random>
-#include <string>
-#include <cstdint>
-#include <stdio.h>
-#include <iostream>
-#include <gflags/gflags.h>
+typedef struct{
+  std::atomic<bool> wait_;
+  std::atomic<bool> execute_;
+  std::atomic<uint64_t> ready_count_;
+  std::atomic<uint64_t> finished_count_;
+
+  void init() {
+    wait_.store(true);
+    execute_.store(true);
+    ready_count_.store(0);
+    finished_count_.store(0);
+  }
+  void start() {
+    wait_.store(false);
+  }
+  void stop() {
+    execute_.store(false);
+  }
+  bool wait() { return wait_.load(); };
+  bool execute() { return execute_.load(); };
+
+  bool notReady(uint64_t threads) {
+    return ready_count_.load() < threads;
+  };
+
+  bool notFinished(uint64_t threads) {
+    return finished_count_.load() < threads;
+  };
+  void ready() { ready_count_.fetch_add(1); };
+  void finished() { finished_count_.fetch_add(1); };
 
 
-/** Arguments for Tester */
-DEFINE_int32(main_sleep, 0, "Causes the main thread to sleep before signaling go. Useful for allowing monitors to be attached.");
 
-DEFINE_int32(num_threads, 0, "The number of executing threads.");
-DEFINE_int32(execution_time, 5, "The amount of time to run the tests");
-
-
-DEFINE_bool(verbose_results, false, "If true then verbose output is used");
-
-
-#define __tervel_xstr(s) __tervel_str(s)
-#define __tervel_str(s) #s
-#include __tervel_xstr(CONTAINER_FILE)
-#undef __tervel_str
-#undef __tervel_xstr
-
-
-#define DS_OP_NAMES { OP_NAMES }
-
+} ThreadSignal;
 typedef struct{
   int fail_;
   int pass_;
@@ -101,7 +105,7 @@ class TestObject {
       };
 
   ~TestObject() {
-    DS_DESTORY_CODE
+
   };
 
   void set_start_time(double t) {

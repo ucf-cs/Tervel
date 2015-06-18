@@ -25,7 +25,7 @@ THE SOFTWARE.
 #ifndef TERVEL_CONTAINER_WF_HASH_MAP_WFHM_HASHMAP_H
 #define TERVEL_CONTAINER_WF_HASH_MAP_WFHM_HASHMAP_H
 
-
+#include <assert.h>
 #include <tervel/util/info.h>
 #include <tervel/util/memory/hp/hp_element.h>
 #include <tervel/util/memory/hp/hazard_pointer.h>

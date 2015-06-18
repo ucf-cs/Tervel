@@ -23,26 +23,21 @@
 #THE SOFTWARE.
 #
 */
+#include "main.h"
 
-#include <thread>
-#include <time.h>
-#include <vector>
-#include <stdio.h>
-#include <string>
-#include <stdlib.h>
-#include <algorithm>
-#include <iostream>
-#include <gflags/gflags.h>
-#include <sys/time.h>
-#include "testObject.h"
+/** Arguments for Tester */
+DEFINE_uint64(main_sleep, 0, "Causes the main thread to sleep before signaling go. Useful for allowing monitors to be attached.");
+DEFINE_uint64(num_threads, 0, "The number of executing threads.");
+DEFINE_uint64(execution_time, 5, "The amount of time to run the tests");
 
-void run(TestObject *t, int id, char **argv) {
-#ifdef USE_CDS
-  cds::gc::HP::thread_gc myThreadGC (true) ;
-#endif
 
-  return t->run(id, argv);
-};
+// Global Variables
+ThreadSignal g_thread_signal;
+
+DS_DECLARE_CODE
+
+const std::string op_names[DS_OP_COUNT] = { DS_OP_NAMES };
+op_counter_t ** g_test_results;
 
 int main(int argc, char **argv) {
 #ifdef USE_CDS
@@ -52,85 +47,97 @@ int main(int argc, char **argv) {
   cds::gc::HP::thread_gc myThreadGC (true) ;
 #endif
 
+  // Variables:
+  struct timeval start_time, end_time;
+
   gflags::ParseCommandLineFlags(&argc, &argv, true);
 
-  // Create Test Object
-  TestObject test_data(argc, argv);
+  {
+    log("Info", "Initializing Tester Object and Data Structure");
+    DS_INIT_CODE
+    log("Info", "Completed Tester Object and Data Structure");
+  }
 
-  std::cout << "#  Initializing Tester Object and Data Structure" << std::endl;
-  test_data.init();
-  std::cout << "#  Completed Tester Object and Data Structure" << std::endl;
+  g_test_results = new op_counter_t *[FLAGS_num_threads];
+
+  std::string execution_str = "";
+  for (int i = 1; i < argc; i++) {
+    execution_str += std::to_string(atoi(argv[i])) + " ";
+  }
 
   // Create Threads
+  g_thread_signal.init();
   std::vector<std::thread> thread_list;
 
-  int64_t numThreads = 0;
+  uint64_t numThreads = 0;
   for (int j = 1; j < argc; j += DS_OP_COUNT + 1) {
 
-    if (j+DS_OP_COUNT >= argc) {
-      std::cout << "#  Error: Invalid Thread Group and Rate Configuration" << std::endl;
+    if (j + DS_OP_COUNT >= argc) {
+      log("Error", "Invalid Thread Group and Rate Configuration");
       exit(-1);
     }
+
     int t = atoi(argv[j]);
     for (int64_t i = 0; i < t; i++) {
-      std::thread temp_thread(run, &test_data, numThreads++, &(argv[j+1]));
+      std::thread temp_thread(run, numThreads++, &(argv[j+1]));
       thread_list.push_back(std::move(temp_thread));
     }
   };
 
   if (FLAGS_num_threads < numThreads) {
-    std::cout << "#  Error: Specified num_threads is greater than the number of threads specified in the thread groups" << std::endl;
+    log("Error", "Specified num_threads is greater than the number of threads specified in the thread groups");
     exit(-1);
   }
+  std::cout << config_str(numThreads, execution_str) << std::endl;
+  sleep(FLAGS_main_sleep);
 
-  std::this_thread::sleep_for(std::chrono::seconds(FLAGS_main_sleep));
 
   // Wait until Threads are ready
-  while (test_data.ready_count_.load() < numThreads);
+  while (g_thread_signal.notReady(numThreads));
 
-  std::cout << "#  Threads Ready, Sleeping for " << test_data.execution_time_ << " seconds." << std::endl;
+  log("Info", "Threads Ready, beginning test.");
 
-  struct timeval start_time;
+
   (void)gettimeofday(&start_time, NULL);
-  test_data.running_.store(true);
-  test_data.wait_flag_.store(false);
+  g_thread_signal.start();
 
   // Wait until test is over
-  std::this_thread::sleep_for(std::chrono::seconds(test_data.execution_time_));
-  test_data.ready_count_.store(0);
-  test_data.wait_flag_.store(true);
-  // Signal Stop
-  test_data.running_.store(false);
+  sleep(FLAGS_execution_time);
 
-  struct timeval end_time;
+  g_thread_signal.stop();
   (void)gettimeofday(&end_time, NULL);
 
-  std::cout << "#  Testing Completed(1)" << std::endl;
-  std::this_thread::sleep_for(std::chrono::seconds(1));
-  test_data.extra_end_signal();
+  log("Info", "Testing Completed");
+  sleep(1);
+
+  DS_EXTRA_END_SIGNAL;
 
   // Wait until all threads are done.
-  while (test_data.ready_count_.load() < numThreads);
+  while (g_thread_signal.notFinished(numThreads));
 
   std::for_each(thread_list.begin(), thread_list.end(),
                 [](std::thread &t) { t.join(); });
 
-  // Print results
-  test_data.set_start_time((double)start_time.tv_sec + (1.0/1000000) * (double)start_time.tv_usec);
+  std::string run_results = results_str(
+    ( (double)start_time.tv_sec + (1.0/1000000) * (double)start_time.tv_usec ),
+    ( (double)end_time.tv_sec   + (1.0/1000000) * (double)end_time.tv_usec   ),
+    numThreads
+  );
+  std::cout << run_results << std::endl;
 
-  test_data.set_end_time((double)end_time.tv_sec + (1.0/1000000) * (double)end_time.tv_usec);
-
-  std::cout << test_data.results(numThreads) << std::endl;
-
-
-
-  std::this_thread::sleep_for(std::chrono::seconds(1));
-
-    std::cout << "#  FIN" << std::endl;
+  sleep(1);
+  DS_DESTORY_CODE
 
 #ifdef USE_CDS
   }
 #endif
-
+  log("Info", "FIN");
   return 0;
-}
+};
+
+#include "run_imp.h"
+#include "yaml_output.h"
+
+
+
+

@@ -48,6 +48,10 @@ all: WFTEST LFTEST WFHASHMAP WFNODELHASHMAP
 test: $(SOURCES) $(EXECUTABLE)
 	rm main.o
 
+.PHONY: BLANK
+BLANK:
+	$(MAKE) test input="api/blank.h" output="blank.x"
+
 .PHONY: LFTEST
 LFTEST:
 	$(MAKE) test input="api/lf_stack_api.h" output="lf_stack.x"
