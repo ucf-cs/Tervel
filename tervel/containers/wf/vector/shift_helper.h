@@ -53,8 +53,9 @@ class ShiftHelper: public tervel::util::Descriptor {
       assert(prev->isAssociated());
     };
 
-  ShiftHelper * prev() { return prev_; }
-  T value() { return value_; }
+  ShiftHelper * prev() { return prev_; };
+  T value() { return value_; };
+  ShiftOp<T> * op() { return op_;};
   bool end(T val) { return value_ == val; };
   void set_value(T value) { value_ = value; };
 

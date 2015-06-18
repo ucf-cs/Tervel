@@ -98,6 +98,10 @@ class TestObject {
         execution_time_(FLAGS_execution_time),
         test_class_(new TestClass<Value>( (num_threads_+1), FLAGS_capacity)) {
     set_rates();
+    for (int i = 0; i < FLAGS_capacity/2; i++) {
+      test_class_->push_back( (1 + i) * 0x8 );
+      func_call_count_[op_codes::pushBack]++;
+    }
   };
 
   ~TestObject() {
@@ -250,8 +254,11 @@ class TestObject {
     }
     res += "Total Operations: " + std::to_string(sum) + "\n";
     res += "Reported Size: " + std::to_string(test_class_->size()) + "\n";
-    {int temp = func_call_count_[op_codes::pushBack] - func_call_count_[op_codes::popBack];
-    res += "Calculated Size: " + std::to_string(temp) + "\n";}
+    {
+      int temp = func_call_count_[op_codes::pushBack] - func_call_count_[op_codes::popBack];
+      temp += func_call_count_[op_codes::insertAt] - func_call_count_[op_codes::eraseAt];
+      res += "Calculated Size: " + std::to_string(temp) + "\n";
+    }
     return res;
   }
 

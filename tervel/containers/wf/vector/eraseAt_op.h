@@ -40,6 +40,9 @@ class EraseAt : public ShiftOp<T> {
     : ShiftOp<T>(vec, idx)  {};
 
   void cleanup();
+  void removedValue(T &val) {
+    val = ShiftOp<T>::helpers_.load()->value();
+  }
   virtual T getValue(ShiftHelper<T> * helper);
 };
 

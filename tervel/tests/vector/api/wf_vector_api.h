@@ -42,7 +42,6 @@ class TestClass {
     tervel_obj = new tervel::Tervel(num_threads);
     attach_thread();
     container = new tervel::containers::wf::vector::Vector<T>(capacity);
-    container->push_back(0x8);
   }
 
   std::string toString() {

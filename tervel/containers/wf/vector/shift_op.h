@@ -77,10 +77,10 @@ class ShiftOp: public tervel::util::OpRecord {
 
   void help_complete() { begin(true); };
   bool begin(bool announced = false) {
-    if (idx_ >= vec_->capacity()) {
-      return false;
-    } else if (idx_ >= vec_->size()) {
-      return false;
+    if (idx_ >= vec_->capacity() || idx_ >= vec_->size()) {
+      if (isFailed()) {
+        return false;
+      };
     }
     place_first_idx(announced);
     if (isFailed()) {
@@ -194,7 +194,7 @@ void ShiftOp<T>::place_rest(bool announced) {
   ShiftHelper<T> *last_helper = helpers_.load();
   assert(last_helper != k_fail_const);
 
-  for (size_t i = idx_ + 1; ; i++) {
+  for (size_t i = idx_ + 1; !is_done() ; i++) {
     assert(last_helper != nullptr);
 
     if (last_helper->end(Vector<T>::c_not_value_)) {
@@ -220,9 +220,7 @@ void ShiftOp<T>::place_rest(bool announced) {
       T expected = spot->load();
       helper->set_value(expected);
       if (expected != Vector<T>::c_not_value_ &&
-          vec_->internal_array.is_descriptor(expected, spot)) {
-        // TODO: detect if part of this operation???
-        // The is_descriptor function changes the value at the address
+          vec_->internal_array.shift_is_descriptor(expected, spot)) {
         continue;
       } else {  // its a valid value or null
         if (spot->compare_exchange_strong(expected, helper_marked)) {

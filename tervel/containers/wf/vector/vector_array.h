@@ -29,6 +29,8 @@ THE SOFTWARE.
 #include <tervel/util/descriptor.h>
 #include <tervel/util/memory/rc/descriptor_util.h>
 
+
+
 namespace tervel {
 namespace containers {
 namespace wf {
@@ -62,22 +64,38 @@ class VectorArray {
    * @param  spot     [description]
    * @return          [description]
    */
-  virtual bool is_descriptor(T &expected, std::atomic<T> *spot) {
-    void *temp = reinterpret_cast<void *>(expected);
-    if (util::memory::rc::is_descriptor_first(temp)) {
-       /* It is some other threads operation, so lets complete it.*/
+  virtual bool is_descriptor(T &expected, std::atomic<T> *spot);
 
-      std::atomic<void *> *temp2 =
-          reinterpret_cast<std::atomic<void *> *>(spot);
-      expected = reinterpret_cast<T>(util::memory::rc::remove_descriptor(temp,
-          temp2));
-      return true;
-    }
-    return false;
-  }
+  /**
+   * Overridden by SingleArray model to detect resize.
+   * @param  expected [description]
+   * @param  spot     [description]
+   * @return          [description]
+   */
+  virtual bool shift_is_descriptor(T &expected, std::atomic<T> *spot);
 };  // class Vector Array
+
+template<typename T>
+bool VectorArray<T>::is_descriptor(T &expected, std::atomic<T> *spot) {
+  void *temp = reinterpret_cast<void *>(expected);
+  if (util::memory::rc::is_descriptor_first(temp)) {
+     /* It is some other threads operation, so lets complete it.*/
+
+    std::atomic<void *> *temp2 =
+        reinterpret_cast<std::atomic<void *> *>(spot);
+    expected = reinterpret_cast<T>(util::memory::rc::remove_descriptor(temp,
+        temp2));
+    return true;
+  }
+  return false;
+};
+
+
 }  // namespace vector
 }  // namespace wf
 }  // namespace containers
 }  // namespace tervel
+
+#include <tervel/containers/wf/vector/array_array_imp.h>
+
 #endif  // __TERVEL_CONTAINERS_WF_VECTOR_VECTOR_ARRAY_H
