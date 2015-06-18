@@ -25,7 +25,7 @@ THE SOFTWARE.
 #ifndef TERVEL_CONTAINER_WF_HASH_MAP_WFHM_HASHMAP_H
 #define TERVEL_CONTAINER_WF_HASH_MAP_WFHM_HASHMAP_H
 
-
+#include <assert.h>
 #include <tervel/util/info.h>
 #include <tervel/util/memory/hp/hp_element.h>
 #include <tervel/util/memory/hp/hazard_pointer.h>
@@ -430,7 +430,14 @@ hp_watch_and_get_value(Location * loc, Node * &value) {
 
   if (is_watched) {
     value = reinterpret_cast<Node *>(temp);
+
+    assert(tervel::util::memory::hp::HazardPointer::is_watched(   temp) == true);
   }
+
+  if (is_watched) {
+    value = reinterpret_cast<Node *>(temp);
+  }
+
   return is_watched;
 }  // hp_watch_and_get_value
 
@@ -442,9 +449,15 @@ hp_unwatch() {
 }  // hp_unwatch
 
 
+bool hp_check_empty() {
+  return !tervel::util::memory::hp::HazardPointer::hasWatch(
+      tervel::util::memory::hp::HazardPointer::SlotID::SHORTUSE);
+}
+
 template<class Key, class Value, class Functor>
 bool HashMap<Key, Value, Functor>::
 at(Key key, ValueAccessor &va) {
+  assert(hp_check_empty() && " Error: Function Did not release hp watch ");
   Functor functor;
   key = functor.hash(key);
 
@@ -475,6 +488,7 @@ at(Key key, ValueAccessor &va) {
       depth++;
       position = get_position(key, depth);
       loc = array_node->access(position);
+      hp_unwatch();
       continue;
     } else {
       assert(curr_value->is_data());
@@ -490,11 +504,13 @@ at(Key key, ValueAccessor &va) {
           op_res = false;
         }
       }
+      hp_unwatch();
       break;
     }
+    assert(false);
   }  // while true
 
-  hp_unwatch();
+  assert(hp_check_empty() && " Error: Function Did not release hp watch ");
   return op_res;
 }  // at
 
@@ -502,6 +518,7 @@ at(Key key, ValueAccessor &va) {
 template<class Key, class Value, class Functor>
 bool HashMap<Key, Value, Functor>::
 insert(Key key, Value value) {
+  assert(hp_check_empty() && " Error: Function Did not release hp watch ");
   tervel::util::ProgressAssurance::check_for_announcement();
 
   Functor functor;
@@ -533,12 +550,16 @@ insert(Key key, Value value) {
         size_.fetch_add(1);
         op_res = true;
         break;
+      } else {
+        continue;
       }
     } else if (curr_value->is_array()) {
       ArrayNode * array_node = reinterpret_cast<ArrayNode *>(curr_value);
       depth++;
       position = get_position(key, depth);
       loc = array_node->access(position);
+      hp_unwatch();
+      continue;
     } else {  // it is a data node
       assert(curr_value->is_data());
       DataNode * data_node = reinterpret_cast<DataNode *>(curr_value);
@@ -550,23 +571,30 @@ insert(Key key, Value value) {
           size_.fetch_add(1);
           op_res = true;
           break;
+        } else {
+          hp_unwatch();
+          continue;
         }
       } else if (functor.key_equals(data_node->key_, key)) {
         op_res = false;
+        hp_unwatch();
         break;
       } else {
         // Key differs, needs to expand...
         expand_map(loc, curr_value, depth);
+        hp_unwatch();
+        continue;
       }   // else key differs
     }  // else it is a data node
+    assert(false);
   }  // while true
-
-  hp_unwatch();
 
   if (!op_res) {
     assert(loc->load() != new_node);
     delete new_node;
   }
+
+  assert(hp_check_empty() && " Error: Function Did not release hp watch ");
   return op_res;
 }  // insert
 
@@ -574,6 +602,7 @@ insert(Key key, Value value) {
 template<class Key, class Value, class Functor>
 bool HashMap<Key, Value, Functor>::
 remove(Key key) {
+  assert(hp_check_empty() && " Error: Function Did not release hp watch ");
   Functor functor;
   key = functor.hash(key);
 
@@ -606,6 +635,7 @@ remove(Key key) {
       depth++;
       position = get_position(key, depth);
       loc = array_node->access(position);
+      hp_unwatch();
       continue;
     } else {  // it is a data node
       assert(curr_value->is_data());
@@ -623,16 +653,20 @@ remove(Key key) {
             assert(data_node->access_count_.load() < 0);
             hp_unwatch();
             data_node->safe_delete();
+            break;
         } else {
-          // It is logically deleted, and some other thread will/has already
-          // will delete it.
+          // It is logically deleted, and some other thread will/has already removed and freed it
         }
+
       }
+      hp_unwatch();
       break;
+
     }  // it is a data node
+    assert(false);
   }  // while
 
-  hp_unwatch();
+  assert(hp_check_empty() && " Error: Function Did not release hp watch ");
   return op_res;
 }  // remove
 

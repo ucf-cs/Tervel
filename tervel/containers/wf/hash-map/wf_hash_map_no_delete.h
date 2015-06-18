@@ -25,9 +25,11 @@ THE SOFTWARE.
 #ifndef TERVEL_CONTAINER_WF_HASH_MAP_WFHM_HASHMAP_H
 #define TERVEL_CONTAINER_WF_HASH_MAP_WFHM_HASHMAP_H
 
-#include <stdlib.h>
+#include <assert.h>
 #include <atomic>
 #include <cmath>
+#include <stdlib.h>
+
 #include <tervel/util/util.h>
 // TODO(Steven):
 //

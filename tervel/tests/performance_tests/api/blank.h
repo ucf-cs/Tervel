@@ -1,3 +1,4 @@
+/*
 #The MIT License (MIT)
 #
 #Copyright (c) 2015 University of Central Florida's Computer Software Engineering
@@ -21,56 +22,64 @@
 #OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 #THE SOFTWARE.
 #
+*/
+
+#ifndef DS_API_H_
+#define DS_API_H_
+
+#include <atomic>
+#include "../src/main.h"
+
+DEFINE_int64(value, 0, "The initial value of the counter");
 
 
-CXX      = g++-4.8
-CONTAINERTYPE ?= -DUSE_WF_VECTOR
-CXXFLAGS =  $(CONTAINERTYPE) -Wall -Wunused-function -std=c++11 \
-            -march=native -m64 -pthread -fno-strict-aliasing
+#define DS_DECLARE_CODE \
+  std::atomic<int64_t> val;
 
-DEBUG = -DDEBUG=1 -g -fpermissive -DDEBUG_POOL=1 -DTERVEL_MEM_RC_MAX_NODES=6000 #  -DMAX_WAIT_FREE
-#RELEASE = -O3 -DNDEBUG
+#define DS_DESTORY_CODE
 
-CXXFLAGS += $(DEBUG) $(RELEASE)
+#define DS_ATTACH_THREAD
 
-CPPFLAGS = -DINTEL
-INC += $(TINC) -I../../../
-LIB += $(TLIB) -ldl -lgflags -lpthread -lrt
-CPPFLAGS += $(INC)
+#define DS_DETACH_THREAD
 
-SOURCES = main.cc $(TSOURCES)
-OUTPUT =Executables/
+#define DS_INIT_CODE \
+  val.store(FLAGS_value);
 
-EXECUTABLE ?=main
-OBJECTS = $(SOURCES:.cc=.o)
+#define DS_NAME "Atomic Int"
+
+#define DS_CONFIG_STR \
+    "\n  Value : " + std::to_string(FLAGS_value) + ""
 
 
-all: WFTEST_DEBUG
+#define OP_RAND \
+  std::uniform_int_distribution<int64_t> random(SHRT_MIN, SHRT_MAX);
 
 
-test: $(SOURCES) $(EXECUTABLE)
-	rm main.o
-	mkdir -p $(OUTPUT)
-	mv $(EXECUTABLE) $(OUTPUT)
+#define OP_CODE \
+  MACRO_OP_MAKER(0, { \
+    int64_t value = random(generator); \
+    val.store(value); \
+  } \
+  ) \
+  MACRO_OP_MAKER(1, { \
+    int64_t value = random(generator); \
+    val.fetch_add(value); \
+  } \
+  ) \
+  MACRO_OP_MAKER(2, { \
+    int64_t value = random(generator); \
+    val.fetch_sub(value); \
+  } \
+  ) \
+  MACRO_OP_MAKER(3, { \
+    int64_t value = random(generator); \
+    val.exchange(value); \
+  } \
+  ) \
 
-WFTEST:
-	$(MAKE) test CONTAINERTYPE=-DUSE_WF_VECTOR \
-        TSOURCES="$(shell find ../../util/ -name '*.cc')" \
-	EXECUTABLE=wfvector.x
 
-WFTEST_DEBUG:
-	$(MAKE) test  CONTAINERTYPE=-DUSE_WF_VECTOR \
-        TSOURCES="$(shell find ../../util/ -name '*.cc')" \
-	EXECUTABLE=wfvector.x
+#define DS_OP_NAMES "store", "faa", "fas", "exchange"
 
-$(EXECUTABLE): $(OBJECTS)
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -o $@ $^ $(LIB)
+#define DS_OP_COUNT 4
 
-%.o: %.cc
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c -o $@ $<
-
-
-.PHONY: clean
-clean:
-	$(RM) $(OUTPUT)*.x  $(shell find ../../util/ -name "*.o")
-	$(RM) $(OBJECTS)
+#endif  // DS_API_H_

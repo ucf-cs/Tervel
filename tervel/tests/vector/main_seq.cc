@@ -24,9 +24,15 @@
 #
 */
 
-#ifndef WF_VECTOR_API_H_
-#define WF_VECTOR_API_H_
+#include <thread>
+#include <time.h>
+#include <vector>
+#include <stdio.h>
 #include <string>
+#include <stdlib.h>
+#include <algorithm>
+#include <iostream>
+#include <gflags/gflags.h>
 
 #include <tervel/containers/wf/vector/vector.hpp>
 #include <tervel/util/info.h>
@@ -35,60 +41,56 @@
 #include <tervel/util/memory/hp/hp_element.h>
 #include <tervel/util/memory/hp/hp_list.h>
 
-template<typename T>
-class TestClass {
- public:
-  TestClass(size_t num_threads, size_t capacity) {
-    tervel_obj = new tervel::Tervel(num_threads);
-    attach_thread();
-    container = new tervel::containers::wf::vector::Vector<T>(capacity);
+tervel::containers::wf::vector::Vector<long> *container;
+
+void print_vector();
+
+int main(int argc, char **argv) {
+  int capacity = 32;
+  int num_threads = 1;
+
+  tervel::Tervel *tervel_obj = new tervel::Tervel(num_threads);
+  tervel::ThreadContext* thread_context __attribute__((unused));
+  thread_context = new tervel::ThreadContext(tervel_obj);
+
+  container = new tervel::containers::wf::vector::Vector<long>(capacity);
+
+  long temp = 0x8;
+  long element_count = 1;
+  container->push_back(temp);
+  for(int i = 0; i < 15; i++) {
+    temp += 0x8;
+    container->insertAt(0,temp);
+    element_count++;
+  }
+  print_vector();
+
+  for(int i = 0; i < element_count; i++) {
+    long temp2 = -1;
+    bool res = container->eraseAt(0,temp2);
+    assert(res);
+    assert(temp2 == temp);
+    temp -= 0x8;
+  }
+  print_vector();
+
+  {
+    long temp2 = -1;
+    bool res = container->eraseAt(0,temp2);
+    assert(res == false);
+    assert(temp2 == -1);
   }
 
-  std::string toString() {
-    return "WF Vector";
-  };
+  print_vector();
+  return 0;
+}
 
-  void attach_thread() {
-    tervel::ThreadContext* thread_context __attribute__((unused));
-    thread_context = new tervel::ThreadContext(tervel_obj);
-  };
+void print_vector() {
 
-  void detach_thread() {};
-
-  bool at(size_t idx, T &value) {
-    return container->at(idx, value);
-  };
-
-  bool cas(size_t idx, T &expValue, T newValue) {
-    return container->cas(idx, expValue, newValue);
-  };
-
-  size_t push_back(T value) {
-    // return container->push_back_only(value);
-    return container->push_back(value);
-  };
-
-  bool pop_back(T &value) {
-    return container->pop_back(value);
-  };
-
-  bool insertAt(size_t idx, T value) {
-    return container->insertAt(idx, value);
-  };
-
-  bool eraseAt(size_t idx, T& value) {
-    return container->eraseAt(idx, value);
-  };
-
-
-
-  size_t size() {
-    return container->size();
-  };
-
- private:
-  tervel::Tervel* tervel_obj;
-  tervel::containers::wf::vector::Vector<T> *container;
-};
-
-#endif  // WF_VECTOR_API_H_
+  for(int i = 0; i < 18; i+=1) {
+    long temp = -1;
+    container->at(i, temp);
+    std::cout << i << " : " << temp << std::endl;
+  }
+  std::cout << "====" << std::endl;
+}

@@ -108,6 +108,14 @@ class HazardPointer {
         tervel::tl_thread_info->get_hazard_pointer());
 
   /**
+   * This method is used to determine if a thread has a hazard pointer watch.
+   *
+   * @param slot the slot to remove the watch
+   */
+  static bool hasWatch(SlotID slot_id, HazardPointer * const hazard_pointer =
+        tervel::tl_thread_info->get_hazard_pointer());
+
+  /**
    * This method is used to remove the hazard pointer watch.
    * If a descr is passed then it will internally call descr->on_unwatch.
    *
@@ -153,6 +161,10 @@ class HazardPointer {
     assert(watches_[get_slot(slot)].load() == nullptr);
     watches_[get_slot(slot)].store(value);
     assert(watches_[get_slot(slot)].load() == value);
+  }
+
+  void * value(SlotID slot) {
+    return watches_[get_slot(slot)].load();
   }
 
   /**

@@ -22,55 +22,68 @@
 #THE SOFTWARE.
 #
 
-
 CXX      = g++-4.8
-CONTAINERTYPE ?= -DUSE_WF_VECTOR
-CXXFLAGS =  $(CONTAINERTYPE) -Wall -Wunused-function -std=c++11 \
-            -march=native -m64 -pthread -fno-strict-aliasing
+CXXFLAGS =  -DCONTAINER_FILE=$(input) -Wall -Werror  -std=c++11  -march=native -m64 -pthread -fno-strict-aliasing # -DTERVEL_PROG_ASSUR_ALWAYS_ANNOUNCE -DTERVEL_PROG_ASSUR_ALWAYS_CHECK
 
-DEBUG = -DDEBUG=1 -g -fpermissive -DDEBUG_POOL=1 -DTERVEL_MEM_RC_MAX_NODES=6000 #  -DMAX_WAIT_FREE
-#RELEASE = -O3 -DNDEBUG
+DEBUG = -DDEBUG=1 -g -g3 
+# RELEASE = -O3 -DNDEBUG
 
 CXXFLAGS += $(DEBUG) $(RELEASE)
 
 CPPFLAGS = -DINTEL
-INC += $(TINC) -I../../../
-LIB += $(TLIB) -ldl -lgflags -lpthread -lrt
-CPPFLAGS += $(INC)
+INC= -I../../../
+LIB += -ldl -lgflags -lpthread -lrt
 
-SOURCES = main.cc $(TSOURCES)
-OUTPUT =Executables/
+SOURCES = $(shell find ../../util/ -name '*.cc')
 
-EXECUTABLE ?=main
+EXECUTABLE ?=src/main.cc
 OBJECTS = $(SOURCES:.cc=.o)
 
+output ?= $(input).x
+OUTPUT = executables/
 
-all: WFTEST_DEBUG
+all: wfstack lfstack wfhashmap wfhashmapnodel
 
 
+
+
+.PHONY: blank
+blank:
+	$(MAKE) test input="api/blank.h" output="blank.x"
+
+.PHONY: lfstack
+lfstack:
+	$(MAKE) test input="tervel_api/lf_stack_api.h" output="lf_stack.x"
+	
+.PHONY: wfstack
+wfstack:
+	$(MAKE) test input="tervel_api/wf_stack_api.h" output="wf_stack.x"
+
+.PHONY: wfhashmap
+wfhashmap:
+	$(MAKE) test input="tervel_api/wf_hashmap.h" output="wf_hashmap.x"
+
+.PHONY: wfhashmapnodel
+wfhashmapnodel:
+	$(MAKE) test input="tervel_api/wf_hashmap_nodel.h" output="wf_hashmap_nodel.x"
+
+
+.PHONY: test
 test: $(SOURCES) $(EXECUTABLE)
-	rm main.o
-	mkdir -p $(OUTPUT)
-	mv $(EXECUTABLE) $(OUTPUT)
-
-WFTEST:
-	$(MAKE) test CONTAINERTYPE=-DUSE_WF_VECTOR \
-        TSOURCES="$(shell find ../../util/ -name '*.cc')" \
-	EXECUTABLE=wfvector.x
-
-WFTEST_DEBUG:
-	$(MAKE) test  CONTAINERTYPE=-DUSE_WF_VECTOR \
-        TSOURCES="$(shell find ../../util/ -name '*.cc')" \
-	EXECUTABLE=wfvector.x
 
 $(EXECUTABLE): $(OBJECTS)
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -o $@ $^ $(LIB)
+	mkdir -p $(OUTPUT)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(INC)  -o $(OUTPUT)$(output) $(EXECUTABLE) $^ $(LIB) $(TOBJS)
 
 %.o: %.cc
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) -c -o $@ $<
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(INC) -c -o $@ $<
 
 
 .PHONY: clean
 clean:
-	$(RM) $(OUTPUT)*.x  $(shell find ../../util/ -name "*.o")
+	$(RM) $(OUTPUT)*.x
+
+.PHONY: clean-all
+clean-all:
+	$(RM) $(OUTPUT)*.x
 	$(RM) $(OBJECTS)

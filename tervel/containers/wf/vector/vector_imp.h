@@ -29,7 +29,6 @@ THE SOFTWARE.
 #include <tervel/util/descriptor.h>
 
 #include <tervel/containers/wf/vector/vector.hpp>
-#include <tervel/containers/wf/vector/vector_array.h>
 
 #include <tervel/containers/wf/vector/read_op.h>
 #include <tervel/containers/wf/vector/write_op.h>
@@ -37,8 +36,10 @@ THE SOFTWARE.
 #include <tervel/containers/wf/vector/pushbackwra_op.h>
 #include <tervel/containers/wf/vector/popback_op.h>
 #include <tervel/containers/wf/vector/popbackwra_op.h>
+#include <tervel/containers/wf/vector/insertAt_op.h>
+#include <tervel/containers/wf/vector/eraseAt_op.h>
 
-
+#include <tervel/containers/wf/vector/vector_array.h>
 
 namespace tervel {
 namespace containers {
@@ -72,7 +73,7 @@ size_t Vector<T>::push_back_only(T value) {
 
 
     tervel::util::ProgressAssurance::Limit progAssur;
-    while (progAssur.isDelayed()) {
+    while (progAssur.isDelayed() == false) {
       std::atomic<T> *spot = internal_array.get_spot(placed_pos);
       T expected = spot->load();
       if ( (expected ==  Vector<T>::c_not_value_) &&
@@ -121,7 +122,7 @@ bool Vector<T>::pop_back_only(T &value) {
 
 
     tervel::util::ProgressAssurance::Limit progAssur;
-    while (progAssur.isDelayed()) {
+    while (progAssur.isDelayed() == false) {
       if (poped_pos <= 0) {
         return false;
       }
@@ -195,7 +196,7 @@ bool Vector<T>::at(size_t idx, T &value) {
     std::atomic<T> *spot = internal_array.get_spot(idx, false);
 
     tervel::util::ProgressAssurance::Limit progAssur;
-    while (progAssur.isDelayed()) {
+    while (progAssur.isDelayed() == false) {
       T cvalue = spot->load(std::memory_order_relaxed);
 
       if (cvalue == Vector<T>::c_not_value_) {
@@ -238,7 +239,7 @@ bool Vector<T>::cas(size_t idx, T &expected, const T val) {
     std::atomic<T> *spot = internal_array.get_spot(idx, false);
 
     tervel::util::ProgressAssurance::Limit progAssur;
-    while (progAssur.isDelayed()) {
+    while (progAssur.isDelayed() == false) {
       T cvalue = spot->load(std::memory_order_relaxed);
 
       if (cvalue == c_not_value_) {
@@ -272,18 +273,22 @@ bool Vector<T>::cas(size_t idx, T &expected, const T val) {
   return false;
 };
 
-/*
+
 template<typename T>
-bool Vector<T>::insertAt(int idx, T value){
+bool Vector<T>::insertAt(size_t idx, T value){
+  if(!internal_array.is_valid(value)){
+    assert(false);
+    return false;
+  }
+
   tervel::util::ProgressAssurance::check_for_announcement();
 
-  InsertAt<T>* op = new InsertAt<T>(idx, value);
-  tl_control_word = &(op->state);
-
-  bool res=op->begin(this);
-
+  InsertAt<T>* op = new InsertAt<T>(this, idx, value);
+  tl_control_word = op->state();
+  op->execute();
+  bool res = !op->isFailed();
   if (res) {
-    op->cleanup(this, idx);
+    op->cleanup();
     size(1);
   }
 
@@ -292,22 +297,23 @@ bool Vector<T>::insertAt(int idx, T value){
 };
 
 template<typename T>
-bool Vector<T>::eraseAt(int idx, T &value){
+bool Vector<T>::eraseAt(size_t idx, T &value){
   tervel::util::ProgressAssurance::check_for_announcement();
 
-  EraseAt<T>* op = new EraseAt<T>(idx);
-  tl_control_word = &(op->state);
+  EraseAt<T>* op = new EraseAt<T>(this, idx);
+  tl_control_word = op->state();
+  op->execute();
 
-  bool res=op->begin(this, value);
-
+  bool res = !op->isFailed();
   if (res) {
-    op->cleanup(this, idx);
+    op->cleanup();
+    op->removedValue(value);
     size(-1);
   }
 
   op->safe_delete();
   return res;
-}; */
+};
 
 }  // namespace vector
 }  // namespace wf
