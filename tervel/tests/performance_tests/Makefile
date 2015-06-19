@@ -51,6 +51,9 @@ all: wfstack lfstack wfhashmap wfhashmapnodel
 blank:
 	$(MAKE) test input="api/blank.h" output="blank.x"
 
+wfvector:
+	$(MAKE) test input="tervel_api/wf_vector_api.h" output="wf_vector.x"
+
 .PHONY: lfstack
 lfstack:
 	$(MAKE) test input="tervel_api/lf_stack_api.h" output="lf_stack.x"
