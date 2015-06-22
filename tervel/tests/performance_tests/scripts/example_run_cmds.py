@@ -6,14 +6,17 @@ exeTime = [20]
 
 def ds_test(exe, exe_config, distributions):
     for time in exeTime:
-      for dist in distributions:
-          for thread in threads:
-            cmd = ""
-            cmd += "./../executables/" + str(exe) + ".x -num_threads="+str(thread)
-            cmd += " -main_sleep=0  -execution_time="+str(time) + " " + exe_config
-            cmd += " " + str(thread) + " " + str(dist)
-            cmd += " 2>&1 > $dir/$(date +\"%s\").log"
-            print cmd
+        for dist in distributions:
+            for thread in threads:
+                print "temp=$dir/$(date +\"%s\").log"
+                cmd = ""
+                cmd += "./../executables/" + str(exe) + ".x -num_threads="+str(thread)
+                cmd += " -main_sleep=0  -execution_time="+str(time) + " " + exe_config
+                cmd += " " + str(thread) + " " + str(dist)
+                print "echo \"CMD : " + cmd + "\" > $temp"
+                cmd += " 2>&1 > $temp"
+                print "echo \"" + cmd + "\""
+                print cmd
 
 def lfstack():
     distributions = ["50 50"] #, "40 60", "60 40"]
