@@ -36,7 +36,7 @@ void run(uint64_t thread_id, char **argv) {
 
   op_counter_t *op_counter = new op_counter_t[DS_OP_COUNT];
 
-  int lcount = 1;
+  __attribute__((unused)) int lcount = 1;
 
   int func_call_rate[DS_OP_COUNT];
   int max_rand = 0;
@@ -65,7 +65,7 @@ void run(uint64_t thread_id, char **argv) {
   /** Update this when adding a new data structure **/
   while (g_thread_signal.execute()) {
     lcount++;
-    int op = distribution(generator);
+    __attribute__((unused)) int op = distribution(generator);
 
     bool opRes = true;
 
