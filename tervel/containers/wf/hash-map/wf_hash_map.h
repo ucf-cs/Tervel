@@ -242,7 +242,7 @@ class HashMap {
   /**
    * This class is used to differentiate between data_nodes and array_nodes/
    */
-  class Node {
+  class Node : public tervel::util::memory::hp::Element {
    public:
     Node() {}
     virtual ~Node() {}
@@ -316,7 +316,7 @@ class HashMap {
    * This class is used to hold a key and value pair.
    * It is hazard pointer protected.
    */
-  class DataNode : public Node, public tervel::util::memory::hp::Element {
+  class DataNode : public Node {
    public:
     explicit DataNode(Key k, Value v)
       : key_(k)
@@ -411,9 +411,17 @@ class HashMap {
   std::unique_ptr<Location[]> primary_array_;
 };  // class wf hash map
 
+
+bool hp_check_empty() {
+  return !tervel::util::memory::hp::HazardPointer::hasWatch(
+      tervel::util::memory::hp::HazardPointer::SlotID::SHORTUSE);
+}
+
+
 template<class Key, class Value, class Functor>
 bool HashMap<Key, Value, Functor>::
 hp_watch_and_get_value(Location * loc, Node * &value) {
+  assert(hp_check_empty());
   std::atomic<void *> *temp_address =
       reinterpret_cast<std::atomic<void *> *>(loc);
 
@@ -431,11 +439,7 @@ hp_watch_and_get_value(Location * loc, Node * &value) {
   if (is_watched) {
     value = reinterpret_cast<Node *>(temp);
 
-    assert(tervel::util::memory::hp::HazardPointer::is_watched(   temp) == true);
-  }
-
-  if (is_watched) {
-    value = reinterpret_cast<Node *>(temp);
+    assert(tervel::util::memory::hp::HazardPointer::is_watched(temp) == true);
   }
 
   return is_watched;
@@ -448,11 +452,6 @@ hp_unwatch() {
           tervel::util::memory::hp::HazardPointer::SlotID::SHORTUSE);
 }  // hp_unwatch
 
-
-bool hp_check_empty() {
-  return !tervel::util::memory::hp::HazardPointer::hasWatch(
-      tervel::util::memory::hp::HazardPointer::SlotID::SHORTUSE);
-}
 
 template<class Key, class Value, class Functor>
 bool HashMap<Key, Value, Functor>::
@@ -610,8 +609,6 @@ remove(Key key) {
   uint64_t position = get_position(key, depth);
 
   Location *loc = &(primary_array_[position]);
-  Node *curr_value;
-
 
   tervel::util::ProgressAssurance::Limit progAssur;
 
@@ -625,6 +622,7 @@ remove(Key key) {
       continue;
     }
 
+    Node *curr_value;
     if (!hp_watch_and_get_value(loc, curr_value)) {
       continue;
     } else if (curr_value == nullptr) {
@@ -651,6 +649,16 @@ remove(Key key) {
         if (loc->compare_exchange_strong(curr_value, nullptr)) {
             assert(loc->load() != data_node);
             assert(data_node->access_count_.load() < 0);
+
+            if (tervel::util::memory::hp::HazardPointer::is_watched(curr_value) == false) {
+              tervel::util::memory::hp::HazardPointer::is_watched(curr_value);
+              assert(false);
+            }
+            if (tervel::util::memory::hp::HazardPointer::is_watched(data_node) == false) {
+              tervel::util::memory::hp::HazardPointer::is_watched(data_node);
+              assert(false);
+            }
+
             hp_unwatch();
             data_node->safe_delete();
             break;
