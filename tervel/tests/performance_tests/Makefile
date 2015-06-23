@@ -25,7 +25,7 @@
 CXX      = g++-4.8
 CXXFLAGS =  -DCONTAINER_FILE=$(input) -Wall -Werror  -std=c++11  -march=native -m64 -pthread -fno-strict-aliasing # -DTERVEL_PROG_ASSUR_ALWAYS_ANNOUNCE -DTERVEL_PROG_ASSUR_ALWAYS_CHECK
 
-DEBUG = -DDEBUG=1 -g -g3 
+DEBUG = -DDEBUG=1 -g -g3
 # RELEASE = -O3 -DNDEBUG
 
 CXXFLAGS += $(DEBUG) $(RELEASE)
@@ -42,9 +42,10 @@ OBJECTS = $(SOURCES:.cc=.o)
 output ?= $(input).x
 OUTPUT = executables/
 
+.PHONY: all
 all:  blank wfringbuffer lfmcasbuffer wfmcas wfvector wfstack lfstack wfhashmap wfhashmapnodel
 
-
+.PHONY: blank
 blank:
 	$(MAKE) test input="api/blank.h" output="blank.x"
 
@@ -62,7 +63,7 @@ wfvector:
 
 lfstack:
 	$(MAKE) test input="tervel_api/lf_stack_api.h" output="lf_stack.x"
-	
+
 wfstack:
 	$(MAKE) test input="tervel_api/wf_stack_api.h" output="wf_stack.x"
 
@@ -76,6 +77,7 @@ wfhashmapnodel:
 .PHONY: test
 test: $(SOURCES) $(EXECUTABLE)
 
+.PHONY: $(EXECUTABLE)
 $(EXECUTABLE): $(OBJECTS)
 	mkdir -p $(OUTPUT)
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(INC)  -o $(OUTPUT)$(output) $(EXECUTABLE) $^ $(LIB) $(TOBJS)
