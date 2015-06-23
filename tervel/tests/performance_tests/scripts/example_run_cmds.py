@@ -18,12 +18,13 @@ def ds_test(exe, ds_config, distributions):
                 cmds += "temp=$dir/$(date +\"%s\").log\n"
                 exe_cmd  = "./" + str(exe)
                 exe_cmd += " -main_sleep=0"
+                exe_cmd += " -verbose"
                 exe_cmd += "  -execution_time=" + str(time)
                 exe_cmd += " " + ds_config
                 exe_cmd += " -num_threads=" + str(thread)
                 exe_cmd += " " + str(thread) + " " + str(dist)
                 cmds += "echo \"CMD : " + exe_cmd + "\" > $temp\n"
-                exe_cmd += " 2>&1 > $temp"
+                exe_cmd += " 2>&1 >> $temp"
                 cmds += "echo \"" + exe_cmd + "\"\n"
                 cmds += exe_cmd + "\n"
 
