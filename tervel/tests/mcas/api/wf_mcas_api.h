@@ -62,8 +62,8 @@ class TestClass {
 
   bool mcas(int len, std::function<int()> posFunc,  std::atomic<void *> *address) {
 
-    tervel::algorithms::wf::mcas::MCAS<void *> *mcas;
-    mcas = new tervel::algorithms::wf::mcas::MCAS<void *>(len);
+    tervel::algorithms::wf::mcas::MultiWordCompareAndSwap<void *> *mcas;
+    mcas = new tervel::algorithms::wf::mcas::MultiWordCompareAndSwap<void *>(len);
 
     for (int i = 0; i < len; i++) {
       bool success;

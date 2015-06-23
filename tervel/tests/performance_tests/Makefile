@@ -42,28 +42,33 @@ OBJECTS = $(SOURCES:.cc=.o)
 output ?= $(input).x
 OUTPUT = executables/
 
-all: wfstack lfstack wfhashmap wfhashmapnodel
+all:  blank wfringbuffer lfmcasbuffer wfmcas wfvector wfstack lfstack wfhashmap wfhashmapnodel
 
 
-
-
-.PHONY: blank
 blank:
 	$(MAKE) test input="api/blank.h" output="blank.x"
 
-.PHONY: lfstack
+wfringbuffer:
+	$(MAKE) test input="tervel_api/wf_ringbuffer_api.h" output="wfringbuffer.x"
+
+lfmcasbuffer:
+	$(MAKE) test input="tervel_api/lf_mcasbuffer_api.h" output="lfmcasbuffer.x"
+
+wfmcas:
+	$(MAKE) test input="tervel_api/wf_mcas_api.h" output="wfmcas.x"
+
+wfvector:
+	$(MAKE) test input="tervel_api/wf_vector_api.h" output="wf_vector.x"
+
 lfstack:
 	$(MAKE) test input="tervel_api/lf_stack_api.h" output="lf_stack.x"
 	
-.PHONY: wfstack
 wfstack:
 	$(MAKE) test input="tervel_api/wf_stack_api.h" output="wf_stack.x"
 
-.PHONY: wfhashmap
 wfhashmap:
 	$(MAKE) test input="tervel_api/wf_hashmap.h" output="wf_hashmap.x"
 
-.PHONY: wfhashmapnodel
 wfhashmapnodel:
 	$(MAKE) test input="tervel_api/wf_hashmap_nodel.h" output="wf_hashmap_nodel.x"
 

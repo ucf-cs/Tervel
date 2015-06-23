@@ -22,8 +22,8 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-#ifndef TERVEL_MCAS_MCAS_HELPER_H_
-#define TERVEL_MCAS_MCAS_HELPER_H_
+#ifndef TERVEL_MultiWordCompareAndSwap_MultiWordCompareAndSwap_HELPER_H_
+#define TERVEL_MultiWordCompareAndSwap_MultiWordCompareAndSwap_HELPER_H_
 
 #include <tervel/util/info.h>
 #include <tervel/util/descriptor.h>
@@ -39,13 +39,13 @@ namespace wf {
 namespace mcas {
 
 template<class T>
-class MCAS;
+class MultiWordCompareAndSwap;
 template<class T>
 class CasRow;
 
 template<class T>
 /**
- * This class is the MCAS operation's helper. The Helper or MCH is used to
+ * This class is the MultiWordCompareAndSwap operation's helper. The Helper or MCH is used to
  * replace the expected value of the specified address.
  */
 class Helper : public util::Descriptor {
@@ -54,15 +54,15 @@ class Helper : public util::Descriptor {
    * The Helper object contains a reference to the row it is associated with and
    * the mcas operation that contains the row.
    *
-   * @param mcas_op the MCAS<T> which contains the referenced cas_row
-   * @param cas_row the referenced row in the MCAS<T>.
+   * @param mcas_op the MultiWordCompareAndSwap<T> which contains the referenced cas_row
+   * @param cas_row the referenced row in the MultiWordCompareAndSwap<T>.
    */
-  Helper<T>(MCAS<T> *mcas_op, CasRow<T> *cas_row)
+  Helper<T>(MultiWordCompareAndSwap<T> *mcas_op, CasRow<T> *cas_row)
     : cas_row_(cas_row), mcas_op_(mcas_op) {}
 
   /**
    * This function is called after this objects rc count was incremented.
-   * It acquires a temporary HP watch on the MCAS op (via last_row_), ensures
+   * It acquires a temporary HP watch on the MultiWordCompareAndSwap op (via last_row_), ensures
    * it is is associated, and if so returns true.
    * If it is not associated or it was removed, it returns false
    *
@@ -77,7 +77,7 @@ class Helper : public util::Descriptor {
           t_SlotID::SHORTUSE, mcas_op_, address, value);
 
     if (success) {
-      /* Success, means that the MCAS object referenced by this Helper can not
+      /* Success, means that the MultiWordCompareAndSwap object referenced by this Helper can not
        * be freed while we check to make sure this Helper is assocaited with
        * it. */
       Helper<T> *curr_mch = cas_row_->helper_.load();
@@ -134,7 +134,7 @@ class Helper : public util::Descriptor {
     bool success = false;
     if (temp_null == nullptr || temp_null == this) {
       /* This implies it was successfully associated
-         So call the complete function of the MCAS operation */
+         So call the complete function of the MultiWordCompareAndSwap operation */
       success = this->mcas_op_->mcas_complete(this->cas_row_);
       if (util::RecursiveAction::recursive_return()) {
         /* If the thread is performing a recursive return back to its own
@@ -144,7 +144,7 @@ class Helper : public util::Descriptor {
     }
 
     if (success) {
-    /* If the MCAS op was successfull then remove the Helper by replacing
+    /* If the MultiWordCompareAndSwap op was successfull then remove the Helper by replacing
         it with the new_value */
       address->compare_exchange_strong(value,
           reinterpret_cast<void *>(this->cas_row_->new_value_));
@@ -166,7 +166,7 @@ class Helper : public util::Descriptor {
    */
   using util::Descriptor::get_logical_value;
   void * get_logical_value() {
-    if (this->mcas_op_->state_ ==  MCAS<T>::MCasState::PASS) {
+    if (this->mcas_op_->state_ ==  MultiWordCompareAndSwap<T>::MCasState::PASS) {
       return this->cas_row_->new_value_;
     }
 
@@ -174,10 +174,10 @@ class Helper : public util::Descriptor {
   }
 
  private:
-  // The Row in the MCAS operation this MCH was placed for
+  // The Row in the MultiWordCompareAndSwap operation this MCH was placed for
   CasRow<T> *cas_row_;
-  // The MCAS which contains the cas_row_
-  MCAS<T> *mcas_op_;
+  // The MultiWordCompareAndSwap which contains the cas_row_
+  MultiWordCompareAndSwap<T> *mcas_op_;
 };  // Helper
 
 
@@ -187,4 +187,4 @@ class Helper : public util::Descriptor {
 }  // namespace algorithms
 }  // namespace tervel
 
-#endif  // TERVEL_MCAS_MCAS_HELPER_H_
+#endif  // TERVEL_MultiWordCompareAndSwap_MultiWordCompareAndSwap_HELPER_H_

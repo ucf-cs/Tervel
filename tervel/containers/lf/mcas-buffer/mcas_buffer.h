@@ -200,8 +200,8 @@ class RingBuffer {
         if (next == c_tail_value) {
           return false;
         } else {
-          tervel::algorithms::wf::mcas::MCAS<Node<T> *> *mcas =
-              new tervel::algorithms::wf::mcas::MCAS<Node<T> *>(2);
+          tervel::algorithms::wf::mcas::MultiWordCompareAndSwap<Node<T> *> *mcas =
+              new tervel::algorithms::wf::mcas::MultiWordCompareAndSwap<Node<T> *>(2);
           bool success;
           success = mcas->add_cas_triple(address(h), c_head_value, node);
           assert(success);
@@ -247,8 +247,8 @@ class RingBuffer {
         } else if (next == c_not_value) {
           t = tail();
         } else {  // some node *
-          tervel::algorithms::wf::mcas::MCAS<Node<T> *> *mcas =
-              new tervel::algorithms::wf::mcas::MCAS<Node<T> *>(2);
+          tervel::algorithms::wf::mcas::MultiWordCompareAndSwap<Node<T> *> *mcas =
+              new tervel::algorithms::wf::mcas::MultiWordCompareAndSwap<Node<T> *>(2);
           bool success;
           success = mcas->add_cas_triple(address(t), c_tail_value, c_not_value);
           assert(success);
