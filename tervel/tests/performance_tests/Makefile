@@ -23,7 +23,7 @@
 #
 
 CXX      = g++-4.8
-CXXFLAGS =  -DCONTAINER_FILE=$(input) -Wall -Werror  -std=c++11  -march=native -m64 -pthread -fno-strict-aliasing # -DTERVEL_PROG_ASSUR_ALWAYS_ANNOUNCE -DTERVEL_PROG_ASSUR_ALWAYS_CHECK
+CXXFLAGS =  -DCONTAINER_FILE=$(input) -Wall -Werror  -std=c++11  -march=native -m64 -pthread -fno-strict-aliasing -DUSE_PAPI # -DTERVEL_PROG_ASSUR_ALWAYS_ANNOUNCE -DTERVEL_PROG_ASSUR_ALWAYS_CHECK
 
 DEBUG = -DDEBUG=1 -g -g3 
 # RELEASE = -O3 -DNDEBUG
@@ -32,7 +32,7 @@ CXXFLAGS += $(DEBUG) $(RELEASE)
 
 CPPFLAGS = -DINTEL
 INC= -I../../../
-LIB += -ldl -lgflags -lpthread -lrt
+LIB += -ldl -lgflags -lpthread -lrt /usr/local/lib/libpapi.a
 
 SOURCES = $(shell find ../../util/ -name '*.cc')
 

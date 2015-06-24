@@ -65,6 +65,11 @@ int main(int argc, char **argv) {
     execution_str += std::to_string(atoi(argv[i])) + " ";
   }
 
+  // Create PAPI Objects
+#ifdef USE_PAPI
+  PapiUtil papiUtil;
+  papiUtil.start();
+#endif
   // Create Threads
   g_thread_signal.init();
   std::vector<std::thread> thread_list;
@@ -107,6 +112,10 @@ int main(int argc, char **argv) {
   g_thread_signal.stop();
   (void)gettimeofday(&end_time, NULL);
 
+#ifdef USE_PAPI
+  papiUtil.stop();
+#endif  
+
   log("Info", "Testing Completed");
   sleep(1);
 
@@ -124,6 +133,10 @@ int main(int argc, char **argv) {
     numThreads
   );
   std::cout << run_results << std::endl;
+
+#ifdef USE_PAPI
+  std::cout << papiUtil.results() << std::endl;
+#endif
 
   sleep(1);
   DS_DESTORY_CODE
