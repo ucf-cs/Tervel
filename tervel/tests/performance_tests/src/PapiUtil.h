@@ -35,18 +35,6 @@
 
 DEFINE_string(papi_events, "PAPI_L1_TCA,PAPI_L1_DCA,PAPI_L1_ICA","Event group to count");
 
-struct PAPIRecord {
-  long long *values;
-  PAPI_option_t opt;
-  int event_set;
-  int num_of_events;
-  std::vector<int> events_vector;
-
-  PAPIRecord(){
-    event_set = PAPI_NULL;
-    num_of_events = 0;
-  }
-};
 
 class PapiException : public std::exception{
   public:
@@ -76,9 +64,9 @@ class PapiUtil {
         init_options();
         addAllEvents(events);
    
-        record_.values = new long long[record_.num_of_events];
-        for (int i = 0; i < record_.num_of_events; ++i){
-          record_.values[i] = 0;
+        values_ = new long long[num_of_events_];
+        for (int i = 0; i < num_of_events_; ++i){
+          values_[i] = 0;
         }
       }catch(std::exception& e){
         std::cout << e.what() << std::endl;        
@@ -87,7 +75,7 @@ class PapiUtil {
 
 
     bool start(){
-      int res = PAPI_start(record_.event_set);
+      int res = PAPI_start(event_set_);
       if(res != PAPI_OK){
         std::cout << "PAPI START ERROR ! ( " << res << " )" << std::endl;
         return false;
@@ -97,7 +85,7 @@ class PapiUtil {
 
     bool stop(){
       int retval = 0;
-      if ( ( retval = PAPI_stop( record_.event_set, record_.values ) ) != PAPI_OK ){
+      if ( ( retval = PAPI_stop( event_set_, values_ ) ) != PAPI_OK ){
         std::cout << "PAPI STOP ERROR ! ( " << retval << " )" << std::endl;
         return false;
       }
@@ -106,11 +94,11 @@ class PapiUtil {
 
     std::string results(){
       std::string res("PAPIResults : \n");
-      for(unsigned int i = 0; i < record_.events_vector.size(); i++){
+      for(unsigned int i = 0; i < events_vector_.size(); i++){
         char event_name[PAPI_MAX_STR_LEN];
-        PAPI_event_code_to_name(record_.events_vector[i],event_name);
+        PAPI_event_code_to_name(events_vector_[i],event_name);
         std::string event_str(event_name);
-        res += "  " + event_str + " : " + std::to_string(record_.values[i])+ "\n";
+        res += "  " + event_str + " : " + std::to_string(values_[i])+ "\n";
       }
       return res;
 
@@ -119,18 +107,18 @@ class PapiUtil {
     void shutdown(){
         PAPI_shutdown();
     }
-
   private:
-    PAPIRecord record_;
+    long long *values_;
+    PAPI_option_t opt_;
+    int event_set_;
+    int num_of_events_;
+    std::vector<int> events_vector_;    
     static const char EVENT_LIST_DELIMITER_ = ',';
 
 
-    void addEvent(std::string eventString){
+    void addEvent(const char* eventName){
       int eventCode;
-      char *eventName = new char[eventString.size()+1];
-      eventString.copy(eventName, eventString.size());
-      eventName[eventString.size()] = '\0';
-      int retval = PAPI_event_name_to_code( eventName, &eventCode );
+      int retval = PAPI_event_name_to_code( (char *)eventName, &eventCode );
       if(retval != PAPI_OK){
         std::string str(eventName);
         std::string msg = "PAPI event name(" + str + ") to code error: " + std::to_string(retval);
@@ -143,20 +131,21 @@ class PapiUtil {
         throw new PapiException(msg);        
       }
 
-      if ( ( retval = PAPI_add_event( record_.event_set, eventCode ) ) != PAPI_OK ){
-        std::string msg = "PAPI add event (" + eventString  + ") error " + std::to_string(retval);
+      if ( ( retval = PAPI_add_event( event_set_, eventCode ) ) != PAPI_OK ){
+        std::string str(eventName);
+        std::string msg = "PAPI add event (" + str  + ") error " + std::to_string(retval);
         std::cout << msg << std::endl;
         throw new PapiException(msg);        
       }
-      record_.num_of_events++;
-      record_.events_vector.push_back(eventCode);      
+      num_of_events_++;
+      events_vector_.push_back(eventCode);      
     };
 
-
     void addAllEvents(std::string allEvents){
+      num_of_events_ = 0;
       std::vector<std::string> events = split(allEvents,EVENT_LIST_DELIMITER_);
       for (unsigned int i = 0; i < events.size(); ++i){
-        addEvent(events[i]);
+        addEvent(events[i].c_str());
       }        
     };     
 
@@ -164,13 +153,14 @@ class PapiUtil {
 
     void init_event_set(){
       int retval = 0;
-      if ( ( retval = PAPI_create_eventset( &record_.event_set ) ) != PAPI_OK ){
+      event_set_ = PAPI_NULL;
+      if ( ( retval = PAPI_create_eventset( &event_set_ ) ) != PAPI_OK ){
         std::string msg = "PAPI create event_set error: " + retval;
         std::cout << msg << std::endl;
         throw new PapiException(msg);
       }
 
-      if ( ( retval = PAPI_assign_eventset_component( record_.event_set, 0 ) ) != PAPI_OK ){
+      if ( ( retval = PAPI_assign_eventset_component( event_set_, 0 ) ) != PAPI_OK ){
         std::string msg = "PAPI assign event_set component error: " + retval;
         std::cout << msg << std::endl;
         throw new PapiException(msg);        
@@ -180,10 +170,10 @@ class PapiUtil {
     void init_options(){
 
       int retval = 0;
-      memset( &record_.opt, 0x0, sizeof ( PAPI_option_t ) );
-      record_.opt.inherit.inherit = PAPI_INHERIT_ALL;
-      record_.opt.inherit.eventset = record_.event_set;  
-      if ( ( retval = PAPI_set_opt( PAPI_INHERIT, &record_.opt ) ) != PAPI_OK ) {
+      memset( &opt_, 0x0, sizeof ( PAPI_option_t ) );
+      opt_.inherit.inherit = PAPI_INHERIT_ALL;
+      opt_.inherit.eventset = event_set_;  
+      if ( ( retval = PAPI_set_opt( PAPI_INHERIT, &opt_ ) ) != PAPI_OK ) {
         if ( retval == PAPI_ECMP) {
           std::string msg = "PAPI Error! Inherit not supported by current component.";
           std::cout << msg << std::endl;

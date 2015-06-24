@@ -68,7 +68,6 @@ int main(int argc, char **argv) {
   // Create PAPI Objects
 #ifdef USE_PAPI
   PapiUtil papiUtil;
-  papiUtil.start();
 #endif
   // Create Threads
   g_thread_signal.init();
@@ -104,6 +103,9 @@ int main(int argc, char **argv) {
 
 
   (void)gettimeofday(&start_time, NULL);
+#ifdef USE_PAPI  
+  papiUtil.start();  
+#endif
   g_thread_signal.start();
 
   // Wait until test is over
