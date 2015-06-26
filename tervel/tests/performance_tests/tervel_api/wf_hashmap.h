@@ -74,9 +74,9 @@ for (int i = 0; i < FLAGS_prefill; i++) { \
 #define DS_NAME "WF Hash Map"
 
 #define DS_CONFIG_STR \
-    "\n  Prefill : " + std::to_string(FLAGS_prefill) \
-  + "\n  Capacity : " + std::to_string(FLAGS_capacity) \
-  + "\n  ExpansionFactor : " + std::to_string(FLAGS_expansion_factor) + ""
+    "\n" _DS_CONFIG_INDENT "Prefill : " + std::to_string(FLAGS_prefill) \
+  + "\n" _DS_CONFIG_INDENT "Capacity : " + std::to_string(FLAGS_capacity) \
+  + "\n" _DS_CONFIG_INDENT "ExpansionFactor : " + std::to_string(FLAGS_expansion_factor) + ""
 
 
 #define OP_RAND \

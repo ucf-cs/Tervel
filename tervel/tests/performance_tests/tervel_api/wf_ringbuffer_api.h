@@ -90,8 +90,8 @@ for (int i = 0; i < FLAGS_prefill; i++) { \
 #define DS_NAME "WF Ring Buffer"
 
 #define DS_CONFIG_STR \
-   "\n  prefill : " + std::to_string(FLAGS_prefill) +"" + \
-   "\n  capacity : " + std::to_string(FLAGS_capacity) +""
+   "\n" _DS_CONFIG_INDENT "prefill : " + std::to_string(FLAGS_prefill) +"" + \
+   "\n" _DS_CONFIG_INDENT "capacity : " + std::to_string(FLAGS_capacity) +""
 
 #define OP_RAND \
   /* std::uniform_int_distribution<Value_o> random(1, UINT_MAX); */ \
