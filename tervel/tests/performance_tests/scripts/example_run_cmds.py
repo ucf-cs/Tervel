@@ -1,6 +1,6 @@
 import time
 
-exe_count = 0;
+exe_count = 5;
 time_count = 0;
 cmds  = "dir=logs/$(date +\"%s\")\n"
 cmds += "mkdir $dir\n"
