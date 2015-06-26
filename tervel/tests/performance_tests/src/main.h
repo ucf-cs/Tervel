@@ -38,7 +38,7 @@
 #include <gflags/gflags.h>
 
 #ifdef USE_PAPI
-  #include "PapiUtil.h"
+  #include "papi_util.h"
 #endif
 
 #define __TERVEL_MACRO_xstr(s) __TERVEL_MACRO_str(s)

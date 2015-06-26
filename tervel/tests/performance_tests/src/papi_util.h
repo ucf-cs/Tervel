@@ -33,7 +33,7 @@
 #include <sstream>
 #include <papi.h>
 
-DEFINE_string(papi_events, "PAPI_L1_TCA,PAPI_L1_DCA,PAPI_L1_ICA","Event group to count");
+DEFINE_string(papi_events, "PAPI_L1_TCA,PAPI_L1_DCA,PAPI_L1_ICA","A comma separated list of events to track");
 
 
 class PapiException : public std::exception{
@@ -63,14 +63,14 @@ class PapiUtil {
         init_event_set();
         init_options();
         addAllEvents(events);
-   
+
         values_ = new long long[num_of_events_];
         for (int i = 0; i < num_of_events_; ++i){
           values_[i] = 0;
         }
       }catch(std::exception& e){
-        std::cout << e.what() << std::endl;        
-      }       
+        std::cout << e.what() << std::endl;
+      }
     }
 
 
@@ -93,12 +93,12 @@ class PapiUtil {
     }
 
     std::string results(){
-      std::string res("PAPIResults : \n");
+      std::string res("  PAPIResults : \n");
       for(unsigned int i = 0; i < events_vector_.size(); i++){
         char event_name[PAPI_MAX_STR_LEN];
         PAPI_event_code_to_name(events_vector_[i],event_name);
         std::string event_str(event_name);
-        res += "  " + event_str + " : " + std::to_string(values_[i])+ "\n";
+        res += "    " + event_str + " : " + std::to_string(values_[i])+ "\n";
       }
       return res;
 
@@ -112,7 +112,7 @@ class PapiUtil {
     PAPI_option_t opt_;
     int event_set_;
     int num_of_events_;
-    std::vector<int> events_vector_;    
+    std::vector<int> events_vector_;
     static const char EVENT_LIST_DELIMITER_ = ',';
 
 
@@ -123,22 +123,22 @@ class PapiUtil {
         std::string str(eventName);
         std::string msg = "PAPI event name(" + str + ") to code error: " + std::to_string(retval);
         std::cout << msg << std::endl;
-        throw new PapiException(msg);          
-      }      
+        throw new PapiException(msg);
+      }
       if ( ( retval = PAPI_query_event( eventCode ) ) != PAPI_OK ){
         std::string msg = "PAPI query event error: " + std::to_string(retval);
         std::cout << msg << std::endl;
-        throw new PapiException(msg);        
+        throw new PapiException(msg);
       }
 
       if ( ( retval = PAPI_add_event( event_set_, eventCode ) ) != PAPI_OK ){
         std::string str(eventName);
         std::string msg = "PAPI add event (" + str  + ") error " + std::to_string(retval);
         std::cout << msg << std::endl;
-        throw new PapiException(msg);        
+        throw new PapiException(msg);
       }
       num_of_events_++;
-      events_vector_.push_back(eventCode);      
+      events_vector_.push_back(eventCode);
     };
 
     void addAllEvents(std::string allEvents){
@@ -146,8 +146,8 @@ class PapiUtil {
       std::vector<std::string> events = split(allEvents,EVENT_LIST_DELIMITER_);
       for (unsigned int i = 0; i < events.size(); ++i){
         addEvent(events[i].c_str());
-      }        
-    };     
+      }
+    };
 
 
 
@@ -163,29 +163,29 @@ class PapiUtil {
       if ( ( retval = PAPI_assign_eventset_component( event_set_, 0 ) ) != PAPI_OK ){
         std::string msg = "PAPI assign event_set component error: " + retval;
         std::cout << msg << std::endl;
-        throw new PapiException(msg);        
+        throw new PapiException(msg);
       }
-    };  
+    };
 
     void init_options(){
 
       int retval = 0;
       memset( &opt_, 0x0, sizeof ( PAPI_option_t ) );
       opt_.inherit.inherit = PAPI_INHERIT_ALL;
-      opt_.inherit.eventset = event_set_;  
+      opt_.inherit.eventset = event_set_;
       if ( ( retval = PAPI_set_opt( PAPI_INHERIT, &opt_ ) ) != PAPI_OK ) {
         if ( retval == PAPI_ECMP) {
           std::string msg = "PAPI Error! Inherit not supported by current component.";
           std::cout << msg << std::endl;
-          throw new PapiException(msg);           
+          throw new PapiException(msg);
         } else {
           std::string msg = "PAPI_set_opt error: " + retval;
           std::cout << msg << std::endl;
-          throw new PapiException(msg);  
+          throw new PapiException(msg);
         }
-      } 
+      }
 
-    };      
+    };
 
     std::vector<std::string> split(const std::string &s, char delim) {
       std::vector<std::string> elems;
@@ -199,7 +199,7 @@ class PapiUtil {
         elems.push_back(item);
       }
       return elems;
-    }       
+    }
 
 
 
