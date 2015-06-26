@@ -131,12 +131,24 @@ typedef struct{
 }op_counter_t;
 
 
-void log(const char * tag, const char * msg) {
-  if (FLAGS_verbose) {
+void log(const char * tag, std::string msg, bool print = false) {
+  if (FLAGS_verbose || print) {
     std::cout << "# "
       << "[" << tag << "]"
       << " : " << msg << std::endl;
   }
+};
+void log(const char * tag, const char * msg, bool print = false) {
+  if (FLAGS_verbose || print) {
+    std::cout << "# "
+      << "[" << tag << "]"
+      << " : " << msg << std::endl;
+  }
+};
+
+
+void error_log(std::string msg) {
+  log("Error", msg, true);
 };
 
 void sleep(int s) {

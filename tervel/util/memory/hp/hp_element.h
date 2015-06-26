@@ -71,8 +71,6 @@ class Element {
     #endif
 
     if (no_check) {
-      this->~Element();
-    } else if (no_check) {
       delete this;
     } else {
       element_list->add_to_unsafe(this);

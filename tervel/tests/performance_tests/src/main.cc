@@ -27,7 +27,7 @@
 
 /** Arguments for Tester */
 DEFINE_uint64(main_sleep, 0, "Causes the main thread to sleep before signaling go. Useful for allowing monitors to be attached.");
-DEFINE_uint64(num_threads, 0, "The number of executing threads.");
+DEFINE_uint64(num_threads, 0, "The number of executing threads. The trailing arguments should be in the forum of thread groups which are in the form: [threads oprate1 .. oprateN]");
 DEFINE_uint64(execution_time, 5, "The amount of time to run the tests");
 
 
@@ -77,7 +77,12 @@ int main(int argc, char **argv) {
   for (int j = 1; j < argc; j += DS_OP_COUNT + 1) {
 
     if (j + DS_OP_COUNT >= argc) {
-      log("Error", "Invalid Thread Group and Rate Configuration");
+      error_log("Invalid Thread Group and Rate Configuration");
+      std::string s = "Use: int values in the following order threads";
+      for (int i = 0; i < DS_OP_COUNT; i++) {
+        s += ", " + op_names[i];
+      }
+      error_log(s);
       exit(-1);
     }
 
