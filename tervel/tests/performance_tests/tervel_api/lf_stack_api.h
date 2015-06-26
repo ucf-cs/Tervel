@@ -68,7 +68,7 @@ for (int i = 0; i < FLAGS_prefill; i++) { \
 #define DS_NAME "LF Stack"
 
 #define DS_CONFIG_STR \
-   "\n  Prefill : " + std::to_string(FLAGS_prefill) + ""
+   "\n" _DS_CONFIG_INDENT "Prefill : " + std::to_string(FLAGS_prefill) + ""
 
 #define OP_RAND \
   /* std::uniform_int_distribution<Value> random(1, UINT_MAX); */ \

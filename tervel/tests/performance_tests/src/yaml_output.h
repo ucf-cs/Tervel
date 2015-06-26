@@ -28,26 +28,28 @@
 
 
 std::string config_str(int numThreads, std::string execution_str) {
-  std::string res("");
-  res += "AlgorithmName : " DS_NAME "\n";
-  res += "AlgorithmConfig : " DS_CONFIG_STR "\n";
-  res += "ExecutionTime : " + std::to_string(FLAGS_execution_time) + "\n";
-  res += "MainDelay : " + std::to_string(FLAGS_main_sleep) + "\n";
-  res += "NumberThreads : " + std::to_string(numThreads) + "\n";
-  res += "RunConfig : " + execution_str + "\n";
+  std::string res("alg_config:\n");
+  res += "  algorithm_name : " DS_NAME "\n";
+  res += "  ds_config : " DS_CONFIG_STR "\n";
+  res += "  run_config : " + execution_str + "\n";
+
+  res += "test_config :  \n";
+  res += "  execution_time : " + std::to_string(FLAGS_execution_time) + "\n";
+  res += "  main_delay : " + std::to_string(FLAGS_main_sleep) + "\n";
+  res += "  num_threads : " + std::to_string(numThreads) + "\n";
 
   return res;
 };
 
 std::string results_str(double start_time, double end_time, int numThreads) {
   std::string res("");
-  res += "TimeStamps: \n";
+  res += "time_stamps: \n";
   res += "  start : " + std::to_string(start_time) + "\n";
   res += "  end : " + std::to_string(end_time) + "\n";
 
-  res += "Metrics : \n";
-  res += "  Operations : \n";
-  res += "    Totals : \n";
+  res += "metrics : \n";
+  res += "  operations : \n";
+  res += "    totals : \n";
   for (int j = 0; j < DS_OP_COUNT; j++) {
     int p = 0; int f = 0;
     for (int i = 0; i < numThreads; i++) {
@@ -61,7 +63,7 @@ std::string results_str(double start_time, double end_time, int numThreads) {
           + std::to_string(f) + "\n";
   }
 
-  res += "  PerThread : \n";
+  res += "    per_thread : \n";
   for (int i = 0; i < numThreads; i++) {
     res += "      - TID : "  + std::to_string(i) + "\n";
     for (int j = 0; j < DS_OP_COUNT; j++) {

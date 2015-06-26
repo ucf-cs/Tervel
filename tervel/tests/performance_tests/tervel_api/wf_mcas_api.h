@@ -43,10 +43,10 @@
 #define DS_NAME "WF MCAS"
 
 #define DS_CONFIG_STR \
-   "\n  ArrayLength : " + std::to_string(FLAGS_array_length) +"" + \
-   "\n  McasSize : " + std::to_string(FLAGS_mcas_size) +"" \
-   "\n  isOverlapping : " + std::to_string(FLAGS_overlapping) +"" \
-   "\n  isMultipleObjects : " + std::to_string(FLAGS_multipleObjects) +""
+   "\n" _DS_CONFIG_INDENT "ArrayLength : " + std::to_string(FLAGS_array_length) +"" + \
+   "\n" _DS_CONFIG_INDENT "McasSize : " + std::to_string(FLAGS_mcas_size) +"" \
+   "\n" _DS_CONFIG_INDENT "isOverlapping : " + std::to_string(FLAGS_overlapping) +"" \
+   "\n" _DS_CONFIG_INDENT "isMultipleObjects : " + std::to_string(FLAGS_multipleObjects) +""
 
 
 // Constructor Arguments

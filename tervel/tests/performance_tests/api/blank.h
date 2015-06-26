@@ -48,7 +48,7 @@ DEFINE_int64(value, 0, "The initial value of the counter");
 #define DS_NAME "Atomic Int"
 
 #define DS_CONFIG_STR \
-    "\n  Value : " + std::to_string(FLAGS_value) + ""
+    "\n" _DS_CONFIG_INDENT "Value : " + std::to_string(FLAGS_value) + ""
 
 
 #define OP_RAND \
