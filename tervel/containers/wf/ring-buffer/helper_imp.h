@@ -64,6 +64,7 @@ on_watch(std::atomic<void *> *address, void *expected) {
         reinterpret_cast<void *>(
           RingBuffer<T>::DelayMarkValue(HelperType(this))));
   #endif
+  tervel::util::memory::hp::HazardPointer::unwatch(pos);
 
   return false;
 }

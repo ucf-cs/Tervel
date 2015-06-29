@@ -91,6 +91,7 @@ readValue(int64_t pos, uintptr_t &val) {
   }
 }
 
+
 template<typename T>
 void RingBuffer<T>::
 getInfo(uintptr_t val, int64_t &val_seqid,
@@ -131,7 +132,7 @@ dequeue(T &value) {
     uintptr_t val;
     uintptr_t new_value = EmptyType(nextSeqId(seqid));
 
-   bool skip_delay_check = true;
+    bool skip_delay_check = true;
     while (retry) {
       if (skip_delay_check) {
         // Removes a double increment on isDelayed

@@ -1,138 +1,148 @@
 __author__ = 'stevenfeldman'
+import sys
 import yaml
 import os
+import pandas as pd
+import seaborn as sns
 import matplotlib.pyplot as plt
-from matplotlib.backends.backend_pdf import PdfPages
+import numpy as np
+
+# Add <metric_name, functions names> here to allow 'CustomMetrics' to be loaded
+def add_operation(data, name, obj):
+    sum = 0
+    for k in obj["totals"]:
+        temp = int(obj["totals"][k])
+        sum += temp
+
+    temp = {"total":sum, "count":1 }
+
+    Execution.add_key_val_pair(data, temp, name)
+
+
+metric_functions = {"operations": add_operation}
+
 
 class Execution:
-    def __init__(self, t, o, st,et):
-        self.threads = t
-        self.ops = o
-        self.start_time = st
-        self.end_time = et
-        self.events = {}
+    @staticmethod
+    def add_key_val_pair(data, set_src, prefix_=""):
+        for s in set_src:
+            res = prefix_ + ":" + s
+            val = set_src[s]
+            if type(val) is dict or type(val) is set:
+                Execution.add_key_val_pair(data, val, res)
+            elif res not in data:
+                data[res] = val
+            else:
+                data[res] += val
 
-    def key(self):
-        return str(self.threads)
+    @staticmethod
+    def process(obj):
+        data = {"key":""}
 
-    def sanity(self):
-        print "Threads: %s\n", self.threads
-        print "Ops: %s\n", self.ops
-        for k in self.events.keys():
-            print k, self.events[k]
+        test_config = obj["test_config"]
+        alg_config = obj["alg_config"]
+        alg_config["run_config"] = " ".join(alg_config["run_config"].split(" ")[1:])
 
-def process_dir(data, path):
-    with open(path+"/logs/app.log", "r") as f:
-        exelog = yaml.load(f)
-        threads = exelog["NumberThreads"]
-        st = exelog["Time"]["start"]
-        et = exelog["Time"]["end"]
-        st = float(st)
-        et = float(et)
-        temp = exelog["Totals"]
-        ops = 0
-        for k in temp.keys():
-            ops += temp[k]
+        Execution.add_key_val_pair(data, test_config, "test_config")
+        Execution.add_key_val_pair(data, alg_config, "alg_config")
 
-        exe = Execution(threads, ops, st, et)
+        return data
 
-    with open(path+"/store/node/papi", "r") as f:
-        l = f.readline()
-        headers = l.split(",")
-        for x in range(0, len(headers)):
-            temp = headers[x]
-            if "Time" not in temp:
-                temp = temp.split("_",1)[1]
-                temp = temp.replace("/","_").strip()
-                headers[x] = temp
+    @staticmethod
+    def add_metric(data, name, obj):
+        if name in metric_functions:
+            metric_functions[name](data, "metrics:"  + name, obj)
+        else:
+            obj["count"] = 1
+            Execution.add_key_val_pair(data, obj, "metrics:" + name)
 
-            if temp not in exe.events:
-                exe.events[temp] = []
-
-        while True:
-            l = f.readline()
-            if not l:
-              break
-            values = l.split(",")
-            time = float(values[0].strip())
-            if time < exe.start_time or time > exe.end_time:
-                continue
-
-            for k in exe.events.keys():
-                exe.events[k].append(0)
+    @staticmethod
+    def add_execution(data, obj):
+        if "metrics" in obj:
+            for c in obj["metrics"]:
+                Execution.add_metric(data, c, obj["metrics"][c])
 
 
-            temp = float(values[0].strip()) - exe.start_time
-            lastPos = len(exe.events[headers[0]]) - 1
-            exe.events[headers[0]][lastPos] += temp
-            for x in range(1, len(values)):
-                temp = float(values[x].strip())
-                lastPos = len(exe.events[headers[x]]) - 1
-                exe.events[headers[x]][lastPos] += temp
+def load_file(results, fname):
+    with open(fname, "r") as fin:
+        execution_result = yaml.load(fin)
 
-        data[exe.key()] = exe
+    cmd = execution_result["CMD"]
+    if cmd not in results:
+        results[cmd] = Execution.process(execution_result)
 
-def process_folder(path):
-    data = {}
-    dirs = os.walk(path).next()[1]
-    for d in dirs:
-        process_dir(data, path+d)
-    return data
+    data = results[cmd]
+    Execution.add_execution(data, execution_result)
 
-tests = ["1", "2", "4", "8", "16", "32", "64"]
-nTests = len(tests)
 
-def process_data(data, path):
-    fout = open(path+"log.txt", 'w')
-    for k in data.keys():
-        metrics = data[k].events.keys()
+def load_logs_from_dir(results, path):
+    for (dirpath, dirnames, filenames) in os.walk(path):
+        num_files = len(filenames)
+        c = 0
+        for f in filenames:
+            c += 1
+            f = dirpath + "/" + f
+            print "(" + str(c) + "/" + str(num_files) + "):  " + f
+            load_file(results, f)
         break
 
-    fout.write("Thread-Level\tValue\t This/Thread-Level 1\n")
-    for k in metrics:
-        if ".CompId" in k:
-            continue
 
-        plt.ylabel(k)
-        plt.xlabel('Seconds')
+if __name__ == "__main__":
+    execution_results = {}
+    load_logs_from_dir(execution_results, "logs/1435363336/")
 
-        ls = [":", "-", "--", "-."]
+    df = pd.DataFrame(execution_results.values())
 
-        fout.write("%s:\n" %k)
-        for x in range(0, nTests):
-            temp1 = data[tests[x]].events[k]
-            timeArray = data[tests[x]].events["#Time"]
+    for k in df.keys():
+        if "metrics:" in k and ":count" not in k:
+            # metrics:<metric name>:count
+            count_str = "metrics:" + k.split(":")[1] + ":count"
+            df[k] /= df[count_str]
 
-            plt.plot(timeArray, temp1, ls[x%len(ls)], label="Threads: %s" % tests[x])
+    config = "test_config:num_threads"
+    # metric = "metrics:PAPIResults:PAPI_L1_TCA"
+    metric = "metrics:operations:total"
 
-            a = temp1[len(temp1) -1]
-            b = a / data["1"].events[k][len(data["1"].events[k]) - 1]
-            fout.write("\t%s\t%d\t%f\n" %(tests[x], a, b))
 
-        lgd = plt.legend(ncol=3, loc='upper center', bbox_to_anchor=(0.5,-0.105))
+    df_filtered = df #[(df["alg_config:algorithm_name"].str.contains("Stack"))]
+    df_filtered = df[(df["alg_config:algorithm_name"].str.contains("Map") or df["alg_config:algorithm_name"].str.contains("map"))]
+    #df_filtered = df_filtered[(df["alg_config:run_config"].str.contains("50 50"))]
+    # df_filtered = df_filtered[(df["alg_config:ds_config:Prefill"] == 0)]
 
-        plt.savefig(path+'%s.pdf' %(k), bbox_extra_artists=(lgd,), bbox_inches='tight')  # saves the current figure into a pdf page
+    for k in df_filtered.keys():
+        if k != config and "metrics" not in k and k != "key":
 
-        plt.clf()
+            def func(row):
+                temp = str(row[k])
+                if temp != "nan":
+                    i = k.rfind(":") + 1
+                    return k[i:] + ":" + temp + "_"
+                return ""
+            df_filtered["key"] += df_filtered.apply(lambda row:  func(row), axis=1)
 
-    fout.write("WorkDone:\n")
-    fout.write("#Threads & Operations Completed & Performance Change \\ \hline \n")
-    one = float(data["1"].ops)
-    for t in tests:
-        exe = data[t]
-        ops = exe.ops
-        factor = float(ops) / (one)
-        if factor < 0:
-            factor = -1.0/factor
-        fout.write("  %s & %d & %f \\ \hline\n" %(t, ops, factor))
+    plt.figure(1)
 
-    fout.close()
+    sns.set(style="ticks")
+    ax = sns.barplot(config,  metric, "key", data=df_filtered)
 
-folder = "Stack/"
-dirs = os.walk(folder).next()[1]
-for d in dirs:
-    path=folder+d+"/"
-    data = process_folder(path+'data/')
-    if not os.path.exists(path+"out/"):
-        os.makedirs(path+"out/")
-    process_data(data, path+"out/")
+    handles, labels = ax.get_legend_handles_labels()
+    # lgd = ax.legend(handles, labels, loc='lower center', bbox_to_anchor=(0.5,-2.0))
+
+    #
+    # plt.figlegend(handles, labels, loc = 'lower center', ncol=1, labelspacing=0. )
+    # plt.show()
+    # sns.plt.show()
+
+    sns.plt
+
+    # Shrink current axis's height by 10% on the bottom
+    box = ax.get_position()
+    shrink = .5
+    ax.set_position([box.x0, box.y0 + box.height * (1-shrink),
+                     box.width, box.height * shrink])
+
+    # Put a legend below current axis
+    ax.legend(loc='upper center', bbox_to_anchor=(0.5, -.25),
+              fancybox=True, shadow=True, ncol=1)
+
+    plt.show()

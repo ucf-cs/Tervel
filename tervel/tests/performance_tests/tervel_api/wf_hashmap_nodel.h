@@ -109,10 +109,15 @@ for (int i = 0; i < FLAGS_prefill; i++) { \
     } \
   } \
   ) \
+  MACRO_OP_MAKER(3, { \
+    opRes = true; \
+  } \
+  ) \
 
 
-#define DS_OP_NAMES "find", "insert", "update"
 
-#define DS_OP_COUNT 3
+#define DS_OP_NAMES "find", "insert", "update", "no-op"
+
+#define DS_OP_COUNT 4
 
 #endif  // DS_API_H_
