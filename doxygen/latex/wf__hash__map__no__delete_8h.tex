@@ -1,0 +1,36 @@
+\hypertarget{wf__hash__map__no__delete_8h}{}\section{tervel/containers/wf/hash-\/map/wf\+\_\+hash\+\_\+map\+\_\+no\+\_\+delete.h File Reference}
+\label{wf__hash__map__no__delete_8h}\index{tervel/containers/wf/hash-\/map/wf\+\_\+hash\+\_\+map\+\_\+no\+\_\+delete.\+h@{tervel/containers/wf/hash-\/map/wf\+\_\+hash\+\_\+map\+\_\+no\+\_\+delete.\+h}}
+{\ttfamily \#include $<$stdlib.\+h$>$}\\*
+{\ttfamily \#include $<$atomic$>$}\\*
+{\ttfamily \#include $<$cmath$>$}\\*
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structtervel_1_1containers_1_1wf_1_1default__functor}{tervel\+::containers\+::wf\+::default\+\_\+functor$<$ Key, Value $>$}
+\begin{DoxyCompactList}\small\item\em A default Functor implementation. \end{DoxyCompactList}\item 
+class \hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map_no_delete}{tervel\+::containers\+::wf\+::\+Hash\+Map\+No\+Delete$<$ Key, Value, Functor $>$}
+\begin{DoxyCompactList}\small\item\em A wait-\/free hash map implementation. \end{DoxyCompactList}\item 
+class \hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map_no_delete_1_1_value_accessor}{tervel\+::containers\+::wf\+::\+Hash\+Map\+No\+Delete$<$ Key, Value, Functor $>$\+::\+Value\+Accessor}
+\begin{DoxyCompactList}\small\item\em This class is used to safe guard access to values. \end{DoxyCompactList}\item 
+class \hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map_no_delete_1_1_node}{tervel\+::containers\+::wf\+::\+Hash\+Map\+No\+Delete$<$ Key, Value, Functor $>$\+::\+Node}
+\begin{DoxyCompactList}\small\item\em This class is used to differentiate between data\+\_\+nodes and array\+\_\+nodes/. \end{DoxyCompactList}\item 
+class \hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map_no_delete_1_1_array_node}{tervel\+::containers\+::wf\+::\+Hash\+Map\+No\+Delete$<$ Key, Value, Functor $>$\+::\+Array\+Node}
+\begin{DoxyCompactList}\small\item\em This class is used to hold the secondary array structure. \end{DoxyCompactList}\item 
+class \hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map_no_delete_1_1_data_node}{tervel\+::containers\+::wf\+::\+Hash\+Map\+No\+Delete$<$ Key, Value, Functor $>$\+::\+Data\+Node}
+\begin{DoxyCompactList}\small\item\em This class is used to hold a key and value pair. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \hyperlink{namespacetervel}{tervel}
+\begin{DoxyCompactList}\small\item\em T\+O\+D\+O(steven)\+: \end{DoxyCompactList}\item 
+ \hyperlink{namespacetervel_1_1util}{tervel\+::util}
+\item 
+ \hyperlink{namespacetervel_1_1containers}{tervel\+::containers}
+\item 
+ \hyperlink{namespacetervel_1_1containers_1_1wf}{tervel\+::containers\+::wf}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+int \hyperlink{namespacetervel_1_1util_a8fa82e619afb1d31d761c703a9aad97b}{tervel\+::util\+::round\+\_\+to\+\_\+next\+\_\+power\+\_\+of\+\_\+two} (uint64\+\_\+t value)
+\begin{DoxyCompactList}\small\item\em Returns the next power of two. \end{DoxyCompactList}\end{DoxyCompactItemize}

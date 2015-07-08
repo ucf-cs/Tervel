@@ -1,0 +1,310 @@
+\hypertarget{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap}{}\section{tervel\+:\+:algorithms\+:\+:wf\+:\+:mcas\+:\+:Multi\+Word\+Compare\+And\+Swap$<$ T $>$ Class Template Reference}
+\label{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap}\index{tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap$<$ T $>$@{tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap$<$ T $>$}}
+
+
+\hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap}{Multi\+Word\+Compare\+And\+Swap} class is used to perform a Multi-\/\+Word Compare-\/and-\/\+Swap (\hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_m_c_a_s}{M\+C\+A\+S}) To execute an \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_m_c_a_s}{M\+C\+A\+S}, call add\+C\+A\+S\+Triple for each address you want to update, then call \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_a3cf56f32c7579f734b1e0ecbd8d9c7f3}{execute()};.  
+
+
+
+
+{\ttfamily \#include $<$mcas.\+h$>$}
+
+Inheritance diagram for tervel\+:\+:algorithms\+:\+:wf\+:\+:mcas\+:\+:Multi\+Word\+Compare\+And\+Swap$<$ T $>$\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_ac31e0f21642273902a26d2858778c57c}{Multi\+Word\+Compare\+And\+Swap} (int max\+\_\+rows)
+\item 
+\hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_abb6ccc2c0fc9c52e741b4a7b544f4ec9}{$\sim$\+Multi\+Word\+Compare\+And\+Swap} ()
+\item 
+bool \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_adb40351c3953d749ff9a57237730846a}{add\+\_\+cas\+\_\+triple} (std\+::atomic$<$ T $>$ $\ast$address, T expected\+\_\+value, T new\+\_\+value)
+\begin{DoxyCompactList}\small\item\em This function is used to add a C\+A\+S triple to the \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_m_c_a_s}{M\+C\+A\+S} operation. \end{DoxyCompactList}\item 
+bool \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_a3cf56f32c7579f734b1e0ecbd8d9c7f3}{execute} ()
+\begin{DoxyCompactList}\small\item\em This function is called after all the C\+A\+S triples have been added to the operation. \end{DoxyCompactList}\item 
+void \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_a2581e26f73e07c80473cf2999cf45652}{help\+\_\+complete} ()
+\begin{DoxyCompactList}\small\item\em T\+His function overrides the virtual function in the Op\+Record class It is called by the progress assurance scheme. \end{DoxyCompactList}\item 
+bool \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_aa5ee7cf4770a925939b9e7497b34473a}{on\+\_\+is\+\_\+watched} ()
+\begin{DoxyCompactList}\small\item\em This function overrides the virtual function in the H\+P\+::\+Element class It returns whether or not this mcas class is being referenced by another threaded. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static constexpr void $\ast$ \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_a7f918a073a882ba1219855a9e03db2f6}{M\+C\+A\+S\+\_\+\+F\+A\+I\+L\+\_\+\+C\+O\+N\+S\+T} = reinterpret\+\_\+cast$<$void $\ast$$>$(0x1\+L)
+\end{DoxyCompactItemize}
+\subsection*{Private Types}
+\begin{DoxyCompactItemize}
+\item 
+enum \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_acc59b33256be2492c2d576bd1b770027}{M\+Cas\+State} \+: std\+::int8\+\_\+t \{ \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_acc59b33256be2492c2d576bd1b770027aca69f96c768067fbff6c911ca87bccc9}{M\+Cas\+State\+::\+I\+N\+\_\+\+P\+R\+O\+G\+R\+E\+S\+S} = 0, 
+\hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_acc59b33256be2492c2d576bd1b770027a7a95bf926a0333f57705aeac07a362a2}{M\+Cas\+State\+::\+P\+A\+S\+S} = 1, 
+\hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_acc59b33256be2492c2d576bd1b770027ac2759effffc94bb9acc71d69fe3e8a1f}{M\+Cas\+State\+::\+F\+A\+I\+L} = 2, 
+\hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_acc59b33256be2492c2d576bd1b770027a63c2867fdcae0e8e8413d7ac21b69b59}{M\+Cas\+State\+::\+D\+E\+L\+E\+T\+E\+D} = 3
+ \}\begin{DoxyCompactList}\small\item\em This enum is used to indicate the state of an mcas operation D\+E\+L\+E\+T\+E\+D is used in debugging procedures. \end{DoxyCompactList}
+\end{DoxyCompactItemize}
+\subsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_a3336555d8271a621a8d616197719de94}{mcas\+\_\+complete} (int start\+\_\+pos, bool wfmode=false)
+\begin{DoxyCompactList}\small\item\em This function is used to complete a currently executing \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_m_c_a_s}{M\+C\+A\+S} operation It is most likely that this operation is in conflict with some other operation and that it was discover by the dereferencing of an M\+C\+H The M\+C\+H contains a reference to the row in the \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_m_c_a_s}{M\+C\+A\+S} it is associated with and a reference to the final row in the mcas. \end{DoxyCompactList}\item 
+bool \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_a7cfccaf9f649f972039aaae8634989ec}{mcas\+\_\+complete} (\hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_cas_row}{Cas\+Row}$<$ T $>$ $\ast$current\+\_\+row)
+\begin{DoxyCompactList}\small\item\em Same as above, but it calculates the start\+\_\+pos based on the current row then calls the above mcas\+\_\+complete. \end{DoxyCompactList}\item 
+void \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_a66dbc5cd0e815dd1884ae39e432ad44d}{cleanup} (bool success)
+\begin{DoxyCompactList}\small\item\em This function is used to cleanup a completed \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_m_c_a_s}{M\+C\+A\+S} operation It removes each M\+C\+H placed during this operation, replacing it with the logical value. \end{DoxyCompactList}\item 
+T \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_a2bd338dc83ac629d5c139f74eab2f5d7}{mcas\+\_\+remove} (const int pos, T value)
+\begin{DoxyCompactList}\small\item\em This function insures that upon its return that $\ast$(cas\+\_\+rows\+\_\+\mbox{[}pos\mbox{]}.address) no longer equals value. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::unique\+\_\+ptr$<$ \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_cas_row}{Cas\+Row}$<$ T $>$\mbox{[}$\,$\mbox{]}$>$ \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_aa8be0b396445ce9d7e022aaab4acbaff}{cas\+\_\+rows\+\_\+}
+\item 
+std\+::atomic$<$ \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_acc59b33256be2492c2d576bd1b770027}{M\+Cas\+State} $>$ \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_a4d1104bb3f8bd1f0c2f4f93366c08224}{state\+\_\+} \{\hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_acc59b33256be2492c2d576bd1b770027aca69f96c768067fbff6c911ca87bccc9}{M\+Cas\+State\+::\+I\+N\+\_\+\+P\+R\+O\+G\+R\+E\+S\+S}\}
+\item 
+int \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_a7e5a630e068ea866a43d4ad17fe71b98}{row\+\_\+count\+\_\+} \{0\}
+\item 
+int \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_a9a61156a897ca69db4ef4b14a3949b5f}{max\+\_\+rows\+\_\+}
+\item 
+friend \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_afdcffdc9d34879f8028a39d91def8fb7}{Helper$<$ T $>$}
+\item 
+friend \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_a330cbacbf84e4c22631cc35b28b0bed4}{Cas\+Row$<$ T $>$}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\subsubsection*{template$<$class T$>$class tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap$<$ T $>$}
+
+\hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap}{Multi\+Word\+Compare\+And\+Swap} class is used to perform a Multi-\/\+Word Compare-\/and-\/\+Swap (\hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_m_c_a_s}{M\+C\+A\+S}) To execute an \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_m_c_a_s}{M\+C\+A\+S}, call add\+C\+A\+S\+Triple for each address you want to update, then call \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_a3cf56f32c7579f734b1e0ecbd8d9c7f3}{execute()};. 
+
+This function is wait-\/free. 
+
+\subsection{Member Enumeration Documentation}
+\hypertarget{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_acc59b33256be2492c2d576bd1b770027}{}\index{tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap@{tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap}!M\+Cas\+State@{M\+Cas\+State}}
+\index{M\+Cas\+State@{M\+Cas\+State}!tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap@{tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap}}
+\subsubsection[{M\+Cas\+State}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ enum {\bf tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap\+::\+M\+Cas\+State} \+: std\+::int8\+\_\+t\hspace{0.3cm}{\ttfamily [strong]}, {\ttfamily [private]}}\label{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_acc59b33256be2492c2d576bd1b770027}
+
+
+This enum is used to indicate the state of an mcas operation D\+E\+L\+E\+T\+E\+D is used in debugging procedures. 
+
+\begin{Desc}
+\item[Enumerator]\par
+\begin{description}
+\index{I\+N\+\_\+\+P\+R\+O\+G\+R\+E\+S\+S@{I\+N\+\_\+\+P\+R\+O\+G\+R\+E\+S\+S}!tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap@{tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap}}\index{tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap@{tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap}!I\+N\+\_\+\+P\+R\+O\+G\+R\+E\+S\+S@{I\+N\+\_\+\+P\+R\+O\+G\+R\+E\+S\+S}}\item[{\em 
+\hypertarget{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_acc59b33256be2492c2d576bd1b770027aca69f96c768067fbff6c911ca87bccc9}{}I\+N\+\_\+\+P\+R\+O\+G\+R\+E\+S\+S\label{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_acc59b33256be2492c2d576bd1b770027aca69f96c768067fbff6c911ca87bccc9}
+}]\index{P\+A\+S\+S@{P\+A\+S\+S}!tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap@{tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap}}\index{tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap@{tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap}!P\+A\+S\+S@{P\+A\+S\+S}}\item[{\em 
+\hypertarget{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_acc59b33256be2492c2d576bd1b770027a7a95bf926a0333f57705aeac07a362a2}{}P\+A\+S\+S\label{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_acc59b33256be2492c2d576bd1b770027a7a95bf926a0333f57705aeac07a362a2}
+}]\index{F\+A\+I\+L@{F\+A\+I\+L}!tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap@{tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap}}\index{tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap@{tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap}!F\+A\+I\+L@{F\+A\+I\+L}}\item[{\em 
+\hypertarget{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_acc59b33256be2492c2d576bd1b770027ac2759effffc94bb9acc71d69fe3e8a1f}{}F\+A\+I\+L\label{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_acc59b33256be2492c2d576bd1b770027ac2759effffc94bb9acc71d69fe3e8a1f}
+}]\index{D\+E\+L\+E\+T\+E\+D@{D\+E\+L\+E\+T\+E\+D}!tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap@{tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap}}\index{tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap@{tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap}!D\+E\+L\+E\+T\+E\+D@{D\+E\+L\+E\+T\+E\+D}}\item[{\em 
+\hypertarget{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_acc59b33256be2492c2d576bd1b770027a63c2867fdcae0e8e8413d7ac21b69b59}{}D\+E\+L\+E\+T\+E\+D\label{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_acc59b33256be2492c2d576bd1b770027a63c2867fdcae0e8e8413d7ac21b69b59}
+}]\end{description}
+\end{Desc}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_ac31e0f21642273902a26d2858778c57c}{}\index{tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap@{tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap}!Multi\+Word\+Compare\+And\+Swap@{Multi\+Word\+Compare\+And\+Swap}}
+\index{Multi\+Word\+Compare\+And\+Swap@{Multi\+Word\+Compare\+And\+Swap}!tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap@{tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap}}
+\subsubsection[{Multi\+Word\+Compare\+And\+Swap(int max\+\_\+rows)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ {\bf tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap}$<$ T $>$\+::{\bf Multi\+Word\+Compare\+And\+Swap} (
+\begin{DoxyParamCaption}
+\item[{int}]{max\+\_\+rows}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}}\label{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_ac31e0f21642273902a26d2858778c57c}
+\hypertarget{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_abb6ccc2c0fc9c52e741b4a7b544f4ec9}{}\index{tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap@{tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap}!````~Multi\+Word\+Compare\+And\+Swap@{$\sim$\+Multi\+Word\+Compare\+And\+Swap}}
+\index{````~Multi\+Word\+Compare\+And\+Swap@{$\sim$\+Multi\+Word\+Compare\+And\+Swap}!tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap@{tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap}}
+\subsubsection[{$\sim$\+Multi\+Word\+Compare\+And\+Swap()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ {\bf tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap}$<$ T $>$\+::$\sim${\bf Multi\+Word\+Compare\+And\+Swap} (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_abb6ccc2c0fc9c52e741b4a7b544f4ec9}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_adb40351c3953d749ff9a57237730846a}{}\index{tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap@{tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap}!add\+\_\+cas\+\_\+triple@{add\+\_\+cas\+\_\+triple}}
+\index{add\+\_\+cas\+\_\+triple@{add\+\_\+cas\+\_\+triple}!tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap@{tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap}}
+\subsubsection[{add\+\_\+cas\+\_\+triple(std\+::atomic$<$ T $>$ $\ast$address, T expected\+\_\+value, T new\+\_\+value)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ bool {\bf tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap}$<$ T $>$\+::add\+\_\+cas\+\_\+triple (
+\begin{DoxyParamCaption}
+\item[{std\+::atomic$<$ T $>$ $\ast$}]{address, }
+\item[{T}]{expected\+\_\+value, }
+\item[{T}]{new\+\_\+value}
+\end{DoxyParamCaption}
+)}\label{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_adb40351c3953d749ff9a57237730846a}
+
+
+This function is used to add a C\+A\+S triple to the \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_m_c_a_s}{M\+C\+A\+S} operation. 
+
+Each Triple consistent of an address to replace the expected value with a new value iff each other address holds its expected value.
+
+This function returns false in the event the address already exists in the \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_m_c_a_s}{M\+C\+A\+S} operation or the passed values are not valid. A Valid value is a value which does not use one of the reserved bits or constants. See related documentation for more details
+
+
+\begin{DoxyParams}{Parameters}
+{\em address} & \\
+\hline
+{\em expected\+\_\+value} & \\
+\hline
+{\em new\+\_\+value} & \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if successfully added. 
+\end{DoxyReturn}
+\hypertarget{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_a66dbc5cd0e815dd1884ae39e432ad44d}{}\index{tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap@{tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap}!cleanup@{cleanup}}
+\index{cleanup@{cleanup}!tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap@{tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap}}
+\subsubsection[{cleanup(bool success)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ void {\bf tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap}$<$ T $>$\+::cleanup (
+\begin{DoxyParamCaption}
+\item[{bool}]{success}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_a66dbc5cd0e815dd1884ae39e432ad44d}
+
+
+This function is used to cleanup a completed \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_m_c_a_s}{M\+C\+A\+S} operation It removes each M\+C\+H placed during this operation, replacing it with the logical value. 
+
+\hypertarget{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_a3cf56f32c7579f734b1e0ecbd8d9c7f3}{}\index{tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap@{tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap}!execute@{execute}}
+\index{execute@{execute}!tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap@{tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap}}
+\subsubsection[{execute()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ bool {\bf tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap}$<$ T $>$\+::execute (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_a3cf56f32c7579f734b1e0ecbd8d9c7f3}
+
+
+This function is called after all the C\+A\+S triples have been added to the operation. 
+
+It will attempt to apply the operation.
+
+\begin{DoxyReturn}{Returns}
+true if it replaced the values at each address with a new value 
+\end{DoxyReturn}
+\hypertarget{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_a2581e26f73e07c80473cf2999cf45652}{}\index{tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap@{tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap}!help\+\_\+complete@{help\+\_\+complete}}
+\index{help\+\_\+complete@{help\+\_\+complete}!tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap@{tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap}}
+\subsubsection[{help\+\_\+complete()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ void {\bf tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap}$<$ T $>$\+::help\+\_\+complete (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}\label{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_a2581e26f73e07c80473cf2999cf45652}
+
+
+T\+His function overrides the virtual function in the Op\+Record class It is called by the progress assurance scheme. 
+
+Upon its return the \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_m_c_a_s}{M\+C\+A\+S} operation must be completed 
+
+Implements \hyperlink{classtervel_1_1util_1_1_op_record_aa75ab39688a8d4cceb6a1ef0409537c0}{tervel\+::util\+::\+Op\+Record}.
+
+\hypertarget{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_a3336555d8271a621a8d616197719de94}{}\index{tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap@{tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap}!mcas\+\_\+complete@{mcas\+\_\+complete}}
+\index{mcas\+\_\+complete@{mcas\+\_\+complete}!tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap@{tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap}}
+\subsubsection[{mcas\+\_\+complete(int start\+\_\+pos, bool wfmode=false)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ bool {\bf tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap}$<$ T $>$\+::mcas\+\_\+complete (
+\begin{DoxyParamCaption}
+\item[{int}]{start\+\_\+pos, }
+\item[{bool}]{wfmode = {\ttfamily false}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_a3336555d8271a621a8d616197719de94}
+
+
+This function is used to complete a currently executing \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_m_c_a_s}{M\+C\+A\+S} operation It is most likely that this operation is in conflict with some other operation and that it was discover by the dereferencing of an M\+C\+H The M\+C\+H contains a reference to the row in the \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_m_c_a_s}{M\+C\+A\+S} it is associated with and a reference to the final row in the mcas. 
+
+Using these two, we can complete the remaining rows.
+
+
+\begin{DoxyParams}{Parameters}
+{\em start\+\_\+pos} & the row to begin at \\
+\hline
+{\em wfmode} & if true it ignores the fail count because the operation is in the op\+\_\+table \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+whether or not the mcas succeeded. 
+\end{DoxyReturn}
+Loop for each row in the op, if helping complete another thread\textquotesingle{}s \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_m_c_a_s}{M\+C\+A\+S} Start at last known completed row.\hypertarget{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_a7cfccaf9f649f972039aaae8634989ec}{}\index{tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap@{tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap}!mcas\+\_\+complete@{mcas\+\_\+complete}}
+\index{mcas\+\_\+complete@{mcas\+\_\+complete}!tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap@{tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap}}
+\subsubsection[{mcas\+\_\+complete(\+Cas\+Row$<$ T $>$ $\ast$current\+\_\+row)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ bool {\bf tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap}$<$ T $>$\+::mcas\+\_\+complete (
+\begin{DoxyParamCaption}
+\item[{{\bf Cas\+Row}$<$ T $>$ $\ast$}]{current\+\_\+row}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_a7cfccaf9f649f972039aaae8634989ec}
+
+
+Same as above, but it calculates the start\+\_\+pos based on the current row then calls the above mcas\+\_\+complete. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em current\+\_\+row} & the last known completed row \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+where or not the mcas succeeded 
+\end{DoxyReturn}
+\hypertarget{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_a2bd338dc83ac629d5c139f74eab2f5d7}{}\index{tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap@{tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap}!mcas\+\_\+remove@{mcas\+\_\+remove}}
+\index{mcas\+\_\+remove@{mcas\+\_\+remove}!tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap@{tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap}}
+\subsubsection[{mcas\+\_\+remove(const int pos, T value)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ T {\bf tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap}$<$ T $>$\+::mcas\+\_\+remove (
+\begin{DoxyParamCaption}
+\item[{const int}]{pos, }
+\item[{T}]{value}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_a2bd338dc83ac629d5c139f74eab2f5d7}
+
+
+This function insures that upon its return that $\ast$(cas\+\_\+rows\+\_\+\mbox{[}pos\mbox{]}.address) no longer equals value. 
+
+Where value is an object that holds an R\+C bit mark. If the object is not a \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_helper}{Helper} for this operation, then the standard descriptor remove function is called. This is important to prevent the case where the stack increases beyond reasonable levels when multiple threads are helping to complete the same operation.
+
+
+\begin{DoxyParams}{Parameters}
+{\em pos} & the cas\+\_\+row which is blocked from completing its operation \\
+\hline
+{\em value} & the value read at the position \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the new current value 
+\end{DoxyReturn}
+\hypertarget{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_aa5ee7cf4770a925939b9e7497b34473a}{}\index{tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap@{tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap}!on\+\_\+is\+\_\+watched@{on\+\_\+is\+\_\+watched}}
+\index{on\+\_\+is\+\_\+watched@{on\+\_\+is\+\_\+watched}!tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap@{tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap}}
+\subsubsection[{on\+\_\+is\+\_\+watched()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ bool {\bf tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap}$<$ T $>$\+::on\+\_\+is\+\_\+watched (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}\label{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_aa5ee7cf4770a925939b9e7497b34473a}
+
+
+This function overrides the virtual function in the H\+P\+::\+Element class It returns whether or not this mcas class is being referenced by another threaded. 
+
+It is being referenced if any associated descriptor has a positive reference count or if there is a hazard point watch on it.
+
+\begin{DoxyReturn}{Returns}
+True if watched 
+\end{DoxyReturn}
+
+
+Reimplemented from \hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_element_a88306bc6b64d0110e3ee568514dbcc04}{tervel\+::util\+::memory\+::hp\+::\+Element}.
+
+
+
+\subsection{Member Data Documentation}
+\hypertarget{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_aa8be0b396445ce9d7e022aaab4acbaff}{}\index{tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap@{tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap}!cas\+\_\+rows\+\_\+@{cas\+\_\+rows\+\_\+}}
+\index{cas\+\_\+rows\+\_\+@{cas\+\_\+rows\+\_\+}!tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap@{tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap}}
+\subsubsection[{cas\+\_\+rows\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ std\+::unique\+\_\+ptr$<${\bf Cas\+Row}$<$T$>$\mbox{[}$\,$\mbox{]}$>$ {\bf tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap}$<$ T $>$\+::cas\+\_\+rows\+\_\+\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_aa8be0b396445ce9d7e022aaab4acbaff}
+\hypertarget{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_a330cbacbf84e4c22631cc35b28b0bed4}{}\index{tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap@{tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap}!Cas\+Row$<$ T $>$@{Cas\+Row$<$ T $>$}}
+\index{Cas\+Row$<$ T $>$@{Cas\+Row$<$ T $>$}!tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap@{tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap}}
+\subsubsection[{Cas\+Row$<$ T $>$}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ friend {\bf tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap}$<$ T $>$\+::{\bf Cas\+Row}$<$ T $>$\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_a330cbacbf84e4c22631cc35b28b0bed4}
+\hypertarget{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_afdcffdc9d34879f8028a39d91def8fb7}{}\index{tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap@{tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap}!Helper$<$ T $>$@{Helper$<$ T $>$}}
+\index{Helper$<$ T $>$@{Helper$<$ T $>$}!tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap@{tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap}}
+\subsubsection[{Helper$<$ T $>$}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ friend {\bf tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap}$<$ T $>$\+::{\bf Helper}$<$ T $>$\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_afdcffdc9d34879f8028a39d91def8fb7}
+\hypertarget{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_a9a61156a897ca69db4ef4b14a3949b5f}{}\index{tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap@{tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap}!max\+\_\+rows\+\_\+@{max\+\_\+rows\+\_\+}}
+\index{max\+\_\+rows\+\_\+@{max\+\_\+rows\+\_\+}!tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap@{tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap}}
+\subsubsection[{max\+\_\+rows\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ int {\bf tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap}$<$ T $>$\+::max\+\_\+rows\+\_\+\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_a9a61156a897ca69db4ef4b14a3949b5f}
+\hypertarget{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_a7f918a073a882ba1219855a9e03db2f6}{}\index{tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap@{tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap}!M\+C\+A\+S\+\_\+\+F\+A\+I\+L\+\_\+\+C\+O\+N\+S\+T@{M\+C\+A\+S\+\_\+\+F\+A\+I\+L\+\_\+\+C\+O\+N\+S\+T}}
+\index{M\+C\+A\+S\+\_\+\+F\+A\+I\+L\+\_\+\+C\+O\+N\+S\+T@{M\+C\+A\+S\+\_\+\+F\+A\+I\+L\+\_\+\+C\+O\+N\+S\+T}!tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap@{tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap}}
+\subsubsection[{M\+C\+A\+S\+\_\+\+F\+A\+I\+L\+\_\+\+C\+O\+N\+S\+T}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ constexpr void$\ast$ {\bf tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap}$<$ T $>$\+::M\+C\+A\+S\+\_\+\+F\+A\+I\+L\+\_\+\+C\+O\+N\+S\+T = reinterpret\+\_\+cast$<$void $\ast$$>$(0x1\+L)\hspace{0.3cm}{\ttfamily [static]}}\label{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_a7f918a073a882ba1219855a9e03db2f6}
+\hypertarget{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_a7e5a630e068ea866a43d4ad17fe71b98}{}\index{tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap@{tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap}!row\+\_\+count\+\_\+@{row\+\_\+count\+\_\+}}
+\index{row\+\_\+count\+\_\+@{row\+\_\+count\+\_\+}!tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap@{tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap}}
+\subsubsection[{row\+\_\+count\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ int {\bf tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap}$<$ T $>$\+::row\+\_\+count\+\_\+ \{0\}\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_a7e5a630e068ea866a43d4ad17fe71b98}
+\hypertarget{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_a4d1104bb3f8bd1f0c2f4f93366c08224}{}\index{tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap@{tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap}!state\+\_\+@{state\+\_\+}}
+\index{state\+\_\+@{state\+\_\+}!tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap@{tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap}}
+\subsubsection[{state\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ std\+::atomic$<${\bf M\+Cas\+State}$>$ {\bf tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap}$<$ T $>$\+::state\+\_\+ \{{\bf M\+Cas\+State\+::\+I\+N\+\_\+\+P\+R\+O\+G\+R\+E\+S\+S}\}\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_a4d1104bb3f8bd1f0c2f4f93366c08224}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+tervel/algorithms/wf/mcas/\hyperlink{mcas_8h}{mcas.\+h}\item 
+tervel/algorithms/wf/mcas/\hyperlink{mcas__imp_8h}{mcas\+\_\+imp.\+h}\end{DoxyCompactItemize}

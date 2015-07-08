@@ -1,0 +1,206 @@
+\hypertarget{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_manager}{}\section{tervel\+:\+:util\+:\+:memory\+:\+:rc\+:\+:Pool\+Manager Class Reference}
+\label{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_manager}\index{tervel\+::util\+::memory\+::rc\+::\+Pool\+Manager@{tervel\+::util\+::memory\+::rc\+::\+Pool\+Manager}}
+
+
+A manager class for the reference count protected memory pools.  
+
+
+
+
+{\ttfamily \#include $<$pool\+\_\+manager.\+h$>$}
+
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structtervel_1_1util_1_1memory_1_1rc_1_1_pool_manager_1_1_managed_pool}{Managed\+Pool}
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_manager_aaedbc1e995ab876080fb098986b8afd2}{Pool\+Manager} (size\+\_\+t number\+\_\+pools)
+\begin{DoxyCompactList}\small\item\em \hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_manager}{Pool\+Manager} constructor. \end{DoxyCompactList}\item 
+\hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_manager_a6baac97ccf4070def8ce8c0fa4253400}{$\sim$\+Pool\+Manager} ()
+\item 
+\hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_descriptor_pool}{Descriptor\+Pool} $\ast$ \hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_manager_a5c63d1bc7aa2e9d6583164b756d2b109}{allocate\+\_\+pool} (const uint64\+\_\+t tid)
+\begin{DoxyCompactList}\small\item\em Allocates a pool for thread-\/local use. \end{DoxyCompactList}\item 
+void \hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_manager_a8dc3f717f6c1e2f725bf634df86cd0fb}{get\+\_\+safe\+\_\+elements} (\hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_element}{Pool\+Element} $\ast$$\ast$pool, uint64\+\_\+t $\ast$count, uint64\+\_\+t min\+\_\+elem)
+\begin{DoxyCompactList}\small\item\em This fuinction attempts to get \textquotesingle{}count\textquotesingle{} many elements from the global pool. \end{DoxyCompactList}\item 
+void \hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_manager_a8c37fce16d20fc15c8db8e38b759041e}{add\+\_\+safe\+\_\+elements} (uint64\+\_\+t pid, \hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_element}{Pool\+Element} $\ast$pool, \hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_element}{Pool\+Element} $\ast$pool\+\_\+end=nullptr)
+\begin{DoxyCompactList}\small\item\em Places excess elements into the global pool. \end{DoxyCompactList}\item 
+void \hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_manager_a8c20264628d73217c0819ddac5964238}{add\+\_\+unsafe\+\_\+elements} (uint64\+\_\+t pid, \hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_element}{Pool\+Element} $\ast$pool)
+\begin{DoxyCompactList}\small\item\em Places unsafe elements into the global pool. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+const size\+\_\+t \hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_manager_aabebb2e05664becf83a3f494160a721f}{number\+\_\+pools\+\_\+}
+\end{DoxyCompactItemize}
+\subsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_manager_a48a378be0c58138b34b32d9fa6fed4c8}{D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N} (\hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_manager}{Pool\+Manager})
+\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::unique\+\_\+ptr$<$ \hyperlink{structtervel_1_1util_1_1memory_1_1rc_1_1_pool_manager_1_1_managed_pool}{Managed\+Pool}\mbox{[}$\,$\mbox{]}$>$ \hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_manager_a69430218cf6f7b1dac677ae64f14f77c}{pools\+\_\+}
+\end{DoxyCompactItemize}
+\subsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+class \hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_manager_a580b2e7743fb5db76d84a307272a3cec}{Descriptor\+Pool}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+A manager class for the reference count protected memory pools. 
+
+Encapsulates a shared central pool between several thread-\/local pools. Idea is that each thread gets a local pool to grab descriptors from, and that each of these pools is managed by a single instance of this class. The thread local pools can periodically release their unused elements into the shared pool in this manager, or can take elements from the shared pools in this manager. 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_manager_aaedbc1e995ab876080fb098986b8afd2}{}\index{tervel\+::util\+::memory\+::rc\+::\+Pool\+Manager@{tervel\+::util\+::memory\+::rc\+::\+Pool\+Manager}!Pool\+Manager@{Pool\+Manager}}
+\index{Pool\+Manager@{Pool\+Manager}!tervel\+::util\+::memory\+::rc\+::\+Pool\+Manager@{tervel\+::util\+::memory\+::rc\+::\+Pool\+Manager}}
+\subsubsection[{Pool\+Manager(size\+\_\+t number\+\_\+pools)}]{\setlength{\rightskip}{0pt plus 5cm}tervel\+::util\+::memory\+::rc\+::\+Pool\+Manager\+::\+Pool\+Manager (
+\begin{DoxyParamCaption}
+\item[{size\+\_\+t}]{number\+\_\+pools}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}}\label{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_manager_aaedbc1e995ab876080fb098986b8afd2}
+
+
+\hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_manager}{Pool\+Manager} constructor. 
+
+R\+C \hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_manager}{Pool\+Manager} constructor
+
+
+\begin{DoxyParams}{Parameters}
+{\em number\+\_\+pools} & this should be the number of \hyperlink{classtervel_1_1_tervel}{Tervel} threads \\
+\hline
+\end{DoxyParams}
+\hypertarget{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_manager_a6baac97ccf4070def8ce8c0fa4253400}{}\index{tervel\+::util\+::memory\+::rc\+::\+Pool\+Manager@{tervel\+::util\+::memory\+::rc\+::\+Pool\+Manager}!````~Pool\+Manager@{$\sim$\+Pool\+Manager}}
+\index{````~Pool\+Manager@{$\sim$\+Pool\+Manager}!tervel\+::util\+::memory\+::rc\+::\+Pool\+Manager@{tervel\+::util\+::memory\+::rc\+::\+Pool\+Manager}}
+\subsubsection[{$\sim$\+Pool\+Manager()}]{\setlength{\rightskip}{0pt plus 5cm}tervel\+::util\+::memory\+::rc\+::\+Pool\+Manager\+::$\sim$\+Pool\+Manager (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_manager_a6baac97ccf4070def8ce8c0fa4253400}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_manager_a8c37fce16d20fc15c8db8e38b759041e}{}\index{tervel\+::util\+::memory\+::rc\+::\+Pool\+Manager@{tervel\+::util\+::memory\+::rc\+::\+Pool\+Manager}!add\+\_\+safe\+\_\+elements@{add\+\_\+safe\+\_\+elements}}
+\index{add\+\_\+safe\+\_\+elements@{add\+\_\+safe\+\_\+elements}!tervel\+::util\+::memory\+::rc\+::\+Pool\+Manager@{tervel\+::util\+::memory\+::rc\+::\+Pool\+Manager}}
+\subsubsection[{add\+\_\+safe\+\_\+elements(uint64\+\_\+t pid, Pool\+Element $\ast$pool, Pool\+Element $\ast$pool\+\_\+end=nullptr)}]{\setlength{\rightskip}{0pt plus 5cm}void tervel\+::util\+::memory\+::rc\+::\+Pool\+Manager\+::add\+\_\+safe\+\_\+elements (
+\begin{DoxyParamCaption}
+\item[{uint64\+\_\+t}]{pid, }
+\item[{{\bf Pool\+Element} $\ast$}]{pool, }
+\item[{{\bf Pool\+Element} $\ast$}]{pool\+\_\+end = {\ttfamily nullptr}}
+\end{DoxyParamCaption}
+)}\label{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_manager_a8c37fce16d20fc15c8db8e38b759041e}
+
+
+Places excess elements into the global pool. 
+
+Places excess elements into the global pool by performing an exchange on the current value of at position \textquotesingle{}pid\textquotesingle{} then combing it was the excess elements and then storing the new value.
+
+
+\begin{DoxyParams}{Parameters}
+{\em pid} & the position to add the elements \\
+\hline
+{\em pool} & the elements to end \\
+\hline
+{\em pool\+\_\+end} & a shortcut to the end of the pool list \\
+\hline
+\end{DoxyParams}
+\hypertarget{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_manager_a8c20264628d73217c0819ddac5964238}{}\index{tervel\+::util\+::memory\+::rc\+::\+Pool\+Manager@{tervel\+::util\+::memory\+::rc\+::\+Pool\+Manager}!add\+\_\+unsafe\+\_\+elements@{add\+\_\+unsafe\+\_\+elements}}
+\index{add\+\_\+unsafe\+\_\+elements@{add\+\_\+unsafe\+\_\+elements}!tervel\+::util\+::memory\+::rc\+::\+Pool\+Manager@{tervel\+::util\+::memory\+::rc\+::\+Pool\+Manager}}
+\subsubsection[{add\+\_\+unsafe\+\_\+elements(uint64\+\_\+t pid, Pool\+Element $\ast$pool)}]{\setlength{\rightskip}{0pt plus 5cm}void tervel\+::util\+::memory\+::rc\+::\+Pool\+Manager\+::add\+\_\+unsafe\+\_\+elements (
+\begin{DoxyParamCaption}
+\item[{uint64\+\_\+t}]{pid, }
+\item[{{\bf Pool\+Element} $\ast$}]{pool}
+\end{DoxyParamCaption}
+)}\label{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_manager_a8c20264628d73217c0819ddac5964238}
+
+
+Places unsafe elements into the global pool. 
+
+Places unsafe elements into the global pool at position \textquotesingle{}pid\textquotesingle{}. This function is only called from the \hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_descriptor_pool}{Descriptor\+Pool} destructor.
+
+
+\begin{DoxyParams}{Parameters}
+{\em pid} & the position to add the elements \\
+\hline
+{\em pool} & the elements to end \\
+\hline
+\end{DoxyParams}
+\hypertarget{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_manager_a5c63d1bc7aa2e9d6583164b756d2b109}{}\index{tervel\+::util\+::memory\+::rc\+::\+Pool\+Manager@{tervel\+::util\+::memory\+::rc\+::\+Pool\+Manager}!allocate\+\_\+pool@{allocate\+\_\+pool}}
+\index{allocate\+\_\+pool@{allocate\+\_\+pool}!tervel\+::util\+::memory\+::rc\+::\+Pool\+Manager@{tervel\+::util\+::memory\+::rc\+::\+Pool\+Manager}}
+\subsubsection[{allocate\+\_\+pool(const uint64\+\_\+t tid)}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Descriptor\+Pool}$\ast$ tervel\+::util\+::memory\+::rc\+::\+Pool\+Manager\+::allocate\+\_\+pool (
+\begin{DoxyParamCaption}
+\item[{const uint64\+\_\+t}]{tid}
+\end{DoxyParamCaption}
+)}\label{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_manager_a5c63d1bc7aa2e9d6583164b756d2b109}
+
+
+Allocates a pool for thread-\/local use. 
+
+Allocates a pool and returns it to the calling thread
+
+It creates a \hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_descriptor_pool}{Descriptor\+Pool} object and returns the a pointer to that object
+
+
+\begin{DoxyParams}{Parameters}
+{\em tid} & \hyperlink{classtervel_1_1_tervel}{Tervel} thread id for the calling thread \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+a \hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_descriptor_pool}{Descriptor\+Pool} pointer 
+\end{DoxyReturn}
+\hypertarget{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_manager_a48a378be0c58138b34b32d9fa6fed4c8}{}\index{tervel\+::util\+::memory\+::rc\+::\+Pool\+Manager@{tervel\+::util\+::memory\+::rc\+::\+Pool\+Manager}!D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N@{D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N}}
+\index{D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N@{D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N}!tervel\+::util\+::memory\+::rc\+::\+Pool\+Manager@{tervel\+::util\+::memory\+::rc\+::\+Pool\+Manager}}
+\subsubsection[{D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N(\+Pool\+Manager)}]{\setlength{\rightskip}{0pt plus 5cm}tervel\+::util\+::memory\+::rc\+::\+Pool\+Manager\+::\+D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N (
+\begin{DoxyParamCaption}
+\item[{{\bf Pool\+Manager}}]{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_manager_a48a378be0c58138b34b32d9fa6fed4c8}
+\hypertarget{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_manager_a8dc3f717f6c1e2f725bf634df86cd0fb}{}\index{tervel\+::util\+::memory\+::rc\+::\+Pool\+Manager@{tervel\+::util\+::memory\+::rc\+::\+Pool\+Manager}!get\+\_\+safe\+\_\+elements@{get\+\_\+safe\+\_\+elements}}
+\index{get\+\_\+safe\+\_\+elements@{get\+\_\+safe\+\_\+elements}!tervel\+::util\+::memory\+::rc\+::\+Pool\+Manager@{tervel\+::util\+::memory\+::rc\+::\+Pool\+Manager}}
+\subsubsection[{get\+\_\+safe\+\_\+elements(\+Pool\+Element $\ast$$\ast$pool, uint64\+\_\+t $\ast$count, uint64\+\_\+t min\+\_\+elem)}]{\setlength{\rightskip}{0pt plus 5cm}void tervel\+::util\+::memory\+::rc\+::\+Pool\+Manager\+::get\+\_\+safe\+\_\+elements (
+\begin{DoxyParamCaption}
+\item[{{\bf Pool\+Element} $\ast$$\ast$}]{pool, }
+\item[{uint64\+\_\+t $\ast$}]{count, }
+\item[{uint64\+\_\+t}]{min\+\_\+elem}
+\end{DoxyParamCaption}
+)}\label{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_manager_a8dc3f717f6c1e2f725bf634df86cd0fb}
+
+
+This fuinction attempts to get \textquotesingle{}count\textquotesingle{} many elements from the global pool. 
+
+A thread calling this function attempts to take any free elements and if successful will update the pool list, and count. It will keep trying until count $>$= min\+\_\+elem or there are no more elements that can be taken from the global pool.
+
+
+\begin{DoxyParams}{Parameters}
+{\em pool} & A link list to pre-\/pend any elements taken from the global pool \\
+\hline
+{\em count} & A count of the number of elements in pool \\
+\hline
+{\em min\+\_\+elem} & The min desired value of count \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Friends And Related Function Documentation}
+\hypertarget{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_manager_a580b2e7743fb5db76d84a307272a3cec}{}\index{tervel\+::util\+::memory\+::rc\+::\+Pool\+Manager@{tervel\+::util\+::memory\+::rc\+::\+Pool\+Manager}!Descriptor\+Pool@{Descriptor\+Pool}}
+\index{Descriptor\+Pool@{Descriptor\+Pool}!tervel\+::util\+::memory\+::rc\+::\+Pool\+Manager@{tervel\+::util\+::memory\+::rc\+::\+Pool\+Manager}}
+\subsubsection[{Descriptor\+Pool}]{\setlength{\rightskip}{0pt plus 5cm}friend class {\bf Descriptor\+Pool}\hspace{0.3cm}{\ttfamily [friend]}}\label{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_manager_a580b2e7743fb5db76d84a307272a3cec}
+
+
+\subsection{Member Data Documentation}
+\hypertarget{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_manager_aabebb2e05664becf83a3f494160a721f}{}\index{tervel\+::util\+::memory\+::rc\+::\+Pool\+Manager@{tervel\+::util\+::memory\+::rc\+::\+Pool\+Manager}!number\+\_\+pools\+\_\+@{number\+\_\+pools\+\_\+}}
+\index{number\+\_\+pools\+\_\+@{number\+\_\+pools\+\_\+}!tervel\+::util\+::memory\+::rc\+::\+Pool\+Manager@{tervel\+::util\+::memory\+::rc\+::\+Pool\+Manager}}
+\subsubsection[{number\+\_\+pools\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}const size\+\_\+t tervel\+::util\+::memory\+::rc\+::\+Pool\+Manager\+::number\+\_\+pools\+\_\+}\label{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_manager_aabebb2e05664becf83a3f494160a721f}
+\hypertarget{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_manager_a69430218cf6f7b1dac677ae64f14f77c}{}\index{tervel\+::util\+::memory\+::rc\+::\+Pool\+Manager@{tervel\+::util\+::memory\+::rc\+::\+Pool\+Manager}!pools\+\_\+@{pools\+\_\+}}
+\index{pools\+\_\+@{pools\+\_\+}!tervel\+::util\+::memory\+::rc\+::\+Pool\+Manager@{tervel\+::util\+::memory\+::rc\+::\+Pool\+Manager}}
+\subsubsection[{pools\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}std\+::unique\+\_\+ptr$<${\bf Managed\+Pool}\mbox{[}$\,$\mbox{]}$>$ tervel\+::util\+::memory\+::rc\+::\+Pool\+Manager\+::pools\+\_\+\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_manager_a69430218cf6f7b1dac677ae64f14f77c}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+tervel/util/memory/rc/\hyperlink{pool__manager_8h}{pool\+\_\+manager.\+h}\end{DoxyCompactItemize}

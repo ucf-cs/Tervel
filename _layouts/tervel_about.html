@@ -1,0 +1,43 @@
+{% assign site.baseurl = "" %}
+{% assign path_parts = page.url | split:"/" %}
+{% for part in path_parts offset:2 %}
+{% assign site.baseurl = site.baseurl | append:"../" %}
+{% endfor %}
+
+<!DOCTYPE html>
+<html lang="en" itemscope itemtype="https://schema.org/WebPage">
+  {% include head.html %}
+  <body>
+    {% include header.html %}
+
+    <div class="page-title-bar">
+      <div class="container">
+        <h1>About Tervel</h1>
+      </div>
+    </div>
+
+    <div class="container vpad">
+      <div class="row">
+        <div class="col-md-9">
+          {{ content }}
+        </div>
+        <div class="col-md-3">
+          <ul class="list-unstyled docs-side-nav">
+            <li><a href="about.html">About Tervel</a></li>
+            <li><a href="bio.html">Who we are</a></li>
+            <li><a href="publications.html">Publications</a></li>
+            <li><a href="contributing.html">Contributing</a></li>
+            <li><a href="roadmap.html">Roadmap</a></li>
+            <li><a href="users.html">Who's Using Tervel</a></li>
+            <li><a href="{{ site.gitrepo }}">Git</a></li>
+            <li><a href="https://groups.google.com/forum/#!forum/tervel">Discussion Group</a></li>
+
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    {% include footer.html %}
+  </body>
+</html>
+

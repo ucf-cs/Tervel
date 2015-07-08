@@ -1,0 +1,125 @@
+\hypertarget{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_op}{}\section{tervel\+:\+:containers\+:\+:wf\+:\+:vector\+:\+:Push\+Op$<$ T $>$ Class Template Reference}
+\label{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_op}\index{tervel\+::containers\+::wf\+::vector\+::\+Push\+Op$<$ T $>$@{tervel\+::containers\+::wf\+::vector\+::\+Push\+Op$<$ T $>$}}
+
+
+{\ttfamily \#include $<$pushback\+\_\+op.\+h$>$}
+
+Inheritance diagram for tervel\+:\+:containers\+:\+:wf\+:\+:vector\+:\+:Push\+Op$<$ T $>$\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_op}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_op_a34175390fd8b79ed7f0cf9e00c0aacd6}{Push\+Op} (Vector$<$ T $>$ $\ast$vec, T val)
+\item 
+\hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_op_a9f4cfedad3558646b4ac15af5135b8ca}{$\sim$\+Push\+Op} ()
+\item 
+uint64\+\_\+t \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_op_a6f55541df2382c5a269a5d88d8980952}{result} ()
+\item 
+void \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_op_aca23a90c8ef1a6ac95a102def3b63d56}{help\+\_\+complete} ()
+\begin{DoxyCompactList}\small\item\em Implementations of this function that upon its return the operation described in the Op\+Record has been completed. \end{DoxyCompactList}\item 
+bool \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_op_a3f3e9e0b7f1ea3c99ef17bb4dc8efc94}{is\+\_\+watched} ()
+\end{DoxyCompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static size\+\_\+t \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_op_adb5e668f536428dbda367da3dee6a94d}{execute} (Vector$<$ T $>$ $\ast$vec, T val)
+\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+Vector$<$ T $>$ $\ast$ \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_op_ace670d6d64e1f884f6213135d32d6dbe}{vec\+\_\+}
+\item 
+T \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_op_a7e4e5a4d2436799e0b31bb82e0b4a0f6}{new\+\_\+val\+\_\+}
+\item 
+std\+::atomic$<$ \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_op_helper}{Push\+Op\+Helper}$<$ T $>$ $\ast$ $>$ \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_op_a285817a3099b8cda383eaf8f514d3496}{helper\+\_\+} \{nullptr\}
+\end{DoxyCompactItemize}
+\subsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+class \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_op_a9620c687e3f69231ae07963424a2c308}{Push\+Op\+Helper$<$ T $>$}
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_op_a34175390fd8b79ed7f0cf9e00c0aacd6}{}\index{tervel\+::containers\+::wf\+::vector\+::\+Push\+Op@{tervel\+::containers\+::wf\+::vector\+::\+Push\+Op}!Push\+Op@{Push\+Op}}
+\index{Push\+Op@{Push\+Op}!tervel\+::containers\+::wf\+::vector\+::\+Push\+Op@{tervel\+::containers\+::wf\+::vector\+::\+Push\+Op}}
+\subsubsection[{Push\+Op(\+Vector$<$ T $>$ $\ast$vec, T val)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T$>$ {\bf tervel\+::containers\+::wf\+::vector\+::\+Push\+Op}$<$ T $>$\+::{\bf Push\+Op} (
+\begin{DoxyParamCaption}
+\item[{Vector$<$ T $>$ $\ast$}]{vec, }
+\item[{T}]{val}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_op_a34175390fd8b79ed7f0cf9e00c0aacd6}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_op_a9f4cfedad3558646b4ac15af5135b8ca}{}\index{tervel\+::containers\+::wf\+::vector\+::\+Push\+Op@{tervel\+::containers\+::wf\+::vector\+::\+Push\+Op}!````~Push\+Op@{$\sim$\+Push\+Op}}
+\index{````~Push\+Op@{$\sim$\+Push\+Op}!tervel\+::containers\+::wf\+::vector\+::\+Push\+Op@{tervel\+::containers\+::wf\+::vector\+::\+Push\+Op}}
+\subsubsection[{$\sim$\+Push\+Op()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T$>$ {\bf tervel\+::containers\+::wf\+::vector\+::\+Push\+Op}$<$ T $>$\+::$\sim${\bf Push\+Op} (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_op_a9f4cfedad3558646b4ac15af5135b8ca}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_op_adb5e668f536428dbda367da3dee6a94d}{}\index{tervel\+::containers\+::wf\+::vector\+::\+Push\+Op@{tervel\+::containers\+::wf\+::vector\+::\+Push\+Op}!execute@{execute}}
+\index{execute@{execute}!tervel\+::containers\+::wf\+::vector\+::\+Push\+Op@{tervel\+::containers\+::wf\+::vector\+::\+Push\+Op}}
+\subsubsection[{execute(\+Vector$<$ T $>$ $\ast$vec, T val)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T$>$ static size\+\_\+t {\bf tervel\+::containers\+::wf\+::vector\+::\+Push\+Op}$<$ T $>$\+::execute (
+\begin{DoxyParamCaption}
+\item[{Vector$<$ T $>$ $\ast$}]{vec, }
+\item[{T}]{val}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}\label{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_op_adb5e668f536428dbda367da3dee6a94d}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_op_aca23a90c8ef1a6ac95a102def3b63d56}{}\index{tervel\+::containers\+::wf\+::vector\+::\+Push\+Op@{tervel\+::containers\+::wf\+::vector\+::\+Push\+Op}!help\+\_\+complete@{help\+\_\+complete}}
+\index{help\+\_\+complete@{help\+\_\+complete}!tervel\+::containers\+::wf\+::vector\+::\+Push\+Op@{tervel\+::containers\+::wf\+::vector\+::\+Push\+Op}}
+\subsubsection[{help\+\_\+complete()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T$>$ void {\bf tervel\+::containers\+::wf\+::vector\+::\+Push\+Op}$<$ T $>$\+::help\+\_\+complete (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}\label{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_op_aca23a90c8ef1a6ac95a102def3b63d56}
+
+
+Implementations of this function that upon its return the operation described in the Op\+Record has been completed. 
+
+As such it must be thread-\/safe and the extending class must contain all the information necessary to complete the operation. 
+
+Implements \hyperlink{classtervel_1_1util_1_1_op_record_aa75ab39688a8d4cceb6a1ef0409537c0}{tervel\+::util\+::\+Op\+Record}.
+
+\hypertarget{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_op_a3f3e9e0b7f1ea3c99ef17bb4dc8efc94}{}\index{tervel\+::containers\+::wf\+::vector\+::\+Push\+Op@{tervel\+::containers\+::wf\+::vector\+::\+Push\+Op}!is\+\_\+watched@{is\+\_\+watched}}
+\index{is\+\_\+watched@{is\+\_\+watched}!tervel\+::containers\+::wf\+::vector\+::\+Push\+Op@{tervel\+::containers\+::wf\+::vector\+::\+Push\+Op}}
+\subsubsection[{is\+\_\+watched()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T$>$ bool {\bf tervel\+::containers\+::wf\+::vector\+::\+Push\+Op}$<$ T $>$\+::is\+\_\+watched (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_op_a3f3e9e0b7f1ea3c99ef17bb4dc8efc94}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_op_a6f55541df2382c5a269a5d88d8980952}{}\index{tervel\+::containers\+::wf\+::vector\+::\+Push\+Op@{tervel\+::containers\+::wf\+::vector\+::\+Push\+Op}!result@{result}}
+\index{result@{result}!tervel\+::containers\+::wf\+::vector\+::\+Push\+Op@{tervel\+::containers\+::wf\+::vector\+::\+Push\+Op}}
+\subsubsection[{result()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T$>$ uint64\+\_\+t {\bf tervel\+::containers\+::wf\+::vector\+::\+Push\+Op}$<$ T $>$\+::result (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_op_a6f55541df2382c5a269a5d88d8980952}
+
+
+\subsection{Friends And Related Function Documentation}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_op_a9620c687e3f69231ae07963424a2c308}{}\index{tervel\+::containers\+::wf\+::vector\+::\+Push\+Op@{tervel\+::containers\+::wf\+::vector\+::\+Push\+Op}!Push\+Op\+Helper$<$ T $>$@{Push\+Op\+Helper$<$ T $>$}}
+\index{Push\+Op\+Helper$<$ T $>$@{Push\+Op\+Helper$<$ T $>$}!tervel\+::containers\+::wf\+::vector\+::\+Push\+Op@{tervel\+::containers\+::wf\+::vector\+::\+Push\+Op}}
+\subsubsection[{Push\+Op\+Helper$<$ T $>$}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T$>$ friend class {\bf Push\+Op\+Helper}$<$ T $>$\hspace{0.3cm}{\ttfamily [friend]}}\label{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_op_a9620c687e3f69231ae07963424a2c308}
+
+
+\subsection{Member Data Documentation}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_op_a285817a3099b8cda383eaf8f514d3496}{}\index{tervel\+::containers\+::wf\+::vector\+::\+Push\+Op@{tervel\+::containers\+::wf\+::vector\+::\+Push\+Op}!helper\+\_\+@{helper\+\_\+}}
+\index{helper\+\_\+@{helper\+\_\+}!tervel\+::containers\+::wf\+::vector\+::\+Push\+Op@{tervel\+::containers\+::wf\+::vector\+::\+Push\+Op}}
+\subsubsection[{helper\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T$>$ std\+::atomic$<${\bf Push\+Op\+Helper}$<$T$>$ $\ast$$>$ {\bf tervel\+::containers\+::wf\+::vector\+::\+Push\+Op}$<$ T $>$\+::helper\+\_\+ \{nullptr\}\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_op_a285817a3099b8cda383eaf8f514d3496}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_op_a7e4e5a4d2436799e0b31bb82e0b4a0f6}{}\index{tervel\+::containers\+::wf\+::vector\+::\+Push\+Op@{tervel\+::containers\+::wf\+::vector\+::\+Push\+Op}!new\+\_\+val\+\_\+@{new\+\_\+val\+\_\+}}
+\index{new\+\_\+val\+\_\+@{new\+\_\+val\+\_\+}!tervel\+::containers\+::wf\+::vector\+::\+Push\+Op@{tervel\+::containers\+::wf\+::vector\+::\+Push\+Op}}
+\subsubsection[{new\+\_\+val\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T$>$ T {\bf tervel\+::containers\+::wf\+::vector\+::\+Push\+Op}$<$ T $>$\+::new\+\_\+val\+\_\+\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_op_a7e4e5a4d2436799e0b31bb82e0b4a0f6}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_op_ace670d6d64e1f884f6213135d32d6dbe}{}\index{tervel\+::containers\+::wf\+::vector\+::\+Push\+Op@{tervel\+::containers\+::wf\+::vector\+::\+Push\+Op}!vec\+\_\+@{vec\+\_\+}}
+\index{vec\+\_\+@{vec\+\_\+}!tervel\+::containers\+::wf\+::vector\+::\+Push\+Op@{tervel\+::containers\+::wf\+::vector\+::\+Push\+Op}}
+\subsubsection[{vec\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T$>$ Vector$<$T$>$$\ast$ {\bf tervel\+::containers\+::wf\+::vector\+::\+Push\+Op}$<$ T $>$\+::vec\+\_\+\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_op_ace670d6d64e1f884f6213135d32d6dbe}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+tervel/containers/wf/vector/\hyperlink{pushback__op_8h}{pushback\+\_\+op.\+h}\end{DoxyCompactItemize}

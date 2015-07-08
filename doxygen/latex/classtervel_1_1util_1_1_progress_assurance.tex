@@ -1,0 +1,168 @@
+\hypertarget{classtervel_1_1util_1_1_progress_assurance}{}\section{tervel\+:\+:util\+:\+:Progress\+Assurance Class Reference}
+\label{classtervel_1_1util_1_1_progress_assurance}\index{tervel\+::util\+::\+Progress\+Assurance@{tervel\+::util\+::\+Progress\+Assurance}}
+
+
+This class represents the progress assurance scheme employed by our library.  
+
+
+
+
+{\ttfamily \#include $<$progress\+\_\+assurance.\+h$>$}
+
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \hyperlink{classtervel_1_1util_1_1_progress_assurance_1_1_limit}{Limit}
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classtervel_1_1util_1_1_progress_assurance_a4e76edc1f1eb6b0b0111fbd2b5b73cb7}{Progress\+Assurance} (size\+\_\+t num\+\_\+threads)
+\end{DoxyCompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static void \hyperlink{classtervel_1_1util_1_1_progress_assurance_ada9868a602d3f45d1c041a29a7612138}{check\+\_\+for\+\_\+announcement} (\hyperlink{classtervel_1_1util_1_1_progress_assurance}{Progress\+Assurance} $\ast$const progress\+\_\+assuarance=nullptr)
+\begin{DoxyCompactList}\small\item\em This function checks at most one position in the op\+\_\+table\+\_\+ for an O\+P\+Recod If one is found it will call its help\+\_\+complete function. \end{DoxyCompactList}\item 
+static void \hyperlink{classtervel_1_1util_1_1_progress_assurance_aa07f6bcc8e41c4c63066989f1ff90685}{make\+\_\+announcement} (\hyperlink{classtervel_1_1util_1_1_op_record}{Op\+Record} $\ast$op, const uint64\+\_\+t tid=\hyperlink{namespacetervel_a60b23602adbb2dee6160af411b74bfd3}{tervel\+::tl\+\_\+thread\+\_\+info}-\/$>$get\+\_\+thread\+\_\+id(), \hyperlink{classtervel_1_1util_1_1_progress_assurance}{Progress\+Assurance} $\ast$const prog\+\_\+assur=\hyperlink{namespacetervel_a60b23602adbb2dee6160af411b74bfd3}{tervel\+::tl\+\_\+thread\+\_\+info}-\/$>$get\+\_\+progress\+\_\+assurance())
+\begin{DoxyCompactList}\small\item\em This function places the. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static constexpr size\+\_\+t \hyperlink{classtervel_1_1util_1_1_progress_assurance_a7b1a1448c14b614503aff9312593c9bc}{H\+E\+L\+P\+\_\+\+D\+E\+L\+A\+Y} = \hyperlink{util_8h_a5200ffa9857ce73ef77b3e8581d5b0cc}{T\+E\+R\+V\+E\+L\+\_\+\+P\+R\+O\+G\+\_\+\+A\+S\+S\+U\+R\+\_\+\+D\+E\+L\+A\+Y}
+\begin{DoxyCompactList}\small\item\em Const used to delay an announcement. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{classtervel_1_1util_1_1_progress_assurance_af7f57b0721b40d5269416b6b8e5042f0}{p\+\_\+check\+\_\+for\+\_\+announcement} (size\+\_\+t \&hpos)
+\begin{DoxyCompactList}\small\item\em This function checks at most one position in the op\+\_\+table\+\_\+ for an O\+P\+Recod If one is found it will call its help\+\_\+complete function. \end{DoxyCompactList}\item 
+void \hyperlink{classtervel_1_1util_1_1_progress_assurance_a63193bc7abbdee5f81eef05986fc1c3e}{p\+\_\+make\+\_\+announcement} (\hyperlink{classtervel_1_1util_1_1_op_record}{Op\+Record} $\ast$op, const uint64\+\_\+t tid=\hyperlink{namespacetervel_a60b23602adbb2dee6160af411b74bfd3}{tervel\+::tl\+\_\+thread\+\_\+info}-\/$>$get\+\_\+thread\+\_\+id())
+\begin{DoxyCompactList}\small\item\em This function places the. \end{DoxyCompactList}\item 
+\hyperlink{classtervel_1_1util_1_1_progress_assurance_a923eb2780489a1bebb342c8fce904308}{D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N} (\hyperlink{classtervel_1_1util_1_1_progress_assurance}{Progress\+Assurance})
+\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::unique\+\_\+ptr$<$ std\+::atomic$<$ \hyperlink{classtervel_1_1util_1_1_op_record}{Op\+Record} $\ast$ $>$\mbox{[}$\,$\mbox{]}$>$ \hyperlink{classtervel_1_1util_1_1_progress_assurance_a7db95582f6fda286d62000d65963a926}{op\+\_\+table\+\_\+}
+\begin{DoxyCompactList}\small\item\em Table for storing operation records, each thread has its own position that corresponds to its thread if. \end{DoxyCompactList}\item 
+const size\+\_\+t \hyperlink{classtervel_1_1util_1_1_progress_assurance_a33770716cc5c51b06474d3a108992efb}{num\+\_\+threads\+\_\+}
+\begin{DoxyCompactList}\small\item\em The number of threads that are using this operation table. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This class represents the progress assurance scheme employed by our library. 
+
+For this scheme to be effective, each operation which may indefinitely prevent the progress of some other operation must call the static function offer\+\_\+help This ensures that if a thread is continually failing its operation, then after a finite number of tries all thread will be helping. The number of failures is M\+A\+X\+\_\+\+F\+A\+I\+L\+U\+R\+E\+S + (number of threads$^\wedge$2)$\ast$ help\+\_\+delay 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classtervel_1_1util_1_1_progress_assurance_a4e76edc1f1eb6b0b0111fbd2b5b73cb7}{}\index{tervel\+::util\+::\+Progress\+Assurance@{tervel\+::util\+::\+Progress\+Assurance}!Progress\+Assurance@{Progress\+Assurance}}
+\index{Progress\+Assurance@{Progress\+Assurance}!tervel\+::util\+::\+Progress\+Assurance@{tervel\+::util\+::\+Progress\+Assurance}}
+\subsubsection[{Progress\+Assurance(size\+\_\+t num\+\_\+threads)}]{\setlength{\rightskip}{0pt plus 5cm}tervel\+::util\+::\+Progress\+Assurance\+::\+Progress\+Assurance (
+\begin{DoxyParamCaption}
+\item[{size\+\_\+t}]{num\+\_\+threads}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}}\label{classtervel_1_1util_1_1_progress_assurance_a4e76edc1f1eb6b0b0111fbd2b5b73cb7}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classtervel_1_1util_1_1_progress_assurance_ada9868a602d3f45d1c041a29a7612138}{}\index{tervel\+::util\+::\+Progress\+Assurance@{tervel\+::util\+::\+Progress\+Assurance}!check\+\_\+for\+\_\+announcement@{check\+\_\+for\+\_\+announcement}}
+\index{check\+\_\+for\+\_\+announcement@{check\+\_\+for\+\_\+announcement}!tervel\+::util\+::\+Progress\+Assurance@{tervel\+::util\+::\+Progress\+Assurance}}
+\subsubsection[{check\+\_\+for\+\_\+announcement(\+Progress\+Assurance $\ast$const progress\+\_\+assuarance=nullptr)}]{\setlength{\rightskip}{0pt plus 5cm}static void tervel\+::util\+::\+Progress\+Assurance\+::check\+\_\+for\+\_\+announcement (
+\begin{DoxyParamCaption}
+\item[{{\bf Progress\+Assurance} $\ast$const}]{progress\+\_\+assuarance = {\ttfamily nullptr}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}\label{classtervel_1_1util_1_1_progress_assurance_ada9868a602d3f45d1c041a29a7612138}
+
+
+This function checks at most one position in the op\+\_\+table\+\_\+ for an O\+P\+Recod If one is found it will call its help\+\_\+complete function. 
+
+help\+\_\+id\+\_\+ is a variable used to track which thread to check for an announcement.
+
+delay\+\_\+count\+\_\+ is a variable used to delay how often a thread checks for an annoucnement \hypertarget{classtervel_1_1util_1_1_progress_assurance_a923eb2780489a1bebb342c8fce904308}{}\index{tervel\+::util\+::\+Progress\+Assurance@{tervel\+::util\+::\+Progress\+Assurance}!D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N@{D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N}}
+\index{D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N@{D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N}!tervel\+::util\+::\+Progress\+Assurance@{tervel\+::util\+::\+Progress\+Assurance}}
+\subsubsection[{D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N(\+Progress\+Assurance)}]{\setlength{\rightskip}{0pt plus 5cm}tervel\+::util\+::\+Progress\+Assurance\+::\+D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N (
+\begin{DoxyParamCaption}
+\item[{{\bf Progress\+Assurance}}]{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1util_1_1_progress_assurance_a923eb2780489a1bebb342c8fce904308}
+\hypertarget{classtervel_1_1util_1_1_progress_assurance_aa07f6bcc8e41c4c63066989f1ff90685}{}\index{tervel\+::util\+::\+Progress\+Assurance@{tervel\+::util\+::\+Progress\+Assurance}!make\+\_\+announcement@{make\+\_\+announcement}}
+\index{make\+\_\+announcement@{make\+\_\+announcement}!tervel\+::util\+::\+Progress\+Assurance@{tervel\+::util\+::\+Progress\+Assurance}}
+\subsubsection[{make\+\_\+announcement(\+Op\+Record $\ast$op, const uint64\+\_\+t tid=tervel\+::tl\+\_\+thread\+\_\+info-\/$>$get\+\_\+thread\+\_\+id(), Progress\+Assurance $\ast$const prog\+\_\+assur=tervel\+::tl\+\_\+thread\+\_\+info-\/$>$get\+\_\+progress\+\_\+assurance())}]{\setlength{\rightskip}{0pt plus 5cm}static void tervel\+::util\+::\+Progress\+Assurance\+::make\+\_\+announcement (
+\begin{DoxyParamCaption}
+\item[{{\bf Op\+Record} $\ast$}]{op, }
+\item[{const uint64\+\_\+t}]{tid = {\ttfamily {\bf tervel\+::tl\+\_\+thread\+\_\+info}-\/$>$get\+\_\+thread\+\_\+id()}, }
+\item[{{\bf Progress\+Assurance} $\ast$const}]{prog\+\_\+assur = {\ttfamily {\bf tervel\+::tl\+\_\+thread\+\_\+info}-\/$>$get\+\_\+progress\+\_\+assurance()}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}\label{classtervel_1_1util_1_1_progress_assurance_aa07f6bcc8e41c4c63066989f1ff90685}
+
+
+This function places the. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em op} & an \hyperlink{classtervel_1_1util_1_1_op_record}{Op\+Record} to complete \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+on return the \hyperlink{classtervel_1_1util_1_1_op_record}{Op\+Record} must be completed. 
+\end{DoxyReturn}
+\hypertarget{classtervel_1_1util_1_1_progress_assurance_af7f57b0721b40d5269416b6b8e5042f0}{}\index{tervel\+::util\+::\+Progress\+Assurance@{tervel\+::util\+::\+Progress\+Assurance}!p\+\_\+check\+\_\+for\+\_\+announcement@{p\+\_\+check\+\_\+for\+\_\+announcement}}
+\index{p\+\_\+check\+\_\+for\+\_\+announcement@{p\+\_\+check\+\_\+for\+\_\+announcement}!tervel\+::util\+::\+Progress\+Assurance@{tervel\+::util\+::\+Progress\+Assurance}}
+\subsubsection[{p\+\_\+check\+\_\+for\+\_\+announcement(size\+\_\+t \&hpos)}]{\setlength{\rightskip}{0pt plus 5cm}void tervel\+::util\+::\+Progress\+Assurance\+::p\+\_\+check\+\_\+for\+\_\+announcement (
+\begin{DoxyParamCaption}
+\item[{size\+\_\+t \&}]{hpos}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1util_1_1_progress_assurance_af7f57b0721b40d5269416b6b8e5042f0}
+
+
+This function checks at most one position in the op\+\_\+table\+\_\+ for an O\+P\+Recod If one is found it will call its help\+\_\+complete function. 
+
+\hypertarget{classtervel_1_1util_1_1_progress_assurance_a63193bc7abbdee5f81eef05986fc1c3e}{}\index{tervel\+::util\+::\+Progress\+Assurance@{tervel\+::util\+::\+Progress\+Assurance}!p\+\_\+make\+\_\+announcement@{p\+\_\+make\+\_\+announcement}}
+\index{p\+\_\+make\+\_\+announcement@{p\+\_\+make\+\_\+announcement}!tervel\+::util\+::\+Progress\+Assurance@{tervel\+::util\+::\+Progress\+Assurance}}
+\subsubsection[{p\+\_\+make\+\_\+announcement(\+Op\+Record $\ast$op, const uint64\+\_\+t tid=tervel\+::tl\+\_\+thread\+\_\+info-\/$>$get\+\_\+thread\+\_\+id())}]{\setlength{\rightskip}{0pt plus 5cm}void tervel\+::util\+::\+Progress\+Assurance\+::p\+\_\+make\+\_\+announcement (
+\begin{DoxyParamCaption}
+\item[{{\bf Op\+Record} $\ast$}]{op, }
+\item[{const uint64\+\_\+t}]{tid = {\ttfamily {\bf tervel\+::tl\+\_\+thread\+\_\+info}-\/$>$get\+\_\+thread\+\_\+id()}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1util_1_1_progress_assurance_a63193bc7abbdee5f81eef05986fc1c3e}
+
+
+This function places the. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em op} & an \hyperlink{classtervel_1_1util_1_1_op_record}{Op\+Record} to complete \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+on return the \hyperlink{classtervel_1_1util_1_1_op_record}{Op\+Record} must be completed. 
+\end{DoxyReturn}
+
+
+\subsection{Member Data Documentation}
+\hypertarget{classtervel_1_1util_1_1_progress_assurance_a7b1a1448c14b614503aff9312593c9bc}{}\index{tervel\+::util\+::\+Progress\+Assurance@{tervel\+::util\+::\+Progress\+Assurance}!H\+E\+L\+P\+\_\+\+D\+E\+L\+A\+Y@{H\+E\+L\+P\+\_\+\+D\+E\+L\+A\+Y}}
+\index{H\+E\+L\+P\+\_\+\+D\+E\+L\+A\+Y@{H\+E\+L\+P\+\_\+\+D\+E\+L\+A\+Y}!tervel\+::util\+::\+Progress\+Assurance@{tervel\+::util\+::\+Progress\+Assurance}}
+\subsubsection[{H\+E\+L\+P\+\_\+\+D\+E\+L\+A\+Y}]{\setlength{\rightskip}{0pt plus 5cm}constexpr size\+\_\+t tervel\+::util\+::\+Progress\+Assurance\+::\+H\+E\+L\+P\+\_\+\+D\+E\+L\+A\+Y = {\bf T\+E\+R\+V\+E\+L\+\_\+\+P\+R\+O\+G\+\_\+\+A\+S\+S\+U\+R\+\_\+\+D\+E\+L\+A\+Y}\hspace{0.3cm}{\ttfamily [static]}}\label{classtervel_1_1util_1_1_progress_assurance_a7b1a1448c14b614503aff9312593c9bc}
+
+
+Const used to delay an announcement. 
+
+Const used to reduce the number of times a thread checks the table Reduces memory loads at the cost of a higher upper bound \hypertarget{classtervel_1_1util_1_1_progress_assurance_a33770716cc5c51b06474d3a108992efb}{}\index{tervel\+::util\+::\+Progress\+Assurance@{tervel\+::util\+::\+Progress\+Assurance}!num\+\_\+threads\+\_\+@{num\+\_\+threads\+\_\+}}
+\index{num\+\_\+threads\+\_\+@{num\+\_\+threads\+\_\+}!tervel\+::util\+::\+Progress\+Assurance@{tervel\+::util\+::\+Progress\+Assurance}}
+\subsubsection[{num\+\_\+threads\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}const size\+\_\+t tervel\+::util\+::\+Progress\+Assurance\+::num\+\_\+threads\+\_\+\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1util_1_1_progress_assurance_a33770716cc5c51b06474d3a108992efb}
+
+
+The number of threads that are using this operation table. 
+
+\hypertarget{classtervel_1_1util_1_1_progress_assurance_a7db95582f6fda286d62000d65963a926}{}\index{tervel\+::util\+::\+Progress\+Assurance@{tervel\+::util\+::\+Progress\+Assurance}!op\+\_\+table\+\_\+@{op\+\_\+table\+\_\+}}
+\index{op\+\_\+table\+\_\+@{op\+\_\+table\+\_\+}!tervel\+::util\+::\+Progress\+Assurance@{tervel\+::util\+::\+Progress\+Assurance}}
+\subsubsection[{op\+\_\+table\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}std\+::unique\+\_\+ptr$<$std\+::atomic$<${\bf Op\+Record} $\ast$$>$\mbox{[}$\,$\mbox{]}$>$ tervel\+::util\+::\+Progress\+Assurance\+::op\+\_\+table\+\_\+\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1util_1_1_progress_assurance_a7db95582f6fda286d62000d65963a926}
+
+
+Table for storing operation records, each thread has its own position that corresponds to its thread if. 
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+tervel/util/\hyperlink{progress__assurance_8h}{progress\+\_\+assurance.\+h}\end{DoxyCompactItemize}

@@ -1,0 +1,162 @@
+\hypertarget{ring-buffer_2test_object_8h}{}\section{tervel/tests/ring-\/buffer/test\+Object.h File Reference}
+\label{ring-buffer_2test_object_8h}\index{tervel/tests/ring-\/buffer/test\+Object.\+h@{tervel/tests/ring-\/buffer/test\+Object.\+h}}
+{\ttfamily \#include $<$climits$>$}\\*
+{\ttfamily \#include $<$assert.\+h$>$}\\*
+{\ttfamily \#include $<$atomic$>$}\\*
+{\ttfamily \#include $<$random$>$}\\*
+{\ttfamily \#include $<$string$>$}\\*
+{\ttfamily \#include $<$cstdint$>$}\\*
+{\ttfamily \#include $<$stdio.\+h$>$}\\*
+{\ttfamily \#include $<$iostream$>$}\\*
+{\ttfamily \#include $<$gflags/gflags.\+h$>$}\\*
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \hyperlink{class_test_object}{Test\+Object}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{ring-buffer_2test_object_8h_a26c845e049b4c24b4872ccf337d43a7c}{\+\_\+\+\_\+tervel\+\_\+xstr}(s)~\hyperlink{ring-buffer_2test_object_8h_ac822e06242113e5bf9fbf48d98055599}{\+\_\+\+\_\+tervel\+\_\+str}(s)
+\item 
+\#define \hyperlink{ring-buffer_2test_object_8h_ac822e06242113e5bf9fbf48d98055599}{\+\_\+\+\_\+tervel\+\_\+str}(s)~\#s
+\item 
+\#define \hyperlink{ring-buffer_2test_object_8h_ad024fc3e2980c9fff2efb715898272f1}{M\+A\+C\+R\+O\+\_\+\+A\+D\+D\+\_\+\+R\+A\+T\+E}(Tervel\+Op\+Name)
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef int64\+\_\+t \hyperlink{ring-buffer_2test_object_8h_a772d89229af3552d6234f2c36857ce4f}{Value}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{ring-buffer_2test_object_8h_ae097569c222fef2d0a87e81290f2fd6e}{D\+E\+F\+I\+N\+E\+\_\+int32} (capacity, 64,\char`\"{}The initial capacity of the container\char`\"{})
+\begin{DoxyCompactList}\small\item\em Change these when adapting to a new data structures. \end{DoxyCompactList}\item 
+\hyperlink{ring-buffer_2test_object_8h_aee31cddaa60c8b36fe7c53b2648d2316}{D\+E\+F\+I\+N\+E\+\_\+int32} (prefill, 0,\char`\"{}The number of elements to be initially inserted.\char`\"{})
+\item 
+\hyperlink{ring-buffer_2test_object_8h_a097d7125898e2fa8bd73191b39d96893}{D\+E\+F\+I\+N\+E\+\_\+int32} (enqueue\+\_\+rate, 60,\char`\"{}The percent of insert operations.\char`\"{})
+\item 
+\hyperlink{ring-buffer_2test_object_8h_aad856a0079cce8fca0c6fb12c4c00e60}{D\+E\+F\+I\+N\+E\+\_\+int32} (dequeue\+\_\+rate, 40,\char`\"{}The percent of find operations.\char`\"{})
+\item 
+\hyperlink{ring-buffer_2test_object_8h_a96c3a19b14115217bfd3493b1488ba31}{D\+E\+F\+I\+N\+E\+\_\+int32} (num\+\_\+threads, 1,\char`\"{}The number of executing threads.\char`\"{})
+\begin{DoxyCompactList}\small\item\em Arguments for Tester. \end{DoxyCompactList}\item 
+\hyperlink{ring-buffer_2test_object_8h_a9478eb45e3743162c827d57e162c93bb}{D\+E\+F\+I\+N\+E\+\_\+int32} (execution\+\_\+time, 5,\char`\"{}The amount of time to run the tests\char`\"{})
+\end{DoxyCompactItemize}
+\subsection*{Variables}
+\begin{DoxyCompactItemize}
+\item 
+const int32\+\_\+t \hyperlink{ring-buffer_2test_object_8h_a23ccddf5bb02f9fd5e3ef43e8e096e23}{F\+L\+A\+G\+S\+\_\+failenqueue\+\_\+rate} = 0
+\item 
+const int32\+\_\+t \hyperlink{ring-buffer_2test_object_8h_a3e86efa7993240673be15a1a66d84804}{F\+L\+A\+G\+S\+\_\+faildequeue\+\_\+rate} = 0
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\hypertarget{ring-buffer_2test_object_8h_ac822e06242113e5bf9fbf48d98055599}{}\index{ring-\/buffer/test\+Object.\+h@{ring-\/buffer/test\+Object.\+h}!\+\_\+\+\_\+tervel\+\_\+str@{\+\_\+\+\_\+tervel\+\_\+str}}
+\index{\+\_\+\+\_\+tervel\+\_\+str@{\+\_\+\+\_\+tervel\+\_\+str}!ring-\/buffer/test\+Object.\+h@{ring-\/buffer/test\+Object.\+h}}
+\subsubsection[{\+\_\+\+\_\+tervel\+\_\+str}]{\setlength{\rightskip}{0pt plus 5cm}\#define \+\_\+\+\_\+tervel\+\_\+str(
+\begin{DoxyParamCaption}
+\item[{}]{s}
+\end{DoxyParamCaption}
+)~\#s}\label{ring-buffer_2test_object_8h_ac822e06242113e5bf9fbf48d98055599}
+\hypertarget{ring-buffer_2test_object_8h_a26c845e049b4c24b4872ccf337d43a7c}{}\index{ring-\/buffer/test\+Object.\+h@{ring-\/buffer/test\+Object.\+h}!\+\_\+\+\_\+tervel\+\_\+xstr@{\+\_\+\+\_\+tervel\+\_\+xstr}}
+\index{\+\_\+\+\_\+tervel\+\_\+xstr@{\+\_\+\+\_\+tervel\+\_\+xstr}!ring-\/buffer/test\+Object.\+h@{ring-\/buffer/test\+Object.\+h}}
+\subsubsection[{\+\_\+\+\_\+tervel\+\_\+xstr}]{\setlength{\rightskip}{0pt plus 5cm}\#define \+\_\+\+\_\+tervel\+\_\+xstr(
+\begin{DoxyParamCaption}
+\item[{}]{s}
+\end{DoxyParamCaption}
+)~{\bf \+\_\+\+\_\+tervel\+\_\+str}(s)}\label{ring-buffer_2test_object_8h_a26c845e049b4c24b4872ccf337d43a7c}
+\hypertarget{ring-buffer_2test_object_8h_ad024fc3e2980c9fff2efb715898272f1}{}\index{ring-\/buffer/test\+Object.\+h@{ring-\/buffer/test\+Object.\+h}!M\+A\+C\+R\+O\+\_\+\+A\+D\+D\+\_\+\+R\+A\+T\+E@{M\+A\+C\+R\+O\+\_\+\+A\+D\+D\+\_\+\+R\+A\+T\+E}}
+\index{M\+A\+C\+R\+O\+\_\+\+A\+D\+D\+\_\+\+R\+A\+T\+E@{M\+A\+C\+R\+O\+\_\+\+A\+D\+D\+\_\+\+R\+A\+T\+E}!ring-\/buffer/test\+Object.\+h@{ring-\/buffer/test\+Object.\+h}}
+\subsubsection[{M\+A\+C\+R\+O\+\_\+\+A\+D\+D\+\_\+\+R\+A\+T\+E}]{\setlength{\rightskip}{0pt plus 5cm}\#define M\+A\+C\+R\+O\+\_\+\+A\+D\+D\+\_\+\+R\+A\+T\+E(
+\begin{DoxyParamCaption}
+\item[{}]{Tervel\+Op\+Name}
+\end{DoxyParamCaption}
+)}\label{ring-buffer_2test_object_8h_ad024fc3e2980c9fff2efb715898272f1}
+{\bfseries Value\+:}
+\begin{DoxyCode}
+func\_name\_[op\_codes::TervelOpName] = \textcolor{stringliteral}{""} #TervelOpName ; \(\backslash\)
+      func\_call\_rate\_[op\_codes::TervelOpName] = FLAGS\_##TervelOpName##\_rate; \(\backslash\)
+      func\_call\_count\_[op\_codes::TervelOpName].store(0);
+\end{DoxyCode}
+
+
+\subsection{Typedef Documentation}
+\hypertarget{ring-buffer_2test_object_8h_a772d89229af3552d6234f2c36857ce4f}{}\index{ring-\/buffer/test\+Object.\+h@{ring-\/buffer/test\+Object.\+h}!Value@{Value}}
+\index{Value@{Value}!ring-\/buffer/test\+Object.\+h@{ring-\/buffer/test\+Object.\+h}}
+\subsubsection[{Value}]{\setlength{\rightskip}{0pt plus 5cm}typedef int64\+\_\+t {\bf Value}}\label{ring-buffer_2test_object_8h_a772d89229af3552d6234f2c36857ce4f}
+
+
+\subsection{Function Documentation}
+\hypertarget{ring-buffer_2test_object_8h_ae097569c222fef2d0a87e81290f2fd6e}{}\index{ring-\/buffer/test\+Object.\+h@{ring-\/buffer/test\+Object.\+h}!D\+E\+F\+I\+N\+E\+\_\+int32@{D\+E\+F\+I\+N\+E\+\_\+int32}}
+\index{D\+E\+F\+I\+N\+E\+\_\+int32@{D\+E\+F\+I\+N\+E\+\_\+int32}!ring-\/buffer/test\+Object.\+h@{ring-\/buffer/test\+Object.\+h}}
+\subsubsection[{D\+E\+F\+I\+N\+E\+\_\+int32(capacity, 64,""The initial capacity of the container"")}]{\setlength{\rightskip}{0pt plus 5cm}D\+E\+F\+I\+N\+E\+\_\+int32 (
+\begin{DoxyParamCaption}
+\item[{capacity}]{, }
+\item[{64}]{, }
+\item[{\char`\"{}The initial capacity of the container\char`\"{}}]{}
+\end{DoxyParamCaption}
+)}\label{ring-buffer_2test_object_8h_ae097569c222fef2d0a87e81290f2fd6e}
+
+
+Change these when adapting to a new data structures. 
+
+\hypertarget{ring-buffer_2test_object_8h_aee31cddaa60c8b36fe7c53b2648d2316}{}\index{ring-\/buffer/test\+Object.\+h@{ring-\/buffer/test\+Object.\+h}!D\+E\+F\+I\+N\+E\+\_\+int32@{D\+E\+F\+I\+N\+E\+\_\+int32}}
+\index{D\+E\+F\+I\+N\+E\+\_\+int32@{D\+E\+F\+I\+N\+E\+\_\+int32}!ring-\/buffer/test\+Object.\+h@{ring-\/buffer/test\+Object.\+h}}
+\subsubsection[{D\+E\+F\+I\+N\+E\+\_\+int32(prefill, 0,""The number of elements to be initially inserted."")}]{\setlength{\rightskip}{0pt plus 5cm}D\+E\+F\+I\+N\+E\+\_\+int32 (
+\begin{DoxyParamCaption}
+\item[{prefill}]{, }
+\item[{0}]{, }
+\item[{\char`\"{}The number of elements to be initially inserted.\char`\"{}}]{}
+\end{DoxyParamCaption}
+)}\label{ring-buffer_2test_object_8h_aee31cddaa60c8b36fe7c53b2648d2316}
+\hypertarget{ring-buffer_2test_object_8h_a097d7125898e2fa8bd73191b39d96893}{}\index{ring-\/buffer/test\+Object.\+h@{ring-\/buffer/test\+Object.\+h}!D\+E\+F\+I\+N\+E\+\_\+int32@{D\+E\+F\+I\+N\+E\+\_\+int32}}
+\index{D\+E\+F\+I\+N\+E\+\_\+int32@{D\+E\+F\+I\+N\+E\+\_\+int32}!ring-\/buffer/test\+Object.\+h@{ring-\/buffer/test\+Object.\+h}}
+\subsubsection[{D\+E\+F\+I\+N\+E\+\_\+int32(enqueue\+\_\+rate, 60,""The percent of insert operations."")}]{\setlength{\rightskip}{0pt plus 5cm}D\+E\+F\+I\+N\+E\+\_\+int32 (
+\begin{DoxyParamCaption}
+\item[{enqueue\+\_\+rate}]{, }
+\item[{60}]{, }
+\item[{\char`\"{}The percent of insert operations.\char`\"{}}]{}
+\end{DoxyParamCaption}
+)}\label{ring-buffer_2test_object_8h_a097d7125898e2fa8bd73191b39d96893}
+\hypertarget{ring-buffer_2test_object_8h_aad856a0079cce8fca0c6fb12c4c00e60}{}\index{ring-\/buffer/test\+Object.\+h@{ring-\/buffer/test\+Object.\+h}!D\+E\+F\+I\+N\+E\+\_\+int32@{D\+E\+F\+I\+N\+E\+\_\+int32}}
+\index{D\+E\+F\+I\+N\+E\+\_\+int32@{D\+E\+F\+I\+N\+E\+\_\+int32}!ring-\/buffer/test\+Object.\+h@{ring-\/buffer/test\+Object.\+h}}
+\subsubsection[{D\+E\+F\+I\+N\+E\+\_\+int32(dequeue\+\_\+rate, 40,""The percent of find operations."")}]{\setlength{\rightskip}{0pt plus 5cm}D\+E\+F\+I\+N\+E\+\_\+int32 (
+\begin{DoxyParamCaption}
+\item[{dequeue\+\_\+rate}]{, }
+\item[{40}]{, }
+\item[{\char`\"{}The percent of find operations.\char`\"{}}]{}
+\end{DoxyParamCaption}
+)}\label{ring-buffer_2test_object_8h_aad856a0079cce8fca0c6fb12c4c00e60}
+\hypertarget{ring-buffer_2test_object_8h_a96c3a19b14115217bfd3493b1488ba31}{}\index{ring-\/buffer/test\+Object.\+h@{ring-\/buffer/test\+Object.\+h}!D\+E\+F\+I\+N\+E\+\_\+int32@{D\+E\+F\+I\+N\+E\+\_\+int32}}
+\index{D\+E\+F\+I\+N\+E\+\_\+int32@{D\+E\+F\+I\+N\+E\+\_\+int32}!ring-\/buffer/test\+Object.\+h@{ring-\/buffer/test\+Object.\+h}}
+\subsubsection[{D\+E\+F\+I\+N\+E\+\_\+int32(num\+\_\+threads, 1,""The number of executing threads."")}]{\setlength{\rightskip}{0pt plus 5cm}D\+E\+F\+I\+N\+E\+\_\+int32 (
+\begin{DoxyParamCaption}
+\item[{num\+\_\+threads}]{, }
+\item[{1}]{, }
+\item[{\char`\"{}The number of executing threads.\char`\"{}}]{}
+\end{DoxyParamCaption}
+)}\label{ring-buffer_2test_object_8h_a96c3a19b14115217bfd3493b1488ba31}
+
+
+Arguments for Tester. 
+
+\hypertarget{ring-buffer_2test_object_8h_a9478eb45e3743162c827d57e162c93bb}{}\index{ring-\/buffer/test\+Object.\+h@{ring-\/buffer/test\+Object.\+h}!D\+E\+F\+I\+N\+E\+\_\+int32@{D\+E\+F\+I\+N\+E\+\_\+int32}}
+\index{D\+E\+F\+I\+N\+E\+\_\+int32@{D\+E\+F\+I\+N\+E\+\_\+int32}!ring-\/buffer/test\+Object.\+h@{ring-\/buffer/test\+Object.\+h}}
+\subsubsection[{D\+E\+F\+I\+N\+E\+\_\+int32(execution\+\_\+time, 5,""The amount of time to run the tests"")}]{\setlength{\rightskip}{0pt plus 5cm}D\+E\+F\+I\+N\+E\+\_\+int32 (
+\begin{DoxyParamCaption}
+\item[{execution\+\_\+time}]{, }
+\item[{5}]{, }
+\item[{\char`\"{}The amount of time to run the tests\char`\"{}}]{}
+\end{DoxyParamCaption}
+)}\label{ring-buffer_2test_object_8h_a9478eb45e3743162c827d57e162c93bb}
+
+
+\subsection{Variable Documentation}
+\hypertarget{ring-buffer_2test_object_8h_a3e86efa7993240673be15a1a66d84804}{}\index{ring-\/buffer/test\+Object.\+h@{ring-\/buffer/test\+Object.\+h}!F\+L\+A\+G\+S\+\_\+faildequeue\+\_\+rate@{F\+L\+A\+G\+S\+\_\+faildequeue\+\_\+rate}}
+\index{F\+L\+A\+G\+S\+\_\+faildequeue\+\_\+rate@{F\+L\+A\+G\+S\+\_\+faildequeue\+\_\+rate}!ring-\/buffer/test\+Object.\+h@{ring-\/buffer/test\+Object.\+h}}
+\subsubsection[{F\+L\+A\+G\+S\+\_\+faildequeue\+\_\+rate}]{\setlength{\rightskip}{0pt plus 5cm}const int32\+\_\+t F\+L\+A\+G\+S\+\_\+faildequeue\+\_\+rate = 0}\label{ring-buffer_2test_object_8h_a3e86efa7993240673be15a1a66d84804}
+\hypertarget{ring-buffer_2test_object_8h_a23ccddf5bb02f9fd5e3ef43e8e096e23}{}\index{ring-\/buffer/test\+Object.\+h@{ring-\/buffer/test\+Object.\+h}!F\+L\+A\+G\+S\+\_\+failenqueue\+\_\+rate@{F\+L\+A\+G\+S\+\_\+failenqueue\+\_\+rate}}
+\index{F\+L\+A\+G\+S\+\_\+failenqueue\+\_\+rate@{F\+L\+A\+G\+S\+\_\+failenqueue\+\_\+rate}!ring-\/buffer/test\+Object.\+h@{ring-\/buffer/test\+Object.\+h}}
+\subsubsection[{F\+L\+A\+G\+S\+\_\+failenqueue\+\_\+rate}]{\setlength{\rightskip}{0pt plus 5cm}const int32\+\_\+t F\+L\+A\+G\+S\+\_\+failenqueue\+\_\+rate = 0}\label{ring-buffer_2test_object_8h_a23ccddf5bb02f9fd5e3ef43e8e096e23}

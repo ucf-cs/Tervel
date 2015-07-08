@@ -1,0 +1,173 @@
+\hypertarget{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_element}{}\section{tervel\+:\+:util\+:\+:memory\+:\+:rc\+:\+:Pool\+Element Class Reference}
+\label{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_element}\index{tervel\+::util\+::memory\+::rc\+::\+Pool\+Element@{tervel\+::util\+::memory\+::rc\+::\+Pool\+Element}}
+
+
+This class is used to hold the memory management information (\hyperlink{structtervel_1_1util_1_1memory_1_1rc_1_1_pool_element_1_1_header}{Header}) and a descriptor object.  
+
+
+
+
+{\ttfamily \#include $<$pool\+\_\+element.\+h$>$}
+
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structtervel_1_1util_1_1memory_1_1rc_1_1_pool_element_1_1_header}{Header}
+\begin{DoxyCompactList}\small\item\em All the member variables of \hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_element}{Pool\+Element} are stored in a struct so that the left over memory for cache padding can be easily calculated. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_element_a172c3d0063e2ade9a3cfc8cb11287061}{Pool\+Element} (\hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_element}{Pool\+Element} $\ast$\hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_element_a2ac432791b8b1d4cba1734a4e3bd7fef}{next}=nullptr)
+\item 
+\hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_element_a52629cac14fdc7e9df441fa28b4d60fc}{$\sim$\+Pool\+Element} ()
+\item 
+\hyperlink{classtervel_1_1util_1_1_descriptor}{Descriptor} $\ast$ \hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_element_ad84ff081d680dd280253e3580fac2561}{descriptor} ()
+\begin{DoxyCompactList}\small\item\em Returns a pointer to the associated descriptor of this element. \end{DoxyCompactList}\item 
+\hyperlink{structtervel_1_1util_1_1memory_1_1rc_1_1_pool_element_1_1_header}{Header} \& \hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_element_a51242ff566f53c56978fb396005e41ad}{header} ()
+\begin{DoxyCompactList}\small\item\em A reference to the header which houses all the special info. \end{DoxyCompactList}\item 
+\hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_element}{Pool\+Element} $\ast$ \hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_element_a2ac432791b8b1d4cba1734a4e3bd7fef}{next} ()
+\begin{DoxyCompactList}\small\item\em Helper method for getting the next pointer. \end{DoxyCompactList}\item 
+void \hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_element_a9e6409cf32a8f23769951b034ad5974a}{next} (\hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_element}{Pool\+Element} $\ast$next)
+\begin{DoxyCompactList}\small\item\em Helper method for setting the next pointer. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename Descr\+Type , typename... Args $>$ }\\void \hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_element_a331f2b0a6a0ebf2db58c0ba81a34db45}{init\+\_\+descriptor} (Args \&\&...args)
+\begin{DoxyCompactList}\small\item\em Constructs a descriptor of the given type within this pool element. \end{DoxyCompactList}\item 
+void \hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_element_add6f9c64f13202b97797dc12c4bc3dd8}{cleanup\+\_\+descriptor} ()
+\begin{DoxyCompactList}\small\item\em Should be called by the owner of this element when the descriptor in this element is no longer needed, and it is safe to destroy it. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_element_a4080376010aab52b5454440ec4537b47}{D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N} (\hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_element}{Pool\+Element})
+\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+char \hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_element_ab97d48ce3cb545bcb970e602f9ddaaa4}{padding\+\_\+} \mbox{[}\hyperlink{system_8h_af89f60b07247176687889ade776c8e10}{C\+A\+C\+H\+E\+\_\+\+L\+I\+N\+E\+\_\+\+S\+I\+Z\+E}-\/sizeof(\hyperlink{structtervel_1_1util_1_1memory_1_1rc_1_1_pool_element_1_1_header}{Header})\mbox{]}
+\item 
+\hyperlink{structtervel_1_1util_1_1memory_1_1rc_1_1_pool_element_1_1_header}{Header} \hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_element_aaa6ba2c75f70b0f717a5df1dfee1c811}{header\+\_\+}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This class is used to hold the memory management information (\hyperlink{structtervel_1_1util_1_1memory_1_1rc_1_1_pool_element_1_1_header}{Header}) and a descriptor object. 
+
+It is important to sepearte them to prevent the case where a thread attempts to dereference an object while its type id is being changed. 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_element_a172c3d0063e2ade9a3cfc8cb11287061}{}\index{tervel\+::util\+::memory\+::rc\+::\+Pool\+Element@{tervel\+::util\+::memory\+::rc\+::\+Pool\+Element}!Pool\+Element@{Pool\+Element}}
+\index{Pool\+Element@{Pool\+Element}!tervel\+::util\+::memory\+::rc\+::\+Pool\+Element@{tervel\+::util\+::memory\+::rc\+::\+Pool\+Element}}
+\subsubsection[{Pool\+Element(\+Pool\+Element $\ast$next=nullptr)}]{\setlength{\rightskip}{0pt plus 5cm}tervel\+::util\+::memory\+::rc\+::\+Pool\+Element\+::\+Pool\+Element (
+\begin{DoxyParamCaption}
+\item[{{\bf Pool\+Element} $\ast$}]{next = {\ttfamily nullptr}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}}\label{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_element_a172c3d0063e2ade9a3cfc8cb11287061}
+\hypertarget{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_element_a52629cac14fdc7e9df441fa28b4d60fc}{}\index{tervel\+::util\+::memory\+::rc\+::\+Pool\+Element@{tervel\+::util\+::memory\+::rc\+::\+Pool\+Element}!````~Pool\+Element@{$\sim$\+Pool\+Element}}
+\index{````~Pool\+Element@{$\sim$\+Pool\+Element}!tervel\+::util\+::memory\+::rc\+::\+Pool\+Element@{tervel\+::util\+::memory\+::rc\+::\+Pool\+Element}}
+\subsubsection[{$\sim$\+Pool\+Element()}]{\setlength{\rightskip}{0pt plus 5cm}tervel\+::util\+::memory\+::rc\+::\+Pool\+Element\+::$\sim$\+Pool\+Element (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_element_a52629cac14fdc7e9df441fa28b4d60fc}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_element_add6f9c64f13202b97797dc12c4bc3dd8}{}\index{tervel\+::util\+::memory\+::rc\+::\+Pool\+Element@{tervel\+::util\+::memory\+::rc\+::\+Pool\+Element}!cleanup\+\_\+descriptor@{cleanup\+\_\+descriptor}}
+\index{cleanup\+\_\+descriptor@{cleanup\+\_\+descriptor}!tervel\+::util\+::memory\+::rc\+::\+Pool\+Element@{tervel\+::util\+::memory\+::rc\+::\+Pool\+Element}}
+\subsubsection[{cleanup\+\_\+descriptor()}]{\setlength{\rightskip}{0pt plus 5cm}void tervel\+::util\+::memory\+::rc\+::\+Pool\+Element\+::cleanup\+\_\+descriptor (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_element_add6f9c64f13202b97797dc12c4bc3dd8}
+
+
+Should be called by the owner of this element when the descriptor in this element is no longer needed, and it is safe to destroy it. 
+
+Simply calls the destructor on the internal descriptor. \hypertarget{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_element_ad84ff081d680dd280253e3580fac2561}{}\index{tervel\+::util\+::memory\+::rc\+::\+Pool\+Element@{tervel\+::util\+::memory\+::rc\+::\+Pool\+Element}!descriptor@{descriptor}}
+\index{descriptor@{descriptor}!tervel\+::util\+::memory\+::rc\+::\+Pool\+Element@{tervel\+::util\+::memory\+::rc\+::\+Pool\+Element}}
+\subsubsection[{descriptor()}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Descriptor}$\ast$ tervel\+::util\+::memory\+::rc\+::\+Pool\+Element\+::descriptor (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_element_ad84ff081d680dd280253e3580fac2561}
+
+
+Returns a pointer to the associated descriptor of this element. 
+
+This pointer may or may not reference a constructed object.
+
+Returns a pointer to the associated descriptor of this element. This pointer may or may not reference a constructed object.
+
+T\+O\+D\+O(carlos) add const versions of these accessors
+
+\begin{DoxyReturn}{Returns}
+a pointer a descriptor type 
+\end{DoxyReturn}
+\hypertarget{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_element_a4080376010aab52b5454440ec4537b47}{}\index{tervel\+::util\+::memory\+::rc\+::\+Pool\+Element@{tervel\+::util\+::memory\+::rc\+::\+Pool\+Element}!D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N@{D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N}}
+\index{D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N@{D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N}!tervel\+::util\+::memory\+::rc\+::\+Pool\+Element@{tervel\+::util\+::memory\+::rc\+::\+Pool\+Element}}
+\subsubsection[{D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N(\+Pool\+Element)}]{\setlength{\rightskip}{0pt plus 5cm}tervel\+::util\+::memory\+::rc\+::\+Pool\+Element\+::\+D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N (
+\begin{DoxyParamCaption}
+\item[{{\bf Pool\+Element}}]{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_element_a4080376010aab52b5454440ec4537b47}
+\hypertarget{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_element_a51242ff566f53c56978fb396005e41ad}{}\index{tervel\+::util\+::memory\+::rc\+::\+Pool\+Element@{tervel\+::util\+::memory\+::rc\+::\+Pool\+Element}!header@{header}}
+\index{header@{header}!tervel\+::util\+::memory\+::rc\+::\+Pool\+Element@{tervel\+::util\+::memory\+::rc\+::\+Pool\+Element}}
+\subsubsection[{header()}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Header}\& tervel\+::util\+::memory\+::rc\+::\+Pool\+Element\+::header (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_element_a51242ff566f53c56978fb396005e41ad}
+
+
+A reference to the header which houses all the special info. 
+
+A reference to the header which houses all the special info \begin{DoxyReturn}{Returns}
+A reference to the header which houses all the 
+\end{DoxyReturn}
+\hypertarget{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_element_a331f2b0a6a0ebf2db58c0ba81a34db45}{}\index{tervel\+::util\+::memory\+::rc\+::\+Pool\+Element@{tervel\+::util\+::memory\+::rc\+::\+Pool\+Element}!init\+\_\+descriptor@{init\+\_\+descriptor}}
+\index{init\+\_\+descriptor@{init\+\_\+descriptor}!tervel\+::util\+::memory\+::rc\+::\+Pool\+Element@{tervel\+::util\+::memory\+::rc\+::\+Pool\+Element}}
+\subsubsection[{init\+\_\+descriptor(\+Args \&\&...\+args)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename Descr\+Type , typename... Args $>$ void tervel\+::util\+::memory\+::rc\+::\+Pool\+Element\+::init\+\_\+descriptor (
+\begin{DoxyParamCaption}
+\item[{Args \&\&...}]{args}
+\end{DoxyParamCaption}
+)}\label{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_element_a331f2b0a6a0ebf2db58c0ba81a34db45}
+
+
+Constructs a descriptor of the given type within this pool element. 
+
+Caller must be careful that there\textquotesingle{}s not another descriptor already in use in this element, or memory will be stomped and resources might leak.
+
+Call \hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_element_add6f9c64f13202b97797dc12c4bc3dd8}{cleanup\+\_\+descriptor()} to call the descriptor\textquotesingle{}s destructor when done with it. \hypertarget{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_element_a2ac432791b8b1d4cba1734a4e3bd7fef}{}\index{tervel\+::util\+::memory\+::rc\+::\+Pool\+Element@{tervel\+::util\+::memory\+::rc\+::\+Pool\+Element}!next@{next}}
+\index{next@{next}!tervel\+::util\+::memory\+::rc\+::\+Pool\+Element@{tervel\+::util\+::memory\+::rc\+::\+Pool\+Element}}
+\subsubsection[{next()}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Pool\+Element}$\ast$ tervel\+::util\+::memory\+::rc\+::\+Pool\+Element\+::next (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_element_a2ac432791b8b1d4cba1734a4e3bd7fef}
+
+
+Helper method for getting the next pointer. 
+
+\hypertarget{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_element_a9e6409cf32a8f23769951b034ad5974a}{}\index{tervel\+::util\+::memory\+::rc\+::\+Pool\+Element@{tervel\+::util\+::memory\+::rc\+::\+Pool\+Element}!next@{next}}
+\index{next@{next}!tervel\+::util\+::memory\+::rc\+::\+Pool\+Element@{tervel\+::util\+::memory\+::rc\+::\+Pool\+Element}}
+\subsubsection[{next(\+Pool\+Element $\ast$next)}]{\setlength{\rightskip}{0pt plus 5cm}void tervel\+::util\+::memory\+::rc\+::\+Pool\+Element\+::next (
+\begin{DoxyParamCaption}
+\item[{{\bf Pool\+Element} $\ast$}]{next}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_element_a9e6409cf32a8f23769951b034ad5974a}
+
+
+Helper method for setting the next pointer. 
+
+
+
+\subsection{Member Data Documentation}
+\hypertarget{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_element_aaa6ba2c75f70b0f717a5df1dfee1c811}{}\index{tervel\+::util\+::memory\+::rc\+::\+Pool\+Element@{tervel\+::util\+::memory\+::rc\+::\+Pool\+Element}!header\+\_\+@{header\+\_\+}}
+\index{header\+\_\+@{header\+\_\+}!tervel\+::util\+::memory\+::rc\+::\+Pool\+Element@{tervel\+::util\+::memory\+::rc\+::\+Pool\+Element}}
+\subsubsection[{header\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Header} tervel\+::util\+::memory\+::rc\+::\+Pool\+Element\+::header\+\_\+\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_element_aaa6ba2c75f70b0f717a5df1dfee1c811}
+\hypertarget{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_element_ab97d48ce3cb545bcb970e602f9ddaaa4}{}\index{tervel\+::util\+::memory\+::rc\+::\+Pool\+Element@{tervel\+::util\+::memory\+::rc\+::\+Pool\+Element}!padding\+\_\+@{padding\+\_\+}}
+\index{padding\+\_\+@{padding\+\_\+}!tervel\+::util\+::memory\+::rc\+::\+Pool\+Element@{tervel\+::util\+::memory\+::rc\+::\+Pool\+Element}}
+\subsubsection[{padding\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}char tervel\+::util\+::memory\+::rc\+::\+Pool\+Element\+::padding\+\_\+\mbox{[}{\bf C\+A\+C\+H\+E\+\_\+\+L\+I\+N\+E\+\_\+\+S\+I\+Z\+E}-\/sizeof({\bf Header})\mbox{]}\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_element_ab97d48ce3cb545bcb970e602f9ddaaa4}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+tervel/util/memory/rc/\hyperlink{pool__element_8h}{pool\+\_\+element.\+h}\end{DoxyCompactItemize}

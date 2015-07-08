@@ -1,0 +1,94 @@
+\hypertarget{classtervel_1_1util_1_1memory_1_1rc_1_1_read_first_op}{}\section{tervel\+:\+:util\+:\+:memory\+:\+:rc\+:\+:Read\+First\+Op Class Reference}
+\label{classtervel_1_1util_1_1memory_1_1rc_1_1_read_first_op}\index{tervel\+::util\+::memory\+::rc\+::\+Read\+First\+Op@{tervel\+::util\+::memory\+::rc\+::\+Read\+First\+Op}}
+
+
+Class used for placement in the Op Table to complete an operation that failed to complete in a bounded number of steps.  
+
+
+
+
+{\ttfamily \#include $<$descriptor\+\_\+read\+\_\+first\+\_\+op.\+h$>$}
+
+Inheritance diagram for tervel\+:\+:util\+:\+:memory\+:\+:rc\+:\+:Read\+First\+Op\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{classtervel_1_1util_1_1memory_1_1rc_1_1_read_first_op}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_read_first_op_af7cc3260ed88464d0582506c90213ca3}{Read\+First\+Op} (std\+::atomic$<$ void $\ast$ $>$ $\ast$address)
+\item 
+\hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_read_first_op_a7d2703263cf845895cf8523343a44f5a}{$\sim$\+Read\+First\+Op} ()
+\item 
+void \hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_read_first_op_a21e1fa517b7e7f522be78dcc95d810da}{help\+\_\+complete} ()
+\begin{DoxyCompactList}\small\item\em This function overrides the virtual function in the \hyperlink{classtervel_1_1util_1_1_op_record}{Op\+Record} class It is called by the progress assurance scheme. \end{DoxyCompactList}\item 
+void $\ast$ \hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_read_first_op_a814d1034d66ae650e9a9bc0ab1f37521}{load} ()
+\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::atomic$<$ void $\ast$ $>$ $\ast$ \hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_read_first_op_afef8620b5ddae7db43eae3fc757b6f05}{address\+\_\+}
+\item 
+std\+::atomic$<$ void $\ast$ $>$ \hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_read_first_op_a12f8e400cee9493c26153b6ed650b369}{value\+\_\+}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Class used for placement in the Op Table to complete an operation that failed to complete in a bounded number of steps. 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classtervel_1_1util_1_1memory_1_1rc_1_1_read_first_op_af7cc3260ed88464d0582506c90213ca3}{}\index{tervel\+::util\+::memory\+::rc\+::\+Read\+First\+Op@{tervel\+::util\+::memory\+::rc\+::\+Read\+First\+Op}!Read\+First\+Op@{Read\+First\+Op}}
+\index{Read\+First\+Op@{Read\+First\+Op}!tervel\+::util\+::memory\+::rc\+::\+Read\+First\+Op@{tervel\+::util\+::memory\+::rc\+::\+Read\+First\+Op}}
+\subsubsection[{Read\+First\+Op(std\+::atomic$<$ void $\ast$ $>$ $\ast$address)}]{\setlength{\rightskip}{0pt plus 5cm}tervel\+::util\+::memory\+::rc\+::\+Read\+First\+Op\+::\+Read\+First\+Op (
+\begin{DoxyParamCaption}
+\item[{std\+::atomic$<$ void $\ast$ $>$ $\ast$}]{address}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}}\label{classtervel_1_1util_1_1memory_1_1rc_1_1_read_first_op_af7cc3260ed88464d0582506c90213ca3}
+\hypertarget{classtervel_1_1util_1_1memory_1_1rc_1_1_read_first_op_a7d2703263cf845895cf8523343a44f5a}{}\index{tervel\+::util\+::memory\+::rc\+::\+Read\+First\+Op@{tervel\+::util\+::memory\+::rc\+::\+Read\+First\+Op}!````~Read\+First\+Op@{$\sim$\+Read\+First\+Op}}
+\index{````~Read\+First\+Op@{$\sim$\+Read\+First\+Op}!tervel\+::util\+::memory\+::rc\+::\+Read\+First\+Op@{tervel\+::util\+::memory\+::rc\+::\+Read\+First\+Op}}
+\subsubsection[{$\sim$\+Read\+First\+Op()}]{\setlength{\rightskip}{0pt plus 5cm}tervel\+::util\+::memory\+::rc\+::\+Read\+First\+Op\+::$\sim$\+Read\+First\+Op (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1util_1_1memory_1_1rc_1_1_read_first_op_a7d2703263cf845895cf8523343a44f5a}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classtervel_1_1util_1_1memory_1_1rc_1_1_read_first_op_a21e1fa517b7e7f522be78dcc95d810da}{}\index{tervel\+::util\+::memory\+::rc\+::\+Read\+First\+Op@{tervel\+::util\+::memory\+::rc\+::\+Read\+First\+Op}!help\+\_\+complete@{help\+\_\+complete}}
+\index{help\+\_\+complete@{help\+\_\+complete}!tervel\+::util\+::memory\+::rc\+::\+Read\+First\+Op@{tervel\+::util\+::memory\+::rc\+::\+Read\+First\+Op}}
+\subsubsection[{help\+\_\+complete()}]{\setlength{\rightskip}{0pt plus 5cm}void tervel\+::util\+::memory\+::rc\+::\+Read\+First\+Op\+::help\+\_\+complete (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [virtual]}}\label{classtervel_1_1util_1_1memory_1_1rc_1_1_read_first_op_a21e1fa517b7e7f522be78dcc95d810da}
+
+
+This function overrides the virtual function in the \hyperlink{classtervel_1_1util_1_1_op_record}{Op\+Record} class It is called by the progress assurance scheme. 
+
+
+
+Implements \hyperlink{classtervel_1_1util_1_1_op_record_aa75ab39688a8d4cceb6a1ef0409537c0}{tervel\+::util\+::\+Op\+Record}.
+
+\hypertarget{classtervel_1_1util_1_1memory_1_1rc_1_1_read_first_op_a814d1034d66ae650e9a9bc0ab1f37521}{}\index{tervel\+::util\+::memory\+::rc\+::\+Read\+First\+Op@{tervel\+::util\+::memory\+::rc\+::\+Read\+First\+Op}!load@{load}}
+\index{load@{load}!tervel\+::util\+::memory\+::rc\+::\+Read\+First\+Op@{tervel\+::util\+::memory\+::rc\+::\+Read\+First\+Op}}
+\subsubsection[{load()}]{\setlength{\rightskip}{0pt plus 5cm}void$\ast$ tervel\+::util\+::memory\+::rc\+::\+Read\+First\+Op\+::load (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{classtervel_1_1util_1_1memory_1_1rc_1_1_read_first_op_a814d1034d66ae650e9a9bc0ab1f37521}
+
+
+\subsection{Member Data Documentation}
+\hypertarget{classtervel_1_1util_1_1memory_1_1rc_1_1_read_first_op_afef8620b5ddae7db43eae3fc757b6f05}{}\index{tervel\+::util\+::memory\+::rc\+::\+Read\+First\+Op@{tervel\+::util\+::memory\+::rc\+::\+Read\+First\+Op}!address\+\_\+@{address\+\_\+}}
+\index{address\+\_\+@{address\+\_\+}!tervel\+::util\+::memory\+::rc\+::\+Read\+First\+Op@{tervel\+::util\+::memory\+::rc\+::\+Read\+First\+Op}}
+\subsubsection[{address\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}std\+::atomic$<$void $\ast$$>$$\ast$ tervel\+::util\+::memory\+::rc\+::\+Read\+First\+Op\+::address\+\_\+\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1util_1_1memory_1_1rc_1_1_read_first_op_afef8620b5ddae7db43eae3fc757b6f05}
+\hypertarget{classtervel_1_1util_1_1memory_1_1rc_1_1_read_first_op_a12f8e400cee9493c26153b6ed650b369}{}\index{tervel\+::util\+::memory\+::rc\+::\+Read\+First\+Op@{tervel\+::util\+::memory\+::rc\+::\+Read\+First\+Op}!value\+\_\+@{value\+\_\+}}
+\index{value\+\_\+@{value\+\_\+}!tervel\+::util\+::memory\+::rc\+::\+Read\+First\+Op@{tervel\+::util\+::memory\+::rc\+::\+Read\+First\+Op}}
+\subsubsection[{value\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}std\+::atomic$<$void $\ast$$>$ tervel\+::util\+::memory\+::rc\+::\+Read\+First\+Op\+::value\+\_\+\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1util_1_1memory_1_1rc_1_1_read_first_op_a12f8e400cee9493c26153b6ed650b369}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+tervel/util/memory/rc/\hyperlink{descriptor__read__first__op_8h}{descriptor\+\_\+read\+\_\+first\+\_\+op.\+h}\end{DoxyCompactItemize}

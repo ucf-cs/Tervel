@@ -1,0 +1,66 @@
+\hypertarget{util_8h}{}\section{tervel/util/util.h File Reference}
+\label{util_8h}\index{tervel/util/util.\+h@{tervel/util/util.\+h}}
+{\ttfamily \#include $<$chrono$>$}\\*
+{\ttfamily \#include $<$thread$>$}\\*
+{\ttfamily \#include $<$cmath$>$}\\*
+\subsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \hyperlink{namespacetervel}{tervel}
+\begin{DoxyCompactList}\small\item\em T\+O\+D\+O(steven)\+: \end{DoxyCompactList}\item 
+ \hyperlink{namespacetervel_1_1util}{tervel\+::util}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{util_8h_a34d6bb99294968ba561d3c2dd93e9b3d}{T\+E\+R\+V\+E\+L\+\_\+\+M\+E\+M\+\_\+\+R\+C\+\_\+\+M\+A\+X\+\_\+\+N\+O\+D\+E\+S}~25
+\item 
+\#define \hyperlink{util_8h_afd0fad68cb3234a00478ba61d879a895}{T\+E\+R\+V\+E\+L\+\_\+\+M\+E\+M\+\_\+\+R\+C\+\_\+\+M\+I\+N\+\_\+\+N\+O\+D\+E\+S}~5
+\item 
+\#define \hyperlink{util_8h_a5200ffa9857ce73ef77b3e8581d5b0cc}{T\+E\+R\+V\+E\+L\+\_\+\+P\+R\+O\+G\+\_\+\+A\+S\+S\+U\+R\+\_\+\+D\+E\+L\+A\+Y}~100
+\item 
+\#define \hyperlink{util_8h_ad2402840ec2629b707473cbb5e0e26d7}{T\+E\+R\+V\+E\+L\+\_\+\+P\+R\+O\+G\+\_\+\+A\+S\+S\+U\+R\+\_\+\+L\+I\+M\+I\+T}~1000
+\item 
+\#define \hyperlink{util_8h_ad4323c9b7b31bf4f7814ae1d5c3b23c9}{T\+E\+R\+V\+E\+L\+\_\+\+D\+E\+F\+\_\+\+B\+A\+C\+K\+O\+F\+F\+\_\+\+T\+I\+M\+E\+\_\+\+N\+S}~10000
+\item 
+\#define \hyperlink{util_8h_af8df3547bfde53a5acb93e2607b0034a}{D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N}(Type\+Name)
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+bool \hyperlink{namespacetervel_1_1util_a50afe37b452b31b8f3f24a6e65d23ba7}{tervel\+::util\+::is\+Valid} (void $\ast$value)
+\begin{DoxyCompactList}\small\item\em Returns whether or not the passed value is has one of the reserved bits set to 1. \end{DoxyCompactList}\item 
+void \hyperlink{namespacetervel_1_1util_a4505d4510f91a5cb1a766dea247f835f}{tervel\+::util\+::backoff} (int duration=\hyperlink{util_8h_ad4323c9b7b31bf4f7814ae1d5c3b23c9}{T\+E\+R\+V\+E\+L\+\_\+\+D\+E\+F\+\_\+\+B\+A\+C\+K\+O\+F\+F\+\_\+\+T\+I\+M\+E\+\_\+\+N\+S})
+\begin{DoxyCompactList}\small\item\em Sets the amount of time in nano-\/seconds for a thread to backoff before re-\/retrying. \end{DoxyCompactList}\item 
+int \hyperlink{namespacetervel_1_1util_a8fa82e619afb1d31d761c703a9aad97b}{tervel\+::util\+::round\+\_\+to\+\_\+next\+\_\+power\+\_\+of\+\_\+two} (uint64\+\_\+t value)
+\begin{DoxyCompactList}\small\item\em Returns the next power of two. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\hypertarget{util_8h_af8df3547bfde53a5acb93e2607b0034a}{}\index{util.\+h@{util.\+h}!D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N@{D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N}}
+\index{D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N@{D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N}!util.\+h@{util.\+h}}
+\subsubsection[{D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N}]{\setlength{\rightskip}{0pt plus 5cm}\#define D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N(
+\begin{DoxyParamCaption}
+\item[{}]{Type\+Name}
+\end{DoxyParamCaption}
+)}\label{util_8h_af8df3547bfde53a5acb93e2607b0034a}
+{\bfseries Value\+:}
+\begin{DoxyCode}
+TypeName(\textcolor{keyword}{const} TypeName&) = \textcolor{keyword}{delete};       \(\backslash\)
+  void operator=(\textcolor{keyword}{const} TypeName&) = \textcolor{keyword}{delete}
+\end{DoxyCode}
+\hypertarget{util_8h_ad4323c9b7b31bf4f7814ae1d5c3b23c9}{}\index{util.\+h@{util.\+h}!T\+E\+R\+V\+E\+L\+\_\+\+D\+E\+F\+\_\+\+B\+A\+C\+K\+O\+F\+F\+\_\+\+T\+I\+M\+E\+\_\+\+N\+S@{T\+E\+R\+V\+E\+L\+\_\+\+D\+E\+F\+\_\+\+B\+A\+C\+K\+O\+F\+F\+\_\+\+T\+I\+M\+E\+\_\+\+N\+S}}
+\index{T\+E\+R\+V\+E\+L\+\_\+\+D\+E\+F\+\_\+\+B\+A\+C\+K\+O\+F\+F\+\_\+\+T\+I\+M\+E\+\_\+\+N\+S@{T\+E\+R\+V\+E\+L\+\_\+\+D\+E\+F\+\_\+\+B\+A\+C\+K\+O\+F\+F\+\_\+\+T\+I\+M\+E\+\_\+\+N\+S}!util.\+h@{util.\+h}}
+\subsubsection[{T\+E\+R\+V\+E\+L\+\_\+\+D\+E\+F\+\_\+\+B\+A\+C\+K\+O\+F\+F\+\_\+\+T\+I\+M\+E\+\_\+\+N\+S}]{\setlength{\rightskip}{0pt plus 5cm}\#define T\+E\+R\+V\+E\+L\+\_\+\+D\+E\+F\+\_\+\+B\+A\+C\+K\+O\+F\+F\+\_\+\+T\+I\+M\+E\+\_\+\+N\+S~10000}\label{util_8h_ad4323c9b7b31bf4f7814ae1d5c3b23c9}
+\hypertarget{util_8h_a34d6bb99294968ba561d3c2dd93e9b3d}{}\index{util.\+h@{util.\+h}!T\+E\+R\+V\+E\+L\+\_\+\+M\+E\+M\+\_\+\+R\+C\+\_\+\+M\+A\+X\+\_\+\+N\+O\+D\+E\+S@{T\+E\+R\+V\+E\+L\+\_\+\+M\+E\+M\+\_\+\+R\+C\+\_\+\+M\+A\+X\+\_\+\+N\+O\+D\+E\+S}}
+\index{T\+E\+R\+V\+E\+L\+\_\+\+M\+E\+M\+\_\+\+R\+C\+\_\+\+M\+A\+X\+\_\+\+N\+O\+D\+E\+S@{T\+E\+R\+V\+E\+L\+\_\+\+M\+E\+M\+\_\+\+R\+C\+\_\+\+M\+A\+X\+\_\+\+N\+O\+D\+E\+S}!util.\+h@{util.\+h}}
+\subsubsection[{T\+E\+R\+V\+E\+L\+\_\+\+M\+E\+M\+\_\+\+R\+C\+\_\+\+M\+A\+X\+\_\+\+N\+O\+D\+E\+S}]{\setlength{\rightskip}{0pt plus 5cm}\#define T\+E\+R\+V\+E\+L\+\_\+\+M\+E\+M\+\_\+\+R\+C\+\_\+\+M\+A\+X\+\_\+\+N\+O\+D\+E\+S~25}\label{util_8h_a34d6bb99294968ba561d3c2dd93e9b3d}
+\hypertarget{util_8h_afd0fad68cb3234a00478ba61d879a895}{}\index{util.\+h@{util.\+h}!T\+E\+R\+V\+E\+L\+\_\+\+M\+E\+M\+\_\+\+R\+C\+\_\+\+M\+I\+N\+\_\+\+N\+O\+D\+E\+S@{T\+E\+R\+V\+E\+L\+\_\+\+M\+E\+M\+\_\+\+R\+C\+\_\+\+M\+I\+N\+\_\+\+N\+O\+D\+E\+S}}
+\index{T\+E\+R\+V\+E\+L\+\_\+\+M\+E\+M\+\_\+\+R\+C\+\_\+\+M\+I\+N\+\_\+\+N\+O\+D\+E\+S@{T\+E\+R\+V\+E\+L\+\_\+\+M\+E\+M\+\_\+\+R\+C\+\_\+\+M\+I\+N\+\_\+\+N\+O\+D\+E\+S}!util.\+h@{util.\+h}}
+\subsubsection[{T\+E\+R\+V\+E\+L\+\_\+\+M\+E\+M\+\_\+\+R\+C\+\_\+\+M\+I\+N\+\_\+\+N\+O\+D\+E\+S}]{\setlength{\rightskip}{0pt plus 5cm}\#define T\+E\+R\+V\+E\+L\+\_\+\+M\+E\+M\+\_\+\+R\+C\+\_\+\+M\+I\+N\+\_\+\+N\+O\+D\+E\+S~5}\label{util_8h_afd0fad68cb3234a00478ba61d879a895}
+\hypertarget{util_8h_a5200ffa9857ce73ef77b3e8581d5b0cc}{}\index{util.\+h@{util.\+h}!T\+E\+R\+V\+E\+L\+\_\+\+P\+R\+O\+G\+\_\+\+A\+S\+S\+U\+R\+\_\+\+D\+E\+L\+A\+Y@{T\+E\+R\+V\+E\+L\+\_\+\+P\+R\+O\+G\+\_\+\+A\+S\+S\+U\+R\+\_\+\+D\+E\+L\+A\+Y}}
+\index{T\+E\+R\+V\+E\+L\+\_\+\+P\+R\+O\+G\+\_\+\+A\+S\+S\+U\+R\+\_\+\+D\+E\+L\+A\+Y@{T\+E\+R\+V\+E\+L\+\_\+\+P\+R\+O\+G\+\_\+\+A\+S\+S\+U\+R\+\_\+\+D\+E\+L\+A\+Y}!util.\+h@{util.\+h}}
+\subsubsection[{T\+E\+R\+V\+E\+L\+\_\+\+P\+R\+O\+G\+\_\+\+A\+S\+S\+U\+R\+\_\+\+D\+E\+L\+A\+Y}]{\setlength{\rightskip}{0pt plus 5cm}\#define T\+E\+R\+V\+E\+L\+\_\+\+P\+R\+O\+G\+\_\+\+A\+S\+S\+U\+R\+\_\+\+D\+E\+L\+A\+Y~100}\label{util_8h_a5200ffa9857ce73ef77b3e8581d5b0cc}
+\hypertarget{util_8h_ad2402840ec2629b707473cbb5e0e26d7}{}\index{util.\+h@{util.\+h}!T\+E\+R\+V\+E\+L\+\_\+\+P\+R\+O\+G\+\_\+\+A\+S\+S\+U\+R\+\_\+\+L\+I\+M\+I\+T@{T\+E\+R\+V\+E\+L\+\_\+\+P\+R\+O\+G\+\_\+\+A\+S\+S\+U\+R\+\_\+\+L\+I\+M\+I\+T}}
+\index{T\+E\+R\+V\+E\+L\+\_\+\+P\+R\+O\+G\+\_\+\+A\+S\+S\+U\+R\+\_\+\+L\+I\+M\+I\+T@{T\+E\+R\+V\+E\+L\+\_\+\+P\+R\+O\+G\+\_\+\+A\+S\+S\+U\+R\+\_\+\+L\+I\+M\+I\+T}!util.\+h@{util.\+h}}
+\subsubsection[{T\+E\+R\+V\+E\+L\+\_\+\+P\+R\+O\+G\+\_\+\+A\+S\+S\+U\+R\+\_\+\+L\+I\+M\+I\+T}]{\setlength{\rightskip}{0pt plus 5cm}\#define T\+E\+R\+V\+E\+L\+\_\+\+P\+R\+O\+G\+\_\+\+A\+S\+S\+U\+R\+\_\+\+L\+I\+M\+I\+T~1000}\label{util_8h_ad2402840ec2629b707473cbb5e0e26d7}

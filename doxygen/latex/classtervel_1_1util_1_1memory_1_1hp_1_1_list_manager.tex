@@ -1,0 +1,124 @@
+\hypertarget{classtervel_1_1util_1_1memory_1_1hp_1_1_list_manager}{}\section{tervel\+:\+:util\+:\+:memory\+:\+:hp\+:\+:List\+Manager Class Reference}
+\label{classtervel_1_1util_1_1memory_1_1hp_1_1_list_manager}\index{tervel\+::util\+::memory\+::hp\+::\+List\+Manager@{tervel\+::util\+::memory\+::hp\+::\+List\+Manager}}
+
+
+Encapsulates a shared central \textquotesingle{}to free list\textquotesingle{} between several thread-\/local lists.  
+
+
+
+
+{\ttfamily \#include $<$list\+\_\+manager.\+h$>$}
+
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{structtervel_1_1util_1_1memory_1_1hp_1_1_list_manager_1_1_managed_pool}{Managed\+Pool}
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_list_manager_a4b3bf525fc6328f81d4696e4357bf507}{List\+Manager} (size\+\_\+t number\+\_\+pools)
+\item 
+\hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_list_manager_a6604ce2e6e426c8e42577356d7fc05c5}{$\sim$\+List\+Manager} ()
+\item 
+\hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_element_list}{Element\+List} $\ast$ \hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_list_manager_affa204b0a7ee633a109b9087e27bdad7}{allocate\+\_\+list} ()
+\end{DoxyCompactItemize}
+\subsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_list_manager_a09d48828ef1f36fadabfa16e3e7b1867}{recieve\+\_\+element\+\_\+list} (uint64\+\_\+t tid, \hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_element}{Element} $\ast$element\+\_\+list)
+\begin{DoxyCompactList}\small\item\em This function is called when a thread is detached. \end{DoxyCompactList}\item 
+\hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_list_manager_adc3d78ca9ecba0289b65ba06f3b558ad}{D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N} (\hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_list_manager}{List\+Manager})
+\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::unique\+\_\+ptr$<$ \hyperlink{structtervel_1_1util_1_1memory_1_1hp_1_1_list_manager_1_1_managed_pool}{Managed\+Pool}\mbox{[}$\,$\mbox{]}$>$ \hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_list_manager_ab69b3baf1e6e618ae90c39694ea0baa7}{free\+\_\+lists\+\_\+}
+\item 
+size\+\_\+t \hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_list_manager_a5db6bf76022092febdad37d9d6db73e4}{number\+\_\+pools\+\_\+}
+\end{DoxyCompactItemize}
+\subsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+class \hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_list_manager_a9b2179409b88ca63c8a1eea5b93a82a9}{Element\+List}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Encapsulates a shared central \textquotesingle{}to free list\textquotesingle{} between several thread-\/local lists. 
+
+When a thread is destroyed it will send its unfreeable items to this list, which is freed by the user. 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classtervel_1_1util_1_1memory_1_1hp_1_1_list_manager_a4b3bf525fc6328f81d4696e4357bf507}{}\index{tervel\+::util\+::memory\+::hp\+::\+List\+Manager@{tervel\+::util\+::memory\+::hp\+::\+List\+Manager}!List\+Manager@{List\+Manager}}
+\index{List\+Manager@{List\+Manager}!tervel\+::util\+::memory\+::hp\+::\+List\+Manager@{tervel\+::util\+::memory\+::hp\+::\+List\+Manager}}
+\subsubsection[{List\+Manager(size\+\_\+t number\+\_\+pools)}]{\setlength{\rightskip}{0pt plus 5cm}tervel\+::util\+::memory\+::hp\+::\+List\+Manager\+::\+List\+Manager (
+\begin{DoxyParamCaption}
+\item[{size\+\_\+t}]{number\+\_\+pools}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}}\label{classtervel_1_1util_1_1memory_1_1hp_1_1_list_manager_a4b3bf525fc6328f81d4696e4357bf507}
+\hypertarget{classtervel_1_1util_1_1memory_1_1hp_1_1_list_manager_a6604ce2e6e426c8e42577356d7fc05c5}{}\index{tervel\+::util\+::memory\+::hp\+::\+List\+Manager@{tervel\+::util\+::memory\+::hp\+::\+List\+Manager}!````~List\+Manager@{$\sim$\+List\+Manager}}
+\index{````~List\+Manager@{$\sim$\+List\+Manager}!tervel\+::util\+::memory\+::hp\+::\+List\+Manager@{tervel\+::util\+::memory\+::hp\+::\+List\+Manager}}
+\subsubsection[{$\sim$\+List\+Manager()}]{\setlength{\rightskip}{0pt plus 5cm}tervel\+::util\+::memory\+::hp\+::\+List\+Manager\+::$\sim$\+List\+Manager (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{classtervel_1_1util_1_1memory_1_1hp_1_1_list_manager_a6604ce2e6e426c8e42577356d7fc05c5}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classtervel_1_1util_1_1memory_1_1hp_1_1_list_manager_affa204b0a7ee633a109b9087e27bdad7}{}\index{tervel\+::util\+::memory\+::hp\+::\+List\+Manager@{tervel\+::util\+::memory\+::hp\+::\+List\+Manager}!allocate\+\_\+list@{allocate\+\_\+list}}
+\index{allocate\+\_\+list@{allocate\+\_\+list}!tervel\+::util\+::memory\+::hp\+::\+List\+Manager@{tervel\+::util\+::memory\+::hp\+::\+List\+Manager}}
+\subsubsection[{allocate\+\_\+list()}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Element\+List}$\ast$ tervel\+::util\+::memory\+::hp\+::\+List\+Manager\+::allocate\+\_\+list (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1util_1_1memory_1_1hp_1_1_list_manager_affa204b0a7ee633a109b9087e27bdad7}
+\hypertarget{classtervel_1_1util_1_1memory_1_1hp_1_1_list_manager_adc3d78ca9ecba0289b65ba06f3b558ad}{}\index{tervel\+::util\+::memory\+::hp\+::\+List\+Manager@{tervel\+::util\+::memory\+::hp\+::\+List\+Manager}!D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N@{D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N}}
+\index{D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N@{D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N}!tervel\+::util\+::memory\+::hp\+::\+List\+Manager@{tervel\+::util\+::memory\+::hp\+::\+List\+Manager}}
+\subsubsection[{D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N(\+List\+Manager)}]{\setlength{\rightskip}{0pt plus 5cm}tervel\+::util\+::memory\+::hp\+::\+List\+Manager\+::\+D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N (
+\begin{DoxyParamCaption}
+\item[{{\bf List\+Manager}}]{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1util_1_1memory_1_1hp_1_1_list_manager_adc3d78ca9ecba0289b65ba06f3b558ad}
+\hypertarget{classtervel_1_1util_1_1memory_1_1hp_1_1_list_manager_a09d48828ef1f36fadabfa16e3e7b1867}{}\index{tervel\+::util\+::memory\+::hp\+::\+List\+Manager@{tervel\+::util\+::memory\+::hp\+::\+List\+Manager}!recieve\+\_\+element\+\_\+list@{recieve\+\_\+element\+\_\+list}}
+\index{recieve\+\_\+element\+\_\+list@{recieve\+\_\+element\+\_\+list}!tervel\+::util\+::memory\+::hp\+::\+List\+Manager@{tervel\+::util\+::memory\+::hp\+::\+List\+Manager}}
+\subsubsection[{recieve\+\_\+element\+\_\+list(uint64\+\_\+t tid, Element $\ast$element\+\_\+list)}]{\setlength{\rightskip}{0pt plus 5cm}void tervel\+::util\+::memory\+::hp\+::\+List\+Manager\+::recieve\+\_\+element\+\_\+list (
+\begin{DoxyParamCaption}
+\item[{uint64\+\_\+t}]{tid, }
+\item[{{\bf Element} $\ast$}]{element\+\_\+list}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}\label{classtervel_1_1util_1_1memory_1_1hp_1_1_list_manager_a09d48828ef1f36fadabfa16e3e7b1867}
+
+
+This function is called when a thread is detached. 
+
+It moves elements from its private H\+P pool to the shared pool.
+
+
+\begin{DoxyParams}{Parameters}
+{\em tid} & The threads tervel id \\
+\hline
+{\em element\+\_\+list} & The list of elements that it owned. \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Friends And Related Function Documentation}
+\hypertarget{classtervel_1_1util_1_1memory_1_1hp_1_1_list_manager_a9b2179409b88ca63c8a1eea5b93a82a9}{}\index{tervel\+::util\+::memory\+::hp\+::\+List\+Manager@{tervel\+::util\+::memory\+::hp\+::\+List\+Manager}!Element\+List@{Element\+List}}
+\index{Element\+List@{Element\+List}!tervel\+::util\+::memory\+::hp\+::\+List\+Manager@{tervel\+::util\+::memory\+::hp\+::\+List\+Manager}}
+\subsubsection[{Element\+List}]{\setlength{\rightskip}{0pt plus 5cm}friend class {\bf Element\+List}\hspace{0.3cm}{\ttfamily [friend]}}\label{classtervel_1_1util_1_1memory_1_1hp_1_1_list_manager_a9b2179409b88ca63c8a1eea5b93a82a9}
+
+
+\subsection{Member Data Documentation}
+\hypertarget{classtervel_1_1util_1_1memory_1_1hp_1_1_list_manager_ab69b3baf1e6e618ae90c39694ea0baa7}{}\index{tervel\+::util\+::memory\+::hp\+::\+List\+Manager@{tervel\+::util\+::memory\+::hp\+::\+List\+Manager}!free\+\_\+lists\+\_\+@{free\+\_\+lists\+\_\+}}
+\index{free\+\_\+lists\+\_\+@{free\+\_\+lists\+\_\+}!tervel\+::util\+::memory\+::hp\+::\+List\+Manager@{tervel\+::util\+::memory\+::hp\+::\+List\+Manager}}
+\subsubsection[{free\+\_\+lists\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}std\+::unique\+\_\+ptr$<${\bf Managed\+Pool}\mbox{[}$\,$\mbox{]}$>$ tervel\+::util\+::memory\+::hp\+::\+List\+Manager\+::free\+\_\+lists\+\_\+\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1util_1_1memory_1_1hp_1_1_list_manager_ab69b3baf1e6e618ae90c39694ea0baa7}
+\hypertarget{classtervel_1_1util_1_1memory_1_1hp_1_1_list_manager_a5db6bf76022092febdad37d9d6db73e4}{}\index{tervel\+::util\+::memory\+::hp\+::\+List\+Manager@{tervel\+::util\+::memory\+::hp\+::\+List\+Manager}!number\+\_\+pools\+\_\+@{number\+\_\+pools\+\_\+}}
+\index{number\+\_\+pools\+\_\+@{number\+\_\+pools\+\_\+}!tervel\+::util\+::memory\+::hp\+::\+List\+Manager@{tervel\+::util\+::memory\+::hp\+::\+List\+Manager}}
+\subsubsection[{number\+\_\+pools\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}size\+\_\+t tervel\+::util\+::memory\+::hp\+::\+List\+Manager\+::number\+\_\+pools\+\_\+\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1util_1_1memory_1_1hp_1_1_list_manager_a5db6bf76022092febdad37d9d6db73e4}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+tervel/util/memory/hp/\hyperlink{list__manager_8h}{list\+\_\+manager.\+h}\end{DoxyCompactItemize}

@@ -1,0 +1,270 @@
+---
+layout: tervel_documentation
+---
+
+<!-- TODO: Replace ciation with paper links -->
+<h1>Tervel: Concepts and Terminology</h1>
+<p>
+  This document provides an overview of concurrent concepts, methodologies, techniques, terminologies, and algorithms used throughout Tervel.
+</p>
+
+<h2>Table of Contents</h2>
+<ul>
+  <li><a href="#intro">Introduction</a></li>
+  <li><a href="#mem">Memory Management</a></li>
+  <li><a href="#progassur">Progress Assurance</a></li>
+  <li><a href="#threadhelping">Inter-Thread Helping</a></li>
+</ul>
+
+<h2 id="intro">Introduction</h2>
+<p>
+We present Tervel, which is a collection of descriptor-based techniques for non-blocking synchronization.
+Tervel contains an approach to the problem of implementing non-blocking synchronization that is based on a progress assurance algorithm~\cite{Feldman2014}, and combined with hazard pointers~\cite{Mic04} and reference counting~\cite{Detlefs2001}.
+</p>
+<p>
+A progress assurance method is a way of ensuring that threads that would otherwise block each other, by writing to the same memory location, cooperate such that forward progress is made.
+This cooperation is facilitated by a descriptor object which stores algorithm-specific information about a thread's operation.
+Hazard pointers are lists of memory blocks that cannot be freed, and an associated algorithm that allows us to know which blocks belong in the list --- reference-counting serves a similar purpose in this paper.
+Knowing which blocks cannot be freed is the biggest problem for any memory reclamation algorithm.
+
+Tervel provides a progress assurance scheme constructed from an announcement table~\cite{Her91,Kogan:2012:MCF:2370036.2145835}, descriptor object~\cite{Barnes1993}, and association model~\cite{Feldman2014}.
+Progress assurance allows the construction of wait-free algorithms by preventing scenarios of livelock in the event a thread is continually preempted by other threads.
+The added complexity of providing for the implementation of wait-free algorithms has little impact on the performance of algorithms that do not require this progress guarantee.
+It has been shown in~\cite{Kogan:2012:MCF:2370036.2145835} that these cases of livelock are exceedingly rare.
+And by extension the times at which a thread will use the progress assurance is also rare.
+In general the cost of including this scheme is one atomic load for every maxDelay calls to an algorithm or data structure's member function, where maxDelay is a compile time constant chosen by the user.
+
+</p>
+<p>
+To handle memory reclamation, Tervel uses thread-local and global memory pools.
+It uses implementations of hazard pointers~\cite{Mic04} and reference counting~\cite{Detlefs2001} to ensure objects are not reused or freed while a thread is operating on them.
+The API for these implementations has been expanded to allow for their use with objects that have complex dependencies.
+</p>
+<p>
+The aforementioned techniques are packaged as a framework that allows users easy access to these algorithms.
+To showcase the ease by which algorithms can be implemented in this framework, we describe the implementations of a wait-free multi-word compare-and-swap algorithm and a hash map data structure.
+In addition to these two algorithms, our initial release includes implementations of a wait-free ring buffer and wait-free vector.
+</p>
+<p>
+Using data structures or algorithms implemented in Tervel in an application is a straight forward procedure.
+It requires a main thread calling an initialization function for the library and each thread that uses Tervel algorithms to call an attachment function.
+Freeing of Tervel resources is accomplished calling the destructor of the object returned from the initialization or attachment function.
+The only task that a user must complete in order to add their own algorithm to the Tervel framework, is to implement an abstract class for a descriptor object.
+</p>
+<p>
+Potential applications for wait-free algorithms include real-time operating systems, and other pieces of software that are used for mission-critical systems that require hard real-time limits.
+Non-blocking algorithms can have a positive impact on performance while also providing progress guarantees to general-use applications that may not need them.
+An example of this has been described in ~\cite{Feldman13}.
+</p>
+<p>
+Our contributions are:
+<ul>
+<li> We present a framework that allows the user to write non-blocking code that is reclaimed in a wait-free manner. This includes a methodology for allowing users to add their own descriptor-based algorithms.One of the key properties of our framework that allows this to be possible is the fact that all library structures are unified and composable.
+</li>
+
+<li> We extend all of the existing techniques that we use in order to provide additional features that are necessary for compatibility with our library; such as, stronger progress guarantees, and composability. Examples of this include the association model that we incorporated into the announcements which are placed in the announcement table, allowing for the design of more complex announcements that remove the risk of individual operations being executed more than once. We also add additional API to our implementation of hazard pointers and reference counting to allow for the protection of objects with complex dependencies. The issues of recursion in non-blocking algorithms that are caused by the inclusion of helping routines, is resolved by two detection methods that Tervel provides as part of its framework.
+</li>
+
+<li> We provide an open-source library that includes implementations of known wait-free algorithms; these include a wait-free multi-word compare-and-swap(MCAS), a wait-free hash map, a wait-free ring buffer, and a wait-free vector.
+</li>
+</ul>
+</p>
+
+<h2 id="mem">Memory Reclamation</h2>
+
+<h4>Overview</h4>
+<p>
+  A number of papers that present concurrent data structures suggest the use of either hazard pointers or reference counting to support reusing memory, however they omit the necessary implementation details~\cite{Feldman2013,Feldman2014,Timnat2012,Harris2001}.
+Tervel provides a comprehensive interface by which developers can add either hazard pointer (HP) or reference counting (RC) protection to shared memory or objects.
+Throughout this paper we refer to the act of applying memory protection as
+watching, the act of removing memory protection as unwatching, and an object that has memory protection as watched.
+An object is watched by calling either a RC or HP specific watch function.
+This function returns a boolean indicating whether or not it was successful.
+False is returned in the event the value at the address the object was read from has changed.
+</p>
+
+<h4>Complex Dependencies</h4>
+
+<p>
+This describes the standard procedure by which HP or RC are typically used and it works well for objects that are only accessible through a single reference.
+For objects that maybe accessed through multiple references, such as those used in the association model, it does not provide adequate protection.
+To protect these objects, we allow the developer to define additional steps that are performed during the watching of an object.
+These steps are encapsulated by an on_watch member function, which is called by the watch function if the object was successfully watched.
+If the on_watch function returns false, the watch function removes the watch on the object and also returns False.
+In addition to the on_watch function, we also provide on_unwatch and on_is_watched functions.
+A developer has access to these functions by extending the HPElement or RCElement abstract class.
+</p>
+
+<p>
+In order to safely reuse objects or return memory to the system, Tervel provides both thread-local and shared memory pools.
+When an object is no longer needed, the object's owner will call a specialized free function based on how the object was allocated.
+An object's owner is a thread responsible for freeing that object.
+An object must be owned by only one thread or it may result in an object being freed by multiple threads.
+In general, an object's owner is determined as follows:
+<ul>
+  <li> An object is initially owned by the thread it was allocated to. </li>
+  <li> A thread takes ownership of an object that it removed all references to it. </li>
+  <li> An object's ownership transfers to a thread if it becomes associated with that thread's operation. </li>
+</ul>
+</p>
+<p>
+The last point is necessary for objects that contain references to other objects.
+For these objects, it is usually the case that neither can be freed while either is watched.
+An object is freed only if the call to is_watched returns false.
+This function internally calls the on_is_watched member function of the passed object.
+This allows a developer to encode logic to prevent an object from being freed prematurely.
+It does require a root object to be identified and have that object's destructor call the appropriate free function for each object referenced by the root object.
+</p>
+<p>
+When freeing an HPElement object, a thread adds the object to its thread-local HPElement memory pool.
+Then for each element in the pool, the is_watched function is called on it.
+If it returns false, the object is removed from the pool and it is returned to the allocator.
+</p>
+<p>
+An RCElement cannot be returned to the allocator, instead it is moved from an unsafe memory pool to a safe memory pool.
+This is because it is possible for the reference count member of the object to be incremented at any point, making it unsafe to return the object to the system.
+When allocating an RCElement the thread will attempt to get an object from the following sources in order: thread-local safe pool, thread-local unsafe pool, shared safe pool, shared unsafe pool, and finally system allocator.
+To prevent a single thread from accumulating too many objects, we implemented a load balancing scheme.
+If a thread contains too many objects, it offloads the excess to the shared pool.
+</p>
+<p>
+To simplify management of subclasses of RCElement that exhibit varying sizes, we force the allocated size of these objects to be a multiple of the system cache.
+A separate pair of unsafe and safe pools are used for each size.
+Our implementation improves memory utilization of an application by allowing all instances of all algorithms to share a common set of memory pools.
+This is in contrast to algorithms that contain their own independent reclamation scheme.
+</p>
+
+
+
+<h2 id="threadhelping">Inter-Thread Helping</h2>
+<h4>Overview</h4>
+<p>
+The most ubiquitous inter-thread helping technique used in non-blocking algorithms is the descriptor object.
+A descriptor object is used to describe a pending operation~\cite{Barnes1993}.
+A thread places a reference to a descriptor object into shared memory.
+Operations that read a reference to a descriptor object will often perform a helping routine.
+For a descriptor-based operation to be lock-free, the descriptor object must contain enough information such that an arbitrary thread can complete the operation described within.
+Descriptor objects are often incorporated into the design of algorithms that modify the value of an address based on the value of one or more other addresses.
+</p>
+<p>
+Tervel provides an abstract descriptor class to guide the implementation of descriptor objects.
+Objects extending this abstract class must provide implementations of the value and complete member functions.
+The value function returns the logical value of the descriptor object.
+This is either the value that the descriptor object replaced, or a value determined by the operation that placed the descriptor.
+The latter is returned if the operation has been completed, but the descriptor has not yet been removed.
+The complete function is used to remove a descriptor object from an address.
+</p>
+<p>
+These functions enable a developer to more readily reason about the correctness of two concurrent operations.
+The developer must only need to consider the case where a thread's calls the complete function of a descriptor object at an arbitrary point in time.
+Without such functions, the developer may have to consider more complex interactions; e.g., two or more different operations executing concurrently.
+</p>
+<p>
+If the algorithm's operations are linearizable, then it can be shown that two concurrent descriptor based operations, operating on overlapping address spaces, are ordered by whichever placed a descriptor object at a common address first.
+The other will either see the descriptor and help, or the operation will be completed first.
+Cyclic dependencies may arise if an operation uses multiple descriptor objects.
+However, this can be prevented by placing descriptor objects in an ascending or descending address order.
+</p>
+<h4>Association Model</h4>
+<p>
+The association model uses two or more descriptor objects, where one object is a parent and the rest are children.
+The parent contains atomic reference(s), which are initially Null, and are set using a cas operation.
+The children contain a reference to the parent object.
+A child and a parent are said to be associated if the child references the parent and the parent references the child.
+
+</p>
+<p>
+When using this model, it is necessary to include specific logic in the on_watch function of a child descriptor object to ensure that it returns True only if the child is associated with its parent.
+In general, the on_watch function attempts to acquire a watch on the parent object and if successful, it attempts to associate them.
+If this association fails, the descriptor object is replaced by its logical value, before returning False
+Otherwise, the function returns True.
+</p>
+<p>
+The watching of the parent object is an important step.
+Consider the case where a thread attempts to associate a child object with a parent object.
+However, just before the cas operation is invoked, the parent object is freed and reused.
+When the cas operation executes, the application could experience undefined behavior.
+<p>
+</p>
+By encapsulating this logic in the on_watch function, we reduce the number of places where an implementation error may occur.
+Instead of having each operation include logic to handle an object's specialized logic, the on_watch function ensures that if an object is watched, it is also associated.
+</p>
+
+<h2 id="progassur"> Progress Assurance </h2>
+<h4>Overview</h4>
+<p>
+It is difficult to use descriptor objects to construct wait-free algorithms.
+This is because there is a theoretical danger where one or more threads will be perpetually helping other threads, thus making no progress in their own operation.
+Because of this, there is no guarantee that a thread will make progress on its own operation, which is contrary to the definition of wait-free.
+</p>
+<p>
+An announcement table scheme can be used in conjunction with descriptor objects to achieve wait-freedom.
+</p>
+
+<h4>Announcement Table</h4>
+<p></p>
+An announcement table allows a delayed thread to announce when it is unable to make progress~\cite{Herlihy1993}.
+Other threads will observe this announcement and help the delayed thread.
+</p>
+<p>
+An announcement differs from a descriptor object in that it describes an entire operation, as opposed to just a portion of an operation.
+Before commencing an operation, a thread is required to check this for table for announcements.
+If an announcement is found, a helping a routine is executed based on the contents of the announcement.
+A thread writes an announcement to its position in the table when it has failed to make progress a predefined number of times.
+</p>
+<p>
+Herlihy's design requires each thread to check the entire table before commencing any operation.
+This check is very costly and makes the design impractical for systems with a large number of threads.
+However, the theoretical upper bound for the number of operations that can complete before an announced operation does is equal to the number of threads.
+</p>
+<p>
+Kogan~\cite{Kogan:2012:MCF:2370036.2145835} proposes new methodology by which a thread checks for an announcement.
+This methodology uses a thread-local counter, checkDelay, to control how often a thread checks for an announcement.
+Another thread-local counter, checkPosition, is used to track the last checked position in the table.
+If after decrementing checkDelay, it is 0, the thread will read the value at checkPosition in the table.
+If the position holds an operation, the thread will help complete that operation.
+Before the function returns, checkPosition is incremented and checkDelay is set equal to the user-defined constant maxDelay.
+This methodology reduces the number of atomic loads caused by including this check from the number of executing threads, numberOfThreads, to (1/maxDelay).
+However, it raises the upper bound on the number of operations that can be completed before an announced operation is guaranteed to complete.
+The theoretical upper bound of this approach is maxDelay * numberOfThreads^2.
+</p>
+
+<h4>Operation Records</h4>
+<p>
+In Tervel we refer to an announcement as an operation record.
+An operation record is a type of descriptor object that contains the information necessary for an arbitrary thread to execute an entire operation.
+To provide O(1) access when checking the table, Tervel uses the methodology described in~\cite{Kogan:2012:MCF:2370036.2145835}.
+</p>
+<p>
+For simple operations, we follow the fast-path-slow-path design methodology~\cite{Kogan:2012:MCF:2370036.2145835} .
+In this methodology, a thread examines the state of an operation record and executes it if its state is not in the complete state.
+When designing more complex operations, this design may allow the ABA problem, or data races to occur.
+For example, if it is uncertain which memory words will be affected by an operation, the same operation may be successfully executed on multiple memory locations, and values could be reused, leading to the ABA problem.
+</p>
+<p>
+To avoid these problems, we employ the association model when implement complex operations.
+In general, a thread will replace a value with references to a child descriptor object that contains a copy of the value.
+Then a thread will attempt to associate the child descriptor with its parent (in this case an operation record).
+If successful, the reference to the child descriptor is replaced by the result of the operation.
+Otherwise, it is replaced by the value contained within.
+</p>
+
+<h4>Recursive Helping</h4>
+<p>
+Recursive helping has not been discussed in the literature but its presence may lead to a scenario where a thread consistently sees new descriptor objects that it must remove before being able to finish executing its current operation.
+Tervel provides two mechanisms by which to detect such an event.
+</p>
+<p>
+The first is that each thread tracks the number of operations it is currently helping.
+If this number exceeds the number of executing threads, the thread will return back to its own operation.
+For a thread to have gotten to this point, it implies that at least one of the operations the thread believes it is helping has completed.
+If this is the case, there no longer exists a dependency between the threads own operation, and the one it is currently helping.
+</p>
+<p>
+The second mechanism has each thread store, in a thread-local variable, the address of a control word.
+When the value of this control word is no longer Null, it implies the thread's operation is complete.
+This allows a thread to detect if some other thread has completed their operation, while it was performing a helping routine.
+For algorithms that use the association model, the control word is often the atomic reference to the child member inside the parent descriptor object.
+</p>
+
+

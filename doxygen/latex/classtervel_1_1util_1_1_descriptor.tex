@@ -1,0 +1,187 @@
+\hypertarget{classtervel_1_1util_1_1_descriptor}{}\section{tervel\+:\+:util\+:\+:Descriptor Class Reference}
+\label{classtervel_1_1util_1_1_descriptor}\index{tervel\+::util\+::\+Descriptor@{tervel\+::util\+::\+Descriptor}}
+
+
+This defines the \hyperlink{classtervel_1_1util_1_1_descriptor}{Descriptor} class, this class is designed to be extend and be used in conjunction with primarily the R\+C memory pool objects.  
+
+
+
+
+{\ttfamily \#include $<$descriptor.\+h$>$}
+
+Inheritance diagram for tervel\+:\+:util\+:\+:Descriptor\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=9.447853cm]{classtervel_1_1util_1_1_descriptor}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classtervel_1_1util_1_1_descriptor_a1c05a0355d92fbf9e48fb3be3b7de6a8}{Descriptor} ()
+\item 
+virtual \hyperlink{classtervel_1_1util_1_1_descriptor_a40ea2f979d8502d3d467d1a9ed5d770d}{$\sim$\+Descriptor} ()
+\item 
+virtual void $\ast$ \hyperlink{classtervel_1_1util_1_1_descriptor_a4303b2a08e3ab67de5533cfb20db87c9}{complete} (void $\ast$current, std\+::atomic$<$ void $\ast$ $>$ $\ast$address)=0
+\begin{DoxyCompactList}\small\item\em This method is implemented by each sub class and must guarantee that upon return that the descriptor no longer exists at the address it was placed. \end{DoxyCompactList}\item 
+virtual void $\ast$ \hyperlink{classtervel_1_1util_1_1_descriptor_a5b443eeb6acf1207f27a6d06c39d4ad4}{get\+\_\+logical\+\_\+value} ()=0
+\begin{DoxyCompactList}\small\item\em This method is implemented by each sub class. \end{DoxyCompactList}\item 
+virtual bool \hyperlink{classtervel_1_1util_1_1_descriptor_ab643e09f20f35149dc820766b0f9ccdb}{on\+\_\+watch} (std\+::atomic$<$ void $\ast$ $>$ $\ast$, void $\ast$)
+\begin{DoxyCompactList}\small\item\em This method is optional to implement for each sub class. \end{DoxyCompactList}\item 
+virtual void \hyperlink{classtervel_1_1util_1_1_descriptor_ad383c66e9e773acdf1533d3735617519}{on\+\_\+unwatch} ()
+\begin{DoxyCompactList}\small\item\em This method must be implemented if on\+\_\+watch is implemented, and is optional otherwise. \end{DoxyCompactList}\item 
+virtual bool \hyperlink{classtervel_1_1util_1_1_descriptor_ac419167492f68c1dc9e8bd517efe5e16}{on\+\_\+is\+\_\+watched} ()
+\begin{DoxyCompactList}\small\item\em This method is optional to implement for each sub class. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classtervel_1_1util_1_1_descriptor_a9e8ac78761a5c86b66014a892ae52d36}{D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N} (\hyperlink{classtervel_1_1util_1_1_descriptor}{Descriptor})
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This defines the \hyperlink{classtervel_1_1util_1_1_descriptor}{Descriptor} class, this class is designed to be extend and be used in conjunction with primarily the R\+C memory pool objects. 
+
+Extending this class allows the developer to quickly create R\+C protected elements.
+
+Classes that extend this class must implement the following functions\+: complete get\+\_\+logical\+\_\+function. This allows for various algorithms and data structures to be executed on overlapping regions of memory.
+
+For use with memory protection schemes we provide the following functions\+: on\+\_\+watch on\+\_\+is\+\_\+watched on\+\_\+unwatch These are called by the memory protection scheme in the event more advance logic is required to safely dereference of free such objects.
+
+If an object contains a reference to other object(s) that can only be freed when it is freed then this must expressed in the objects destructor. 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classtervel_1_1util_1_1_descriptor_a1c05a0355d92fbf9e48fb3be3b7de6a8}{}\index{tervel\+::util\+::\+Descriptor@{tervel\+::util\+::\+Descriptor}!Descriptor@{Descriptor}}
+\index{Descriptor@{Descriptor}!tervel\+::util\+::\+Descriptor@{tervel\+::util\+::\+Descriptor}}
+\subsubsection[{Descriptor()}]{\setlength{\rightskip}{0pt plus 5cm}tervel\+::util\+::\+Descriptor\+::\+Descriptor (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1util_1_1_descriptor_a1c05a0355d92fbf9e48fb3be3b7de6a8}
+\hypertarget{classtervel_1_1util_1_1_descriptor_a40ea2f979d8502d3d467d1a9ed5d770d}{}\index{tervel\+::util\+::\+Descriptor@{tervel\+::util\+::\+Descriptor}!````~Descriptor@{$\sim$\+Descriptor}}
+\index{````~Descriptor@{$\sim$\+Descriptor}!tervel\+::util\+::\+Descriptor@{tervel\+::util\+::\+Descriptor}}
+\subsubsection[{$\sim$\+Descriptor()}]{\setlength{\rightskip}{0pt plus 5cm}virtual tervel\+::util\+::\+Descriptor\+::$\sim$\+Descriptor (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}\label{classtervel_1_1util_1_1_descriptor_a40ea2f979d8502d3d467d1a9ed5d770d}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classtervel_1_1util_1_1_descriptor_a4303b2a08e3ab67de5533cfb20db87c9}{}\index{tervel\+::util\+::\+Descriptor@{tervel\+::util\+::\+Descriptor}!complete@{complete}}
+\index{complete@{complete}!tervel\+::util\+::\+Descriptor@{tervel\+::util\+::\+Descriptor}}
+\subsubsection[{complete(void $\ast$current, std\+::atomic$<$ void $\ast$ $>$ $\ast$address)=0}]{\setlength{\rightskip}{0pt plus 5cm}virtual void$\ast$ tervel\+::util\+::\+Descriptor\+::complete (
+\begin{DoxyParamCaption}
+\item[{void $\ast$}]{current, }
+\item[{std\+::atomic$<$ void $\ast$ $>$ $\ast$}]{address}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [pure virtual]}}\label{classtervel_1_1util_1_1_descriptor_a4303b2a08e3ab67de5533cfb20db87c9}
+
+
+This method is implemented by each sub class and must guarantee that upon return that the descriptor no longer exists at the address it was placed. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em current} & the reference to this object as it is at the address, \\
+\hline
+{\em address} & the location this object was read from \\
+\hline
+\end{DoxyParams}
+
+
+Implemented in \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_pop_op_sub_helper_a8dc2729e8f7ed857c55df0f56361622b}{tervel\+::containers\+::wf\+::vector\+::\+Pop\+Op\+Sub\+Helper$<$ T $>$}, \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_op_helper_a8faede3c50015027a4738b5a626c1ea6}{tervel\+::containers\+::wf\+::vector\+::\+Push\+Op\+Helper$<$ T $>$}, \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_pop_op_helper_a1f92037dcfec837afe0684e119c7344f}{tervel\+::containers\+::wf\+::vector\+::\+Pop\+Op\+Helper$<$ T $>$}, \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_descr_aa8d94d395ac24a37566dfdde8616ff53}{tervel\+::containers\+::wf\+::vector\+::\+Push\+Descr$<$ T $>$}, \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_write_helper_a379b580d78358bf8332119541d8e87c0}{tervel\+::containers\+::wf\+::vector\+::\+Write\+Helper$<$ T $>$}, \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_pop_w_r_a_op_helper_a4bb595dabd2cb32dc4171d82532c3413}{tervel\+::containers\+::wf\+::vector\+::\+Pop\+W\+R\+A\+Op\+Helper$<$ T $>$}, \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_w_r_a_op_helper_a77a582be1e79950c4de106e031d5fa1c}{tervel\+::containers\+::wf\+::vector\+::\+Push\+W\+R\+A\+Op\+Helper$<$ T $>$}, \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_helper_a952a74178febcf25e6f3fe6d3fd8f691}{tervel\+::algorithms\+::wf\+::mcas\+::\+Helper$<$ T $>$}, and \hyperlink{classtervel_1_1containers_1_1lf_1_1mcas__buffer_1_1_node_afee54ad05721b9418bae358383e31f89}{tervel\+::containers\+::lf\+::mcas\+\_\+buffer\+::\+Node$<$ T $>$}.
+
+\hypertarget{classtervel_1_1util_1_1_descriptor_a9e8ac78761a5c86b66014a892ae52d36}{}\index{tervel\+::util\+::\+Descriptor@{tervel\+::util\+::\+Descriptor}!D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N@{D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N}}
+\index{D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N@{D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N}!tervel\+::util\+::\+Descriptor@{tervel\+::util\+::\+Descriptor}}
+\subsubsection[{D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N(\+Descriptor)}]{\setlength{\rightskip}{0pt plus 5cm}tervel\+::util\+::\+Descriptor\+::\+D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N (
+\begin{DoxyParamCaption}
+\item[{{\bf Descriptor}}]{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1util_1_1_descriptor_a9e8ac78761a5c86b66014a892ae52d36}
+\hypertarget{classtervel_1_1util_1_1_descriptor_a5b443eeb6acf1207f27a6d06c39d4ad4}{}\index{tervel\+::util\+::\+Descriptor@{tervel\+::util\+::\+Descriptor}!get\+\_\+logical\+\_\+value@{get\+\_\+logical\+\_\+value}}
+\index{get\+\_\+logical\+\_\+value@{get\+\_\+logical\+\_\+value}!tervel\+::util\+::\+Descriptor@{tervel\+::util\+::\+Descriptor}}
+\subsubsection[{get\+\_\+logical\+\_\+value()=0}]{\setlength{\rightskip}{0pt plus 5cm}virtual void$\ast$ tervel\+::util\+::\+Descriptor\+::get\+\_\+logical\+\_\+value (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [pure virtual]}}\label{classtervel_1_1util_1_1_descriptor_a5b443eeb6acf1207f27a6d06c39d4ad4}
+
+
+This method is implemented by each sub class. 
+
+It returns the logical value of the past address. If the associated operation is still in progress then it will generally return the value that was replaced by this descriptor. Otherwise it will generally return the result of the operation for the specified address.
+
+It can only be called from the static function which protects the object from being reused during the function. 
+
+Implemented in \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_pop_op_sub_helper_a2b908a6e906f82a63af7e662fd6407cd}{tervel\+::containers\+::wf\+::vector\+::\+Pop\+Op\+Sub\+Helper$<$ T $>$}, \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_op_helper_aa8ba2c9d99007ae04325294413601cff}{tervel\+::containers\+::wf\+::vector\+::\+Push\+Op\+Helper$<$ T $>$}, \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_pop_op_helper_a0cd831d37361277e4e212e56d453dd70}{tervel\+::containers\+::wf\+::vector\+::\+Pop\+Op\+Helper$<$ T $>$}, \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_descr_ada1424d353cb887e5f6380f08d0e926a}{tervel\+::containers\+::wf\+::vector\+::\+Push\+Descr$<$ T $>$}, \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_write_helper_ae2c93c4fb9304dd82c25f5d8d9b23487}{tervel\+::containers\+::wf\+::vector\+::\+Write\+Helper$<$ T $>$}, \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_w_r_a_op_helper_a2c1c6135378bd516be4a147d7e9a61a5}{tervel\+::containers\+::wf\+::vector\+::\+Push\+W\+R\+A\+Op\+Helper$<$ T $>$}, \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_helper_ad7fbc9ead7553cb023b0ecec2eaf45d4}{tervel\+::algorithms\+::wf\+::mcas\+::\+Helper$<$ T $>$}, \hyperlink{classtervel_1_1containers_1_1lf_1_1mcas__buffer_1_1_node_aceb3488510a25751e9055f13505a6a7d}{tervel\+::containers\+::lf\+::mcas\+\_\+buffer\+::\+Node$<$ T $>$}, and \hyperlink{class_shift_helper_a4c58f2e7ae4ce7e86a38fea777b3ff2e}{Shift\+Helper$<$ Shift\+Op, T $>$}.
+
+\hypertarget{classtervel_1_1util_1_1_descriptor_ac419167492f68c1dc9e8bd517efe5e16}{}\index{tervel\+::util\+::\+Descriptor@{tervel\+::util\+::\+Descriptor}!on\+\_\+is\+\_\+watched@{on\+\_\+is\+\_\+watched}}
+\index{on\+\_\+is\+\_\+watched@{on\+\_\+is\+\_\+watched}!tervel\+::util\+::\+Descriptor@{tervel\+::util\+::\+Descriptor}}
+\subsubsection[{on\+\_\+is\+\_\+watched()}]{\setlength{\rightskip}{0pt plus 5cm}virtual bool tervel\+::util\+::\+Descriptor\+::on\+\_\+is\+\_\+watched (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}\label{classtervel_1_1util_1_1_descriptor_ac419167492f68c1dc9e8bd517efe5e16}
+
+
+This method is optional to implement for each sub class. 
+
+This function must be implemented if on\+\_\+watch is implemented.
+
+\begin{DoxyReturn}{Returns}
+true if the item is watched by another thread 
+\end{DoxyReturn}
+
+
+Reimplemented in \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_pop_op_helper_afc30533f275eb109ae847e0038404360}{tervel\+::containers\+::wf\+::vector\+::\+Pop\+Op\+Helper$<$ T $>$}.
+
+\hypertarget{classtervel_1_1util_1_1_descriptor_ad383c66e9e773acdf1533d3735617519}{}\index{tervel\+::util\+::\+Descriptor@{tervel\+::util\+::\+Descriptor}!on\+\_\+unwatch@{on\+\_\+unwatch}}
+\index{on\+\_\+unwatch@{on\+\_\+unwatch}!tervel\+::util\+::\+Descriptor@{tervel\+::util\+::\+Descriptor}}
+\subsubsection[{on\+\_\+unwatch()}]{\setlength{\rightskip}{0pt plus 5cm}virtual void tervel\+::util\+::\+Descriptor\+::on\+\_\+unwatch (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}\label{classtervel_1_1util_1_1_descriptor_ad383c66e9e773acdf1533d3735617519}
+
+
+This method must be implemented if on\+\_\+watch is implemented, and is optional otherwise. 
+
+It must unwatch any object watched by on\+\_\+watch. It should not unwatch itself. It is called when this descriptor is unwatched. 
+
+Reimplemented in \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_pop_op_helper_a90ee1e07905e336a864184e96d04bf96}{tervel\+::containers\+::wf\+::vector\+::\+Pop\+Op\+Helper$<$ T $>$}.
+
+\hypertarget{classtervel_1_1util_1_1_descriptor_ab643e09f20f35149dc820766b0f9ccdb}{}\index{tervel\+::util\+::\+Descriptor@{tervel\+::util\+::\+Descriptor}!on\+\_\+watch@{on\+\_\+watch}}
+\index{on\+\_\+watch@{on\+\_\+watch}!tervel\+::util\+::\+Descriptor@{tervel\+::util\+::\+Descriptor}}
+\subsubsection[{on\+\_\+watch(std\+::atomic$<$ void $\ast$ $>$ $\ast$, void $\ast$)}]{\setlength{\rightskip}{0pt plus 5cm}virtual bool tervel\+::util\+::\+Descriptor\+::on\+\_\+watch (
+\begin{DoxyParamCaption}
+\item[{std\+::atomic$<$ void $\ast$ $>$ $\ast$}]{, }
+\item[{void $\ast$}]{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}\label{classtervel_1_1util_1_1_descriptor_ab643e09f20f35149dc820766b0f9ccdb}
+
+
+This method is optional to implement for each sub class. 
+
+In the event there is a complex dependency between descriptor objects, where watching one implies performing other actions, such as watching a parent object, a developer will implement this function to encapsulate that logic
+
+This function is called by the static watch function It should not watch itself.
+
+
+\begin{DoxyParams}{Parameters}
+{\em address} & The location to check. \\
+\hline
+{\em expected} & The expected value for that location\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if successful, false otherwise 
+\end{DoxyReturn}
+
+
+Reimplemented in \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_pop_op_sub_helper_ae0fcfb9527874f0b321b0fd48a295833}{tervel\+::containers\+::wf\+::vector\+::\+Pop\+Op\+Sub\+Helper$<$ T $>$}, \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_op_helper_a26ce47d7b64eedcf1983508f5a60d5b7}{tervel\+::containers\+::wf\+::vector\+::\+Push\+Op\+Helper$<$ T $>$}, \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_pop_op_helper_a2b421b2a3cb984bd94abe3ee254ac819}{tervel\+::containers\+::wf\+::vector\+::\+Pop\+Op\+Helper$<$ T $>$}, \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_write_helper_a4c914b2218dfcfffaae66e85ff77e6df}{tervel\+::containers\+::wf\+::vector\+::\+Write\+Helper$<$ T $>$}, \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_w_r_a_op_helper_ab330b531d19d3ef8c8b86e239ce22215}{tervel\+::containers\+::wf\+::vector\+::\+Push\+W\+R\+A\+Op\+Helper$<$ T $>$}, \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_helper_a381449ae3b9624302008a581610f76b5}{tervel\+::algorithms\+::wf\+::mcas\+::\+Helper$<$ T $>$}, and \hyperlink{class_shift_helper_ad7f8e39f62c9646ec5862df3ee1e5ab4}{Shift\+Helper$<$ Shift\+Op, T $>$}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+tervel/util/\hyperlink{descriptor_8h}{descriptor.\+h}\end{DoxyCompactItemize}

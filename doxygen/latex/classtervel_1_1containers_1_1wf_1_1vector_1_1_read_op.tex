@@ -1,0 +1,91 @@
+\hypertarget{classtervel_1_1containers_1_1wf_1_1vector_1_1_read_op}{}\section{tervel\+:\+:containers\+:\+:wf\+:\+:vector\+:\+:Read\+Op$<$ T $>$ Class Template Reference}
+\label{classtervel_1_1containers_1_1wf_1_1vector_1_1_read_op}\index{tervel\+::containers\+::wf\+::vector\+::\+Read\+Op$<$ T $>$@{tervel\+::containers\+::wf\+::vector\+::\+Read\+Op$<$ T $>$}}
+
+
+{\ttfamily \#include $<$read\+\_\+op.\+h$>$}
+
+Inheritance diagram for tervel\+:\+:containers\+:\+:wf\+:\+:vector\+:\+:Read\+Op$<$ T $>$\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{classtervel_1_1containers_1_1wf_1_1vector_1_1_read_op}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_read_op_ad0c7ce2b9563e63413925ae67a2cc0cc}{Read\+Op} (Vector$<$ T $>$ $\ast$vec, size\+\_\+t idx)
+\item 
+void \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_read_op_ad2c5f63b0c39e1b30350656fcdd44538}{help\+\_\+complete} ()
+\begin{DoxyCompactList}\small\item\em Implementations of this function that upon its return the operation described in the Op\+Record has been completed. \end{DoxyCompactList}\item 
+bool \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_read_op_af4e89911f2abe9ec130f5e03b1c98a50}{result} (T \&expected)
+\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+Vector$<$ T $>$ $\ast$ \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_read_op_aa345d1b47f36e47a74b185ea1ab11390}{vec\+\_\+}
+\item 
+size\+\_\+t \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_read_op_ae16e934cbd5a237eb3f3c8dca70c4aa0}{idx\+\_\+}
+\item 
+std\+::atomic$<$ T $>$ \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_read_op_accb5f2574e02c570e6fc7386e65d2ddf}{value\+\_\+} \{Vector$<$T$>$\+::c\+\_\+not\+\_\+value\+\_\+\}
+\end{DoxyCompactItemize}
+\subsection*{Static Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static const T \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_read_op_a85fb04ba215b356679573518921879e0}{c\+\_\+fail\+\_\+value\+\_\+} \{static\+\_\+cast$<$T$>$($\sim$0x1\+L)\}
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1vector_1_1_read_op_ad0c7ce2b9563e63413925ae67a2cc0cc}{}\index{tervel\+::containers\+::wf\+::vector\+::\+Read\+Op@{tervel\+::containers\+::wf\+::vector\+::\+Read\+Op}!Read\+Op@{Read\+Op}}
+\index{Read\+Op@{Read\+Op}!tervel\+::containers\+::wf\+::vector\+::\+Read\+Op@{tervel\+::containers\+::wf\+::vector\+::\+Read\+Op}}
+\subsubsection[{Read\+Op(\+Vector$<$ T $>$ $\ast$vec, size\+\_\+t idx)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T $>$ {\bf tervel\+::containers\+::wf\+::vector\+::\+Read\+Op}$<$ T $>$\+::{\bf Read\+Op} (
+\begin{DoxyParamCaption}
+\item[{Vector$<$ T $>$ $\ast$}]{vec, }
+\item[{size\+\_\+t}]{idx}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1containers_1_1wf_1_1vector_1_1_read_op_ad0c7ce2b9563e63413925ae67a2cc0cc}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1vector_1_1_read_op_ad2c5f63b0c39e1b30350656fcdd44538}{}\index{tervel\+::containers\+::wf\+::vector\+::\+Read\+Op@{tervel\+::containers\+::wf\+::vector\+::\+Read\+Op}!help\+\_\+complete@{help\+\_\+complete}}
+\index{help\+\_\+complete@{help\+\_\+complete}!tervel\+::containers\+::wf\+::vector\+::\+Read\+Op@{tervel\+::containers\+::wf\+::vector\+::\+Read\+Op}}
+\subsubsection[{help\+\_\+complete()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T $>$ void {\bf tervel\+::containers\+::wf\+::vector\+::\+Read\+Op}$<$ T $>$\+::help\+\_\+complete (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}\label{classtervel_1_1containers_1_1wf_1_1vector_1_1_read_op_ad2c5f63b0c39e1b30350656fcdd44538}
+
+
+Implementations of this function that upon its return the operation described in the Op\+Record has been completed. 
+
+As such it must be thread-\/safe and the extending class must contain all the information necessary to complete the operation. 
+
+Implements \hyperlink{classtervel_1_1util_1_1_op_record_aa75ab39688a8d4cceb6a1ef0409537c0}{tervel\+::util\+::\+Op\+Record}.
+
+\hypertarget{classtervel_1_1containers_1_1wf_1_1vector_1_1_read_op_af4e89911f2abe9ec130f5e03b1c98a50}{}\index{tervel\+::containers\+::wf\+::vector\+::\+Read\+Op@{tervel\+::containers\+::wf\+::vector\+::\+Read\+Op}!result@{result}}
+\index{result@{result}!tervel\+::containers\+::wf\+::vector\+::\+Read\+Op@{tervel\+::containers\+::wf\+::vector\+::\+Read\+Op}}
+\subsubsection[{result(\+T \&expected)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T $>$ bool {\bf tervel\+::containers\+::wf\+::vector\+::\+Read\+Op}$<$ T $>$\+::result (
+\begin{DoxyParamCaption}
+\item[{T \&}]{expected}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1containers_1_1wf_1_1vector_1_1_read_op_af4e89911f2abe9ec130f5e03b1c98a50}
+
+
+\subsection{Member Data Documentation}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1vector_1_1_read_op_a85fb04ba215b356679573518921879e0}{}\index{tervel\+::containers\+::wf\+::vector\+::\+Read\+Op@{tervel\+::containers\+::wf\+::vector\+::\+Read\+Op}!c\+\_\+fail\+\_\+value\+\_\+@{c\+\_\+fail\+\_\+value\+\_\+}}
+\index{c\+\_\+fail\+\_\+value\+\_\+@{c\+\_\+fail\+\_\+value\+\_\+}!tervel\+::containers\+::wf\+::vector\+::\+Read\+Op@{tervel\+::containers\+::wf\+::vector\+::\+Read\+Op}}
+\subsubsection[{c\+\_\+fail\+\_\+value\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T $>$ const T {\bf tervel\+::containers\+::wf\+::vector\+::\+Read\+Op}$<$ T $>$\+::c\+\_\+fail\+\_\+value\+\_\+ \{static\+\_\+cast$<$T$>$($\sim$0x1\+L)\}\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [private]}}\label{classtervel_1_1containers_1_1wf_1_1vector_1_1_read_op_a85fb04ba215b356679573518921879e0}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1vector_1_1_read_op_ae16e934cbd5a237eb3f3c8dca70c4aa0}{}\index{tervel\+::containers\+::wf\+::vector\+::\+Read\+Op@{tervel\+::containers\+::wf\+::vector\+::\+Read\+Op}!idx\+\_\+@{idx\+\_\+}}
+\index{idx\+\_\+@{idx\+\_\+}!tervel\+::containers\+::wf\+::vector\+::\+Read\+Op@{tervel\+::containers\+::wf\+::vector\+::\+Read\+Op}}
+\subsubsection[{idx\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T $>$ size\+\_\+t {\bf tervel\+::containers\+::wf\+::vector\+::\+Read\+Op}$<$ T $>$\+::idx\+\_\+\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1containers_1_1wf_1_1vector_1_1_read_op_ae16e934cbd5a237eb3f3c8dca70c4aa0}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1vector_1_1_read_op_accb5f2574e02c570e6fc7386e65d2ddf}{}\index{tervel\+::containers\+::wf\+::vector\+::\+Read\+Op@{tervel\+::containers\+::wf\+::vector\+::\+Read\+Op}!value\+\_\+@{value\+\_\+}}
+\index{value\+\_\+@{value\+\_\+}!tervel\+::containers\+::wf\+::vector\+::\+Read\+Op@{tervel\+::containers\+::wf\+::vector\+::\+Read\+Op}}
+\subsubsection[{value\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T $>$ std\+::atomic$<$T$>$ {\bf tervel\+::containers\+::wf\+::vector\+::\+Read\+Op}$<$ T $>$\+::value\+\_\+ \{Vector$<$T$>$\+::c\+\_\+not\+\_\+value\+\_\+\}\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1containers_1_1wf_1_1vector_1_1_read_op_accb5f2574e02c570e6fc7386e65d2ddf}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1vector_1_1_read_op_aa345d1b47f36e47a74b185ea1ab11390}{}\index{tervel\+::containers\+::wf\+::vector\+::\+Read\+Op@{tervel\+::containers\+::wf\+::vector\+::\+Read\+Op}!vec\+\_\+@{vec\+\_\+}}
+\index{vec\+\_\+@{vec\+\_\+}!tervel\+::containers\+::wf\+::vector\+::\+Read\+Op@{tervel\+::containers\+::wf\+::vector\+::\+Read\+Op}}
+\subsubsection[{vec\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T $>$ Vector$<$T$>$$\ast$ {\bf tervel\+::containers\+::wf\+::vector\+::\+Read\+Op}$<$ T $>$\+::vec\+\_\+\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1containers_1_1wf_1_1vector_1_1_read_op_aa345d1b47f36e47a74b185ea1ab11390}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+tervel/containers/wf/vector/\hyperlink{read__op_8h}{read\+\_\+op.\+h}\end{DoxyCompactItemize}

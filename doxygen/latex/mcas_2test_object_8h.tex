@@ -1,0 +1,129 @@
+\hypertarget{mcas_2test_object_8h}{}\section{tervel/tests/mcas/test\+Object.h File Reference}
+\label{mcas_2test_object_8h}\index{tervel/tests/mcas/test\+Object.\+h@{tervel/tests/mcas/test\+Object.\+h}}
+{\ttfamily \#include $<$functional$>$}\\*
+{\ttfamily \#include $<$climits$>$}\\*
+{\ttfamily \#include $<$assert.\+h$>$}\\*
+{\ttfamily \#include $<$atomic$>$}\\*
+{\ttfamily \#include $<$random$>$}\\*
+{\ttfamily \#include $<$string$>$}\\*
+{\ttfamily \#include $<$cstdint$>$}\\*
+{\ttfamily \#include $<$stdio.\+h$>$}\\*
+{\ttfamily \#include $<$iostream$>$}\\*
+{\ttfamily \#include $<$gflags/gflags.\+h$>$}\\*
+{\ttfamily \#include $<$tervel/tests/mcas/container\+\_\+api.\+h$>$}\\*
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \hyperlink{class_test_object}{Test\+Object}
+\item 
+struct \hyperlink{struct_test_object_1_1counter}{Test\+Object\+::counter}
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef uint64\+\_\+t \hyperlink{mcas_2test_object_8h_ad777bf08d8e2b01df17ba5e3c51ae11f}{Value}
+\end{DoxyCompactItemize}
+\subsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \hyperlink{mcas_2test_object_8h_afab3ba69fc7c858ce3b8ba2753db9a73}{Test\+Type} \+: size\+\_\+t \{ \hyperlink{mcas_2test_object_8h_afab3ba69fc7c858ce3b8ba2753db9a73a55d53a58c51323bc7dc9d353d175c8f9}{Test\+Type\+::\+U\+P\+D\+A\+T\+E\+O\+B\+J\+E\+C\+T} = 0, 
+\hyperlink{mcas_2test_object_8h_afab3ba69fc7c858ce3b8ba2753db9a73a82804bd0733629b60c2d52010488b1a1}{Test\+Type\+::\+U\+P\+D\+A\+T\+E\+M\+U\+L\+T\+I\+O\+B\+J\+E\+C\+T} = 1, 
+\hyperlink{mcas_2test_object_8h_afab3ba69fc7c858ce3b8ba2753db9a73a1b8c84c84b8e7cb0458d76940ac00eb7}{Test\+Type\+::\+R\+A\+N\+D\+O\+M\+O\+V\+E\+R\+L\+A\+P\+S} = 2
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{mcas_2test_object_8h_a2585381311043ec0603bbc0092fb05ac}{D\+E\+F\+I\+N\+E\+\_\+int32} (array\+\_\+length, 32,\char`\"{}The size of the region to test on.\char`\"{})
+\begin{DoxyCompactList}\small\item\em Change this when including a new data structure. \end{DoxyCompactList}\item 
+\hyperlink{mcas_2test_object_8h_a021d22de0cacb50ca0b4883e5f686b2f}{D\+E\+F\+I\+N\+E\+\_\+int32} (mcas\+\_\+size, 2,\char`\"{}The number of words in a mcas operation.\char`\"{})
+\item 
+\hyperlink{mcas_2test_object_8h_ad8fdecff6a596b90144c4d2fa814f252}{D\+E\+F\+I\+N\+E\+\_\+int32} (operation\+\_\+type, 0,\char`\"{}The type of test to execute\char`\"{}\char`\"{}(0\+: updating single multi-\/word object\char`\"{}\char`\"{}, 1\+: updating multiple objects\char`\"{}\char`\"{}, 2\+: updating overlapping multi-\/word updates)\char`\"{})
+\begin{DoxyCompactList}\small\item\em Operation Parameters. \end{DoxyCompactList}\item 
+\hyperlink{mcas_2test_object_8h_a19fd1aca461345d73ac2e7b416390853}{D\+E\+F\+I\+N\+E\+\_\+int32} (num\+\_\+threads, 1,\char`\"{}The number of threads to spawn.\char`\"{})
+\begin{DoxyCompactList}\small\item\em Arguments for Tester. \end{DoxyCompactList}\item 
+\hyperlink{mcas_2test_object_8h_a9478eb45e3743162c827d57e162c93bb}{D\+E\+F\+I\+N\+E\+\_\+int32} (execution\+\_\+time, 5,\char`\"{}The amount of time to run the tests\char`\"{})
+\end{DoxyCompactItemize}
+
+
+\subsection{Typedef Documentation}
+\hypertarget{mcas_2test_object_8h_ad777bf08d8e2b01df17ba5e3c51ae11f}{}\index{mcas/test\+Object.\+h@{mcas/test\+Object.\+h}!Value@{Value}}
+\index{Value@{Value}!mcas/test\+Object.\+h@{mcas/test\+Object.\+h}}
+\subsubsection[{Value}]{\setlength{\rightskip}{0pt plus 5cm}typedef uint64\+\_\+t {\bf Value}}\label{mcas_2test_object_8h_ad777bf08d8e2b01df17ba5e3c51ae11f}
+
+
+\subsection{Enumeration Type Documentation}
+\hypertarget{mcas_2test_object_8h_afab3ba69fc7c858ce3b8ba2753db9a73}{}\index{mcas/test\+Object.\+h@{mcas/test\+Object.\+h}!Test\+Type@{Test\+Type}}
+\index{Test\+Type@{Test\+Type}!mcas/test\+Object.\+h@{mcas/test\+Object.\+h}}
+\subsubsection[{Test\+Type}]{\setlength{\rightskip}{0pt plus 5cm}enum {\bf Test\+Type} \+: size\+\_\+t\hspace{0.3cm}{\ttfamily [strong]}}\label{mcas_2test_object_8h_afab3ba69fc7c858ce3b8ba2753db9a73}
+\begin{Desc}
+\item[Enumerator]\par
+\begin{description}
+\index{U\+P\+D\+A\+T\+E\+O\+B\+J\+E\+C\+T@{U\+P\+D\+A\+T\+E\+O\+B\+J\+E\+C\+T}!mcas/test\+Object.\+h@{mcas/test\+Object.\+h}}\index{mcas/test\+Object.\+h@{mcas/test\+Object.\+h}!U\+P\+D\+A\+T\+E\+O\+B\+J\+E\+C\+T@{U\+P\+D\+A\+T\+E\+O\+B\+J\+E\+C\+T}}\item[{\em 
+\hypertarget{mcas_2test_object_8h_afab3ba69fc7c858ce3b8ba2753db9a73a55d53a58c51323bc7dc9d353d175c8f9}{}U\+P\+D\+A\+T\+E\+O\+B\+J\+E\+C\+T\label{mcas_2test_object_8h_afab3ba69fc7c858ce3b8ba2753db9a73a55d53a58c51323bc7dc9d353d175c8f9}
+}]\index{U\+P\+D\+A\+T\+E\+M\+U\+L\+T\+I\+O\+B\+J\+E\+C\+T@{U\+P\+D\+A\+T\+E\+M\+U\+L\+T\+I\+O\+B\+J\+E\+C\+T}!mcas/test\+Object.\+h@{mcas/test\+Object.\+h}}\index{mcas/test\+Object.\+h@{mcas/test\+Object.\+h}!U\+P\+D\+A\+T\+E\+M\+U\+L\+T\+I\+O\+B\+J\+E\+C\+T@{U\+P\+D\+A\+T\+E\+M\+U\+L\+T\+I\+O\+B\+J\+E\+C\+T}}\item[{\em 
+\hypertarget{mcas_2test_object_8h_afab3ba69fc7c858ce3b8ba2753db9a73a82804bd0733629b60c2d52010488b1a1}{}U\+P\+D\+A\+T\+E\+M\+U\+L\+T\+I\+O\+B\+J\+E\+C\+T\label{mcas_2test_object_8h_afab3ba69fc7c858ce3b8ba2753db9a73a82804bd0733629b60c2d52010488b1a1}
+}]\index{R\+A\+N\+D\+O\+M\+O\+V\+E\+R\+L\+A\+P\+S@{R\+A\+N\+D\+O\+M\+O\+V\+E\+R\+L\+A\+P\+S}!mcas/test\+Object.\+h@{mcas/test\+Object.\+h}}\index{mcas/test\+Object.\+h@{mcas/test\+Object.\+h}!R\+A\+N\+D\+O\+M\+O\+V\+E\+R\+L\+A\+P\+S@{R\+A\+N\+D\+O\+M\+O\+V\+E\+R\+L\+A\+P\+S}}\item[{\em 
+\hypertarget{mcas_2test_object_8h_afab3ba69fc7c858ce3b8ba2753db9a73a1b8c84c84b8e7cb0458d76940ac00eb7}{}R\+A\+N\+D\+O\+M\+O\+V\+E\+R\+L\+A\+P\+S\label{mcas_2test_object_8h_afab3ba69fc7c858ce3b8ba2753db9a73a1b8c84c84b8e7cb0458d76940ac00eb7}
+}]\end{description}
+\end{Desc}
+
+
+\subsection{Function Documentation}
+\hypertarget{mcas_2test_object_8h_a2585381311043ec0603bbc0092fb05ac}{}\index{mcas/test\+Object.\+h@{mcas/test\+Object.\+h}!D\+E\+F\+I\+N\+E\+\_\+int32@{D\+E\+F\+I\+N\+E\+\_\+int32}}
+\index{D\+E\+F\+I\+N\+E\+\_\+int32@{D\+E\+F\+I\+N\+E\+\_\+int32}!mcas/test\+Object.\+h@{mcas/test\+Object.\+h}}
+\subsubsection[{D\+E\+F\+I\+N\+E\+\_\+int32(array\+\_\+length, 32,""The size of the region to test on."")}]{\setlength{\rightskip}{0pt plus 5cm}D\+E\+F\+I\+N\+E\+\_\+int32 (
+\begin{DoxyParamCaption}
+\item[{array\+\_\+length}]{, }
+\item[{32}]{, }
+\item[{\char`\"{}The size of the region to test on.\char`\"{}}]{}
+\end{DoxyParamCaption}
+)}\label{mcas_2test_object_8h_a2585381311043ec0603bbc0092fb05ac}
+
+
+Change this when including a new data structure. 
+
+Change these when adapting to a new data structures \hypertarget{mcas_2test_object_8h_a021d22de0cacb50ca0b4883e5f686b2f}{}\index{mcas/test\+Object.\+h@{mcas/test\+Object.\+h}!D\+E\+F\+I\+N\+E\+\_\+int32@{D\+E\+F\+I\+N\+E\+\_\+int32}}
+\index{D\+E\+F\+I\+N\+E\+\_\+int32@{D\+E\+F\+I\+N\+E\+\_\+int32}!mcas/test\+Object.\+h@{mcas/test\+Object.\+h}}
+\subsubsection[{D\+E\+F\+I\+N\+E\+\_\+int32(mcas\+\_\+size, 2,""The number of words in a mcas operation."")}]{\setlength{\rightskip}{0pt plus 5cm}D\+E\+F\+I\+N\+E\+\_\+int32 (
+\begin{DoxyParamCaption}
+\item[{mcas\+\_\+size}]{, }
+\item[{2}]{, }
+\item[{\char`\"{}The number of words in a mcas operation.\char`\"{}}]{}
+\end{DoxyParamCaption}
+)}\label{mcas_2test_object_8h_a021d22de0cacb50ca0b4883e5f686b2f}
+\hypertarget{mcas_2test_object_8h_ad8fdecff6a596b90144c4d2fa814f252}{}\index{mcas/test\+Object.\+h@{mcas/test\+Object.\+h}!D\+E\+F\+I\+N\+E\+\_\+int32@{D\+E\+F\+I\+N\+E\+\_\+int32}}
+\index{D\+E\+F\+I\+N\+E\+\_\+int32@{D\+E\+F\+I\+N\+E\+\_\+int32}!mcas/test\+Object.\+h@{mcas/test\+Object.\+h}}
+\subsubsection[{D\+E\+F\+I\+N\+E\+\_\+int32(operation\+\_\+type, 0,""The type of test to execute""""(0\+: updating single multi-\/word object"""", 1\+: updating multiple objects"""", 2\+: updating overlapping multi-\/word updates)"")}]{\setlength{\rightskip}{0pt plus 5cm}D\+E\+F\+I\+N\+E\+\_\+int32 (
+\begin{DoxyParamCaption}
+\item[{operation\+\_\+type}]{, }
+\item[{0}]{, }
+\item[{\char`\"{}The type of test to execute\char`\"{}\char`\"{}(0\+: updating single multi-\/word object\char`\"{}\char`\"{}, 1\+: updating multiple objects\char`\"{}\char`\"{}, 2\+: updating overlapping multi-\/word updates)\char`\"{}}]{}
+\end{DoxyParamCaption}
+)}\label{mcas_2test_object_8h_ad8fdecff6a596b90144c4d2fa814f252}
+
+
+Operation Parameters. 
+
+\hypertarget{mcas_2test_object_8h_a19fd1aca461345d73ac2e7b416390853}{}\index{mcas/test\+Object.\+h@{mcas/test\+Object.\+h}!D\+E\+F\+I\+N\+E\+\_\+int32@{D\+E\+F\+I\+N\+E\+\_\+int32}}
+\index{D\+E\+F\+I\+N\+E\+\_\+int32@{D\+E\+F\+I\+N\+E\+\_\+int32}!mcas/test\+Object.\+h@{mcas/test\+Object.\+h}}
+\subsubsection[{D\+E\+F\+I\+N\+E\+\_\+int32(num\+\_\+threads, 1,""The number of threads to spawn."")}]{\setlength{\rightskip}{0pt plus 5cm}D\+E\+F\+I\+N\+E\+\_\+int32 (
+\begin{DoxyParamCaption}
+\item[{num\+\_\+threads}]{, }
+\item[{1}]{, }
+\item[{\char`\"{}The number of threads to spawn.\char`\"{}}]{}
+\end{DoxyParamCaption}
+)}\label{mcas_2test_object_8h_a19fd1aca461345d73ac2e7b416390853}
+
+
+Arguments for Tester. 
+
+\hypertarget{mcas_2test_object_8h_a9478eb45e3743162c827d57e162c93bb}{}\index{mcas/test\+Object.\+h@{mcas/test\+Object.\+h}!D\+E\+F\+I\+N\+E\+\_\+int32@{D\+E\+F\+I\+N\+E\+\_\+int32}}
+\index{D\+E\+F\+I\+N\+E\+\_\+int32@{D\+E\+F\+I\+N\+E\+\_\+int32}!mcas/test\+Object.\+h@{mcas/test\+Object.\+h}}
+\subsubsection[{D\+E\+F\+I\+N\+E\+\_\+int32(execution\+\_\+time, 5,""The amount of time to run the tests"")}]{\setlength{\rightskip}{0pt plus 5cm}D\+E\+F\+I\+N\+E\+\_\+int32 (
+\begin{DoxyParamCaption}
+\item[{execution\+\_\+time}]{, }
+\item[{5}]{, }
+\item[{\char`\"{}The amount of time to run the tests\char`\"{}}]{}
+\end{DoxyParamCaption}
+)}\label{mcas_2test_object_8h_a9478eb45e3743162c827d57e162c93bb}

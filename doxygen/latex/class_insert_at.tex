@@ -1,0 +1,128 @@
+\hypertarget{class_insert_at}{}\section{Insert\+At Class Reference}
+\label{class_insert_at}\index{Insert\+At@{Insert\+At}}
+
+
+{\ttfamily \#include $<$insertat\+\_\+op.\+h$>$}
+
+Inheritance diagram for Insert\+At\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_insert_at}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{class_insert_at_a44d47d24a48f8bcedd833129dadedea0}{init} (int p, void $\ast$v)
+\item 
+\hyperlink{class_insert_at_aa86ff4bb5674c3be14a46a29dacd3d9f}{Insert\+At} (int p, void $\ast$v)
+\item 
+void \hyperlink{class_insert_at_a80960f22e24c552a92f02963b3f9032c}{execute} (W\+F\+Vector $\ast$vec)
+\item 
+bool \hyperlink{class_insert_at_aca674527cd17b29b486a3082ab0437a4}{s\+\_\+execute} (W\+F\+Vector $\ast$vec)
+\item 
+void \hyperlink{class_insert_at_af3728e08aaa557a8c99ba81564120597}{cleanup} (W\+F\+Vector $\ast$vec, int \hyperlink{class_insert_at_a926928e16ec2ab511860662a01f3082a}{pos})
+\item 
+bool \hyperlink{class_insert_at_a2d95031cbed8c06477dd5001588757ca}{complete} (W\+F\+Vector $\ast$vec, int \hyperlink{class_insert_at_a926928e16ec2ab511860662a01f3082a}{pos})
+\item 
+bool \hyperlink{class_insert_at_a09d79636c2ba9023e3600d80d0af314c}{try\+Free} ()
+\item 
+void $\ast$ \hyperlink{class_insert_at_a7ccae8ef989a96aece9e7aef1afbd553}{read\+Through} (\hyperlink{class_shift_helper}{Shift\+Helper}$<$ \hyperlink{class_insert_at}{Insert\+At} $>$ $\ast$helper)
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+void $\ast$ \hyperlink{class_insert_at_a4cd84946e247761597bde3791508d820}{rvalue}
+\item 
+int \hyperlink{class_insert_at_a926928e16ec2ab511860662a01f3082a}{pos}
+\item 
+std\+::atomic$<$ \hyperlink{class_shift_helper}{Shift\+Helper}$<$ \hyperlink{class_insert_at}{Insert\+At} $>$ $\ast$ $>$ \hyperlink{class_insert_at_a05c82ae139b7af1675eeaa58dd8f930a}{next}
+\item 
+std\+::atomic$<$ bool $>$ \hyperlink{class_insert_at_a258e77cb8a4bf7676290c28428b58d5c}{is\+Complete}
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{class_insert_at_aa86ff4bb5674c3be14a46a29dacd3d9f}{}\index{Insert\+At@{Insert\+At}!Insert\+At@{Insert\+At}}
+\index{Insert\+At@{Insert\+At}!Insert\+At@{Insert\+At}}
+\subsubsection[{Insert\+At(int p, void $\ast$v)}]{\setlength{\rightskip}{0pt plus 5cm}Insert\+At\+::\+Insert\+At (
+\begin{DoxyParamCaption}
+\item[{int}]{p, }
+\item[{void $\ast$}]{v}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_insert_at_aa86ff4bb5674c3be14a46a29dacd3d9f}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_insert_at_af3728e08aaa557a8c99ba81564120597}{}\index{Insert\+At@{Insert\+At}!cleanup@{cleanup}}
+\index{cleanup@{cleanup}!Insert\+At@{Insert\+At}}
+\subsubsection[{cleanup(\+W\+F\+Vector $\ast$vec, int pos)}]{\setlength{\rightskip}{0pt plus 5cm}void Insert\+At\+::cleanup (
+\begin{DoxyParamCaption}
+\item[{W\+F\+Vector $\ast$}]{vec, }
+\item[{int}]{pos}
+\end{DoxyParamCaption}
+)}\label{class_insert_at_af3728e08aaa557a8c99ba81564120597}
+\hypertarget{class_insert_at_a2d95031cbed8c06477dd5001588757ca}{}\index{Insert\+At@{Insert\+At}!complete@{complete}}
+\index{complete@{complete}!Insert\+At@{Insert\+At}}
+\subsubsection[{complete(\+W\+F\+Vector $\ast$vec, int pos)}]{\setlength{\rightskip}{0pt plus 5cm}bool Insert\+At\+::complete (
+\begin{DoxyParamCaption}
+\item[{W\+F\+Vector $\ast$}]{vec, }
+\item[{int}]{pos}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_insert_at_a2d95031cbed8c06477dd5001588757ca}
+\hypertarget{class_insert_at_a80960f22e24c552a92f02963b3f9032c}{}\index{Insert\+At@{Insert\+At}!execute@{execute}}
+\index{execute@{execute}!Insert\+At@{Insert\+At}}
+\subsubsection[{execute(\+W\+F\+Vector $\ast$vec)}]{\setlength{\rightskip}{0pt plus 5cm}void Insert\+At\+::execute (
+\begin{DoxyParamCaption}
+\item[{W\+F\+Vector $\ast$}]{vec}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_insert_at_a80960f22e24c552a92f02963b3f9032c}
+\hypertarget{class_insert_at_a44d47d24a48f8bcedd833129dadedea0}{}\index{Insert\+At@{Insert\+At}!init@{init}}
+\index{init@{init}!Insert\+At@{Insert\+At}}
+\subsubsection[{init(int p, void $\ast$v)}]{\setlength{\rightskip}{0pt plus 5cm}void Insert\+At\+::init (
+\begin{DoxyParamCaption}
+\item[{int}]{p, }
+\item[{void $\ast$}]{v}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_insert_at_a44d47d24a48f8bcedd833129dadedea0}
+\hypertarget{class_insert_at_a7ccae8ef989a96aece9e7aef1afbd553}{}\index{Insert\+At@{Insert\+At}!read\+Through@{read\+Through}}
+\index{read\+Through@{read\+Through}!Insert\+At@{Insert\+At}}
+\subsubsection[{read\+Through(\+Shift\+Helper$<$ Insert\+At $>$ $\ast$helper)}]{\setlength{\rightskip}{0pt plus 5cm}void $\ast$ Insert\+At\+::read\+Through (
+\begin{DoxyParamCaption}
+\item[{{\bf Shift\+Helper}$<$ {\bf Insert\+At} $>$ $\ast$}]{helper}
+\end{DoxyParamCaption}
+)}\label{class_insert_at_a7ccae8ef989a96aece9e7aef1afbd553}
+\hypertarget{class_insert_at_aca674527cd17b29b486a3082ab0437a4}{}\index{Insert\+At@{Insert\+At}!s\+\_\+execute@{s\+\_\+execute}}
+\index{s\+\_\+execute@{s\+\_\+execute}!Insert\+At@{Insert\+At}}
+\subsubsection[{s\+\_\+execute(\+W\+F\+Vector $\ast$vec)}]{\setlength{\rightskip}{0pt plus 5cm}bool Insert\+At\+::s\+\_\+execute (
+\begin{DoxyParamCaption}
+\item[{W\+F\+Vector $\ast$}]{vec}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_insert_at_aca674527cd17b29b486a3082ab0437a4}
+\hypertarget{class_insert_at_a09d79636c2ba9023e3600d80d0af314c}{}\index{Insert\+At@{Insert\+At}!try\+Free@{try\+Free}}
+\index{try\+Free@{try\+Free}!Insert\+At@{Insert\+At}}
+\subsubsection[{try\+Free()}]{\setlength{\rightskip}{0pt plus 5cm}bool Insert\+At\+::try\+Free (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{class_insert_at_a09d79636c2ba9023e3600d80d0af314c}
+
+
+\subsection{Member Data Documentation}
+\hypertarget{class_insert_at_a258e77cb8a4bf7676290c28428b58d5c}{}\index{Insert\+At@{Insert\+At}!is\+Complete@{is\+Complete}}
+\index{is\+Complete@{is\+Complete}!Insert\+At@{Insert\+At}}
+\subsubsection[{is\+Complete}]{\setlength{\rightskip}{0pt plus 5cm}std\+::atomic$<$bool$>$ Insert\+At\+::is\+Complete}\label{class_insert_at_a258e77cb8a4bf7676290c28428b58d5c}
+\hypertarget{class_insert_at_a05c82ae139b7af1675eeaa58dd8f930a}{}\index{Insert\+At@{Insert\+At}!next@{next}}
+\index{next@{next}!Insert\+At@{Insert\+At}}
+\subsubsection[{next}]{\setlength{\rightskip}{0pt plus 5cm}std\+::atomic$<${\bf Shift\+Helper}$<${\bf Insert\+At}$>$ $\ast$$>$ Insert\+At\+::next}\label{class_insert_at_a05c82ae139b7af1675eeaa58dd8f930a}
+\hypertarget{class_insert_at_a926928e16ec2ab511860662a01f3082a}{}\index{Insert\+At@{Insert\+At}!pos@{pos}}
+\index{pos@{pos}!Insert\+At@{Insert\+At}}
+\subsubsection[{pos}]{\setlength{\rightskip}{0pt plus 5cm}int Insert\+At\+::pos}\label{class_insert_at_a926928e16ec2ab511860662a01f3082a}
+\hypertarget{class_insert_at_a4cd84946e247761597bde3791508d820}{}\index{Insert\+At@{Insert\+At}!rvalue@{rvalue}}
+\index{rvalue@{rvalue}!Insert\+At@{Insert\+At}}
+\subsubsection[{rvalue}]{\setlength{\rightskip}{0pt plus 5cm}void$\ast$ Insert\+At\+::rvalue}\label{class_insert_at_a4cd84946e247761597bde3791508d820}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+tervel/containers/wf/vector/old/\hyperlink{insertat__op_8h}{insertat\+\_\+op.\+h}\end{DoxyCompactItemize}

@@ -1,0 +1,144 @@
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_buffer_op}{}\section{tervel\+:\+:containers\+:\+:wf\+:\+:Ring\+Buffer$<$ T $>$\+:\+:Buffer\+Op Class Reference}
+\label{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_buffer_op}\index{tervel\+::containers\+::wf\+::\+Ring\+Buffer$<$ T $>$\+::\+Buffer\+Op@{tervel\+::containers\+::wf\+::\+Ring\+Buffer$<$ T $>$\+::\+Buffer\+Op}}
+
+
+{\ttfamily \#include $<$ring\+\_\+buffer\+\_\+op.\+h$>$}
+
+Inheritance diagram for tervel\+:\+:containers\+:\+:wf\+:\+:Ring\+Buffer$<$ T $>$\+:\+:Buffer\+Op\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.323442cm]{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_buffer_op}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_buffer_op_a3beeae0f911b913a997c4841392c577c}{Buffer\+Op} (\hyperlink{classtervel_1_1containers_1_1wf_1_1_ring_buffer}{Ring\+Buffer}$<$ T $>$ $\ast$rb)
+\item 
+\hyperlink{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_buffer_op_aed38cc45945b5fe9fa6020554ebe8543}{$\sim$\+Buffer\+Op} ()
+\item 
+virtual void $\ast$ \hyperlink{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_buffer_op_a345d7432fa98f44f1620f5f718ff7a1e}{associate} (\hyperlink{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_helper}{Helper} $\ast$h)=0
+\item 
+bool \hyperlink{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_buffer_op_a118e970ddcaef2f6e932244fc88d99e8}{priv\+Associate} (\hyperlink{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_helper}{Helper} $\ast$h)
+\item 
+bool \hyperlink{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_buffer_op_adb1f2fd8c3d16d7024c00d49124da0b5}{valid} (\hyperlink{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_helper}{Helper} $\ast$h)
+\item 
+void \hyperlink{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_buffer_op_a1afc3cef307a996571b654f41650dc4e}{fail} ()
+\item 
+bool \hyperlink{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_buffer_op_a90977eb87ba55abaabe0edb32ab609e7}{is\+Fail} (\hyperlink{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_helper}{Helper} $\ast$\&h)
+\item 
+\hyperlink{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_helper}{Helper} $\ast$ \hyperlink{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_buffer_op_ab67453c6a60a8cd47aefc9a5bece510a}{get\+Helper} ()
+\item 
+bool \hyperlink{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_buffer_op_a7b64b9df1ce447b38bbf6d874edea54d}{not\+Done} ()
+\item 
+\hyperlink{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_buffer_op_ac6f6c55dff8bae48cccce1357848d32f}{D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N} (\hyperlink{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_buffer_op}{Buffer\+Op})
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classtervel_1_1containers_1_1wf_1_1_ring_buffer}{Ring\+Buffer}$<$ T $>$ $\ast$ \hyperlink{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_buffer_op_a2f8fe07f0f1b404a6cecb43564795973}{rb\+\_\+}
+\item 
+std\+::atomic$<$ \hyperlink{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_helper}{Helper} $\ast$ $>$ \hyperlink{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_buffer_op_a27d2feab0bcff8ba7f23ffed677b7a6e}{helper\+\_\+} \{nullptr\}
+\end{DoxyCompactItemize}
+\subsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static constexpr \hyperlink{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_helper}{Helper} $\ast$ \hyperlink{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_buffer_op_abdce2129a65d213a747850f8dbe0c6b8}{fail\+\_\+val\+\_\+} = reinterpret\+\_\+cast$<$\hyperlink{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_helper}{Helper} $\ast$$>$(0x1\+L)
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_buffer_op_a3beeae0f911b913a997c4841392c577c}{}\index{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Buffer\+Op@{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Buffer\+Op}!Buffer\+Op@{Buffer\+Op}}
+\index{Buffer\+Op@{Buffer\+Op}!tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Buffer\+Op@{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Buffer\+Op}}
+\subsubsection[{Buffer\+Op(\+Ring\+Buffer$<$ T $>$ $\ast$rb)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T$>$ {\bf tervel\+::containers\+::wf\+::\+Ring\+Buffer}$<$ T $>$\+::Buffer\+Op\+::\+Buffer\+Op (
+\begin{DoxyParamCaption}
+\item[{{\bf Ring\+Buffer}$<$ T $>$ $\ast$}]{rb}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_buffer_op_a3beeae0f911b913a997c4841392c577c}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_buffer_op_aed38cc45945b5fe9fa6020554ebe8543}{}\index{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Buffer\+Op@{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Buffer\+Op}!````~Buffer\+Op@{$\sim$\+Buffer\+Op}}
+\index{````~Buffer\+Op@{$\sim$\+Buffer\+Op}!tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Buffer\+Op@{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Buffer\+Op}}
+\subsubsection[{$\sim$\+Buffer\+Op()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T$>$ {\bf tervel\+::containers\+::wf\+::\+Ring\+Buffer}$<$ T $>$\+::Buffer\+Op\+::$\sim$\+Buffer\+Op (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_buffer_op_aed38cc45945b5fe9fa6020554ebe8543}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_buffer_op_a345d7432fa98f44f1620f5f718ff7a1e}{}\index{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Buffer\+Op@{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Buffer\+Op}!associate@{associate}}
+\index{associate@{associate}!tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Buffer\+Op@{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Buffer\+Op}}
+\subsubsection[{associate(\+Helper $\ast$h)=0}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T$>$ virtual void$\ast$ {\bf tervel\+::containers\+::wf\+::\+Ring\+Buffer}$<$ T $>$\+::Buffer\+Op\+::associate (
+\begin{DoxyParamCaption}
+\item[{{\bf Helper} $\ast$}]{h}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [pure virtual]}}\label{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_buffer_op_a345d7432fa98f44f1620f5f718ff7a1e}
+
+
+Implemented in \hyperlink{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_enqueue_op_a746cece514a2d8189bad01c04a1cf00c}{tervel\+::containers\+::wf\+::\+Ring\+Buffer$<$ T $>$\+::\+Enqueue\+Op$<$ T $>$}, and \hyperlink{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_dequeue_op_a9c2398124db300ce3b28e3541e48d347}{tervel\+::containers\+::wf\+::\+Ring\+Buffer$<$ T $>$\+::\+Dequeue\+Op$<$ T $>$}.
+
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_buffer_op_ac6f6c55dff8bae48cccce1357848d32f}{}\index{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Buffer\+Op@{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Buffer\+Op}!D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N@{D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N}}
+\index{D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N@{D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N}!tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Buffer\+Op@{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Buffer\+Op}}
+\subsubsection[{D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N(\+Buffer\+Op)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T$>$ {\bf tervel\+::containers\+::wf\+::\+Ring\+Buffer}$<$ T $>$\+::Buffer\+Op\+::\+D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N (
+\begin{DoxyParamCaption}
+\item[{{\bf Buffer\+Op}}]{}
+\end{DoxyParamCaption}
+)}\label{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_buffer_op_ac6f6c55dff8bae48cccce1357848d32f}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_buffer_op_a1afc3cef307a996571b654f41650dc4e}{}\index{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Buffer\+Op@{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Buffer\+Op}!fail@{fail}}
+\index{fail@{fail}!tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Buffer\+Op@{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Buffer\+Op}}
+\subsubsection[{fail()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T$>$ void {\bf tervel\+::containers\+::wf\+::\+Ring\+Buffer}$<$ T $>$\+::Buffer\+Op\+::fail (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_buffer_op_a1afc3cef307a996571b654f41650dc4e}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_buffer_op_ab67453c6a60a8cd47aefc9a5bece510a}{}\index{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Buffer\+Op@{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Buffer\+Op}!get\+Helper@{get\+Helper}}
+\index{get\+Helper@{get\+Helper}!tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Buffer\+Op@{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Buffer\+Op}}
+\subsubsection[{get\+Helper()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T$>$ {\bf Helper}$\ast$ {\bf tervel\+::containers\+::wf\+::\+Ring\+Buffer}$<$ T $>$\+::Buffer\+Op\+::get\+Helper (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_buffer_op_ab67453c6a60a8cd47aefc9a5bece510a}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_buffer_op_a90977eb87ba55abaabe0edb32ab609e7}{}\index{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Buffer\+Op@{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Buffer\+Op}!is\+Fail@{is\+Fail}}
+\index{is\+Fail@{is\+Fail}!tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Buffer\+Op@{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Buffer\+Op}}
+\subsubsection[{is\+Fail(\+Helper $\ast$\&h)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T$>$ bool {\bf tervel\+::containers\+::wf\+::\+Ring\+Buffer}$<$ T $>$\+::Buffer\+Op\+::is\+Fail (
+\begin{DoxyParamCaption}
+\item[{{\bf Helper} $\ast$\&}]{h}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_buffer_op_a90977eb87ba55abaabe0edb32ab609e7}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_buffer_op_a7b64b9df1ce447b38bbf6d874edea54d}{}\index{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Buffer\+Op@{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Buffer\+Op}!not\+Done@{not\+Done}}
+\index{not\+Done@{not\+Done}!tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Buffer\+Op@{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Buffer\+Op}}
+\subsubsection[{not\+Done()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T$>$ bool {\bf tervel\+::containers\+::wf\+::\+Ring\+Buffer}$<$ T $>$\+::Buffer\+Op\+::not\+Done (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_buffer_op_a7b64b9df1ce447b38bbf6d874edea54d}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_buffer_op_a118e970ddcaef2f6e932244fc88d99e8}{}\index{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Buffer\+Op@{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Buffer\+Op}!priv\+Associate@{priv\+Associate}}
+\index{priv\+Associate@{priv\+Associate}!tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Buffer\+Op@{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Buffer\+Op}}
+\subsubsection[{priv\+Associate(\+Helper $\ast$h)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T$>$ bool {\bf tervel\+::containers\+::wf\+::\+Ring\+Buffer}$<$ T $>$\+::Buffer\+Op\+::priv\+Associate (
+\begin{DoxyParamCaption}
+\item[{{\bf Helper} $\ast$}]{h}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_buffer_op_a118e970ddcaef2f6e932244fc88d99e8}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_buffer_op_adb1f2fd8c3d16d7024c00d49124da0b5}{}\index{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Buffer\+Op@{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Buffer\+Op}!valid@{valid}}
+\index{valid@{valid}!tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Buffer\+Op@{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Buffer\+Op}}
+\subsubsection[{valid(\+Helper $\ast$h)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T$>$ bool {\bf tervel\+::containers\+::wf\+::\+Ring\+Buffer}$<$ T $>$\+::Buffer\+Op\+::valid (
+\begin{DoxyParamCaption}
+\item[{{\bf Helper} $\ast$}]{h}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_buffer_op_adb1f2fd8c3d16d7024c00d49124da0b5}
+
+
+\subsection{Member Data Documentation}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_buffer_op_abdce2129a65d213a747850f8dbe0c6b8}{}\index{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Buffer\+Op@{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Buffer\+Op}!fail\+\_\+val\+\_\+@{fail\+\_\+val\+\_\+}}
+\index{fail\+\_\+val\+\_\+@{fail\+\_\+val\+\_\+}!tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Buffer\+Op@{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Buffer\+Op}}
+\subsubsection[{fail\+\_\+val\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T$>$ constexpr {\bf Helper}$\ast$ {\bf tervel\+::containers\+::wf\+::\+Ring\+Buffer}$<$ T $>$\+::Buffer\+Op\+::fail\+\_\+val\+\_\+ = reinterpret\+\_\+cast$<${\bf Helper} $\ast$$>$(0x1\+L)\hspace{0.3cm}{\ttfamily [static]}}\label{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_buffer_op_abdce2129a65d213a747850f8dbe0c6b8}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_buffer_op_a27d2feab0bcff8ba7f23ffed677b7a6e}{}\index{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Buffer\+Op@{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Buffer\+Op}!helper\+\_\+@{helper\+\_\+}}
+\index{helper\+\_\+@{helper\+\_\+}!tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Buffer\+Op@{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Buffer\+Op}}
+\subsubsection[{helper\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T$>$ std\+::atomic$<${\bf Helper} $\ast$$>$ {\bf tervel\+::containers\+::wf\+::\+Ring\+Buffer}$<$ T $>$\+::Buffer\+Op\+::helper\+\_\+ \{nullptr\}}\label{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_buffer_op_a27d2feab0bcff8ba7f23ffed677b7a6e}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_buffer_op_a2f8fe07f0f1b404a6cecb43564795973}{}\index{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Buffer\+Op@{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Buffer\+Op}!rb\+\_\+@{rb\+\_\+}}
+\index{rb\+\_\+@{rb\+\_\+}!tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Buffer\+Op@{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Buffer\+Op}}
+\subsubsection[{rb\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T$>$ {\bf Ring\+Buffer}$<$T$>$$\ast$ {\bf tervel\+::containers\+::wf\+::\+Ring\+Buffer}$<$ T $>$\+::Buffer\+Op\+::rb\+\_\+}\label{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_buffer_op_a2f8fe07f0f1b404a6cecb43564795973}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+tervel/containers/wf/ring-\/buffer/\hyperlink{ring__buffer__op_8h}{ring\+\_\+buffer\+\_\+op.\+h}\end{DoxyCompactItemize}

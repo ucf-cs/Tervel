@@ -1,0 +1,142 @@
+\hypertarget{classtervel_1_1util_1_1_padded_atomic}{}\section{tervel\+:\+:util\+:\+:Padded\+Atomic$<$ T $>$ Class Template Reference}
+\label{classtervel_1_1util_1_1_padded_atomic}\index{tervel\+::util\+::\+Padded\+Atomic$<$ T $>$@{tervel\+::util\+::\+Padded\+Atomic$<$ T $>$}}
+
+
+{\ttfamily \#include $<$padded\+\_\+atomic.\+h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classtervel_1_1util_1_1_padded_atomic_aa7929f3db1e0a13913692fe4db0b017a}{Padded\+Atomic} ()
+\item 
+\hyperlink{classtervel_1_1util_1_1_padded_atomic_a86f2c393839532e972a095d2b43be4d0}{Padded\+Atomic} (T value)
+\item 
+T \hyperlink{classtervel_1_1util_1_1_padded_atomic_a603ee3ac664c6121044c914f6824ee52}{load} (std\+::memory\+\_\+order memory\+\_\+order=std\+::memory\+\_\+order\+\_\+seq\+\_\+cst)
+\item 
+void \hyperlink{classtervel_1_1util_1_1_padded_atomic_a33f992fba64fdd3a7a17ab54d1abeca2}{store} (T value, std\+::memory\+\_\+order memory\+\_\+order=std\+::memory\+\_\+order\+\_\+seq\+\_\+cst)
+\item 
+T \hyperlink{classtervel_1_1util_1_1_padded_atomic_a7800d0cf0e9c78fa55375a1ce3030914}{exchange} (T value, std\+::memory\+\_\+order memory\+\_\+order=std\+::memory\+\_\+order\+\_\+seq\+\_\+cst)
+\item 
+bool \hyperlink{classtervel_1_1util_1_1_padded_atomic_a78f2403b679cb889cc3c460eb1b3a287}{compare\+\_\+exchange\+\_\+weak} (T \&expected, T desired, std\+::memory\+\_\+order success, std\+::memory\+\_\+order failure)
+\item 
+bool \hyperlink{classtervel_1_1util_1_1_padded_atomic_aff55fac4c51bd25c554da24a2b9037d3}{compare\+\_\+exchange\+\_\+weak} (T \&expected, T desired, std\+::memory\+\_\+order order=std\+::memory\+\_\+order\+\_\+seq\+\_\+cst)
+\item 
+bool \hyperlink{classtervel_1_1util_1_1_padded_atomic_a439f7948c88df740c4f39ec97570e28e}{compare\+\_\+exchange\+\_\+strong} (T \&expected, T desired, std\+::memory\+\_\+order success, std\+::memory\+\_\+order failure)
+\item 
+bool \hyperlink{classtervel_1_1util_1_1_padded_atomic_ac6c9885eb963cf7b1854ea00d7a8c89a}{compare\+\_\+exchange\+\_\+strong} (T \&expected, T desired, std\+::memory\+\_\+order order=std\+::memory\+\_\+order\+\_\+seq\+\_\+cst)
+\item 
+T \hyperlink{classtervel_1_1util_1_1_padded_atomic_ab5f6c8224a77c14dc9d5638cc916ea1e}{fetch\+\_\+add} (T arg, std\+::memory\+\_\+order memory\+\_\+order=std\+::memory\+\_\+order\+\_\+seq\+\_\+cst)
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::atomic$<$ T $>$ \hyperlink{classtervel_1_1util_1_1_padded_atomic_a31ed76f17b9e51163c8850dd854eef1c}{atomic}
+\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+char \hyperlink{classtervel_1_1util_1_1_padded_atomic_a25a8e96cf123a656c36b71ce65747528}{padding} \mbox{[}\hyperlink{system_8h_af89f60b07247176687889ade776c8e10}{C\+A\+C\+H\+E\+\_\+\+L\+I\+N\+E\+\_\+\+S\+I\+Z\+E}-\/sizeof(std\+::atomic$<$ T $>$)\mbox{]}
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classtervel_1_1util_1_1_padded_atomic_aa7929f3db1e0a13913692fe4db0b017a}{}\index{tervel\+::util\+::\+Padded\+Atomic@{tervel\+::util\+::\+Padded\+Atomic}!Padded\+Atomic@{Padded\+Atomic}}
+\index{Padded\+Atomic@{Padded\+Atomic}!tervel\+::util\+::\+Padded\+Atomic@{tervel\+::util\+::\+Padded\+Atomic}}
+\subsubsection[{Padded\+Atomic()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ {\bf tervel\+::util\+::\+Padded\+Atomic}$<$ T $>$\+::{\bf Padded\+Atomic} (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}}\label{classtervel_1_1util_1_1_padded_atomic_aa7929f3db1e0a13913692fe4db0b017a}
+\hypertarget{classtervel_1_1util_1_1_padded_atomic_a86f2c393839532e972a095d2b43be4d0}{}\index{tervel\+::util\+::\+Padded\+Atomic@{tervel\+::util\+::\+Padded\+Atomic}!Padded\+Atomic@{Padded\+Atomic}}
+\index{Padded\+Atomic@{Padded\+Atomic}!tervel\+::util\+::\+Padded\+Atomic@{tervel\+::util\+::\+Padded\+Atomic}}
+\subsubsection[{Padded\+Atomic(\+T value)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ {\bf tervel\+::util\+::\+Padded\+Atomic}$<$ T $>$\+::{\bf Padded\+Atomic} (
+\begin{DoxyParamCaption}
+\item[{T}]{value}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}}\label{classtervel_1_1util_1_1_padded_atomic_a86f2c393839532e972a095d2b43be4d0}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classtervel_1_1util_1_1_padded_atomic_a439f7948c88df740c4f39ec97570e28e}{}\index{tervel\+::util\+::\+Padded\+Atomic@{tervel\+::util\+::\+Padded\+Atomic}!compare\+\_\+exchange\+\_\+strong@{compare\+\_\+exchange\+\_\+strong}}
+\index{compare\+\_\+exchange\+\_\+strong@{compare\+\_\+exchange\+\_\+strong}!tervel\+::util\+::\+Padded\+Atomic@{tervel\+::util\+::\+Padded\+Atomic}}
+\subsubsection[{compare\+\_\+exchange\+\_\+strong(\+T \&expected, T desired, std\+::memory\+\_\+order success, std\+::memory\+\_\+order failure)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ bool {\bf tervel\+::util\+::\+Padded\+Atomic}$<$ T $>$\+::compare\+\_\+exchange\+\_\+strong (
+\begin{DoxyParamCaption}
+\item[{T \&}]{expected, }
+\item[{T}]{desired, }
+\item[{std\+::memory\+\_\+order}]{success, }
+\item[{std\+::memory\+\_\+order}]{failure}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1util_1_1_padded_atomic_a439f7948c88df740c4f39ec97570e28e}
+\hypertarget{classtervel_1_1util_1_1_padded_atomic_ac6c9885eb963cf7b1854ea00d7a8c89a}{}\index{tervel\+::util\+::\+Padded\+Atomic@{tervel\+::util\+::\+Padded\+Atomic}!compare\+\_\+exchange\+\_\+strong@{compare\+\_\+exchange\+\_\+strong}}
+\index{compare\+\_\+exchange\+\_\+strong@{compare\+\_\+exchange\+\_\+strong}!tervel\+::util\+::\+Padded\+Atomic@{tervel\+::util\+::\+Padded\+Atomic}}
+\subsubsection[{compare\+\_\+exchange\+\_\+strong(\+T \&expected, T desired, std\+::memory\+\_\+order order=std\+::memory\+\_\+order\+\_\+seq\+\_\+cst)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ bool {\bf tervel\+::util\+::\+Padded\+Atomic}$<$ T $>$\+::compare\+\_\+exchange\+\_\+strong (
+\begin{DoxyParamCaption}
+\item[{T \&}]{expected, }
+\item[{T}]{desired, }
+\item[{std\+::memory\+\_\+order}]{order = {\ttfamily std\+:\+:memory\+\_\+order\+\_\+seq\+\_\+cst}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1util_1_1_padded_atomic_ac6c9885eb963cf7b1854ea00d7a8c89a}
+\hypertarget{classtervel_1_1util_1_1_padded_atomic_a78f2403b679cb889cc3c460eb1b3a287}{}\index{tervel\+::util\+::\+Padded\+Atomic@{tervel\+::util\+::\+Padded\+Atomic}!compare\+\_\+exchange\+\_\+weak@{compare\+\_\+exchange\+\_\+weak}}
+\index{compare\+\_\+exchange\+\_\+weak@{compare\+\_\+exchange\+\_\+weak}!tervel\+::util\+::\+Padded\+Atomic@{tervel\+::util\+::\+Padded\+Atomic}}
+\subsubsection[{compare\+\_\+exchange\+\_\+weak(\+T \&expected, T desired, std\+::memory\+\_\+order success, std\+::memory\+\_\+order failure)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ bool {\bf tervel\+::util\+::\+Padded\+Atomic}$<$ T $>$\+::compare\+\_\+exchange\+\_\+weak (
+\begin{DoxyParamCaption}
+\item[{T \&}]{expected, }
+\item[{T}]{desired, }
+\item[{std\+::memory\+\_\+order}]{success, }
+\item[{std\+::memory\+\_\+order}]{failure}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1util_1_1_padded_atomic_a78f2403b679cb889cc3c460eb1b3a287}
+\hypertarget{classtervel_1_1util_1_1_padded_atomic_aff55fac4c51bd25c554da24a2b9037d3}{}\index{tervel\+::util\+::\+Padded\+Atomic@{tervel\+::util\+::\+Padded\+Atomic}!compare\+\_\+exchange\+\_\+weak@{compare\+\_\+exchange\+\_\+weak}}
+\index{compare\+\_\+exchange\+\_\+weak@{compare\+\_\+exchange\+\_\+weak}!tervel\+::util\+::\+Padded\+Atomic@{tervel\+::util\+::\+Padded\+Atomic}}
+\subsubsection[{compare\+\_\+exchange\+\_\+weak(\+T \&expected, T desired, std\+::memory\+\_\+order order=std\+::memory\+\_\+order\+\_\+seq\+\_\+cst)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ bool {\bf tervel\+::util\+::\+Padded\+Atomic}$<$ T $>$\+::compare\+\_\+exchange\+\_\+weak (
+\begin{DoxyParamCaption}
+\item[{T \&}]{expected, }
+\item[{T}]{desired, }
+\item[{std\+::memory\+\_\+order}]{order = {\ttfamily std\+:\+:memory\+\_\+order\+\_\+seq\+\_\+cst}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1util_1_1_padded_atomic_aff55fac4c51bd25c554da24a2b9037d3}
+\hypertarget{classtervel_1_1util_1_1_padded_atomic_a7800d0cf0e9c78fa55375a1ce3030914}{}\index{tervel\+::util\+::\+Padded\+Atomic@{tervel\+::util\+::\+Padded\+Atomic}!exchange@{exchange}}
+\index{exchange@{exchange}!tervel\+::util\+::\+Padded\+Atomic@{tervel\+::util\+::\+Padded\+Atomic}}
+\subsubsection[{exchange(\+T value, std\+::memory\+\_\+order memory\+\_\+order=std\+::memory\+\_\+order\+\_\+seq\+\_\+cst)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ T {\bf tervel\+::util\+::\+Padded\+Atomic}$<$ T $>$\+::exchange (
+\begin{DoxyParamCaption}
+\item[{T}]{value, }
+\item[{std\+::memory\+\_\+order}]{memory\+\_\+order = {\ttfamily std\+:\+:memory\+\_\+order\+\_\+seq\+\_\+cst}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1util_1_1_padded_atomic_a7800d0cf0e9c78fa55375a1ce3030914}
+\hypertarget{classtervel_1_1util_1_1_padded_atomic_ab5f6c8224a77c14dc9d5638cc916ea1e}{}\index{tervel\+::util\+::\+Padded\+Atomic@{tervel\+::util\+::\+Padded\+Atomic}!fetch\+\_\+add@{fetch\+\_\+add}}
+\index{fetch\+\_\+add@{fetch\+\_\+add}!tervel\+::util\+::\+Padded\+Atomic@{tervel\+::util\+::\+Padded\+Atomic}}
+\subsubsection[{fetch\+\_\+add(\+T arg, std\+::memory\+\_\+order memory\+\_\+order=std\+::memory\+\_\+order\+\_\+seq\+\_\+cst)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ T {\bf tervel\+::util\+::\+Padded\+Atomic}$<$ T $>$\+::fetch\+\_\+add (
+\begin{DoxyParamCaption}
+\item[{T}]{arg, }
+\item[{std\+::memory\+\_\+order}]{memory\+\_\+order = {\ttfamily std\+:\+:memory\+\_\+order\+\_\+seq\+\_\+cst}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1util_1_1_padded_atomic_ab5f6c8224a77c14dc9d5638cc916ea1e}
+\hypertarget{classtervel_1_1util_1_1_padded_atomic_a603ee3ac664c6121044c914f6824ee52}{}\index{tervel\+::util\+::\+Padded\+Atomic@{tervel\+::util\+::\+Padded\+Atomic}!load@{load}}
+\index{load@{load}!tervel\+::util\+::\+Padded\+Atomic@{tervel\+::util\+::\+Padded\+Atomic}}
+\subsubsection[{load(std\+::memory\+\_\+order memory\+\_\+order=std\+::memory\+\_\+order\+\_\+seq\+\_\+cst)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ T {\bf tervel\+::util\+::\+Padded\+Atomic}$<$ T $>$\+::load (
+\begin{DoxyParamCaption}
+\item[{std\+::memory\+\_\+order}]{memory\+\_\+order = {\ttfamily std\+:\+:memory\+\_\+order\+\_\+seq\+\_\+cst}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1util_1_1_padded_atomic_a603ee3ac664c6121044c914f6824ee52}
+\hypertarget{classtervel_1_1util_1_1_padded_atomic_a33f992fba64fdd3a7a17ab54d1abeca2}{}\index{tervel\+::util\+::\+Padded\+Atomic@{tervel\+::util\+::\+Padded\+Atomic}!store@{store}}
+\index{store@{store}!tervel\+::util\+::\+Padded\+Atomic@{tervel\+::util\+::\+Padded\+Atomic}}
+\subsubsection[{store(\+T value, std\+::memory\+\_\+order memory\+\_\+order=std\+::memory\+\_\+order\+\_\+seq\+\_\+cst)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ void {\bf tervel\+::util\+::\+Padded\+Atomic}$<$ T $>$\+::store (
+\begin{DoxyParamCaption}
+\item[{T}]{value, }
+\item[{std\+::memory\+\_\+order}]{memory\+\_\+order = {\ttfamily std\+:\+:memory\+\_\+order\+\_\+seq\+\_\+cst}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1util_1_1_padded_atomic_a33f992fba64fdd3a7a17ab54d1abeca2}
+
+
+\subsection{Member Data Documentation}
+\hypertarget{classtervel_1_1util_1_1_padded_atomic_a31ed76f17b9e51163c8850dd854eef1c}{}\index{tervel\+::util\+::\+Padded\+Atomic@{tervel\+::util\+::\+Padded\+Atomic}!atomic@{atomic}}
+\index{atomic@{atomic}!tervel\+::util\+::\+Padded\+Atomic@{tervel\+::util\+::\+Padded\+Atomic}}
+\subsubsection[{atomic}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ std\+::atomic$<$T$>$ {\bf tervel\+::util\+::\+Padded\+Atomic}$<$ T $>$\+::atomic}\label{classtervel_1_1util_1_1_padded_atomic_a31ed76f17b9e51163c8850dd854eef1c}
+\hypertarget{classtervel_1_1util_1_1_padded_atomic_a25a8e96cf123a656c36b71ce65747528}{}\index{tervel\+::util\+::\+Padded\+Atomic@{tervel\+::util\+::\+Padded\+Atomic}!padding@{padding}}
+\index{padding@{padding}!tervel\+::util\+::\+Padded\+Atomic@{tervel\+::util\+::\+Padded\+Atomic}}
+\subsubsection[{padding}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ char {\bf tervel\+::util\+::\+Padded\+Atomic}$<$ T $>$\+::padding\mbox{[}{\bf C\+A\+C\+H\+E\+\_\+\+L\+I\+N\+E\+\_\+\+S\+I\+Z\+E}-\/sizeof(std\+::atomic$<$ T $>$)\mbox{]}\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1util_1_1_padded_atomic_a25a8e96cf123a656c36b71ce65747528}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+tervel/util/\hyperlink{padded__atomic_8h}{padded\+\_\+atomic.\+h}\end{DoxyCompactItemize}

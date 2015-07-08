@@ -1,0 +1,166 @@
+\hypertarget{classtervel_1_1_thread_context}{}\section{tervel\+:\+:Thread\+Context Class Reference}
+\label{classtervel_1_1_thread_context}\index{tervel\+::\+Thread\+Context@{tervel\+::\+Thread\+Context}}
+
+
+Thread local information.  
+
+
+
+
+{\ttfamily \#include $<$thread\+\_\+context.\+h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classtervel_1_1_thread_context_ad721aa4ac6705923d8559444ca44a1c8}{Thread\+Context} (\hyperlink{classtervel_1_1_tervel}{Tervel} $\ast$tervel)
+\item 
+\hyperlink{classtervel_1_1_thread_context_a795e72564606c1d81d4be2f9b505525c}{$\sim$\+Thread\+Context} ()
+\item 
+\hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer}{util\+::memory\+::hp\+::\+Hazard\+Pointer} $\ast$const \hyperlink{classtervel_1_1_thread_context_a55fae753db46b07ba743b84e56b1396c}{get\+\_\+hazard\+\_\+pointer} ()
+\item 
+\hyperlink{classtervel_1_1util_1_1_progress_assurance}{util\+::\+Progress\+Assurance} $\ast$const \hyperlink{classtervel_1_1_thread_context_ac25a0709805f33804c1f1093b18d3282}{get\+\_\+progress\+\_\+assurance} ()
+\item 
+\hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_element_list}{util\+::memory\+::hp\+::\+Element\+List} $\ast$const \hyperlink{classtervel_1_1_thread_context_aafee44442237351bb3644cfe43dcbca8}{get\+\_\+hp\+\_\+element\+\_\+list} ()
+\item 
+\hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_descriptor_pool}{util\+::memory\+::rc\+::\+Descriptor\+Pool} $\ast$const \hyperlink{classtervel_1_1_thread_context_aa6b07257c8e434718b67cf2acf4bf947}{get\+\_\+rc\+\_\+descriptor\+\_\+pool} ()
+\item 
+const uint64\+\_\+t \hyperlink{classtervel_1_1_thread_context_a6fd725c30af483506cd43ea06606886e}{get\+\_\+thread\+\_\+id} ()
+\begin{DoxyCompactList}\small\item\em A unique I\+D among all active threads. \end{DoxyCompactList}\item 
+const uint64\+\_\+t \hyperlink{classtervel_1_1_thread_context_a8165e74716c2b2a04251565c0d734254}{get\+\_\+num\+\_\+threads} ()
+\end{DoxyCompactItemize}
+\subsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classtervel_1_1_thread_context_a83a120bf3799f3d3d05eeb21aab622d4}{D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N} (\hyperlink{classtervel_1_1_thread_context}{Thread\+Context})
+\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classtervel_1_1_tervel}{Tervel} $\ast$const \hyperlink{classtervel_1_1_thread_context_a1450770d0f80431f3b28a67c8b6b1f82}{tervel\+\_\+}
+\begin{DoxyCompactList}\small\item\em \hyperlink{classtervel_1_1_tervel}{Tervel} provides a link to the shared \hyperlink{classtervel_1_1_tervel}{Tervel} object. \end{DoxyCompactList}\item 
+const uint64\+\_\+t \hyperlink{classtervel_1_1_thread_context_aba7d0450873f2cb6afd9125d6d233983}{thread\+\_\+id\+\_\+}
+\item 
+\hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_element_list}{util\+::memory\+::hp\+::\+Element\+List} $\ast$const \hyperlink{classtervel_1_1_thread_context_a3e8104c52171ea6887499cabab7228b8}{hp\+\_\+element\+\_\+list\+\_\+}
+\item 
+\hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_descriptor_pool}{util\+::memory\+::rc\+::\+Descriptor\+Pool} $\ast$const \hyperlink{classtervel_1_1_thread_context_a7717d148600af10eebf3a4dc6c67dbed}{rc\+\_\+descriptor\+\_\+pool\+\_\+}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Thread local information. 
+
+Each thread should have an instance of this. 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classtervel_1_1_thread_context_ad721aa4ac6705923d8559444ca44a1c8}{}\index{tervel\+::\+Thread\+Context@{tervel\+::\+Thread\+Context}!Thread\+Context@{Thread\+Context}}
+\index{Thread\+Context@{Thread\+Context}!tervel\+::\+Thread\+Context@{tervel\+::\+Thread\+Context}}
+\subsubsection[{Thread\+Context(\+Tervel $\ast$tervel)}]{\setlength{\rightskip}{0pt plus 5cm}tervel\+::\+Thread\+Context\+::\+Thread\+Context (
+\begin{DoxyParamCaption}
+\item[{{\bf Tervel} $\ast$}]{tervel}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [explicit]}}\label{classtervel_1_1_thread_context_ad721aa4ac6705923d8559444ca44a1c8}
+\hypertarget{classtervel_1_1_thread_context_a795e72564606c1d81d4be2f9b505525c}{}\index{tervel\+::\+Thread\+Context@{tervel\+::\+Thread\+Context}!````~Thread\+Context@{$\sim$\+Thread\+Context}}
+\index{````~Thread\+Context@{$\sim$\+Thread\+Context}!tervel\+::\+Thread\+Context@{tervel\+::\+Thread\+Context}}
+\subsubsection[{$\sim$\+Thread\+Context()}]{\setlength{\rightskip}{0pt plus 5cm}tervel\+::\+Thread\+Context\+::$\sim$\+Thread\+Context (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{classtervel_1_1_thread_context_a795e72564606c1d81d4be2f9b505525c}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classtervel_1_1_thread_context_a83a120bf3799f3d3d05eeb21aab622d4}{}\index{tervel\+::\+Thread\+Context@{tervel\+::\+Thread\+Context}!D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N@{D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N}}
+\index{D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N@{D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N}!tervel\+::\+Thread\+Context@{tervel\+::\+Thread\+Context}}
+\subsubsection[{D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N(\+Thread\+Context)}]{\setlength{\rightskip}{0pt plus 5cm}tervel\+::\+Thread\+Context\+::\+D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N (
+\begin{DoxyParamCaption}
+\item[{{\bf Thread\+Context}}]{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1_thread_context_a83a120bf3799f3d3d05eeb21aab622d4}
+\hypertarget{classtervel_1_1_thread_context_a55fae753db46b07ba743b84e56b1396c}{}\index{tervel\+::\+Thread\+Context@{tervel\+::\+Thread\+Context}!get\+\_\+hazard\+\_\+pointer@{get\+\_\+hazard\+\_\+pointer}}
+\index{get\+\_\+hazard\+\_\+pointer@{get\+\_\+hazard\+\_\+pointer}!tervel\+::\+Thread\+Context@{tervel\+::\+Thread\+Context}}
+\subsubsection[{get\+\_\+hazard\+\_\+pointer()}]{\setlength{\rightskip}{0pt plus 5cm}{\bf util\+::memory\+::hp\+::\+Hazard\+Pointer}$\ast$ const tervel\+::\+Thread\+Context\+::get\+\_\+hazard\+\_\+pointer (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{classtervel_1_1_thread_context_a55fae753db46b07ba743b84e56b1396c}
+\begin{DoxyReturn}{Returns}
+a reference to the Hazard\+Pointer singleton 
+\end{DoxyReturn}
+\hypertarget{classtervel_1_1_thread_context_aafee44442237351bb3644cfe43dcbca8}{}\index{tervel\+::\+Thread\+Context@{tervel\+::\+Thread\+Context}!get\+\_\+hp\+\_\+element\+\_\+list@{get\+\_\+hp\+\_\+element\+\_\+list}}
+\index{get\+\_\+hp\+\_\+element\+\_\+list@{get\+\_\+hp\+\_\+element\+\_\+list}!tervel\+::\+Thread\+Context@{tervel\+::\+Thread\+Context}}
+\subsubsection[{get\+\_\+hp\+\_\+element\+\_\+list()}]{\setlength{\rightskip}{0pt plus 5cm}{\bf util\+::memory\+::hp\+::\+Element\+List}$\ast$ const tervel\+::\+Thread\+Context\+::get\+\_\+hp\+\_\+element\+\_\+list (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{classtervel_1_1_thread_context_aafee44442237351bb3644cfe43dcbca8}
+\begin{DoxyReturn}{Returns}
+a reference to the hp\+\_\+element\+\_\+list\+\_\+ 
+\end{DoxyReturn}
+\hypertarget{classtervel_1_1_thread_context_a8165e74716c2b2a04251565c0d734254}{}\index{tervel\+::\+Thread\+Context@{tervel\+::\+Thread\+Context}!get\+\_\+num\+\_\+threads@{get\+\_\+num\+\_\+threads}}
+\index{get\+\_\+num\+\_\+threads@{get\+\_\+num\+\_\+threads}!tervel\+::\+Thread\+Context@{tervel\+::\+Thread\+Context}}
+\subsubsection[{get\+\_\+num\+\_\+threads()}]{\setlength{\rightskip}{0pt plus 5cm}const uint64\+\_\+t tervel\+::\+Thread\+Context\+::get\+\_\+num\+\_\+threads (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{classtervel_1_1_thread_context_a8165e74716c2b2a04251565c0d734254}
+\begin{DoxyReturn}{Returns}
+number of threads 
+\end{DoxyReturn}
+\hypertarget{classtervel_1_1_thread_context_ac25a0709805f33804c1f1093b18d3282}{}\index{tervel\+::\+Thread\+Context@{tervel\+::\+Thread\+Context}!get\+\_\+progress\+\_\+assurance@{get\+\_\+progress\+\_\+assurance}}
+\index{get\+\_\+progress\+\_\+assurance@{get\+\_\+progress\+\_\+assurance}!tervel\+::\+Thread\+Context@{tervel\+::\+Thread\+Context}}
+\subsubsection[{get\+\_\+progress\+\_\+assurance()}]{\setlength{\rightskip}{0pt plus 5cm}{\bf util\+::\+Progress\+Assurance}$\ast$ const tervel\+::\+Thread\+Context\+::get\+\_\+progress\+\_\+assurance (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{classtervel_1_1_thread_context_ac25a0709805f33804c1f1093b18d3282}
+\begin{DoxyReturn}{Returns}
+a reference to the Progress\+Assurance singleton 
+\end{DoxyReturn}
+\hypertarget{classtervel_1_1_thread_context_aa6b07257c8e434718b67cf2acf4bf947}{}\index{tervel\+::\+Thread\+Context@{tervel\+::\+Thread\+Context}!get\+\_\+rc\+\_\+descriptor\+\_\+pool@{get\+\_\+rc\+\_\+descriptor\+\_\+pool}}
+\index{get\+\_\+rc\+\_\+descriptor\+\_\+pool@{get\+\_\+rc\+\_\+descriptor\+\_\+pool}!tervel\+::\+Thread\+Context@{tervel\+::\+Thread\+Context}}
+\subsubsection[{get\+\_\+rc\+\_\+descriptor\+\_\+pool()}]{\setlength{\rightskip}{0pt plus 5cm}{\bf util\+::memory\+::rc\+::\+Descriptor\+Pool}$\ast$ const tervel\+::\+Thread\+Context\+::get\+\_\+rc\+\_\+descriptor\+\_\+pool (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{classtervel_1_1_thread_context_aa6b07257c8e434718b67cf2acf4bf947}
+\begin{DoxyReturn}{Returns}
+a reference to the rc\+\_\+descriptor\+\_\+pool 
+\end{DoxyReturn}
+\hypertarget{classtervel_1_1_thread_context_a6fd725c30af483506cd43ea06606886e}{}\index{tervel\+::\+Thread\+Context@{tervel\+::\+Thread\+Context}!get\+\_\+thread\+\_\+id@{get\+\_\+thread\+\_\+id}}
+\index{get\+\_\+thread\+\_\+id@{get\+\_\+thread\+\_\+id}!tervel\+::\+Thread\+Context@{tervel\+::\+Thread\+Context}}
+\subsubsection[{get\+\_\+thread\+\_\+id()}]{\setlength{\rightskip}{0pt plus 5cm}const uint64\+\_\+t tervel\+::\+Thread\+Context\+::get\+\_\+thread\+\_\+id (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{classtervel_1_1_thread_context_a6fd725c30af483506cd43ea06606886e}
+
+
+A unique I\+D among all active threads. 
+
+\begin{DoxyReturn}{Returns}
+the threads id. 
+\end{DoxyReturn}
+
+
+\subsection{Member Data Documentation}
+\hypertarget{classtervel_1_1_thread_context_a3e8104c52171ea6887499cabab7228b8}{}\index{tervel\+::\+Thread\+Context@{tervel\+::\+Thread\+Context}!hp\+\_\+element\+\_\+list\+\_\+@{hp\+\_\+element\+\_\+list\+\_\+}}
+\index{hp\+\_\+element\+\_\+list\+\_\+@{hp\+\_\+element\+\_\+list\+\_\+}!tervel\+::\+Thread\+Context@{tervel\+::\+Thread\+Context}}
+\subsubsection[{hp\+\_\+element\+\_\+list\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}{\bf util\+::memory\+::hp\+::\+Element\+List}$\ast$ const tervel\+::\+Thread\+Context\+::hp\+\_\+element\+\_\+list\+\_\+\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1_thread_context_a3e8104c52171ea6887499cabab7228b8}
+\hypertarget{classtervel_1_1_thread_context_a7717d148600af10eebf3a4dc6c67dbed}{}\index{tervel\+::\+Thread\+Context@{tervel\+::\+Thread\+Context}!rc\+\_\+descriptor\+\_\+pool\+\_\+@{rc\+\_\+descriptor\+\_\+pool\+\_\+}}
+\index{rc\+\_\+descriptor\+\_\+pool\+\_\+@{rc\+\_\+descriptor\+\_\+pool\+\_\+}!tervel\+::\+Thread\+Context@{tervel\+::\+Thread\+Context}}
+\subsubsection[{rc\+\_\+descriptor\+\_\+pool\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}{\bf util\+::memory\+::rc\+::\+Descriptor\+Pool}$\ast$ const tervel\+::\+Thread\+Context\+::rc\+\_\+descriptor\+\_\+pool\+\_\+\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1_thread_context_a7717d148600af10eebf3a4dc6c67dbed}
+\hypertarget{classtervel_1_1_thread_context_a1450770d0f80431f3b28a67c8b6b1f82}{}\index{tervel\+::\+Thread\+Context@{tervel\+::\+Thread\+Context}!tervel\+\_\+@{tervel\+\_\+}}
+\index{tervel\+\_\+@{tervel\+\_\+}!tervel\+::\+Thread\+Context@{tervel\+::\+Thread\+Context}}
+\subsubsection[{tervel\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Tervel}$\ast$ const tervel\+::\+Thread\+Context\+::tervel\+\_\+\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1_thread_context_a1450770d0f80431f3b28a67c8b6b1f82}
+
+
+\hyperlink{classtervel_1_1_tervel}{Tervel} provides a link to the shared \hyperlink{classtervel_1_1_tervel}{Tervel} object. 
+
+This object contains number of threads, hazard\+\_\+pointer, and other shared structures. \hypertarget{classtervel_1_1_thread_context_aba7d0450873f2cb6afd9125d6d233983}{}\index{tervel\+::\+Thread\+Context@{tervel\+::\+Thread\+Context}!thread\+\_\+id\+\_\+@{thread\+\_\+id\+\_\+}}
+\index{thread\+\_\+id\+\_\+@{thread\+\_\+id\+\_\+}!tervel\+::\+Thread\+Context@{tervel\+::\+Thread\+Context}}
+\subsubsection[{thread\+\_\+id\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}const uint64\+\_\+t tervel\+::\+Thread\+Context\+::thread\+\_\+id\+\_\+\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1_thread_context_aba7d0450873f2cb6afd9125d6d233983}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+tervel/util/\hyperlink{thread__context_8h}{thread\+\_\+context.\+h}\end{DoxyCompactItemize}

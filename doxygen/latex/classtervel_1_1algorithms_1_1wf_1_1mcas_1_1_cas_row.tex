@@ -1,0 +1,144 @@
+\hypertarget{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_cas_row}{}\section{tervel\+:\+:algorithms\+:\+:wf\+:\+:mcas\+:\+:Cas\+Row$<$ T $>$ Class Template Reference}
+\label{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_cas_row}\index{tervel\+::algorithms\+::wf\+::mcas\+::\+Cas\+Row$<$ T $>$@{tervel\+::algorithms\+::wf\+::mcas\+::\+Cas\+Row$<$ T $>$}}
+
+
+This class is used to represent a one of the M C\+A\+S operations performed by an \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_m_c_a_s}{M\+C\+A\+S} operation.  
+
+
+
+
+{\ttfamily \#include $<$mcas\+\_\+casrow.\+h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_cas_row_a5c9234abd6cf605b0de5b8d5589afcab}{Cas\+Row} ()
+\item 
+\hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_cas_row_a817b55482cc93b3503c3d37d479943c8}{Cas\+Row} (std\+::atomic$<$ T $>$ $\ast$address, T expected\+\_\+value, T new\+\_\+value)
+\item 
+\hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_cas_row_a6dd876b641f1e88f951d6a3cd72be34b}{$\sim$\+Cas\+Row} ()
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::atomic$<$ T $>$ $\ast$ \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_cas_row_a8481dc81b0be30ba611a7f4478989710}{address\+\_\+}
+\item 
+T \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_cas_row_a66a7a49d2689691763631b635d0f80b6}{expected\+\_\+value\+\_\+}
+\item 
+T \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_cas_row_adcc297c44b5dafc6b08b9fcf3cdc277e}{new\+\_\+value\+\_\+}
+\item 
+std\+::atomic$<$ \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_helper}{Helper}$<$ T $>$ $\ast$ $>$ \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_cas_row_a762b03fb15cb83f591430c393bd3b444}{helper\+\_\+}
+\end{DoxyCompactItemize}
+\subsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+bool \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_cas_row_a83e942681a1ebe69e69f7fedf93cc89f}{operator$<$} (const \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_cas_row}{Cas\+Row}$<$ T $>$ \&a, const \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_cas_row}{Cas\+Row}$<$ T $>$ \&b)
+\item 
+bool \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_cas_row_a614f8a40786b7bb3223b08f56013228e}{operator$>$} (const \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_cas_row}{Cas\+Row}$<$ T $>$ \&a, const \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_cas_row}{Cas\+Row}$<$ T $>$ \&b)
+\item 
+bool \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_cas_row_abfebad601d55fa9ccd25347967c3fdf4}{operator==} (const \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_cas_row}{Cas\+Row}$<$ T $>$ \&a, const \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_cas_row}{Cas\+Row}$<$ T $>$ \&b)
+\item 
+bool \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_cas_row_a5c80c15327d420ec6bc5ab9dcf51d71e}{operator!=} (const \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_cas_row}{Cas\+Row}$<$ T $>$ \&a, const \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_cas_row}{Cas\+Row}$<$ T $>$ \&b)
+\item 
+void \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_cas_row_a5b373a53721ccf837fb585df65a585ff}{swap} (\hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_cas_row}{Cas\+Row} \&a, \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_cas_row}{Cas\+Row} \&b)
+\begin{DoxyCompactList}\small\item\em This funciton is used when the \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_m_c_a_s}{M\+C\+A\+S} operation is sorted to re-\/arrange the Cas\+Rows so they are sorted in a decsending manner. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\subsubsection*{template$<$class T$>$class tervel\+::algorithms\+::wf\+::mcas\+::\+Cas\+Row$<$ T $>$}
+
+This class is used to represent a one of the M C\+A\+S operations performed by an \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_m_c_a_s}{M\+C\+A\+S} operation. 
+
+It holds an address, expected value and new value for that address. 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_cas_row_a5c9234abd6cf605b0de5b8d5589afcab}{}\index{tervel\+::algorithms\+::wf\+::mcas\+::\+Cas\+Row@{tervel\+::algorithms\+::wf\+::mcas\+::\+Cas\+Row}!Cas\+Row@{Cas\+Row}}
+\index{Cas\+Row@{Cas\+Row}!tervel\+::algorithms\+::wf\+::mcas\+::\+Cas\+Row@{tervel\+::algorithms\+::wf\+::mcas\+::\+Cas\+Row}}
+\subsubsection[{Cas\+Row()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T$>$ {\bf tervel\+::algorithms\+::wf\+::mcas\+::\+Cas\+Row}$<$ T $>$\+::{\bf Cas\+Row} (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_cas_row_a5c9234abd6cf605b0de5b8d5589afcab}
+\hypertarget{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_cas_row_a817b55482cc93b3503c3d37d479943c8}{}\index{tervel\+::algorithms\+::wf\+::mcas\+::\+Cas\+Row@{tervel\+::algorithms\+::wf\+::mcas\+::\+Cas\+Row}!Cas\+Row@{Cas\+Row}}
+\index{Cas\+Row@{Cas\+Row}!tervel\+::algorithms\+::wf\+::mcas\+::\+Cas\+Row@{tervel\+::algorithms\+::wf\+::mcas\+::\+Cas\+Row}}
+\subsubsection[{Cas\+Row(std\+::atomic$<$ T $>$ $\ast$address, T expected\+\_\+value, T new\+\_\+value)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T$>$ {\bf tervel\+::algorithms\+::wf\+::mcas\+::\+Cas\+Row}$<$ T $>$\+::{\bf Cas\+Row} (
+\begin{DoxyParamCaption}
+\item[{std\+::atomic$<$ T $>$ $\ast$}]{address, }
+\item[{T}]{expected\+\_\+value, }
+\item[{T}]{new\+\_\+value}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_cas_row_a817b55482cc93b3503c3d37d479943c8}
+\hypertarget{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_cas_row_a6dd876b641f1e88f951d6a3cd72be34b}{}\index{tervel\+::algorithms\+::wf\+::mcas\+::\+Cas\+Row@{tervel\+::algorithms\+::wf\+::mcas\+::\+Cas\+Row}!````~Cas\+Row@{$\sim$\+Cas\+Row}}
+\index{````~Cas\+Row@{$\sim$\+Cas\+Row}!tervel\+::algorithms\+::wf\+::mcas\+::\+Cas\+Row@{tervel\+::algorithms\+::wf\+::mcas\+::\+Cas\+Row}}
+\subsubsection[{$\sim$\+Cas\+Row()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T$>$ {\bf tervel\+::algorithms\+::wf\+::mcas\+::\+Cas\+Row}$<$ T $>$\+::$\sim${\bf Cas\+Row} (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_cas_row_a6dd876b641f1e88f951d6a3cd72be34b}
+
+
+\subsection{Friends And Related Function Documentation}
+\hypertarget{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_cas_row_a5c80c15327d420ec6bc5ab9dcf51d71e}{}\index{tervel\+::algorithms\+::wf\+::mcas\+::\+Cas\+Row@{tervel\+::algorithms\+::wf\+::mcas\+::\+Cas\+Row}!operator"!=@{operator"!=}}
+\index{operator"!=@{operator"!=}!tervel\+::algorithms\+::wf\+::mcas\+::\+Cas\+Row@{tervel\+::algorithms\+::wf\+::mcas\+::\+Cas\+Row}}
+\subsubsection[{operator"!=}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T$>$ bool operator!= (
+\begin{DoxyParamCaption}
+\item[{const {\bf Cas\+Row}$<$ T $>$ \&}]{a, }
+\item[{const {\bf Cas\+Row}$<$ T $>$ \&}]{b}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [friend]}}\label{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_cas_row_a5c80c15327d420ec6bc5ab9dcf51d71e}
+\hypertarget{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_cas_row_a83e942681a1ebe69e69f7fedf93cc89f}{}\index{tervel\+::algorithms\+::wf\+::mcas\+::\+Cas\+Row@{tervel\+::algorithms\+::wf\+::mcas\+::\+Cas\+Row}!operator$<$@{operator$<$}}
+\index{operator$<$@{operator$<$}!tervel\+::algorithms\+::wf\+::mcas\+::\+Cas\+Row@{tervel\+::algorithms\+::wf\+::mcas\+::\+Cas\+Row}}
+\subsubsection[{operator$<$}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T$>$ bool operator$<$ (
+\begin{DoxyParamCaption}
+\item[{const {\bf Cas\+Row}$<$ T $>$ \&}]{a, }
+\item[{const {\bf Cas\+Row}$<$ T $>$ \&}]{b}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [friend]}}\label{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_cas_row_a83e942681a1ebe69e69f7fedf93cc89f}
+\hypertarget{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_cas_row_abfebad601d55fa9ccd25347967c3fdf4}{}\index{tervel\+::algorithms\+::wf\+::mcas\+::\+Cas\+Row@{tervel\+::algorithms\+::wf\+::mcas\+::\+Cas\+Row}!operator==@{operator==}}
+\index{operator==@{operator==}!tervel\+::algorithms\+::wf\+::mcas\+::\+Cas\+Row@{tervel\+::algorithms\+::wf\+::mcas\+::\+Cas\+Row}}
+\subsubsection[{operator==}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T$>$ bool operator== (
+\begin{DoxyParamCaption}
+\item[{const {\bf Cas\+Row}$<$ T $>$ \&}]{a, }
+\item[{const {\bf Cas\+Row}$<$ T $>$ \&}]{b}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [friend]}}\label{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_cas_row_abfebad601d55fa9ccd25347967c3fdf4}
+\hypertarget{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_cas_row_a614f8a40786b7bb3223b08f56013228e}{}\index{tervel\+::algorithms\+::wf\+::mcas\+::\+Cas\+Row@{tervel\+::algorithms\+::wf\+::mcas\+::\+Cas\+Row}!operator$>$@{operator$>$}}
+\index{operator$>$@{operator$>$}!tervel\+::algorithms\+::wf\+::mcas\+::\+Cas\+Row@{tervel\+::algorithms\+::wf\+::mcas\+::\+Cas\+Row}}
+\subsubsection[{operator$>$}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T$>$ bool operator$>$ (
+\begin{DoxyParamCaption}
+\item[{const {\bf Cas\+Row}$<$ T $>$ \&}]{a, }
+\item[{const {\bf Cas\+Row}$<$ T $>$ \&}]{b}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [friend]}}\label{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_cas_row_a614f8a40786b7bb3223b08f56013228e}
+\hypertarget{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_cas_row_a5b373a53721ccf837fb585df65a585ff}{}\index{tervel\+::algorithms\+::wf\+::mcas\+::\+Cas\+Row@{tervel\+::algorithms\+::wf\+::mcas\+::\+Cas\+Row}!swap@{swap}}
+\index{swap@{swap}!tervel\+::algorithms\+::wf\+::mcas\+::\+Cas\+Row@{tervel\+::algorithms\+::wf\+::mcas\+::\+Cas\+Row}}
+\subsubsection[{swap}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T$>$ void swap (
+\begin{DoxyParamCaption}
+\item[{{\bf Cas\+Row}$<$ T $>$ \&}]{a, }
+\item[{{\bf Cas\+Row}$<$ T $>$ \&}]{b}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [friend]}}\label{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_cas_row_a5b373a53721ccf837fb585df65a585ff}
+
+
+This funciton is used when the \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_m_c_a_s}{M\+C\+A\+S} operation is sorted to re-\/arrange the Cas\+Rows so they are sorted in a decsending manner. 
+
+Sorting is important to prevent cyclic dependices between \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_m_c_a_s}{M\+C\+A\+S} operations. We choose descedning as a secondary bound on the number of \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_m_c_a_s}{M\+C\+A\+S} operations. That could interfer with this operation. 
+
+\subsection{Member Data Documentation}
+\hypertarget{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_cas_row_a8481dc81b0be30ba611a7f4478989710}{}\index{tervel\+::algorithms\+::wf\+::mcas\+::\+Cas\+Row@{tervel\+::algorithms\+::wf\+::mcas\+::\+Cas\+Row}!address\+\_\+@{address\+\_\+}}
+\index{address\+\_\+@{address\+\_\+}!tervel\+::algorithms\+::wf\+::mcas\+::\+Cas\+Row@{tervel\+::algorithms\+::wf\+::mcas\+::\+Cas\+Row}}
+\subsubsection[{address\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T$>$ std\+::atomic$<$T$>$$\ast$ {\bf tervel\+::algorithms\+::wf\+::mcas\+::\+Cas\+Row}$<$ T $>$\+::address\+\_\+}\label{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_cas_row_a8481dc81b0be30ba611a7f4478989710}
+\hypertarget{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_cas_row_a66a7a49d2689691763631b635d0f80b6}{}\index{tervel\+::algorithms\+::wf\+::mcas\+::\+Cas\+Row@{tervel\+::algorithms\+::wf\+::mcas\+::\+Cas\+Row}!expected\+\_\+value\+\_\+@{expected\+\_\+value\+\_\+}}
+\index{expected\+\_\+value\+\_\+@{expected\+\_\+value\+\_\+}!tervel\+::algorithms\+::wf\+::mcas\+::\+Cas\+Row@{tervel\+::algorithms\+::wf\+::mcas\+::\+Cas\+Row}}
+\subsubsection[{expected\+\_\+value\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T$>$ T {\bf tervel\+::algorithms\+::wf\+::mcas\+::\+Cas\+Row}$<$ T $>$\+::expected\+\_\+value\+\_\+}\label{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_cas_row_a66a7a49d2689691763631b635d0f80b6}
+\hypertarget{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_cas_row_a762b03fb15cb83f591430c393bd3b444}{}\index{tervel\+::algorithms\+::wf\+::mcas\+::\+Cas\+Row@{tervel\+::algorithms\+::wf\+::mcas\+::\+Cas\+Row}!helper\+\_\+@{helper\+\_\+}}
+\index{helper\+\_\+@{helper\+\_\+}!tervel\+::algorithms\+::wf\+::mcas\+::\+Cas\+Row@{tervel\+::algorithms\+::wf\+::mcas\+::\+Cas\+Row}}
+\subsubsection[{helper\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T$>$ std\+::atomic$<${\bf Helper}$<$T$>$ $\ast$$>$ {\bf tervel\+::algorithms\+::wf\+::mcas\+::\+Cas\+Row}$<$ T $>$\+::helper\+\_\+}\label{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_cas_row_a762b03fb15cb83f591430c393bd3b444}
+\hypertarget{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_cas_row_adcc297c44b5dafc6b08b9fcf3cdc277e}{}\index{tervel\+::algorithms\+::wf\+::mcas\+::\+Cas\+Row@{tervel\+::algorithms\+::wf\+::mcas\+::\+Cas\+Row}!new\+\_\+value\+\_\+@{new\+\_\+value\+\_\+}}
+\index{new\+\_\+value\+\_\+@{new\+\_\+value\+\_\+}!tervel\+::algorithms\+::wf\+::mcas\+::\+Cas\+Row@{tervel\+::algorithms\+::wf\+::mcas\+::\+Cas\+Row}}
+\subsubsection[{new\+\_\+value\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T$>$ T {\bf tervel\+::algorithms\+::wf\+::mcas\+::\+Cas\+Row}$<$ T $>$\+::new\+\_\+value\+\_\+}\label{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_cas_row_adcc297c44b5dafc6b08b9fcf3cdc277e}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+tervel/algorithms/wf/mcas/\hyperlink{mcas__casrow_8h}{mcas\+\_\+casrow.\+h}\end{DoxyCompactItemize}

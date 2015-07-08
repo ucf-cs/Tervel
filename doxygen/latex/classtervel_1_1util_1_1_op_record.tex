@@ -1,0 +1,143 @@
+\hypertarget{classtervel_1_1util_1_1_op_record}{}\section{tervel\+:\+:util\+:\+:Op\+Record Class Reference}
+\label{classtervel_1_1util_1_1_op_record}\index{tervel\+::util\+::\+Op\+Record@{tervel\+::util\+::\+Op\+Record}}
+
+
+This class is used to create Operation Records.  
+
+
+
+
+{\ttfamily \#include $<$progress\+\_\+assurance.\+h$>$}
+
+Inheritance diagram for tervel\+:\+:util\+:\+:Op\+Record\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=7.706422cm]{classtervel_1_1util_1_1_op_record}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classtervel_1_1util_1_1_op_record_aab6cd47463ff94ff4e94a7f1a57b7312}{Op\+Record} ()
+\item 
+virtual void \hyperlink{classtervel_1_1util_1_1_op_record_aa75ab39688a8d4cceb6a1ef0409537c0}{help\+\_\+complete} ()=0
+\begin{DoxyCompactList}\small\item\em Implementations of this function that upon its return the operation described in the \hyperlink{classtervel_1_1util_1_1_op_record}{Op\+Record} has been completed. \end{DoxyCompactList}\item 
+bool \hyperlink{classtervel_1_1util_1_1_op_record_a6433f4d6d353ba6ed66e8eaefaa07d32}{on\+\_\+watch} (std\+::atomic$<$ void $\ast$ $>$ $\ast$address, void $\ast$expected)
+\begin{DoxyCompactList}\small\item\em This function is used to achieve a strong watch on an Element. \end{DoxyCompactList}\item 
+bool \hyperlink{classtervel_1_1util_1_1_op_record_a80c4ee47bebf246ce40bb922958dd21b}{on\+\_\+is\+\_\+watched} ()
+\begin{DoxyCompactList}\small\item\em This function is used to check a strong watch on an Element. \end{DoxyCompactList}\item 
+void \hyperlink{classtervel_1_1util_1_1_op_record_a0018d1a71b9b3dcc4e2f59f34c938a46}{on\+\_\+unwatch} ()
+\begin{DoxyCompactList}\small\item\em This function is used to remove a strong watch on an Element. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classtervel_1_1util_1_1_op_record_abf951d0ffac66bfebc8ae6aef8a3c6e1}{D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N} (\hyperlink{classtervel_1_1util_1_1_op_record}{Op\+Record})
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This class is used to create Operation Records. 
+
+Operation records are designed to allow an arbitary thread to complete some other thread\textquotesingle{}s operation in the event that thread is unable to do so. These objects are H\+P protected. 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classtervel_1_1util_1_1_op_record_aab6cd47463ff94ff4e94a7f1a57b7312}{}\index{tervel\+::util\+::\+Op\+Record@{tervel\+::util\+::\+Op\+Record}!Op\+Record@{Op\+Record}}
+\index{Op\+Record@{Op\+Record}!tervel\+::util\+::\+Op\+Record@{tervel\+::util\+::\+Op\+Record}}
+\subsubsection[{Op\+Record()}]{\setlength{\rightskip}{0pt plus 5cm}tervel\+::util\+::\+Op\+Record\+::\+Op\+Record (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1util_1_1_op_record_aab6cd47463ff94ff4e94a7f1a57b7312}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classtervel_1_1util_1_1_op_record_abf951d0ffac66bfebc8ae6aef8a3c6e1}{}\index{tervel\+::util\+::\+Op\+Record@{tervel\+::util\+::\+Op\+Record}!D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N@{D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N}}
+\index{D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N@{D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N}!tervel\+::util\+::\+Op\+Record@{tervel\+::util\+::\+Op\+Record}}
+\subsubsection[{D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N(\+Op\+Record)}]{\setlength{\rightskip}{0pt plus 5cm}tervel\+::util\+::\+Op\+Record\+::\+D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N (
+\begin{DoxyParamCaption}
+\item[{{\bf Op\+Record}}]{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1util_1_1_op_record_abf951d0ffac66bfebc8ae6aef8a3c6e1}
+\hypertarget{classtervel_1_1util_1_1_op_record_aa75ab39688a8d4cceb6a1ef0409537c0}{}\index{tervel\+::util\+::\+Op\+Record@{tervel\+::util\+::\+Op\+Record}!help\+\_\+complete@{help\+\_\+complete}}
+\index{help\+\_\+complete@{help\+\_\+complete}!tervel\+::util\+::\+Op\+Record@{tervel\+::util\+::\+Op\+Record}}
+\subsubsection[{help\+\_\+complete()=0}]{\setlength{\rightskip}{0pt plus 5cm}virtual void tervel\+::util\+::\+Op\+Record\+::help\+\_\+complete (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [pure virtual]}}\label{classtervel_1_1util_1_1_op_record_aa75ab39688a8d4cceb6a1ef0409537c0}
+
+
+Implementations of this function that upon its return the operation described in the \hyperlink{classtervel_1_1util_1_1_op_record}{Op\+Record} has been completed. 
+
+As such it must be thread-\/safe and the extending class must contain all the information necessary to complete the operation. 
+
+Implemented in \hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map_1_1_force_expand_op_adfe48adab3158c1e81119a2ff369e3d8}{tervel\+::containers\+::wf\+::\+Hash\+Map$<$ Key, Value, Functor $>$\+::\+Force\+Expand\+Op}, \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_pop_op_abd820a976a7f356f87ed8dadddef12c4}{tervel\+::containers\+::wf\+::vector\+::\+Pop\+Op$<$ T $>$}, \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_op_aca23a90c8ef1a6ac95a102def3b63d56}{tervel\+::containers\+::wf\+::vector\+::\+Push\+Op$<$ T $>$}, \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_a2581e26f73e07c80473cf2999cf45652}{tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap$<$ T $>$}, \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_pop_w_r_a_op_ab9dbcb928b3805f777856e2e35e9b461}{tervel\+::containers\+::wf\+::vector\+::\+Pop\+W\+R\+A\+Op$<$ T $>$}, \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_write_op_a30f4a6d0e37b6e591fb986977304e08d}{tervel\+::containers\+::wf\+::vector\+::\+Write\+Op$<$ T $>$}, \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_w_r_a_op_ae06dc17442f24775407ce7eabbf79a59}{tervel\+::containers\+::wf\+::vector\+::\+Push\+W\+R\+A\+Op$<$ T $>$}, \hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_read_first_op_a21e1fa517b7e7f522be78dcc95d810da}{tervel\+::util\+::memory\+::rc\+::\+Read\+First\+Op}, \hyperlink{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_enqueue_op_a928f562593a93be6c99df05c128012b8}{tervel\+::containers\+::wf\+::\+Ring\+Buffer$<$ T $>$\+::\+Enqueue\+Op$<$ T $>$}, \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_read_op_ad2c5f63b0c39e1b30350656fcdd44538}{tervel\+::containers\+::wf\+::vector\+::\+Read\+Op$<$ T $>$}, and \hyperlink{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_dequeue_op_a0f798edd2a65caf9ce112b496c27bdd5}{tervel\+::containers\+::wf\+::\+Ring\+Buffer$<$ T $>$\+::\+Dequeue\+Op$<$ T $>$}.
+
+\hypertarget{classtervel_1_1util_1_1_op_record_a80c4ee47bebf246ce40bb922958dd21b}{}\index{tervel\+::util\+::\+Op\+Record@{tervel\+::util\+::\+Op\+Record}!on\+\_\+is\+\_\+watched@{on\+\_\+is\+\_\+watched}}
+\index{on\+\_\+is\+\_\+watched@{on\+\_\+is\+\_\+watched}!tervel\+::util\+::\+Op\+Record@{tervel\+::util\+::\+Op\+Record}}
+\subsubsection[{on\+\_\+is\+\_\+watched()}]{\setlength{\rightskip}{0pt plus 5cm}bool tervel\+::util\+::\+Op\+Record\+::on\+\_\+is\+\_\+watched (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}\label{classtervel_1_1util_1_1_op_record_a80c4ee47bebf246ce40bb922958dd21b}
+
+
+This function is used to check a strong watch on an Element. 
+
+Classes wishing to express this should override this function.
+
+\begin{DoxyReturn}{Returns}
+whether or not the element is watched. 
+\end{DoxyReturn}
+
+
+Reimplemented from \hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_element_a88306bc6b64d0110e3ee568514dbcc04}{tervel\+::util\+::memory\+::hp\+::\+Element}.
+
+\hypertarget{classtervel_1_1util_1_1_op_record_a0018d1a71b9b3dcc4e2f59f34c938a46}{}\index{tervel\+::util\+::\+Op\+Record@{tervel\+::util\+::\+Op\+Record}!on\+\_\+unwatch@{on\+\_\+unwatch}}
+\index{on\+\_\+unwatch@{on\+\_\+unwatch}!tervel\+::util\+::\+Op\+Record@{tervel\+::util\+::\+Op\+Record}}
+\subsubsection[{on\+\_\+unwatch()}]{\setlength{\rightskip}{0pt plus 5cm}void tervel\+::util\+::\+Op\+Record\+::on\+\_\+unwatch (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}\label{classtervel_1_1util_1_1_op_record_a0018d1a71b9b3dcc4e2f59f34c938a46}
+
+
+This function is used to remove a strong watch on an Element. 
+
+Classes wishing to express this should override this function. 
+
+Reimplemented from \hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_element_ae71f306b6c9f08565e61546a0dc0a30c}{tervel\+::util\+::memory\+::hp\+::\+Element}.
+
+\hypertarget{classtervel_1_1util_1_1_op_record_a6433f4d6d353ba6ed66e8eaefaa07d32}{}\index{tervel\+::util\+::\+Op\+Record@{tervel\+::util\+::\+Op\+Record}!on\+\_\+watch@{on\+\_\+watch}}
+\index{on\+\_\+watch@{on\+\_\+watch}!tervel\+::util\+::\+Op\+Record@{tervel\+::util\+::\+Op\+Record}}
+\subsubsection[{on\+\_\+watch(std\+::atomic$<$ void $\ast$ $>$ $\ast$address, void $\ast$expected)}]{\setlength{\rightskip}{0pt plus 5cm}bool tervel\+::util\+::\+Op\+Record\+::on\+\_\+watch (
+\begin{DoxyParamCaption}
+\item[{std\+::atomic$<$ void $\ast$ $>$ $\ast$}]{address, }
+\item[{void $\ast$}]{expected}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}\label{classtervel_1_1util_1_1_op_record_a6433f4d6d353ba6ed66e8eaefaa07d32}
+
+
+This function is used to achieve a strong watch on an Element. 
+
+Classes wishing to express this should override this function.
+
+
+\begin{DoxyParams}{Parameters}
+{\em address} & the expected was load from \\
+\hline
+{\em expected} & the last known value of address \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+whether or not the element was succefully watched. 
+\end{DoxyReturn}
+
+
+Reimplemented from \hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_element_a53493ef4754dd77016139863af964f90}{tervel\+::util\+::memory\+::hp\+::\+Element}.
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+tervel/util/\hyperlink{progress__assurance_8h}{progress\+\_\+assurance.\+h}\end{DoxyCompactItemize}

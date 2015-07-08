@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" itemscope itemtype="https://schema.org/WebPage">
+  {% include head.html %}
+  <body>
+    {% include header.html %}
+
+    <div class="page-title-bar">
+      <div class="container">
+        <h1>Documentation</h1>
+      </div>
+    </div>
+
+    <div class="container vpad">
+      <div class="row">
+        <div class="col-md-9">
+          {{ content }}
+        </div>
+        <div class="col-md-3">
+          <ul class="list-unstyled docs-side-nav">
+            <li><a href="install.html">Installing</a></li>
+            <li><a href="getting-started.html">Getting Started</a></li>
+            <li>
+              Using Tervel:
+              <ul>
+                <li><a href="build-ref.html">Concepts</a></li>
+                <li><a href="tervel-user-manual.html">User Manual</a></li>
+                <li><a href="{{ site.baseurl }}/doxygen/html/index.html">Doxygen</a></li>
+                <li><a href="{{ site.gitrepo }}">Git</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    {% include footer.html %}
+  </body>
+</html>

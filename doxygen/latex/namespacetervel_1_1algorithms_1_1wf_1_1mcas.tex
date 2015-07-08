@@ -1,0 +1,40 @@
+\hypertarget{namespacetervel_1_1algorithms_1_1wf_1_1mcas}{}\section{tervel\+:\+:algorithms\+:\+:wf\+:\+:mcas Namespace Reference}
+\label{namespacetervel_1_1algorithms_1_1wf_1_1mcas}\index{tervel\+::algorithms\+::wf\+::mcas@{tervel\+::algorithms\+::wf\+::mcas}}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_cas_row}{Cas\+Row}
+\begin{DoxyCompactList}\small\item\em This class is used to represent a one of the M C\+A\+S operations performed by an \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_m_c_a_s}{M\+C\+A\+S} operation. \end{DoxyCompactList}\item 
+class \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_helper}{Helper}
+\begin{DoxyCompactList}\small\item\em This class is the \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_m_c_a_s}{M\+C\+A\+S} operation\textquotesingle{}s helper. \end{DoxyCompactList}\item 
+class \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_m_c_a_s}{M\+C\+A\+S}
+\item 
+class \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap}{Multi\+Word\+Compare\+And\+Swap}
+\begin{DoxyCompactList}\small\item\em \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap}{Multi\+Word\+Compare\+And\+Swap} class is used to perform a Multi-\/\+Word Compare-\/and-\/\+Swap (\hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_m_c_a_s}{M\+C\+A\+S}) To execute an \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_m_c_a_s}{M\+C\+A\+S}, call add\+C\+A\+S\+Triple for each address you want to update, then call \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_a3cf56f32c7579f734b1e0ecbd8d9c7f3}{execute()};. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$class T $>$ }\\T \hyperlink{namespacetervel_1_1algorithms_1_1wf_1_1mcas_a5abaf235e4abd3bd1f9f372c5d914d08}{read} (std\+::atomic$<$ T $>$ $\ast$address)
+\begin{DoxyCompactList}\small\item\em This function determines the logical value of the address. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\hypertarget{namespacetervel_1_1algorithms_1_1wf_1_1mcas_a5abaf235e4abd3bd1f9f372c5d914d08}{}\index{tervel\+::algorithms\+::wf\+::mcas@{tervel\+::algorithms\+::wf\+::mcas}!read@{read}}
+\index{read@{read}!tervel\+::algorithms\+::wf\+::mcas@{tervel\+::algorithms\+::wf\+::mcas}}
+\subsubsection[{read(std\+::atomic$<$ T $>$ $\ast$address)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ T tervel\+::algorithms\+::wf\+::mcas\+::read (
+\begin{DoxyParamCaption}
+\item[{std\+::atomic$<$ T $>$ $\ast$}]{address}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{namespacetervel_1_1algorithms_1_1wf_1_1mcas_a5abaf235e4abd3bd1f9f372c5d914d08}
+
+
+This function determines the logical value of the address. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em address} & the location to determine the value \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the logical value 
+\end{DoxyReturn}

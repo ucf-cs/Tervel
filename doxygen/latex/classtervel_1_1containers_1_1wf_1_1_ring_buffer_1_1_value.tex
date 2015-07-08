@@ -1,0 +1,128 @@
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_value}{}\section{tervel\+:\+:containers\+:\+:wf\+:\+:Ring\+Buffer$<$ T $>$\+:\+:Value Class Reference}
+\label{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_value}\index{tervel\+::containers\+::wf\+::\+Ring\+Buffer$<$ T $>$\+::\+Value@{tervel\+::containers\+::wf\+::\+Ring\+Buffer$<$ T $>$\+::\+Value}}
+
+
+\hyperlink{classtervel_1_1containers_1_1wf_1_1_ring_buffer}{Ring\+Buffer} value class, values stored in the class must extend it.  
+
+
+
+
+{\ttfamily \#include $<$ring\+\_\+buffer.\+h$>$}
+
+Inheritance diagram for tervel\+:\+:containers\+:\+:wf\+:\+:Ring\+Buffer$<$ T $>$\+:\+:Value\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_value}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_value_a613688460de05951b79f31a3f1482ede}{Value} ()
+\begin{DoxyCompactList}\small\item\em Empty constructor. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+friend \hyperlink{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_value_a603884ee3e254094da695fa05b796764}{Ring\+Buffer}
+\end{DoxyCompactItemize}
+\subsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+int64\+\_\+t \hyperlink{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_value_addbad0a38025643a16f01edaf501a982}{func\+\_\+seqid} ()
+\begin{DoxyCompactList}\small\item\em Returns the items seqid. \end{DoxyCompactList}\item 
+void \hyperlink{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_value_a1ea5c365921ff3476b5dba84ad104cbc}{func\+\_\+seqid} (int64\+\_\+t s)
+\begin{DoxyCompactList}\small\item\em Sets the items seqid. \end{DoxyCompactList}\item 
+void \hyperlink{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_value_a7bd2fbc2b8577ac6bd884e06328bfb2d}{atomic\+\_\+change\+\_\+seqid} (int64\+\_\+t e, int64\+\_\+t n)
+\begin{DoxyCompactList}\small\item\em Conditionally updates the seqid. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+int64\+\_\+t \hyperlink{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_value_aaecdcc3fbb8c5a8b784625e835c7d6ef}{seqid\+\_\+} \{-\/1\}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\subsubsection*{template$<$typename T$>$class tervel\+::containers\+::wf\+::\+Ring\+Buffer$<$ T $>$\+::\+Value}
+
+\hyperlink{classtervel_1_1containers_1_1wf_1_1_ring_buffer}{Ring\+Buffer} value class, values stored in the class must extend it. 
+
+This class is necessary to provide the F\+I\+F\+O property. It adds a sequence identifier to each value stored. Using this identifier, we are apply generate F\+I\+F\+O valid sequential history from a concurrent history. 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_value_a613688460de05951b79f31a3f1482ede}{}\index{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Value@{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Value}!Value@{Value}}
+\index{Value@{Value}!tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Value@{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Value}}
+\subsubsection[{Value()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T$>$ {\bf tervel\+::containers\+::wf\+::\+Ring\+Buffer}$<$ T $>$\+::Value\+::\+Value (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_value_a613688460de05951b79f31a3f1482ede}
+
+
+Empty constructor. 
+
+Empty Constructor 
+
+\subsection{Member Function Documentation}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_value_a7bd2fbc2b8577ac6bd884e06328bfb2d}{}\index{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Value@{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Value}!atomic\+\_\+change\+\_\+seqid@{atomic\+\_\+change\+\_\+seqid}}
+\index{atomic\+\_\+change\+\_\+seqid@{atomic\+\_\+change\+\_\+seqid}!tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Value@{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Value}}
+\subsubsection[{atomic\+\_\+change\+\_\+seqid(int64\+\_\+t e, int64\+\_\+t n)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T$>$ void {\bf tervel\+::containers\+::wf\+::\+Ring\+Buffer}$<$ T $>$\+::Value\+::atomic\+\_\+change\+\_\+seqid (
+\begin{DoxyParamCaption}
+\item[{int64\+\_\+t}]{e, }
+\item[{int64\+\_\+t}]{n}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}\label{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_value_a7bd2fbc2b8577ac6bd884e06328bfb2d}
+
+
+Conditionally updates the seqid. 
+
+This function is used when multiple threads maybe enqueueing the same value
+
+
+\begin{DoxyParams}{Parameters}
+{\em e} & expected seqid (address of the oprec $\ast$ -\/1). \\
+\hline
+{\em n} & new seqid \\
+\hline
+\end{DoxyParams}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_value_addbad0a38025643a16f01edaf501a982}{}\index{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Value@{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Value}!func\+\_\+seqid@{func\+\_\+seqid}}
+\index{func\+\_\+seqid@{func\+\_\+seqid}!tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Value@{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Value}}
+\subsubsection[{func\+\_\+seqid()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T$>$ int64\+\_\+t {\bf tervel\+::containers\+::wf\+::\+Ring\+Buffer}$<$ T $>$\+::Value\+::func\+\_\+seqid (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}\label{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_value_addbad0a38025643a16f01edaf501a982}
+
+
+Returns the items seqid. 
+
+Returns the items seqid \begin{DoxyReturn}{Returns}
+Returns the items seqid 
+\end{DoxyReturn}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_value_a1ea5c365921ff3476b5dba84ad104cbc}{}\index{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Value@{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Value}!func\+\_\+seqid@{func\+\_\+seqid}}
+\index{func\+\_\+seqid@{func\+\_\+seqid}!tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Value@{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Value}}
+\subsubsection[{func\+\_\+seqid(int64\+\_\+t s)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T$>$ void {\bf tervel\+::containers\+::wf\+::\+Ring\+Buffer}$<$ T $>$\+::Value\+::func\+\_\+seqid (
+\begin{DoxyParamCaption}
+\item[{int64\+\_\+t}]{s}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}\label{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_value_a1ea5c365921ff3476b5dba84ad104cbc}
+
+
+Sets the items seqid. 
+
+Sets the items seqid \begin{DoxyReturn}{Returns}
+Sets the items seqid 
+\end{DoxyReturn}
+
+
+\subsection{Member Data Documentation}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_value_a603884ee3e254094da695fa05b796764}{}\index{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Value@{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Value}!Ring\+Buffer@{Ring\+Buffer}}
+\index{Ring\+Buffer@{Ring\+Buffer}!tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Value@{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Value}}
+\subsubsection[{Ring\+Buffer}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T$>$ friend {\bf tervel\+::containers\+::wf\+::\+Ring\+Buffer}$<$ T $>$\+::Value\+::\+Ring\+Buffer}\label{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_value_a603884ee3e254094da695fa05b796764}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_value_aaecdcc3fbb8c5a8b784625e835c7d6ef}{}\index{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Value@{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Value}!seqid\+\_\+@{seqid\+\_\+}}
+\index{seqid\+\_\+@{seqid\+\_\+}!tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Value@{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Value}}
+\subsubsection[{seqid\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T$>$ int64\+\_\+t {\bf tervel\+::containers\+::wf\+::\+Ring\+Buffer}$<$ T $>$\+::Value\+::seqid\+\_\+ \{-\/1\}\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_value_aaecdcc3fbb8c5a8b784625e835c7d6ef}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+tervel/containers/wf/ring-\/buffer/\hyperlink{ring__buffer_8h}{ring\+\_\+buffer.\+h}\end{DoxyCompactItemize}

@@ -1,0 +1,754 @@
+\hypertarget{class_test_object}{}\section{Test\+Object Class Reference}
+\label{class_test_object}\index{Test\+Object@{Test\+Object}}
+
+
+{\ttfamily \#include $<$test\+Object.\+h$>$}
+
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{struct_test_object_1_1counter}{counter}
+\end{DoxyCompactItemize}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+enum \hyperlink{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691}{op\+\_\+codes} \+: int \{ \\*
+\hyperlink{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691ab592ae7309e65362b9e0d2f04ed2386d}{find} = 0, 
+\hyperlink{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a3dfd45ac036e0f96c87e73d9ff8379b7}{insert}, 
+\hyperlink{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691aaa6a13d0d0daf0afb752b9f153470cbc}{update}, 
+\hyperlink{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a5a60d7f84862567a5e1266335785110e}{remove}, 
+\\*
+\hyperlink{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691aa86a0ab56d515a87ad230849609f4abc}{L\+E\+N\+G\+T\+H}, 
+\hyperlink{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a863802059023aa4212f7d095e5eef98a}{enqueue} = 0, 
+\hyperlink{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a7e5ac462412b7b6578737a48580e30ab}{dequeue}, 
+\hyperlink{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a6cd138a1d3f62e8dcf4c2dc3e1a2dd0e}{faildequeue}, 
+\\*
+\hyperlink{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691ab43880c87ff2ab4931e4d08b4f7e8ad3}{failenqueue}, 
+\hyperlink{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691aa86a0ab56d515a87ad230849609f4abc}{L\+E\+N\+G\+T\+H}, 
+\hyperlink{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a2b44f9f70ebc199aeff73f13eebe3340}{cas} = 0, 
+\hyperlink{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a8b7aeb9aee90c400d0c2a8c2ab9ee7dd}{at}, 
+\\*
+\hyperlink{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a8aab8c0bbc55fbc25b82c305340bb5de}{pop\+Back}, 
+\hyperlink{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a3a4336051aeaf535d5aa9126238c34ec}{push\+Back}, 
+\hyperlink{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691aff4ed9ee8956557260cfa98f1ad9b958}{size}, 
+\hyperlink{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691aa86a0ab56d515a87ad230849609f4abc}{L\+E\+N\+G\+T\+H}
+ \}
+\item 
+enum \hyperlink{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691}{op\+\_\+codes} \+: int \{ \\*
+\hyperlink{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691ab592ae7309e65362b9e0d2f04ed2386d}{find} = 0, 
+\hyperlink{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a3dfd45ac036e0f96c87e73d9ff8379b7}{insert}, 
+\hyperlink{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691aaa6a13d0d0daf0afb752b9f153470cbc}{update}, 
+\hyperlink{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a5a60d7f84862567a5e1266335785110e}{remove}, 
+\\*
+\hyperlink{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691aa86a0ab56d515a87ad230849609f4abc}{L\+E\+N\+G\+T\+H}, 
+\hyperlink{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a863802059023aa4212f7d095e5eef98a}{enqueue} = 0, 
+\hyperlink{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a7e5ac462412b7b6578737a48580e30ab}{dequeue}, 
+\hyperlink{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a6cd138a1d3f62e8dcf4c2dc3e1a2dd0e}{faildequeue}, 
+\\*
+\hyperlink{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691ab43880c87ff2ab4931e4d08b4f7e8ad3}{failenqueue}, 
+\hyperlink{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691aa86a0ab56d515a87ad230849609f4abc}{L\+E\+N\+G\+T\+H}, 
+\hyperlink{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a2b44f9f70ebc199aeff73f13eebe3340}{cas} = 0, 
+\hyperlink{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a8b7aeb9aee90c400d0c2a8c2ab9ee7dd}{at}, 
+\\*
+\hyperlink{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a8aab8c0bbc55fbc25b82c305340bb5de}{pop\+Back}, 
+\hyperlink{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a3a4336051aeaf535d5aa9126238c34ec}{push\+Back}, 
+\hyperlink{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691aff4ed9ee8956557260cfa98f1ad9b958}{size}, 
+\hyperlink{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691aa86a0ab56d515a87ad230849609f4abc}{L\+E\+N\+G\+T\+H}
+ \}
+\item 
+enum \hyperlink{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691}{op\+\_\+codes} \+: int \{ \\*
+\hyperlink{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691ab592ae7309e65362b9e0d2f04ed2386d}{find} = 0, 
+\hyperlink{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a3dfd45ac036e0f96c87e73d9ff8379b7}{insert}, 
+\hyperlink{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691aaa6a13d0d0daf0afb752b9f153470cbc}{update}, 
+\hyperlink{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a5a60d7f84862567a5e1266335785110e}{remove}, 
+\\*
+\hyperlink{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691aa86a0ab56d515a87ad230849609f4abc}{L\+E\+N\+G\+T\+H}, 
+\hyperlink{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a863802059023aa4212f7d095e5eef98a}{enqueue} = 0, 
+\hyperlink{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a7e5ac462412b7b6578737a48580e30ab}{dequeue}, 
+\hyperlink{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a6cd138a1d3f62e8dcf4c2dc3e1a2dd0e}{faildequeue}, 
+\\*
+\hyperlink{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691ab43880c87ff2ab4931e4d08b4f7e8ad3}{failenqueue}, 
+\hyperlink{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691aa86a0ab56d515a87ad230849609f4abc}{L\+E\+N\+G\+T\+H}, 
+\hyperlink{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a2b44f9f70ebc199aeff73f13eebe3340}{cas} = 0, 
+\hyperlink{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a8b7aeb9aee90c400d0c2a8c2ab9ee7dd}{at}, 
+\\*
+\hyperlink{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a8aab8c0bbc55fbc25b82c305340bb5de}{pop\+Back}, 
+\hyperlink{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a3a4336051aeaf535d5aa9126238c34ec}{push\+Back}, 
+\hyperlink{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691aff4ed9ee8956557260cfa98f1ad9b958}{size}, 
+\hyperlink{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691aa86a0ab56d515a87ad230849609f4abc}{L\+E\+N\+G\+T\+H}
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{class_test_object_adfad75ad3f6c014f68ff2cdc4e752fc9}{set\+\_\+rates} ()
+\item 
+\hyperlink{class_test_object_a3d0036f18982129567596b06d72087b6}{Test\+Object} ()
+\item 
+\hyperlink{class_test_object_a3262a3065422e5ebd007e38c4c50d01f}{$\sim$\+Test\+Object} ()
+\item 
+void \hyperlink{class_test_object_a9aec85cd402d269ccf81cca9dcb4c31e}{attach\+Thread} (int thread\+I\+D)
+\item 
+void \hyperlink{class_test_object_acf21dd1257cae9a96c4ea39233929027}{detach\+Thread} (int thread\+I\+D)
+\item 
+void \hyperlink{class_test_object_a7c5bccd9eb5900850169d39a22db8c53}{extra\+\_\+end\+\_\+signal} ()
+\item 
+void \hyperlink{class_test_object_acc6255f8f3e0f9e1a09955cc7f53caff}{init} ()
+\item 
+void \hyperlink{class_test_object_a30dbc74cb72669dd4d0cec14baa92bc9}{destroy} ()
+\item 
+void \hyperlink{class_test_object_ae0ac39cc52730e2c60961ea495b34550}{run} (int64\+\_\+t thread\+\_\+id)
+\item 
+std\+::string \hyperlink{class_test_object_af09564f241ed447b17ab16ef751eef8e}{to\+String} ()
+\item 
+std\+::string \hyperlink{class_test_object_a39bb7ef595355ab7459e992b85b045d8}{results} ()
+\item 
+void \hyperlink{class_test_object_a30655b96ad192de48772ad45036a38a3}{add\+\_\+results} (int func\+\_\+call\+\_\+count\mbox{[}\hyperlink{class_test_object_a2eafe110f35fcae7fa739cd52f02392a}{k\+\_\+num\+\_\+functions}\mbox{]})
+\item 
+\hyperlink{class_test_object_a3262a3065422e5ebd007e38c4c50d01f}{$\sim$\+Test\+Object} ()
+\item 
+\hyperlink{class_test_object_a3d0036f18982129567596b06d72087b6}{Test\+Object} ()
+\item 
+void \hyperlink{class_test_object_afeabc840ed3d84b34be1131f7ec4c2e0}{atomic\+\_\+add} (int passed\+\_\+count, int failed\+\_\+count)
+\item 
+void \hyperlink{class_test_object_a9aec85cd402d269ccf81cca9dcb4c31e}{attach\+Thread} (int thread\+I\+D)
+\item 
+void \hyperlink{class_test_object_acf21dd1257cae9a96c4ea39233929027}{detach\+Thread} (int thread\+I\+D)
+\item 
+void \hyperlink{class_test_object_a7c5bccd9eb5900850169d39a22db8c53}{extra\+\_\+end\+\_\+signal} ()
+\item 
+void \hyperlink{class_test_object_acc6255f8f3e0f9e1a09955cc7f53caff}{init} ()
+\item 
+void \hyperlink{class_test_object_a30dbc74cb72669dd4d0cec14baa92bc9}{destroy} ()
+\item 
+void \hyperlink{class_test_object_ae0ac39cc52730e2c60961ea495b34550}{run} (int64\+\_\+t thread\+\_\+id)
+\item 
+std\+::string \hyperlink{class_test_object_af09564f241ed447b17ab16ef751eef8e}{to\+String} ()
+\item 
+std\+::string \hyperlink{class_test_object_a39bb7ef595355ab7459e992b85b045d8}{results} ()
+\item 
+void \hyperlink{class_test_object_adfad75ad3f6c014f68ff2cdc4e752fc9}{set\+\_\+rates} ()
+\item 
+\hyperlink{class_test_object_a3d0036f18982129567596b06d72087b6}{Test\+Object} ()
+\item 
+\hyperlink{class_test_object_a3262a3065422e5ebd007e38c4c50d01f}{$\sim$\+Test\+Object} ()
+\item 
+void \hyperlink{class_test_object_a9aec85cd402d269ccf81cca9dcb4c31e}{attach\+Thread} (int thread\+I\+D)
+\item 
+void \hyperlink{class_test_object_acf21dd1257cae9a96c4ea39233929027}{detach\+Thread} (int thread\+I\+D)
+\item 
+void \hyperlink{class_test_object_a7c5bccd9eb5900850169d39a22db8c53}{extra\+\_\+end\+\_\+signal} ()
+\item 
+void \hyperlink{class_test_object_a147ed57b86118d03111f83b074828ab8}{sanity\+\_\+check} ()
+\item 
+void \hyperlink{class_test_object_acc6255f8f3e0f9e1a09955cc7f53caff}{init} ()
+\item 
+void \hyperlink{class_test_object_a30dbc74cb72669dd4d0cec14baa92bc9}{destroy} ()
+\item 
+void \hyperlink{class_test_object_ae0ac39cc52730e2c60961ea495b34550}{run} (int64\+\_\+t thread\+\_\+id)
+\item 
+std\+::string \hyperlink{class_test_object_af09564f241ed447b17ab16ef751eef8e}{to\+String} ()
+\item 
+std\+::string \hyperlink{class_test_object_a39bb7ef595355ab7459e992b85b045d8}{results} ()
+\item 
+void \hyperlink{class_test_object_a30655b96ad192de48772ad45036a38a3}{add\+\_\+results} (int func\+\_\+call\+\_\+count\mbox{[}\hyperlink{class_test_object_a2eafe110f35fcae7fa739cd52f02392a}{k\+\_\+num\+\_\+functions}\mbox{]})
+\item 
+void \hyperlink{class_test_object_adfad75ad3f6c014f68ff2cdc4e752fc9}{set\+\_\+rates} ()
+\item 
+\hyperlink{class_test_object_a3d0036f18982129567596b06d72087b6}{Test\+Object} ()
+\item 
+\hyperlink{class_test_object_a3262a3065422e5ebd007e38c4c50d01f}{$\sim$\+Test\+Object} ()
+\item 
+void \hyperlink{class_test_object_a9aec85cd402d269ccf81cca9dcb4c31e}{attach\+Thread} (int thread\+I\+D)
+\item 
+void \hyperlink{class_test_object_acf21dd1257cae9a96c4ea39233929027}{detach\+Thread} (int thread\+I\+D)
+\item 
+void \hyperlink{class_test_object_a7c5bccd9eb5900850169d39a22db8c53}{extra\+\_\+end\+\_\+signal} ()
+\item 
+void \hyperlink{class_test_object_acc6255f8f3e0f9e1a09955cc7f53caff}{init} ()
+\item 
+void \hyperlink{class_test_object_a30dbc74cb72669dd4d0cec14baa92bc9}{destroy} ()
+\item 
+void \hyperlink{class_test_object_ae0ac39cc52730e2c60961ea495b34550}{run} (int64\+\_\+t thread\+\_\+id)
+\item 
+std\+::string \hyperlink{class_test_object_af09564f241ed447b17ab16ef751eef8e}{to\+String} ()
+\item 
+std\+::string \hyperlink{class_test_object_a39bb7ef595355ab7459e992b85b045d8}{results} ()
+\item 
+void \hyperlink{class_test_object_a30655b96ad192de48772ad45036a38a3}{add\+\_\+results} (int func\+\_\+call\+\_\+count\mbox{[}\hyperlink{class_test_object_a2eafe110f35fcae7fa739cd52f02392a}{k\+\_\+num\+\_\+functions}\mbox{]})
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+int $\ast$ \hyperlink{class_test_object_ad069dbfc17e738bda7f5ef0a976aab30}{func\+\_\+call\+\_\+rate\+\_\+}
+\item 
+std\+::string $\ast$ \hyperlink{class_test_object_a0824981875a52434332860af996f4ffb}{func\+\_\+name\+\_\+}
+\item 
+std\+::atomic$<$ int $>$ \hyperlink{class_test_object_ad94d908ecb400ec8d82cb566bcdd4565}{func\+\_\+call\+\_\+count\+\_\+} \mbox{[}\hyperlink{class_test_object_a2eafe110f35fcae7fa739cd52f02392a}{k\+\_\+num\+\_\+functions}\mbox{]}
+\item 
+const int \hyperlink{class_test_object_aad9fb886d54e6c7eeb9685d0d89854b0}{num\+\_\+threads\+\_\+}
+\item 
+const int \hyperlink{class_test_object_a793d9a604b2aba56deb74988227b79da}{execution\+\_\+time\+\_\+}
+\item 
+\hyperlink{class_test_class}{Test\+Class}$<$ \hyperlink{hash__map_2test_object_8h_ad777bf08d8e2b01df17ba5e3c51ae11f}{Value}, \hyperlink{hash__map_2test_object_8h_ad777bf08d8e2b01df17ba5e3c51ae11f}{Value} $>$ $\ast$ \hyperlink{class_test_object_aff2586a58e6599398218f18cb0fca4f4}{test\+\_\+class\+\_\+}
+\item 
+std\+::atomic$<$ bool $>$ \hyperlink{class_test_object_a6ccfdc908c6a49be86e380474a3448c0}{wait\+\_\+flag\+\_\+} \hyperlink{class_test_object_a5837b96611f5cc5dc27a4b536831b489}{true}
+\item 
+std\+::atomic$<$ bool $>$ \hyperlink{class_test_object_a6bb349ea0af5dc9a56214b3ba911d544}{running\+\_\+} \{\hyperlink{class_test_object_a5837b96611f5cc5dc27a4b536831b489}{true}\}
+\item 
+std\+::atomic$<$ int $>$ \hyperlink{class_test_object_aacfa3985ea1d4427319f97cc813d2a91}{ready\+\_\+count\+\_\+} \{0\}
+\item 
+const int \hyperlink{class_test_object_a3ecf0e2547599d03b0f51f2b3360dfe9}{array\+\_\+length\+\_\+}
+\item 
+const int \hyperlink{class_test_object_aafa8d7cb90fc81d821f1788af2959ac6}{mcas\+\_\+size\+\_\+}
+\item 
+const int \hyperlink{class_test_object_a034546a627911670749ab574d92831b5}{operation\+\_\+type\+\_\+}
+\item 
+\hyperlink{class_test_class}{Test\+Class} $\ast$ \hyperlink{class_test_object_a7e8e641112366f90c14d458b6167bee1}{test\+\_\+class\+\_\+}
+\item 
+std\+::atomic$<$ uint64\+\_\+t $>$ \hyperlink{class_test_object_a7f2ec3b2d643f50a441e84e3bce407da}{passed\+\_\+count\+\_\+} \{0\}
+\item 
+std\+::atomic$<$ uint64\+\_\+t $>$ \hyperlink{class_test_object_ac35fa7f931e815c17dc672d2bc157a50}{failed\+\_\+count\+\_\+} \{0\}
+\item 
+std\+::atomic$<$ void $\ast$ $>$ $\ast$ \hyperlink{class_test_object_a5a0bcec98ef2512f1c62e330522b6df0}{shared\+\_\+memory\+\_\+}
+\item 
+std\+::atomic$<$ bool $>$ \hyperlink{class_test_object_a6ccfdc908c6a49be86e380474a3448c0}{wait\+\_\+flag\+\_\+} \{\hyperlink{class_test_object_a5837b96611f5cc5dc27a4b536831b489}{true}\}
+\item 
+\hyperlink{class_test_class}{Test\+Class}$<$ \hyperlink{hash__map_2test_object_8h_ad777bf08d8e2b01df17ba5e3c51ae11f}{Value} $>$ $\ast$ \hyperlink{class_test_object_ab978d0afc9d91e3f0d51b52fe13eafb4}{test\+\_\+class\+\_\+}
+\end{DoxyCompactItemize}
+\subsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static const int \hyperlink{class_test_object_a2eafe110f35fcae7fa739cd52f02392a}{k\+\_\+num\+\_\+functions} = op\+\_\+codes\+::\+L\+E\+N\+G\+T\+H
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Enumeration Documentation}
+\hypertarget{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691}{}\index{Test\+Object@{Test\+Object}!op\+\_\+codes@{op\+\_\+codes}}
+\index{op\+\_\+codes@{op\+\_\+codes}!Test\+Object@{Test\+Object}}
+\subsubsection[{op\+\_\+codes}]{\setlength{\rightskip}{0pt plus 5cm}enum {\bf Test\+Object\+::op\+\_\+codes} \+: int}\label{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691}
+\begin{Desc}
+\item[Enumerator]\par
+\begin{description}
+\index{find@{find}!Test\+Object@{Test\+Object}}\index{Test\+Object@{Test\+Object}!find@{find}}\item[{\em 
+\hypertarget{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691ab592ae7309e65362b9e0d2f04ed2386d}{}find\label{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691ab592ae7309e65362b9e0d2f04ed2386d}
+}]\index{insert@{insert}!Test\+Object@{Test\+Object}}\index{Test\+Object@{Test\+Object}!insert@{insert}}\item[{\em 
+\hypertarget{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a3dfd45ac036e0f96c87e73d9ff8379b7}{}insert\label{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a3dfd45ac036e0f96c87e73d9ff8379b7}
+}]\index{update@{update}!Test\+Object@{Test\+Object}}\index{Test\+Object@{Test\+Object}!update@{update}}\item[{\em 
+\hypertarget{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691aaa6a13d0d0daf0afb752b9f153470cbc}{}update\label{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691aaa6a13d0d0daf0afb752b9f153470cbc}
+}]\index{remove@{remove}!Test\+Object@{Test\+Object}}\index{Test\+Object@{Test\+Object}!remove@{remove}}\item[{\em 
+\hypertarget{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a5a60d7f84862567a5e1266335785110e}{}remove\label{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a5a60d7f84862567a5e1266335785110e}
+}]\index{L\+E\+N\+G\+T\+H@{L\+E\+N\+G\+T\+H}!Test\+Object@{Test\+Object}}\index{Test\+Object@{Test\+Object}!L\+E\+N\+G\+T\+H@{L\+E\+N\+G\+T\+H}}\item[{\em 
+\hypertarget{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691aa86a0ab56d515a87ad230849609f4abc}{}L\+E\+N\+G\+T\+H\label{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691aa86a0ab56d515a87ad230849609f4abc}
+}]\index{enqueue@{enqueue}!Test\+Object@{Test\+Object}}\index{Test\+Object@{Test\+Object}!enqueue@{enqueue}}\item[{\em 
+\hypertarget{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a863802059023aa4212f7d095e5eef98a}{}enqueue\label{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a863802059023aa4212f7d095e5eef98a}
+}]\index{dequeue@{dequeue}!Test\+Object@{Test\+Object}}\index{Test\+Object@{Test\+Object}!dequeue@{dequeue}}\item[{\em 
+\hypertarget{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a7e5ac462412b7b6578737a48580e30ab}{}dequeue\label{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a7e5ac462412b7b6578737a48580e30ab}
+}]\index{faildequeue@{faildequeue}!Test\+Object@{Test\+Object}}\index{Test\+Object@{Test\+Object}!faildequeue@{faildequeue}}\item[{\em 
+\hypertarget{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a6cd138a1d3f62e8dcf4c2dc3e1a2dd0e}{}faildequeue\label{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a6cd138a1d3f62e8dcf4c2dc3e1a2dd0e}
+}]\index{failenqueue@{failenqueue}!Test\+Object@{Test\+Object}}\index{Test\+Object@{Test\+Object}!failenqueue@{failenqueue}}\item[{\em 
+\hypertarget{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691ab43880c87ff2ab4931e4d08b4f7e8ad3}{}failenqueue\label{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691ab43880c87ff2ab4931e4d08b4f7e8ad3}
+}]\index{L\+E\+N\+G\+T\+H@{L\+E\+N\+G\+T\+H}!Test\+Object@{Test\+Object}}\index{Test\+Object@{Test\+Object}!L\+E\+N\+G\+T\+H@{L\+E\+N\+G\+T\+H}}\item[{\em 
+\hypertarget{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691aa86a0ab56d515a87ad230849609f4abc}{}L\+E\+N\+G\+T\+H\label{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691aa86a0ab56d515a87ad230849609f4abc}
+}]\index{cas@{cas}!Test\+Object@{Test\+Object}}\index{Test\+Object@{Test\+Object}!cas@{cas}}\item[{\em 
+\hypertarget{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a2b44f9f70ebc199aeff73f13eebe3340}{}cas\label{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a2b44f9f70ebc199aeff73f13eebe3340}
+}]\index{at@{at}!Test\+Object@{Test\+Object}}\index{Test\+Object@{Test\+Object}!at@{at}}\item[{\em 
+\hypertarget{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a8b7aeb9aee90c400d0c2a8c2ab9ee7dd}{}at\label{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a8b7aeb9aee90c400d0c2a8c2ab9ee7dd}
+}]\index{pop\+Back@{pop\+Back}!Test\+Object@{Test\+Object}}\index{Test\+Object@{Test\+Object}!pop\+Back@{pop\+Back}}\item[{\em 
+\hypertarget{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a8aab8c0bbc55fbc25b82c305340bb5de}{}pop\+Back\label{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a8aab8c0bbc55fbc25b82c305340bb5de}
+}]\index{push\+Back@{push\+Back}!Test\+Object@{Test\+Object}}\index{Test\+Object@{Test\+Object}!push\+Back@{push\+Back}}\item[{\em 
+\hypertarget{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a3a4336051aeaf535d5aa9126238c34ec}{}push\+Back\label{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a3a4336051aeaf535d5aa9126238c34ec}
+}]\index{size@{size}!Test\+Object@{Test\+Object}}\index{Test\+Object@{Test\+Object}!size@{size}}\item[{\em 
+\hypertarget{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691aff4ed9ee8956557260cfa98f1ad9b958}{}size\label{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691aff4ed9ee8956557260cfa98f1ad9b958}
+}]\index{L\+E\+N\+G\+T\+H@{L\+E\+N\+G\+T\+H}!Test\+Object@{Test\+Object}}\index{Test\+Object@{Test\+Object}!L\+E\+N\+G\+T\+H@{L\+E\+N\+G\+T\+H}}\item[{\em 
+\hypertarget{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691aa86a0ab56d515a87ad230849609f4abc}{}L\+E\+N\+G\+T\+H\label{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691aa86a0ab56d515a87ad230849609f4abc}
+}]\end{description}
+\end{Desc}
+\hypertarget{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691}{}\index{Test\+Object@{Test\+Object}!op\+\_\+codes@{op\+\_\+codes}}
+\index{op\+\_\+codes@{op\+\_\+codes}!Test\+Object@{Test\+Object}}
+\subsubsection[{op\+\_\+codes}]{\setlength{\rightskip}{0pt plus 5cm}enum {\bf Test\+Object\+::op\+\_\+codes} \+: int}\label{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691}
+\begin{Desc}
+\item[Enumerator]\par
+\begin{description}
+\index{find@{find}!Test\+Object@{Test\+Object}}\index{Test\+Object@{Test\+Object}!find@{find}}\item[{\em 
+\hypertarget{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691ab592ae7309e65362b9e0d2f04ed2386d}{}find\label{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691ab592ae7309e65362b9e0d2f04ed2386d}
+}]\index{insert@{insert}!Test\+Object@{Test\+Object}}\index{Test\+Object@{Test\+Object}!insert@{insert}}\item[{\em 
+\hypertarget{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a3dfd45ac036e0f96c87e73d9ff8379b7}{}insert\label{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a3dfd45ac036e0f96c87e73d9ff8379b7}
+}]\index{update@{update}!Test\+Object@{Test\+Object}}\index{Test\+Object@{Test\+Object}!update@{update}}\item[{\em 
+\hypertarget{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691aaa6a13d0d0daf0afb752b9f153470cbc}{}update\label{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691aaa6a13d0d0daf0afb752b9f153470cbc}
+}]\index{remove@{remove}!Test\+Object@{Test\+Object}}\index{Test\+Object@{Test\+Object}!remove@{remove}}\item[{\em 
+\hypertarget{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a5a60d7f84862567a5e1266335785110e}{}remove\label{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a5a60d7f84862567a5e1266335785110e}
+}]\index{L\+E\+N\+G\+T\+H@{L\+E\+N\+G\+T\+H}!Test\+Object@{Test\+Object}}\index{Test\+Object@{Test\+Object}!L\+E\+N\+G\+T\+H@{L\+E\+N\+G\+T\+H}}\item[{\em 
+\hypertarget{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691aa86a0ab56d515a87ad230849609f4abc}{}L\+E\+N\+G\+T\+H\label{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691aa86a0ab56d515a87ad230849609f4abc}
+}]\index{enqueue@{enqueue}!Test\+Object@{Test\+Object}}\index{Test\+Object@{Test\+Object}!enqueue@{enqueue}}\item[{\em 
+\hypertarget{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a863802059023aa4212f7d095e5eef98a}{}enqueue\label{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a863802059023aa4212f7d095e5eef98a}
+}]\index{dequeue@{dequeue}!Test\+Object@{Test\+Object}}\index{Test\+Object@{Test\+Object}!dequeue@{dequeue}}\item[{\em 
+\hypertarget{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a7e5ac462412b7b6578737a48580e30ab}{}dequeue\label{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a7e5ac462412b7b6578737a48580e30ab}
+}]\index{faildequeue@{faildequeue}!Test\+Object@{Test\+Object}}\index{Test\+Object@{Test\+Object}!faildequeue@{faildequeue}}\item[{\em 
+\hypertarget{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a6cd138a1d3f62e8dcf4c2dc3e1a2dd0e}{}faildequeue\label{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a6cd138a1d3f62e8dcf4c2dc3e1a2dd0e}
+}]\index{failenqueue@{failenqueue}!Test\+Object@{Test\+Object}}\index{Test\+Object@{Test\+Object}!failenqueue@{failenqueue}}\item[{\em 
+\hypertarget{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691ab43880c87ff2ab4931e4d08b4f7e8ad3}{}failenqueue\label{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691ab43880c87ff2ab4931e4d08b4f7e8ad3}
+}]\index{L\+E\+N\+G\+T\+H@{L\+E\+N\+G\+T\+H}!Test\+Object@{Test\+Object}}\index{Test\+Object@{Test\+Object}!L\+E\+N\+G\+T\+H@{L\+E\+N\+G\+T\+H}}\item[{\em 
+\hypertarget{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691aa86a0ab56d515a87ad230849609f4abc}{}L\+E\+N\+G\+T\+H\label{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691aa86a0ab56d515a87ad230849609f4abc}
+}]\index{cas@{cas}!Test\+Object@{Test\+Object}}\index{Test\+Object@{Test\+Object}!cas@{cas}}\item[{\em 
+\hypertarget{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a2b44f9f70ebc199aeff73f13eebe3340}{}cas\label{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a2b44f9f70ebc199aeff73f13eebe3340}
+}]\index{at@{at}!Test\+Object@{Test\+Object}}\index{Test\+Object@{Test\+Object}!at@{at}}\item[{\em 
+\hypertarget{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a8b7aeb9aee90c400d0c2a8c2ab9ee7dd}{}at\label{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a8b7aeb9aee90c400d0c2a8c2ab9ee7dd}
+}]\index{pop\+Back@{pop\+Back}!Test\+Object@{Test\+Object}}\index{Test\+Object@{Test\+Object}!pop\+Back@{pop\+Back}}\item[{\em 
+\hypertarget{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a8aab8c0bbc55fbc25b82c305340bb5de}{}pop\+Back\label{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a8aab8c0bbc55fbc25b82c305340bb5de}
+}]\index{push\+Back@{push\+Back}!Test\+Object@{Test\+Object}}\index{Test\+Object@{Test\+Object}!push\+Back@{push\+Back}}\item[{\em 
+\hypertarget{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a3a4336051aeaf535d5aa9126238c34ec}{}push\+Back\label{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a3a4336051aeaf535d5aa9126238c34ec}
+}]\index{size@{size}!Test\+Object@{Test\+Object}}\index{Test\+Object@{Test\+Object}!size@{size}}\item[{\em 
+\hypertarget{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691aff4ed9ee8956557260cfa98f1ad9b958}{}size\label{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691aff4ed9ee8956557260cfa98f1ad9b958}
+}]\index{L\+E\+N\+G\+T\+H@{L\+E\+N\+G\+T\+H}!Test\+Object@{Test\+Object}}\index{Test\+Object@{Test\+Object}!L\+E\+N\+G\+T\+H@{L\+E\+N\+G\+T\+H}}\item[{\em 
+\hypertarget{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691aa86a0ab56d515a87ad230849609f4abc}{}L\+E\+N\+G\+T\+H\label{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691aa86a0ab56d515a87ad230849609f4abc}
+}]\end{description}
+\end{Desc}
+\hypertarget{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691}{}\index{Test\+Object@{Test\+Object}!op\+\_\+codes@{op\+\_\+codes}}
+\index{op\+\_\+codes@{op\+\_\+codes}!Test\+Object@{Test\+Object}}
+\subsubsection[{op\+\_\+codes}]{\setlength{\rightskip}{0pt plus 5cm}enum {\bf Test\+Object\+::op\+\_\+codes} \+: int}\label{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691}
+\begin{Desc}
+\item[Enumerator]\par
+\begin{description}
+\index{find@{find}!Test\+Object@{Test\+Object}}\index{Test\+Object@{Test\+Object}!find@{find}}\item[{\em 
+\hypertarget{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691ab592ae7309e65362b9e0d2f04ed2386d}{}find\label{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691ab592ae7309e65362b9e0d2f04ed2386d}
+}]\index{insert@{insert}!Test\+Object@{Test\+Object}}\index{Test\+Object@{Test\+Object}!insert@{insert}}\item[{\em 
+\hypertarget{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a3dfd45ac036e0f96c87e73d9ff8379b7}{}insert\label{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a3dfd45ac036e0f96c87e73d9ff8379b7}
+}]\index{update@{update}!Test\+Object@{Test\+Object}}\index{Test\+Object@{Test\+Object}!update@{update}}\item[{\em 
+\hypertarget{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691aaa6a13d0d0daf0afb752b9f153470cbc}{}update\label{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691aaa6a13d0d0daf0afb752b9f153470cbc}
+}]\index{remove@{remove}!Test\+Object@{Test\+Object}}\index{Test\+Object@{Test\+Object}!remove@{remove}}\item[{\em 
+\hypertarget{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a5a60d7f84862567a5e1266335785110e}{}remove\label{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a5a60d7f84862567a5e1266335785110e}
+}]\index{L\+E\+N\+G\+T\+H@{L\+E\+N\+G\+T\+H}!Test\+Object@{Test\+Object}}\index{Test\+Object@{Test\+Object}!L\+E\+N\+G\+T\+H@{L\+E\+N\+G\+T\+H}}\item[{\em 
+\hypertarget{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691aa86a0ab56d515a87ad230849609f4abc}{}L\+E\+N\+G\+T\+H\label{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691aa86a0ab56d515a87ad230849609f4abc}
+}]\index{enqueue@{enqueue}!Test\+Object@{Test\+Object}}\index{Test\+Object@{Test\+Object}!enqueue@{enqueue}}\item[{\em 
+\hypertarget{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a863802059023aa4212f7d095e5eef98a}{}enqueue\label{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a863802059023aa4212f7d095e5eef98a}
+}]\index{dequeue@{dequeue}!Test\+Object@{Test\+Object}}\index{Test\+Object@{Test\+Object}!dequeue@{dequeue}}\item[{\em 
+\hypertarget{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a7e5ac462412b7b6578737a48580e30ab}{}dequeue\label{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a7e5ac462412b7b6578737a48580e30ab}
+}]\index{faildequeue@{faildequeue}!Test\+Object@{Test\+Object}}\index{Test\+Object@{Test\+Object}!faildequeue@{faildequeue}}\item[{\em 
+\hypertarget{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a6cd138a1d3f62e8dcf4c2dc3e1a2dd0e}{}faildequeue\label{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a6cd138a1d3f62e8dcf4c2dc3e1a2dd0e}
+}]\index{failenqueue@{failenqueue}!Test\+Object@{Test\+Object}}\index{Test\+Object@{Test\+Object}!failenqueue@{failenqueue}}\item[{\em 
+\hypertarget{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691ab43880c87ff2ab4931e4d08b4f7e8ad3}{}failenqueue\label{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691ab43880c87ff2ab4931e4d08b4f7e8ad3}
+}]\index{L\+E\+N\+G\+T\+H@{L\+E\+N\+G\+T\+H}!Test\+Object@{Test\+Object}}\index{Test\+Object@{Test\+Object}!L\+E\+N\+G\+T\+H@{L\+E\+N\+G\+T\+H}}\item[{\em 
+\hypertarget{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691aa86a0ab56d515a87ad230849609f4abc}{}L\+E\+N\+G\+T\+H\label{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691aa86a0ab56d515a87ad230849609f4abc}
+}]\index{cas@{cas}!Test\+Object@{Test\+Object}}\index{Test\+Object@{Test\+Object}!cas@{cas}}\item[{\em 
+\hypertarget{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a2b44f9f70ebc199aeff73f13eebe3340}{}cas\label{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a2b44f9f70ebc199aeff73f13eebe3340}
+}]\index{at@{at}!Test\+Object@{Test\+Object}}\index{Test\+Object@{Test\+Object}!at@{at}}\item[{\em 
+\hypertarget{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a8b7aeb9aee90c400d0c2a8c2ab9ee7dd}{}at\label{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a8b7aeb9aee90c400d0c2a8c2ab9ee7dd}
+}]\index{pop\+Back@{pop\+Back}!Test\+Object@{Test\+Object}}\index{Test\+Object@{Test\+Object}!pop\+Back@{pop\+Back}}\item[{\em 
+\hypertarget{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a8aab8c0bbc55fbc25b82c305340bb5de}{}pop\+Back\label{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a8aab8c0bbc55fbc25b82c305340bb5de}
+}]\index{push\+Back@{push\+Back}!Test\+Object@{Test\+Object}}\index{Test\+Object@{Test\+Object}!push\+Back@{push\+Back}}\item[{\em 
+\hypertarget{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a3a4336051aeaf535d5aa9126238c34ec}{}push\+Back\label{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691a3a4336051aeaf535d5aa9126238c34ec}
+}]\index{size@{size}!Test\+Object@{Test\+Object}}\index{Test\+Object@{Test\+Object}!size@{size}}\item[{\em 
+\hypertarget{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691aff4ed9ee8956557260cfa98f1ad9b958}{}size\label{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691aff4ed9ee8956557260cfa98f1ad9b958}
+}]\index{L\+E\+N\+G\+T\+H@{L\+E\+N\+G\+T\+H}!Test\+Object@{Test\+Object}}\index{Test\+Object@{Test\+Object}!L\+E\+N\+G\+T\+H@{L\+E\+N\+G\+T\+H}}\item[{\em 
+\hypertarget{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691aa86a0ab56d515a87ad230849609f4abc}{}L\+E\+N\+G\+T\+H\label{class_test_object_a2748dcd7cc312f5a3d52ad94a3400691aa86a0ab56d515a87ad230849609f4abc}
+}]\end{description}
+\end{Desc}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{class_test_object_a3d0036f18982129567596b06d72087b6}{}\index{Test\+Object@{Test\+Object}!Test\+Object@{Test\+Object}}
+\index{Test\+Object@{Test\+Object}!Test\+Object@{Test\+Object}}
+\subsubsection[{Test\+Object()}]{\setlength{\rightskip}{0pt plus 5cm}Test\+Object\+::\+Test\+Object (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_object_a3d0036f18982129567596b06d72087b6}
+\hypertarget{class_test_object_a3262a3065422e5ebd007e38c4c50d01f}{}\index{Test\+Object@{Test\+Object}!````~Test\+Object@{$\sim$\+Test\+Object}}
+\index{````~Test\+Object@{$\sim$\+Test\+Object}!Test\+Object@{Test\+Object}}
+\subsubsection[{$\sim$\+Test\+Object()}]{\setlength{\rightskip}{0pt plus 5cm}Test\+Object\+::$\sim$\+Test\+Object (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_object_a3262a3065422e5ebd007e38c4c50d01f}
+\hypertarget{class_test_object_a3262a3065422e5ebd007e38c4c50d01f}{}\index{Test\+Object@{Test\+Object}!````~Test\+Object@{$\sim$\+Test\+Object}}
+\index{````~Test\+Object@{$\sim$\+Test\+Object}!Test\+Object@{Test\+Object}}
+\subsubsection[{$\sim$\+Test\+Object()}]{\setlength{\rightskip}{0pt plus 5cm}Test\+Object\+::$\sim$\+Test\+Object (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_object_a3262a3065422e5ebd007e38c4c50d01f}
+\hypertarget{class_test_object_a3d0036f18982129567596b06d72087b6}{}\index{Test\+Object@{Test\+Object}!Test\+Object@{Test\+Object}}
+\index{Test\+Object@{Test\+Object}!Test\+Object@{Test\+Object}}
+\subsubsection[{Test\+Object()}]{\setlength{\rightskip}{0pt plus 5cm}Test\+Object\+::\+Test\+Object (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_object_a3d0036f18982129567596b06d72087b6}
+\hypertarget{class_test_object_a3d0036f18982129567596b06d72087b6}{}\index{Test\+Object@{Test\+Object}!Test\+Object@{Test\+Object}}
+\index{Test\+Object@{Test\+Object}!Test\+Object@{Test\+Object}}
+\subsubsection[{Test\+Object()}]{\setlength{\rightskip}{0pt plus 5cm}Test\+Object\+::\+Test\+Object (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_object_a3d0036f18982129567596b06d72087b6}
+\hypertarget{class_test_object_a3262a3065422e5ebd007e38c4c50d01f}{}\index{Test\+Object@{Test\+Object}!````~Test\+Object@{$\sim$\+Test\+Object}}
+\index{````~Test\+Object@{$\sim$\+Test\+Object}!Test\+Object@{Test\+Object}}
+\subsubsection[{$\sim$\+Test\+Object()}]{\setlength{\rightskip}{0pt plus 5cm}Test\+Object\+::$\sim$\+Test\+Object (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_object_a3262a3065422e5ebd007e38c4c50d01f}
+\hypertarget{class_test_object_a3d0036f18982129567596b06d72087b6}{}\index{Test\+Object@{Test\+Object}!Test\+Object@{Test\+Object}}
+\index{Test\+Object@{Test\+Object}!Test\+Object@{Test\+Object}}
+\subsubsection[{Test\+Object()}]{\setlength{\rightskip}{0pt plus 5cm}Test\+Object\+::\+Test\+Object (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_object_a3d0036f18982129567596b06d72087b6}
+\hypertarget{class_test_object_a3262a3065422e5ebd007e38c4c50d01f}{}\index{Test\+Object@{Test\+Object}!````~Test\+Object@{$\sim$\+Test\+Object}}
+\index{````~Test\+Object@{$\sim$\+Test\+Object}!Test\+Object@{Test\+Object}}
+\subsubsection[{$\sim$\+Test\+Object()}]{\setlength{\rightskip}{0pt plus 5cm}Test\+Object\+::$\sim$\+Test\+Object (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_object_a3262a3065422e5ebd007e38c4c50d01f}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_test_object_a30655b96ad192de48772ad45036a38a3}{}\index{Test\+Object@{Test\+Object}!add\+\_\+results@{add\+\_\+results}}
+\index{add\+\_\+results@{add\+\_\+results}!Test\+Object@{Test\+Object}}
+\subsubsection[{add\+\_\+results(int func\+\_\+call\+\_\+count[k\+\_\+num\+\_\+functions])}]{\setlength{\rightskip}{0pt plus 5cm}void Test\+Object\+::add\+\_\+results (
+\begin{DoxyParamCaption}
+\item[{int}]{func\+\_\+call\+\_\+count\mbox{[}k\+\_\+num\+\_\+functions\mbox{]}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_object_a30655b96ad192de48772ad45036a38a3}
+\hypertarget{class_test_object_a30655b96ad192de48772ad45036a38a3}{}\index{Test\+Object@{Test\+Object}!add\+\_\+results@{add\+\_\+results}}
+\index{add\+\_\+results@{add\+\_\+results}!Test\+Object@{Test\+Object}}
+\subsubsection[{add\+\_\+results(int func\+\_\+call\+\_\+count[k\+\_\+num\+\_\+functions])}]{\setlength{\rightskip}{0pt plus 5cm}void Test\+Object\+::add\+\_\+results (
+\begin{DoxyParamCaption}
+\item[{int}]{func\+\_\+call\+\_\+count\mbox{[}k\+\_\+num\+\_\+functions\mbox{]}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_object_a30655b96ad192de48772ad45036a38a3}
+\hypertarget{class_test_object_a30655b96ad192de48772ad45036a38a3}{}\index{Test\+Object@{Test\+Object}!add\+\_\+results@{add\+\_\+results}}
+\index{add\+\_\+results@{add\+\_\+results}!Test\+Object@{Test\+Object}}
+\subsubsection[{add\+\_\+results(int func\+\_\+call\+\_\+count[k\+\_\+num\+\_\+functions])}]{\setlength{\rightskip}{0pt plus 5cm}void Test\+Object\+::add\+\_\+results (
+\begin{DoxyParamCaption}
+\item[{int}]{func\+\_\+call\+\_\+count\mbox{[}k\+\_\+num\+\_\+functions\mbox{]}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_object_a30655b96ad192de48772ad45036a38a3}
+\hypertarget{class_test_object_afeabc840ed3d84b34be1131f7ec4c2e0}{}\index{Test\+Object@{Test\+Object}!atomic\+\_\+add@{atomic\+\_\+add}}
+\index{atomic\+\_\+add@{atomic\+\_\+add}!Test\+Object@{Test\+Object}}
+\subsubsection[{atomic\+\_\+add(int passed\+\_\+count, int failed\+\_\+count)}]{\setlength{\rightskip}{0pt plus 5cm}void Test\+Object\+::atomic\+\_\+add (
+\begin{DoxyParamCaption}
+\item[{int}]{passed\+\_\+count, }
+\item[{int}]{failed\+\_\+count}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_object_afeabc840ed3d84b34be1131f7ec4c2e0}
+\hypertarget{class_test_object_a9aec85cd402d269ccf81cca9dcb4c31e}{}\index{Test\+Object@{Test\+Object}!attach\+Thread@{attach\+Thread}}
+\index{attach\+Thread@{attach\+Thread}!Test\+Object@{Test\+Object}}
+\subsubsection[{attach\+Thread(int thread\+I\+D)}]{\setlength{\rightskip}{0pt plus 5cm}void Test\+Object\+::attach\+Thread (
+\begin{DoxyParamCaption}
+\item[{int}]{thread\+I\+D}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_object_a9aec85cd402d269ccf81cca9dcb4c31e}
+\hypertarget{class_test_object_a9aec85cd402d269ccf81cca9dcb4c31e}{}\index{Test\+Object@{Test\+Object}!attach\+Thread@{attach\+Thread}}
+\index{attach\+Thread@{attach\+Thread}!Test\+Object@{Test\+Object}}
+\subsubsection[{attach\+Thread(int thread\+I\+D)}]{\setlength{\rightskip}{0pt plus 5cm}void Test\+Object\+::attach\+Thread (
+\begin{DoxyParamCaption}
+\item[{int}]{thread\+I\+D}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_object_a9aec85cd402d269ccf81cca9dcb4c31e}
+\hypertarget{class_test_object_a9aec85cd402d269ccf81cca9dcb4c31e}{}\index{Test\+Object@{Test\+Object}!attach\+Thread@{attach\+Thread}}
+\index{attach\+Thread@{attach\+Thread}!Test\+Object@{Test\+Object}}
+\subsubsection[{attach\+Thread(int thread\+I\+D)}]{\setlength{\rightskip}{0pt plus 5cm}void Test\+Object\+::attach\+Thread (
+\begin{DoxyParamCaption}
+\item[{int}]{thread\+I\+D}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_object_a9aec85cd402d269ccf81cca9dcb4c31e}
+\hypertarget{class_test_object_a9aec85cd402d269ccf81cca9dcb4c31e}{}\index{Test\+Object@{Test\+Object}!attach\+Thread@{attach\+Thread}}
+\index{attach\+Thread@{attach\+Thread}!Test\+Object@{Test\+Object}}
+\subsubsection[{attach\+Thread(int thread\+I\+D)}]{\setlength{\rightskip}{0pt plus 5cm}void Test\+Object\+::attach\+Thread (
+\begin{DoxyParamCaption}
+\item[{int}]{thread\+I\+D}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_object_a9aec85cd402d269ccf81cca9dcb4c31e}
+\hypertarget{class_test_object_a30dbc74cb72669dd4d0cec14baa92bc9}{}\index{Test\+Object@{Test\+Object}!destroy@{destroy}}
+\index{destroy@{destroy}!Test\+Object@{Test\+Object}}
+\subsubsection[{destroy()}]{\setlength{\rightskip}{0pt plus 5cm}void Test\+Object\+::destroy (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_object_a30dbc74cb72669dd4d0cec14baa92bc9}
+\hypertarget{class_test_object_a30dbc74cb72669dd4d0cec14baa92bc9}{}\index{Test\+Object@{Test\+Object}!destroy@{destroy}}
+\index{destroy@{destroy}!Test\+Object@{Test\+Object}}
+\subsubsection[{destroy()}]{\setlength{\rightskip}{0pt plus 5cm}void Test\+Object\+::destroy (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_object_a30dbc74cb72669dd4d0cec14baa92bc9}
+\hypertarget{class_test_object_a30dbc74cb72669dd4d0cec14baa92bc9}{}\index{Test\+Object@{Test\+Object}!destroy@{destroy}}
+\index{destroy@{destroy}!Test\+Object@{Test\+Object}}
+\subsubsection[{destroy()}]{\setlength{\rightskip}{0pt plus 5cm}void Test\+Object\+::destroy (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_object_a30dbc74cb72669dd4d0cec14baa92bc9}
+\hypertarget{class_test_object_a30dbc74cb72669dd4d0cec14baa92bc9}{}\index{Test\+Object@{Test\+Object}!destroy@{destroy}}
+\index{destroy@{destroy}!Test\+Object@{Test\+Object}}
+\subsubsection[{destroy()}]{\setlength{\rightskip}{0pt plus 5cm}void Test\+Object\+::destroy (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_object_a30dbc74cb72669dd4d0cec14baa92bc9}
+\hypertarget{class_test_object_acf21dd1257cae9a96c4ea39233929027}{}\index{Test\+Object@{Test\+Object}!detach\+Thread@{detach\+Thread}}
+\index{detach\+Thread@{detach\+Thread}!Test\+Object@{Test\+Object}}
+\subsubsection[{detach\+Thread(int thread\+I\+D)}]{\setlength{\rightskip}{0pt plus 5cm}void Test\+Object\+::detach\+Thread (
+\begin{DoxyParamCaption}
+\item[{int}]{thread\+I\+D}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_object_acf21dd1257cae9a96c4ea39233929027}
+\hypertarget{class_test_object_acf21dd1257cae9a96c4ea39233929027}{}\index{Test\+Object@{Test\+Object}!detach\+Thread@{detach\+Thread}}
+\index{detach\+Thread@{detach\+Thread}!Test\+Object@{Test\+Object}}
+\subsubsection[{detach\+Thread(int thread\+I\+D)}]{\setlength{\rightskip}{0pt plus 5cm}void Test\+Object\+::detach\+Thread (
+\begin{DoxyParamCaption}
+\item[{int}]{thread\+I\+D}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_object_acf21dd1257cae9a96c4ea39233929027}
+\hypertarget{class_test_object_acf21dd1257cae9a96c4ea39233929027}{}\index{Test\+Object@{Test\+Object}!detach\+Thread@{detach\+Thread}}
+\index{detach\+Thread@{detach\+Thread}!Test\+Object@{Test\+Object}}
+\subsubsection[{detach\+Thread(int thread\+I\+D)}]{\setlength{\rightskip}{0pt plus 5cm}void Test\+Object\+::detach\+Thread (
+\begin{DoxyParamCaption}
+\item[{int}]{thread\+I\+D}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_object_acf21dd1257cae9a96c4ea39233929027}
+\hypertarget{class_test_object_acf21dd1257cae9a96c4ea39233929027}{}\index{Test\+Object@{Test\+Object}!detach\+Thread@{detach\+Thread}}
+\index{detach\+Thread@{detach\+Thread}!Test\+Object@{Test\+Object}}
+\subsubsection[{detach\+Thread(int thread\+I\+D)}]{\setlength{\rightskip}{0pt plus 5cm}void Test\+Object\+::detach\+Thread (
+\begin{DoxyParamCaption}
+\item[{int}]{thread\+I\+D}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_object_acf21dd1257cae9a96c4ea39233929027}
+\hypertarget{class_test_object_a7c5bccd9eb5900850169d39a22db8c53}{}\index{Test\+Object@{Test\+Object}!extra\+\_\+end\+\_\+signal@{extra\+\_\+end\+\_\+signal}}
+\index{extra\+\_\+end\+\_\+signal@{extra\+\_\+end\+\_\+signal}!Test\+Object@{Test\+Object}}
+\subsubsection[{extra\+\_\+end\+\_\+signal()}]{\setlength{\rightskip}{0pt plus 5cm}void Test\+Object\+::extra\+\_\+end\+\_\+signal (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_object_a7c5bccd9eb5900850169d39a22db8c53}
+\hypertarget{class_test_object_a7c5bccd9eb5900850169d39a22db8c53}{}\index{Test\+Object@{Test\+Object}!extra\+\_\+end\+\_\+signal@{extra\+\_\+end\+\_\+signal}}
+\index{extra\+\_\+end\+\_\+signal@{extra\+\_\+end\+\_\+signal}!Test\+Object@{Test\+Object}}
+\subsubsection[{extra\+\_\+end\+\_\+signal()}]{\setlength{\rightskip}{0pt plus 5cm}void Test\+Object\+::extra\+\_\+end\+\_\+signal (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_object_a7c5bccd9eb5900850169d39a22db8c53}
+\hypertarget{class_test_object_a7c5bccd9eb5900850169d39a22db8c53}{}\index{Test\+Object@{Test\+Object}!extra\+\_\+end\+\_\+signal@{extra\+\_\+end\+\_\+signal}}
+\index{extra\+\_\+end\+\_\+signal@{extra\+\_\+end\+\_\+signal}!Test\+Object@{Test\+Object}}
+\subsubsection[{extra\+\_\+end\+\_\+signal()}]{\setlength{\rightskip}{0pt plus 5cm}void Test\+Object\+::extra\+\_\+end\+\_\+signal (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_object_a7c5bccd9eb5900850169d39a22db8c53}
+\hypertarget{class_test_object_a7c5bccd9eb5900850169d39a22db8c53}{}\index{Test\+Object@{Test\+Object}!extra\+\_\+end\+\_\+signal@{extra\+\_\+end\+\_\+signal}}
+\index{extra\+\_\+end\+\_\+signal@{extra\+\_\+end\+\_\+signal}!Test\+Object@{Test\+Object}}
+\subsubsection[{extra\+\_\+end\+\_\+signal()}]{\setlength{\rightskip}{0pt plus 5cm}void Test\+Object\+::extra\+\_\+end\+\_\+signal (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_object_a7c5bccd9eb5900850169d39a22db8c53}
+\hypertarget{class_test_object_acc6255f8f3e0f9e1a09955cc7f53caff}{}\index{Test\+Object@{Test\+Object}!init@{init}}
+\index{init@{init}!Test\+Object@{Test\+Object}}
+\subsubsection[{init()}]{\setlength{\rightskip}{0pt plus 5cm}void Test\+Object\+::init (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_object_acc6255f8f3e0f9e1a09955cc7f53caff}
+\hypertarget{class_test_object_acc6255f8f3e0f9e1a09955cc7f53caff}{}\index{Test\+Object@{Test\+Object}!init@{init}}
+\index{init@{init}!Test\+Object@{Test\+Object}}
+\subsubsection[{init()}]{\setlength{\rightskip}{0pt plus 5cm}void Test\+Object\+::init (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_object_acc6255f8f3e0f9e1a09955cc7f53caff}
+\hypertarget{class_test_object_acc6255f8f3e0f9e1a09955cc7f53caff}{}\index{Test\+Object@{Test\+Object}!init@{init}}
+\index{init@{init}!Test\+Object@{Test\+Object}}
+\subsubsection[{init()}]{\setlength{\rightskip}{0pt plus 5cm}void Test\+Object\+::init (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_object_acc6255f8f3e0f9e1a09955cc7f53caff}
+\hypertarget{class_test_object_acc6255f8f3e0f9e1a09955cc7f53caff}{}\index{Test\+Object@{Test\+Object}!init@{init}}
+\index{init@{init}!Test\+Object@{Test\+Object}}
+\subsubsection[{init()}]{\setlength{\rightskip}{0pt plus 5cm}void Test\+Object\+::init (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_object_acc6255f8f3e0f9e1a09955cc7f53caff}
+\hypertarget{class_test_object_a39bb7ef595355ab7459e992b85b045d8}{}\index{Test\+Object@{Test\+Object}!results@{results}}
+\index{results@{results}!Test\+Object@{Test\+Object}}
+\subsubsection[{results()}]{\setlength{\rightskip}{0pt plus 5cm}std\+::string Test\+Object\+::results (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_object_a39bb7ef595355ab7459e992b85b045d8}
+\hypertarget{class_test_object_a39bb7ef595355ab7459e992b85b045d8}{}\index{Test\+Object@{Test\+Object}!results@{results}}
+\index{results@{results}!Test\+Object@{Test\+Object}}
+\subsubsection[{results()}]{\setlength{\rightskip}{0pt plus 5cm}std\+::string Test\+Object\+::results (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_object_a39bb7ef595355ab7459e992b85b045d8}
+\hypertarget{class_test_object_a39bb7ef595355ab7459e992b85b045d8}{}\index{Test\+Object@{Test\+Object}!results@{results}}
+\index{results@{results}!Test\+Object@{Test\+Object}}
+\subsubsection[{results()}]{\setlength{\rightskip}{0pt plus 5cm}std\+::string Test\+Object\+::results (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_object_a39bb7ef595355ab7459e992b85b045d8}
+\hypertarget{class_test_object_a39bb7ef595355ab7459e992b85b045d8}{}\index{Test\+Object@{Test\+Object}!results@{results}}
+\index{results@{results}!Test\+Object@{Test\+Object}}
+\subsubsection[{results()}]{\setlength{\rightskip}{0pt plus 5cm}std\+::string Test\+Object\+::results (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_object_a39bb7ef595355ab7459e992b85b045d8}
+\hypertarget{class_test_object_ae0ac39cc52730e2c60961ea495b34550}{}\index{Test\+Object@{Test\+Object}!run@{run}}
+\index{run@{run}!Test\+Object@{Test\+Object}}
+\subsubsection[{run(int64\+\_\+t thread\+\_\+id)}]{\setlength{\rightskip}{0pt plus 5cm}void Test\+Object\+::run (
+\begin{DoxyParamCaption}
+\item[{int64\+\_\+t}]{thread\+\_\+id}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_object_ae0ac39cc52730e2c60961ea495b34550}
+Update this when adding a new data structure \hypertarget{class_test_object_ae0ac39cc52730e2c60961ea495b34550}{}\index{Test\+Object@{Test\+Object}!run@{run}}
+\index{run@{run}!Test\+Object@{Test\+Object}}
+\subsubsection[{run(int64\+\_\+t thread\+\_\+id)}]{\setlength{\rightskip}{0pt plus 5cm}void Test\+Object\+::run (
+\begin{DoxyParamCaption}
+\item[{int64\+\_\+t}]{thread\+\_\+id}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_object_ae0ac39cc52730e2c60961ea495b34550}
+Update this when adding a new data structure \hypertarget{class_test_object_ae0ac39cc52730e2c60961ea495b34550}{}\index{Test\+Object@{Test\+Object}!run@{run}}
+\index{run@{run}!Test\+Object@{Test\+Object}}
+\subsubsection[{run(int64\+\_\+t thread\+\_\+id)}]{\setlength{\rightskip}{0pt plus 5cm}void Test\+Object\+::run (
+\begin{DoxyParamCaption}
+\item[{int64\+\_\+t}]{thread\+\_\+id}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_object_ae0ac39cc52730e2c60961ea495b34550}
+Update this when adding a new data structure \hypertarget{class_test_object_ae0ac39cc52730e2c60961ea495b34550}{}\index{Test\+Object@{Test\+Object}!run@{run}}
+\index{run@{run}!Test\+Object@{Test\+Object}}
+\subsubsection[{run(int64\+\_\+t thread\+\_\+id)}]{\setlength{\rightskip}{0pt plus 5cm}void Test\+Object\+::run (
+\begin{DoxyParamCaption}
+\item[{int64\+\_\+t}]{thread\+\_\+id}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_object_ae0ac39cc52730e2c60961ea495b34550}
+Update this when adding a new data structure \hypertarget{class_test_object_a147ed57b86118d03111f83b074828ab8}{}\index{Test\+Object@{Test\+Object}!sanity\+\_\+check@{sanity\+\_\+check}}
+\index{sanity\+\_\+check@{sanity\+\_\+check}!Test\+Object@{Test\+Object}}
+\subsubsection[{sanity\+\_\+check()}]{\setlength{\rightskip}{0pt plus 5cm}void Test\+Object\+::sanity\+\_\+check (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{class_test_object_a147ed57b86118d03111f83b074828ab8}
+\hypertarget{class_test_object_adfad75ad3f6c014f68ff2cdc4e752fc9}{}\index{Test\+Object@{Test\+Object}!set\+\_\+rates@{set\+\_\+rates}}
+\index{set\+\_\+rates@{set\+\_\+rates}!Test\+Object@{Test\+Object}}
+\subsubsection[{set\+\_\+rates()}]{\setlength{\rightskip}{0pt plus 5cm}void Test\+Object\+::set\+\_\+rates (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_object_adfad75ad3f6c014f68ff2cdc4e752fc9}
+\hypertarget{class_test_object_adfad75ad3f6c014f68ff2cdc4e752fc9}{}\index{Test\+Object@{Test\+Object}!set\+\_\+rates@{set\+\_\+rates}}
+\index{set\+\_\+rates@{set\+\_\+rates}!Test\+Object@{Test\+Object}}
+\subsubsection[{set\+\_\+rates()}]{\setlength{\rightskip}{0pt plus 5cm}void Test\+Object\+::set\+\_\+rates (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_object_adfad75ad3f6c014f68ff2cdc4e752fc9}
+\hypertarget{class_test_object_adfad75ad3f6c014f68ff2cdc4e752fc9}{}\index{Test\+Object@{Test\+Object}!set\+\_\+rates@{set\+\_\+rates}}
+\index{set\+\_\+rates@{set\+\_\+rates}!Test\+Object@{Test\+Object}}
+\subsubsection[{set\+\_\+rates()}]{\setlength{\rightskip}{0pt plus 5cm}void Test\+Object\+::set\+\_\+rates (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_object_adfad75ad3f6c014f68ff2cdc4e752fc9}
+\hypertarget{class_test_object_af09564f241ed447b17ab16ef751eef8e}{}\index{Test\+Object@{Test\+Object}!to\+String@{to\+String}}
+\index{to\+String@{to\+String}!Test\+Object@{Test\+Object}}
+\subsubsection[{to\+String()}]{\setlength{\rightskip}{0pt plus 5cm}std\+::string Test\+Object\+::to\+String (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_object_af09564f241ed447b17ab16ef751eef8e}
+\hypertarget{class_test_object_af09564f241ed447b17ab16ef751eef8e}{}\index{Test\+Object@{Test\+Object}!to\+String@{to\+String}}
+\index{to\+String@{to\+String}!Test\+Object@{Test\+Object}}
+\subsubsection[{to\+String()}]{\setlength{\rightskip}{0pt plus 5cm}std\+::string Test\+Object\+::to\+String (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_object_af09564f241ed447b17ab16ef751eef8e}
+\hypertarget{class_test_object_af09564f241ed447b17ab16ef751eef8e}{}\index{Test\+Object@{Test\+Object}!to\+String@{to\+String}}
+\index{to\+String@{to\+String}!Test\+Object@{Test\+Object}}
+\subsubsection[{to\+String()}]{\setlength{\rightskip}{0pt plus 5cm}std\+::string Test\+Object\+::to\+String (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_object_af09564f241ed447b17ab16ef751eef8e}
+\hypertarget{class_test_object_af09564f241ed447b17ab16ef751eef8e}{}\index{Test\+Object@{Test\+Object}!to\+String@{to\+String}}
+\index{to\+String@{to\+String}!Test\+Object@{Test\+Object}}
+\subsubsection[{to\+String()}]{\setlength{\rightskip}{0pt plus 5cm}std\+::string Test\+Object\+::to\+String (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_object_af09564f241ed447b17ab16ef751eef8e}
+
+
+\subsection{Member Data Documentation}
+\hypertarget{class_test_object_a3ecf0e2547599d03b0f51f2b3360dfe9}{}\index{Test\+Object@{Test\+Object}!array\+\_\+length\+\_\+@{array\+\_\+length\+\_\+}}
+\index{array\+\_\+length\+\_\+@{array\+\_\+length\+\_\+}!Test\+Object@{Test\+Object}}
+\subsubsection[{array\+\_\+length\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}const int Test\+Object\+::array\+\_\+length\+\_\+}\label{class_test_object_a3ecf0e2547599d03b0f51f2b3360dfe9}
+\hypertarget{class_test_object_a793d9a604b2aba56deb74988227b79da}{}\index{Test\+Object@{Test\+Object}!execution\+\_\+time\+\_\+@{execution\+\_\+time\+\_\+}}
+\index{execution\+\_\+time\+\_\+@{execution\+\_\+time\+\_\+}!Test\+Object@{Test\+Object}}
+\subsubsection[{execution\+\_\+time\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}const int Test\+Object\+::execution\+\_\+time\+\_\+}\label{class_test_object_a793d9a604b2aba56deb74988227b79da}
+\hypertarget{class_test_object_ac35fa7f931e815c17dc672d2bc157a50}{}\index{Test\+Object@{Test\+Object}!failed\+\_\+count\+\_\+@{failed\+\_\+count\+\_\+}}
+\index{failed\+\_\+count\+\_\+@{failed\+\_\+count\+\_\+}!Test\+Object@{Test\+Object}}
+\subsubsection[{failed\+\_\+count\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}std\+::atomic$<$uint64\+\_\+t$>$ Test\+Object\+::failed\+\_\+count\+\_\+ \{0\}}\label{class_test_object_ac35fa7f931e815c17dc672d2bc157a50}
+\hypertarget{class_test_object_ad94d908ecb400ec8d82cb566bcdd4565}{}\index{Test\+Object@{Test\+Object}!func\+\_\+call\+\_\+count\+\_\+@{func\+\_\+call\+\_\+count\+\_\+}}
+\index{func\+\_\+call\+\_\+count\+\_\+@{func\+\_\+call\+\_\+count\+\_\+}!Test\+Object@{Test\+Object}}
+\subsubsection[{func\+\_\+call\+\_\+count\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}std\+::atomic$<$ int $>$ Test\+Object\+::func\+\_\+call\+\_\+count\+\_\+}\label{class_test_object_ad94d908ecb400ec8d82cb566bcdd4565}
+\hypertarget{class_test_object_ad069dbfc17e738bda7f5ef0a976aab30}{}\index{Test\+Object@{Test\+Object}!func\+\_\+call\+\_\+rate\+\_\+@{func\+\_\+call\+\_\+rate\+\_\+}}
+\index{func\+\_\+call\+\_\+rate\+\_\+@{func\+\_\+call\+\_\+rate\+\_\+}!Test\+Object@{Test\+Object}}
+\subsubsection[{func\+\_\+call\+\_\+rate\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}int $\ast$ Test\+Object\+::func\+\_\+call\+\_\+rate\+\_\+}\label{class_test_object_ad069dbfc17e738bda7f5ef0a976aab30}
+\hypertarget{class_test_object_a0824981875a52434332860af996f4ffb}{}\index{Test\+Object@{Test\+Object}!func\+\_\+name\+\_\+@{func\+\_\+name\+\_\+}}
+\index{func\+\_\+name\+\_\+@{func\+\_\+name\+\_\+}!Test\+Object@{Test\+Object}}
+\subsubsection[{func\+\_\+name\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}std\+::string $\ast$ Test\+Object\+::func\+\_\+name\+\_\+}\label{class_test_object_a0824981875a52434332860af996f4ffb}
+\hypertarget{class_test_object_a2eafe110f35fcae7fa739cd52f02392a}{}\index{Test\+Object@{Test\+Object}!k\+\_\+num\+\_\+functions@{k\+\_\+num\+\_\+functions}}
+\index{k\+\_\+num\+\_\+functions@{k\+\_\+num\+\_\+functions}!Test\+Object@{Test\+Object}}
+\subsubsection[{k\+\_\+num\+\_\+functions}]{\setlength{\rightskip}{0pt plus 5cm}static const int Test\+Object\+::k\+\_\+num\+\_\+functions = op\+\_\+codes\+::\+L\+E\+N\+G\+T\+H\hspace{0.3cm}{\ttfamily [static]}}\label{class_test_object_a2eafe110f35fcae7fa739cd52f02392a}
+\hypertarget{class_test_object_aafa8d7cb90fc81d821f1788af2959ac6}{}\index{Test\+Object@{Test\+Object}!mcas\+\_\+size\+\_\+@{mcas\+\_\+size\+\_\+}}
+\index{mcas\+\_\+size\+\_\+@{mcas\+\_\+size\+\_\+}!Test\+Object@{Test\+Object}}
+\subsubsection[{mcas\+\_\+size\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}const int Test\+Object\+::mcas\+\_\+size\+\_\+}\label{class_test_object_aafa8d7cb90fc81d821f1788af2959ac6}
+\hypertarget{class_test_object_aad9fb886d54e6c7eeb9685d0d89854b0}{}\index{Test\+Object@{Test\+Object}!num\+\_\+threads\+\_\+@{num\+\_\+threads\+\_\+}}
+\index{num\+\_\+threads\+\_\+@{num\+\_\+threads\+\_\+}!Test\+Object@{Test\+Object}}
+\subsubsection[{num\+\_\+threads\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}const int Test\+Object\+::num\+\_\+threads\+\_\+}\label{class_test_object_aad9fb886d54e6c7eeb9685d0d89854b0}
+\hypertarget{class_test_object_a034546a627911670749ab574d92831b5}{}\index{Test\+Object@{Test\+Object}!operation\+\_\+type\+\_\+@{operation\+\_\+type\+\_\+}}
+\index{operation\+\_\+type\+\_\+@{operation\+\_\+type\+\_\+}!Test\+Object@{Test\+Object}}
+\subsubsection[{operation\+\_\+type\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}const int Test\+Object\+::operation\+\_\+type\+\_\+}\label{class_test_object_a034546a627911670749ab574d92831b5}
+\hypertarget{class_test_object_a7f2ec3b2d643f50a441e84e3bce407da}{}\index{Test\+Object@{Test\+Object}!passed\+\_\+count\+\_\+@{passed\+\_\+count\+\_\+}}
+\index{passed\+\_\+count\+\_\+@{passed\+\_\+count\+\_\+}!Test\+Object@{Test\+Object}}
+\subsubsection[{passed\+\_\+count\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}std\+::atomic$<$uint64\+\_\+t$>$ Test\+Object\+::passed\+\_\+count\+\_\+ \{0\}}\label{class_test_object_a7f2ec3b2d643f50a441e84e3bce407da}
+\hypertarget{class_test_object_aacfa3985ea1d4427319f97cc813d2a91}{}\index{Test\+Object@{Test\+Object}!ready\+\_\+count\+\_\+@{ready\+\_\+count\+\_\+}}
+\index{ready\+\_\+count\+\_\+@{ready\+\_\+count\+\_\+}!Test\+Object@{Test\+Object}}
+\subsubsection[{ready\+\_\+count\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}std\+::atomic$<$ int $>$ Test\+Object\+::ready\+\_\+count\+\_\+ \{0\}}\label{class_test_object_aacfa3985ea1d4427319f97cc813d2a91}
+\hypertarget{class_test_object_a6bb349ea0af5dc9a56214b3ba911d544}{}\index{Test\+Object@{Test\+Object}!running\+\_\+@{running\+\_\+}}
+\index{running\+\_\+@{running\+\_\+}!Test\+Object@{Test\+Object}}
+\subsubsection[{running\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}std\+::atomic$<$ bool $>$ Test\+Object\+::running\+\_\+ \{{\bf true}\}}\label{class_test_object_a6bb349ea0af5dc9a56214b3ba911d544}
+\hypertarget{class_test_object_a5a0bcec98ef2512f1c62e330522b6df0}{}\index{Test\+Object@{Test\+Object}!shared\+\_\+memory\+\_\+@{shared\+\_\+memory\+\_\+}}
+\index{shared\+\_\+memory\+\_\+@{shared\+\_\+memory\+\_\+}!Test\+Object@{Test\+Object}}
+\subsubsection[{shared\+\_\+memory\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}std\+::atomic$<$void $\ast$$>$$\ast$ Test\+Object\+::shared\+\_\+memory\+\_\+}\label{class_test_object_a5a0bcec98ef2512f1c62e330522b6df0}
+\hypertarget{class_test_object_a7e8e641112366f90c14d458b6167bee1}{}\index{Test\+Object@{Test\+Object}!test\+\_\+class\+\_\+@{test\+\_\+class\+\_\+}}
+\index{test\+\_\+class\+\_\+@{test\+\_\+class\+\_\+}!Test\+Object@{Test\+Object}}
+\subsubsection[{test\+\_\+class\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Test\+Class}$\ast$ Test\+Object\+::test\+\_\+class\+\_\+}\label{class_test_object_a7e8e641112366f90c14d458b6167bee1}
+\hypertarget{class_test_object_aff2586a58e6599398218f18cb0fca4f4}{}\index{Test\+Object@{Test\+Object}!test\+\_\+class\+\_\+@{test\+\_\+class\+\_\+}}
+\index{test\+\_\+class\+\_\+@{test\+\_\+class\+\_\+}!Test\+Object@{Test\+Object}}
+\subsubsection[{test\+\_\+class\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Test\+Class}$<$ {\bf Value} $>$ $\ast$ Test\+Object\+::test\+\_\+class\+\_\+}\label{class_test_object_aff2586a58e6599398218f18cb0fca4f4}
+\hypertarget{class_test_object_ab978d0afc9d91e3f0d51b52fe13eafb4}{}\index{Test\+Object@{Test\+Object}!test\+\_\+class\+\_\+@{test\+\_\+class\+\_\+}}
+\index{test\+\_\+class\+\_\+@{test\+\_\+class\+\_\+}!Test\+Object@{Test\+Object}}
+\subsubsection[{test\+\_\+class\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Test\+Class}$<${\bf Value}$>$$\ast$ Test\+Object\+::test\+\_\+class\+\_\+}\label{class_test_object_ab978d0afc9d91e3f0d51b52fe13eafb4}
+\hypertarget{class_test_object_a5837b96611f5cc5dc27a4b536831b489}{}\index{Test\+Object@{Test\+Object}!true@{true}}
+\index{true@{true}!Test\+Object@{Test\+Object}}
+\subsubsection[{true}]{\setlength{\rightskip}{0pt plus 5cm}std\+::atomic$<$bool$>$ {\bf wait\+\_\+flag\+\_\+} Test\+Object\+::true}\label{class_test_object_a5837b96611f5cc5dc27a4b536831b489}
+\hypertarget{class_test_object_a6ccfdc908c6a49be86e380474a3448c0}{}\index{Test\+Object@{Test\+Object}!wait\+\_\+flag\+\_\+@{wait\+\_\+flag\+\_\+}}
+\index{wait\+\_\+flag\+\_\+@{wait\+\_\+flag\+\_\+}!Test\+Object@{Test\+Object}}
+\subsubsection[{wait\+\_\+flag\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}std\+::atomic$<$ bool $>$ Test\+Object\+::wait\+\_\+flag\+\_\+ \{{\bf true}\}}\label{class_test_object_a6ccfdc908c6a49be86e380474a3448c0}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+tervel/tests/hash\+\_\+map/\hyperlink{hash__map_2test_object_8h}{test\+Object.\+h}\end{DoxyCompactItemize}

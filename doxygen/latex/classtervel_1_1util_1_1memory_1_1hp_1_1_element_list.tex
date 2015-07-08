@@ -1,0 +1,134 @@
+\hypertarget{classtervel_1_1util_1_1memory_1_1hp_1_1_element_list}{}\section{tervel\+:\+:util\+:\+:memory\+:\+:hp\+:\+:Element\+List Class Reference}
+\label{classtervel_1_1util_1_1memory_1_1hp_1_1_element_list}\index{tervel\+::util\+::memory\+::hp\+::\+Element\+List@{tervel\+::util\+::memory\+::hp\+::\+Element\+List}}
+
+
+Defines a list of objects which are stored until they are safe to be freed.  
+
+
+
+
+{\ttfamily \#include $<$hp\+\_\+list.\+h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_element_list_a08f1ad218521948919aa8232098d69fb}{Element\+List} (\hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_list_manager}{List\+Manager} $\ast$manager)
+\item 
+\hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_element_list_a4ca58faad54530a724b61dfc5dc2f73b}{$\sim$\+Element\+List} ()
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+friend \hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_element_list_a2392e8dcf3dc26d7766c92a875696649}{Element}
+\end{DoxyCompactItemize}
+\subsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_element_list_adf7724a6cc985cde89f6195bbfd9d656}{send\+\_\+to\+\_\+manager} ()
+\begin{DoxyCompactList}\small\item\em Sends all elements managed by this list to the parent. \end{DoxyCompactList}\item 
+void \hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_element_list_a694cee8f0e74e14e9af680f48f28b109}{add\+\_\+to\+\_\+unsafe} (\hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_element}{Element} $\ast$elem)
+\begin{DoxyCompactList}\small\item\em This function adds an \hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_element}{Element} to the unsafe list. \end{DoxyCompactList}\item 
+void \hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_element_list_a595805e2257bf2f276ad2e0ecf8dd675}{try\+\_\+to\+\_\+free\+\_\+elements} (bool dont\+\_\+check=false)
+\begin{DoxyCompactList}\small\item\em Tries to free elements from the unsafe list. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_list_manager}{List\+Manager} $\ast$ \hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_element_list_a59a6505303f5914110a624570b5c902d}{manager\+\_\+}
+\begin{DoxyCompactList}\small\item\em This list\textquotesingle{}s manager. \end{DoxyCompactList}\item 
+\hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_element}{Element} $\ast$ \hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_element_list_a7522322f344cde24db1524ce4e4666d1}{element\+\_\+list\+\_\+} \{nullptr\}
+\begin{DoxyCompactList}\small\item\em A linked list of list elements. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Defines a list of objects which are stored until they are safe to be freed. 
+
+The list is represented as a linked list of H\+P Elements
+
+Further, this object has a parent who is shared amongst other threads. When it is to be destroyed, it sends its remaining elements to the parent, relinquishing ownership of said elements. 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classtervel_1_1util_1_1memory_1_1hp_1_1_element_list_a08f1ad218521948919aa8232098d69fb}{}\index{tervel\+::util\+::memory\+::hp\+::\+Element\+List@{tervel\+::util\+::memory\+::hp\+::\+Element\+List}!Element\+List@{Element\+List}}
+\index{Element\+List@{Element\+List}!tervel\+::util\+::memory\+::hp\+::\+Element\+List@{tervel\+::util\+::memory\+::hp\+::\+Element\+List}}
+\subsubsection[{Element\+List(\+List\+Manager $\ast$manager)}]{\setlength{\rightskip}{0pt plus 5cm}tervel\+::util\+::memory\+::hp\+::\+Element\+List\+::\+Element\+List (
+\begin{DoxyParamCaption}
+\item[{{\bf List\+Manager} $\ast$}]{manager}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}}\label{classtervel_1_1util_1_1memory_1_1hp_1_1_element_list_a08f1ad218521948919aa8232098d69fb}
+\hypertarget{classtervel_1_1util_1_1memory_1_1hp_1_1_element_list_a4ca58faad54530a724b61dfc5dc2f73b}{}\index{tervel\+::util\+::memory\+::hp\+::\+Element\+List@{tervel\+::util\+::memory\+::hp\+::\+Element\+List}!````~Element\+List@{$\sim$\+Element\+List}}
+\index{````~Element\+List@{$\sim$\+Element\+List}!tervel\+::util\+::memory\+::hp\+::\+Element\+List@{tervel\+::util\+::memory\+::hp\+::\+Element\+List}}
+\subsubsection[{$\sim$\+Element\+List()}]{\setlength{\rightskip}{0pt plus 5cm}tervel\+::util\+::memory\+::hp\+::\+Element\+List\+::$\sim$\+Element\+List (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1util_1_1memory_1_1hp_1_1_element_list_a4ca58faad54530a724b61dfc5dc2f73b}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classtervel_1_1util_1_1memory_1_1hp_1_1_element_list_a694cee8f0e74e14e9af680f48f28b109}{}\index{tervel\+::util\+::memory\+::hp\+::\+Element\+List@{tervel\+::util\+::memory\+::hp\+::\+Element\+List}!add\+\_\+to\+\_\+unsafe@{add\+\_\+to\+\_\+unsafe}}
+\index{add\+\_\+to\+\_\+unsafe@{add\+\_\+to\+\_\+unsafe}!tervel\+::util\+::memory\+::hp\+::\+Element\+List@{tervel\+::util\+::memory\+::hp\+::\+Element\+List}}
+\subsubsection[{add\+\_\+to\+\_\+unsafe(\+Element $\ast$elem)}]{\setlength{\rightskip}{0pt plus 5cm}void tervel\+::util\+::memory\+::hp\+::\+Element\+List\+::add\+\_\+to\+\_\+unsafe (
+\begin{DoxyParamCaption}
+\item[{{\bf Element} $\ast$}]{elem}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1util_1_1memory_1_1hp_1_1_element_list_a694cee8f0e74e14e9af680f48f28b109}
+
+
+This function adds an \hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_element}{Element} to the unsafe list. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em elem} & The element to add \\
+\hline
+\end{DoxyParams}
+\hypertarget{classtervel_1_1util_1_1memory_1_1hp_1_1_element_list_adf7724a6cc985cde89f6195bbfd9d656}{}\index{tervel\+::util\+::memory\+::hp\+::\+Element\+List@{tervel\+::util\+::memory\+::hp\+::\+Element\+List}!send\+\_\+to\+\_\+manager@{send\+\_\+to\+\_\+manager}}
+\index{send\+\_\+to\+\_\+manager@{send\+\_\+to\+\_\+manager}!tervel\+::util\+::memory\+::hp\+::\+Element\+List@{tervel\+::util\+::memory\+::hp\+::\+Element\+List}}
+\subsubsection[{send\+\_\+to\+\_\+manager()}]{\setlength{\rightskip}{0pt plus 5cm}void tervel\+::util\+::memory\+::hp\+::\+Element\+List\+::send\+\_\+to\+\_\+manager (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1util_1_1memory_1_1hp_1_1_element_list_adf7724a6cc985cde89f6195bbfd9d656}
+
+
+Sends all elements managed by this list to the parent. 
+
+\hypertarget{classtervel_1_1util_1_1memory_1_1hp_1_1_element_list_a595805e2257bf2f276ad2e0ecf8dd675}{}\index{tervel\+::util\+::memory\+::hp\+::\+Element\+List@{tervel\+::util\+::memory\+::hp\+::\+Element\+List}!try\+\_\+to\+\_\+free\+\_\+elements@{try\+\_\+to\+\_\+free\+\_\+elements}}
+\index{try\+\_\+to\+\_\+free\+\_\+elements@{try\+\_\+to\+\_\+free\+\_\+elements}!tervel\+::util\+::memory\+::hp\+::\+Element\+List@{tervel\+::util\+::memory\+::hp\+::\+Element\+List}}
+\subsubsection[{try\+\_\+to\+\_\+free\+\_\+elements(bool dont\+\_\+check=false)}]{\setlength{\rightskip}{0pt plus 5cm}void tervel\+::util\+::memory\+::hp\+::\+Element\+List\+::try\+\_\+to\+\_\+free\+\_\+elements (
+\begin{DoxyParamCaption}
+\item[{bool}]{dont\+\_\+check = {\ttfamily false}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1util_1_1memory_1_1hp_1_1_element_list_a595805e2257bf2f276ad2e0ecf8dd675}
+
+
+Tries to free elements from the unsafe list. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em dont\+\_\+check} & If true, it ignores safety checks \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Member Data Documentation}
+\hypertarget{classtervel_1_1util_1_1memory_1_1hp_1_1_element_list_a2392e8dcf3dc26d7766c92a875696649}{}\index{tervel\+::util\+::memory\+::hp\+::\+Element\+List@{tervel\+::util\+::memory\+::hp\+::\+Element\+List}!Element@{Element}}
+\index{Element@{Element}!tervel\+::util\+::memory\+::hp\+::\+Element\+List@{tervel\+::util\+::memory\+::hp\+::\+Element\+List}}
+\subsubsection[{Element}]{\setlength{\rightskip}{0pt plus 5cm}friend tervel\+::util\+::memory\+::hp\+::\+Element\+List\+::\+Element}\label{classtervel_1_1util_1_1memory_1_1hp_1_1_element_list_a2392e8dcf3dc26d7766c92a875696649}
+\hypertarget{classtervel_1_1util_1_1memory_1_1hp_1_1_element_list_a7522322f344cde24db1524ce4e4666d1}{}\index{tervel\+::util\+::memory\+::hp\+::\+Element\+List@{tervel\+::util\+::memory\+::hp\+::\+Element\+List}!element\+\_\+list\+\_\+@{element\+\_\+list\+\_\+}}
+\index{element\+\_\+list\+\_\+@{element\+\_\+list\+\_\+}!tervel\+::util\+::memory\+::hp\+::\+Element\+List@{tervel\+::util\+::memory\+::hp\+::\+Element\+List}}
+\subsubsection[{element\+\_\+list\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Element}$\ast$ tervel\+::util\+::memory\+::hp\+::\+Element\+List\+::element\+\_\+list\+\_\+ \{nullptr\}\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1util_1_1memory_1_1hp_1_1_element_list_a7522322f344cde24db1524ce4e4666d1}
+
+
+A linked list of list elements. 
+
+Elements are freed when they are no longer referenced by other threads. \hypertarget{classtervel_1_1util_1_1memory_1_1hp_1_1_element_list_a59a6505303f5914110a624570b5c902d}{}\index{tervel\+::util\+::memory\+::hp\+::\+Element\+List@{tervel\+::util\+::memory\+::hp\+::\+Element\+List}!manager\+\_\+@{manager\+\_\+}}
+\index{manager\+\_\+@{manager\+\_\+}!tervel\+::util\+::memory\+::hp\+::\+Element\+List@{tervel\+::util\+::memory\+::hp\+::\+Element\+List}}
+\subsubsection[{manager\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}{\bf List\+Manager}$\ast$ tervel\+::util\+::memory\+::hp\+::\+Element\+List\+::manager\+\_\+\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1util_1_1memory_1_1hp_1_1_element_list_a59a6505303f5914110a624570b5c902d}
+
+
+This list\textquotesingle{}s manager. 
+
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+tervel/util/memory/hp/\hyperlink{hp__list_8h}{hp\+\_\+list.\+h}\end{DoxyCompactItemize}

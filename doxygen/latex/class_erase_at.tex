@@ -1,0 +1,107 @@
+\hypertarget{class_erase_at}{}\section{Erase\+At$<$ T $>$ Class Template Reference}
+\label{class_erase_at}\index{Erase\+At$<$ T $>$@{Erase\+At$<$ T $>$}}
+
+
+{\ttfamily \#include $<$earaseat\+\_\+op.\+h$>$}
+
+Inheritance diagram for Erase\+At$<$ T $>$\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_erase_at}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_erase_at_a4f96bd2292727d90cecbaac7aa356aeb}{Erase\+At} (const Vector $\ast$vector, const size\+\_\+t idx)
+\item 
+bool \hyperlink{class_erase_at_a8db28ef12f418e3e7bc745fb32038b78}{begin} (const T \&result)
+\item 
+void \hyperlink{class_erase_at_ac69fc35afacc8da116cf093f100fff69}{execute} ()
+\item 
+void \hyperlink{class_erase_at_a47c62ba991eb506ffe67a73e0317673d}{cleanup} ()
+\item 
+bool \hyperlink{class_erase_at_ae8f9925c82a249f5467da3036747d340}{complete} (int pos)
+\item 
+bool \hyperlink{class_erase_at_a6f6a5c68a1bae7683b10f403702f0f88}{is\+\_\+complete} ()
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+const size\+\_\+t \hyperlink{class_erase_at_ab067b4f8d097677748b1cd081730e450}{idx\+\_\+}
+\item 
+const Vector$<$ T $>$ $\ast$ \hyperlink{class_erase_at_a7a24a5872cd3fa48cb71711b96e15af9}{vector\+\_\+}
+\item 
+std\+::atomic$<$ bool $>$ \hyperlink{class_erase_at_a7a0e20cf5a5e02822dd1d0a3d486920c}{is\+\_\+complete\+\_\+}
+\item 
+std\+::atomic$<$ helper\+\_\+t $\ast$ $>$ \hyperlink{class_erase_at_a6fe6f561569a440fa9f8631d6c06d895}{next\+\_\+}
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{class_erase_at_a4f96bd2292727d90cecbaac7aa356aeb}{}\index{Erase\+At@{Erase\+At}!Erase\+At@{Erase\+At}}
+\index{Erase\+At@{Erase\+At}!Erase\+At@{Erase\+At}}
+\subsubsection[{Erase\+At(const Vector $\ast$vector, const size\+\_\+t idx)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ {\bf Erase\+At}$<$ T $>$\+::{\bf Erase\+At} (
+\begin{DoxyParamCaption}
+\item[{const Vector $\ast$}]{vector, }
+\item[{const size\+\_\+t}]{idx}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_erase_at_a4f96bd2292727d90cecbaac7aa356aeb}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_erase_at_a8db28ef12f418e3e7bc745fb32038b78}{}\index{Erase\+At@{Erase\+At}!begin@{begin}}
+\index{begin@{begin}!Erase\+At@{Erase\+At}}
+\subsubsection[{begin(const T \&result)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ bool {\bf Erase\+At}$<$ T $>$\+::begin (
+\begin{DoxyParamCaption}
+\item[{const T \&}]{result}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_erase_at_a8db28ef12f418e3e7bc745fb32038b78}
+\hypertarget{class_erase_at_a47c62ba991eb506ffe67a73e0317673d}{}\index{Erase\+At@{Erase\+At}!cleanup@{cleanup}}
+\index{cleanup@{cleanup}!Erase\+At@{Erase\+At}}
+\subsubsection[{cleanup()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ void {\bf Erase\+At}$<$ T $>$\+::cleanup (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{class_erase_at_a47c62ba991eb506ffe67a73e0317673d}
+\hypertarget{class_erase_at_ae8f9925c82a249f5467da3036747d340}{}\index{Erase\+At@{Erase\+At}!complete@{complete}}
+\index{complete@{complete}!Erase\+At@{Erase\+At}}
+\subsubsection[{complete(int pos)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ bool {\bf Erase\+At}$<$ T $>$\+::complete (
+\begin{DoxyParamCaption}
+\item[{int}]{pos}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_erase_at_ae8f9925c82a249f5467da3036747d340}
+\hypertarget{class_erase_at_ac69fc35afacc8da116cf093f100fff69}{}\index{Erase\+At@{Erase\+At}!execute@{execute}}
+\index{execute@{execute}!Erase\+At@{Erase\+At}}
+\subsubsection[{execute()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ void {\bf Erase\+At}$<$ T $>$\+::execute (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_erase_at_ac69fc35afacc8da116cf093f100fff69}
+\hypertarget{class_erase_at_a6f6a5c68a1bae7683b10f403702f0f88}{}\index{Erase\+At@{Erase\+At}!is\+\_\+complete@{is\+\_\+complete}}
+\index{is\+\_\+complete@{is\+\_\+complete}!Erase\+At@{Erase\+At}}
+\subsubsection[{is\+\_\+complete()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ bool {\bf Erase\+At}$<$ T $>$\+::is\+\_\+complete (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_erase_at_a6f6a5c68a1bae7683b10f403702f0f88}
+
+
+\subsection{Member Data Documentation}
+\hypertarget{class_erase_at_ab067b4f8d097677748b1cd081730e450}{}\index{Erase\+At@{Erase\+At}!idx\+\_\+@{idx\+\_\+}}
+\index{idx\+\_\+@{idx\+\_\+}!Erase\+At@{Erase\+At}}
+\subsubsection[{idx\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ const size\+\_\+t {\bf Erase\+At}$<$ T $>$\+::idx\+\_\+}\label{class_erase_at_ab067b4f8d097677748b1cd081730e450}
+\hypertarget{class_erase_at_a7a0e20cf5a5e02822dd1d0a3d486920c}{}\index{Erase\+At@{Erase\+At}!is\+\_\+complete\+\_\+@{is\+\_\+complete\+\_\+}}
+\index{is\+\_\+complete\+\_\+@{is\+\_\+complete\+\_\+}!Erase\+At@{Erase\+At}}
+\subsubsection[{is\+\_\+complete\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ std\+::atomic$<$bool$>$ {\bf Erase\+At}$<$ T $>$\+::is\+\_\+complete\+\_\+}\label{class_erase_at_a7a0e20cf5a5e02822dd1d0a3d486920c}
+\hypertarget{class_erase_at_a6fe6f561569a440fa9f8631d6c06d895}{}\index{Erase\+At@{Erase\+At}!next\+\_\+@{next\+\_\+}}
+\index{next\+\_\+@{next\+\_\+}!Erase\+At@{Erase\+At}}
+\subsubsection[{next\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ std\+::atomic$<$helper\+\_\+t $\ast$$>$ {\bf Erase\+At}$<$ T $>$\+::next\+\_\+}\label{class_erase_at_a6fe6f561569a440fa9f8631d6c06d895}
+\hypertarget{class_erase_at_a7a24a5872cd3fa48cb71711b96e15af9}{}\index{Erase\+At@{Erase\+At}!vector\+\_\+@{vector\+\_\+}}
+\index{vector\+\_\+@{vector\+\_\+}!Erase\+At@{Erase\+At}}
+\subsubsection[{vector\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T $>$ const Vector$<$T$>$$\ast$ {\bf Erase\+At}$<$ T $>$\+::vector\+\_\+}\label{class_erase_at_a7a24a5872cd3fa48cb71711b96e15af9}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+tervel/containers/wf/vector/old/\hyperlink{earaseat__op_8h}{earaseat\+\_\+op.\+h}\end{DoxyCompactItemize}

@@ -1,0 +1,334 @@
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_hash_map}{}\section{tervel\+:\+:containers\+:\+:wf\+:\+:Hash\+Map$<$ Key, Value, Functor $>$ Class Template Reference}
+\label{classtervel_1_1containers_1_1wf_1_1_hash_map}\index{tervel\+::containers\+::wf\+::\+Hash\+Map$<$ Key, Value, Functor $>$@{tervel\+::containers\+::wf\+::\+Hash\+Map$<$ Key, Value, Functor $>$}}
+
+
+A wait-\/free hash map implementation.  
+
+
+
+
+{\ttfamily \#include $<$wf\+\_\+hash\+\_\+map.\+h$>$}
+
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map_1_1_array_node}{Array\+Node}
+\begin{DoxyCompactList}\small\item\em This class is used to hold the secondary array structure. \end{DoxyCompactList}\item 
+class \hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map_1_1_data_node}{Data\+Node}
+\begin{DoxyCompactList}\small\item\em This class is used to hold a key and value pair. \end{DoxyCompactList}\item 
+class \hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map_1_1_force_expand_op}{Force\+Expand\+Op}
+\begin{DoxyCompactList}\small\item\em T\+O\+D\+O(steven)\+: add description T\+O\+D\+O(steven)\+: move into a file. \end{DoxyCompactList}\item 
+class \hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map_1_1_node}{Node}
+\begin{DoxyCompactList}\small\item\em This class is used to differentiate between data\+\_\+nodes and array\+\_\+nodes/. \end{DoxyCompactList}\item 
+class \hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map_1_1_value_accessor}{Value\+Accessor}
+\begin{DoxyCompactList}\small\item\em This class is used to safe guard access to values. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map_ad8c150cd36ed719afb858430337f1c62}{Hash\+Map} (uint64\+\_\+t capacity, uint64\+\_\+t expansion\+\_\+rate=3)
+\item 
+\hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map_ae794cb0541447e72830673a22f541ca8}{$\sim$\+Hash\+Map} ()
+\begin{DoxyCompactList}\small\item\em Not Thread Safe! May create a very large stack! Note\+: should implement a better way... \end{DoxyCompactList}\item 
+bool \hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map_a4c1495c1d9bcdef760f0a4d973778d57}{at} (Key key, \hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map_1_1_value_accessor}{Value\+Accessor} \&va)
+\begin{DoxyCompactList}\small\item\em This function returns true and initializes the passed \hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map_1_1_value_accessor}{Value\+Accessor} if the key exists in the hash map. \end{DoxyCompactList}\item 
+bool \hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map_aa987d6abf872d3fb51a714fa9c3da047}{insert} (Key key, \hyperlink{hash__map_2test_object_8h_ad777bf08d8e2b01df17ba5e3c51ae11f}{Value} value)
+\begin{DoxyCompactList}\small\item\em This function returns true if the key value pair was successfully inserted. \end{DoxyCompactList}\item 
+bool \hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map_ad4c3355a93bdec5af4d8dba02b9bd02a}{remove} (Key key)
+\begin{DoxyCompactList}\small\item\em Attempts to remove a key/value pair from the hash map Returns false in the event the key is not in the hash map or if the access\+\_\+counter is non-\/zero. \end{DoxyCompactList}\item 
+size\+\_\+t \hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map_a2fb368a522433b4a96c8d4ac7feb7a78}{size} ()
+\item 
+uint64\+\_\+t \hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map_a8e8d0c8976e57161982b2690429c7a21}{get\+\_\+position} (Key \&key, size\+\_\+t depth)
+\item 
+uint64\+\_\+t \hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map_a6612d9ecf9fa6707d6f5f6cc9aa59613}{max\+\_\+depth} ()
+\item 
+void \hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map_aef0328afe3b270b14f6345e76aff9ef7}{print\+\_\+key} (Key \&key)
+\begin{DoxyCompactList}\small\item\em Outputs the positions a key belongs in at each depth. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Private Types}
+\begin{DoxyCompactItemize}
+\item 
+typedef std\+::atomic$<$ \hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map_1_1_node}{Node} $\ast$ $>$ \hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map_ab2c04cbf19034689a795208e0108fe8a}{Location}
+\end{DoxyCompactItemize}
+\subsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map_a16ae6d201452512192fdca6e2edfb103}{expand\+\_\+map} (\hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map_ab2c04cbf19034689a795208e0108fe8a}{Location} $\ast$loc, \hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map_1_1_node}{Node} $\ast$curr\+\_\+value, size\+\_\+t depth)
+\begin{DoxyCompactList}\small\item\em Increases the capacity of the hash map by replacing a data node reference with a reference to an array node containing a reference to that data node. \end{DoxyCompactList}\item 
+bool \hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map_ad20d1a66ecbec92076502223116708e4}{hp\+\_\+watch\+\_\+and\+\_\+get\+\_\+value} (\hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map_ab2c04cbf19034689a795208e0108fe8a}{Location} $\ast$loc, \hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map_1_1_node}{Node} $\ast$\&value)
+\begin{DoxyCompactList}\small\item\em This is a wrapper for hazard pointers. \end{DoxyCompactList}\item 
+void \hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map_aa69a1e4365aa684f19af2b98fe0a663a}{hp\+\_\+unwatch} ()
+\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+const size\+\_\+t \hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map_a33e402d5fcf528ee13dbe5aa3f893fa2}{primary\+\_\+array\+\_\+size\+\_\+}
+\item 
+const size\+\_\+t \hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map_abaa36dc12509164a3c9612666a4eacbc}{primary\+\_\+array\+\_\+pow\+\_\+}
+\item 
+const size\+\_\+t \hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map_ac9a43fdb98927d0147a1240bd882e70b}{secondary\+\_\+array\+\_\+size\+\_\+}
+\item 
+const size\+\_\+t \hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map_a0db3b6f46ecf2ac2c243ee76edf0a4f5}{secondary\+\_\+array\+\_\+pow\+\_\+}
+\item 
+std\+::atomic$<$ uint64\+\_\+t $>$ \hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map_a88bcdcb8728735910311f62e99027385}{size\+\_\+}
+\item 
+std\+::unique\+\_\+ptr$<$ \hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map_ab2c04cbf19034689a795208e0108fe8a}{Location}\mbox{[}$\,$\mbox{]}$>$ \hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map_a501a15b166513ae18873d6d1d3da71a4}{primary\+\_\+array\+\_\+}
+\end{DoxyCompactItemize}
+\subsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+class \hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map_a6db9d28bd448a131448276ee03de1e6d}{Node}
+\item 
+class \hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map_a92fd79231cf52565db2b541bf8b96039}{Force\+Expand\+Op}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\subsubsection*{template$<$class Key, class Value, class Functor = default\+\_\+functor$<$\+Key, Value$>$$>$class tervel\+::containers\+::wf\+::\+Hash\+Map$<$ Key, Value, Functor $>$}
+
+A wait-\/free hash map implementation. 
+
+T\+O\+D\+O(steven)\+: Provide general overview
+
+Functor should have the following functions\+: -\/\+Key hash(\+Key k) (where hash(a) == (hash(b) implies a == b -\/bool key\+\_\+equals (Key a, Key b) Important Note\+: the hashed value of keys will be passed in. 
+
+\subsection{Member Typedef Documentation}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_hash_map_ab2c04cbf19034689a795208e0108fe8a}{}\index{tervel\+::containers\+::wf\+::\+Hash\+Map@{tervel\+::containers\+::wf\+::\+Hash\+Map}!Location@{Location}}
+\index{Location@{Location}!tervel\+::containers\+::wf\+::\+Hash\+Map@{tervel\+::containers\+::wf\+::\+Hash\+Map}}
+\subsubsection[{Location}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key , class Value , class Functor  = default\+\_\+functor$<$\+Key, Value$>$$>$ typedef std\+::atomic$<${\bf Node} $\ast$$>$ {\bf tervel\+::containers\+::wf\+::\+Hash\+Map}$<$ Key, {\bf Value}, Functor $>$\+::{\bf Location}\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1containers_1_1wf_1_1_hash_map_ab2c04cbf19034689a795208e0108fe8a}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_hash_map_ad8c150cd36ed719afb858430337f1c62}{}\index{tervel\+::containers\+::wf\+::\+Hash\+Map@{tervel\+::containers\+::wf\+::\+Hash\+Map}!Hash\+Map@{Hash\+Map}}
+\index{Hash\+Map@{Hash\+Map}!tervel\+::containers\+::wf\+::\+Hash\+Map@{tervel\+::containers\+::wf\+::\+Hash\+Map}}
+\subsubsection[{Hash\+Map(uint64\+\_\+t capacity, uint64\+\_\+t expansion\+\_\+rate=3)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key , class Value , class Functor  = default\+\_\+functor$<$\+Key, Value$>$$>$ {\bf tervel\+::containers\+::wf\+::\+Hash\+Map}$<$ Key, {\bf Value}, Functor $>$\+::{\bf Hash\+Map} (
+\begin{DoxyParamCaption}
+\item[{uint64\+\_\+t}]{capacity, }
+\item[{uint64\+\_\+t}]{expansion\+\_\+rate = {\ttfamily 3}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1containers_1_1wf_1_1_hash_map_ad8c150cd36ed719afb858430337f1c62}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_hash_map_ae794cb0541447e72830673a22f541ca8}{}\index{tervel\+::containers\+::wf\+::\+Hash\+Map@{tervel\+::containers\+::wf\+::\+Hash\+Map}!````~Hash\+Map@{$\sim$\+Hash\+Map}}
+\index{````~Hash\+Map@{$\sim$\+Hash\+Map}!tervel\+::containers\+::wf\+::\+Hash\+Map@{tervel\+::containers\+::wf\+::\+Hash\+Map}}
+\subsubsection[{$\sim$\+Hash\+Map()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key , class Value , class Functor  = default\+\_\+functor$<$\+Key, Value$>$$>$ {\bf tervel\+::containers\+::wf\+::\+Hash\+Map}$<$ Key, {\bf Value}, Functor $>$\+::$\sim${\bf Hash\+Map} (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1containers_1_1wf_1_1_hash_map_ae794cb0541447e72830673a22f541ca8}
+
+
+Not Thread Safe! May create a very large stack! Note\+: should implement a better way... 
+
+If it is a node type then the node will be freed If it is an array node then the destructor of the array node will free any nodes that are referenced it. This may cause more array node\textquotesingle{}s to be freed. Stack can reach \hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map_a6612d9ecf9fa6707d6f5f6cc9aa59613}{max\+\_\+depth()} in size. 
+
+\subsection{Member Function Documentation}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_hash_map_a4c1495c1d9bcdef760f0a4d973778d57}{}\index{tervel\+::containers\+::wf\+::\+Hash\+Map@{tervel\+::containers\+::wf\+::\+Hash\+Map}!at@{at}}
+\index{at@{at}!tervel\+::containers\+::wf\+::\+Hash\+Map@{tervel\+::containers\+::wf\+::\+Hash\+Map}}
+\subsubsection[{at(\+Key key, Value\+Accessor \&va)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key , class Value , class Functor $>$ bool {\bf tervel\+::containers\+::wf\+::\+Hash\+Map}$<$ Key, {\bf Value}, Functor $>$\+::at (
+\begin{DoxyParamCaption}
+\item[{Key}]{key, }
+\item[{{\bf Value\+Accessor} \&}]{va}
+\end{DoxyParamCaption}
+)}\label{classtervel_1_1containers_1_1wf_1_1_hash_map_a4c1495c1d9bcdef760f0a4d973778d57}
+
+
+This function returns true and initializes the passed \hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map_1_1_value_accessor}{Value\+Accessor} if the key exists in the hash map. 
+
+Initializing the \hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map_1_1_value_accessor}{Value\+Accessor} consists of assigning storing a reference to the associated value and a reference to the access counter. The access counter will have been increased by one. Upon the destruction or re-\/initialization of the \hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map_1_1_value_accessor}{Value\+Accessor}, the access counter will be decremented.
+
+The sequential complexity of this operation is O(max\+\_\+depth()).
+
+
+\begin{DoxyParams}{Parameters}
+{\em key} & the key to look up \\
+\hline
+{\em va} & the location to store the address of the value/access\+\_\+counter \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+whether or not the key is present 
+\end{DoxyReturn}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_hash_map_a16ae6d201452512192fdca6e2edfb103}{}\index{tervel\+::containers\+::wf\+::\+Hash\+Map@{tervel\+::containers\+::wf\+::\+Hash\+Map}!expand\+\_\+map@{expand\+\_\+map}}
+\index{expand\+\_\+map@{expand\+\_\+map}!tervel\+::containers\+::wf\+::\+Hash\+Map@{tervel\+::containers\+::wf\+::\+Hash\+Map}}
+\subsubsection[{expand\+\_\+map(\+Location $\ast$loc, Node $\ast$curr\+\_\+value, size\+\_\+t depth)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key , class Value , class Functor $>$ void {\bf tervel\+::containers\+::wf\+::\+Hash\+Map}$<$ Key, {\bf Value}, Functor $>$\+::expand\+\_\+map (
+\begin{DoxyParamCaption}
+\item[{{\bf Location} $\ast$}]{loc, }
+\item[{{\bf Node} $\ast$}]{curr\+\_\+value, }
+\item[{size\+\_\+t}]{depth}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1containers_1_1wf_1_1_hash_map_a16ae6d201452512192fdca6e2edfb103}
+
+
+Increases the capacity of the hash map by replacing a data node reference with a reference to an array node containing a reference to that data node. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em loc} & The location to expand at \\
+\hline
+{\em curr\+\_\+value} & The current value (data node) at the location \\
+\hline
+{\em next\+\_\+position} & The position the data node belongs at the next depth. \\
+\hline
+\end{DoxyParams}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_hash_map_a8e8d0c8976e57161982b2690429c7a21}{}\index{tervel\+::containers\+::wf\+::\+Hash\+Map@{tervel\+::containers\+::wf\+::\+Hash\+Map}!get\+\_\+position@{get\+\_\+position}}
+\index{get\+\_\+position@{get\+\_\+position}!tervel\+::containers\+::wf\+::\+Hash\+Map@{tervel\+::containers\+::wf\+::\+Hash\+Map}}
+\subsubsection[{get\+\_\+position(\+Key \&key, size\+\_\+t depth)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key , class Value , class Functor $>$ uint64\+\_\+t {\bf tervel\+::containers\+::wf\+::\+Hash\+Map}$<$ Key, {\bf Value}, Functor $>$\+::get\+\_\+position (
+\begin{DoxyParamCaption}
+\item[{Key \&}]{key, }
+\item[{size\+\_\+t}]{depth}
+\end{DoxyParamCaption}
+)}\label{classtervel_1_1containers_1_1wf_1_1_hash_map_a8e8d0c8976e57161982b2690429c7a21}
+
+\begin{DoxyParams}{Parameters}
+{\em key} & The key \\
+\hline
+{\em depth} & The depth \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the position this key belongs in at the specified depth. 
+\end{DoxyReturn}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_hash_map_aa69a1e4365aa684f19af2b98fe0a663a}{}\index{tervel\+::containers\+::wf\+::\+Hash\+Map@{tervel\+::containers\+::wf\+::\+Hash\+Map}!hp\+\_\+unwatch@{hp\+\_\+unwatch}}
+\index{hp\+\_\+unwatch@{hp\+\_\+unwatch}!tervel\+::containers\+::wf\+::\+Hash\+Map@{tervel\+::containers\+::wf\+::\+Hash\+Map}}
+\subsubsection[{hp\+\_\+unwatch()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key , class Value , class Functor $>$ void {\bf tervel\+::containers\+::wf\+::\+Hash\+Map}$<$ Key, {\bf Value}, Functor $>$\+::hp\+\_\+unwatch (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1containers_1_1wf_1_1_hash_map_aa69a1e4365aa684f19af2b98fe0a663a}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_hash_map_ad20d1a66ecbec92076502223116708e4}{}\index{tervel\+::containers\+::wf\+::\+Hash\+Map@{tervel\+::containers\+::wf\+::\+Hash\+Map}!hp\+\_\+watch\+\_\+and\+\_\+get\+\_\+value@{hp\+\_\+watch\+\_\+and\+\_\+get\+\_\+value}}
+\index{hp\+\_\+watch\+\_\+and\+\_\+get\+\_\+value@{hp\+\_\+watch\+\_\+and\+\_\+get\+\_\+value}!tervel\+::containers\+::wf\+::\+Hash\+Map@{tervel\+::containers\+::wf\+::\+Hash\+Map}}
+\subsubsection[{hp\+\_\+watch\+\_\+and\+\_\+get\+\_\+value(\+Location $\ast$loc, Node $\ast$\&value)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key , class Value , class Functor $>$ bool {\bf tervel\+::containers\+::wf\+::\+Hash\+Map}$<$ Key, {\bf Value}, Functor $>$\+::hp\+\_\+watch\+\_\+and\+\_\+get\+\_\+value (
+\begin{DoxyParamCaption}
+\item[{{\bf Location} $\ast$}]{loc, }
+\item[{{\bf Node} $\ast$\&}]{value}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1containers_1_1wf_1_1_hash_map_ad20d1a66ecbec92076502223116708e4}
+
+
+This is a wrapper for hazard pointers. 
+
+If it returns true then the value has been assigned the current value of loc and it is hazard pointer protected. 
+\begin{DoxyParams}{Parameters}
+{\em loc} & the location to dereference a \hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map_1_1_node}{Node} object from \\
+\hline
+{\em value} & the destination to write the \hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map_1_1_node}{Node} objet pointer \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+whether or not it was able to dereference and hazard pointer watch a node object. 
+\end{DoxyReturn}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_hash_map_aa987d6abf872d3fb51a714fa9c3da047}{}\index{tervel\+::containers\+::wf\+::\+Hash\+Map@{tervel\+::containers\+::wf\+::\+Hash\+Map}!insert@{insert}}
+\index{insert@{insert}!tervel\+::containers\+::wf\+::\+Hash\+Map@{tervel\+::containers\+::wf\+::\+Hash\+Map}}
+\subsubsection[{insert(\+Key key, Value value)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key , class Value , class Functor $>$ bool {\bf tervel\+::containers\+::wf\+::\+Hash\+Map}$<$ Key, {\bf Value}, Functor $>$\+::insert (
+\begin{DoxyParamCaption}
+\item[{Key}]{key, }
+\item[{{\bf Value}}]{value}
+\end{DoxyParamCaption}
+)}\label{classtervel_1_1containers_1_1wf_1_1_hash_map_aa987d6abf872d3fb51a714fa9c3da047}
+
+
+This function returns true if the key value pair was successfully inserted. 
+
+Otherwise it returns false.
+
+A key can fail to insert in the event the key is already present.
+
+The sequential complexity of this operation is O(max\+\_\+depth()).
+
+
+\begin{DoxyParams}{Parameters}
+{\em key} & The key to insert \\
+\hline
+{\em value} & The key\textquotesingle{}s associated value \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+whether or not the the key/value was inserted 
+\end{DoxyReturn}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_hash_map_a6612d9ecf9fa6707d6f5f6cc9aa59613}{}\index{tervel\+::containers\+::wf\+::\+Hash\+Map@{tervel\+::containers\+::wf\+::\+Hash\+Map}!max\+\_\+depth@{max\+\_\+depth}}
+\index{max\+\_\+depth@{max\+\_\+depth}!tervel\+::containers\+::wf\+::\+Hash\+Map@{tervel\+::containers\+::wf\+::\+Hash\+Map}}
+\subsubsection[{max\+\_\+depth()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key , class Value , class Functor $>$ uint64\+\_\+t {\bf tervel\+::containers\+::wf\+::\+Hash\+Map}$<$ Key, {\bf Value}, Functor $>$\+::max\+\_\+depth (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{classtervel_1_1containers_1_1wf_1_1_hash_map_a6612d9ecf9fa6707d6f5f6cc9aa59613}
+\begin{DoxyReturn}{Returns}
+the maximum depth of the hash map, any depth beyond this would not produce any non-\/zero positions. 
+\end{DoxyReturn}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_hash_map_aef0328afe3b270b14f6345e76aff9ef7}{}\index{tervel\+::containers\+::wf\+::\+Hash\+Map@{tervel\+::containers\+::wf\+::\+Hash\+Map}!print\+\_\+key@{print\+\_\+key}}
+\index{print\+\_\+key@{print\+\_\+key}!tervel\+::containers\+::wf\+::\+Hash\+Map@{tervel\+::containers\+::wf\+::\+Hash\+Map}}
+\subsubsection[{print\+\_\+key(\+Key \&key)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key , class Value , class Functor $>$ void {\bf tervel\+::containers\+::wf\+::\+Hash\+Map}$<$ Key, {\bf Value}, Functor $>$\+::print\+\_\+key (
+\begin{DoxyParamCaption}
+\item[{Key \&}]{key}
+\end{DoxyParamCaption}
+)}\label{classtervel_1_1containers_1_1wf_1_1_hash_map_aef0328afe3b270b14f6345e76aff9ef7}
+
+
+Outputs the positions a key belongs in at each depth. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em key} & The Key \\
+\hline
+\end{DoxyParams}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_hash_map_ad4c3355a93bdec5af4d8dba02b9bd02a}{}\index{tervel\+::containers\+::wf\+::\+Hash\+Map@{tervel\+::containers\+::wf\+::\+Hash\+Map}!remove@{remove}}
+\index{remove@{remove}!tervel\+::containers\+::wf\+::\+Hash\+Map@{tervel\+::containers\+::wf\+::\+Hash\+Map}}
+\subsubsection[{remove(\+Key key)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key , class Value , class Functor $>$ bool {\bf tervel\+::containers\+::wf\+::\+Hash\+Map}$<$ Key, {\bf Value}, Functor $>$\+::remove (
+\begin{DoxyParamCaption}
+\item[{Key}]{key}
+\end{DoxyParamCaption}
+)}\label{classtervel_1_1containers_1_1wf_1_1_hash_map_ad4c3355a93bdec5af4d8dba02b9bd02a}
+
+
+Attempts to remove a key/value pair from the hash map Returns false in the event the key is not in the hash map or if the access\+\_\+counter is non-\/zero. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em key} & The key to resume \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+where or not the key was removed 
+\end{DoxyReturn}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_hash_map_a2fb368a522433b4a96c8d4ac7feb7a78}{}\index{tervel\+::containers\+::wf\+::\+Hash\+Map@{tervel\+::containers\+::wf\+::\+Hash\+Map}!size@{size}}
+\index{size@{size}!tervel\+::containers\+::wf\+::\+Hash\+Map@{tervel\+::containers\+::wf\+::\+Hash\+Map}}
+\subsubsection[{size()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key , class Value , class Functor  = default\+\_\+functor$<$\+Key, Value$>$$>$ size\+\_\+t {\bf tervel\+::containers\+::wf\+::\+Hash\+Map}$<$ Key, {\bf Value}, Functor $>$\+::size (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1containers_1_1wf_1_1_hash_map_a2fb368a522433b4a96c8d4ac7feb7a78}
+\begin{DoxyReturn}{Returns}
+the number of keys in the hash map 
+\end{DoxyReturn}
+
+
+\subsection{Friends And Related Function Documentation}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_hash_map_a92fd79231cf52565db2b541bf8b96039}{}\index{tervel\+::containers\+::wf\+::\+Hash\+Map@{tervel\+::containers\+::wf\+::\+Hash\+Map}!Force\+Expand\+Op@{Force\+Expand\+Op}}
+\index{Force\+Expand\+Op@{Force\+Expand\+Op}!tervel\+::containers\+::wf\+::\+Hash\+Map@{tervel\+::containers\+::wf\+::\+Hash\+Map}}
+\subsubsection[{Force\+Expand\+Op}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key , class Value , class Functor  = default\+\_\+functor$<$\+Key, Value$>$$>$ friend class {\bf Force\+Expand\+Op}\hspace{0.3cm}{\ttfamily [friend]}}\label{classtervel_1_1containers_1_1wf_1_1_hash_map_a92fd79231cf52565db2b541bf8b96039}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_hash_map_a6db9d28bd448a131448276ee03de1e6d}{}\index{tervel\+::containers\+::wf\+::\+Hash\+Map@{tervel\+::containers\+::wf\+::\+Hash\+Map}!Node@{Node}}
+\index{Node@{Node}!tervel\+::containers\+::wf\+::\+Hash\+Map@{tervel\+::containers\+::wf\+::\+Hash\+Map}}
+\subsubsection[{Node}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key , class Value , class Functor  = default\+\_\+functor$<$\+Key, Value$>$$>$ friend class {\bf Node}\hspace{0.3cm}{\ttfamily [friend]}}\label{classtervel_1_1containers_1_1wf_1_1_hash_map_a6db9d28bd448a131448276ee03de1e6d}
+
+
+\subsection{Member Data Documentation}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_hash_map_a501a15b166513ae18873d6d1d3da71a4}{}\index{tervel\+::containers\+::wf\+::\+Hash\+Map@{tervel\+::containers\+::wf\+::\+Hash\+Map}!primary\+\_\+array\+\_\+@{primary\+\_\+array\+\_\+}}
+\index{primary\+\_\+array\+\_\+@{primary\+\_\+array\+\_\+}!tervel\+::containers\+::wf\+::\+Hash\+Map@{tervel\+::containers\+::wf\+::\+Hash\+Map}}
+\subsubsection[{primary\+\_\+array\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key , class Value , class Functor  = default\+\_\+functor$<$\+Key, Value$>$$>$ std\+::unique\+\_\+ptr$<${\bf Location}\mbox{[}$\,$\mbox{]}$>$ {\bf tervel\+::containers\+::wf\+::\+Hash\+Map}$<$ Key, {\bf Value}, Functor $>$\+::primary\+\_\+array\+\_\+\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1containers_1_1wf_1_1_hash_map_a501a15b166513ae18873d6d1d3da71a4}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_hash_map_abaa36dc12509164a3c9612666a4eacbc}{}\index{tervel\+::containers\+::wf\+::\+Hash\+Map@{tervel\+::containers\+::wf\+::\+Hash\+Map}!primary\+\_\+array\+\_\+pow\+\_\+@{primary\+\_\+array\+\_\+pow\+\_\+}}
+\index{primary\+\_\+array\+\_\+pow\+\_\+@{primary\+\_\+array\+\_\+pow\+\_\+}!tervel\+::containers\+::wf\+::\+Hash\+Map@{tervel\+::containers\+::wf\+::\+Hash\+Map}}
+\subsubsection[{primary\+\_\+array\+\_\+pow\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key , class Value , class Functor  = default\+\_\+functor$<$\+Key, Value$>$$>$ const size\+\_\+t {\bf tervel\+::containers\+::wf\+::\+Hash\+Map}$<$ Key, {\bf Value}, Functor $>$\+::primary\+\_\+array\+\_\+pow\+\_\+\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1containers_1_1wf_1_1_hash_map_abaa36dc12509164a3c9612666a4eacbc}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_hash_map_a33e402d5fcf528ee13dbe5aa3f893fa2}{}\index{tervel\+::containers\+::wf\+::\+Hash\+Map@{tervel\+::containers\+::wf\+::\+Hash\+Map}!primary\+\_\+array\+\_\+size\+\_\+@{primary\+\_\+array\+\_\+size\+\_\+}}
+\index{primary\+\_\+array\+\_\+size\+\_\+@{primary\+\_\+array\+\_\+size\+\_\+}!tervel\+::containers\+::wf\+::\+Hash\+Map@{tervel\+::containers\+::wf\+::\+Hash\+Map}}
+\subsubsection[{primary\+\_\+array\+\_\+size\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key , class Value , class Functor  = default\+\_\+functor$<$\+Key, Value$>$$>$ const size\+\_\+t {\bf tervel\+::containers\+::wf\+::\+Hash\+Map}$<$ Key, {\bf Value}, Functor $>$\+::primary\+\_\+array\+\_\+size\+\_\+\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1containers_1_1wf_1_1_hash_map_a33e402d5fcf528ee13dbe5aa3f893fa2}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_hash_map_a0db3b6f46ecf2ac2c243ee76edf0a4f5}{}\index{tervel\+::containers\+::wf\+::\+Hash\+Map@{tervel\+::containers\+::wf\+::\+Hash\+Map}!secondary\+\_\+array\+\_\+pow\+\_\+@{secondary\+\_\+array\+\_\+pow\+\_\+}}
+\index{secondary\+\_\+array\+\_\+pow\+\_\+@{secondary\+\_\+array\+\_\+pow\+\_\+}!tervel\+::containers\+::wf\+::\+Hash\+Map@{tervel\+::containers\+::wf\+::\+Hash\+Map}}
+\subsubsection[{secondary\+\_\+array\+\_\+pow\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key , class Value , class Functor  = default\+\_\+functor$<$\+Key, Value$>$$>$ const size\+\_\+t {\bf tervel\+::containers\+::wf\+::\+Hash\+Map}$<$ Key, {\bf Value}, Functor $>$\+::secondary\+\_\+array\+\_\+pow\+\_\+\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1containers_1_1wf_1_1_hash_map_a0db3b6f46ecf2ac2c243ee76edf0a4f5}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_hash_map_ac9a43fdb98927d0147a1240bd882e70b}{}\index{tervel\+::containers\+::wf\+::\+Hash\+Map@{tervel\+::containers\+::wf\+::\+Hash\+Map}!secondary\+\_\+array\+\_\+size\+\_\+@{secondary\+\_\+array\+\_\+size\+\_\+}}
+\index{secondary\+\_\+array\+\_\+size\+\_\+@{secondary\+\_\+array\+\_\+size\+\_\+}!tervel\+::containers\+::wf\+::\+Hash\+Map@{tervel\+::containers\+::wf\+::\+Hash\+Map}}
+\subsubsection[{secondary\+\_\+array\+\_\+size\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key , class Value , class Functor  = default\+\_\+functor$<$\+Key, Value$>$$>$ const size\+\_\+t {\bf tervel\+::containers\+::wf\+::\+Hash\+Map}$<$ Key, {\bf Value}, Functor $>$\+::secondary\+\_\+array\+\_\+size\+\_\+\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1containers_1_1wf_1_1_hash_map_ac9a43fdb98927d0147a1240bd882e70b}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_hash_map_a88bcdcb8728735910311f62e99027385}{}\index{tervel\+::containers\+::wf\+::\+Hash\+Map@{tervel\+::containers\+::wf\+::\+Hash\+Map}!size\+\_\+@{size\+\_\+}}
+\index{size\+\_\+@{size\+\_\+}!tervel\+::containers\+::wf\+::\+Hash\+Map@{tervel\+::containers\+::wf\+::\+Hash\+Map}}
+\subsubsection[{size\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key , class Value , class Functor  = default\+\_\+functor$<$\+Key, Value$>$$>$ std\+::atomic$<$uint64\+\_\+t$>$ {\bf tervel\+::containers\+::wf\+::\+Hash\+Map}$<$ Key, {\bf Value}, Functor $>$\+::size\+\_\+\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1containers_1_1wf_1_1_hash_map_a88bcdcb8728735910311f62e99027385}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+tervel/containers/wf/hash-\/map/\hyperlink{wf__hash__map_8h}{wf\+\_\+hash\+\_\+map.\+h}\end{DoxyCompactItemize}

@@ -1,0 +1,108 @@
+\hypertarget{classtervel_1_1containers_1_1lf_1_1mcas__buffer_1_1_node}{}\section{tervel\+:\+:containers\+:\+:lf\+:\+:mcas\+\_\+buffer\+:\+:Node$<$ T $>$ Class Template Reference}
+\label{classtervel_1_1containers_1_1lf_1_1mcas__buffer_1_1_node}\index{tervel\+::containers\+::lf\+::mcas\+\_\+buffer\+::\+Node$<$ T $>$@{tervel\+::containers\+::lf\+::mcas\+\_\+buffer\+::\+Node$<$ T $>$}}
+
+
+{\ttfamily \#include $<$mcas\+\_\+buffer.\+h$>$}
+
+Inheritance diagram for tervel\+:\+:containers\+:\+:lf\+:\+:mcas\+\_\+buffer\+:\+:Node$<$ T $>$\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classtervel_1_1containers_1_1lf_1_1mcas__buffer_1_1_node}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classtervel_1_1containers_1_1lf_1_1mcas__buffer_1_1_node_ac5c94e003f42781fa851d8f83c860901}{Node} (T val)
+\item 
+\hyperlink{classtervel_1_1containers_1_1lf_1_1mcas__buffer_1_1_node_a424b975f90d6ba651c10b834837165e0}{$\sim$\+Node} ()
+\item 
+T \hyperlink{classtervel_1_1containers_1_1lf_1_1mcas__buffer_1_1_node_a64fc5cbefc0609a1e59f0d912808ecc8}{value} ()
+\item 
+void $\ast$ \hyperlink{classtervel_1_1containers_1_1lf_1_1mcas__buffer_1_1_node_afee54ad05721b9418bae358383e31f89}{complete} (void $\ast$current, std\+::atomic$<$ void $\ast$ $>$ $\ast$address)
+\begin{DoxyCompactList}\small\item\em This method is implemented by each sub class and must guarantee that upon return that the descriptor no longer exists at the address it was placed. \end{DoxyCompactList}\item 
+void $\ast$ \hyperlink{classtervel_1_1containers_1_1lf_1_1mcas__buffer_1_1_node_aceb3488510a25751e9055f13505a6a7d}{get\+\_\+logical\+\_\+value} ()
+\begin{DoxyCompactList}\small\item\em This method is implemented by each sub class. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+const T \hyperlink{classtervel_1_1containers_1_1lf_1_1mcas__buffer_1_1_node_a4e4a3009f3c6bdde1a0d55513bcfc89f}{val\+\_\+}
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classtervel_1_1containers_1_1lf_1_1mcas__buffer_1_1_node_ac5c94e003f42781fa851d8f83c860901}{}\index{tervel\+::containers\+::lf\+::mcas\+\_\+buffer\+::\+Node@{tervel\+::containers\+::lf\+::mcas\+\_\+buffer\+::\+Node}!Node@{Node}}
+\index{Node@{Node}!tervel\+::containers\+::lf\+::mcas\+\_\+buffer\+::\+Node@{tervel\+::containers\+::lf\+::mcas\+\_\+buffer\+::\+Node}}
+\subsubsection[{Node(\+T val)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T$>$ {\bf tervel\+::containers\+::lf\+::mcas\+\_\+buffer\+::\+Node}$<$ T $>$\+::{\bf Node} (
+\begin{DoxyParamCaption}
+\item[{T}]{val}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}}\label{classtervel_1_1containers_1_1lf_1_1mcas__buffer_1_1_node_ac5c94e003f42781fa851d8f83c860901}
+\hypertarget{classtervel_1_1containers_1_1lf_1_1mcas__buffer_1_1_node_a424b975f90d6ba651c10b834837165e0}{}\index{tervel\+::containers\+::lf\+::mcas\+\_\+buffer\+::\+Node@{tervel\+::containers\+::lf\+::mcas\+\_\+buffer\+::\+Node}!````~Node@{$\sim$\+Node}}
+\index{````~Node@{$\sim$\+Node}!tervel\+::containers\+::lf\+::mcas\+\_\+buffer\+::\+Node@{tervel\+::containers\+::lf\+::mcas\+\_\+buffer\+::\+Node}}
+\subsubsection[{$\sim$\+Node()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T$>$ {\bf tervel\+::containers\+::lf\+::mcas\+\_\+buffer\+::\+Node}$<$ T $>$\+::$\sim${\bf Node} (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1containers_1_1lf_1_1mcas__buffer_1_1_node_a424b975f90d6ba651c10b834837165e0}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classtervel_1_1containers_1_1lf_1_1mcas__buffer_1_1_node_afee54ad05721b9418bae358383e31f89}{}\index{tervel\+::containers\+::lf\+::mcas\+\_\+buffer\+::\+Node@{tervel\+::containers\+::lf\+::mcas\+\_\+buffer\+::\+Node}!complete@{complete}}
+\index{complete@{complete}!tervel\+::containers\+::lf\+::mcas\+\_\+buffer\+::\+Node@{tervel\+::containers\+::lf\+::mcas\+\_\+buffer\+::\+Node}}
+\subsubsection[{complete(void $\ast$current, std\+::atomic$<$ void $\ast$ $>$ $\ast$address)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T$>$ void$\ast$ {\bf tervel\+::containers\+::lf\+::mcas\+\_\+buffer\+::\+Node}$<$ T $>$\+::complete (
+\begin{DoxyParamCaption}
+\item[{void $\ast$}]{current, }
+\item[{std\+::atomic$<$ void $\ast$ $>$ $\ast$}]{address}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}\label{classtervel_1_1containers_1_1lf_1_1mcas__buffer_1_1_node_afee54ad05721b9418bae358383e31f89}
+
+
+This method is implemented by each sub class and must guarantee that upon return that the descriptor no longer exists at the address it was placed. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em current} & the reference to this object as it is at the address, \\
+\hline
+{\em address} & the location this object was read from \\
+\hline
+\end{DoxyParams}
+
+
+Implements \hyperlink{classtervel_1_1util_1_1_descriptor_a4303b2a08e3ab67de5533cfb20db87c9}{tervel\+::util\+::\+Descriptor}.
+
+\hypertarget{classtervel_1_1containers_1_1lf_1_1mcas__buffer_1_1_node_aceb3488510a25751e9055f13505a6a7d}{}\index{tervel\+::containers\+::lf\+::mcas\+\_\+buffer\+::\+Node@{tervel\+::containers\+::lf\+::mcas\+\_\+buffer\+::\+Node}!get\+\_\+logical\+\_\+value@{get\+\_\+logical\+\_\+value}}
+\index{get\+\_\+logical\+\_\+value@{get\+\_\+logical\+\_\+value}!tervel\+::containers\+::lf\+::mcas\+\_\+buffer\+::\+Node@{tervel\+::containers\+::lf\+::mcas\+\_\+buffer\+::\+Node}}
+\subsubsection[{get\+\_\+logical\+\_\+value()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T$>$ void$\ast$ {\bf tervel\+::containers\+::lf\+::mcas\+\_\+buffer\+::\+Node}$<$ T $>$\+::get\+\_\+logical\+\_\+value (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}\label{classtervel_1_1containers_1_1lf_1_1mcas__buffer_1_1_node_aceb3488510a25751e9055f13505a6a7d}
+
+
+This method is implemented by each sub class. 
+
+It returns the logical value of the past address. If the associated operation is still in progress then it will generally return the value that was replaced by this descriptor. Otherwise it will generally return the result of the operation for the specified address.
+
+It can only be called from the static function which protects the object from being reused during the function. 
+
+Implements \hyperlink{classtervel_1_1util_1_1_descriptor_a5b443eeb6acf1207f27a6d06c39d4ad4}{tervel\+::util\+::\+Descriptor}.
+
+\hypertarget{classtervel_1_1containers_1_1lf_1_1mcas__buffer_1_1_node_a64fc5cbefc0609a1e59f0d912808ecc8}{}\index{tervel\+::containers\+::lf\+::mcas\+\_\+buffer\+::\+Node@{tervel\+::containers\+::lf\+::mcas\+\_\+buffer\+::\+Node}!value@{value}}
+\index{value@{value}!tervel\+::containers\+::lf\+::mcas\+\_\+buffer\+::\+Node@{tervel\+::containers\+::lf\+::mcas\+\_\+buffer\+::\+Node}}
+\subsubsection[{value()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T$>$ T {\bf tervel\+::containers\+::lf\+::mcas\+\_\+buffer\+::\+Node}$<$ T $>$\+::value (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1containers_1_1lf_1_1mcas__buffer_1_1_node_a64fc5cbefc0609a1e59f0d912808ecc8}
+
+
+\subsection{Member Data Documentation}
+\hypertarget{classtervel_1_1containers_1_1lf_1_1mcas__buffer_1_1_node_a4e4a3009f3c6bdde1a0d55513bcfc89f}{}\index{tervel\+::containers\+::lf\+::mcas\+\_\+buffer\+::\+Node@{tervel\+::containers\+::lf\+::mcas\+\_\+buffer\+::\+Node}!val\+\_\+@{val\+\_\+}}
+\index{val\+\_\+@{val\+\_\+}!tervel\+::containers\+::lf\+::mcas\+\_\+buffer\+::\+Node@{tervel\+::containers\+::lf\+::mcas\+\_\+buffer\+::\+Node}}
+\subsubsection[{val\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T$>$ const T {\bf tervel\+::containers\+::lf\+::mcas\+\_\+buffer\+::\+Node}$<$ T $>$\+::val\+\_\+\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1containers_1_1lf_1_1mcas__buffer_1_1_node_a4e4a3009f3c6bdde1a0d55513bcfc89f}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+tervel/containers/lf/mcas-\/buffer/\hyperlink{mcas__buffer_8h}{mcas\+\_\+buffer.\+h}\end{DoxyCompactItemize}

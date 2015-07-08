@@ -1,0 +1,165 @@
+\hypertarget{class_shift_helper}{}\section{Shift\+Helper$<$ Shift\+Op, T $>$ Class Template Reference}
+\label{class_shift_helper}\index{Shift\+Helper$<$ Shift\+Op, T $>$@{Shift\+Helper$<$ Shift\+Op, T $>$}}
+
+
+{\ttfamily \#include $<$shift\+\_\+helper.\+h$>$}
+
+Inheritance diagram for Shift\+Helper$<$ Shift\+Op, T $>$\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_shift_helper}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_shift_helper_afe59d3f3c04ec220e27b4e105ef524ba}{Shift\+Helper} (Shift\+Op $\ast$op\+\_\+rec, \hyperlink{class_shift_helper_a4aef867507bfd1c5db6c66d3902c1ac4}{helper\+\_\+t} $\ast$prev, T replaced\+\_\+value)
+\item 
+bool \hyperlink{class_shift_helper_aff4a4245b9e9abd04924b5786a11f865}{complete\+\_\+phase1} (W\+F\+Vector $\ast$vec, int pos)
+\item 
+bool \hyperlink{class_shift_helper_a767a40e252dfebb4b281a6c10a079056}{complete} (W\+F\+Vector $\ast$vec, int pos)
+\item 
+bool \hyperlink{class_shift_helper_ad7f8e39f62c9646ec5862df3ee1e5ab4}{on\+\_\+watch} (std\+::atomic$<$ void $\ast$ $>$ $\ast$address, void $\ast$value)
+\begin{DoxyCompactList}\small\item\em This method is optional to implement for each sub class. \end{DoxyCompactList}\item 
+void $\ast$ \hyperlink{class_shift_helper_a4c58f2e7ae4ce7e86a38fea777b3ff2e}{get\+\_\+logical\+\_\+value} ()
+\begin{DoxyCompactList}\small\item\em This method is implemented by each sub class. \end{DoxyCompactList}\item 
+{\footnotesize template$<$$>$ }\\bool \hyperlink{class_shift_helper_a16fb2a9b85184a6df079d24be1fa407d}{complete} (W\+F\+Vector $\ast$vec, int pos)
+\item 
+{\footnotesize template$<$$>$ }\\bool \hyperlink{class_shift_helper_a08b8565cd212f551818204c94430d579}{complete} (W\+F\+Vector $\ast$vec, int pos)
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+const \hyperlink{class_shift_helper_a4aef867507bfd1c5db6c66d3902c1ac4}{helper\+\_\+t} $\ast$ \hyperlink{class_shift_helper_a78998ae32b1b34120e66ab954a5faeca}{prev\+\_\+}
+\item 
+const Shift\+Op $\ast$ \hyperlink{class_shift_helper_aed2e1221ed06fb90eb37979339229ef9}{op\+\_\+rec\+\_\+}
+\item 
+const T \hyperlink{class_shift_helper_ad138be20f4364f297e3c809eda6136c4}{replaced\+\_\+value\+\_\+}
+\item 
+std\+::atomic$<$ \hyperlink{class_shift_helper_a4aef867507bfd1c5db6c66d3902c1ac4}{helper\+\_\+t} $\ast$ $>$ \hyperlink{class_shift_helper_a04a511ddc0133148d98c38cad0a73e16}{next\+\_\+} \{nullptr\}
+\end{DoxyCompactItemize}
+\subsection*{Private Types}
+\begin{DoxyCompactItemize}
+\item 
+typedef \hyperlink{class_shift_helper}{Shift\+Helper}$<$ Shift\+Op, T $>$ \hyperlink{class_shift_helper_a4aef867507bfd1c5db6c66d3902c1ac4}{helper\+\_\+t}
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Typedef Documentation}
+\hypertarget{class_shift_helper_a4aef867507bfd1c5db6c66d3902c1ac4}{}\index{Shift\+Helper@{Shift\+Helper}!helper\+\_\+t@{helper\+\_\+t}}
+\index{helper\+\_\+t@{helper\+\_\+t}!Shift\+Helper@{Shift\+Helper}}
+\subsubsection[{helper\+\_\+t}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Shift\+Op, class T$>$ typedef {\bf Shift\+Helper}$<$Shift\+Op, T$>$ {\bf Shift\+Helper}$<$ Shift\+Op, T $>$\+::{\bf helper\+\_\+t}\hspace{0.3cm}{\ttfamily [private]}}\label{class_shift_helper_a4aef867507bfd1c5db6c66d3902c1ac4}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{class_shift_helper_afe59d3f3c04ec220e27b4e105ef524ba}{}\index{Shift\+Helper@{Shift\+Helper}!Shift\+Helper@{Shift\+Helper}}
+\index{Shift\+Helper@{Shift\+Helper}!Shift\+Helper@{Shift\+Helper}}
+\subsubsection[{Shift\+Helper(\+Shift\+Op $\ast$op\+\_\+rec, helper\+\_\+t $\ast$prev, T replaced\+\_\+value)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Shift\+Op, class T$>$ {\bf Shift\+Helper}$<$ Shift\+Op, T $>$\+::{\bf Shift\+Helper} (
+\begin{DoxyParamCaption}
+\item[{Shift\+Op $\ast$}]{op\+\_\+rec, }
+\item[{{\bf helper\+\_\+t} $\ast$}]{prev, }
+\item[{T}]{replaced\+\_\+value}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_shift_helper_afe59d3f3c04ec220e27b4e105ef524ba}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_shift_helper_a767a40e252dfebb4b281a6c10a079056}{}\index{Shift\+Helper@{Shift\+Helper}!complete@{complete}}
+\index{complete@{complete}!Shift\+Helper@{Shift\+Helper}}
+\subsubsection[{complete(\+W\+F\+Vector $\ast$vec, int pos)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Shift\+Op, class T$>$ bool {\bf Shift\+Helper}$<$ Shift\+Op, T $>$\+::complete (
+\begin{DoxyParamCaption}
+\item[{W\+F\+Vector $\ast$}]{vec, }
+\item[{int}]{pos}
+\end{DoxyParamCaption}
+)}\label{class_shift_helper_a767a40e252dfebb4b281a6c10a079056}
+\hypertarget{class_shift_helper_a16fb2a9b85184a6df079d24be1fa407d}{}\index{Shift\+Helper@{Shift\+Helper}!complete@{complete}}
+\index{complete@{complete}!Shift\+Helper@{Shift\+Helper}}
+\subsubsection[{complete(\+W\+F\+Vector $\ast$vec, int pos)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$$>$ bool {\bf Shift\+Helper}$<$ {\bf Insert\+At} $>$\+::complete (
+\begin{DoxyParamCaption}
+\item[{W\+F\+Vector $\ast$}]{vec, }
+\item[{int}]{pos}
+\end{DoxyParamCaption}
+)}\label{class_shift_helper_a16fb2a9b85184a6df079d24be1fa407d}
+\hypertarget{class_shift_helper_a08b8565cd212f551818204c94430d579}{}\index{Shift\+Helper@{Shift\+Helper}!complete@{complete}}
+\index{complete@{complete}!Shift\+Helper@{Shift\+Helper}}
+\subsubsection[{complete(\+W\+F\+Vector $\ast$vec, int pos)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$$>$ bool {\bf Shift\+Helper}$<$ {\bf Erase\+At} $>$\+::complete (
+\begin{DoxyParamCaption}
+\item[{W\+F\+Vector $\ast$}]{vec, }
+\item[{int}]{pos}
+\end{DoxyParamCaption}
+)}\label{class_shift_helper_a08b8565cd212f551818204c94430d579}
+\hypertarget{class_shift_helper_aff4a4245b9e9abd04924b5786a11f865}{}\index{Shift\+Helper@{Shift\+Helper}!complete\+\_\+phase1@{complete\+\_\+phase1}}
+\index{complete\+\_\+phase1@{complete\+\_\+phase1}!Shift\+Helper@{Shift\+Helper}}
+\subsubsection[{complete\+\_\+phase1(\+W\+F\+Vector $\ast$vec, int pos)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Parent\+Op $>$ bool {\bf Shift\+Helper}$<$ Parent\+Op $>$\+::complete\+\_\+phase1 (
+\begin{DoxyParamCaption}
+\item[{W\+F\+Vector $\ast$}]{vec, }
+\item[{int}]{pos}
+\end{DoxyParamCaption}
+)}\label{class_shift_helper_aff4a4245b9e9abd04924b5786a11f865}
+\hypertarget{class_shift_helper_a4c58f2e7ae4ce7e86a38fea777b3ff2e}{}\index{Shift\+Helper@{Shift\+Helper}!get\+\_\+logical\+\_\+value@{get\+\_\+logical\+\_\+value}}
+\index{get\+\_\+logical\+\_\+value@{get\+\_\+logical\+\_\+value}!Shift\+Helper@{Shift\+Helper}}
+\subsubsection[{get\+\_\+logical\+\_\+value()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Shift\+Op, class T$>$ void$\ast$ {\bf Shift\+Helper}$<$ Shift\+Op, T $>$\+::get\+\_\+logical\+\_\+value (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}\label{class_shift_helper_a4c58f2e7ae4ce7e86a38fea777b3ff2e}
+
+
+This method is implemented by each sub class. 
+
+It returns the logical value of the past address. If the associated operation is still in progress then it will generally return the value that was replaced by this descriptor. Otherwise it will generally return the result of the operation for the specified address.
+
+It can only be called from the static function which protects the object from being reused during the function. 
+
+Implements \hyperlink{classtervel_1_1util_1_1_descriptor_a5b443eeb6acf1207f27a6d06c39d4ad4}{tervel\+::util\+::\+Descriptor}.
+
+\hypertarget{class_shift_helper_ad7f8e39f62c9646ec5862df3ee1e5ab4}{}\index{Shift\+Helper@{Shift\+Helper}!on\+\_\+watch@{on\+\_\+watch}}
+\index{on\+\_\+watch@{on\+\_\+watch}!Shift\+Helper@{Shift\+Helper}}
+\subsubsection[{on\+\_\+watch(std\+::atomic$<$ void $\ast$ $>$ $\ast$address, void $\ast$value)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Shift\+Op, class T$>$ bool {\bf Shift\+Helper}$<$ Shift\+Op, T $>$\+::on\+\_\+watch (
+\begin{DoxyParamCaption}
+\item[{std\+::atomic$<$ void $\ast$ $>$ $\ast$}]{, }
+\item[{void $\ast$}]{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}\label{class_shift_helper_ad7f8e39f62c9646ec5862df3ee1e5ab4}
+
+
+This method is optional to implement for each sub class. 
+
+In the event there is a complex dependency between descriptor objects, where watching one implies performing other actions, such as watching a parent object, a developer will implement this function to encapsulate that logic
+
+This function is called by the static watch function It should not watch itself.
+
+
+\begin{DoxyParams}{Parameters}
+{\em address} & The location to check. \\
+\hline
+{\em expected} & The expected value for that location\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if successful, false otherwise 
+\end{DoxyReturn}
+
+
+Reimplemented from \hyperlink{classtervel_1_1util_1_1_descriptor_ab643e09f20f35149dc820766b0f9ccdb}{tervel\+::util\+::\+Descriptor}.
+
+
+
+\subsection{Member Data Documentation}
+\hypertarget{class_shift_helper_a04a511ddc0133148d98c38cad0a73e16}{}\index{Shift\+Helper@{Shift\+Helper}!next\+\_\+@{next\+\_\+}}
+\index{next\+\_\+@{next\+\_\+}!Shift\+Helper@{Shift\+Helper}}
+\subsubsection[{next\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Shift\+Op, class T$>$ std\+::atomic$<${\bf helper\+\_\+t} $\ast$$>$ {\bf Shift\+Helper}$<$ Shift\+Op, T $>$\+::next\+\_\+ \{nullptr\}}\label{class_shift_helper_a04a511ddc0133148d98c38cad0a73e16}
+\hypertarget{class_shift_helper_aed2e1221ed06fb90eb37979339229ef9}{}\index{Shift\+Helper@{Shift\+Helper}!op\+\_\+rec\+\_\+@{op\+\_\+rec\+\_\+}}
+\index{op\+\_\+rec\+\_\+@{op\+\_\+rec\+\_\+}!Shift\+Helper@{Shift\+Helper}}
+\subsubsection[{op\+\_\+rec\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Shift\+Op, class T$>$ const Shift\+Op$\ast$ {\bf Shift\+Helper}$<$ Shift\+Op, T $>$\+::op\+\_\+rec\+\_\+}\label{class_shift_helper_aed2e1221ed06fb90eb37979339229ef9}
+\hypertarget{class_shift_helper_a78998ae32b1b34120e66ab954a5faeca}{}\index{Shift\+Helper@{Shift\+Helper}!prev\+\_\+@{prev\+\_\+}}
+\index{prev\+\_\+@{prev\+\_\+}!Shift\+Helper@{Shift\+Helper}}
+\subsubsection[{prev\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Shift\+Op, class T$>$ const {\bf helper\+\_\+t}$\ast$ {\bf Shift\+Helper}$<$ Shift\+Op, T $>$\+::prev\+\_\+}\label{class_shift_helper_a78998ae32b1b34120e66ab954a5faeca}
+\hypertarget{class_shift_helper_ad138be20f4364f297e3c809eda6136c4}{}\index{Shift\+Helper@{Shift\+Helper}!replaced\+\_\+value\+\_\+@{replaced\+\_\+value\+\_\+}}
+\index{replaced\+\_\+value\+\_\+@{replaced\+\_\+value\+\_\+}!Shift\+Helper@{Shift\+Helper}}
+\subsubsection[{replaced\+\_\+value\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Shift\+Op, class T$>$ const T {\bf Shift\+Helper}$<$ Shift\+Op, T $>$\+::replaced\+\_\+value\+\_\+}\label{class_shift_helper_ad138be20f4364f297e3c809eda6136c4}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+tervel/containers/wf/vector/old/\hyperlink{shift__helper_8h}{shift\+\_\+helper.\+h}\end{DoxyCompactItemize}

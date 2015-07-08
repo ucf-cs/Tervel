@@ -1,0 +1,150 @@
+\hypertarget{hash__map_2test_object_8h}{}\section{tervel/tests/hash\+\_\+map/test\+Object.h File Reference}
+\label{hash__map_2test_object_8h}\index{tervel/tests/hash\+\_\+map/test\+Object.\+h@{tervel/tests/hash\+\_\+map/test\+Object.\+h}}
+{\ttfamily \#include $<$climits$>$}\\*
+{\ttfamily \#include $<$assert.\+h$>$}\\*
+{\ttfamily \#include $<$atomic$>$}\\*
+{\ttfamily \#include $<$random$>$}\\*
+{\ttfamily \#include $<$string$>$}\\*
+{\ttfamily \#include $<$cstdint$>$}\\*
+{\ttfamily \#include $<$stdio.\+h$>$}\\*
+{\ttfamily \#include $<$iostream$>$}\\*
+{\ttfamily \#include $<$gflags/gflags.\+h$>$}\\*
+{\ttfamily \#include $<$tervel/tests/hash\+\_\+map/container\+\_\+api.\+h$>$}\\*
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \hyperlink{class_test_object}{Test\+Object}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{hash__map_2test_object_8h_ad024fc3e2980c9fff2efb715898272f1}{M\+A\+C\+R\+O\+\_\+\+A\+D\+D\+\_\+\+R\+A\+T\+E}(Tervel\+Op\+Name)
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef uint64\+\_\+t \hyperlink{hash__map_2test_object_8h_ad777bf08d8e2b01df17ba5e3c51ae11f}{Value}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{hash__map_2test_object_8h_aecacabe93c2329b11aaa25957a40b965}{D\+E\+F\+I\+N\+E\+\_\+int32} (capacity, 64,\char`\"{}The initial capacity of the hash map\char`\"{})
+\begin{DoxyCompactList}\small\item\em Change this when including a new data structure. \end{DoxyCompactList}\item 
+\hyperlink{hash__map_2test_object_8h_aee31cddaa60c8b36fe7c53b2648d2316}{D\+E\+F\+I\+N\+E\+\_\+int32} (prefill, 0,\char`\"{}The number of elements to be initially inserted.\char`\"{})
+\item 
+\hyperlink{hash__map_2test_object_8h_a6b8eef0b84c05499606fa7839dd81e03}{D\+E\+F\+I\+N\+E\+\_\+int32} (insert\+\_\+rate, 25,\char`\"{}The percent of insert operations.\char`\"{})
+\item 
+\hyperlink{hash__map_2test_object_8h_a7c48164df1948a146865cbd9b17c2580}{D\+E\+F\+I\+N\+E\+\_\+int32} (find\+\_\+rate, 25,\char`\"{}The percent of find operations.\char`\"{})
+\item 
+\hyperlink{hash__map_2test_object_8h_af09e25f339be2f1257d76d8f7f500545}{D\+E\+F\+I\+N\+E\+\_\+int32} (update\+\_\+rate, 25,\char`\"{}The percent of update operations.\char`\"{})
+\item 
+\hyperlink{hash__map_2test_object_8h_a42fd536773f3f03d6ca81c431f076b7f}{D\+E\+F\+I\+N\+E\+\_\+int32} (remove\+\_\+rate, 25,\char`\"{}The percent of remove operations.\char`\"{})
+\item 
+\hyperlink{hash__map_2test_object_8h_a96c3a19b14115217bfd3493b1488ba31}{D\+E\+F\+I\+N\+E\+\_\+int32} (num\+\_\+threads, 1,\char`\"{}The number of executing threads.\char`\"{})
+\begin{DoxyCompactList}\small\item\em Arguments for Tester. \end{DoxyCompactList}\item 
+\hyperlink{hash__map_2test_object_8h_a9478eb45e3743162c827d57e162c93bb}{D\+E\+F\+I\+N\+E\+\_\+int32} (execution\+\_\+time, 5,\char`\"{}The amount of time to run the tests\char`\"{})
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\hypertarget{hash__map_2test_object_8h_ad024fc3e2980c9fff2efb715898272f1}{}\index{hash\+\_\+map/test\+Object.\+h@{hash\+\_\+map/test\+Object.\+h}!M\+A\+C\+R\+O\+\_\+\+A\+D\+D\+\_\+\+R\+A\+T\+E@{M\+A\+C\+R\+O\+\_\+\+A\+D\+D\+\_\+\+R\+A\+T\+E}}
+\index{M\+A\+C\+R\+O\+\_\+\+A\+D\+D\+\_\+\+R\+A\+T\+E@{M\+A\+C\+R\+O\+\_\+\+A\+D\+D\+\_\+\+R\+A\+T\+E}!hash\+\_\+map/test\+Object.\+h@{hash\+\_\+map/test\+Object.\+h}}
+\subsubsection[{M\+A\+C\+R\+O\+\_\+\+A\+D\+D\+\_\+\+R\+A\+T\+E}]{\setlength{\rightskip}{0pt plus 5cm}\#define M\+A\+C\+R\+O\+\_\+\+A\+D\+D\+\_\+\+R\+A\+T\+E(
+\begin{DoxyParamCaption}
+\item[{}]{Tervel\+Op\+Name}
+\end{DoxyParamCaption}
+)}\label{hash__map_2test_object_8h_ad024fc3e2980c9fff2efb715898272f1}
+{\bfseries Value\+:}
+\begin{DoxyCode}
+func\_name\_[op\_codes::TervelOpName] = \textcolor{stringliteral}{""} #TervelOpName ; \(\backslash\)
+      func\_call\_rate\_[op\_codes::TervelOpName] = FLAGS\_##TervelOpName##\_rate;
+\end{DoxyCode}
+
+
+\subsection{Typedef Documentation}
+\hypertarget{hash__map_2test_object_8h_ad777bf08d8e2b01df17ba5e3c51ae11f}{}\index{hash\+\_\+map/test\+Object.\+h@{hash\+\_\+map/test\+Object.\+h}!Value@{Value}}
+\index{Value@{Value}!hash\+\_\+map/test\+Object.\+h@{hash\+\_\+map/test\+Object.\+h}}
+\subsubsection[{Value}]{\setlength{\rightskip}{0pt plus 5cm}typedef uint64\+\_\+t {\bf Value}}\label{hash__map_2test_object_8h_ad777bf08d8e2b01df17ba5e3c51ae11f}
+
+
+\subsection{Function Documentation}
+\hypertarget{hash__map_2test_object_8h_aecacabe93c2329b11aaa25957a40b965}{}\index{hash\+\_\+map/test\+Object.\+h@{hash\+\_\+map/test\+Object.\+h}!D\+E\+F\+I\+N\+E\+\_\+int32@{D\+E\+F\+I\+N\+E\+\_\+int32}}
+\index{D\+E\+F\+I\+N\+E\+\_\+int32@{D\+E\+F\+I\+N\+E\+\_\+int32}!hash\+\_\+map/test\+Object.\+h@{hash\+\_\+map/test\+Object.\+h}}
+\subsubsection[{D\+E\+F\+I\+N\+E\+\_\+int32(capacity, 64,""The initial capacity of the hash map"")}]{\setlength{\rightskip}{0pt plus 5cm}D\+E\+F\+I\+N\+E\+\_\+int32 (
+\begin{DoxyParamCaption}
+\item[{capacity}]{, }
+\item[{64}]{, }
+\item[{\char`\"{}The initial capacity of the hash map\char`\"{}}]{}
+\end{DoxyParamCaption}
+)}\label{hash__map_2test_object_8h_aecacabe93c2329b11aaa25957a40b965}
+
+
+Change this when including a new data structure. 
+
+Change these when adapting to a new data structures \hypertarget{hash__map_2test_object_8h_aee31cddaa60c8b36fe7c53b2648d2316}{}\index{hash\+\_\+map/test\+Object.\+h@{hash\+\_\+map/test\+Object.\+h}!D\+E\+F\+I\+N\+E\+\_\+int32@{D\+E\+F\+I\+N\+E\+\_\+int32}}
+\index{D\+E\+F\+I\+N\+E\+\_\+int32@{D\+E\+F\+I\+N\+E\+\_\+int32}!hash\+\_\+map/test\+Object.\+h@{hash\+\_\+map/test\+Object.\+h}}
+\subsubsection[{D\+E\+F\+I\+N\+E\+\_\+int32(prefill, 0,""The number of elements to be initially inserted."")}]{\setlength{\rightskip}{0pt plus 5cm}D\+E\+F\+I\+N\+E\+\_\+int32 (
+\begin{DoxyParamCaption}
+\item[{prefill}]{, }
+\item[{0}]{, }
+\item[{\char`\"{}The number of elements to be initially inserted.\char`\"{}}]{}
+\end{DoxyParamCaption}
+)}\label{hash__map_2test_object_8h_aee31cddaa60c8b36fe7c53b2648d2316}
+\hypertarget{hash__map_2test_object_8h_a6b8eef0b84c05499606fa7839dd81e03}{}\index{hash\+\_\+map/test\+Object.\+h@{hash\+\_\+map/test\+Object.\+h}!D\+E\+F\+I\+N\+E\+\_\+int32@{D\+E\+F\+I\+N\+E\+\_\+int32}}
+\index{D\+E\+F\+I\+N\+E\+\_\+int32@{D\+E\+F\+I\+N\+E\+\_\+int32}!hash\+\_\+map/test\+Object.\+h@{hash\+\_\+map/test\+Object.\+h}}
+\subsubsection[{D\+E\+F\+I\+N\+E\+\_\+int32(insert\+\_\+rate, 25,""The percent of insert operations."")}]{\setlength{\rightskip}{0pt plus 5cm}D\+E\+F\+I\+N\+E\+\_\+int32 (
+\begin{DoxyParamCaption}
+\item[{insert\+\_\+rate}]{, }
+\item[{25}]{, }
+\item[{\char`\"{}The percent of insert operations.\char`\"{}}]{}
+\end{DoxyParamCaption}
+)}\label{hash__map_2test_object_8h_a6b8eef0b84c05499606fa7839dd81e03}
+\hypertarget{hash__map_2test_object_8h_a7c48164df1948a146865cbd9b17c2580}{}\index{hash\+\_\+map/test\+Object.\+h@{hash\+\_\+map/test\+Object.\+h}!D\+E\+F\+I\+N\+E\+\_\+int32@{D\+E\+F\+I\+N\+E\+\_\+int32}}
+\index{D\+E\+F\+I\+N\+E\+\_\+int32@{D\+E\+F\+I\+N\+E\+\_\+int32}!hash\+\_\+map/test\+Object.\+h@{hash\+\_\+map/test\+Object.\+h}}
+\subsubsection[{D\+E\+F\+I\+N\+E\+\_\+int32(find\+\_\+rate, 25,""The percent of find operations."")}]{\setlength{\rightskip}{0pt plus 5cm}D\+E\+F\+I\+N\+E\+\_\+int32 (
+\begin{DoxyParamCaption}
+\item[{find\+\_\+rate}]{, }
+\item[{25}]{, }
+\item[{\char`\"{}The percent of find operations.\char`\"{}}]{}
+\end{DoxyParamCaption}
+)}\label{hash__map_2test_object_8h_a7c48164df1948a146865cbd9b17c2580}
+\hypertarget{hash__map_2test_object_8h_af09e25f339be2f1257d76d8f7f500545}{}\index{hash\+\_\+map/test\+Object.\+h@{hash\+\_\+map/test\+Object.\+h}!D\+E\+F\+I\+N\+E\+\_\+int32@{D\+E\+F\+I\+N\+E\+\_\+int32}}
+\index{D\+E\+F\+I\+N\+E\+\_\+int32@{D\+E\+F\+I\+N\+E\+\_\+int32}!hash\+\_\+map/test\+Object.\+h@{hash\+\_\+map/test\+Object.\+h}}
+\subsubsection[{D\+E\+F\+I\+N\+E\+\_\+int32(update\+\_\+rate, 25,""The percent of update operations."")}]{\setlength{\rightskip}{0pt plus 5cm}D\+E\+F\+I\+N\+E\+\_\+int32 (
+\begin{DoxyParamCaption}
+\item[{update\+\_\+rate}]{, }
+\item[{25}]{, }
+\item[{\char`\"{}The percent of update operations.\char`\"{}}]{}
+\end{DoxyParamCaption}
+)}\label{hash__map_2test_object_8h_af09e25f339be2f1257d76d8f7f500545}
+\hypertarget{hash__map_2test_object_8h_a42fd536773f3f03d6ca81c431f076b7f}{}\index{hash\+\_\+map/test\+Object.\+h@{hash\+\_\+map/test\+Object.\+h}!D\+E\+F\+I\+N\+E\+\_\+int32@{D\+E\+F\+I\+N\+E\+\_\+int32}}
+\index{D\+E\+F\+I\+N\+E\+\_\+int32@{D\+E\+F\+I\+N\+E\+\_\+int32}!hash\+\_\+map/test\+Object.\+h@{hash\+\_\+map/test\+Object.\+h}}
+\subsubsection[{D\+E\+F\+I\+N\+E\+\_\+int32(remove\+\_\+rate, 25,""The percent of remove operations."")}]{\setlength{\rightskip}{0pt plus 5cm}D\+E\+F\+I\+N\+E\+\_\+int32 (
+\begin{DoxyParamCaption}
+\item[{remove\+\_\+rate}]{, }
+\item[{25}]{, }
+\item[{\char`\"{}The percent of remove operations.\char`\"{}}]{}
+\end{DoxyParamCaption}
+)}\label{hash__map_2test_object_8h_a42fd536773f3f03d6ca81c431f076b7f}
+\hypertarget{hash__map_2test_object_8h_a96c3a19b14115217bfd3493b1488ba31}{}\index{hash\+\_\+map/test\+Object.\+h@{hash\+\_\+map/test\+Object.\+h}!D\+E\+F\+I\+N\+E\+\_\+int32@{D\+E\+F\+I\+N\+E\+\_\+int32}}
+\index{D\+E\+F\+I\+N\+E\+\_\+int32@{D\+E\+F\+I\+N\+E\+\_\+int32}!hash\+\_\+map/test\+Object.\+h@{hash\+\_\+map/test\+Object.\+h}}
+\subsubsection[{D\+E\+F\+I\+N\+E\+\_\+int32(num\+\_\+threads, 1,""The number of executing threads."")}]{\setlength{\rightskip}{0pt plus 5cm}D\+E\+F\+I\+N\+E\+\_\+int32 (
+\begin{DoxyParamCaption}
+\item[{num\+\_\+threads}]{, }
+\item[{1}]{, }
+\item[{\char`\"{}The number of executing threads.\char`\"{}}]{}
+\end{DoxyParamCaption}
+)}\label{hash__map_2test_object_8h_a96c3a19b14115217bfd3493b1488ba31}
+
+
+Arguments for Tester. 
+
+\hypertarget{hash__map_2test_object_8h_a9478eb45e3743162c827d57e162c93bb}{}\index{hash\+\_\+map/test\+Object.\+h@{hash\+\_\+map/test\+Object.\+h}!D\+E\+F\+I\+N\+E\+\_\+int32@{D\+E\+F\+I\+N\+E\+\_\+int32}}
+\index{D\+E\+F\+I\+N\+E\+\_\+int32@{D\+E\+F\+I\+N\+E\+\_\+int32}!hash\+\_\+map/test\+Object.\+h@{hash\+\_\+map/test\+Object.\+h}}
+\subsubsection[{D\+E\+F\+I\+N\+E\+\_\+int32(execution\+\_\+time, 5,""The amount of time to run the tests"")}]{\setlength{\rightskip}{0pt plus 5cm}D\+E\+F\+I\+N\+E\+\_\+int32 (
+\begin{DoxyParamCaption}
+\item[{execution\+\_\+time}]{, }
+\item[{5}]{, }
+\item[{\char`\"{}The amount of time to run the tests\char`\"{}}]{}
+\end{DoxyParamCaption}
+)}\label{hash__map_2test_object_8h_a9478eb45e3743162c827d57e162c93bb}

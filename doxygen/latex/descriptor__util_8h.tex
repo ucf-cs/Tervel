@@ -1,0 +1,45 @@
+\hypertarget{descriptor__util_8h}{}\section{tervel/util/memory/rc/descriptor\+\_\+util.h File Reference}
+\label{descriptor__util_8h}\index{tervel/util/memory/rc/descriptor\+\_\+util.\+h@{tervel/util/memory/rc/descriptor\+\_\+util.\+h}}
+{\ttfamily \#include $<$tervel/util/info.\+h$>$}\\*
+{\ttfamily \#include $<$tervel/util/descriptor.\+h$>$}\\*
+{\ttfamily \#include $<$tervel/util/recursive\+\_\+action.\+h$>$}\\*
+{\ttfamily \#include $<$tervel/util/memory/rc/pool\+\_\+element.\+h$>$}\\*
+{\ttfamily \#include $<$tervel/util/memory/rc/descriptor\+\_\+pool.\+h$>$}\\*
+{\ttfamily \#include $<$tervel/util/progress\+\_\+assurance.\+h$>$}\\*
+{\ttfamily \#include $<$tervel/util/memory/rc/descriptor\+\_\+read\+\_\+first\+\_\+op.\+h$>$}\\*
+\subsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \hyperlink{namespacetervel}{tervel}
+\begin{DoxyCompactList}\small\item\em T\+O\+D\+O(steven)\+: \end{DoxyCompactList}\item 
+ \hyperlink{namespacetervel_1_1util}{tervel\+::util}
+\item 
+ \hyperlink{namespacetervel_1_1util_1_1memory}{tervel\+::util\+::memory}
+\item 
+ \hyperlink{namespacetervel_1_1util_1_1memory_1_1rc}{tervel\+::util\+::memory\+::rc}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\footnotesize template$<$typename Descr\+Type , typename... Args $>$ }\\Descr\+Type $\ast$ \hyperlink{namespacetervel_1_1util_1_1memory_1_1rc_a38e02080a32927b40a7ac60e1edd4fbf}{tervel\+::util\+::memory\+::rc\+::get\+\_\+descriptor} (Args \&\&...args)
+\begin{DoxyCompactList}\small\item\em Constructs and returns a descriptor. \end{DoxyCompactList}\item 
+void \hyperlink{namespacetervel_1_1util_1_1memory_1_1rc_a97da2d57615625ad60e4bb151600fdd7}{tervel\+::util\+::memory\+::rc\+::free\+\_\+descriptor} (\hyperlink{classtervel_1_1util_1_1_descriptor}{tervel\+::util\+::\+Descriptor} $\ast$descr, bool dont\+\_\+check=false)
+\begin{DoxyCompactList}\small\item\em Once a user is done with a descriptor, they should free it with this method. \end{DoxyCompactList}\item 
+bool \hyperlink{namespacetervel_1_1util_1_1memory_1_1rc_adbd0694dc5f40b13ca31c143edee459f}{tervel\+::util\+::memory\+::rc\+::is\+\_\+watched} (\hyperlink{classtervel_1_1util_1_1_descriptor}{tervel\+::util\+::\+Descriptor} $\ast$descr)
+\begin{DoxyCompactList}\small\item\em This method is used to determine if the passed descriptor is under rc protection. \end{DoxyCompactList}\item 
+bool \hyperlink{namespacetervel_1_1util_1_1memory_1_1rc_a1dc4906c41f24991438c68e840c8b833}{tervel\+::util\+::memory\+::rc\+::watch} (\hyperlink{classtervel_1_1util_1_1_descriptor}{tervel\+::util\+::\+Descriptor} $\ast$descr, std\+::atomic$<$ void $\ast$ $>$ $\ast$address, void $\ast$value)
+\begin{DoxyCompactList}\small\item\em This method is used to increment the reference count of the passed descriptor object. \end{DoxyCompactList}\item 
+void \hyperlink{namespacetervel_1_1util_1_1memory_1_1rc_a0964016234e7d046cc64f44c5bc4f856}{tervel\+::util\+::memory\+::rc\+::unwatch} (\hyperlink{classtervel_1_1util_1_1_descriptor}{tervel\+::util\+::\+Descriptor} $\ast$descr)
+\begin{DoxyCompactList}\small\item\em This method is used to decrement the reference count of the passed descriptor object. \end{DoxyCompactList}\item 
+void $\ast$ \hyperlink{namespacetervel_1_1util_1_1memory_1_1rc_a084b51c075ff02fb2d858097b764827c}{tervel\+::util\+::memory\+::rc\+::mark\+\_\+first} (\hyperlink{classtervel_1_1util_1_1_descriptor}{tervel\+::util\+::\+Descriptor} $\ast$descr)
+\begin{DoxyCompactList}\small\item\em This returns the passed reference with its least signifcant bit set to 1. \end{DoxyCompactList}\item 
+void \hyperlink{namespacetervel_1_1util_1_1memory_1_1rc_a62b15d973adb1f7f052dd96e06f55e2f}{tervel\+::util\+::memory\+::rc\+::atomic\+\_\+mark\+\_\+first} (std\+::atomic$<$ void $\ast$ $>$ $\ast$address)
+\begin{DoxyCompactList}\small\item\em This function atomically bit marks the value at address. \end{DoxyCompactList}\item 
+\hyperlink{classtervel_1_1util_1_1_descriptor}{tervel\+::util\+::\+Descriptor} $\ast$ \hyperlink{namespacetervel_1_1util_1_1memory_1_1rc_aaae87a0d05d8fe85f02f711235fc5db5}{tervel\+::util\+::memory\+::rc\+::unmark\+\_\+first} (void $\ast$descr)
+\begin{DoxyCompactList}\small\item\em This returns an unbitmarked reference. \end{DoxyCompactList}\item 
+bool \hyperlink{namespacetervel_1_1util_1_1memory_1_1rc_ad86ec07a1f739e0bea27c852b160ba5b}{tervel\+::util\+::memory\+::rc\+::is\+\_\+descriptor\+\_\+first} (void $\ast$descr)
+\begin{DoxyCompactList}\small\item\em This returns whether or not the least significant bit holds a bitmark. \end{DoxyCompactList}\item 
+void $\ast$ \hyperlink{namespacetervel_1_1util_1_1memory_1_1rc_a21ef9046ee5ae16d7904833a54812309}{tervel\+::util\+::memory\+::rc\+::remove\+\_\+descriptor} (void $\ast$expected, std\+::atomic$<$ void $\ast$ $>$ $\ast$address)
+\begin{DoxyCompactList}\small\item\em This method is used to remove a descriptor object that is conflict with another threads operation. \end{DoxyCompactList}\item 
+void $\ast$ \hyperlink{namespacetervel_1_1util_1_1memory_1_1rc_aab30661a8c52aa99a4c59c1afa014e1d}{tervel\+::util\+::memory\+::rc\+::descriptor\+\_\+read\+\_\+first} (std\+::atomic$<$ void $\ast$ $>$ $\ast$address)
+\begin{DoxyCompactList}\small\item\em This function determines the logical value of an address which may have either a R\+C descriptor or a normal value. \end{DoxyCompactList}\end{DoxyCompactItemize}

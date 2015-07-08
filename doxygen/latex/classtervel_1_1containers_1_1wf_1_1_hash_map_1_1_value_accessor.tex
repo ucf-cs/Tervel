@@ -1,0 +1,138 @@
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_hash_map_1_1_value_accessor}{}\section{tervel\+:\+:containers\+:\+:wf\+:\+:Hash\+Map$<$ Key, Value, Functor $>$\+:\+:Value\+Accessor Class Reference}
+\label{classtervel_1_1containers_1_1wf_1_1_hash_map_1_1_value_accessor}\index{tervel\+::containers\+::wf\+::\+Hash\+Map$<$ Key, Value, Functor $>$\+::\+Value\+Accessor@{tervel\+::containers\+::wf\+::\+Hash\+Map$<$ Key, Value, Functor $>$\+::\+Value\+Accessor}}
+
+
+This class is used to safe guard access to values.  
+
+
+
+
+{\ttfamily \#include $<$wf\+\_\+hash\+\_\+map.\+h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map_1_1_value_accessor_a5cf5be9f8fcf0b32ecac2d6ba1d18a24}{Value\+Accessor} ()
+\item 
+\hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map_1_1_value_accessor_a4a79d0ccc099187188e7d001406f4381}{$\sim$\+Value\+Accessor} ()
+\item 
+\hyperlink{hash__map_2test_object_8h_ad777bf08d8e2b01df17ba5e3c51ae11f}{Value} $\ast$ \hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map_1_1_value_accessor_a54f9f278457daf02a4e140cbe053643b}{value} ()
+\item 
+bool \hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map_1_1_value_accessor_adf525344b84c57e6c560b7fe46db7a4f}{valid} ()
+\item 
+void \hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map_1_1_value_accessor_ac255a8bda6d5118c2987f91aa4cc0ca7}{reset} ()
+\begin{DoxyCompactList}\small\item\em Resets this value accessors, decrementing the access\+\_\+count and clearing the variables. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map_1_1_value_accessor_a44db31fa9f2364a0dddf193dcd3e0c72}{init} (\hyperlink{hash__map_2test_object_8h_ad777bf08d8e2b01df17ba5e3c51ae11f}{Value} $\ast$\hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map_1_1_value_accessor_a54f9f278457daf02a4e140cbe053643b}{value}, std\+::atomic$<$ int64\+\_\+t $>$ $\ast$access\+\_\+count)
+\begin{DoxyCompactList}\small\item\em Initializes the value accessor. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::atomic$<$ int64\+\_\+t $>$ $\ast$ \hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map_1_1_value_accessor_a618a0a94c509bc451fd63cf0687ca527}{access\+\_\+count\+\_\+}
+\item 
+\hyperlink{hash__map_2test_object_8h_ad777bf08d8e2b01df17ba5e3c51ae11f}{Value} $\ast$ \hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map_1_1_value_accessor_a75ab81c8fa2032a5a4a9dff43227c387}{value\+\_\+}
+\end{DoxyCompactItemize}
+\subsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+class \hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map_1_1_value_accessor_ab6054287e6f409207af3fa16e49046ad}{Hash\+Map}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\subsubsection*{template$<$class Key, class Value, class Functor = default\+\_\+functor$<$\+Key, Value$>$$>$class tervel\+::containers\+::wf\+::\+Hash\+Map$<$ Key, Value, Functor $>$\+::\+Value\+Accessor}
+
+This class is used to safe guard access to values. 
+
+Before it is initialized the referenced data\+\_\+node\textquotesingle{}s access counter would have been incremented. 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_hash_map_1_1_value_accessor_a5cf5be9f8fcf0b32ecac2d6ba1d18a24}{}\index{tervel\+::containers\+::wf\+::\+Hash\+Map\+::\+Value\+Accessor@{tervel\+::containers\+::wf\+::\+Hash\+Map\+::\+Value\+Accessor}!Value\+Accessor@{Value\+Accessor}}
+\index{Value\+Accessor@{Value\+Accessor}!tervel\+::containers\+::wf\+::\+Hash\+Map\+::\+Value\+Accessor@{tervel\+::containers\+::wf\+::\+Hash\+Map\+::\+Value\+Accessor}}
+\subsubsection[{Value\+Accessor()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key , class Value , class Functor  = default\+\_\+functor$<$\+Key, Value$>$$>$ {\bf tervel\+::containers\+::wf\+::\+Hash\+Map}$<$ Key, {\bf Value}, Functor $>$\+::Value\+Accessor\+::\+Value\+Accessor (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1containers_1_1wf_1_1_hash_map_1_1_value_accessor_a5cf5be9f8fcf0b32ecac2d6ba1d18a24}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_hash_map_1_1_value_accessor_a4a79d0ccc099187188e7d001406f4381}{}\index{tervel\+::containers\+::wf\+::\+Hash\+Map\+::\+Value\+Accessor@{tervel\+::containers\+::wf\+::\+Hash\+Map\+::\+Value\+Accessor}!````~Value\+Accessor@{$\sim$\+Value\+Accessor}}
+\index{````~Value\+Accessor@{$\sim$\+Value\+Accessor}!tervel\+::containers\+::wf\+::\+Hash\+Map\+::\+Value\+Accessor@{tervel\+::containers\+::wf\+::\+Hash\+Map\+::\+Value\+Accessor}}
+\subsubsection[{$\sim$\+Value\+Accessor()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key , class Value , class Functor  = default\+\_\+functor$<$\+Key, Value$>$$>$ {\bf tervel\+::containers\+::wf\+::\+Hash\+Map}$<$ Key, {\bf Value}, Functor $>$\+::Value\+Accessor\+::$\sim$\+Value\+Accessor (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1containers_1_1wf_1_1_hash_map_1_1_value_accessor_a4a79d0ccc099187188e7d001406f4381}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_hash_map_1_1_value_accessor_a44db31fa9f2364a0dddf193dcd3e0c72}{}\index{tervel\+::containers\+::wf\+::\+Hash\+Map\+::\+Value\+Accessor@{tervel\+::containers\+::wf\+::\+Hash\+Map\+::\+Value\+Accessor}!init@{init}}
+\index{init@{init}!tervel\+::containers\+::wf\+::\+Hash\+Map\+::\+Value\+Accessor@{tervel\+::containers\+::wf\+::\+Hash\+Map\+::\+Value\+Accessor}}
+\subsubsection[{init(\+Value $\ast$value, std\+::atomic$<$ int64\+\_\+t $>$ $\ast$access\+\_\+count)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key , class Value , class Functor  = default\+\_\+functor$<$\+Key, Value$>$$>$ void {\bf tervel\+::containers\+::wf\+::\+Hash\+Map}$<$ Key, {\bf Value}, Functor $>$\+::Value\+Accessor\+::init (
+\begin{DoxyParamCaption}
+\item[{{\bf Value} $\ast$}]{value, }
+\item[{std\+::atomic$<$ int64\+\_\+t $>$ $\ast$}]{access\+\_\+count}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}\label{classtervel_1_1containers_1_1wf_1_1_hash_map_1_1_value_accessor_a44db31fa9f2364a0dddf193dcd3e0c72}
+
+
+Initializes the value accessor. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em value} & the address of the value \\
+\hline
+{\em access\+\_\+count} & the address of the value\textquotesingle{}s access\+\_\+count \\
+\hline
+\end{DoxyParams}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_hash_map_1_1_value_accessor_ac255a8bda6d5118c2987f91aa4cc0ca7}{}\index{tervel\+::containers\+::wf\+::\+Hash\+Map\+::\+Value\+Accessor@{tervel\+::containers\+::wf\+::\+Hash\+Map\+::\+Value\+Accessor}!reset@{reset}}
+\index{reset@{reset}!tervel\+::containers\+::wf\+::\+Hash\+Map\+::\+Value\+Accessor@{tervel\+::containers\+::wf\+::\+Hash\+Map\+::\+Value\+Accessor}}
+\subsubsection[{reset()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key , class Value , class Functor  = default\+\_\+functor$<$\+Key, Value$>$$>$ void {\bf tervel\+::containers\+::wf\+::\+Hash\+Map}$<$ Key, {\bf Value}, Functor $>$\+::Value\+Accessor\+::reset (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1containers_1_1wf_1_1_hash_map_1_1_value_accessor_ac255a8bda6d5118c2987f91aa4cc0ca7}
+
+
+Resets this value accessors, decrementing the access\+\_\+count and clearing the variables. 
+
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_hash_map_1_1_value_accessor_adf525344b84c57e6c560b7fe46db7a4f}{}\index{tervel\+::containers\+::wf\+::\+Hash\+Map\+::\+Value\+Accessor@{tervel\+::containers\+::wf\+::\+Hash\+Map\+::\+Value\+Accessor}!valid@{valid}}
+\index{valid@{valid}!tervel\+::containers\+::wf\+::\+Hash\+Map\+::\+Value\+Accessor@{tervel\+::containers\+::wf\+::\+Hash\+Map\+::\+Value\+Accessor}}
+\subsubsection[{valid()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key , class Value , class Functor  = default\+\_\+functor$<$\+Key, Value$>$$>$ bool {\bf tervel\+::containers\+::wf\+::\+Hash\+Map}$<$ Key, {\bf Value}, Functor $>$\+::Value\+Accessor\+::valid (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1containers_1_1wf_1_1_hash_map_1_1_value_accessor_adf525344b84c57e6c560b7fe46db7a4f}
+\begin{DoxyReturn}{Returns}
+whether or not this was initialized. 
+\end{DoxyReturn}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_hash_map_1_1_value_accessor_a54f9f278457daf02a4e140cbe053643b}{}\index{tervel\+::containers\+::wf\+::\+Hash\+Map\+::\+Value\+Accessor@{tervel\+::containers\+::wf\+::\+Hash\+Map\+::\+Value\+Accessor}!value@{value}}
+\index{value@{value}!tervel\+::containers\+::wf\+::\+Hash\+Map\+::\+Value\+Accessor@{tervel\+::containers\+::wf\+::\+Hash\+Map\+::\+Value\+Accessor}}
+\subsubsection[{value()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key , class Value , class Functor  = default\+\_\+functor$<$\+Key, Value$>$$>$ {\bf Value}$\ast$ {\bf tervel\+::containers\+::wf\+::\+Hash\+Map}$<$ Key, {\bf Value}, Functor $>$\+::Value\+Accessor\+::value (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1containers_1_1wf_1_1_hash_map_1_1_value_accessor_a54f9f278457daf02a4e140cbe053643b}
+\begin{DoxyReturn}{Returns}
+the address of the value in the data\+\_\+node. 
+\end{DoxyReturn}
+
+
+\subsection{Friends And Related Function Documentation}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_hash_map_1_1_value_accessor_ab6054287e6f409207af3fa16e49046ad}{}\index{tervel\+::containers\+::wf\+::\+Hash\+Map\+::\+Value\+Accessor@{tervel\+::containers\+::wf\+::\+Hash\+Map\+::\+Value\+Accessor}!Hash\+Map@{Hash\+Map}}
+\index{Hash\+Map@{Hash\+Map}!tervel\+::containers\+::wf\+::\+Hash\+Map\+::\+Value\+Accessor@{tervel\+::containers\+::wf\+::\+Hash\+Map\+::\+Value\+Accessor}}
+\subsubsection[{Hash\+Map}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key , class Value , class Functor  = default\+\_\+functor$<$\+Key, Value$>$$>$ friend class {\bf Hash\+Map}\hspace{0.3cm}{\ttfamily [friend]}}\label{classtervel_1_1containers_1_1wf_1_1_hash_map_1_1_value_accessor_ab6054287e6f409207af3fa16e49046ad}
+
+
+\subsection{Member Data Documentation}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_hash_map_1_1_value_accessor_a618a0a94c509bc451fd63cf0687ca527}{}\index{tervel\+::containers\+::wf\+::\+Hash\+Map\+::\+Value\+Accessor@{tervel\+::containers\+::wf\+::\+Hash\+Map\+::\+Value\+Accessor}!access\+\_\+count\+\_\+@{access\+\_\+count\+\_\+}}
+\index{access\+\_\+count\+\_\+@{access\+\_\+count\+\_\+}!tervel\+::containers\+::wf\+::\+Hash\+Map\+::\+Value\+Accessor@{tervel\+::containers\+::wf\+::\+Hash\+Map\+::\+Value\+Accessor}}
+\subsubsection[{access\+\_\+count\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key , class Value , class Functor  = default\+\_\+functor$<$\+Key, Value$>$$>$ std\+::atomic$<$int64\+\_\+t$>$$\ast$ {\bf tervel\+::containers\+::wf\+::\+Hash\+Map}$<$ Key, {\bf Value}, Functor $>$\+::Value\+Accessor\+::access\+\_\+count\+\_\+\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1containers_1_1wf_1_1_hash_map_1_1_value_accessor_a618a0a94c509bc451fd63cf0687ca527}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_hash_map_1_1_value_accessor_a75ab81c8fa2032a5a4a9dff43227c387}{}\index{tervel\+::containers\+::wf\+::\+Hash\+Map\+::\+Value\+Accessor@{tervel\+::containers\+::wf\+::\+Hash\+Map\+::\+Value\+Accessor}!value\+\_\+@{value\+\_\+}}
+\index{value\+\_\+@{value\+\_\+}!tervel\+::containers\+::wf\+::\+Hash\+Map\+::\+Value\+Accessor@{tervel\+::containers\+::wf\+::\+Hash\+Map\+::\+Value\+Accessor}}
+\subsubsection[{value\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key , class Value , class Functor  = default\+\_\+functor$<$\+Key, Value$>$$>$ {\bf Value}$\ast$ {\bf tervel\+::containers\+::wf\+::\+Hash\+Map}$<$ Key, {\bf Value}, Functor $>$\+::Value\+Accessor\+::value\+\_\+\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1containers_1_1wf_1_1_hash_map_1_1_value_accessor_a75ab81c8fa2032a5a4a9dff43227c387}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+tervel/containers/wf/hash-\/map/\hyperlink{wf__hash__map_8h}{wf\+\_\+hash\+\_\+map.\+h}\end{DoxyCompactItemize}

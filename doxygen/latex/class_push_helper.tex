@@ -1,0 +1,132 @@
+\hypertarget{class_push_helper}{}\section{Push\+Helper Class Reference}
+\label{class_push_helper}\index{Push\+Helper@{Push\+Helper}}
+
+
+{\ttfamily \#include $<$push\+\_\+helper.\+h$>$}
+
+Inheritance diagram for Push\+Helper\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_push_helper}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \hyperlink{class_push_helper_af0f2b3d32c4fa045423c0c33338fda6d}{init} (void $\ast$v, \hyperlink{class_push_op}{Push\+Op} $\ast$op)
+\item 
+\hyperlink{class_push_helper_a280f399f92564f84624c8044a7068fcf}{Push\+Helper} (void $\ast$v)
+\item 
+\hyperlink{class_push_helper_af0ae04521864c1ae2d3fa09e85d97fc6}{Push\+Helper} (void $\ast$v, \hyperlink{class_push_op}{Push\+Op} $\ast$op)
+\item 
+bool \hyperlink{class_push_helper_ad7439a580cc3979f4a8d024209f02a48}{complete} (W\+F\+Vector $\ast$vec, int \hyperlink{class_push_helper_afc30e140af18bc227c92363abeb504a1}{pos})
+\item 
+bool \hyperlink{class_push_helper_ad3a73efd37ac6b130da9892ce17a15f9}{try\+Free} ()
+\item 
+bool \hyperlink{class_push_helper_a3a766549de39a978203ec9e24d0adcce}{watch} (void $\ast$p, Array\+Element $\ast$a)
+\item 
+void \hyperlink{class_push_helper_ae5261cf5cc0aec9f9ea0e38bef6dec92}{unwatch} ()
+\item 
+bool \hyperlink{class_push_helper_aae1e891a2cde3c4d718bf02be0369a46}{is\+Watched} ()
+\item 
+void $\ast$ \hyperlink{class_push_helper_a3711a9e4be2b548b89f0c945907ceed0}{read\+Through} ()
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+void $\ast$ \hyperlink{class_push_helper_af930dbddbf4d0ea5d0cb723d0dce7790}{value}
+\item 
+std\+::atomic$<$ long $>$ \hyperlink{class_push_helper_afc30e140af18bc227c92363abeb504a1}{pos}
+\item 
+\hyperlink{class_push_op}{Push\+Op} $\ast$ \hyperlink{class_push_helper_ada3667bd8ed54f5a7d2b0f89bdc08695}{control\+Op}
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{class_push_helper_a280f399f92564f84624c8044a7068fcf}{}\index{Push\+Helper@{Push\+Helper}!Push\+Helper@{Push\+Helper}}
+\index{Push\+Helper@{Push\+Helper}!Push\+Helper@{Push\+Helper}}
+\subsubsection[{Push\+Helper(void $\ast$v)}]{\setlength{\rightskip}{0pt plus 5cm}Push\+Helper\+::\+Push\+Helper (
+\begin{DoxyParamCaption}
+\item[{void $\ast$}]{v}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_push_helper_a280f399f92564f84624c8044a7068fcf}
+\hypertarget{class_push_helper_af0ae04521864c1ae2d3fa09e85d97fc6}{}\index{Push\+Helper@{Push\+Helper}!Push\+Helper@{Push\+Helper}}
+\index{Push\+Helper@{Push\+Helper}!Push\+Helper@{Push\+Helper}}
+\subsubsection[{Push\+Helper(void $\ast$v, Push\+Op $\ast$op)}]{\setlength{\rightskip}{0pt plus 5cm}Push\+Helper\+::\+Push\+Helper (
+\begin{DoxyParamCaption}
+\item[{void $\ast$}]{v, }
+\item[{{\bf Push\+Op} $\ast$}]{op}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_push_helper_af0ae04521864c1ae2d3fa09e85d97fc6}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_push_helper_ad7439a580cc3979f4a8d024209f02a48}{}\index{Push\+Helper@{Push\+Helper}!complete@{complete}}
+\index{complete@{complete}!Push\+Helper@{Push\+Helper}}
+\subsubsection[{complete(\+W\+F\+Vector $\ast$vec, int pos)}]{\setlength{\rightskip}{0pt plus 5cm}bool Push\+Helper\+::complete (
+\begin{DoxyParamCaption}
+\item[{W\+F\+Vector $\ast$}]{vec, }
+\item[{int}]{pos}
+\end{DoxyParamCaption}
+)}\label{class_push_helper_ad7439a580cc3979f4a8d024209f02a48}
+\hypertarget{class_push_helper_af0f2b3d32c4fa045423c0c33338fda6d}{}\index{Push\+Helper@{Push\+Helper}!init@{init}}
+\index{init@{init}!Push\+Helper@{Push\+Helper}}
+\subsubsection[{init(void $\ast$v, Push\+Op $\ast$op)}]{\setlength{\rightskip}{0pt plus 5cm}void Push\+Helper\+::init (
+\begin{DoxyParamCaption}
+\item[{void $\ast$}]{v, }
+\item[{{\bf Push\+Op} $\ast$}]{op}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_push_helper_af0f2b3d32c4fa045423c0c33338fda6d}
+\hypertarget{class_push_helper_aae1e891a2cde3c4d718bf02be0369a46}{}\index{Push\+Helper@{Push\+Helper}!is\+Watched@{is\+Watched}}
+\index{is\+Watched@{is\+Watched}!Push\+Helper@{Push\+Helper}}
+\subsubsection[{is\+Watched()}]{\setlength{\rightskip}{0pt plus 5cm}bool Push\+Helper\+::is\+Watched (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_push_helper_aae1e891a2cde3c4d718bf02be0369a46}
+\hypertarget{class_push_helper_a3711a9e4be2b548b89f0c945907ceed0}{}\index{Push\+Helper@{Push\+Helper}!read\+Through@{read\+Through}}
+\index{read\+Through@{read\+Through}!Push\+Helper@{Push\+Helper}}
+\subsubsection[{read\+Through()}]{\setlength{\rightskip}{0pt plus 5cm}void$\ast$ Push\+Helper\+::read\+Through (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_push_helper_a3711a9e4be2b548b89f0c945907ceed0}
+\hypertarget{class_push_helper_ad3a73efd37ac6b130da9892ce17a15f9}{}\index{Push\+Helper@{Push\+Helper}!try\+Free@{try\+Free}}
+\index{try\+Free@{try\+Free}!Push\+Helper@{Push\+Helper}}
+\subsubsection[{try\+Free()}]{\setlength{\rightskip}{0pt plus 5cm}bool Push\+Helper\+::try\+Free (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{class_push_helper_ad3a73efd37ac6b130da9892ce17a15f9}
+\hypertarget{class_push_helper_ae5261cf5cc0aec9f9ea0e38bef6dec92}{}\index{Push\+Helper@{Push\+Helper}!unwatch@{unwatch}}
+\index{unwatch@{unwatch}!Push\+Helper@{Push\+Helper}}
+\subsubsection[{unwatch()}]{\setlength{\rightskip}{0pt plus 5cm}void Push\+Helper\+::unwatch (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_push_helper_ae5261cf5cc0aec9f9ea0e38bef6dec92}
+\hypertarget{class_push_helper_a3a766549de39a978203ec9e24d0adcce}{}\index{Push\+Helper@{Push\+Helper}!watch@{watch}}
+\index{watch@{watch}!Push\+Helper@{Push\+Helper}}
+\subsubsection[{watch(void $\ast$p, Array\+Element $\ast$a)}]{\setlength{\rightskip}{0pt plus 5cm}bool Push\+Helper\+::watch (
+\begin{DoxyParamCaption}
+\item[{void $\ast$}]{p, }
+\item[{Array\+Element $\ast$}]{a}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_push_helper_a3a766549de39a978203ec9e24d0adcce}
+
+
+\subsection{Member Data Documentation}
+\hypertarget{class_push_helper_ada3667bd8ed54f5a7d2b0f89bdc08695}{}\index{Push\+Helper@{Push\+Helper}!control\+Op@{control\+Op}}
+\index{control\+Op@{control\+Op}!Push\+Helper@{Push\+Helper}}
+\subsubsection[{control\+Op}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Push\+Op}$\ast$ Push\+Helper\+::control\+Op}\label{class_push_helper_ada3667bd8ed54f5a7d2b0f89bdc08695}
+\hypertarget{class_push_helper_afc30e140af18bc227c92363abeb504a1}{}\index{Push\+Helper@{Push\+Helper}!pos@{pos}}
+\index{pos@{pos}!Push\+Helper@{Push\+Helper}}
+\subsubsection[{pos}]{\setlength{\rightskip}{0pt plus 5cm}std\+::atomic$<$long$>$ Push\+Helper\+::pos}\label{class_push_helper_afc30e140af18bc227c92363abeb504a1}
+\hypertarget{class_push_helper_af930dbddbf4d0ea5d0cb723d0dce7790}{}\index{Push\+Helper@{Push\+Helper}!value@{value}}
+\index{value@{value}!Push\+Helper@{Push\+Helper}}
+\subsubsection[{value}]{\setlength{\rightskip}{0pt plus 5cm}void$\ast$ Push\+Helper\+::value}\label{class_push_helper_af930dbddbf4d0ea5d0cb723d0dce7790}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+tervel/containers/wf/vector/old/\hyperlink{push__helper_8h}{push\+\_\+helper.\+h}\end{DoxyCompactItemize}

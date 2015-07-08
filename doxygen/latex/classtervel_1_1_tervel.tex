@@ -1,0 +1,103 @@
+\hypertarget{classtervel_1_1_tervel}{}\section{tervel\+:\+:Tervel Class Reference}
+\label{classtervel_1_1_tervel}\index{tervel\+::\+Tervel@{tervel\+::\+Tervel}}
+
+
+Contains shared information that should be accessible by all threads.  
+
+
+
+
+{\ttfamily \#include $<$tervel.\+h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classtervel_1_1_tervel_aae87ace03f0fb62083e3683f99135a00}{Tervel} (size\+\_\+t num\+\_\+threads)
+\item 
+\hyperlink{classtervel_1_1_tervel_aea18e9dcc8a8212c0c451a94bc9ff522}{$\sim$\+Tervel} ()
+\end{DoxyCompactItemize}
+\subsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+uint64\+\_\+t \hyperlink{classtervel_1_1_tervel_a89db2253e58923a4d113bb3a5f197b47}{get\+\_\+thread\+\_\+id} ()
+\item 
+\hyperlink{classtervel_1_1_tervel_ae4aafbeaaa2d0c95ca825b3ec9db0c5d}{D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N} (\hyperlink{classtervel_1_1_tervel}{Tervel})
+\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+const uint64\+\_\+t \hyperlink{classtervel_1_1_tervel_adc91b4b1b22ab49ed249df0ef14eadad}{num\+\_\+threads\+\_\+}
+\item 
+std\+::atomic$<$ uint64\+\_\+t $>$ \hyperlink{classtervel_1_1_tervel_a3942b8c533d065ab7df11e20d253afa9}{active\+\_\+threads\+\_\+} \{0\}
+\item 
+\hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer}{util\+::memory\+::hp\+::\+Hazard\+Pointer} \hyperlink{classtervel_1_1_tervel_aa0d6c90c07f50e9505b2ac590425a59a}{hazard\+\_\+pointer\+\_\+}
+\item 
+\hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_manager}{util\+::memory\+::rc\+::\+Pool\+Manager} \hyperlink{classtervel_1_1_tervel_a86681b7ea969722f86234c70b9d97a83}{rc\+\_\+pool\+\_\+manager\+\_\+}
+\item 
+\hyperlink{classtervel_1_1util_1_1_progress_assurance}{util\+::\+Progress\+Assurance} \hyperlink{classtervel_1_1_tervel_a011a5b3732c1482ac6cc87cb47d20b42}{progress\+\_\+assurance\+\_\+}
+\item 
+friend \hyperlink{classtervel_1_1_tervel_a6322cb41e5b57f070b02dd1b1f54cea2}{Thread\+Context}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Contains shared information that should be accessible by all threads. 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classtervel_1_1_tervel_aae87ace03f0fb62083e3683f99135a00}{}\index{tervel\+::\+Tervel@{tervel\+::\+Tervel}!Tervel@{Tervel}}
+\index{Tervel@{Tervel}!tervel\+::\+Tervel@{tervel\+::\+Tervel}}
+\subsubsection[{Tervel(size\+\_\+t num\+\_\+threads)}]{\setlength{\rightskip}{0pt plus 5cm}tervel\+::\+Tervel\+::\+Tervel (
+\begin{DoxyParamCaption}
+\item[{size\+\_\+t}]{num\+\_\+threads}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}}\label{classtervel_1_1_tervel_aae87ace03f0fb62083e3683f99135a00}
+\hypertarget{classtervel_1_1_tervel_aea18e9dcc8a8212c0c451a94bc9ff522}{}\index{tervel\+::\+Tervel@{tervel\+::\+Tervel}!````~Tervel@{$\sim$\+Tervel}}
+\index{````~Tervel@{$\sim$\+Tervel}!tervel\+::\+Tervel@{tervel\+::\+Tervel}}
+\subsubsection[{$\sim$\+Tervel()}]{\setlength{\rightskip}{0pt plus 5cm}tervel\+::\+Tervel\+::$\sim$\+Tervel (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1_tervel_aea18e9dcc8a8212c0c451a94bc9ff522}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classtervel_1_1_tervel_ae4aafbeaaa2d0c95ca825b3ec9db0c5d}{}\index{tervel\+::\+Tervel@{tervel\+::\+Tervel}!D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N@{D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N}}
+\index{D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N@{D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N}!tervel\+::\+Tervel@{tervel\+::\+Tervel}}
+\subsubsection[{D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N(\+Tervel)}]{\setlength{\rightskip}{0pt plus 5cm}tervel\+::\+Tervel\+::\+D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N (
+\begin{DoxyParamCaption}
+\item[{{\bf Tervel}}]{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1_tervel_ae4aafbeaaa2d0c95ca825b3ec9db0c5d}
+\hypertarget{classtervel_1_1_tervel_a89db2253e58923a4d113bb3a5f197b47}{}\index{tervel\+::\+Tervel@{tervel\+::\+Tervel}!get\+\_\+thread\+\_\+id@{get\+\_\+thread\+\_\+id}}
+\index{get\+\_\+thread\+\_\+id@{get\+\_\+thread\+\_\+id}!tervel\+::\+Tervel@{tervel\+::\+Tervel}}
+\subsubsection[{get\+\_\+thread\+\_\+id()}]{\setlength{\rightskip}{0pt plus 5cm}uint64\+\_\+t tervel\+::\+Tervel\+::get\+\_\+thread\+\_\+id (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}\label{classtervel_1_1_tervel_a89db2253e58923a4d113bb3a5f197b47}
+
+
+\subsection{Member Data Documentation}
+\hypertarget{classtervel_1_1_tervel_a3942b8c533d065ab7df11e20d253afa9}{}\index{tervel\+::\+Tervel@{tervel\+::\+Tervel}!active\+\_\+threads\+\_\+@{active\+\_\+threads\+\_\+}}
+\index{active\+\_\+threads\+\_\+@{active\+\_\+threads\+\_\+}!tervel\+::\+Tervel@{tervel\+::\+Tervel}}
+\subsubsection[{active\+\_\+threads\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}std\+::atomic$<$uint64\+\_\+t$>$ tervel\+::\+Tervel\+::active\+\_\+threads\+\_\+ \{0\}\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1_tervel_a3942b8c533d065ab7df11e20d253afa9}
+\hypertarget{classtervel_1_1_tervel_aa0d6c90c07f50e9505b2ac590425a59a}{}\index{tervel\+::\+Tervel@{tervel\+::\+Tervel}!hazard\+\_\+pointer\+\_\+@{hazard\+\_\+pointer\+\_\+}}
+\index{hazard\+\_\+pointer\+\_\+@{hazard\+\_\+pointer\+\_\+}!tervel\+::\+Tervel@{tervel\+::\+Tervel}}
+\subsubsection[{hazard\+\_\+pointer\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}{\bf util\+::memory\+::hp\+::\+Hazard\+Pointer} tervel\+::\+Tervel\+::hazard\+\_\+pointer\+\_\+\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1_tervel_aa0d6c90c07f50e9505b2ac590425a59a}
+\hypertarget{classtervel_1_1_tervel_adc91b4b1b22ab49ed249df0ef14eadad}{}\index{tervel\+::\+Tervel@{tervel\+::\+Tervel}!num\+\_\+threads\+\_\+@{num\+\_\+threads\+\_\+}}
+\index{num\+\_\+threads\+\_\+@{num\+\_\+threads\+\_\+}!tervel\+::\+Tervel@{tervel\+::\+Tervel}}
+\subsubsection[{num\+\_\+threads\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}const uint64\+\_\+t tervel\+::\+Tervel\+::num\+\_\+threads\+\_\+\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1_tervel_adc91b4b1b22ab49ed249df0ef14eadad}
+\hypertarget{classtervel_1_1_tervel_a011a5b3732c1482ac6cc87cb47d20b42}{}\index{tervel\+::\+Tervel@{tervel\+::\+Tervel}!progress\+\_\+assurance\+\_\+@{progress\+\_\+assurance\+\_\+}}
+\index{progress\+\_\+assurance\+\_\+@{progress\+\_\+assurance\+\_\+}!tervel\+::\+Tervel@{tervel\+::\+Tervel}}
+\subsubsection[{progress\+\_\+assurance\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}{\bf util\+::\+Progress\+Assurance} tervel\+::\+Tervel\+::progress\+\_\+assurance\+\_\+\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1_tervel_a011a5b3732c1482ac6cc87cb47d20b42}
+\hypertarget{classtervel_1_1_tervel_a86681b7ea969722f86234c70b9d97a83}{}\index{tervel\+::\+Tervel@{tervel\+::\+Tervel}!rc\+\_\+pool\+\_\+manager\+\_\+@{rc\+\_\+pool\+\_\+manager\+\_\+}}
+\index{rc\+\_\+pool\+\_\+manager\+\_\+@{rc\+\_\+pool\+\_\+manager\+\_\+}!tervel\+::\+Tervel@{tervel\+::\+Tervel}}
+\subsubsection[{rc\+\_\+pool\+\_\+manager\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}{\bf util\+::memory\+::rc\+::\+Pool\+Manager} tervel\+::\+Tervel\+::rc\+\_\+pool\+\_\+manager\+\_\+\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1_tervel_a86681b7ea969722f86234c70b9d97a83}
+\hypertarget{classtervel_1_1_tervel_a6322cb41e5b57f070b02dd1b1f54cea2}{}\index{tervel\+::\+Tervel@{tervel\+::\+Tervel}!Thread\+Context@{Thread\+Context}}
+\index{Thread\+Context@{Thread\+Context}!tervel\+::\+Tervel@{tervel\+::\+Tervel}}
+\subsubsection[{Thread\+Context}]{\setlength{\rightskip}{0pt plus 5cm}friend tervel\+::\+Tervel\+::\+Thread\+Context\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1_tervel_a6322cb41e5b57f070b02dd1b1f54cea2}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+tervel/util/\hyperlink{tervel_8h}{tervel.\+h}\end{DoxyCompactItemize}

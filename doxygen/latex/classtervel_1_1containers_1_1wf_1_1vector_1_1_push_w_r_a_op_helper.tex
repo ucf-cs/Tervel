@@ -1,0 +1,174 @@
+\hypertarget{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_w_r_a_op_helper}{}\section{tervel\+:\+:containers\+:\+:wf\+:\+:vector\+:\+:Push\+W\+R\+A\+Op\+Helper$<$ T $>$ Class Template Reference}
+\label{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_w_r_a_op_helper}\index{tervel\+::containers\+::wf\+::vector\+::\+Push\+W\+R\+A\+Op\+Helper$<$ T $>$@{tervel\+::containers\+::wf\+::vector\+::\+Push\+W\+R\+A\+Op\+Helper$<$ T $>$}}
+
+
+{\ttfamily \#include $<$pushbackwra\+\_\+op.\+h$>$}
+
+Inheritance diagram for tervel\+:\+:containers\+:\+:wf\+:\+:vector\+:\+:Push\+W\+R\+A\+Op\+Helper$<$ T $>$\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_w_r_a_op_helper}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_w_r_a_op_helper_a3fe26df430b7d5a1102f6871e1166a85}{Push\+W\+R\+A\+Op\+Helper} (\hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_w_r_a_op}{Push\+W\+R\+A\+Op}$<$ T $>$ $\ast$op)
+\item 
+void \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_w_r_a_op_helper_a368ab8ad0b4b8470b201995a6f12a226}{set\+\_\+idx} (uint64\+\_\+t i)
+\item 
+uint64\+\_\+t \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_w_r_a_op_helper_a9b08e8d16012894c0ec04aa92bbde2d1}{idx} ()
+\item 
+bool \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_w_r_a_op_helper_ab72ec790d16af1a786039289a61e135e}{result} ()
+\item 
+bool \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_w_r_a_op_helper_aea01bbb42a32ca5bb4d0a27c9158c81a}{associate} ()
+\item 
+void $\ast$ \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_w_r_a_op_helper_a77a582be1e79950c4de106e031d5fa1c}{complete} (void $\ast$value, std\+::atomic$<$ void $\ast$ $>$ $\ast$address)
+\begin{DoxyCompactList}\small\item\em This method is implemented by each sub class and must guarantee that upon return that the descriptor no longer exists at the address it was placed. \end{DoxyCompactList}\item 
+void $\ast$ \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_w_r_a_op_helper_a2c1c6135378bd516be4a147d7e9a61a5}{get\+\_\+logical\+\_\+value} ()
+\begin{DoxyCompactList}\small\item\em This method is implemented by each sub class. \end{DoxyCompactList}\item 
+bool \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_w_r_a_op_helper_ab330b531d19d3ef8c8b86e239ce22215}{on\+\_\+watch} (std\+::atomic$<$ void $\ast$ $>$ $\ast$address, void $\ast$value)
+\begin{DoxyCompactList}\small\item\em This method is optional to implement for each sub class. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_w_r_a_op}{Push\+W\+R\+A\+Op}$<$ T $>$ $\ast$ \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_w_r_a_op_helper_adcb96f369c052a709fa3b2a5ea12d642}{op\+\_\+}
+\item 
+uint64\+\_\+t \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_w_r_a_op_helper_a059176bc02e87fbbe4fe344ef63630ea}{idx\+\_\+}
+\end{DoxyCompactItemize}
+\subsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+class \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_w_r_a_op_helper_a55dec9ce6e1993f721d73ecd1741dc33}{Push\+W\+R\+A\+Op$<$ T $>$}
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_w_r_a_op_helper_a3fe26df430b7d5a1102f6871e1166a85}{}\index{tervel\+::containers\+::wf\+::vector\+::\+Push\+W\+R\+A\+Op\+Helper@{tervel\+::containers\+::wf\+::vector\+::\+Push\+W\+R\+A\+Op\+Helper}!Push\+W\+R\+A\+Op\+Helper@{Push\+W\+R\+A\+Op\+Helper}}
+\index{Push\+W\+R\+A\+Op\+Helper@{Push\+W\+R\+A\+Op\+Helper}!tervel\+::containers\+::wf\+::vector\+::\+Push\+W\+R\+A\+Op\+Helper@{tervel\+::containers\+::wf\+::vector\+::\+Push\+W\+R\+A\+Op\+Helper}}
+\subsubsection[{Push\+W\+R\+A\+Op\+Helper(\+Push\+W\+R\+A\+Op$<$ T $>$ $\ast$op)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T$>$ {\bf tervel\+::containers\+::wf\+::vector\+::\+Push\+W\+R\+A\+Op\+Helper}$<$ T $>$\+::{\bf Push\+W\+R\+A\+Op\+Helper} (
+\begin{DoxyParamCaption}
+\item[{{\bf Push\+W\+R\+A\+Op}$<$ T $>$ $\ast$}]{op}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}}\label{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_w_r_a_op_helper_a3fe26df430b7d5a1102f6871e1166a85}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_w_r_a_op_helper_aea01bbb42a32ca5bb4d0a27c9158c81a}{}\index{tervel\+::containers\+::wf\+::vector\+::\+Push\+W\+R\+A\+Op\+Helper@{tervel\+::containers\+::wf\+::vector\+::\+Push\+W\+R\+A\+Op\+Helper}!associate@{associate}}
+\index{associate@{associate}!tervel\+::containers\+::wf\+::vector\+::\+Push\+W\+R\+A\+Op\+Helper@{tervel\+::containers\+::wf\+::vector\+::\+Push\+W\+R\+A\+Op\+Helper}}
+\subsubsection[{associate()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T$>$ bool {\bf tervel\+::containers\+::wf\+::vector\+::\+Push\+W\+R\+A\+Op\+Helper}$<$ T $>$\+::associate (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_w_r_a_op_helper_aea01bbb42a32ca5bb4d0a27c9158c81a}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_w_r_a_op_helper_a77a582be1e79950c4de106e031d5fa1c}{}\index{tervel\+::containers\+::wf\+::vector\+::\+Push\+W\+R\+A\+Op\+Helper@{tervel\+::containers\+::wf\+::vector\+::\+Push\+W\+R\+A\+Op\+Helper}!complete@{complete}}
+\index{complete@{complete}!tervel\+::containers\+::wf\+::vector\+::\+Push\+W\+R\+A\+Op\+Helper@{tervel\+::containers\+::wf\+::vector\+::\+Push\+W\+R\+A\+Op\+Helper}}
+\subsubsection[{complete(void $\ast$value, std\+::atomic$<$ void $\ast$ $>$ $\ast$address)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T$>$ void$\ast$ {\bf tervel\+::containers\+::wf\+::vector\+::\+Push\+W\+R\+A\+Op\+Helper}$<$ T $>$\+::complete (
+\begin{DoxyParamCaption}
+\item[{void $\ast$}]{current, }
+\item[{std\+::atomic$<$ void $\ast$ $>$ $\ast$}]{address}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}\label{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_w_r_a_op_helper_a77a582be1e79950c4de106e031d5fa1c}
+
+
+This method is implemented by each sub class and must guarantee that upon return that the descriptor no longer exists at the address it was placed. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em current} & the reference to this object as it is at the address, \\
+\hline
+{\em address} & the location this object was read from \\
+\hline
+\end{DoxyParams}
+
+
+Implements \hyperlink{classtervel_1_1util_1_1_descriptor_a4303b2a08e3ab67de5533cfb20db87c9}{tervel\+::util\+::\+Descriptor}.
+
+\hypertarget{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_w_r_a_op_helper_a2c1c6135378bd516be4a147d7e9a61a5}{}\index{tervel\+::containers\+::wf\+::vector\+::\+Push\+W\+R\+A\+Op\+Helper@{tervel\+::containers\+::wf\+::vector\+::\+Push\+W\+R\+A\+Op\+Helper}!get\+\_\+logical\+\_\+value@{get\+\_\+logical\+\_\+value}}
+\index{get\+\_\+logical\+\_\+value@{get\+\_\+logical\+\_\+value}!tervel\+::containers\+::wf\+::vector\+::\+Push\+W\+R\+A\+Op\+Helper@{tervel\+::containers\+::wf\+::vector\+::\+Push\+W\+R\+A\+Op\+Helper}}
+\subsubsection[{get\+\_\+logical\+\_\+value()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T$>$ void$\ast$ {\bf tervel\+::containers\+::wf\+::vector\+::\+Push\+W\+R\+A\+Op\+Helper}$<$ T $>$\+::get\+\_\+logical\+\_\+value (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}\label{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_w_r_a_op_helper_a2c1c6135378bd516be4a147d7e9a61a5}
+
+
+This method is implemented by each sub class. 
+
+It returns the logical value of the past address. If the associated operation is still in progress then it will generally return the value that was replaced by this descriptor. Otherwise it will generally return the result of the operation for the specified address.
+
+It can only be called from the static function which protects the object from being reused during the function. 
+
+Implements \hyperlink{classtervel_1_1util_1_1_descriptor_a5b443eeb6acf1207f27a6d06c39d4ad4}{tervel\+::util\+::\+Descriptor}.
+
+\hypertarget{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_w_r_a_op_helper_a9b08e8d16012894c0ec04aa92bbde2d1}{}\index{tervel\+::containers\+::wf\+::vector\+::\+Push\+W\+R\+A\+Op\+Helper@{tervel\+::containers\+::wf\+::vector\+::\+Push\+W\+R\+A\+Op\+Helper}!idx@{idx}}
+\index{idx@{idx}!tervel\+::containers\+::wf\+::vector\+::\+Push\+W\+R\+A\+Op\+Helper@{tervel\+::containers\+::wf\+::vector\+::\+Push\+W\+R\+A\+Op\+Helper}}
+\subsubsection[{idx()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T$>$ uint64\+\_\+t {\bf tervel\+::containers\+::wf\+::vector\+::\+Push\+W\+R\+A\+Op\+Helper}$<$ T $>$\+::idx (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_w_r_a_op_helper_a9b08e8d16012894c0ec04aa92bbde2d1}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_w_r_a_op_helper_ab330b531d19d3ef8c8b86e239ce22215}{}\index{tervel\+::containers\+::wf\+::vector\+::\+Push\+W\+R\+A\+Op\+Helper@{tervel\+::containers\+::wf\+::vector\+::\+Push\+W\+R\+A\+Op\+Helper}!on\+\_\+watch@{on\+\_\+watch}}
+\index{on\+\_\+watch@{on\+\_\+watch}!tervel\+::containers\+::wf\+::vector\+::\+Push\+W\+R\+A\+Op\+Helper@{tervel\+::containers\+::wf\+::vector\+::\+Push\+W\+R\+A\+Op\+Helper}}
+\subsubsection[{on\+\_\+watch(std\+::atomic$<$ void $\ast$ $>$ $\ast$address, void $\ast$value)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T$>$ bool {\bf tervel\+::containers\+::wf\+::vector\+::\+Push\+W\+R\+A\+Op\+Helper}$<$ T $>$\+::on\+\_\+watch (
+\begin{DoxyParamCaption}
+\item[{std\+::atomic$<$ void $\ast$ $>$ $\ast$}]{, }
+\item[{void $\ast$}]{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}\label{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_w_r_a_op_helper_ab330b531d19d3ef8c8b86e239ce22215}
+
+
+This method is optional to implement for each sub class. 
+
+In the event there is a complex dependency between descriptor objects, where watching one implies performing other actions, such as watching a parent object, a developer will implement this function to encapsulate that logic
+
+This function is called by the static watch function It should not watch itself.
+
+
+\begin{DoxyParams}{Parameters}
+{\em address} & The location to check. \\
+\hline
+{\em expected} & The expected value for that location\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if successful, false otherwise 
+\end{DoxyReturn}
+
+
+Reimplemented from \hyperlink{classtervel_1_1util_1_1_descriptor_ab643e09f20f35149dc820766b0f9ccdb}{tervel\+::util\+::\+Descriptor}.
+
+\hypertarget{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_w_r_a_op_helper_ab72ec790d16af1a786039289a61e135e}{}\index{tervel\+::containers\+::wf\+::vector\+::\+Push\+W\+R\+A\+Op\+Helper@{tervel\+::containers\+::wf\+::vector\+::\+Push\+W\+R\+A\+Op\+Helper}!result@{result}}
+\index{result@{result}!tervel\+::containers\+::wf\+::vector\+::\+Push\+W\+R\+A\+Op\+Helper@{tervel\+::containers\+::wf\+::vector\+::\+Push\+W\+R\+A\+Op\+Helper}}
+\subsubsection[{result()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T$>$ bool {\bf tervel\+::containers\+::wf\+::vector\+::\+Push\+W\+R\+A\+Op\+Helper}$<$ T $>$\+::result (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_w_r_a_op_helper_ab72ec790d16af1a786039289a61e135e}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_w_r_a_op_helper_a368ab8ad0b4b8470b201995a6f12a226}{}\index{tervel\+::containers\+::wf\+::vector\+::\+Push\+W\+R\+A\+Op\+Helper@{tervel\+::containers\+::wf\+::vector\+::\+Push\+W\+R\+A\+Op\+Helper}!set\+\_\+idx@{set\+\_\+idx}}
+\index{set\+\_\+idx@{set\+\_\+idx}!tervel\+::containers\+::wf\+::vector\+::\+Push\+W\+R\+A\+Op\+Helper@{tervel\+::containers\+::wf\+::vector\+::\+Push\+W\+R\+A\+Op\+Helper}}
+\subsubsection[{set\+\_\+idx(uint64\+\_\+t i)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T$>$ void {\bf tervel\+::containers\+::wf\+::vector\+::\+Push\+W\+R\+A\+Op\+Helper}$<$ T $>$\+::set\+\_\+idx (
+\begin{DoxyParamCaption}
+\item[{uint64\+\_\+t}]{i}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_w_r_a_op_helper_a368ab8ad0b4b8470b201995a6f12a226}
+
+
+\subsection{Friends And Related Function Documentation}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_w_r_a_op_helper_a55dec9ce6e1993f721d73ecd1741dc33}{}\index{tervel\+::containers\+::wf\+::vector\+::\+Push\+W\+R\+A\+Op\+Helper@{tervel\+::containers\+::wf\+::vector\+::\+Push\+W\+R\+A\+Op\+Helper}!Push\+W\+R\+A\+Op$<$ T $>$@{Push\+W\+R\+A\+Op$<$ T $>$}}
+\index{Push\+W\+R\+A\+Op$<$ T $>$@{Push\+W\+R\+A\+Op$<$ T $>$}!tervel\+::containers\+::wf\+::vector\+::\+Push\+W\+R\+A\+Op\+Helper@{tervel\+::containers\+::wf\+::vector\+::\+Push\+W\+R\+A\+Op\+Helper}}
+\subsubsection[{Push\+W\+R\+A\+Op$<$ T $>$}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T$>$ friend class {\bf Push\+W\+R\+A\+Op}$<$ T $>$\hspace{0.3cm}{\ttfamily [friend]}}\label{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_w_r_a_op_helper_a55dec9ce6e1993f721d73ecd1741dc33}
+
+
+\subsection{Member Data Documentation}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_w_r_a_op_helper_a059176bc02e87fbbe4fe344ef63630ea}{}\index{tervel\+::containers\+::wf\+::vector\+::\+Push\+W\+R\+A\+Op\+Helper@{tervel\+::containers\+::wf\+::vector\+::\+Push\+W\+R\+A\+Op\+Helper}!idx\+\_\+@{idx\+\_\+}}
+\index{idx\+\_\+@{idx\+\_\+}!tervel\+::containers\+::wf\+::vector\+::\+Push\+W\+R\+A\+Op\+Helper@{tervel\+::containers\+::wf\+::vector\+::\+Push\+W\+R\+A\+Op\+Helper}}
+\subsubsection[{idx\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T$>$ uint64\+\_\+t {\bf tervel\+::containers\+::wf\+::vector\+::\+Push\+W\+R\+A\+Op\+Helper}$<$ T $>$\+::idx\+\_\+\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_w_r_a_op_helper_a059176bc02e87fbbe4fe344ef63630ea}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_w_r_a_op_helper_adcb96f369c052a709fa3b2a5ea12d642}{}\index{tervel\+::containers\+::wf\+::vector\+::\+Push\+W\+R\+A\+Op\+Helper@{tervel\+::containers\+::wf\+::vector\+::\+Push\+W\+R\+A\+Op\+Helper}!op\+\_\+@{op\+\_\+}}
+\index{op\+\_\+@{op\+\_\+}!tervel\+::containers\+::wf\+::vector\+::\+Push\+W\+R\+A\+Op\+Helper@{tervel\+::containers\+::wf\+::vector\+::\+Push\+W\+R\+A\+Op\+Helper}}
+\subsubsection[{op\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T$>$ {\bf Push\+W\+R\+A\+Op}$<$T$>$$\ast$ {\bf tervel\+::containers\+::wf\+::vector\+::\+Push\+W\+R\+A\+Op\+Helper}$<$ T $>$\+::op\+\_\+\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1containers_1_1wf_1_1vector_1_1_push_w_r_a_op_helper_adcb96f369c052a709fa3b2a5ea12d642}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+tervel/containers/wf/vector/\hyperlink{pushbackwra__op_8h}{pushbackwra\+\_\+op.\+h}\end{DoxyCompactItemize}

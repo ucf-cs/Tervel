@@ -1,0 +1,154 @@
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_helper}{}\section{tervel\+:\+:containers\+:\+:wf\+:\+:Ring\+Buffer$<$ T $>$\+:\+:Helper$<$ T $>$ Class Template Reference}
+\label{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_helper}\index{tervel\+::containers\+::wf\+::\+Ring\+Buffer$<$ T $>$\+::\+Helper$<$ T $>$@{tervel\+::containers\+::wf\+::\+Ring\+Buffer$<$ T $>$\+::\+Helper$<$ T $>$}}
+
+
+{\ttfamily \#include $<$helper.\+h$>$}
+
+Inheritance diagram for tervel\+:\+:containers\+:\+:wf\+:\+:Ring\+Buffer$<$ T $>$\+:\+:Helper$<$ T $>$\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_helper}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_helper_a727b15617f6bd482ae200aad29e9a062}{Helper} (\hyperlink{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_buffer_op}{Buffer\+Op} $\ast$op, uintptr\+\_\+t old\+\_\+value)
+\item 
+\hyperlink{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_helper_a27ab01a87150b6b3561485fbb48f1a2d}{$\sim$\+Helper} ()
+\item 
+bool \hyperlink{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_helper_a2602ee377d46b4b086c5df431b851645}{on\+\_\+watch} (std\+::atomic$<$ void $\ast$ $>$ $\ast$address, void $\ast$expected)
+\begin{DoxyCompactList}\small\item\em This function is used to achieve a strong watch on an Element. \end{DoxyCompactList}\item 
+void $\ast$ \hyperlink{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_helper_ad9e59b7233276f595218f0731eb61602}{associate} ()
+\item 
+bool \hyperlink{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_helper_a82987e8211ac1e29b9f08edcee4b17e6}{valid} ()
+\end{DoxyCompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static uintptr\+\_\+t \hyperlink{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_helper_ae04b46af093b7546aa05a9ce7a8533a9}{Helper\+Type} (\hyperlink{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_helper}{Helper} $\ast$h)
+\begin{DoxyCompactList}\small\item\em Returns a uintptr\+\_\+t for the passed helper object. \end{DoxyCompactList}\item 
+static bool \hyperlink{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_helper_aa375dafb087de1a4b6ad9d2164f390ea}{is\+Helper\+Type} (uintptr\+\_\+t val)
+\item 
+static \hyperlink{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_helper}{Helper} $\ast$ \hyperlink{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_helper_a4a392baf1637042a60e743b306b9399f}{get\+Helper\+Type} (uintptr\+\_\+t val)
+\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_buffer_op}{Buffer\+Op} $\ast$ \hyperlink{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_helper_acdb1064476d7cbc7cc18492aa2a2d9ea}{op\+\_\+}
+\item 
+const uintptr\+\_\+t \hyperlink{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_helper_a9669431287884c83f20afb6c16446a6c}{old\+\_\+value\+\_\+}
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_helper_a727b15617f6bd482ae200aad29e9a062}{}\index{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Helper@{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Helper}!Helper@{Helper}}
+\index{Helper@{Helper}!tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Helper@{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Helper}}
+\subsubsection[{Helper(\+Buffer\+Op $\ast$op, uintptr\+\_\+t old\+\_\+value)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T$>$ template$<$typename T $>$ {\bf tervel\+::containers\+::wf\+::\+Ring\+Buffer}$<$ T $>$\+::{\bf Helper}$<$ T $>$\+::{\bf Helper} (
+\begin{DoxyParamCaption}
+\item[{{\bf Buffer\+Op} $\ast$}]{op, }
+\item[{uintptr\+\_\+t}]{old\+\_\+value}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_helper_a727b15617f6bd482ae200aad29e9a062}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_helper_a27ab01a87150b6b3561485fbb48f1a2d}{}\index{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Helper@{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Helper}!````~Helper@{$\sim$\+Helper}}
+\index{````~Helper@{$\sim$\+Helper}!tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Helper@{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Helper}}
+\subsubsection[{$\sim$\+Helper()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T$>$ template$<$typename T $>$ {\bf tervel\+::containers\+::wf\+::\+Ring\+Buffer}$<$ T $>$\+::{\bf Helper}$<$ T $>$\+::$\sim${\bf Helper} (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_helper_a27ab01a87150b6b3561485fbb48f1a2d}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_helper_ad9e59b7233276f595218f0731eb61602}{}\index{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Helper@{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Helper}!associate@{associate}}
+\index{associate@{associate}!tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Helper@{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Helper}}
+\subsubsection[{associate()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T$>$ template$<$typename T $>$ void $\ast$ {\bf tervel\+::containers\+::wf\+::\+Ring\+Buffer}$<$ T $>$\+::{\bf Helper}$<$ T $>$\+::associate (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_helper_ad9e59b7233276f595218f0731eb61602}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_helper_a4a392baf1637042a60e743b306b9399f}{}\index{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Helper@{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Helper}!get\+Helper\+Type@{get\+Helper\+Type}}
+\index{get\+Helper\+Type@{get\+Helper\+Type}!tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Helper@{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Helper}}
+\subsubsection[{get\+Helper\+Type(uintptr\+\_\+t val)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T$>$ template$<$typename T $>$ {\bf Ring\+Buffer}$<$ T $>$\+::{\bf Helper} $\ast$ {\bf tervel\+::containers\+::wf\+::\+Ring\+Buffer}$<$ T $>$\+::{\bf Helper}$<$ T $>$\+::get\+Helper\+Type (
+\begin{DoxyParamCaption}
+\item[{uintptr\+\_\+t}]{val}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}\label{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_helper_a4a392baf1637042a60e743b306b9399f}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_helper_ae04b46af093b7546aa05a9ce7a8533a9}{}\index{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Helper@{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Helper}!Helper\+Type@{Helper\+Type}}
+\index{Helper\+Type@{Helper\+Type}!tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Helper@{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Helper}}
+\subsubsection[{Helper\+Type(\+Helper $\ast$h)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T$>$ template$<$typename T $>$ uintptr\+\_\+t {\bf tervel\+::containers\+::wf\+::\+Ring\+Buffer}$<$ T $>$\+::{\bf Helper}$<$ T $>$\+::Helper\+Type (
+\begin{DoxyParamCaption}
+\item[{{\bf Helper}$<$ T $>$ $\ast$}]{h}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}\label{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_helper_ae04b46af093b7546aa05a9ce7a8533a9}
+
+
+Returns a uintptr\+\_\+t for the passed helper object. 
+
+Returns a uintptr\+\_\+t for the passed helper object by performing a bitwise O\+R with h and oprec\+\_\+lsb
+
+
+\begin{DoxyParams}{Parameters}
+{\em h} & the pointer to O\+R \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the result of the bitwise or. 
+\end{DoxyReturn}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_helper_aa375dafb087de1a4b6ad9d2164f390ea}{}\index{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Helper@{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Helper}!is\+Helper\+Type@{is\+Helper\+Type}}
+\index{is\+Helper\+Type@{is\+Helper\+Type}!tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Helper@{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Helper}}
+\subsubsection[{is\+Helper\+Type(uintptr\+\_\+t val)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T$>$ template$<$typename T $>$ bool {\bf tervel\+::containers\+::wf\+::\+Ring\+Buffer}$<$ T $>$\+::{\bf Helper}$<$ T $>$\+::is\+Helper\+Type (
+\begin{DoxyParamCaption}
+\item[{uintptr\+\_\+t}]{val}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}\label{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_helper_aa375dafb087de1a4b6ad9d2164f390ea}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_helper_a2602ee377d46b4b086c5df431b851645}{}\index{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Helper@{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Helper}!on\+\_\+watch@{on\+\_\+watch}}
+\index{on\+\_\+watch@{on\+\_\+watch}!tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Helper@{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Helper}}
+\subsubsection[{on\+\_\+watch(std\+::atomic$<$ void $\ast$ $>$ $\ast$address, void $\ast$expected)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T$>$ template$<$typename T $>$ bool {\bf tervel\+::containers\+::wf\+::\+Ring\+Buffer}$<$ T $>$\+::{\bf Helper}$<$ T $>$\+::on\+\_\+watch (
+\begin{DoxyParamCaption}
+\item[{std\+::atomic$<$ void $\ast$ $>$ $\ast$}]{address, }
+\item[{void $\ast$}]{expected}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [virtual]}}\label{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_helper_a2602ee377d46b4b086c5df431b851645}
+
+
+This function is used to achieve a strong watch on an Element. 
+
+Classes wishing to express this should override this function.
+
+
+\begin{DoxyParams}{Parameters}
+{\em address} & the expected was load from \\
+\hline
+{\em expected} & the last known value of address \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+whether or not the element was succefully watched. 
+\end{DoxyReturn}
+
+
+Reimplemented from \hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_element_a53493ef4754dd77016139863af964f90}{tervel\+::util\+::memory\+::hp\+::\+Element}.
+
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_helper_a82987e8211ac1e29b9f08edcee4b17e6}{}\index{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Helper@{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Helper}!valid@{valid}}
+\index{valid@{valid}!tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Helper@{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Helper}}
+\subsubsection[{valid()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T$>$ template$<$typename T $>$ bool {\bf tervel\+::containers\+::wf\+::\+Ring\+Buffer}$<$ T $>$\+::{\bf Helper}$<$ T $>$\+::valid (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_helper_a82987e8211ac1e29b9f08edcee4b17e6}
+
+
+\subsection{Member Data Documentation}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_helper_a9669431287884c83f20afb6c16446a6c}{}\index{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Helper@{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Helper}!old\+\_\+value\+\_\+@{old\+\_\+value\+\_\+}}
+\index{old\+\_\+value\+\_\+@{old\+\_\+value\+\_\+}!tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Helper@{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Helper}}
+\subsubsection[{old\+\_\+value\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T$>$ template$<$typename T $>$ const uintptr\+\_\+t {\bf tervel\+::containers\+::wf\+::\+Ring\+Buffer}$<$ T $>$\+::{\bf Helper}$<$ T $>$\+::old\+\_\+value\+\_\+}\label{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_helper_a9669431287884c83f20afb6c16446a6c}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_helper_acdb1064476d7cbc7cc18492aa2a2d9ea}{}\index{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Helper@{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Helper}!op\+\_\+@{op\+\_\+}}
+\index{op\+\_\+@{op\+\_\+}!tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Helper@{tervel\+::containers\+::wf\+::\+Ring\+Buffer\+::\+Helper}}
+\subsubsection[{op\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T$>$ template$<$typename T $>$ {\bf Buffer\+Op}$\ast$ {\bf tervel\+::containers\+::wf\+::\+Ring\+Buffer}$<$ T $>$\+::{\bf Helper}$<$ T $>$\+::op\+\_\+}\label{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_helper_acdb1064476d7cbc7cc18492aa2a2d9ea}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+tervel/containers/wf/ring-\/buffer/\hyperlink{helper_8h}{helper.\+h}\item 
+tervel/containers/wf/ring-\/buffer/\hyperlink{helper__imp_8h}{helper\+\_\+imp.\+h}\end{DoxyCompactItemize}

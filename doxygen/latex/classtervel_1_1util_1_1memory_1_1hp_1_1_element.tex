@@ -1,0 +1,205 @@
+\hypertarget{classtervel_1_1util_1_1memory_1_1hp_1_1_element}{}\section{tervel\+:\+:util\+:\+:memory\+:\+:hp\+:\+:Element Class Reference}
+\label{classtervel_1_1util_1_1memory_1_1hp_1_1_element}\index{tervel\+::util\+::memory\+::hp\+::\+Element@{tervel\+::util\+::memory\+::hp\+::\+Element}}
+
+
+This class is used for the creation of Hazard Pointer Protected Objects Objects which extend it have the ability to call safe\+Free which delays the calling of the objects destructor until it is safe to do so.  
+
+
+
+
+{\ttfamily \#include $<$hp\+\_\+element.\+h$>$}
+
+Inheritance diagram for tervel\+:\+:util\+:\+:memory\+:\+:hp\+:\+:Element\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.853211cm]{classtervel_1_1util_1_1memory_1_1hp_1_1_element}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_element_a9b14f67c07b2bd0081978697bf7e545f}{Element} ()
+\item 
+virtual \hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_element_abe65a1233e6d95b0a75c2ca3383daa86}{$\sim$\+Element} ()
+\item 
+void \hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_element_af2356f697bc41aeffdc4a3e8f9aacefc}{safe\+\_\+delete} (bool no\+\_\+check=false, \hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_element_list}{Element\+List} $\ast$const element\+\_\+list=\hyperlink{namespacetervel_a60b23602adbb2dee6160af411b74bfd3}{tervel\+::tl\+\_\+thread\+\_\+info}-\/$>$get\+\_\+hp\+\_\+element\+\_\+list())
+\begin{DoxyCompactList}\small\item\em This function is used to free a hazard pointer protected object if it is safe to do so O\+R add it to a list to be freed later. \end{DoxyCompactList}\item 
+virtual bool \hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_element_a53493ef4754dd77016139863af964f90}{on\+\_\+watch} (std\+::atomic$<$ void $\ast$ $>$ $\ast$address, void $\ast$expected)
+\begin{DoxyCompactList}\small\item\em This function is used to achieve a strong watch on an \hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_element}{Element}. \end{DoxyCompactList}\item 
+virtual bool \hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_element_a88306bc6b64d0110e3ee568514dbcc04}{on\+\_\+is\+\_\+watched} ()
+\begin{DoxyCompactList}\small\item\em This function is used to check a strong watch on an \hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_element}{Element}. \end{DoxyCompactList}\item 
+virtual void \hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_element_ae71f306b6c9f08565e61546a0dc0a30c}{on\+\_\+unwatch} ()
+\begin{DoxyCompactList}\small\item\em This function is used to remove a strong watch on an \hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_element}{Element}. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_element}{Element} $\ast$ \hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_element_ac7b4a852a630298613bad1c57fb58d7f}{next} ()
+\begin{DoxyCompactList}\small\item\em Helper method for getting the next pointer. \end{DoxyCompactList}\item 
+void \hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_element_a0611147a7c56ce225ec3129c2770eb9e}{next} (\hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_element}{Element} $\ast$next)
+\begin{DoxyCompactList}\small\item\em Helper method for setting the next pointer. \end{DoxyCompactList}\item 
+\hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_element_ad02ba6ec20e44c7a7e3cf8f9cea8e759}{D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N} (\hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_element}{Element})
+\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_element}{Element} $\ast$ \hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_element_a6a0fa344b7f35ea4db2381a54dfd6c8d}{next\+\_\+} \{nullptr\}
+\item 
+friend \hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_element_a2bede6af4da0ddbd5d5e12861432d670}{List\+Manager}
+\item 
+friend \hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_element_abf4d1f696e870e12271bffb158ceb7c7}{Element\+List}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This class is used for the creation of Hazard Pointer Protected Objects Objects which extend it have the ability to call safe\+Free which delays the calling of the objects destructor until it is safe to do so. 
+
+To achieve more advance functionality, the user can also extend \hyperlink{classtervel_1_1util_1_1_descriptor}{Descriptor} class which will provides on\+\_\+watch, on\+\_\+unwatch, and on\+\_\+is\+\_\+watch functions. 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classtervel_1_1util_1_1memory_1_1hp_1_1_element_a9b14f67c07b2bd0081978697bf7e545f}{}\index{tervel\+::util\+::memory\+::hp\+::\+Element@{tervel\+::util\+::memory\+::hp\+::\+Element}!Element@{Element}}
+\index{Element@{Element}!tervel\+::util\+::memory\+::hp\+::\+Element@{tervel\+::util\+::memory\+::hp\+::\+Element}}
+\subsubsection[{Element()}]{\setlength{\rightskip}{0pt plus 5cm}tervel\+::util\+::memory\+::hp\+::\+Element\+::\+Element (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1util_1_1memory_1_1hp_1_1_element_a9b14f67c07b2bd0081978697bf7e545f}
+\hypertarget{classtervel_1_1util_1_1memory_1_1hp_1_1_element_abe65a1233e6d95b0a75c2ca3383daa86}{}\index{tervel\+::util\+::memory\+::hp\+::\+Element@{tervel\+::util\+::memory\+::hp\+::\+Element}!````~Element@{$\sim$\+Element}}
+\index{````~Element@{$\sim$\+Element}!tervel\+::util\+::memory\+::hp\+::\+Element@{tervel\+::util\+::memory\+::hp\+::\+Element}}
+\subsubsection[{$\sim$\+Element()}]{\setlength{\rightskip}{0pt plus 5cm}virtual tervel\+::util\+::memory\+::hp\+::\+Element\+::$\sim$\+Element (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}\label{classtervel_1_1util_1_1memory_1_1hp_1_1_element_abe65a1233e6d95b0a75c2ca3383daa86}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classtervel_1_1util_1_1memory_1_1hp_1_1_element_ad02ba6ec20e44c7a7e3cf8f9cea8e759}{}\index{tervel\+::util\+::memory\+::hp\+::\+Element@{tervel\+::util\+::memory\+::hp\+::\+Element}!D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N@{D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N}}
+\index{D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N@{D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N}!tervel\+::util\+::memory\+::hp\+::\+Element@{tervel\+::util\+::memory\+::hp\+::\+Element}}
+\subsubsection[{D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N(\+Element)}]{\setlength{\rightskip}{0pt plus 5cm}tervel\+::util\+::memory\+::hp\+::\+Element\+::\+D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N (
+\begin{DoxyParamCaption}
+\item[{{\bf Element}}]{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1util_1_1memory_1_1hp_1_1_element_ad02ba6ec20e44c7a7e3cf8f9cea8e759}
+\hypertarget{classtervel_1_1util_1_1memory_1_1hp_1_1_element_ac7b4a852a630298613bad1c57fb58d7f}{}\index{tervel\+::util\+::memory\+::hp\+::\+Element@{tervel\+::util\+::memory\+::hp\+::\+Element}!next@{next}}
+\index{next@{next}!tervel\+::util\+::memory\+::hp\+::\+Element@{tervel\+::util\+::memory\+::hp\+::\+Element}}
+\subsubsection[{next()}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Element}$\ast$ tervel\+::util\+::memory\+::hp\+::\+Element\+::next (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}\label{classtervel_1_1util_1_1memory_1_1hp_1_1_element_ac7b4a852a630298613bad1c57fb58d7f}
+
+
+Helper method for getting the next pointer. 
+
+\hypertarget{classtervel_1_1util_1_1memory_1_1hp_1_1_element_a0611147a7c56ce225ec3129c2770eb9e}{}\index{tervel\+::util\+::memory\+::hp\+::\+Element@{tervel\+::util\+::memory\+::hp\+::\+Element}!next@{next}}
+\index{next@{next}!tervel\+::util\+::memory\+::hp\+::\+Element@{tervel\+::util\+::memory\+::hp\+::\+Element}}
+\subsubsection[{next(\+Element $\ast$next)}]{\setlength{\rightskip}{0pt plus 5cm}void tervel\+::util\+::memory\+::hp\+::\+Element\+::next (
+\begin{DoxyParamCaption}
+\item[{{\bf Element} $\ast$}]{next}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}\label{classtervel_1_1util_1_1memory_1_1hp_1_1_element_a0611147a7c56ce225ec3129c2770eb9e}
+
+
+Helper method for setting the next pointer. 
+
+\hypertarget{classtervel_1_1util_1_1memory_1_1hp_1_1_element_a88306bc6b64d0110e3ee568514dbcc04}{}\index{tervel\+::util\+::memory\+::hp\+::\+Element@{tervel\+::util\+::memory\+::hp\+::\+Element}!on\+\_\+is\+\_\+watched@{on\+\_\+is\+\_\+watched}}
+\index{on\+\_\+is\+\_\+watched@{on\+\_\+is\+\_\+watched}!tervel\+::util\+::memory\+::hp\+::\+Element@{tervel\+::util\+::memory\+::hp\+::\+Element}}
+\subsubsection[{on\+\_\+is\+\_\+watched()}]{\setlength{\rightskip}{0pt plus 5cm}virtual bool tervel\+::util\+::memory\+::hp\+::\+Element\+::on\+\_\+is\+\_\+watched (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}\label{classtervel_1_1util_1_1memory_1_1hp_1_1_element_a88306bc6b64d0110e3ee568514dbcc04}
+
+
+This function is used to check a strong watch on an \hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_element}{Element}. 
+
+Classes wishing to express this should override this function.
+
+\begin{DoxyReturn}{Returns}
+whether or not the element is watched. 
+\end{DoxyReturn}
+
+
+Reimplemented in \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_multi_word_compare_and_swap_aa5ee7cf4770a925939b9e7497b34473a}{tervel\+::algorithms\+::wf\+::mcas\+::\+Multi\+Word\+Compare\+And\+Swap$<$ T $>$}, and \hyperlink{classtervel_1_1util_1_1_op_record_a80c4ee47bebf246ce40bb922958dd21b}{tervel\+::util\+::\+Op\+Record}.
+
+\hypertarget{classtervel_1_1util_1_1memory_1_1hp_1_1_element_ae71f306b6c9f08565e61546a0dc0a30c}{}\index{tervel\+::util\+::memory\+::hp\+::\+Element@{tervel\+::util\+::memory\+::hp\+::\+Element}!on\+\_\+unwatch@{on\+\_\+unwatch}}
+\index{on\+\_\+unwatch@{on\+\_\+unwatch}!tervel\+::util\+::memory\+::hp\+::\+Element@{tervel\+::util\+::memory\+::hp\+::\+Element}}
+\subsubsection[{on\+\_\+unwatch()}]{\setlength{\rightskip}{0pt plus 5cm}virtual void tervel\+::util\+::memory\+::hp\+::\+Element\+::on\+\_\+unwatch (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}\label{classtervel_1_1util_1_1memory_1_1hp_1_1_element_ae71f306b6c9f08565e61546a0dc0a30c}
+
+
+This function is used to remove a strong watch on an \hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_element}{Element}. 
+
+Classes wishing to express this should override this function. 
+
+Reimplemented in \hyperlink{classtervel_1_1util_1_1_op_record_a0018d1a71b9b3dcc4e2f59f34c938a46}{tervel\+::util\+::\+Op\+Record}.
+
+\hypertarget{classtervel_1_1util_1_1memory_1_1hp_1_1_element_a53493ef4754dd77016139863af964f90}{}\index{tervel\+::util\+::memory\+::hp\+::\+Element@{tervel\+::util\+::memory\+::hp\+::\+Element}!on\+\_\+watch@{on\+\_\+watch}}
+\index{on\+\_\+watch@{on\+\_\+watch}!tervel\+::util\+::memory\+::hp\+::\+Element@{tervel\+::util\+::memory\+::hp\+::\+Element}}
+\subsubsection[{on\+\_\+watch(std\+::atomic$<$ void $\ast$ $>$ $\ast$address, void $\ast$expected)}]{\setlength{\rightskip}{0pt plus 5cm}virtual bool tervel\+::util\+::memory\+::hp\+::\+Element\+::on\+\_\+watch (
+\begin{DoxyParamCaption}
+\item[{std\+::atomic$<$ void $\ast$ $>$ $\ast$}]{address, }
+\item[{void $\ast$}]{expected}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}\label{classtervel_1_1util_1_1memory_1_1hp_1_1_element_a53493ef4754dd77016139863af964f90}
+
+
+This function is used to achieve a strong watch on an \hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_element}{Element}. 
+
+Classes wishing to express this should override this function.
+
+
+\begin{DoxyParams}{Parameters}
+{\em address} & the expected was load from \\
+\hline
+{\em expected} & the last known value of address \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+whether or not the element was succefully watched. 
+\end{DoxyReturn}
+
+
+Reimplemented in \hyperlink{classtervel_1_1util_1_1_op_record_a6433f4d6d353ba6ed66e8eaefaa07d32}{tervel\+::util\+::\+Op\+Record}, and \hyperlink{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_helper_a2602ee377d46b4b086c5df431b851645}{tervel\+::containers\+::wf\+::\+Ring\+Buffer$<$ T $>$\+::\+Helper$<$ T $>$}.
+
+\hypertarget{classtervel_1_1util_1_1memory_1_1hp_1_1_element_af2356f697bc41aeffdc4a3e8f9aacefc}{}\index{tervel\+::util\+::memory\+::hp\+::\+Element@{tervel\+::util\+::memory\+::hp\+::\+Element}!safe\+\_\+delete@{safe\+\_\+delete}}
+\index{safe\+\_\+delete@{safe\+\_\+delete}!tervel\+::util\+::memory\+::hp\+::\+Element@{tervel\+::util\+::memory\+::hp\+::\+Element}}
+\subsubsection[{safe\+\_\+delete(bool no\+\_\+check=false, Element\+List $\ast$const element\+\_\+list=tervel\+::tl\+\_\+thread\+\_\+info-\/$>$get\+\_\+hp\+\_\+element\+\_\+list())}]{\setlength{\rightskip}{0pt plus 5cm}void tervel\+::util\+::memory\+::hp\+::\+Element\+::safe\+\_\+delete (
+\begin{DoxyParamCaption}
+\item[{bool}]{no\+\_\+check = {\ttfamily false}, }
+\item[{{\bf Element\+List} $\ast$const}]{element\+\_\+list = {\ttfamily {\bf tervel\+::tl\+\_\+thread\+\_\+info}-\/$>$get\+\_\+hp\+\_\+element\+\_\+list()}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1util_1_1memory_1_1hp_1_1_element_af2356f697bc41aeffdc4a3e8f9aacefc}
+
+
+This function is used to free a hazard pointer protected object if it is safe to do so O\+R add it to a list to be freed later. 
+
+It also calls \textquotesingle{}try\+\_\+to\+\_\+free\+\_\+\+Elements\textquotesingle{} in an attempt to free previously unfreeable objects.
+
+
+\begin{DoxyParams}{Parameters}
+{\em no\+\_\+check} & if true then the object is imeditly deleted \\
+\hline
+{\em element\+\_\+list} & the list to append the object to until it is safe \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Member Data Documentation}
+\hypertarget{classtervel_1_1util_1_1memory_1_1hp_1_1_element_abf4d1f696e870e12271bffb158ceb7c7}{}\index{tervel\+::util\+::memory\+::hp\+::\+Element@{tervel\+::util\+::memory\+::hp\+::\+Element}!Element\+List@{Element\+List}}
+\index{Element\+List@{Element\+List}!tervel\+::util\+::memory\+::hp\+::\+Element@{tervel\+::util\+::memory\+::hp\+::\+Element}}
+\subsubsection[{Element\+List}]{\setlength{\rightskip}{0pt plus 5cm}friend tervel\+::util\+::memory\+::hp\+::\+Element\+::\+Element\+List\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1util_1_1memory_1_1hp_1_1_element_abf4d1f696e870e12271bffb158ceb7c7}
+\hypertarget{classtervel_1_1util_1_1memory_1_1hp_1_1_element_a2bede6af4da0ddbd5d5e12861432d670}{}\index{tervel\+::util\+::memory\+::hp\+::\+Element@{tervel\+::util\+::memory\+::hp\+::\+Element}!List\+Manager@{List\+Manager}}
+\index{List\+Manager@{List\+Manager}!tervel\+::util\+::memory\+::hp\+::\+Element@{tervel\+::util\+::memory\+::hp\+::\+Element}}
+\subsubsection[{List\+Manager}]{\setlength{\rightskip}{0pt plus 5cm}friend tervel\+::util\+::memory\+::hp\+::\+Element\+::\+List\+Manager\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1util_1_1memory_1_1hp_1_1_element_a2bede6af4da0ddbd5d5e12861432d670}
+\hypertarget{classtervel_1_1util_1_1memory_1_1hp_1_1_element_a6a0fa344b7f35ea4db2381a54dfd6c8d}{}\index{tervel\+::util\+::memory\+::hp\+::\+Element@{tervel\+::util\+::memory\+::hp\+::\+Element}!next\+\_\+@{next\+\_\+}}
+\index{next\+\_\+@{next\+\_\+}!tervel\+::util\+::memory\+::hp\+::\+Element@{tervel\+::util\+::memory\+::hp\+::\+Element}}
+\subsubsection[{next\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Element}$\ast$ tervel\+::util\+::memory\+::hp\+::\+Element\+::next\+\_\+ \{nullptr\}\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1util_1_1memory_1_1hp_1_1_element_a6a0fa344b7f35ea4db2381a54dfd6c8d}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+tervel/util/memory/hp/\hyperlink{hp__element_8h}{hp\+\_\+element.\+h}\end{DoxyCompactItemize}

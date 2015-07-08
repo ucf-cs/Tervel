@@ -1,0 +1,114 @@
+\hypertarget{classtervel_1_1containers_1_1wf_1_1vector_1_1_vector_array}{}\section{tervel\+:\+:containers\+:\+:wf\+:\+:vector\+:\+:Vector\+Array$<$ T $>$ Class Template Reference}
+\label{classtervel_1_1containers_1_1wf_1_1vector_1_1_vector_array}\index{tervel\+::containers\+::wf\+::vector\+::\+Vector\+Array$<$ T $>$@{tervel\+::containers\+::wf\+::vector\+::\+Vector\+Array$<$ T $>$}}
+
+
+{\ttfamily \#include $<$vector\+\_\+array.\+h$>$}
+
+Inheritance diagram for tervel\+:\+:containers\+:\+:wf\+:\+:vector\+:\+:Vector\+Array$<$ T $>$\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classtervel_1_1containers_1_1wf_1_1vector_1_1_vector_array}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_vector_array_aed082fd2b69025f00bedd363c65cf83c}{Vector\+Array} ()
+\item 
+\hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_vector_array_ac685bbc4b704949073f3ac73d8c6ade7}{Vector\+Array} (size\+\_\+t capacity)
+\item 
+virtual \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_vector_array_aea78805a55da50a537dd0533df091db6}{$\sim$\+Vector\+Array} ()
+\item 
+virtual std\+::atomic$<$ T $>$ $\ast$ \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_vector_array_a1ff5c1a5a86a822cfd50b48987d1857b}{get\+\_\+spot} (const size\+\_\+t raw\+\_\+pos, const bool no\+\_\+add=false)=0
+\begin{DoxyCompactList}\small\item\em This function returns the address of the specified position. \end{DoxyCompactList}\item 
+virtual bool \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_vector_array_a46c74b691caae714a87bc93e793083f9}{is\+\_\+valid} (T value)
+\item 
+virtual bool \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_vector_array_a03f1f7712b35cb9fc7d5f9bc4a89dd96}{is\+\_\+descriptor} (T \&expected, std\+::atomic$<$ T $>$ $\ast$spot)
+\begin{DoxyCompactList}\small\item\em Overridden by Single\+Array model to detect resize. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1vector_1_1_vector_array_aed082fd2b69025f00bedd363c65cf83c}{}\index{tervel\+::containers\+::wf\+::vector\+::\+Vector\+Array@{tervel\+::containers\+::wf\+::vector\+::\+Vector\+Array}!Vector\+Array@{Vector\+Array}}
+\index{Vector\+Array@{Vector\+Array}!tervel\+::containers\+::wf\+::vector\+::\+Vector\+Array@{tervel\+::containers\+::wf\+::vector\+::\+Vector\+Array}}
+\subsubsection[{Vector\+Array()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T $>$ {\bf tervel\+::containers\+::wf\+::vector\+::\+Vector\+Array}$<$ T $>$\+::{\bf Vector\+Array} (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}}\label{classtervel_1_1containers_1_1wf_1_1vector_1_1_vector_array_aed082fd2b69025f00bedd363c65cf83c}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1vector_1_1_vector_array_ac685bbc4b704949073f3ac73d8c6ade7}{}\index{tervel\+::containers\+::wf\+::vector\+::\+Vector\+Array@{tervel\+::containers\+::wf\+::vector\+::\+Vector\+Array}!Vector\+Array@{Vector\+Array}}
+\index{Vector\+Array@{Vector\+Array}!tervel\+::containers\+::wf\+::vector\+::\+Vector\+Array@{tervel\+::containers\+::wf\+::vector\+::\+Vector\+Array}}
+\subsubsection[{Vector\+Array(size\+\_\+t capacity)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T $>$ {\bf tervel\+::containers\+::wf\+::vector\+::\+Vector\+Array}$<$ T $>$\+::{\bf Vector\+Array} (
+\begin{DoxyParamCaption}
+\item[{size\+\_\+t}]{capacity}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}}\label{classtervel_1_1containers_1_1wf_1_1vector_1_1_vector_array_ac685bbc4b704949073f3ac73d8c6ade7}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1vector_1_1_vector_array_aea78805a55da50a537dd0533df091db6}{}\index{tervel\+::containers\+::wf\+::vector\+::\+Vector\+Array@{tervel\+::containers\+::wf\+::vector\+::\+Vector\+Array}!````~Vector\+Array@{$\sim$\+Vector\+Array}}
+\index{````~Vector\+Array@{$\sim$\+Vector\+Array}!tervel\+::containers\+::wf\+::vector\+::\+Vector\+Array@{tervel\+::containers\+::wf\+::vector\+::\+Vector\+Array}}
+\subsubsection[{$\sim$\+Vector\+Array()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T $>$ virtual {\bf tervel\+::containers\+::wf\+::vector\+::\+Vector\+Array}$<$ T $>$\+::$\sim${\bf Vector\+Array} (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}\label{classtervel_1_1containers_1_1wf_1_1vector_1_1_vector_array_aea78805a55da50a537dd0533df091db6}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1vector_1_1_vector_array_a1ff5c1a5a86a822cfd50b48987d1857b}{}\index{tervel\+::containers\+::wf\+::vector\+::\+Vector\+Array@{tervel\+::containers\+::wf\+::vector\+::\+Vector\+Array}!get\+\_\+spot@{get\+\_\+spot}}
+\index{get\+\_\+spot@{get\+\_\+spot}!tervel\+::containers\+::wf\+::vector\+::\+Vector\+Array@{tervel\+::containers\+::wf\+::vector\+::\+Vector\+Array}}
+\subsubsection[{get\+\_\+spot(const size\+\_\+t raw\+\_\+pos, const bool no\+\_\+add=false)=0}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T $>$ virtual std\+::atomic$<$T$>$$\ast$ {\bf tervel\+::containers\+::wf\+::vector\+::\+Vector\+Array}$<$ T $>$\+::get\+\_\+spot (
+\begin{DoxyParamCaption}
+\item[{const size\+\_\+t}]{raw\+\_\+pos, }
+\item[{const bool}]{no\+\_\+add = {\ttfamily false}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [pure virtual]}}\label{classtervel_1_1containers_1_1wf_1_1vector_1_1_vector_array_a1ff5c1a5a86a822cfd50b48987d1857b}
+
+
+This function returns the address of the specified position. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em raw\+\_\+pos} & the position \\
+\hline
+{\em no\+\_\+add} & if true then it will not increase the vectors size \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the address of the specified position 
+\end{DoxyReturn}
+
+
+Implemented in \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_array_array_afaa4f7502ab5ae8ccbe7bb05408f600a}{tervel\+::containers\+::wf\+::vector\+::\+Array\+Array$<$ T $>$}.
+
+\hypertarget{classtervel_1_1containers_1_1wf_1_1vector_1_1_vector_array_a03f1f7712b35cb9fc7d5f9bc4a89dd96}{}\index{tervel\+::containers\+::wf\+::vector\+::\+Vector\+Array@{tervel\+::containers\+::wf\+::vector\+::\+Vector\+Array}!is\+\_\+descriptor@{is\+\_\+descriptor}}
+\index{is\+\_\+descriptor@{is\+\_\+descriptor}!tervel\+::containers\+::wf\+::vector\+::\+Vector\+Array@{tervel\+::containers\+::wf\+::vector\+::\+Vector\+Array}}
+\subsubsection[{is\+\_\+descriptor(\+T \&expected, std\+::atomic$<$ T $>$ $\ast$spot)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T $>$ virtual bool {\bf tervel\+::containers\+::wf\+::vector\+::\+Vector\+Array}$<$ T $>$\+::is\+\_\+descriptor (
+\begin{DoxyParamCaption}
+\item[{T \&}]{expected, }
+\item[{std\+::atomic$<$ T $>$ $\ast$}]{spot}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}\label{classtervel_1_1containers_1_1wf_1_1vector_1_1_vector_array_a03f1f7712b35cb9fc7d5f9bc4a89dd96}
+
+
+Overridden by Single\+Array model to detect resize. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em expected} & \mbox{[}description\mbox{]} \\
+\hline
+{\em spot} & \mbox{[}description\mbox{]} \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+\mbox{[}description\mbox{]} 
+\end{DoxyReturn}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1vector_1_1_vector_array_a46c74b691caae714a87bc93e793083f9}{}\index{tervel\+::containers\+::wf\+::vector\+::\+Vector\+Array@{tervel\+::containers\+::wf\+::vector\+::\+Vector\+Array}!is\+\_\+valid@{is\+\_\+valid}}
+\index{is\+\_\+valid@{is\+\_\+valid}!tervel\+::containers\+::wf\+::vector\+::\+Vector\+Array@{tervel\+::containers\+::wf\+::vector\+::\+Vector\+Array}}
+\subsubsection[{is\+\_\+valid(\+T value)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T $>$ virtual bool {\bf tervel\+::containers\+::wf\+::vector\+::\+Vector\+Array}$<$ T $>$\+::is\+\_\+valid (
+\begin{DoxyParamCaption}
+\item[{T}]{value}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}\label{classtervel_1_1containers_1_1wf_1_1vector_1_1_vector_array_a46c74b691caae714a87bc93e793083f9}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+tervel/containers/wf/vector/\hyperlink{vector__array_8h}{vector\+\_\+array.\+h}\end{DoxyCompactItemize}

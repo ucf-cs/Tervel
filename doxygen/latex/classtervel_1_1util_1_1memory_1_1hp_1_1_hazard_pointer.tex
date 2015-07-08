@@ -1,0 +1,344 @@
+\hypertarget{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer}{}\section{tervel\+:\+:util\+:\+:memory\+:\+:hp\+:\+:Hazard\+Pointer Class Reference}
+\label{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer}\index{tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer@{tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer}}
+
+
+This class is used to maintain the list of hazard pointed objects.  
+
+
+
+
+{\ttfamily \#include $<$hazard\+\_\+pointer.\+h$>$}
+
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+enum \hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer_a390f6869150121a40b300b955198b897}{Slot\+I\+D} \+: size\+\_\+t \{ \hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer_a390f6869150121a40b300b955198b897abd1604d15b78c5756539716cce5a8630}{Slot\+I\+D\+::\+S\+H\+O\+R\+T\+U\+S\+E} = 0, 
+\hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer_a390f6869150121a40b300b955198b897ac661068f021187b485d8673a518a8518}{Slot\+I\+D\+::\+S\+H\+O\+R\+T\+U\+S\+E2}, 
+\hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer_a390f6869150121a40b300b955198b897aea3e00804dede57f637602af17ce4388}{Slot\+I\+D\+::\+P\+R\+O\+G\+\_\+\+A\+S\+S\+U\+R}, 
+\hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer_a390f6869150121a40b300b955198b897ab1a326c06d88bf042f73d70f50197905}{Slot\+I\+D\+::\+E\+N\+D}
+ \}
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer_a0dbe6dd92b03ef114c42df84fb3a5890}{Hazard\+Pointer} (int num\+\_\+threads)
+\item 
+\hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer_a97e562a1f8ff2941576df361eb987645}{$\sim$\+Hazard\+Pointer} ()
+\item 
+void \hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer_ab01efc169d99bc39c5bd9cbc4f6dcfaa}{watch} (\hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer_a390f6869150121a40b300b955198b897}{Slot\+I\+D} slot, void $\ast$value)
+\begin{DoxyCompactList}\small\item\em This function takes a Slot\+I\+D and stores the specified value into that the threads alloted slot for that id in the hazard pointer watch list. \end{DoxyCompactList}\item 
+void \hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer_a3c17a4d058f1a85927fd9b16f05c7f35}{clear\+\_\+watch} (\hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer_a390f6869150121a40b300b955198b897}{Slot\+I\+D} slot)
+\begin{DoxyCompactList}\small\item\em This function takes a Slot\+I\+D and stores null into that the threads alloted slot for that id in the hazard pointer watch list. \end{DoxyCompactList}\item 
+bool \hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer_ab2bff99dd52c7e31dbca3a22ad56686f}{contains} (void $\ast$value)
+\begin{DoxyCompactList}\small\item\em This function returns true of the specified value is being watched. \end{DoxyCompactList}\item 
+\hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer_a5466b42f3da363b0e855d525752956ed}{D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N} (\hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer}{Hazard\+Pointer})
+\end{DoxyCompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static bool \hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer_a120e2c2ab55e065af1a94323436e194c}{watch} (\hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer_a390f6869150121a40b300b955198b897}{Slot\+I\+D} slot\+\_\+id, \hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_element}{Element} $\ast$elem, std\+::atomic$<$ void $\ast$ $>$ $\ast$address, void $\ast$expected, \hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer}{Hazard\+Pointer} $\ast$const hazard\+\_\+pointer=\hyperlink{namespacetervel_a60b23602adbb2dee6160af411b74bfd3}{tervel\+::tl\+\_\+thread\+\_\+info}-\/$>$get\+\_\+hazard\+\_\+pointer())
+\begin{DoxyCompactList}\small\item\em This method is used to achieve a hazard pointer watch on the the based descr. \end{DoxyCompactList}\item 
+static bool \hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer_a922cce0c823718c742dbe175302746e7}{watch} (\hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer_a390f6869150121a40b300b955198b897}{Slot\+I\+D} slot\+\_\+id, void $\ast$value, std\+::atomic$<$ void $\ast$ $>$ $\ast$address, void $\ast$expected, \hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer}{Hazard\+Pointer} $\ast$const hazard\+\_\+pointer=\hyperlink{namespacetervel_a60b23602adbb2dee6160af411b74bfd3}{tervel\+::tl\+\_\+thread\+\_\+info}-\/$>$get\+\_\+hazard\+\_\+pointer())
+\begin{DoxyCompactList}\small\item\em This method is used to achieve a hazard pointer watch on a memory address. \end{DoxyCompactList}\item 
+static void \hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer_a1590c02f081e2f007ccd094316d1c63c}{unwatch} (\hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer_a390f6869150121a40b300b955198b897}{Slot\+I\+D} slot\+\_\+id, \hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer}{Hazard\+Pointer} $\ast$const hazard\+\_\+pointer=\hyperlink{namespacetervel_a60b23602adbb2dee6160af411b74bfd3}{tervel\+::tl\+\_\+thread\+\_\+info}-\/$>$get\+\_\+hazard\+\_\+pointer())
+\begin{DoxyCompactList}\small\item\em This method is used to remove the hazard pointer watch. \end{DoxyCompactList}\item 
+static void \hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer_afc0d806a9da778508e03841a8cf3f680}{unwatch} (\hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer_a390f6869150121a40b300b955198b897}{Slot\+I\+D} slot\+\_\+id, \hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_element}{Element} $\ast$descr, \hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer}{Hazard\+Pointer} $\ast$const hazard\+\_\+pointer=\hyperlink{namespacetervel_a60b23602adbb2dee6160af411b74bfd3}{tervel\+::tl\+\_\+thread\+\_\+info}-\/$>$get\+\_\+hazard\+\_\+pointer())
+\begin{DoxyCompactList}\small\item\em This method is used to remove the hazard pointer watch. \end{DoxyCompactList}\item 
+static bool \hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer_a925098130bd0c94a05c5481b98a6c80e}{is\+\_\+watched} (\hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_element}{Element} $\ast$descr, \hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer}{Hazard\+Pointer} $\ast$const hazard\+\_\+pointer=\hyperlink{namespacetervel_a60b23602adbb2dee6160af411b74bfd3}{tervel\+::tl\+\_\+thread\+\_\+info}-\/$>$get\+\_\+hazard\+\_\+pointer())
+\begin{DoxyCompactList}\small\item\em This method is used to determine if a hazard pointer watch exists on a passed value. \end{DoxyCompactList}\item 
+static bool \hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer_ad168bf73b08b1cbdb5bff69f0e289433}{is\+\_\+watched} (void $\ast$value, \hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer}{Hazard\+Pointer} $\ast$const hazard\+\_\+pointer=\hyperlink{namespacetervel_a60b23602adbb2dee6160af411b74bfd3}{tervel\+::tl\+\_\+thread\+\_\+info}-\/$>$get\+\_\+hazard\+\_\+pointer())
+\begin{DoxyCompactList}\small\item\em This method is used to determine if a hazard pointer watch exists on a passed value. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_list_manager}{util\+::memory\+::hp\+::\+List\+Manager} \hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer_a1a383a62d826608c66e33718e1efa523}{hp\+\_\+list\+\_\+manager\+\_\+}
+\end{DoxyCompactItemize}
+\subsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+size\+\_\+t \hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer_ae45134e1defa344a7cf642ea3dac29e2}{get\+\_\+slot} (\hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer_a390f6869150121a40b300b955198b897}{Slot\+I\+D} id)
+\begin{DoxyCompactList}\small\item\em This function calculates a the position of a threads slot for the specified Slot\+I\+D. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+std\+::unique\+\_\+ptr$<$ std\+::atomic$<$ void $\ast$ $>$\mbox{[}$\,$\mbox{]}$>$ \hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer_abfd4c49d7092b4114b65f763d748c939}{watches\+\_\+}
+\item 
+const size\+\_\+t \hyperlink{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer_ae43516037d461753c977ec58eb545760}{num\+\_\+slots\+\_\+}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This class is used to maintain the list of hazard pointed objects. 
+
+Any value can be written into a slot, however we provide special implementation for Elements, in that we call their on\+\_\+$\ast$ functions. This allows for more expressive operations to be performed.
+
+If an individual thread requires more than one element to be hazard pointer protected at a single instance, then Slot\+I\+Ds should be added. 
+
+\subsection{Member Enumeration Documentation}
+\hypertarget{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer_a390f6869150121a40b300b955198b897}{}\index{tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer@{tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer}!Slot\+I\+D@{Slot\+I\+D}}
+\index{Slot\+I\+D@{Slot\+I\+D}!tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer@{tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer}}
+\subsubsection[{Slot\+I\+D}]{\setlength{\rightskip}{0pt plus 5cm}enum {\bf tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer\+::\+Slot\+I\+D} \+: size\+\_\+t\hspace{0.3cm}{\ttfamily [strong]}}\label{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer_a390f6869150121a40b300b955198b897}
+\begin{Desc}
+\item[Enumerator]\par
+\begin{description}
+\index{S\+H\+O\+R\+T\+U\+S\+E@{S\+H\+O\+R\+T\+U\+S\+E}!tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer@{tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer}}\index{tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer@{tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer}!S\+H\+O\+R\+T\+U\+S\+E@{S\+H\+O\+R\+T\+U\+S\+E}}\item[{\em 
+\hypertarget{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer_a390f6869150121a40b300b955198b897abd1604d15b78c5756539716cce5a8630}{}S\+H\+O\+R\+T\+U\+S\+E\label{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer_a390f6869150121a40b300b955198b897abd1604d15b78c5756539716cce5a8630}
+}]\index{S\+H\+O\+R\+T\+U\+S\+E2@{S\+H\+O\+R\+T\+U\+S\+E2}!tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer@{tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer}}\index{tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer@{tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer}!S\+H\+O\+R\+T\+U\+S\+E2@{S\+H\+O\+R\+T\+U\+S\+E2}}\item[{\em 
+\hypertarget{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer_a390f6869150121a40b300b955198b897ac661068f021187b485d8673a518a8518}{}S\+H\+O\+R\+T\+U\+S\+E2\label{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer_a390f6869150121a40b300b955198b897ac661068f021187b485d8673a518a8518}
+}]\index{P\+R\+O\+G\+\_\+\+A\+S\+S\+U\+R@{P\+R\+O\+G\+\_\+\+A\+S\+S\+U\+R}!tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer@{tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer}}\index{tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer@{tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer}!P\+R\+O\+G\+\_\+\+A\+S\+S\+U\+R@{P\+R\+O\+G\+\_\+\+A\+S\+S\+U\+R}}\item[{\em 
+\hypertarget{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer_a390f6869150121a40b300b955198b897aea3e00804dede57f637602af17ce4388}{}P\+R\+O\+G\+\_\+\+A\+S\+S\+U\+R\label{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer_a390f6869150121a40b300b955198b897aea3e00804dede57f637602af17ce4388}
+}]\index{E\+N\+D@{E\+N\+D}!tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer@{tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer}}\index{tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer@{tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer}!E\+N\+D@{E\+N\+D}}\item[{\em 
+\hypertarget{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer_a390f6869150121a40b300b955198b897ab1a326c06d88bf042f73d70f50197905}{}E\+N\+D\label{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer_a390f6869150121a40b300b955198b897ab1a326c06d88bf042f73d70f50197905}
+}]\end{description}
+\end{Desc}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer_a0dbe6dd92b03ef114c42df84fb3a5890}{}\index{tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer@{tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer}!Hazard\+Pointer@{Hazard\+Pointer}}
+\index{Hazard\+Pointer@{Hazard\+Pointer}!tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer@{tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer}}
+\subsubsection[{Hazard\+Pointer(int num\+\_\+threads)}]{\setlength{\rightskip}{0pt plus 5cm}tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer\+::\+Hazard\+Pointer (
+\begin{DoxyParamCaption}
+\item[{int}]{num\+\_\+threads}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [explicit]}}\label{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer_a0dbe6dd92b03ef114c42df84fb3a5890}
+\hypertarget{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer_a97e562a1f8ff2941576df361eb987645}{}\index{tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer@{tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer}!````~Hazard\+Pointer@{$\sim$\+Hazard\+Pointer}}
+\index{````~Hazard\+Pointer@{$\sim$\+Hazard\+Pointer}!tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer@{tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer}}
+\subsubsection[{$\sim$\+Hazard\+Pointer()}]{\setlength{\rightskip}{0pt plus 5cm}tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer\+::$\sim$\+Hazard\+Pointer (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer_a97e562a1f8ff2941576df361eb987645}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer_a3c17a4d058f1a85927fd9b16f05c7f35}{}\index{tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer@{tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer}!clear\+\_\+watch@{clear\+\_\+watch}}
+\index{clear\+\_\+watch@{clear\+\_\+watch}!tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer@{tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer}}
+\subsubsection[{clear\+\_\+watch(\+Slot\+I\+D slot)}]{\setlength{\rightskip}{0pt plus 5cm}void tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer\+::clear\+\_\+watch (
+\begin{DoxyParamCaption}
+\item[{{\bf Slot\+I\+D}}]{slot}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer_a3c17a4d058f1a85927fd9b16f05c7f35}
+
+
+This function takes a Slot\+I\+D and stores null into that the threads alloted slot for that id in the hazard pointer watch list. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em slot} & The id of the slot to watch. \\
+\hline
+\end{DoxyParams}
+\hypertarget{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer_ab2bff99dd52c7e31dbca3a22ad56686f}{}\index{tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer@{tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer}!contains@{contains}}
+\index{contains@{contains}!tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer@{tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer}}
+\subsubsection[{contains(void $\ast$value)}]{\setlength{\rightskip}{0pt plus 5cm}bool tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer\+::contains (
+\begin{DoxyParamCaption}
+\item[{void $\ast$}]{value}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer_ab2bff99dd52c7e31dbca3a22ad56686f}
+
+
+This function returns true of the specified value is being watched. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em value} & The value to check. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true is the table contains the specified value 
+\end{DoxyReturn}
+\hypertarget{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer_a5466b42f3da363b0e855d525752956ed}{}\index{tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer@{tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer}!D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N@{D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N}}
+\index{D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N@{D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N}!tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer@{tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer}}
+\subsubsection[{D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N(\+Hazard\+Pointer)}]{\setlength{\rightskip}{0pt plus 5cm}tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer\+::\+D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N (
+\begin{DoxyParamCaption}
+\item[{{\bf Hazard\+Pointer}}]{}
+\end{DoxyParamCaption}
+)}\label{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer_a5466b42f3da363b0e855d525752956ed}
+\hypertarget{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer_ae45134e1defa344a7cf642ea3dac29e2}{}\index{tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer@{tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer}!get\+\_\+slot@{get\+\_\+slot}}
+\index{get\+\_\+slot@{get\+\_\+slot}!tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer@{tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer}}
+\subsubsection[{get\+\_\+slot(\+Slot\+I\+D id)}]{\setlength{\rightskip}{0pt plus 5cm}size\+\_\+t tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer\+::get\+\_\+slot (
+\begin{DoxyParamCaption}
+\item[{{\bf Slot\+I\+D}}]{id}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}\label{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer_ae45134e1defa344a7cf642ea3dac29e2}
+
+
+This function calculates a the position of a threads slot for the specified Slot\+I\+D. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em slot} & The slot id to get the position of \\
+\hline
+\end{DoxyParams}
+\hypertarget{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer_a925098130bd0c94a05c5481b98a6c80e}{}\index{tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer@{tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer}!is\+\_\+watched@{is\+\_\+watched}}
+\index{is\+\_\+watched@{is\+\_\+watched}!tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer@{tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer}}
+\subsubsection[{is\+\_\+watched(\+Element $\ast$descr, Hazard\+Pointer $\ast$const hazard\+\_\+pointer=tervel\+::tl\+\_\+thread\+\_\+info-\/$>$get\+\_\+hazard\+\_\+pointer())}]{\setlength{\rightskip}{0pt plus 5cm}static bool tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer\+::is\+\_\+watched (
+\begin{DoxyParamCaption}
+\item[{{\bf Element} $\ast$}]{descr, }
+\item[{{\bf Hazard\+Pointer} $\ast$const}]{hazard\+\_\+pointer = {\ttfamily {\bf tervel\+::tl\+\_\+thread\+\_\+info}-\/$>$get\+\_\+hazard\+\_\+pointer()}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [static]}}\label{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer_a925098130bd0c94a05c5481b98a6c80e}
+
+
+This method is used to determine if a hazard pointer watch exists on a passed value. 
+
+If a descr is passed then it will internally call descr-\/$>$on\+\_\+is\+\_\+watched.
+
+
+\begin{DoxyParams}{Parameters}
+{\em descr} & to call on\+\_\+is\+\_\+watched on. \\
+\hline
+\end{DoxyParams}
+\hypertarget{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer_ad168bf73b08b1cbdb5bff69f0e289433}{}\index{tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer@{tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer}!is\+\_\+watched@{is\+\_\+watched}}
+\index{is\+\_\+watched@{is\+\_\+watched}!tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer@{tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer}}
+\subsubsection[{is\+\_\+watched(void $\ast$value, Hazard\+Pointer $\ast$const hazard\+\_\+pointer=tervel\+::tl\+\_\+thread\+\_\+info-\/$>$get\+\_\+hazard\+\_\+pointer())}]{\setlength{\rightskip}{0pt plus 5cm}static bool tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer\+::is\+\_\+watched (
+\begin{DoxyParamCaption}
+\item[{void $\ast$}]{value, }
+\item[{{\bf Hazard\+Pointer} $\ast$const}]{hazard\+\_\+pointer = {\ttfamily {\bf tervel\+::tl\+\_\+thread\+\_\+info}-\/$>$get\+\_\+hazard\+\_\+pointer()}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [static]}}\label{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer_ad168bf73b08b1cbdb5bff69f0e289433}
+
+
+This method is used to determine if a hazard pointer watch exists on a passed value. 
+
+If a descr is passed then it will internally call descr-\/$>$on\+\_\+is\+\_\+watched.
+
+
+\begin{DoxyParams}{Parameters}
+{\em value} & to check if watch \\
+\hline
+\end{DoxyParams}
+\hypertarget{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer_a1590c02f081e2f007ccd094316d1c63c}{}\index{tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer@{tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer}!unwatch@{unwatch}}
+\index{unwatch@{unwatch}!tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer@{tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer}}
+\subsubsection[{unwatch(\+Slot\+I\+D slot\+\_\+id, Hazard\+Pointer $\ast$const hazard\+\_\+pointer=tervel\+::tl\+\_\+thread\+\_\+info-\/$>$get\+\_\+hazard\+\_\+pointer())}]{\setlength{\rightskip}{0pt plus 5cm}static void tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer\+::unwatch (
+\begin{DoxyParamCaption}
+\item[{{\bf Slot\+I\+D}}]{slot\+\_\+id, }
+\item[{{\bf Hazard\+Pointer} $\ast$const}]{hazard\+\_\+pointer = {\ttfamily {\bf tervel\+::tl\+\_\+thread\+\_\+info}-\/$>$get\+\_\+hazard\+\_\+pointer()}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [static]}}\label{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer_a1590c02f081e2f007ccd094316d1c63c}
+
+
+This method is used to remove the hazard pointer watch. 
+
+If a descr is passed then it will internally call descr-\/$>$on\+\_\+unwatch.
+
+
+\begin{DoxyParams}{Parameters}
+{\em slot} & the slot to remove the watch \\
+\hline
+\end{DoxyParams}
+\hypertarget{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer_afc0d806a9da778508e03841a8cf3f680}{}\index{tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer@{tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer}!unwatch@{unwatch}}
+\index{unwatch@{unwatch}!tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer@{tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer}}
+\subsubsection[{unwatch(\+Slot\+I\+D slot\+\_\+id, Element $\ast$descr, Hazard\+Pointer $\ast$const hazard\+\_\+pointer=tervel\+::tl\+\_\+thread\+\_\+info-\/$>$get\+\_\+hazard\+\_\+pointer())}]{\setlength{\rightskip}{0pt plus 5cm}static void tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer\+::unwatch (
+\begin{DoxyParamCaption}
+\item[{{\bf Slot\+I\+D}}]{slot\+\_\+id, }
+\item[{{\bf Element} $\ast$}]{descr, }
+\item[{{\bf Hazard\+Pointer} $\ast$const}]{hazard\+\_\+pointer = {\ttfamily {\bf tervel\+::tl\+\_\+thread\+\_\+info}-\/$>$get\+\_\+hazard\+\_\+pointer()}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [static]}}\label{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer_afc0d806a9da778508e03841a8cf3f680}
+
+
+This method is used to remove the hazard pointer watch. 
+
+If a descr is passed then it will internally call descr-\/$>$on\+\_\+unwatch.
+
+
+\begin{DoxyParams}{Parameters}
+{\em slot} & the slot to remove the watch \\
+\hline
+{\em descr} & to call on\+\_\+unwatch on. \\
+\hline
+\end{DoxyParams}
+\hypertarget{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer_a120e2c2ab55e065af1a94323436e194c}{}\index{tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer@{tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer}!watch@{watch}}
+\index{watch@{watch}!tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer@{tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer}}
+\subsubsection[{watch(\+Slot\+I\+D slot\+\_\+id, Element $\ast$elem, std\+::atomic$<$ void $\ast$ $>$ $\ast$address, void $\ast$expected, Hazard\+Pointer $\ast$const hazard\+\_\+pointer=tervel\+::tl\+\_\+thread\+\_\+info-\/$>$get\+\_\+hazard\+\_\+pointer())}]{\setlength{\rightskip}{0pt plus 5cm}static bool tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer\+::watch (
+\begin{DoxyParamCaption}
+\item[{{\bf Slot\+I\+D}}]{slot\+\_\+id, }
+\item[{{\bf Element} $\ast$}]{elem, }
+\item[{std\+::atomic$<$ void $\ast$ $>$ $\ast$}]{address, }
+\item[{void $\ast$}]{expected, }
+\item[{{\bf Hazard\+Pointer} $\ast$const}]{hazard\+\_\+pointer = {\ttfamily {\bf tervel\+::tl\+\_\+thread\+\_\+info}-\/$>$get\+\_\+hazard\+\_\+pointer()}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [static]}}\label{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer_a120e2c2ab55e065af1a94323436e194c}
+
+
+This method is used to achieve a hazard pointer watch on the the based descr. 
+
+Internally it will call the descriptors on\+\_\+watch function.
+
+If after writing descr the object is still at the address (indicated by $\ast$a == value), it will call on\+\_\+watch. If that returns true then it will return true. Otherwise it removes the hazard pointer watch and returns false
+
+
+\begin{DoxyParams}{Parameters}
+{\em slot} & The position to place the descr value in the watch table. \\
+\hline
+{\em descr} & The descr that is to be watched. \\
+\hline
+{\em address} & The address to check \\
+\hline
+{\em expected} & The value which is to be expected at the address \\
+\hline
+\end{DoxyParams}
+\hypertarget{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer_a922cce0c823718c742dbe175302746e7}{}\index{tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer@{tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer}!watch@{watch}}
+\index{watch@{watch}!tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer@{tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer}}
+\subsubsection[{watch(\+Slot\+I\+D slot\+\_\+id, void $\ast$value, std\+::atomic$<$ void $\ast$ $>$ $\ast$address, void $\ast$expected, Hazard\+Pointer $\ast$const hazard\+\_\+pointer=tervel\+::tl\+\_\+thread\+\_\+info-\/$>$get\+\_\+hazard\+\_\+pointer())}]{\setlength{\rightskip}{0pt plus 5cm}static bool tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer\+::watch (
+\begin{DoxyParamCaption}
+\item[{{\bf Slot\+I\+D}}]{slot\+\_\+id, }
+\item[{void $\ast$}]{value, }
+\item[{std\+::atomic$<$ void $\ast$ $>$ $\ast$}]{address, }
+\item[{void $\ast$}]{expected, }
+\item[{{\bf Hazard\+Pointer} $\ast$const}]{hazard\+\_\+pointer = {\ttfamily {\bf tervel\+::tl\+\_\+thread\+\_\+info}-\/$>$get\+\_\+hazard\+\_\+pointer()}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [static]}}\label{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer_a922cce0c823718c742dbe175302746e7}
+
+
+This method is used to achieve a hazard pointer watch on a memory address. 
+
+If after writing the value, it is still at the address (indicated by $\ast$a == value), will return true. Otherwise it removes the hazard pointer watch and returns false
+
+
+\begin{DoxyParams}{Parameters}
+{\em slot} & The position to place the value in the watch table. \\
+\hline
+{\em value} & The value that is to be watched. \\
+\hline
+{\em address} & The address to check \\
+\hline
+{\em expected} & The value which is to be expected at the address \\
+\hline
+\end{DoxyParams}
+\hypertarget{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer_ab01efc169d99bc39c5bd9cbc4f6dcfaa}{}\index{tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer@{tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer}!watch@{watch}}
+\index{watch@{watch}!tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer@{tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer}}
+\subsubsection[{watch(\+Slot\+I\+D slot, void $\ast$value)}]{\setlength{\rightskip}{0pt plus 5cm}void tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer\+::watch (
+\begin{DoxyParamCaption}
+\item[{{\bf Slot\+I\+D}}]{slot, }
+\item[{void $\ast$}]{value}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer_ab01efc169d99bc39c5bd9cbc4f6dcfaa}
+
+
+This function takes a Slot\+I\+D and stores the specified value into that the threads alloted slot for that id in the hazard pointer watch list. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em slot} & The id of the slot to watch. \\
+\hline
+{\em value} & The value to watch \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Member Data Documentation}
+\hypertarget{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer_a1a383a62d826608c66e33718e1efa523}{}\index{tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer@{tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer}!hp\+\_\+list\+\_\+manager\+\_\+@{hp\+\_\+list\+\_\+manager\+\_\+}}
+\index{hp\+\_\+list\+\_\+manager\+\_\+@{hp\+\_\+list\+\_\+manager\+\_\+}!tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer@{tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer}}
+\subsubsection[{hp\+\_\+list\+\_\+manager\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}{\bf util\+::memory\+::hp\+::\+List\+Manager} tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer\+::hp\+\_\+list\+\_\+manager\+\_\+}\label{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer_a1a383a62d826608c66e33718e1efa523}
+\hypertarget{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer_ae43516037d461753c977ec58eb545760}{}\index{tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer@{tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer}!num\+\_\+slots\+\_\+@{num\+\_\+slots\+\_\+}}
+\index{num\+\_\+slots\+\_\+@{num\+\_\+slots\+\_\+}!tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer@{tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer}}
+\subsubsection[{num\+\_\+slots\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}const size\+\_\+t tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer\+::num\+\_\+slots\+\_\+\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer_ae43516037d461753c977ec58eb545760}
+\hypertarget{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer_abfd4c49d7092b4114b65f763d748c939}{}\index{tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer@{tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer}!watches\+\_\+@{watches\+\_\+}}
+\index{watches\+\_\+@{watches\+\_\+}!tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer@{tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer}}
+\subsubsection[{watches\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}std\+::unique\+\_\+ptr$<$std\+::atomic$<$void $\ast$$>$\mbox{[}$\,$\mbox{]}$>$ tervel\+::util\+::memory\+::hp\+::\+Hazard\+Pointer\+::watches\+\_\+\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1util_1_1memory_1_1hp_1_1_hazard_pointer_abfd4c49d7092b4114b65f763d748c939}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+tervel/util/memory/hp/\hyperlink{hazard__pointer_8h}{hazard\+\_\+pointer.\+h}\end{DoxyCompactItemize}

@@ -1,0 +1,150 @@
+\hypertarget{vector_2test_object_8h}{}\section{tervel/tests/vector/test\+Object.h File Reference}
+\label{vector_2test_object_8h}\index{tervel/tests/vector/test\+Object.\+h@{tervel/tests/vector/test\+Object.\+h}}
+{\ttfamily \#include $<$climits$>$}\\*
+{\ttfamily \#include $<$assert.\+h$>$}\\*
+{\ttfamily \#include $<$atomic$>$}\\*
+{\ttfamily \#include $<$random$>$}\\*
+{\ttfamily \#include $<$string$>$}\\*
+{\ttfamily \#include $<$cstdint$>$}\\*
+{\ttfamily \#include $<$stdio.\+h$>$}\\*
+{\ttfamily \#include $<$iostream$>$}\\*
+{\ttfamily \#include $<$gflags/gflags.\+h$>$}\\*
+{\ttfamily \#include $<$tervel/tests/vector/container\+\_\+api.\+h$>$}\\*
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \hyperlink{class_test_object}{Test\+Object}
+\end{DoxyCompactItemize}
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{vector_2test_object_8h_ad024fc3e2980c9fff2efb715898272f1}{M\+A\+C\+R\+O\+\_\+\+A\+D\+D\+\_\+\+R\+A\+T\+E}(Tervel\+Op\+Name)
+\end{DoxyCompactItemize}
+\subsection*{Typedefs}
+\begin{DoxyCompactItemize}
+\item 
+typedef uint64\+\_\+t \hyperlink{vector_2test_object_8h_ad777bf08d8e2b01df17ba5e3c51ae11f}{Value}
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{vector_2test_object_8h_aecacabe93c2329b11aaa25957a40b965}{D\+E\+F\+I\+N\+E\+\_\+int32} (capacity, 64,\char`\"{}The initial capacity of the hash map\char`\"{})
+\begin{DoxyCompactList}\small\item\em Change this when including a new data structure. \end{DoxyCompactList}\item 
+\hyperlink{vector_2test_object_8h_ad461564acd0eb23a0e5e030557df0149}{D\+E\+F\+I\+N\+E\+\_\+int32} (cas\+\_\+rate, 20,\char`\"{}The chance (0-\/100) of the C\+A\+S operation being called.\char`\"{})
+\item 
+\hyperlink{vector_2test_object_8h_aa2fa690662740bcf41ba5fcff7fec407}{D\+E\+F\+I\+N\+E\+\_\+int32} (at\+\_\+rate, 20,\char`\"{}The chance (0-\/100) of the at operation being called.\char`\"{})
+\item 
+\hyperlink{vector_2test_object_8h_aa261ad2e129b32f3e7ec9144c1c2fc72}{D\+E\+F\+I\+N\+E\+\_\+int32} (push\+Back\+\_\+rate, 20,\char`\"{}The chance (0-\/100) of push\+Back operation being called.\char`\"{})
+\item 
+\hyperlink{vector_2test_object_8h_afc737a74ab88aab3104edbffc1f4e283}{D\+E\+F\+I\+N\+E\+\_\+int32} (pop\+Back\+\_\+rate, 20,\char`\"{}The chance (0-\/100) of pop\+Back operation being called.\char`\"{})
+\item 
+\hyperlink{vector_2test_object_8h_a04be4bbf4163ae1dca86dcc188f3e062}{D\+E\+F\+I\+N\+E\+\_\+int32} (size\+\_\+rate, 20,\char`\"{}The chance (0-\/100) of size operation being called.\char`\"{})
+\item 
+\hyperlink{vector_2test_object_8h_a96c3a19b14115217bfd3493b1488ba31}{D\+E\+F\+I\+N\+E\+\_\+int32} (num\+\_\+threads, 1,\char`\"{}The number of executing threads.\char`\"{})
+\begin{DoxyCompactList}\small\item\em Arguments for Tester. \end{DoxyCompactList}\item 
+\hyperlink{vector_2test_object_8h_a9478eb45e3743162c827d57e162c93bb}{D\+E\+F\+I\+N\+E\+\_\+int32} (execution\+\_\+time, 5,\char`\"{}The amount of time to run the tests\char`\"{})
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\hypertarget{vector_2test_object_8h_ad024fc3e2980c9fff2efb715898272f1}{}\index{vector/test\+Object.\+h@{vector/test\+Object.\+h}!M\+A\+C\+R\+O\+\_\+\+A\+D\+D\+\_\+\+R\+A\+T\+E@{M\+A\+C\+R\+O\+\_\+\+A\+D\+D\+\_\+\+R\+A\+T\+E}}
+\index{M\+A\+C\+R\+O\+\_\+\+A\+D\+D\+\_\+\+R\+A\+T\+E@{M\+A\+C\+R\+O\+\_\+\+A\+D\+D\+\_\+\+R\+A\+T\+E}!vector/test\+Object.\+h@{vector/test\+Object.\+h}}
+\subsubsection[{M\+A\+C\+R\+O\+\_\+\+A\+D\+D\+\_\+\+R\+A\+T\+E}]{\setlength{\rightskip}{0pt plus 5cm}\#define M\+A\+C\+R\+O\+\_\+\+A\+D\+D\+\_\+\+R\+A\+T\+E(
+\begin{DoxyParamCaption}
+\item[{}]{Tervel\+Op\+Name}
+\end{DoxyParamCaption}
+)}\label{vector_2test_object_8h_ad024fc3e2980c9fff2efb715898272f1}
+{\bfseries Value\+:}
+\begin{DoxyCode}
+func\_name\_[op\_codes::TervelOpName] = \textcolor{stringliteral}{""} #TervelOpName ; \(\backslash\)
+      func\_call\_rate\_[op\_codes::TervelOpName] = FLAGS\_##TervelOpName##\_rate;
+\end{DoxyCode}
+
+
+\subsection{Typedef Documentation}
+\hypertarget{vector_2test_object_8h_ad777bf08d8e2b01df17ba5e3c51ae11f}{}\index{vector/test\+Object.\+h@{vector/test\+Object.\+h}!Value@{Value}}
+\index{Value@{Value}!vector/test\+Object.\+h@{vector/test\+Object.\+h}}
+\subsubsection[{Value}]{\setlength{\rightskip}{0pt plus 5cm}typedef uint64\+\_\+t {\bf Value}}\label{vector_2test_object_8h_ad777bf08d8e2b01df17ba5e3c51ae11f}
+
+
+\subsection{Function Documentation}
+\hypertarget{vector_2test_object_8h_aecacabe93c2329b11aaa25957a40b965}{}\index{vector/test\+Object.\+h@{vector/test\+Object.\+h}!D\+E\+F\+I\+N\+E\+\_\+int32@{D\+E\+F\+I\+N\+E\+\_\+int32}}
+\index{D\+E\+F\+I\+N\+E\+\_\+int32@{D\+E\+F\+I\+N\+E\+\_\+int32}!vector/test\+Object.\+h@{vector/test\+Object.\+h}}
+\subsubsection[{D\+E\+F\+I\+N\+E\+\_\+int32(capacity, 64,""The initial capacity of the hash map"")}]{\setlength{\rightskip}{0pt plus 5cm}D\+E\+F\+I\+N\+E\+\_\+int32 (
+\begin{DoxyParamCaption}
+\item[{capacity}]{, }
+\item[{64}]{, }
+\item[{\char`\"{}The initial capacity of the hash map\char`\"{}}]{}
+\end{DoxyParamCaption}
+)}\label{vector_2test_object_8h_aecacabe93c2329b11aaa25957a40b965}
+
+
+Change this when including a new data structure. 
+
+Change these when adapting to a new data structures \hypertarget{vector_2test_object_8h_ad461564acd0eb23a0e5e030557df0149}{}\index{vector/test\+Object.\+h@{vector/test\+Object.\+h}!D\+E\+F\+I\+N\+E\+\_\+int32@{D\+E\+F\+I\+N\+E\+\_\+int32}}
+\index{D\+E\+F\+I\+N\+E\+\_\+int32@{D\+E\+F\+I\+N\+E\+\_\+int32}!vector/test\+Object.\+h@{vector/test\+Object.\+h}}
+\subsubsection[{D\+E\+F\+I\+N\+E\+\_\+int32(cas\+\_\+rate, 20,""The chance (0-\/100) of the C\+A\+S operation being called."")}]{\setlength{\rightskip}{0pt plus 5cm}D\+E\+F\+I\+N\+E\+\_\+int32 (
+\begin{DoxyParamCaption}
+\item[{cas\+\_\+rate}]{, }
+\item[{20}]{, }
+\item[{\char`\"{}The chance (0-\/100) of the C\+A\+S operation being called.\char`\"{}}]{}
+\end{DoxyParamCaption}
+)}\label{vector_2test_object_8h_ad461564acd0eb23a0e5e030557df0149}
+\hypertarget{vector_2test_object_8h_aa2fa690662740bcf41ba5fcff7fec407}{}\index{vector/test\+Object.\+h@{vector/test\+Object.\+h}!D\+E\+F\+I\+N\+E\+\_\+int32@{D\+E\+F\+I\+N\+E\+\_\+int32}}
+\index{D\+E\+F\+I\+N\+E\+\_\+int32@{D\+E\+F\+I\+N\+E\+\_\+int32}!vector/test\+Object.\+h@{vector/test\+Object.\+h}}
+\subsubsection[{D\+E\+F\+I\+N\+E\+\_\+int32(at\+\_\+rate, 20,""The chance (0-\/100) of the at operation being called."")}]{\setlength{\rightskip}{0pt plus 5cm}D\+E\+F\+I\+N\+E\+\_\+int32 (
+\begin{DoxyParamCaption}
+\item[{at\+\_\+rate}]{, }
+\item[{20}]{, }
+\item[{\char`\"{}The chance (0-\/100) of the at operation being called.\char`\"{}}]{}
+\end{DoxyParamCaption}
+)}\label{vector_2test_object_8h_aa2fa690662740bcf41ba5fcff7fec407}
+\hypertarget{vector_2test_object_8h_aa261ad2e129b32f3e7ec9144c1c2fc72}{}\index{vector/test\+Object.\+h@{vector/test\+Object.\+h}!D\+E\+F\+I\+N\+E\+\_\+int32@{D\+E\+F\+I\+N\+E\+\_\+int32}}
+\index{D\+E\+F\+I\+N\+E\+\_\+int32@{D\+E\+F\+I\+N\+E\+\_\+int32}!vector/test\+Object.\+h@{vector/test\+Object.\+h}}
+\subsubsection[{D\+E\+F\+I\+N\+E\+\_\+int32(push\+Back\+\_\+rate, 20,""The chance (0-\/100) of push\+Back operation being called."")}]{\setlength{\rightskip}{0pt plus 5cm}D\+E\+F\+I\+N\+E\+\_\+int32 (
+\begin{DoxyParamCaption}
+\item[{push\+Back\+\_\+rate}]{, }
+\item[{20}]{, }
+\item[{\char`\"{}The chance (0-\/100) of push\+Back operation being called.\char`\"{}}]{}
+\end{DoxyParamCaption}
+)}\label{vector_2test_object_8h_aa261ad2e129b32f3e7ec9144c1c2fc72}
+\hypertarget{vector_2test_object_8h_afc737a74ab88aab3104edbffc1f4e283}{}\index{vector/test\+Object.\+h@{vector/test\+Object.\+h}!D\+E\+F\+I\+N\+E\+\_\+int32@{D\+E\+F\+I\+N\+E\+\_\+int32}}
+\index{D\+E\+F\+I\+N\+E\+\_\+int32@{D\+E\+F\+I\+N\+E\+\_\+int32}!vector/test\+Object.\+h@{vector/test\+Object.\+h}}
+\subsubsection[{D\+E\+F\+I\+N\+E\+\_\+int32(pop\+Back\+\_\+rate, 20,""The chance (0-\/100) of pop\+Back operation being called."")}]{\setlength{\rightskip}{0pt plus 5cm}D\+E\+F\+I\+N\+E\+\_\+int32 (
+\begin{DoxyParamCaption}
+\item[{pop\+Back\+\_\+rate}]{, }
+\item[{20}]{, }
+\item[{\char`\"{}The chance (0-\/100) of pop\+Back operation being called.\char`\"{}}]{}
+\end{DoxyParamCaption}
+)}\label{vector_2test_object_8h_afc737a74ab88aab3104edbffc1f4e283}
+\hypertarget{vector_2test_object_8h_a04be4bbf4163ae1dca86dcc188f3e062}{}\index{vector/test\+Object.\+h@{vector/test\+Object.\+h}!D\+E\+F\+I\+N\+E\+\_\+int32@{D\+E\+F\+I\+N\+E\+\_\+int32}}
+\index{D\+E\+F\+I\+N\+E\+\_\+int32@{D\+E\+F\+I\+N\+E\+\_\+int32}!vector/test\+Object.\+h@{vector/test\+Object.\+h}}
+\subsubsection[{D\+E\+F\+I\+N\+E\+\_\+int32(size\+\_\+rate, 20,""The chance (0-\/100) of size operation being called."")}]{\setlength{\rightskip}{0pt plus 5cm}D\+E\+F\+I\+N\+E\+\_\+int32 (
+\begin{DoxyParamCaption}
+\item[{size\+\_\+rate}]{, }
+\item[{20}]{, }
+\item[{\char`\"{}The chance (0-\/100) of size operation being called.\char`\"{}}]{}
+\end{DoxyParamCaption}
+)}\label{vector_2test_object_8h_a04be4bbf4163ae1dca86dcc188f3e062}
+\hypertarget{vector_2test_object_8h_a96c3a19b14115217bfd3493b1488ba31}{}\index{vector/test\+Object.\+h@{vector/test\+Object.\+h}!D\+E\+F\+I\+N\+E\+\_\+int32@{D\+E\+F\+I\+N\+E\+\_\+int32}}
+\index{D\+E\+F\+I\+N\+E\+\_\+int32@{D\+E\+F\+I\+N\+E\+\_\+int32}!vector/test\+Object.\+h@{vector/test\+Object.\+h}}
+\subsubsection[{D\+E\+F\+I\+N\+E\+\_\+int32(num\+\_\+threads, 1,""The number of executing threads."")}]{\setlength{\rightskip}{0pt plus 5cm}D\+E\+F\+I\+N\+E\+\_\+int32 (
+\begin{DoxyParamCaption}
+\item[{num\+\_\+threads}]{, }
+\item[{1}]{, }
+\item[{\char`\"{}The number of executing threads.\char`\"{}}]{}
+\end{DoxyParamCaption}
+)}\label{vector_2test_object_8h_a96c3a19b14115217bfd3493b1488ba31}
+
+
+Arguments for Tester. 
+
+\hypertarget{vector_2test_object_8h_a9478eb45e3743162c827d57e162c93bb}{}\index{vector/test\+Object.\+h@{vector/test\+Object.\+h}!D\+E\+F\+I\+N\+E\+\_\+int32@{D\+E\+F\+I\+N\+E\+\_\+int32}}
+\index{D\+E\+F\+I\+N\+E\+\_\+int32@{D\+E\+F\+I\+N\+E\+\_\+int32}!vector/test\+Object.\+h@{vector/test\+Object.\+h}}
+\subsubsection[{D\+E\+F\+I\+N\+E\+\_\+int32(execution\+\_\+time, 5,""The amount of time to run the tests"")}]{\setlength{\rightskip}{0pt plus 5cm}D\+E\+F\+I\+N\+E\+\_\+int32 (
+\begin{DoxyParamCaption}
+\item[{execution\+\_\+time}]{, }
+\item[{5}]{, }
+\item[{\char`\"{}The amount of time to run the tests\char`\"{}}]{}
+\end{DoxyParamCaption}
+)}\label{vector_2test_object_8h_a9478eb45e3743162c827d57e162c93bb}

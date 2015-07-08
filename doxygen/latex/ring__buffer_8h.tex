@@ -1,0 +1,36 @@
+\hypertarget{ring__buffer_8h}{}\section{tervel/containers/wf/ring-\/buffer/ring\+\_\+buffer.h File Reference}
+\label{ring__buffer_8h}\index{tervel/containers/wf/ring-\/buffer/ring\+\_\+buffer.\+h@{tervel/containers/wf/ring-\/buffer/ring\+\_\+buffer.\+h}}
+{\ttfamily \#include $<$atomic$>$}\\*
+{\ttfamily \#include $<$assert.\+h$>$}\\*
+{\ttfamily \#include $<$cstddef$>$}\\*
+{\ttfamily \#include $<$memory$>$}\\*
+{\ttfamily \#include $<$thread$>$}\\*
+{\ttfamily \#include $<$string$>$}\\*
+{\ttfamily \#include $<$tervel/util/info.\+h$>$}\\*
+{\ttfamily \#include $<$tervel/util/util.\+h$>$}\\*
+{\ttfamily \#include $<$tervel/util/progress\+\_\+assurance.\+h$>$}\\*
+{\ttfamily \#include $<$tervel/util/memory/hp/hazard\+\_\+pointer.\+h$>$}\\*
+{\ttfamily \#include $<$tervel/containers/wf/ring-\/buffer/ring\+\_\+buffer\+\_\+op.\+h$>$}\\*
+{\ttfamily \#include $<$tervel/containers/wf/ring-\/buffer/helper.\+h$>$}\\*
+{\ttfamily \#include $<$tervel/containers/wf/ring-\/buffer/enqueue\+\_\+op.\+h$>$}\\*
+{\ttfamily \#include $<$tervel/containers/wf/ring-\/buffer/dequeue\+\_\+op.\+h$>$}\\*
+{\ttfamily \#include $<$tervel/containers/wf/ring-\/buffer/helper\+\_\+imp.\+h$>$}\\*
+{\ttfamily \#include $<$tervel/containers/wf/ring-\/buffer/enqueue\+\_\+op\+\_\+imp.\+h$>$}\\*
+{\ttfamily \#include $<$tervel/containers/wf/ring-\/buffer/dequeue\+\_\+op\+\_\+imp.\+h$>$}\\*
+{\ttfamily \#include $<$tervel/containers/wf/ring-\/buffer/ring\+\_\+buffer\+\_\+imp.\+h$>$}\\*
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \hyperlink{classtervel_1_1containers_1_1wf_1_1_ring_buffer}{tervel\+::containers\+::wf\+::\+Ring\+Buffer$<$ T $>$}
+\begin{DoxyCompactList}\small\item\em This is a non-\/blocking F\+I\+F\+O ring buffer design that was made wait-\/free by applying a progress assurance framework to it. \end{DoxyCompactList}\item 
+class \hyperlink{classtervel_1_1containers_1_1wf_1_1_ring_buffer_1_1_value}{tervel\+::containers\+::wf\+::\+Ring\+Buffer$<$ T $>$\+::\+Value}
+\begin{DoxyCompactList}\small\item\em \hyperlink{classtervel_1_1containers_1_1wf_1_1_ring_buffer}{Ring\+Buffer} value class, values stored in the class must extend it. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Namespaces}
+\begin{DoxyCompactItemize}
+\item 
+ \hyperlink{namespacetervel}{tervel}
+\begin{DoxyCompactList}\small\item\em T\+O\+D\+O(steven)\+: \end{DoxyCompactList}\item 
+ \hyperlink{namespacetervel_1_1containers}{tervel\+::containers}
+\item 
+ \hyperlink{namespacetervel_1_1containers_1_1wf}{tervel\+::containers\+::wf}
+\end{DoxyCompactItemize}

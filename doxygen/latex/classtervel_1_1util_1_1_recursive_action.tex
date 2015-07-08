@@ -1,0 +1,115 @@
+\hypertarget{classtervel_1_1util_1_1_recursive_action}{}\section{tervel\+:\+:util\+:\+:Recursive\+Action Class Reference}
+\label{classtervel_1_1util_1_1_recursive_action}\index{tervel\+::util\+::\+Recursive\+Action@{tervel\+::util\+::\+Recursive\+Action}}
+
+
+Helper class for R\+A\+I\+I management of recursive helping of threads.  
+
+
+
+
+{\ttfamily \#include $<$recursive\+\_\+action.\+h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classtervel_1_1util_1_1_recursive_action_a9b933d52b081bc2bec138f44e035cfb4}{Recursive\+Action} ()
+\item 
+\hyperlink{classtervel_1_1util_1_1_recursive_action_aecf790a95c56d002498a74e7bf064ed4}{$\sim$\+Recursive\+Action} ()
+\end{DoxyCompactItemize}
+\subsection*{Static Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+static bool \hyperlink{classtervel_1_1util_1_1_recursive_action_a04517ab2addf5809dc3a3ac305043e59}{recursive\+\_\+return} (bool change=false, bool value=false)
+\item 
+static void \hyperlink{classtervel_1_1util_1_1_recursive_action_ad03949b4e1aad8fb562db5b3ea56633b}{set\+\_\+recursive\+\_\+return} ()
+\item 
+static void \hyperlink{classtervel_1_1util_1_1_recursive_action_aff53861114a7b16bad441839a1247f6f}{clear\+\_\+recursive\+\_\+return} ()
+\item 
+static size\+\_\+t \hyperlink{classtervel_1_1util_1_1_recursive_action_a003b6df6a071e6299e27ac16f8d0c8f2}{recursive\+\_\+depth} (size\+\_\+t i=0)
+\begin{DoxyCompactList}\small\item\em Adds the passed value and returns the pre-\/incremented value. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classtervel_1_1util_1_1_recursive_action_a309845abdb6e9dbbb31568c81257ed86}{D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N} (\hyperlink{classtervel_1_1util_1_1_recursive_action}{Recursive\+Action})
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Helper class for R\+A\+I\+I management of recursive helping of threads. 
+
+Lifetime of this object handles the increment and decrement of the {\ttfamily recursive\+\_\+depth} of the given Thread\+Info object and sets the {\ttfamily recursive\+\_\+return} if needed. 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classtervel_1_1util_1_1_recursive_action_a9b933d52b081bc2bec138f44e035cfb4}{}\index{tervel\+::util\+::\+Recursive\+Action@{tervel\+::util\+::\+Recursive\+Action}!Recursive\+Action@{Recursive\+Action}}
+\index{Recursive\+Action@{Recursive\+Action}!tervel\+::util\+::\+Recursive\+Action@{tervel\+::util\+::\+Recursive\+Action}}
+\subsubsection[{Recursive\+Action()}]{\setlength{\rightskip}{0pt plus 5cm}tervel\+::util\+::\+Recursive\+Action\+::\+Recursive\+Action (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1util_1_1_recursive_action_a9b933d52b081bc2bec138f44e035cfb4}
+\hypertarget{classtervel_1_1util_1_1_recursive_action_aecf790a95c56d002498a74e7bf064ed4}{}\index{tervel\+::util\+::\+Recursive\+Action@{tervel\+::util\+::\+Recursive\+Action}!````~Recursive\+Action@{$\sim$\+Recursive\+Action}}
+\index{````~Recursive\+Action@{$\sim$\+Recursive\+Action}!tervel\+::util\+::\+Recursive\+Action@{tervel\+::util\+::\+Recursive\+Action}}
+\subsubsection[{$\sim$\+Recursive\+Action()}]{\setlength{\rightskip}{0pt plus 5cm}tervel\+::util\+::\+Recursive\+Action\+::$\sim$\+Recursive\+Action (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1util_1_1_recursive_action_aecf790a95c56d002498a74e7bf064ed4}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classtervel_1_1util_1_1_recursive_action_aff53861114a7b16bad441839a1247f6f}{}\index{tervel\+::util\+::\+Recursive\+Action@{tervel\+::util\+::\+Recursive\+Action}!clear\+\_\+recursive\+\_\+return@{clear\+\_\+recursive\+\_\+return}}
+\index{clear\+\_\+recursive\+\_\+return@{clear\+\_\+recursive\+\_\+return}!tervel\+::util\+::\+Recursive\+Action@{tervel\+::util\+::\+Recursive\+Action}}
+\subsubsection[{clear\+\_\+recursive\+\_\+return()}]{\setlength{\rightskip}{0pt plus 5cm}static void tervel\+::util\+::\+Recursive\+Action\+::clear\+\_\+recursive\+\_\+return (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}\label{classtervel_1_1util_1_1_recursive_action_aff53861114a7b16bad441839a1247f6f}
+\hypertarget{classtervel_1_1util_1_1_recursive_action_a309845abdb6e9dbbb31568c81257ed86}{}\index{tervel\+::util\+::\+Recursive\+Action@{tervel\+::util\+::\+Recursive\+Action}!D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N@{D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N}}
+\index{D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N@{D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N}!tervel\+::util\+::\+Recursive\+Action@{tervel\+::util\+::\+Recursive\+Action}}
+\subsubsection[{D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N(\+Recursive\+Action)}]{\setlength{\rightskip}{0pt plus 5cm}tervel\+::util\+::\+Recursive\+Action\+::\+D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N (
+\begin{DoxyParamCaption}
+\item[{{\bf Recursive\+Action}}]{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1util_1_1_recursive_action_a309845abdb6e9dbbb31568c81257ed86}
+\hypertarget{classtervel_1_1util_1_1_recursive_action_a003b6df6a071e6299e27ac16f8d0c8f2}{}\index{tervel\+::util\+::\+Recursive\+Action@{tervel\+::util\+::\+Recursive\+Action}!recursive\+\_\+depth@{recursive\+\_\+depth}}
+\index{recursive\+\_\+depth@{recursive\+\_\+depth}!tervel\+::util\+::\+Recursive\+Action@{tervel\+::util\+::\+Recursive\+Action}}
+\subsubsection[{recursive\+\_\+depth(size\+\_\+t i=0)}]{\setlength{\rightskip}{0pt plus 5cm}static size\+\_\+t tervel\+::util\+::\+Recursive\+Action\+::recursive\+\_\+depth (
+\begin{DoxyParamCaption}
+\item[{size\+\_\+t}]{i = {\ttfamily 0}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [static]}}\label{classtervel_1_1util_1_1_recursive_action_a003b6df6a071e6299e27ac16f8d0c8f2}
+
+
+Adds the passed value and returns the pre-\/incremented value. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em i} & value to increment by \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the value before the increment 
+\end{DoxyReturn}
+\hypertarget{classtervel_1_1util_1_1_recursive_action_a04517ab2addf5809dc3a3ac305043e59}{}\index{tervel\+::util\+::\+Recursive\+Action@{tervel\+::util\+::\+Recursive\+Action}!recursive\+\_\+return@{recursive\+\_\+return}}
+\index{recursive\+\_\+return@{recursive\+\_\+return}!tervel\+::util\+::\+Recursive\+Action@{tervel\+::util\+::\+Recursive\+Action}}
+\subsubsection[{recursive\+\_\+return(bool change=false, bool value=false)}]{\setlength{\rightskip}{0pt plus 5cm}static bool tervel\+::util\+::\+Recursive\+Action\+::recursive\+\_\+return (
+\begin{DoxyParamCaption}
+\item[{bool}]{change = {\ttfamily false}, }
+\item[{bool}]{value = {\ttfamily false}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [static]}}\label{classtervel_1_1util_1_1_recursive_action_a04517ab2addf5809dc3a3ac305043e59}
+\begin{DoxyReturn}{Returns}
+whether or not the thread is performing a recursive return. 
+\end{DoxyReturn}
+\hypertarget{classtervel_1_1util_1_1_recursive_action_ad03949b4e1aad8fb562db5b3ea56633b}{}\index{tervel\+::util\+::\+Recursive\+Action@{tervel\+::util\+::\+Recursive\+Action}!set\+\_\+recursive\+\_\+return@{set\+\_\+recursive\+\_\+return}}
+\index{set\+\_\+recursive\+\_\+return@{set\+\_\+recursive\+\_\+return}!tervel\+::util\+::\+Recursive\+Action@{tervel\+::util\+::\+Recursive\+Action}}
+\subsubsection[{set\+\_\+recursive\+\_\+return()}]{\setlength{\rightskip}{0pt plus 5cm}static void tervel\+::util\+::\+Recursive\+Action\+::set\+\_\+recursive\+\_\+return (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [static]}}\label{classtervel_1_1util_1_1_recursive_action_ad03949b4e1aad8fb562db5b3ea56633b}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+tervel/util/\hyperlink{recursive__action_8h}{recursive\+\_\+action.\+h}\end{DoxyCompactItemize}

@@ -1,0 +1,119 @@
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_hash_map_no_delete_1_1_array_node}{}\section{tervel\+:\+:containers\+:\+:wf\+:\+:Hash\+Map\+No\+Delete$<$ Key, Value, Functor $>$\+:\+:Array\+Node Class Reference}
+\label{classtervel_1_1containers_1_1wf_1_1_hash_map_no_delete_1_1_array_node}\index{tervel\+::containers\+::wf\+::\+Hash\+Map\+No\+Delete$<$ Key, Value, Functor $>$\+::\+Array\+Node@{tervel\+::containers\+::wf\+::\+Hash\+Map\+No\+Delete$<$ Key, Value, Functor $>$\+::\+Array\+Node}}
+
+
+This class is used to hold the secondary array structure.  
+
+
+Inheritance diagram for tervel\+:\+:containers\+:\+:wf\+:\+:Hash\+Map\+No\+Delete$<$ Key, Value, Functor $>$\+:\+:Array\+Node\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classtervel_1_1containers_1_1wf_1_1_hash_map_no_delete_1_1_array_node}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map_no_delete_1_1_array_node_ac45e67621163d45bf45f5bcc0b6f39f4}{Array\+Node} (uint64\+\_\+t len)
+\item 
+\hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map_no_delete_1_1_array_node_ab8e4a7e0ec552f5426083c4559a2d366}{$\sim$\+Array\+Node} ()
+\begin{DoxyCompactList}\small\item\em See Notes on hash map destructor. \end{DoxyCompactList}\item 
+\hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map_no_delete_af5b18c3806eb5b2d39693075d8c70ade}{Location} $\ast$ \hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map_no_delete_1_1_array_node_a405b0e610ce284c037bae98e64239599}{access} (uint64\+\_\+t pos)
+\item 
+bool \hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map_no_delete_1_1_array_node_a11f011931040dfd98938b073006cb04b}{is\+\_\+array} ()
+\item 
+bool \hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map_no_delete_1_1_array_node_a049ba7f928ab0c87be2e0466f8d29a1b}{is\+\_\+data} ()
+\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+uint64\+\_\+t \hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map_no_delete_1_1_array_node_a5f281eee813a9ccf8357399782bde1a3}{len\+\_\+}
+\item 
+std\+::unique\+\_\+ptr$<$ \hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map_no_delete_af5b18c3806eb5b2d39693075d8c70ade}{Location}\mbox{[}$\,$\mbox{]}$>$ \hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map_no_delete_1_1_array_node_a7856c599048010921c610f1b6c5ef6e7}{internal\+\_\+array\+\_\+}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\subsubsection*{template$<$class Key, class Value, class Functor = default\+\_\+functor$<$\+Key, Value$>$$>$class tervel\+::containers\+::wf\+::\+Hash\+Map\+No\+Delete$<$ Key, Value, Functor $>$\+::\+Array\+Node}
+
+This class is used to hold the secondary array structure. 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_hash_map_no_delete_1_1_array_node_ac45e67621163d45bf45f5bcc0b6f39f4}{}\index{tervel\+::containers\+::wf\+::\+Hash\+Map\+No\+Delete\+::\+Array\+Node@{tervel\+::containers\+::wf\+::\+Hash\+Map\+No\+Delete\+::\+Array\+Node}!Array\+Node@{Array\+Node}}
+\index{Array\+Node@{Array\+Node}!tervel\+::containers\+::wf\+::\+Hash\+Map\+No\+Delete\+::\+Array\+Node@{tervel\+::containers\+::wf\+::\+Hash\+Map\+No\+Delete\+::\+Array\+Node}}
+\subsubsection[{Array\+Node(uint64\+\_\+t len)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key , class Value , class Functor  = default\+\_\+functor$<$\+Key, Value$>$$>$ {\bf tervel\+::containers\+::wf\+::\+Hash\+Map\+No\+Delete}$<$ Key, {\bf Value}, Functor $>$\+::Array\+Node\+::\+Array\+Node (
+\begin{DoxyParamCaption}
+\item[{uint64\+\_\+t}]{len}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [explicit]}}\label{classtervel_1_1containers_1_1wf_1_1_hash_map_no_delete_1_1_array_node_ac45e67621163d45bf45f5bcc0b6f39f4}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_hash_map_no_delete_1_1_array_node_ab8e4a7e0ec552f5426083c4559a2d366}{}\index{tervel\+::containers\+::wf\+::\+Hash\+Map\+No\+Delete\+::\+Array\+Node@{tervel\+::containers\+::wf\+::\+Hash\+Map\+No\+Delete\+::\+Array\+Node}!````~Array\+Node@{$\sim$\+Array\+Node}}
+\index{````~Array\+Node@{$\sim$\+Array\+Node}!tervel\+::containers\+::wf\+::\+Hash\+Map\+No\+Delete\+::\+Array\+Node@{tervel\+::containers\+::wf\+::\+Hash\+Map\+No\+Delete\+::\+Array\+Node}}
+\subsubsection[{$\sim$\+Array\+Node()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key , class Value , class Functor  = default\+\_\+functor$<$\+Key, Value$>$$>$ {\bf tervel\+::containers\+::wf\+::\+Hash\+Map\+No\+Delete}$<$ Key, {\bf Value}, Functor $>$\+::Array\+Node\+::$\sim$\+Array\+Node (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1containers_1_1wf_1_1_hash_map_no_delete_1_1_array_node_ab8e4a7e0ec552f5426083c4559a2d366}
+
+
+See Notes on hash map destructor. 
+
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_hash_map_no_delete_1_1_array_node_a405b0e610ce284c037bae98e64239599}{}\index{tervel\+::containers\+::wf\+::\+Hash\+Map\+No\+Delete\+::\+Array\+Node@{tervel\+::containers\+::wf\+::\+Hash\+Map\+No\+Delete\+::\+Array\+Node}!access@{access}}
+\index{access@{access}!tervel\+::containers\+::wf\+::\+Hash\+Map\+No\+Delete\+::\+Array\+Node@{tervel\+::containers\+::wf\+::\+Hash\+Map\+No\+Delete\+::\+Array\+Node}}
+\subsubsection[{access(uint64\+\_\+t pos)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key , class Value , class Functor  = default\+\_\+functor$<$\+Key, Value$>$$>$ {\bf Location}$\ast$ {\bf tervel\+::containers\+::wf\+::\+Hash\+Map\+No\+Delete}$<$ Key, {\bf Value}, Functor $>$\+::Array\+Node\+::access (
+\begin{DoxyParamCaption}
+\item[{uint64\+\_\+t}]{pos}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1containers_1_1wf_1_1_hash_map_no_delete_1_1_array_node_a405b0e610ce284c037bae98e64239599}
+
+\begin{DoxyParams}{Parameters}
+{\em pos} & The position to get the address of. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the address of a position on the internal array 
+\end{DoxyReturn}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_hash_map_no_delete_1_1_array_node_a11f011931040dfd98938b073006cb04b}{}\index{tervel\+::containers\+::wf\+::\+Hash\+Map\+No\+Delete\+::\+Array\+Node@{tervel\+::containers\+::wf\+::\+Hash\+Map\+No\+Delete\+::\+Array\+Node}!is\+\_\+array@{is\+\_\+array}}
+\index{is\+\_\+array@{is\+\_\+array}!tervel\+::containers\+::wf\+::\+Hash\+Map\+No\+Delete\+::\+Array\+Node@{tervel\+::containers\+::wf\+::\+Hash\+Map\+No\+Delete\+::\+Array\+Node}}
+\subsubsection[{is\+\_\+array()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key , class Value , class Functor  = default\+\_\+functor$<$\+Key, Value$>$$>$ bool {\bf tervel\+::containers\+::wf\+::\+Hash\+Map\+No\+Delete}$<$ Key, {\bf Value}, Functor $>$\+::Array\+Node\+::is\+\_\+array (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}\label{classtervel_1_1containers_1_1wf_1_1_hash_map_no_delete_1_1_array_node_a11f011931040dfd98938b073006cb04b}
+\begin{DoxyReturn}{Returns}
+whether or not this instance is an \hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map_no_delete_1_1_array_node}{Array\+Node} sub type 
+\end{DoxyReturn}
+
+
+Implements \hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map_no_delete_1_1_node_a551c6b4900b06efe3fc1d4de7c25963b}{tervel\+::containers\+::wf\+::\+Hash\+Map\+No\+Delete$<$ Key, Value, Functor $>$\+::\+Node}.
+
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_hash_map_no_delete_1_1_array_node_a049ba7f928ab0c87be2e0466f8d29a1b}{}\index{tervel\+::containers\+::wf\+::\+Hash\+Map\+No\+Delete\+::\+Array\+Node@{tervel\+::containers\+::wf\+::\+Hash\+Map\+No\+Delete\+::\+Array\+Node}!is\+\_\+data@{is\+\_\+data}}
+\index{is\+\_\+data@{is\+\_\+data}!tervel\+::containers\+::wf\+::\+Hash\+Map\+No\+Delete\+::\+Array\+Node@{tervel\+::containers\+::wf\+::\+Hash\+Map\+No\+Delete\+::\+Array\+Node}}
+\subsubsection[{is\+\_\+data()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key , class Value , class Functor  = default\+\_\+functor$<$\+Key, Value$>$$>$ bool {\bf tervel\+::containers\+::wf\+::\+Hash\+Map\+No\+Delete}$<$ Key, {\bf Value}, Functor $>$\+::Array\+Node\+::is\+\_\+data (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}\label{classtervel_1_1containers_1_1wf_1_1_hash_map_no_delete_1_1_array_node_a049ba7f928ab0c87be2e0466f8d29a1b}
+\begin{DoxyReturn}{Returns}
+whether or not this instance is an \hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map_no_delete_1_1_data_node}{Data\+Node} sub type 
+\end{DoxyReturn}
+
+
+Implements \hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map_no_delete_1_1_node_a03ef6395f93104d0313296773be36b3c}{tervel\+::containers\+::wf\+::\+Hash\+Map\+No\+Delete$<$ Key, Value, Functor $>$\+::\+Node}.
+
+
+
+\subsection{Member Data Documentation}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_hash_map_no_delete_1_1_array_node_a7856c599048010921c610f1b6c5ef6e7}{}\index{tervel\+::containers\+::wf\+::\+Hash\+Map\+No\+Delete\+::\+Array\+Node@{tervel\+::containers\+::wf\+::\+Hash\+Map\+No\+Delete\+::\+Array\+Node}!internal\+\_\+array\+\_\+@{internal\+\_\+array\+\_\+}}
+\index{internal\+\_\+array\+\_\+@{internal\+\_\+array\+\_\+}!tervel\+::containers\+::wf\+::\+Hash\+Map\+No\+Delete\+::\+Array\+Node@{tervel\+::containers\+::wf\+::\+Hash\+Map\+No\+Delete\+::\+Array\+Node}}
+\subsubsection[{internal\+\_\+array\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key , class Value , class Functor  = default\+\_\+functor$<$\+Key, Value$>$$>$ std\+::unique\+\_\+ptr$<${\bf Location}\mbox{[}$\,$\mbox{]}$>$ {\bf tervel\+::containers\+::wf\+::\+Hash\+Map\+No\+Delete}$<$ Key, {\bf Value}, Functor $>$\+::Array\+Node\+::internal\+\_\+array\+\_\+\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1containers_1_1wf_1_1_hash_map_no_delete_1_1_array_node_a7856c599048010921c610f1b6c5ef6e7}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1_hash_map_no_delete_1_1_array_node_a5f281eee813a9ccf8357399782bde1a3}{}\index{tervel\+::containers\+::wf\+::\+Hash\+Map\+No\+Delete\+::\+Array\+Node@{tervel\+::containers\+::wf\+::\+Hash\+Map\+No\+Delete\+::\+Array\+Node}!len\+\_\+@{len\+\_\+}}
+\index{len\+\_\+@{len\+\_\+}!tervel\+::containers\+::wf\+::\+Hash\+Map\+No\+Delete\+::\+Array\+Node@{tervel\+::containers\+::wf\+::\+Hash\+Map\+No\+Delete\+::\+Array\+Node}}
+\subsubsection[{len\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key , class Value , class Functor  = default\+\_\+functor$<$\+Key, Value$>$$>$ uint64\+\_\+t {\bf tervel\+::containers\+::wf\+::\+Hash\+Map\+No\+Delete}$<$ Key, {\bf Value}, Functor $>$\+::Array\+Node\+::len\+\_\+\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1containers_1_1wf_1_1_hash_map_no_delete_1_1_array_node_a5f281eee813a9ccf8357399782bde1a3}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+tervel/containers/wf/hash-\/map/\hyperlink{wf__hash__map__no__delete_8h}{wf\+\_\+hash\+\_\+map\+\_\+no\+\_\+delete.\+h}\end{DoxyCompactItemize}

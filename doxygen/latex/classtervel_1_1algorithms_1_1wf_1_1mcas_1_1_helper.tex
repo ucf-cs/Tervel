@@ -1,0 +1,152 @@
+\hypertarget{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_helper}{}\section{tervel\+:\+:algorithms\+:\+:wf\+:\+:mcas\+:\+:Helper$<$ T $>$ Class Template Reference}
+\label{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_helper}\index{tervel\+::algorithms\+::wf\+::mcas\+::\+Helper$<$ T $>$@{tervel\+::algorithms\+::wf\+::mcas\+::\+Helper$<$ T $>$}}
+
+
+This class is the \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_m_c_a_s}{M\+C\+A\+S} operation\textquotesingle{}s helper.  
+
+
+
+
+{\ttfamily \#include $<$mcas\+\_\+casrow.\+h$>$}
+
+Inheritance diagram for tervel\+:\+:algorithms\+:\+:wf\+:\+:mcas\+:\+:Helper$<$ T $>$\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_helper}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_helper_adf95331e5787d82f619057cbccdf1905}{Helper} (\hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_m_c_a_s}{M\+C\+A\+S}$<$ T $>$ $\ast$mcas\+\_\+op, \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_cas_row}{Cas\+Row}$<$ T $>$ $\ast$cas\+\_\+row)
+\begin{DoxyCompactList}\small\item\em The \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_helper}{Helper} object contains a reference to the row it is associated with and the mcas operation that contains the row. \end{DoxyCompactList}\item 
+bool \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_helper_a381449ae3b9624302008a581610f76b5}{on\+\_\+watch} (std\+::atomic$<$ void $\ast$ $>$ $\ast$address, void $\ast$value)
+\begin{DoxyCompactList}\small\item\em This method is optional to implement for each sub class. \end{DoxyCompactList}\item 
+void $\ast$ \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_helper_a952a74178febcf25e6f3fe6d3fd8f691}{complete} (void $\ast$value, std\+::atomic$<$ void $\ast$ $>$ $\ast$address)
+\begin{DoxyCompactList}\small\item\em This method is implemented by each sub class and must guarantee that upon return that the descriptor no longer exists at the address it was placed. \end{DoxyCompactList}\item 
+void $\ast$ \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_helper_ad7fbc9ead7553cb023b0ecec2eaf45d4}{get\+\_\+logical\+\_\+value} ()
+\begin{DoxyCompactList}\small\item\em This method is implemented by each sub class. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_cas_row}{Cas\+Row}$<$ T $>$ $\ast$ \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_helper_a1dc09a369e400a1d0dc37e505b585932}{cas\+\_\+row\+\_\+}
+\item 
+\hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_m_c_a_s}{M\+C\+A\+S}$<$ T $>$ $\ast$ \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_helper_a50a2eb6601553b9110c408f7981b7f15}{mcas\+\_\+op\+\_\+}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+\subsubsection*{template$<$class T$>$class tervel\+::algorithms\+::wf\+::mcas\+::\+Helper$<$ T $>$}
+
+This class is the \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_m_c_a_s}{M\+C\+A\+S} operation\textquotesingle{}s helper. 
+
+The \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_helper}{Helper} or M\+C\+H is used to replace the expected value of the specified address. 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_helper_adf95331e5787d82f619057cbccdf1905}{}\index{tervel\+::algorithms\+::wf\+::mcas\+::\+Helper@{tervel\+::algorithms\+::wf\+::mcas\+::\+Helper}!Helper@{Helper}}
+\index{Helper@{Helper}!tervel\+::algorithms\+::wf\+::mcas\+::\+Helper@{tervel\+::algorithms\+::wf\+::mcas\+::\+Helper}}
+\subsubsection[{Helper(\+M\+C\+A\+S$<$ T $>$ $\ast$mcas\+\_\+op, Cas\+Row$<$ T $>$ $\ast$cas\+\_\+row)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T$>$ {\bf tervel\+::algorithms\+::wf\+::mcas\+::\+Helper}$<$ T $>$\+::{\bf Helper} (
+\begin{DoxyParamCaption}
+\item[{{\bf M\+C\+A\+S}$<$ T $>$ $\ast$}]{mcas\+\_\+op, }
+\item[{{\bf Cas\+Row}$<$ T $>$ $\ast$}]{cas\+\_\+row}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_helper_adf95331e5787d82f619057cbccdf1905}
+
+
+The \hyperlink{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_helper}{Helper} object contains a reference to the row it is associated with and the mcas operation that contains the row. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em mcas\+\_\+op} & the M\+C\+A\+S$<$\+T$>$ which contains the referenced cas\+\_\+row \\
+\hline
+{\em cas\+\_\+row} & the referenced row in the M\+C\+A\+S$<$\+T$>$. \\
+\hline
+\end{DoxyParams}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_helper_a952a74178febcf25e6f3fe6d3fd8f691}{}\index{tervel\+::algorithms\+::wf\+::mcas\+::\+Helper@{tervel\+::algorithms\+::wf\+::mcas\+::\+Helper}!complete@{complete}}
+\index{complete@{complete}!tervel\+::algorithms\+::wf\+::mcas\+::\+Helper@{tervel\+::algorithms\+::wf\+::mcas\+::\+Helper}}
+\subsubsection[{complete(void $\ast$value, std\+::atomic$<$ void $\ast$ $>$ $\ast$address)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T$>$ void$\ast$ {\bf tervel\+::algorithms\+::wf\+::mcas\+::\+Helper}$<$ T $>$\+::complete (
+\begin{DoxyParamCaption}
+\item[{void $\ast$}]{current, }
+\item[{std\+::atomic$<$ void $\ast$ $>$ $\ast$}]{address}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}\label{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_helper_a952a74178febcf25e6f3fe6d3fd8f691}
+
+
+This method is implemented by each sub class and must guarantee that upon return that the descriptor no longer exists at the address it was placed. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em current} & the reference to this object as it is at the address, \\
+\hline
+{\em address} & the location this object was read from \\
+\hline
+\end{DoxyParams}
+
+
+Implements \hyperlink{classtervel_1_1util_1_1_descriptor_a4303b2a08e3ab67de5533cfb20db87c9}{tervel\+::util\+::\+Descriptor}.
+
+\hypertarget{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_helper_ad7fbc9ead7553cb023b0ecec2eaf45d4}{}\index{tervel\+::algorithms\+::wf\+::mcas\+::\+Helper@{tervel\+::algorithms\+::wf\+::mcas\+::\+Helper}!get\+\_\+logical\+\_\+value@{get\+\_\+logical\+\_\+value}}
+\index{get\+\_\+logical\+\_\+value@{get\+\_\+logical\+\_\+value}!tervel\+::algorithms\+::wf\+::mcas\+::\+Helper@{tervel\+::algorithms\+::wf\+::mcas\+::\+Helper}}
+\subsubsection[{get\+\_\+logical\+\_\+value()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T$>$ void$\ast$ {\bf tervel\+::algorithms\+::wf\+::mcas\+::\+Helper}$<$ T $>$\+::get\+\_\+logical\+\_\+value (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}\label{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_helper_ad7fbc9ead7553cb023b0ecec2eaf45d4}
+
+
+This method is implemented by each sub class. 
+
+It returns the logical value of the past address. If the associated operation is still in progress then it will generally return the value that was replaced by this descriptor. Otherwise it will generally return the result of the operation for the specified address.
+
+It can only be called from the static function which protects the object from being reused during the function. 
+
+Implements \hyperlink{classtervel_1_1util_1_1_descriptor_a5b443eeb6acf1207f27a6d06c39d4ad4}{tervel\+::util\+::\+Descriptor}.
+
+\hypertarget{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_helper_a381449ae3b9624302008a581610f76b5}{}\index{tervel\+::algorithms\+::wf\+::mcas\+::\+Helper@{tervel\+::algorithms\+::wf\+::mcas\+::\+Helper}!on\+\_\+watch@{on\+\_\+watch}}
+\index{on\+\_\+watch@{on\+\_\+watch}!tervel\+::algorithms\+::wf\+::mcas\+::\+Helper@{tervel\+::algorithms\+::wf\+::mcas\+::\+Helper}}
+\subsubsection[{on\+\_\+watch(std\+::atomic$<$ void $\ast$ $>$ $\ast$address, void $\ast$value)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T$>$ bool {\bf tervel\+::algorithms\+::wf\+::mcas\+::\+Helper}$<$ T $>$\+::on\+\_\+watch (
+\begin{DoxyParamCaption}
+\item[{std\+::atomic$<$ void $\ast$ $>$ $\ast$}]{, }
+\item[{void $\ast$}]{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}\label{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_helper_a381449ae3b9624302008a581610f76b5}
+
+
+This method is optional to implement for each sub class. 
+
+In the event there is a complex dependency between descriptor objects, where watching one implies performing other actions, such as watching a parent object, a developer will implement this function to encapsulate that logic
+
+This function is called by the static watch function It should not watch itself.
+
+
+\begin{DoxyParams}{Parameters}
+{\em address} & The location to check. \\
+\hline
+{\em expected} & The expected value for that location\\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if successful, false otherwise 
+\end{DoxyReturn}
+
+
+Reimplemented from \hyperlink{classtervel_1_1util_1_1_descriptor_ab643e09f20f35149dc820766b0f9ccdb}{tervel\+::util\+::\+Descriptor}.
+
+
+
+\subsection{Member Data Documentation}
+\hypertarget{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_helper_a1dc09a369e400a1d0dc37e505b585932}{}\index{tervel\+::algorithms\+::wf\+::mcas\+::\+Helper@{tervel\+::algorithms\+::wf\+::mcas\+::\+Helper}!cas\+\_\+row\+\_\+@{cas\+\_\+row\+\_\+}}
+\index{cas\+\_\+row\+\_\+@{cas\+\_\+row\+\_\+}!tervel\+::algorithms\+::wf\+::mcas\+::\+Helper@{tervel\+::algorithms\+::wf\+::mcas\+::\+Helper}}
+\subsubsection[{cas\+\_\+row\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T$>$ {\bf Cas\+Row}$<$T$>$$\ast$ {\bf tervel\+::algorithms\+::wf\+::mcas\+::\+Helper}$<$ T $>$\+::cas\+\_\+row\+\_\+\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_helper_a1dc09a369e400a1d0dc37e505b585932}
+\hypertarget{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_helper_a50a2eb6601553b9110c408f7981b7f15}{}\index{tervel\+::algorithms\+::wf\+::mcas\+::\+Helper@{tervel\+::algorithms\+::wf\+::mcas\+::\+Helper}!mcas\+\_\+op\+\_\+@{mcas\+\_\+op\+\_\+}}
+\index{mcas\+\_\+op\+\_\+@{mcas\+\_\+op\+\_\+}!tervel\+::algorithms\+::wf\+::mcas\+::\+Helper@{tervel\+::algorithms\+::wf\+::mcas\+::\+Helper}}
+\subsubsection[{mcas\+\_\+op\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class T$>$ {\bf M\+C\+A\+S}$<$T$>$$\ast$ {\bf tervel\+::algorithms\+::wf\+::mcas\+::\+Helper}$<$ T $>$\+::mcas\+\_\+op\+\_\+\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1algorithms_1_1wf_1_1mcas_1_1_helper_a50a2eb6601553b9110c408f7981b7f15}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+tervel/algorithms/wf/mcas/\hyperlink{mcas__casrow_8h}{mcas\+\_\+casrow.\+h}\item 
+tervel/algorithms/wf/mcas/\hyperlink{mcas__helper_8h}{mcas\+\_\+helper.\+h}\end{DoxyCompactItemize}

@@ -1,0 +1,285 @@
+\hypertarget{classtervel_1_1util_1_1memory_1_1rc_1_1_descriptor_pool}{}\section{tervel\+:\+:util\+:\+:memory\+:\+:rc\+:\+:Descriptor\+Pool Class Reference}
+\label{classtervel_1_1util_1_1memory_1_1rc_1_1_descriptor_pool}\index{tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool@{tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool}}
+
+
+Defines a pool of descriptor objects which is used to allocate descriptors and to store them while they are not safe to delete.  
+
+
+
+
+{\ttfamily \#include $<$descriptor\+\_\+pool.\+h$>$}
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_descriptor_pool_a552444bec208a324258ef830fa45597d}{Descriptor\+Pool} (\hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_manager}{Pool\+Manager} $\ast$manager, uint64\+\_\+t pool\+\_\+id, int prefill=\hyperlink{util_8h_afd0fad68cb3234a00478ba61d879a895}{T\+E\+R\+V\+E\+L\+\_\+\+M\+E\+M\+\_\+\+R\+C\+\_\+\+M\+I\+N\+\_\+\+N\+O\+D\+E\+S})
+\item 
+\hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_descriptor_pool_ac3e88ac0469b52e803f4f1991611f72e}{$\sim$\+Descriptor\+Pool} ()
+\item 
+void \hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_descriptor_pool_a6d086ae584f1ce4b23ec0f3040503c7d}{reserve} (size\+\_\+t num\+\_\+descriptors=\hyperlink{util_8h_afd0fad68cb3234a00478ba61d879a895}{T\+E\+R\+V\+E\+L\+\_\+\+M\+E\+M\+\_\+\+R\+C\+\_\+\+M\+I\+N\+\_\+\+N\+O\+D\+E\+S})
+\begin{DoxyCompactList}\small\item\em Allocates an extra {\ttfamily num\+\_\+descriptors} elements to the pool. \end{DoxyCompactList}\item 
+{\footnotesize template$<$typename Descr\+Type , typename... Args $>$ }\\Descr\+Type $\ast$ \hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_descriptor_pool_aeba4dbb575d67e4c2425e1b15c4b3f11}{get\+\_\+descriptor} (Args \&\&...args)
+\begin{DoxyCompactList}\small\item\em Constructs and returns a descriptor. \end{DoxyCompactList}\item 
+void \hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_descriptor_pool_aa81862471eea9aeed3b04ecc503b9197}{free\+\_\+descriptor} (\hyperlink{classtervel_1_1util_1_1_descriptor}{tervel\+::util\+::\+Descriptor} $\ast$descr, bool dont\+\_\+check=false)
+\begin{DoxyCompactList}\small\item\em Once a user is done with a descriptor, they should free it with this method. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\subsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_element}{Pool\+Element} $\ast$ \hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_descriptor_pool_a6a96d2e2269fdf2b9f56bf4249f1ef24}{get\+\_\+from\+\_\+pool} (bool allocate\+\_\+new=true)
+\begin{DoxyCompactList}\small\item\em Gets a free element. \end{DoxyCompactList}\item 
+void \hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_descriptor_pool_a768ce63acad7353b919e71c722f5fe30}{send\+\_\+safe\+\_\+to\+\_\+manager} ()
+\begin{DoxyCompactList}\small\item\em Sends the elements from the safe pool to the corresponding safe pool in this pool\textquotesingle{}s manager. \end{DoxyCompactList}\item 
+void \hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_descriptor_pool_a3e869b61b3689ce58c8749016d380926}{send\+\_\+unsafe\+\_\+to\+\_\+manager} ()
+\begin{DoxyCompactList}\small\item\em Sends the elements from the unsafe pool to the corresponding unsafe pool in this pool\textquotesingle{}s manager. \end{DoxyCompactList}\item 
+void \hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_descriptor_pool_a362beb1ef559ba40a64ca78ffca12cff}{offload} ()
+\begin{DoxyCompactList}\small\item\em Sends a subset of the elements to the managers pool. \end{DoxyCompactList}\item 
+void \hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_descriptor_pool_a573585b4dd774585e2430970f8c1b3fb}{add\+\_\+to\+\_\+safe} (\hyperlink{classtervel_1_1util_1_1_descriptor}{tervel\+::util\+::\+Descriptor} $\ast$descr)
+\begin{DoxyCompactList}\small\item\em Releases the descriptor back to the safe pool. \end{DoxyCompactList}\item 
+void \hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_descriptor_pool_aae0b2295f7166b40c9c748a5ed78f570}{add\+\_\+to\+\_\+unsafe} (\hyperlink{classtervel_1_1util_1_1_descriptor}{tervel\+::util\+::\+Descriptor} $\ast$descr)
+\begin{DoxyCompactList}\small\item\em Releases the descriptor back to the unsafe pool. \end{DoxyCompactList}\item 
+void \hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_descriptor_pool_aff5201eac41e952363dab1e23949f629}{try\+\_\+clear\+\_\+unsafe\+\_\+pool} (bool dont\+\_\+check=false)
+\begin{DoxyCompactList}\small\item\em Try to move elements from the unsafe pool to the safe pool. \end{DoxyCompactList}\item 
+bool \hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_descriptor_pool_a602d77f377890c6c32311d8764a616a5}{verify\+\_\+pool\+\_\+count} (\hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_element}{Pool\+Element} $\ast$pool, uint64\+\_\+t count)
+\begin{DoxyCompactList}\small\item\em verifies that the length of the linked list matches the count \end{DoxyCompactList}\item 
+\hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_descriptor_pool_a1a47980d510a2178f37a1c44fb54be54}{D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N} (\hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_descriptor_pool}{Descriptor\+Pool})
+\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_manager}{Pool\+Manager} $\ast$ \hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_descriptor_pool_a571b9eb199df3356d66d3a8137ad9944}{manager\+\_\+}
+\begin{DoxyCompactList}\small\item\em This pool\textquotesingle{}s manager. \end{DoxyCompactList}\item 
+uint64\+\_\+t \hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_descriptor_pool_adec7cbd5e692812b0aa0afefa04697d7}{pool\+\_\+id\+\_\+}
+\begin{DoxyCompactList}\small\item\em The pool where excess elements are placed. \end{DoxyCompactList}\item 
+\hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_element}{Pool\+Element} $\ast$ \hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_descriptor_pool_a816f71722b9a18b007154e27bdb153bd}{safe\+\_\+pool\+\_\+} \{nullptr\}
+\begin{DoxyCompactList}\small\item\em A linked list of pool elements. \end{DoxyCompactList}\item 
+\hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_pool_element}{Pool\+Element} $\ast$ \hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_descriptor_pool_a850e99b50092270ccc5e8529cffe294b}{unsafe\+\_\+pool\+\_\+} \{nullptr\}
+\begin{DoxyCompactList}\small\item\em A linked list of pool elements. \end{DoxyCompactList}\item 
+uint64\+\_\+t \hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_descriptor_pool_a121f3c807724ee68f21faf5e659c2cf7}{safe\+\_\+pool\+\_\+count\+\_\+} \{0\}
+\begin{DoxyCompactList}\small\item\em Two counters used to track the number of elements in the linked list. \end{DoxyCompactList}\item 
+uint64\+\_\+t \hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_descriptor_pool_a8b8a73ac56132217ea75bd6f5d13ba98}{unsafe\+\_\+pool\+\_\+count\+\_\+} \{0\}
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+Defines a pool of descriptor objects which is used to allocate descriptors and to store them while they are not safe to delete. 
+
+The pool is represented as two linked lists of descriptors\+: one for safe elements and one for unsafe elements. The safe pool is known to only contain items owned by the thread owning the \hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_descriptor_pool}{Descriptor\+Pool} object, and the unsafe pool contains items where other threads may still hold references to them.
+
+Further, the pool object has a parent who is shared amongst other threads. When a pool is to be destroyed, it sends its remaining elements to the parent, relinquishing ownership of said elements. A top-\/level pool has a null parent. At the moment, it only makes sense to have a single top-\/level parent representing the central pool for all threads, and several local pools for each thread. 
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classtervel_1_1util_1_1memory_1_1rc_1_1_descriptor_pool_a552444bec208a324258ef830fa45597d}{}\index{tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool@{tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool}!Descriptor\+Pool@{Descriptor\+Pool}}
+\index{Descriptor\+Pool@{Descriptor\+Pool}!tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool@{tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool}}
+\subsubsection[{Descriptor\+Pool(\+Pool\+Manager $\ast$manager, uint64\+\_\+t pool\+\_\+id, int prefill=\+T\+E\+R\+V\+E\+L\+\_\+\+M\+E\+M\+\_\+\+R\+C\+\_\+\+M\+I\+N\+\_\+\+N\+O\+D\+E\+S)}]{\setlength{\rightskip}{0pt plus 5cm}tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool\+::\+Descriptor\+Pool (
+\begin{DoxyParamCaption}
+\item[{{\bf Pool\+Manager} $\ast$}]{manager, }
+\item[{uint64\+\_\+t}]{pool\+\_\+id, }
+\item[{int}]{prefill = {\ttfamily {\bf T\+E\+R\+V\+E\+L\+\_\+\+M\+E\+M\+\_\+\+R\+C\+\_\+\+M\+I\+N\+\_\+\+N\+O\+D\+E\+S}}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1util_1_1memory_1_1rc_1_1_descriptor_pool_a552444bec208a324258ef830fa45597d}
+\hypertarget{classtervel_1_1util_1_1memory_1_1rc_1_1_descriptor_pool_ac3e88ac0469b52e803f4f1991611f72e}{}\index{tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool@{tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool}!````~Descriptor\+Pool@{$\sim$\+Descriptor\+Pool}}
+\index{````~Descriptor\+Pool@{$\sim$\+Descriptor\+Pool}!tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool@{tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool}}
+\subsubsection[{$\sim$\+Descriptor\+Pool()}]{\setlength{\rightskip}{0pt plus 5cm}tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool\+::$\sim$\+Descriptor\+Pool (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1util_1_1memory_1_1rc_1_1_descriptor_pool_ac3e88ac0469b52e803f4f1991611f72e}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classtervel_1_1util_1_1memory_1_1rc_1_1_descriptor_pool_a573585b4dd774585e2430970f8c1b3fb}{}\index{tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool@{tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool}!add\+\_\+to\+\_\+safe@{add\+\_\+to\+\_\+safe}}
+\index{add\+\_\+to\+\_\+safe@{add\+\_\+to\+\_\+safe}!tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool@{tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool}}
+\subsubsection[{add\+\_\+to\+\_\+safe(tervel\+::util\+::\+Descriptor $\ast$descr)}]{\setlength{\rightskip}{0pt plus 5cm}void tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool\+::add\+\_\+to\+\_\+safe (
+\begin{DoxyParamCaption}
+\item[{{\bf tervel\+::util\+::\+Descriptor} $\ast$}]{descr}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1util_1_1memory_1_1rc_1_1_descriptor_pool_a573585b4dd774585e2430970f8c1b3fb}
+
+
+Releases the descriptor back to the safe pool. 
+
+Caller relinquishes ownership of descriptor. It\textquotesingle{}s expected that the given descriptor was taken from this pool to begin with.
+
+Adding a descriptor to the safe pool calls its \textquotesingle{}on\+\_\+return\+\_\+to\+\_\+pool\textquotesingle{} method and its destructor. \hypertarget{classtervel_1_1util_1_1memory_1_1rc_1_1_descriptor_pool_aae0b2295f7166b40c9c748a5ed78f570}{}\index{tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool@{tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool}!add\+\_\+to\+\_\+unsafe@{add\+\_\+to\+\_\+unsafe}}
+\index{add\+\_\+to\+\_\+unsafe@{add\+\_\+to\+\_\+unsafe}!tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool@{tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool}}
+\subsubsection[{add\+\_\+to\+\_\+unsafe(tervel\+::util\+::\+Descriptor $\ast$descr)}]{\setlength{\rightskip}{0pt plus 5cm}void tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool\+::add\+\_\+to\+\_\+unsafe (
+\begin{DoxyParamCaption}
+\item[{{\bf tervel\+::util\+::\+Descriptor} $\ast$}]{descr}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1util_1_1memory_1_1rc_1_1_descriptor_pool_aae0b2295f7166b40c9c748a5ed78f570}
+
+
+Releases the descriptor back to the unsafe pool. 
+
+Caller relinquishes ownership of descriptor. It\textquotesingle{}s expected that the given descriptor was taken from this pool to begin with.
+
+See notes on \hyperlink{classtervel_1_1util_1_1memory_1_1rc_1_1_descriptor_pool_a573585b4dd774585e2430970f8c1b3fb}{add\+\_\+to\+\_\+safe()} \hypertarget{classtervel_1_1util_1_1memory_1_1rc_1_1_descriptor_pool_a1a47980d510a2178f37a1c44fb54be54}{}\index{tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool@{tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool}!D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N@{D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N}}
+\index{D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N@{D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N}!tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool@{tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool}}
+\subsubsection[{D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N(\+Descriptor\+Pool)}]{\setlength{\rightskip}{0pt plus 5cm}tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool\+::\+D\+I\+S\+A\+L\+L\+O\+W\+\_\+\+C\+O\+P\+Y\+\_\+\+A\+N\+D\+\_\+\+A\+S\+S\+I\+G\+N (
+\begin{DoxyParamCaption}
+\item[{{\bf Descriptor\+Pool}}]{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1util_1_1memory_1_1rc_1_1_descriptor_pool_a1a47980d510a2178f37a1c44fb54be54}
+\hypertarget{classtervel_1_1util_1_1memory_1_1rc_1_1_descriptor_pool_aa81862471eea9aeed3b04ecc503b9197}{}\index{tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool@{tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool}!free\+\_\+descriptor@{free\+\_\+descriptor}}
+\index{free\+\_\+descriptor@{free\+\_\+descriptor}!tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool@{tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool}}
+\subsubsection[{free\+\_\+descriptor(tervel\+::util\+::\+Descriptor $\ast$descr, bool dont\+\_\+check=false)}]{\setlength{\rightskip}{0pt plus 5cm}void tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool\+::free\+\_\+descriptor (
+\begin{DoxyParamCaption}
+\item[{{\bf tervel\+::util\+::\+Descriptor} $\ast$}]{descr, }
+\item[{bool}]{dont\+\_\+check = {\ttfamily false}}
+\end{DoxyParamCaption}
+)}\label{classtervel_1_1util_1_1memory_1_1rc_1_1_descriptor_pool_aa81862471eea9aeed3b04ecc503b9197}
+
+
+Once a user is done with a descriptor, they should free it with this method. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em descr} & The descriptor to free. \\
+\hline
+{\em dont\+\_\+check} & Don\textquotesingle{}t check if the descriptor is being watched before freeing it. Use this flag if you know that no other thread has had access to this descriptor. \\
+\hline
+{\em pool} & the pool to use when freeing the descriptor. \\
+\hline
+\end{DoxyParams}
+\hypertarget{classtervel_1_1util_1_1memory_1_1rc_1_1_descriptor_pool_aeba4dbb575d67e4c2425e1b15c4b3f11}{}\index{tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool@{tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool}!get\+\_\+descriptor@{get\+\_\+descriptor}}
+\index{get\+\_\+descriptor@{get\+\_\+descriptor}!tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool@{tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool}}
+\subsubsection[{get\+\_\+descriptor(\+Args \&\&...\+args)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename Descr\+Type , typename... Args $>$ Descr\+Type $\ast$ tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool\+::get\+\_\+descriptor (
+\begin{DoxyParamCaption}
+\item[{Args \&\&...}]{args}
+\end{DoxyParamCaption}
+)}\label{classtervel_1_1util_1_1memory_1_1rc_1_1_descriptor_pool_aeba4dbb575d67e4c2425e1b15c4b3f11}
+
+
+Constructs and returns a descriptor. 
+
+Arguments are forwarded to the constructor of the given descriptor type. User should call free\+\_\+descriptor on the returned pointer when they are done with it to avoid memory leaks. \hypertarget{classtervel_1_1util_1_1memory_1_1rc_1_1_descriptor_pool_a6a96d2e2269fdf2b9f56bf4249f1ef24}{}\index{tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool@{tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool}!get\+\_\+from\+\_\+pool@{get\+\_\+from\+\_\+pool}}
+\index{get\+\_\+from\+\_\+pool@{get\+\_\+from\+\_\+pool}!tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool@{tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool}}
+\subsubsection[{get\+\_\+from\+\_\+pool(bool allocate\+\_\+new=true)}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Pool\+Element}$\ast$ tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool\+::get\+\_\+from\+\_\+pool (
+\begin{DoxyParamCaption}
+\item[{bool}]{allocate\+\_\+new = {\ttfamily true}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1util_1_1memory_1_1rc_1_1_descriptor_pool_a6a96d2e2269fdf2b9f56bf4249f1ef24}
+
+
+Gets a free element. 
+
+The local pool is checked for one first, then the manager if there are no local ones, and if all else fails, a new one is allocated using new.
+
+
+\begin{DoxyParams}{Parameters}
+{\em allocate\+\_\+new} & If true and there are no free elements to retrieve from the pool, a new one is allocated. Otherwise, nullptr is returned. \\
+\hline
+\end{DoxyParams}
+\hypertarget{classtervel_1_1util_1_1memory_1_1rc_1_1_descriptor_pool_a362beb1ef559ba40a64ca78ffca12cff}{}\index{tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool@{tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool}!offload@{offload}}
+\index{offload@{offload}!tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool@{tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool}}
+\subsubsection[{offload()}]{\setlength{\rightskip}{0pt plus 5cm}void tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool\+::offload (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1util_1_1memory_1_1rc_1_1_descriptor_pool_a362beb1ef559ba40a64ca78ffca12cff}
+
+
+Sends a subset of the elements to the managers pool. 
+
+\hypertarget{classtervel_1_1util_1_1memory_1_1rc_1_1_descriptor_pool_a6d086ae584f1ce4b23ec0f3040503c7d}{}\index{tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool@{tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool}!reserve@{reserve}}
+\index{reserve@{reserve}!tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool@{tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool}}
+\subsubsection[{reserve(size\+\_\+t num\+\_\+descriptors=\+T\+E\+R\+V\+E\+L\+\_\+\+M\+E\+M\+\_\+\+R\+C\+\_\+\+M\+I\+N\+\_\+\+N\+O\+D\+E\+S)}]{\setlength{\rightskip}{0pt plus 5cm}void tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool\+::reserve (
+\begin{DoxyParamCaption}
+\item[{size\+\_\+t}]{num\+\_\+descriptors = {\ttfamily {\bf T\+E\+R\+V\+E\+L\+\_\+\+M\+E\+M\+\_\+\+R\+C\+\_\+\+M\+I\+N\+\_\+\+N\+O\+D\+E\+S}}}
+\end{DoxyParamCaption}
+)}\label{classtervel_1_1util_1_1memory_1_1rc_1_1_descriptor_pool_a6d086ae584f1ce4b23ec0f3040503c7d}
+
+
+Allocates an extra {\ttfamily num\+\_\+descriptors} elements to the pool. 
+
+\hypertarget{classtervel_1_1util_1_1memory_1_1rc_1_1_descriptor_pool_a768ce63acad7353b919e71c722f5fe30}{}\index{tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool@{tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool}!send\+\_\+safe\+\_\+to\+\_\+manager@{send\+\_\+safe\+\_\+to\+\_\+manager}}
+\index{send\+\_\+safe\+\_\+to\+\_\+manager@{send\+\_\+safe\+\_\+to\+\_\+manager}!tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool@{tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool}}
+\subsubsection[{send\+\_\+safe\+\_\+to\+\_\+manager()}]{\setlength{\rightskip}{0pt plus 5cm}void tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool\+::send\+\_\+safe\+\_\+to\+\_\+manager (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1util_1_1memory_1_1rc_1_1_descriptor_pool_a768ce63acad7353b919e71c722f5fe30}
+
+
+Sends the elements from the safe pool to the corresponding safe pool in this pool\textquotesingle{}s manager. 
+
+\hypertarget{classtervel_1_1util_1_1memory_1_1rc_1_1_descriptor_pool_a3e869b61b3689ce58c8749016d380926}{}\index{tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool@{tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool}!send\+\_\+unsafe\+\_\+to\+\_\+manager@{send\+\_\+unsafe\+\_\+to\+\_\+manager}}
+\index{send\+\_\+unsafe\+\_\+to\+\_\+manager@{send\+\_\+unsafe\+\_\+to\+\_\+manager}!tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool@{tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool}}
+\subsubsection[{send\+\_\+unsafe\+\_\+to\+\_\+manager()}]{\setlength{\rightskip}{0pt plus 5cm}void tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool\+::send\+\_\+unsafe\+\_\+to\+\_\+manager (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1util_1_1memory_1_1rc_1_1_descriptor_pool_a3e869b61b3689ce58c8749016d380926}
+
+
+Sends the elements from the unsafe pool to the corresponding unsafe pool in this pool\textquotesingle{}s manager. 
+
+\hypertarget{classtervel_1_1util_1_1memory_1_1rc_1_1_descriptor_pool_aff5201eac41e952363dab1e23949f629}{}\index{tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool@{tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool}!try\+\_\+clear\+\_\+unsafe\+\_\+pool@{try\+\_\+clear\+\_\+unsafe\+\_\+pool}}
+\index{try\+\_\+clear\+\_\+unsafe\+\_\+pool@{try\+\_\+clear\+\_\+unsafe\+\_\+pool}!tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool@{tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool}}
+\subsubsection[{try\+\_\+clear\+\_\+unsafe\+\_\+pool(bool dont\+\_\+check=false)}]{\setlength{\rightskip}{0pt plus 5cm}void tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool\+::try\+\_\+clear\+\_\+unsafe\+\_\+pool (
+\begin{DoxyParamCaption}
+\item[{bool}]{dont\+\_\+check = {\ttfamily false}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1util_1_1memory_1_1rc_1_1_descriptor_pool_aff5201eac41e952363dab1e23949f629}
+
+
+Try to move elements from the unsafe pool to the safe pool. 
+
+\hypertarget{classtervel_1_1util_1_1memory_1_1rc_1_1_descriptor_pool_a602d77f377890c6c32311d8764a616a5}{}\index{tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool@{tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool}!verify\+\_\+pool\+\_\+count@{verify\+\_\+pool\+\_\+count}}
+\index{verify\+\_\+pool\+\_\+count@{verify\+\_\+pool\+\_\+count}!tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool@{tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool}}
+\subsubsection[{verify\+\_\+pool\+\_\+count(\+Pool\+Element $\ast$pool, uint64\+\_\+t count)}]{\setlength{\rightskip}{0pt plus 5cm}bool tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool\+::verify\+\_\+pool\+\_\+count (
+\begin{DoxyParamCaption}
+\item[{{\bf Pool\+Element} $\ast$}]{pool, }
+\item[{uint64\+\_\+t}]{count}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1util_1_1memory_1_1rc_1_1_descriptor_pool_a602d77f377890c6c32311d8764a616a5}
+
+
+verifies that the length of the linked list matches the count 
+
+
+
+\subsection{Member Data Documentation}
+\hypertarget{classtervel_1_1util_1_1memory_1_1rc_1_1_descriptor_pool_a571b9eb199df3356d66d3a8137ad9944}{}\index{tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool@{tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool}!manager\+\_\+@{manager\+\_\+}}
+\index{manager\+\_\+@{manager\+\_\+}!tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool@{tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool}}
+\subsubsection[{manager\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Pool\+Manager}$\ast$ tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool\+::manager\+\_\+\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1util_1_1memory_1_1rc_1_1_descriptor_pool_a571b9eb199df3356d66d3a8137ad9944}
+
+
+This pool\textquotesingle{}s manager. 
+
+\hypertarget{classtervel_1_1util_1_1memory_1_1rc_1_1_descriptor_pool_adec7cbd5e692812b0aa0afefa04697d7}{}\index{tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool@{tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool}!pool\+\_\+id\+\_\+@{pool\+\_\+id\+\_\+}}
+\index{pool\+\_\+id\+\_\+@{pool\+\_\+id\+\_\+}!tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool@{tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool}}
+\subsubsection[{pool\+\_\+id\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}uint64\+\_\+t tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool\+::pool\+\_\+id\+\_\+\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1util_1_1memory_1_1rc_1_1_descriptor_pool_adec7cbd5e692812b0aa0afefa04697d7}
+
+
+The pool where excess elements are placed. 
+
+\hypertarget{classtervel_1_1util_1_1memory_1_1rc_1_1_descriptor_pool_a816f71722b9a18b007154e27bdb153bd}{}\index{tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool@{tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool}!safe\+\_\+pool\+\_\+@{safe\+\_\+pool\+\_\+}}
+\index{safe\+\_\+pool\+\_\+@{safe\+\_\+pool\+\_\+}!tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool@{tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool}}
+\subsubsection[{safe\+\_\+pool\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Pool\+Element}$\ast$ tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool\+::safe\+\_\+pool\+\_\+ \{nullptr\}\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1util_1_1memory_1_1rc_1_1_descriptor_pool_a816f71722b9a18b007154e27bdb153bd}
+
+
+A linked list of pool elements. 
+
+One can be assured that no thread will try to access the descriptor of any element in this pool. They can\textquotesingle{}t be freed as some threads may still have access to the element itself and may try to increment the refrence count. \hypertarget{classtervel_1_1util_1_1memory_1_1rc_1_1_descriptor_pool_a121f3c807724ee68f21faf5e659c2cf7}{}\index{tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool@{tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool}!safe\+\_\+pool\+\_\+count\+\_\+@{safe\+\_\+pool\+\_\+count\+\_\+}}
+\index{safe\+\_\+pool\+\_\+count\+\_\+@{safe\+\_\+pool\+\_\+count\+\_\+}!tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool@{tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool}}
+\subsubsection[{safe\+\_\+pool\+\_\+count\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}uint64\+\_\+t tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool\+::safe\+\_\+pool\+\_\+count\+\_\+ \{0\}\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1util_1_1memory_1_1rc_1_1_descriptor_pool_a121f3c807724ee68f21faf5e659c2cf7}
+
+
+Two counters used to track the number of elements in the linked list. 
+
+this facilitates the detection of when there are too many elements. \hypertarget{classtervel_1_1util_1_1memory_1_1rc_1_1_descriptor_pool_a850e99b50092270ccc5e8529cffe294b}{}\index{tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool@{tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool}!unsafe\+\_\+pool\+\_\+@{unsafe\+\_\+pool\+\_\+}}
+\index{unsafe\+\_\+pool\+\_\+@{unsafe\+\_\+pool\+\_\+}!tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool@{tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool}}
+\subsubsection[{unsafe\+\_\+pool\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}{\bf Pool\+Element}$\ast$ tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool\+::unsafe\+\_\+pool\+\_\+ \{nullptr\}\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1util_1_1memory_1_1rc_1_1_descriptor_pool_a850e99b50092270ccc5e8529cffe294b}
+
+
+A linked list of pool elements. 
+
+Elements get released to this pool when they\textquotesingle{}re no longer needed, but some threads may still try to access the descriptor in the element. After some time has passed, items generally move from this pool to the safe\+\_\+pool\+\_\+ \hypertarget{classtervel_1_1util_1_1memory_1_1rc_1_1_descriptor_pool_a8b8a73ac56132217ea75bd6f5d13ba98}{}\index{tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool@{tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool}!unsafe\+\_\+pool\+\_\+count\+\_\+@{unsafe\+\_\+pool\+\_\+count\+\_\+}}
+\index{unsafe\+\_\+pool\+\_\+count\+\_\+@{unsafe\+\_\+pool\+\_\+count\+\_\+}!tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool@{tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool}}
+\subsubsection[{unsafe\+\_\+pool\+\_\+count\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}uint64\+\_\+t tervel\+::util\+::memory\+::rc\+::\+Descriptor\+Pool\+::unsafe\+\_\+pool\+\_\+count\+\_\+ \{0\}\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1util_1_1memory_1_1rc_1_1_descriptor_pool_a8b8a73ac56132217ea75bd6f5d13ba98}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+tervel/util/memory/rc/\hyperlink{descriptor__pool_8h}{descriptor\+\_\+pool.\+h}\end{DoxyCompactItemize}

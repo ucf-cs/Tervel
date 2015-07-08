@@ -1,0 +1,171 @@
+\hypertarget{classtervel_1_1containers_1_1wf_1_1vector_1_1_array_array}{}\section{tervel\+:\+:containers\+:\+:wf\+:\+:vector\+:\+:Array\+Array$<$ T $>$ Class Template Reference}
+\label{classtervel_1_1containers_1_1wf_1_1vector_1_1_array_array}\index{tervel\+::containers\+::wf\+::vector\+::\+Array\+Array$<$ T $>$@{tervel\+::containers\+::wf\+::vector\+::\+Array\+Array$<$ T $>$}}
+
+
+{\ttfamily \#include $<$array\+\_\+array.\+h$>$}
+
+Inheritance diagram for tervel\+:\+:containers\+:\+:wf\+:\+:vector\+:\+:Array\+Array$<$ T $>$\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classtervel_1_1containers_1_1wf_1_1vector_1_1_array_array}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_array_array_a4d5831877440072dac89334eda24e6e3}{Array\+Array} (size\+\_\+t \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_array_array_ae7bb842a55e3e189dc1452fb077d8459}{capacity}, T default\+\_\+value=nullptr)
+\begin{DoxyCompactList}\small\item\em This class contains code related to managing elements stored in the vector It stores elements on a series of array segments, which are stored into a global vector. \end{DoxyCompactList}\item 
+\hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_array_array_a6bac363e501d15644d71e1057db51d55}{$\sim$\+Array\+Array} ()
+\item 
+\hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_array_array_a7c46cf8d5a4df86d5d258f5e97069876}{Array\+Segment} \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_array_array_a26bfbe1d092f02ca047d24856cff004c}{add\+\_\+segment} (const size\+\_\+t pos)
+\begin{DoxyCompactList}\small\item\em This function adds an array segment to the arrays used to hold additional elements. \end{DoxyCompactList}\item 
+\hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_array_array_ac3a7367d6f8ead5417cafe0026e86481}{Array\+Element} $\ast$ \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_array_array_afaa4f7502ab5ae8ccbe7bb05408f600a}{get\+\_\+spot} (const size\+\_\+t raw\+\_\+pos, const bool no\+\_\+add=false)
+\begin{DoxyCompactList}\small\item\em This function returns the address of the specified position. \end{DoxyCompactList}\item 
+\hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_array_array_ac3a7367d6f8ead5417cafe0026e86481}{Array\+Element} $\ast$ \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_array_array_adeae4be5c2a2f99478a8afab5d033316}{allocate\+\_\+array\+\_\+segment} (const size\+\_\+t \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_array_array_ae7bb842a55e3e189dc1452fb077d8459}{capacity})
+\item 
+size\+\_\+t \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_array_array_ae7bb842a55e3e189dc1452fb077d8459}{capacity} ()
+\end{DoxyCompactItemize}
+\subsection*{Private Types}
+\begin{DoxyCompactItemize}
+\item 
+typedef std\+::atomic$<$ T $>$ \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_array_array_ac3a7367d6f8ead5417cafe0026e86481}{Array\+Element}
+\item 
+typedef \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_array_array_ac3a7367d6f8ead5417cafe0026e86481}{Array\+Element} $\ast$ \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_array_array_a7c46cf8d5a4df86d5d258f5e97069876}{Array\+Segment}
+\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+const T \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_array_array_ae234686849179edcb8834753b35a181f}{default\+\_\+value\+\_\+} \{nullptr\}
+\item 
+std\+::atomic$<$ \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_array_array_a7c46cf8d5a4df86d5d258f5e97069876}{Array\+Segment} $>$ \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_array_array_a3dda9f4ccf0846e5741c03c13ae3e2b1}{array\+\_\+of\+\_\+arrays} \mbox{[}\hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_array_array_aee96083ae205bf8a3e2c63520320b674}{k\+\_\+max\+\_\+array\+\_\+segments\+\_\+}\mbox{]}
+\item 
+size\+\_\+t \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_array_array_aa658a2bedb822e44a645078afbba8d1f}{offset\+\_\+}
+\item 
+size\+\_\+t \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_array_array_a914f36d1acd29dcda33665e08af09bca}{offset\+\_\+pow\+\_\+}
+\item 
+std\+::atomic$<$ size\+\_\+t $>$ \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_array_array_add3378d0061344bf1d6cc8f684502cc4}{current\+\_\+capacity\+\_\+}
+\end{DoxyCompactItemize}
+\subsection*{Static Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+static const size\+\_\+t \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_array_array_aee96083ae205bf8a3e2c63520320b674}{k\+\_\+max\+\_\+array\+\_\+segments\+\_\+} \{64\}
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Typedef Documentation}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1vector_1_1_array_array_ac3a7367d6f8ead5417cafe0026e86481}{}\index{tervel\+::containers\+::wf\+::vector\+::\+Array\+Array@{tervel\+::containers\+::wf\+::vector\+::\+Array\+Array}!Array\+Element@{Array\+Element}}
+\index{Array\+Element@{Array\+Element}!tervel\+::containers\+::wf\+::vector\+::\+Array\+Array@{tervel\+::containers\+::wf\+::vector\+::\+Array\+Array}}
+\subsubsection[{Array\+Element}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T $>$ typedef std\+::atomic$<$T$>$ {\bf tervel\+::containers\+::wf\+::vector\+::\+Array\+Array}$<$ T $>$\+::{\bf Array\+Element}\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1containers_1_1wf_1_1vector_1_1_array_array_ac3a7367d6f8ead5417cafe0026e86481}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1vector_1_1_array_array_a7c46cf8d5a4df86d5d258f5e97069876}{}\index{tervel\+::containers\+::wf\+::vector\+::\+Array\+Array@{tervel\+::containers\+::wf\+::vector\+::\+Array\+Array}!Array\+Segment@{Array\+Segment}}
+\index{Array\+Segment@{Array\+Segment}!tervel\+::containers\+::wf\+::vector\+::\+Array\+Array@{tervel\+::containers\+::wf\+::vector\+::\+Array\+Array}}
+\subsubsection[{Array\+Segment}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T $>$ typedef {\bf Array\+Element}$\ast$ {\bf tervel\+::containers\+::wf\+::vector\+::\+Array\+Array}$<$ T $>$\+::{\bf Array\+Segment}\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1containers_1_1wf_1_1vector_1_1_array_array_a7c46cf8d5a4df86d5d258f5e97069876}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1vector_1_1_array_array_a4d5831877440072dac89334eda24e6e3}{}\index{tervel\+::containers\+::wf\+::vector\+::\+Array\+Array@{tervel\+::containers\+::wf\+::vector\+::\+Array\+Array}!Array\+Array@{Array\+Array}}
+\index{Array\+Array@{Array\+Array}!tervel\+::containers\+::wf\+::vector\+::\+Array\+Array@{tervel\+::containers\+::wf\+::vector\+::\+Array\+Array}}
+\subsubsection[{Array\+Array(size\+\_\+t capacity, T default\+\_\+value=nullptr)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T $>$ {\bf tervel\+::containers\+::wf\+::vector\+::\+Array\+Array}$<$ T $>$\+::{\bf Array\+Array} (
+\begin{DoxyParamCaption}
+\item[{size\+\_\+t}]{capacity, }
+\item[{T}]{default\+\_\+value = {\ttfamily nullptr}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1containers_1_1wf_1_1vector_1_1_array_array_a4d5831877440072dac89334eda24e6e3}
+
+
+This class contains code related to managing elements stored in the vector It stores elements on a series of array segments, which are stored into a global vector. 
+
+T\+O\+D\+O\+: Remove atomic type of array replace it with explicit atomic loads This will remove unnecessary memory barriers since it is a single transition type. \hypertarget{classtervel_1_1containers_1_1wf_1_1vector_1_1_array_array_a6bac363e501d15644d71e1057db51d55}{}\index{tervel\+::containers\+::wf\+::vector\+::\+Array\+Array@{tervel\+::containers\+::wf\+::vector\+::\+Array\+Array}!````~Array\+Array@{$\sim$\+Array\+Array}}
+\index{````~Array\+Array@{$\sim$\+Array\+Array}!tervel\+::containers\+::wf\+::vector\+::\+Array\+Array@{tervel\+::containers\+::wf\+::vector\+::\+Array\+Array}}
+\subsubsection[{$\sim$\+Array\+Array()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T $>$ {\bf tervel\+::containers\+::wf\+::vector\+::\+Array\+Array}$<$ T $>$\+::$\sim${\bf Array\+Array} (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1containers_1_1wf_1_1vector_1_1_array_array_a6bac363e501d15644d71e1057db51d55}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1vector_1_1_array_array_a26bfbe1d092f02ca047d24856cff004c}{}\index{tervel\+::containers\+::wf\+::vector\+::\+Array\+Array@{tervel\+::containers\+::wf\+::vector\+::\+Array\+Array}!add\+\_\+segment@{add\+\_\+segment}}
+\index{add\+\_\+segment@{add\+\_\+segment}!tervel\+::containers\+::wf\+::vector\+::\+Array\+Array@{tervel\+::containers\+::wf\+::vector\+::\+Array\+Array}}
+\subsubsection[{add\+\_\+segment(const size\+\_\+t pos)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T $>$ {\bf Array\+Segment} {\bf tervel\+::containers\+::wf\+::vector\+::\+Array\+Array}$<$ T $>$\+::add\+\_\+segment (
+\begin{DoxyParamCaption}
+\item[{const size\+\_\+t}]{pos}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1containers_1_1wf_1_1vector_1_1_array_array_a26bfbe1d092f02ca047d24856cff004c}
+
+
+This function adds an array segment to the arrays used to hold additional elements. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em pos} & the slot to place the new array segment \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the current array segment at the specified position 
+\end{DoxyReturn}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1vector_1_1_array_array_adeae4be5c2a2f99478a8afab5d033316}{}\index{tervel\+::containers\+::wf\+::vector\+::\+Array\+Array@{tervel\+::containers\+::wf\+::vector\+::\+Array\+Array}!allocate\+\_\+array\+\_\+segment@{allocate\+\_\+array\+\_\+segment}}
+\index{allocate\+\_\+array\+\_\+segment@{allocate\+\_\+array\+\_\+segment}!tervel\+::containers\+::wf\+::vector\+::\+Array\+Array@{tervel\+::containers\+::wf\+::vector\+::\+Array\+Array}}
+\subsubsection[{allocate\+\_\+array\+\_\+segment(const size\+\_\+t capacity)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T $>$ {\bf Array\+Element}$\ast$ {\bf tervel\+::containers\+::wf\+::vector\+::\+Array\+Array}$<$ T $>$\+::allocate\+\_\+array\+\_\+segment (
+\begin{DoxyParamCaption}
+\item[{const size\+\_\+t}]{capacity}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1containers_1_1wf_1_1vector_1_1_array_array_adeae4be5c2a2f99478a8afab5d033316}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1vector_1_1_array_array_ae7bb842a55e3e189dc1452fb077d8459}{}\index{tervel\+::containers\+::wf\+::vector\+::\+Array\+Array@{tervel\+::containers\+::wf\+::vector\+::\+Array\+Array}!capacity@{capacity}}
+\index{capacity@{capacity}!tervel\+::containers\+::wf\+::vector\+::\+Array\+Array@{tervel\+::containers\+::wf\+::vector\+::\+Array\+Array}}
+\subsubsection[{capacity()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T $>$ size\+\_\+t {\bf tervel\+::containers\+::wf\+::vector\+::\+Array\+Array}$<$ T $>$\+::capacity (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1containers_1_1wf_1_1vector_1_1_array_array_ae7bb842a55e3e189dc1452fb077d8459}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1vector_1_1_array_array_afaa4f7502ab5ae8ccbe7bb05408f600a}{}\index{tervel\+::containers\+::wf\+::vector\+::\+Array\+Array@{tervel\+::containers\+::wf\+::vector\+::\+Array\+Array}!get\+\_\+spot@{get\+\_\+spot}}
+\index{get\+\_\+spot@{get\+\_\+spot}!tervel\+::containers\+::wf\+::vector\+::\+Array\+Array@{tervel\+::containers\+::wf\+::vector\+::\+Array\+Array}}
+\subsubsection[{get\+\_\+spot(const size\+\_\+t raw\+\_\+pos, const bool no\+\_\+add=false)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T $>$ {\bf Array\+Element}$\ast$ {\bf tervel\+::containers\+::wf\+::vector\+::\+Array\+Array}$<$ T $>$\+::get\+\_\+spot (
+\begin{DoxyParamCaption}
+\item[{const size\+\_\+t}]{raw\+\_\+pos, }
+\item[{const bool}]{no\+\_\+add = {\ttfamily false}}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}\label{classtervel_1_1containers_1_1wf_1_1vector_1_1_array_array_afaa4f7502ab5ae8ccbe7bb05408f600a}
+
+
+This function returns the address of the specified position. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em raw\+\_\+pos} & the position \\
+\hline
+{\em no\+\_\+add} & if true then it will not increase the vectors size \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+the address of the specified positon 
+\end{DoxyReturn}
+
+
+Implements \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_vector_array_a1ff5c1a5a86a822cfd50b48987d1857b}{tervel\+::containers\+::wf\+::vector\+::\+Vector\+Array$<$ T $>$}.
+
+
+
+\subsection{Member Data Documentation}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1vector_1_1_array_array_a3dda9f4ccf0846e5741c03c13ae3e2b1}{}\index{tervel\+::containers\+::wf\+::vector\+::\+Array\+Array@{tervel\+::containers\+::wf\+::vector\+::\+Array\+Array}!array\+\_\+of\+\_\+arrays@{array\+\_\+of\+\_\+arrays}}
+\index{array\+\_\+of\+\_\+arrays@{array\+\_\+of\+\_\+arrays}!tervel\+::containers\+::wf\+::vector\+::\+Array\+Array@{tervel\+::containers\+::wf\+::vector\+::\+Array\+Array}}
+\subsubsection[{array\+\_\+of\+\_\+arrays}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T $>$ std\+::atomic$<${\bf Array\+Segment}$>$ {\bf tervel\+::containers\+::wf\+::vector\+::\+Array\+Array}$<$ T $>$\+::array\+\_\+of\+\_\+arrays\mbox{[}{\bf k\+\_\+max\+\_\+array\+\_\+segments\+\_\+}\mbox{]}\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1containers_1_1wf_1_1vector_1_1_array_array_a3dda9f4ccf0846e5741c03c13ae3e2b1}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1vector_1_1_array_array_add3378d0061344bf1d6cc8f684502cc4}{}\index{tervel\+::containers\+::wf\+::vector\+::\+Array\+Array@{tervel\+::containers\+::wf\+::vector\+::\+Array\+Array}!current\+\_\+capacity\+\_\+@{current\+\_\+capacity\+\_\+}}
+\index{current\+\_\+capacity\+\_\+@{current\+\_\+capacity\+\_\+}!tervel\+::containers\+::wf\+::vector\+::\+Array\+Array@{tervel\+::containers\+::wf\+::vector\+::\+Array\+Array}}
+\subsubsection[{current\+\_\+capacity\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T $>$ std\+::atomic$<$size\+\_\+t$>$ {\bf tervel\+::containers\+::wf\+::vector\+::\+Array\+Array}$<$ T $>$\+::current\+\_\+capacity\+\_\+\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1containers_1_1wf_1_1vector_1_1_array_array_add3378d0061344bf1d6cc8f684502cc4}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1vector_1_1_array_array_ae234686849179edcb8834753b35a181f}{}\index{tervel\+::containers\+::wf\+::vector\+::\+Array\+Array@{tervel\+::containers\+::wf\+::vector\+::\+Array\+Array}!default\+\_\+value\+\_\+@{default\+\_\+value\+\_\+}}
+\index{default\+\_\+value\+\_\+@{default\+\_\+value\+\_\+}!tervel\+::containers\+::wf\+::vector\+::\+Array\+Array@{tervel\+::containers\+::wf\+::vector\+::\+Array\+Array}}
+\subsubsection[{default\+\_\+value\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T $>$ const T {\bf tervel\+::containers\+::wf\+::vector\+::\+Array\+Array}$<$ T $>$\+::default\+\_\+value\+\_\+ \{nullptr\}\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1containers_1_1wf_1_1vector_1_1_array_array_ae234686849179edcb8834753b35a181f}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1vector_1_1_array_array_aee96083ae205bf8a3e2c63520320b674}{}\index{tervel\+::containers\+::wf\+::vector\+::\+Array\+Array@{tervel\+::containers\+::wf\+::vector\+::\+Array\+Array}!k\+\_\+max\+\_\+array\+\_\+segments\+\_\+@{k\+\_\+max\+\_\+array\+\_\+segments\+\_\+}}
+\index{k\+\_\+max\+\_\+array\+\_\+segments\+\_\+@{k\+\_\+max\+\_\+array\+\_\+segments\+\_\+}!tervel\+::containers\+::wf\+::vector\+::\+Array\+Array@{tervel\+::containers\+::wf\+::vector\+::\+Array\+Array}}
+\subsubsection[{k\+\_\+max\+\_\+array\+\_\+segments\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T $>$ const size\+\_\+t {\bf tervel\+::containers\+::wf\+::vector\+::\+Array\+Array}$<$ T $>$\+::k\+\_\+max\+\_\+array\+\_\+segments\+\_\+ \{64\}\hspace{0.3cm}{\ttfamily [static]}, {\ttfamily [private]}}\label{classtervel_1_1containers_1_1wf_1_1vector_1_1_array_array_aee96083ae205bf8a3e2c63520320b674}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1vector_1_1_array_array_aa658a2bedb822e44a645078afbba8d1f}{}\index{tervel\+::containers\+::wf\+::vector\+::\+Array\+Array@{tervel\+::containers\+::wf\+::vector\+::\+Array\+Array}!offset\+\_\+@{offset\+\_\+}}
+\index{offset\+\_\+@{offset\+\_\+}!tervel\+::containers\+::wf\+::vector\+::\+Array\+Array@{tervel\+::containers\+::wf\+::vector\+::\+Array\+Array}}
+\subsubsection[{offset\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T $>$ size\+\_\+t {\bf tervel\+::containers\+::wf\+::vector\+::\+Array\+Array}$<$ T $>$\+::offset\+\_\+\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1containers_1_1wf_1_1vector_1_1_array_array_aa658a2bedb822e44a645078afbba8d1f}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1vector_1_1_array_array_a914f36d1acd29dcda33665e08af09bca}{}\index{tervel\+::containers\+::wf\+::vector\+::\+Array\+Array@{tervel\+::containers\+::wf\+::vector\+::\+Array\+Array}!offset\+\_\+pow\+\_\+@{offset\+\_\+pow\+\_\+}}
+\index{offset\+\_\+pow\+\_\+@{offset\+\_\+pow\+\_\+}!tervel\+::containers\+::wf\+::vector\+::\+Array\+Array@{tervel\+::containers\+::wf\+::vector\+::\+Array\+Array}}
+\subsubsection[{offset\+\_\+pow\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T $>$ size\+\_\+t {\bf tervel\+::containers\+::wf\+::vector\+::\+Array\+Array}$<$ T $>$\+::offset\+\_\+pow\+\_\+\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1containers_1_1wf_1_1vector_1_1_array_array_a914f36d1acd29dcda33665e08af09bca}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+tervel/containers/wf/vector/\hyperlink{array__array_8h}{array\+\_\+array.\+h}\end{DoxyCompactItemize}

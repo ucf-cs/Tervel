@@ -1,0 +1,1550 @@
+\hypertarget{class_test_class}{}\section{Test\+Class$<$ Key, Value $>$ Class Template Reference}
+\label{class_test_class}\index{Test\+Class$<$ Key, Value $>$@{Test\+Class$<$ Key, Value $>$}}
+
+
+{\ttfamily \#include $<$blank\+\_\+api.\+h$>$}
+
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{struct_test_class_1_1equal__to}{equal\+\_\+to}
+\item 
+struct \hyperlink{struct_test_class_1_1foo__set__traits}{foo\+\_\+set\+\_\+traits}
+\item 
+struct \hyperlink{struct_test_class_1_1functor}{functor}
+\item 
+struct \hyperlink{struct_test_class_1_1less__s}{less\+\_\+s}
+\item 
+struct \hyperlink{struct_test_class_1_1list__traits}{list\+\_\+traits}
+\item 
+struct \hyperlink{struct_test_class_1_1map__traits}{map\+\_\+traits}
+\item 
+struct \hyperlink{struct_test_class_1_1_my_hash_compare}{My\+Hash\+Compare}
+\item 
+struct \hyperlink{struct_test_class_1_1s__hash}{s\+\_\+hash}
+\item 
+struct \hyperlink{struct_test_class_1_1ufunctor}{ufunctor}
+\item 
+class \hyperlink{class_test_class_1_1_wrapper_type}{Wrapper\+Type}
+\end{DoxyCompactItemize}
+\subsection*{Public Types}
+\begin{DoxyCompactItemize}
+\item 
+typedef \hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map}{tervel\+::containers\+::wf\+::\+Hash\+Map}$<$ Key, \hyperlink{hash__map_2test_object_8h_ad777bf08d8e2b01df17ba5e3c51ae11f}{Value} $>$ \hyperlink{class_test_class_a1b85c62e95a514dec1b9680e76348329}{Map}
+\item 
+typedef \hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map}{tervel\+::containers\+::wf\+::\+Hash\+Map}$<$ Key, \hyperlink{hash__map_2test_object_8h_ad777bf08d8e2b01df17ba5e3c51ae11f}{Value} $>$\+::Value\+Accessor \hyperlink{class_test_class_a0af9e93839a0717ed717ab4818353762}{Accessor}
+\item 
+typedef \hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map}{tervel\+::containers\+::wf\+::\+Hash\+Map}$<$ Key, \hyperlink{hash__map_2test_object_8h_ad777bf08d8e2b01df17ba5e3c51ae11f}{Value} $>$ \hyperlink{class_test_class_a1b85c62e95a514dec1b9680e76348329}{Map}
+\item 
+typedef \hyperlink{classtervel_1_1containers_1_1wf_1_1_hash_map}{tervel\+::containers\+::wf\+::\+Hash\+Map}$<$ Key, \hyperlink{hash__map_2test_object_8h_ad777bf08d8e2b01df17ba5e3c51ae11f}{Value} $>$\+::Value\+Accessor \hyperlink{class_test_class_a0af9e93839a0717ed717ab4818353762}{Accessor}
+\item 
+typedef \hyperlink{classtervel_1_1containers_1_1wf_1_1_ring_buffer}{tervel\+::containers\+::wf\+::\+Ring\+Buffer}$<$ \hyperlink{class_test_class_1_1_wrapper_type}{Wrapper\+Type} $\ast$ $>$ \hyperlink{class_test_class_abe640a96ccd2edb9a09ad292c8a8b298}{container\+\_\+t}
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_test_class_ab3dbc7a67da46dda1125f7dee533aca2}{Test\+Class} (size\+\_\+t num\+\_\+threads, size\+\_\+t capacity)
+\item 
+std\+::string \hyperlink{class_test_class_a84e73a91ede625887472a307235d6de5}{to\+String} ()
+\item 
+void \hyperlink{class_test_class_a7e6bce4c39c047282ea8c1f1485a260b}{attach\+\_\+thread} ()
+\item 
+void \hyperlink{class_test_class_a79b3a395c8a1fac7a156228a27d829cc}{detach\+\_\+thread} ()
+\item 
+bool \hyperlink{class_test_class_af497b95115e81f882851b2ab843c298c}{find} (Key key, \hyperlink{hash__map_2test_object_8h_ad777bf08d8e2b01df17ba5e3c51ae11f}{Value} \&value)
+\item 
+bool \hyperlink{class_test_class_a0d075565ad4cccdb071bf267fe444681}{insert} (Key key, \hyperlink{hash__map_2test_object_8h_ad777bf08d8e2b01df17ba5e3c51ae11f}{Value} value)
+\item 
+bool \hyperlink{class_test_class_a4c33c8cac20119f9bee9b5091bc8a385}{update} (Key key, \hyperlink{hash__map_2test_object_8h_ad777bf08d8e2b01df17ba5e3c51ae11f}{Value} \&value\+\_\+expected, \hyperlink{hash__map_2test_object_8h_ad777bf08d8e2b01df17ba5e3c51ae11f}{Value} value\+\_\+new)
+\item 
+bool \hyperlink{class_test_class_a3a22d60709c15d419f69d29b7de92d02}{remove} (Key key)
+\item 
+size\+\_\+t \hyperlink{class_test_class_af2230f298ab3ef4ebf71aa7afa3fb6ca}{size} ()
+\item 
+\hyperlink{class_test_class_ab3dbc7a67da46dda1125f7dee533aca2}{Test\+Class} (size\+\_\+t num\+\_\+threads, size\+\_\+t capacity)
+\item 
+std\+::string \hyperlink{class_test_class_a84e73a91ede625887472a307235d6de5}{to\+String} ()
+\item 
+void \hyperlink{class_test_class_a7e6bce4c39c047282ea8c1f1485a260b}{attach\+\_\+thread} ()
+\item 
+void \hyperlink{class_test_class_a79b3a395c8a1fac7a156228a27d829cc}{detach\+\_\+thread} ()
+\item 
+bool \hyperlink{class_test_class_af497b95115e81f882851b2ab843c298c}{find} (Key key, \hyperlink{hash__map_2test_object_8h_ad777bf08d8e2b01df17ba5e3c51ae11f}{Value} \&value)
+\item 
+bool \hyperlink{class_test_class_a0d075565ad4cccdb071bf267fe444681}{insert} (Key key, \hyperlink{hash__map_2test_object_8h_ad777bf08d8e2b01df17ba5e3c51ae11f}{Value} value)
+\item 
+bool \hyperlink{class_test_class_a4c33c8cac20119f9bee9b5091bc8a385}{update} (Key key, \hyperlink{hash__map_2test_object_8h_ad777bf08d8e2b01df17ba5e3c51ae11f}{Value} \&value\+\_\+expected, \hyperlink{hash__map_2test_object_8h_ad777bf08d8e2b01df17ba5e3c51ae11f}{Value} value\+\_\+new)
+\item 
+bool \hyperlink{class_test_class_a3a22d60709c15d419f69d29b7de92d02}{remove} (Key key)
+\item 
+size\+\_\+t \hyperlink{class_test_class_af2230f298ab3ef4ebf71aa7afa3fb6ca}{size} ()
+\item 
+\hyperlink{class_test_class_ab3dbc7a67da46dda1125f7dee533aca2}{Test\+Class} (size\+\_\+t num\+\_\+threads, size\+\_\+t capacity)
+\item 
+std\+::string \hyperlink{class_test_class_a84e73a91ede625887472a307235d6de5}{to\+String} ()
+\item 
+void \hyperlink{class_test_class_a7e6bce4c39c047282ea8c1f1485a260b}{attach\+\_\+thread} ()
+\item 
+void \hyperlink{class_test_class_a79b3a395c8a1fac7a156228a27d829cc}{detach\+\_\+thread} ()
+\item 
+bool \hyperlink{class_test_class_af497b95115e81f882851b2ab843c298c}{find} (Key key, \hyperlink{hash__map_2test_object_8h_ad777bf08d8e2b01df17ba5e3c51ae11f}{Value} \&value)
+\item 
+bool \hyperlink{class_test_class_a0d075565ad4cccdb071bf267fe444681}{insert} (Key key, \hyperlink{hash__map_2test_object_8h_ad777bf08d8e2b01df17ba5e3c51ae11f}{Value} value)
+\item 
+bool \hyperlink{class_test_class_a4c33c8cac20119f9bee9b5091bc8a385}{update} (Key key, \hyperlink{hash__map_2test_object_8h_ad777bf08d8e2b01df17ba5e3c51ae11f}{Value} \&value\+\_\+expected, \hyperlink{hash__map_2test_object_8h_ad777bf08d8e2b01df17ba5e3c51ae11f}{Value} value\+\_\+new)
+\item 
+bool \hyperlink{class_test_class_a3a22d60709c15d419f69d29b7de92d02}{remove} (Key key)
+\item 
+size\+\_\+t \hyperlink{class_test_class_af2230f298ab3ef4ebf71aa7afa3fb6ca}{size} ()
+\item 
+\hyperlink{class_test_class_ab3dbc7a67da46dda1125f7dee533aca2}{Test\+Class} (size\+\_\+t num\+\_\+threads, size\+\_\+t capacity)
+\item 
+std\+::string \hyperlink{class_test_class_a84e73a91ede625887472a307235d6de5}{to\+String} ()
+\item 
+void \hyperlink{class_test_class_a7e6bce4c39c047282ea8c1f1485a260b}{attach\+\_\+thread} ()
+\item 
+void \hyperlink{class_test_class_a79b3a395c8a1fac7a156228a27d829cc}{detach\+\_\+thread} ()
+\item 
+bool \hyperlink{class_test_class_af497b95115e81f882851b2ab843c298c}{find} (Key key, \hyperlink{hash__map_2test_object_8h_ad777bf08d8e2b01df17ba5e3c51ae11f}{Value} \&value)
+\item 
+bool \hyperlink{class_test_class_a0d075565ad4cccdb071bf267fe444681}{insert} (Key key, \hyperlink{hash__map_2test_object_8h_ad777bf08d8e2b01df17ba5e3c51ae11f}{Value} value)
+\item 
+bool \hyperlink{class_test_class_a4c33c8cac20119f9bee9b5091bc8a385}{update} (Key key, \hyperlink{hash__map_2test_object_8h_ad777bf08d8e2b01df17ba5e3c51ae11f}{Value} \&value\+\_\+expected, \hyperlink{hash__map_2test_object_8h_ad777bf08d8e2b01df17ba5e3c51ae11f}{Value} value\+\_\+new)
+\item 
+bool \hyperlink{class_test_class_a3a22d60709c15d419f69d29b7de92d02}{remove} (Key key)
+\item 
+size\+\_\+t \hyperlink{class_test_class_af2230f298ab3ef4ebf71aa7afa3fb6ca}{size} ()
+\item 
+\hyperlink{class_test_class_ab3dbc7a67da46dda1125f7dee533aca2}{Test\+Class} (size\+\_\+t num\+\_\+threads, size\+\_\+t capacity)
+\item 
+std\+::string \hyperlink{class_test_class_a84e73a91ede625887472a307235d6de5}{to\+String} ()
+\item 
+void \hyperlink{class_test_class_a7e6bce4c39c047282ea8c1f1485a260b}{attach\+\_\+thread} ()
+\item 
+void \hyperlink{class_test_class_a79b3a395c8a1fac7a156228a27d829cc}{detach\+\_\+thread} ()
+\item 
+bool \hyperlink{class_test_class_af497b95115e81f882851b2ab843c298c}{find} (Key key, \hyperlink{hash__map_2test_object_8h_ad777bf08d8e2b01df17ba5e3c51ae11f}{Value} \&value)
+\item 
+bool \hyperlink{class_test_class_a0d075565ad4cccdb071bf267fe444681}{insert} (Key key, \hyperlink{hash__map_2test_object_8h_ad777bf08d8e2b01df17ba5e3c51ae11f}{Value} value)
+\item 
+bool \hyperlink{class_test_class_a4c33c8cac20119f9bee9b5091bc8a385}{update} (Key key, \hyperlink{hash__map_2test_object_8h_ad777bf08d8e2b01df17ba5e3c51ae11f}{Value} \&value\+\_\+expected, \hyperlink{hash__map_2test_object_8h_ad777bf08d8e2b01df17ba5e3c51ae11f}{Value} value\+\_\+new)
+\item 
+bool \hyperlink{class_test_class_a3a22d60709c15d419f69d29b7de92d02}{remove} (Key key)
+\item 
+size\+\_\+t \hyperlink{class_test_class_af2230f298ab3ef4ebf71aa7afa3fb6ca}{size} ()
+\item 
+\hyperlink{class_test_class_ab3dbc7a67da46dda1125f7dee533aca2}{Test\+Class} (size\+\_\+t num\+\_\+threads, size\+\_\+t capacity)
+\item 
+std\+::string \hyperlink{class_test_class_a84e73a91ede625887472a307235d6de5}{to\+String} ()
+\item 
+void \hyperlink{class_test_class_a7e6bce4c39c047282ea8c1f1485a260b}{attach\+\_\+thread} ()
+\item 
+void \hyperlink{class_test_class_a79b3a395c8a1fac7a156228a27d829cc}{detach\+\_\+thread} ()
+\item 
+bool \hyperlink{class_test_class_af497b95115e81f882851b2ab843c298c}{find} (Key key, \hyperlink{hash__map_2test_object_8h_ad777bf08d8e2b01df17ba5e3c51ae11f}{Value} \&value)
+\item 
+bool \hyperlink{class_test_class_a0d075565ad4cccdb071bf267fe444681}{insert} (Key key, \hyperlink{hash__map_2test_object_8h_ad777bf08d8e2b01df17ba5e3c51ae11f}{Value} value)
+\item 
+bool \hyperlink{class_test_class_a4c33c8cac20119f9bee9b5091bc8a385}{update} (Key key, \hyperlink{hash__map_2test_object_8h_ad777bf08d8e2b01df17ba5e3c51ae11f}{Value} \&value\+\_\+expected, \hyperlink{hash__map_2test_object_8h_ad777bf08d8e2b01df17ba5e3c51ae11f}{Value} value\+\_\+new)
+\item 
+bool \hyperlink{class_test_class_a3a22d60709c15d419f69d29b7de92d02}{remove} (Key key)
+\item 
+size\+\_\+t \hyperlink{class_test_class_af2230f298ab3ef4ebf71aa7afa3fb6ca}{size} ()
+\item 
+\hyperlink{class_test_class_ab3dbc7a67da46dda1125f7dee533aca2}{Test\+Class} (size\+\_\+t num\+\_\+threads, size\+\_\+t capacity)
+\item 
+std\+::string \hyperlink{class_test_class_a84e73a91ede625887472a307235d6de5}{to\+String} ()
+\item 
+void \hyperlink{class_test_class_a7e6bce4c39c047282ea8c1f1485a260b}{attach\+\_\+thread} ()
+\item 
+void \hyperlink{class_test_class_a79b3a395c8a1fac7a156228a27d829cc}{detach\+\_\+thread} ()
+\item 
+bool \hyperlink{class_test_class_af497b95115e81f882851b2ab843c298c}{find} (Key key, \hyperlink{hash__map_2test_object_8h_ad777bf08d8e2b01df17ba5e3c51ae11f}{Value} \&value)
+\item 
+bool \hyperlink{class_test_class_a0d075565ad4cccdb071bf267fe444681}{insert} (Key key, \hyperlink{hash__map_2test_object_8h_ad777bf08d8e2b01df17ba5e3c51ae11f}{Value} value)
+\item 
+bool \hyperlink{class_test_class_a4c33c8cac20119f9bee9b5091bc8a385}{update} (Key key, \hyperlink{hash__map_2test_object_8h_ad777bf08d8e2b01df17ba5e3c51ae11f}{Value} \&value\+\_\+expected, \hyperlink{hash__map_2test_object_8h_ad777bf08d8e2b01df17ba5e3c51ae11f}{Value} value\+\_\+new)
+\item 
+bool \hyperlink{class_test_class_a3a22d60709c15d419f69d29b7de92d02}{remove} (Key key)
+\item 
+size\+\_\+t \hyperlink{class_test_class_af2230f298ab3ef4ebf71aa7afa3fb6ca}{size} ()
+\item 
+\hyperlink{class_test_class_ab3dbc7a67da46dda1125f7dee533aca2}{Test\+Class} (size\+\_\+t num\+\_\+threads, size\+\_\+t capacity)
+\item 
+std\+::string \hyperlink{class_test_class_a84e73a91ede625887472a307235d6de5}{to\+String} ()
+\item 
+void \hyperlink{class_test_class_a7e6bce4c39c047282ea8c1f1485a260b}{attach\+\_\+thread} ()
+\item 
+void \hyperlink{class_test_class_a79b3a395c8a1fac7a156228a27d829cc}{detach\+\_\+thread} ()
+\item 
+bool \hyperlink{class_test_class_af497b95115e81f882851b2ab843c298c}{find} (Key key, \hyperlink{hash__map_2test_object_8h_ad777bf08d8e2b01df17ba5e3c51ae11f}{Value} \&value)
+\item 
+bool \hyperlink{class_test_class_a0d075565ad4cccdb071bf267fe444681}{insert} (Key key, \hyperlink{hash__map_2test_object_8h_ad777bf08d8e2b01df17ba5e3c51ae11f}{Value} value)
+\item 
+bool \hyperlink{class_test_class_a4c33c8cac20119f9bee9b5091bc8a385}{update} (Key key, \hyperlink{hash__map_2test_object_8h_ad777bf08d8e2b01df17ba5e3c51ae11f}{Value} \&value\+\_\+expected, \hyperlink{hash__map_2test_object_8h_ad777bf08d8e2b01df17ba5e3c51ae11f}{Value} value\+\_\+new)
+\item 
+bool \hyperlink{class_test_class_a3a22d60709c15d419f69d29b7de92d02}{remove} (Key key)
+\item 
+size\+\_\+t \hyperlink{class_test_class_af2230f298ab3ef4ebf71aa7afa3fb6ca}{size} ()
+\item 
+\hyperlink{class_test_class_ab3dbc7a67da46dda1125f7dee533aca2}{Test\+Class} (size\+\_\+t num\+\_\+threads, size\+\_\+t capacity)
+\item 
+std\+::string \hyperlink{class_test_class_a84e73a91ede625887472a307235d6de5}{to\+String} ()
+\item 
+void \hyperlink{class_test_class_a7e6bce4c39c047282ea8c1f1485a260b}{attach\+\_\+thread} ()
+\item 
+void \hyperlink{class_test_class_a79b3a395c8a1fac7a156228a27d829cc}{detach\+\_\+thread} ()
+\item 
+bool \hyperlink{class_test_class_af497b95115e81f882851b2ab843c298c}{find} (Key key, \hyperlink{hash__map_2test_object_8h_ad777bf08d8e2b01df17ba5e3c51ae11f}{Value} \&value)
+\item 
+bool \hyperlink{class_test_class_a0d075565ad4cccdb071bf267fe444681}{insert} (Key key, \hyperlink{hash__map_2test_object_8h_ad777bf08d8e2b01df17ba5e3c51ae11f}{Value} value)
+\item 
+bool \hyperlink{class_test_class_a4c33c8cac20119f9bee9b5091bc8a385}{update} (Key key, \hyperlink{hash__map_2test_object_8h_ad777bf08d8e2b01df17ba5e3c51ae11f}{Value} \&value\+\_\+expected, \hyperlink{hash__map_2test_object_8h_ad777bf08d8e2b01df17ba5e3c51ae11f}{Value} value\+\_\+new)
+\item 
+bool \hyperlink{class_test_class_a3a22d60709c15d419f69d29b7de92d02}{remove} (Key key)
+\item 
+size\+\_\+t \hyperlink{class_test_class_af2230f298ab3ef4ebf71aa7afa3fb6ca}{size} ()
+\item 
+\hyperlink{class_test_class_a25153d9821ce372f9c9146891b04aa07}{Test\+Class} (size\+\_\+t num\+\_\+threads)
+\item 
+std\+::string \hyperlink{class_test_class_a84e73a91ede625887472a307235d6de5}{to\+String} ()
+\item 
+void \hyperlink{class_test_class_a7e6bce4c39c047282ea8c1f1485a260b}{attach\+\_\+thread} ()
+\item 
+void \hyperlink{class_test_class_a79b3a395c8a1fac7a156228a27d829cc}{detach\+\_\+thread} ()
+\item 
+void $\ast$ \hyperlink{class_test_class_a34905bce461fd703bbfb598a1a4f2ff1}{calc\+\_\+next\+\_\+value} (void $\ast$value)
+\item 
+bool \hyperlink{class_test_class_a28aaf697b939932f750c2607fe5ec1ce}{mcas} (int len, std\+::function$<$ int()$>$ pos\+Func, std\+::atomic$<$ void $\ast$ $>$ $\ast$address)
+\item 
+\hyperlink{class_test_class_a2caeb43f7bbe5512fac0d4c58f1c2263}{Test\+Class} (size\+\_\+t capacity, size\+\_\+t num\+\_\+threads)
+\item 
+char $\ast$ \hyperlink{class_test_class_a1bd0edf8d0e906d97e4b3c768398cf7b}{name} ()
+\item 
+bool \hyperlink{class_test_class_ac5d4fa7fbb51710fc978146124f1f8cf}{enqueue} (T value)
+\item 
+bool \hyperlink{class_test_class_a781dcd2216461c876843923c11bb9aac}{dequeue} (T \&val)
+\item 
+void \hyperlink{class_test_class_a7e6bce4c39c047282ea8c1f1485a260b}{attach\+\_\+thread} ()
+\item 
+void \hyperlink{class_test_class_a79b3a395c8a1fac7a156228a27d829cc}{detach\+\_\+thread} ()
+\item 
+\hyperlink{class_test_class_a2caeb43f7bbe5512fac0d4c58f1c2263}{Test\+Class} (size\+\_\+t capacity, size\+\_\+t num\+\_\+threads)
+\item 
+char $\ast$ \hyperlink{class_test_class_a1bd0edf8d0e906d97e4b3c768398cf7b}{name} ()
+\item 
+void \hyperlink{class_test_class_a7e6bce4c39c047282ea8c1f1485a260b}{attach\+\_\+thread} ()
+\item 
+void \hyperlink{class_test_class_a79b3a395c8a1fac7a156228a27d829cc}{detach\+\_\+thread} ()
+\item 
+bool \hyperlink{class_test_class_a2b4f6df9453394ab73885f875801659d}{enqueue} (T val)
+\item 
+bool \hyperlink{class_test_class_a781dcd2216461c876843923c11bb9aac}{dequeue} (T \&val)
+\item 
+\hyperlink{class_test_class_a2caeb43f7bbe5512fac0d4c58f1c2263}{Test\+Class} (size\+\_\+t capacity, size\+\_\+t num\+\_\+threads)
+\item 
+char $\ast$ \hyperlink{class_test_class_a1bd0edf8d0e906d97e4b3c768398cf7b}{name} ()
+\item 
+void \hyperlink{class_test_class_a7e6bce4c39c047282ea8c1f1485a260b}{attach\+\_\+thread} ()
+\item 
+void \hyperlink{class_test_class_a79b3a395c8a1fac7a156228a27d829cc}{detach\+\_\+thread} ()
+\item 
+bool \hyperlink{class_test_class_a2b4f6df9453394ab73885f875801659d}{enqueue} (T val)
+\item 
+bool \hyperlink{class_test_class_a781dcd2216461c876843923c11bb9aac}{dequeue} (T \&val)
+\item 
+void \hyperlink{class_test_class_a794faf7da47f72b05a6b8c57298187e2}{print\+\_\+queue} ()
+\item 
+\hyperlink{class_test_class_a2caeb43f7bbe5512fac0d4c58f1c2263}{Test\+Class} (size\+\_\+t capacity, size\+\_\+t num\+\_\+threads)
+\item 
+char $\ast$ \hyperlink{class_test_class_a1bd0edf8d0e906d97e4b3c768398cf7b}{name} ()
+\item 
+void \hyperlink{class_test_class_a7e6bce4c39c047282ea8c1f1485a260b}{attach\+\_\+thread} ()
+\item 
+void \hyperlink{class_test_class_a79b3a395c8a1fac7a156228a27d829cc}{detach\+\_\+thread} ()
+\item 
+bool \hyperlink{class_test_class_a2b4f6df9453394ab73885f875801659d}{enqueue} (T val)
+\item 
+bool \hyperlink{class_test_class_a781dcd2216461c876843923c11bb9aac}{dequeue} (T \&val)
+\item 
+\hyperlink{class_test_class_a2caeb43f7bbe5512fac0d4c58f1c2263}{Test\+Class} (size\+\_\+t capacity, size\+\_\+t num\+\_\+threads)
+\item 
+char $\ast$ \hyperlink{class_test_class_a1bd0edf8d0e906d97e4b3c768398cf7b}{name} ()
+\item 
+void \hyperlink{class_test_class_a7e6bce4c39c047282ea8c1f1485a260b}{attach\+\_\+thread} ()
+\item 
+void \hyperlink{class_test_class_a79b3a395c8a1fac7a156228a27d829cc}{detach\+\_\+thread} ()
+\item 
+bool \hyperlink{class_test_class_a2b4f6df9453394ab73885f875801659d}{enqueue} (T val)
+\item 
+bool \hyperlink{class_test_class_a781dcd2216461c876843923c11bb9aac}{dequeue} (T \&val)
+\item 
+void \hyperlink{class_test_class_a72a094bae5f780bb6fae94aaf43f9773}{sanity\+\_\+check} ()
+\item 
+\hyperlink{class_test_class_ab3dbc7a67da46dda1125f7dee533aca2}{Test\+Class} (size\+\_\+t num\+\_\+threads, size\+\_\+t capacity)
+\item 
+\hyperlink{class_test_class_a2466c51dad9d120019f486d8372d2a2e}{$\sim$\+Test\+Class} ()
+\item 
+std\+::string \hyperlink{class_test_class_a84e73a91ede625887472a307235d6de5}{to\+String} ()
+\item 
+void \hyperlink{class_test_class_a7e6bce4c39c047282ea8c1f1485a260b}{attach\+\_\+thread} ()
+\item 
+void \hyperlink{class_test_class_a79b3a395c8a1fac7a156228a27d829cc}{detach\+\_\+thread} ()
+\item 
+bool \hyperlink{class_test_class_a48ec6b0f960a62ad6073b1df391932ef}{enqueue} (\hyperlink{hash__map_2test_object_8h_ad777bf08d8e2b01df17ba5e3c51ae11f}{Value} value)
+\item 
+bool \hyperlink{class_test_class_a89fcb2cb3842285e9de88cdb1ac9ff73}{dequeue} (\hyperlink{hash__map_2test_object_8h_ad777bf08d8e2b01df17ba5e3c51ae11f}{Value} \&value)
+\item 
+\hyperlink{class_test_class_ab3dbc7a67da46dda1125f7dee533aca2}{Test\+Class} (size\+\_\+t num\+\_\+threads, size\+\_\+t capacity)
+\item 
+std\+::string \hyperlink{class_test_class_a84e73a91ede625887472a307235d6de5}{to\+String} ()
+\item 
+void \hyperlink{class_test_class_a7e6bce4c39c047282ea8c1f1485a260b}{attach\+\_\+thread} ()
+\item 
+void \hyperlink{class_test_class_a79b3a395c8a1fac7a156228a27d829cc}{detach\+\_\+thread} ()
+\item 
+bool \hyperlink{class_test_class_ac0b38d5b2783d2989a1351718547c8ba}{at} (size\+\_\+t idx, T \&value)
+\item 
+bool \hyperlink{class_test_class_abb0a6be1ab9e43fd5fd40fe8c3b2e5a8}{cas} (size\+\_\+t idx, T \&exp\+Value, T new\+Value)
+\item 
+size\+\_\+t \hyperlink{class_test_class_a64245ead64233bf7bc8948ba339785c4}{push\+\_\+back} (T value)
+\item 
+bool \hyperlink{class_test_class_a50774f0c4fe248799aae9114a9f01233}{pop\+\_\+back} (T \&value)
+\item 
+size\+\_\+t \hyperlink{class_test_class_af2230f298ab3ef4ebf71aa7afa3fb6ca}{size} ()
+\end{DoxyCompactItemize}
+\subsection*{Private Types}
+\begin{DoxyCompactItemize}
+\item 
+typedef cds\+::container\+::\+Michael\+K\+V\+List$<$ cds\+::gc\+::\+H\+P, Key, \hyperlink{hash__map_2test_object_8h_ad777bf08d8e2b01df17ba5e3c51ae11f}{Value}, \hyperlink{struct_test_class_1_1list__traits}{list\+\_\+traits} $>$ \hyperlink{class_test_class_a5c18ae754153ec12a6591663ca817565}{Key2\+Value\+\_\+list}
+\item 
+typedef cds\+::container\+::\+Michael\+Hash\+Map$<$ cds\+::gc\+::\+H\+P, \hyperlink{class_test_class_a5c18ae754153ec12a6591663ca817565}{Key2\+Value\+\_\+list}, \hyperlink{struct_test_class_1_1map__traits}{map\+\_\+traits} $>$ \hyperlink{class_test_class_acff06dce1120b0a2879c55f7a5e5acc7}{hash\+\_\+t}
+\item 
+typedef cds\+::container\+::\+Split\+List\+Map$<$ cds\+::gc\+::\+H\+P, Key, \hyperlink{hash__map_2test_object_8h_ad777bf08d8e2b01df17ba5e3c51ae11f}{Value}, \hyperlink{struct_test_class_1_1foo__set__traits}{foo\+\_\+set\+\_\+traits} $>$ \hyperlink{class_test_class_a8220399a41bb1a4b93273090306ea770}{hash\+\_\+t}
+\item 
+typedef struct \hyperlink{struct_test_class_1_1s__hash}{s\+\_\+hash}$<$ Key $>$ \hyperlink{class_test_class_ac0d14c72d1a7e359213955041bd3eea5}{c\+\_\+hash}
+\item 
+typedef struct \hyperlink{struct_test_class_1_1equal__to}{equal\+\_\+to}$<$ Key $>$ \hyperlink{class_test_class_aafbd6570cd1aa88768f912c15ca188b5}{c\+\_\+equals}
+\item 
+typedef boost\+::unordered\+\_\+map$<$ Key, \hyperlink{hash__map_2test_object_8h_ad777bf08d8e2b01df17ba5e3c51ae11f}{Value}, \hyperlink{class_test_class_ac0d14c72d1a7e359213955041bd3eea5}{c\+\_\+hash}, \hyperlink{class_test_class_aafbd6570cd1aa88768f912c15ca188b5}{c\+\_\+equals}, std\+::allocator$<$ std\+::pair$<$ Key, \hyperlink{hash__map_2test_object_8h_ad777bf08d8e2b01df17ba5e3c51ae11f}{Value} $>$ $>$ $>$ \hyperlink{class_test_class_a8169ffe4884a5ad6488eb7893452ebb1}{hash\+\_\+t}
+\item 
+typedef struct \hyperlink{struct_test_class_1_1s__hash}{s\+\_\+hash}$<$ Key $>$ \hyperlink{class_test_class_ac0d14c72d1a7e359213955041bd3eea5}{c\+\_\+hash}
+\item 
+typedef struct \hyperlink{struct_test_class_1_1equal__to}{equal\+\_\+to}$<$ Key $>$ \hyperlink{class_test_class_aafbd6570cd1aa88768f912c15ca188b5}{c\+\_\+equals}
+\item 
+typedef std\+::tr1\+::unordered\+\_\+map$<$ Key, \hyperlink{hash__map_2test_object_8h_ad777bf08d8e2b01df17ba5e3c51ae11f}{Value}, \hyperlink{class_test_class_ac0d14c72d1a7e359213955041bd3eea5}{c\+\_\+hash}, \hyperlink{class_test_class_aafbd6570cd1aa88768f912c15ca188b5}{c\+\_\+equals}, std\+::allocator$<$ std\+::pair$<$ Key, \hyperlink{hash__map_2test_object_8h_ad777bf08d8e2b01df17ba5e3c51ae11f}{Value} $>$ $>$ $>$ \hyperlink{class_test_class_a8fb58a1993096d04900e63c7901dbe75}{hash\+\_\+t}
+\item 
+typedef cds\+::container\+::\+Tsigas\+Cycle\+Queue$<$ T, cds\+::opt\+::buffer$<$ cds\+::opt\+::v\+::dynamic\+\_\+buffer$<$ T $>$ $>$ $>$ \hyperlink{class_test_class_ae96e169a6dee97fddd6acfc655497f0c}{T\+Queue}
+\end{DoxyCompactItemize}
+\subsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+uint64\+\_\+t \hyperlink{class_test_class_ab545dba6b104cb162aed9d6fd893d3c8}{fetch\+Head\+Seq} ()
+\item 
+uint64\+\_\+t \hyperlink{class_test_class_a29a38598a9e07d80cbcf712ae9634185}{fetch\+Tail\+Seq} ()
+\item 
+bool \hyperlink{class_test_class_af8f565d4f1733a92b02b903e882210de}{is\+Full} ()
+\item 
+bool \hyperlink{class_test_class_abb48ce9bd10e18e6362e66ced3af0200}{is\+Empty} ()
+\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{class_test_class_acff06dce1120b0a2879c55f7a5e5acc7}{hash\+\_\+t} $\ast$ \hyperlink{class_test_class_a94c73b5cb829bdd7e729be5668f6f6da}{test\+\_\+container}
+\item 
+map\+\_\+t $\ast$ \hyperlink{class_test_class_a82e6fb0f71bfaeab7623660b1c6d5801}{container}
+\item 
+boost\+::mutex \hyperlink{class_test_class_ac56bdd8296cec194c437ae49b63d8887}{v\+\_\+mutex}
+\item 
+tbb\+::concurrent\+\_\+hash\+\_\+map$<$ Key, \hyperlink{hash__map_2test_object_8h_ad777bf08d8e2b01df17ba5e3c51ae11f}{Value}, \hyperlink{struct_test_class_1_1_my_hash_compare}{My\+Hash\+Compare} $>$ $\ast$ \hyperlink{class_test_class_a45c01f347cfca94da55b3f8f626e4a01}{container}
+\item 
+\hyperlink{classtervel_1_1_tervel}{tervel\+::\+Tervel} $\ast$ \hyperlink{class_test_class_a73eaea6b839e2a3171945d0f2d209b98}{tervel\+\_\+obj}
+\item 
+\hyperlink{class_test_class_a1b85c62e95a514dec1b9680e76348329}{Map} $\ast$ \hyperlink{class_test_class_afd26cf553caeb881f2d24252b973a398}{container}
+\item 
+Lock\+Free\+Queue$<$ T $>$ $\ast$ \hyperlink{class_test_class_aa4ccae17f7befca71214f40ddcca6c1a}{buff\+\_\+}
+\item 
+uint64\+\_\+t \hyperlink{class_test_class_a011461808ec9d3cfc6f085642fcfec01}{capacity\+\_\+}
+\item 
+uint64\+\_\+t \hyperlink{class_test_class_af2429ac335c40b2244dcf1c0d27aa3e7}{size\+\_\+mask\+\_\+}
+\item 
+uint64\+\_\+t \hyperlink{class_test_class_af57483e6863d4fbbe455be1a32514b92}{head\+\_\+}
+\item 
+uint64\+\_\+t \hyperlink{class_test_class_a4d2c82c8499f514936f1262c684075aa}{tail\+\_\+}
+\item 
+std\+::atomic$<$ T $>$ $\ast$ \hyperlink{class_test_class_a25fdd248a90a1027d4f9dec63f7b2328}{queue\+\_\+}
+\item 
+pthread\+\_\+mutex\+\_\+t \hyperlink{class_test_class_aed0b5ac583a2f0c4405ea66e5e4835c6}{queue\+\_\+lock\+\_\+}
+\item 
+\hyperlink{classtervel_1_1containers_1_1lf_1_1mcas__buffer_1_1_ring_buffer}{tervel\+::containers\+::lf\+::mcas\+\_\+buffer\+::\+Ring\+Buffer}$<$ T $>$ $\ast$ \hyperlink{class_test_class_a58c609d2496e3e96bf13fa26d9697c6c}{queue\+\_\+}
+\item 
+tbb\+::concurrent\+\_\+bounded\+\_\+queue$<$ T $>$ $\ast$ \hyperlink{class_test_class_a165f4022d46081c8594106c0247cfef3}{queue\+\_\+}
+\item 
+\hyperlink{class_test_class_ae96e169a6dee97fddd6acfc655497f0c}{T\+Queue} $\ast$ \hyperlink{class_test_class_a6d2a5cb3e074be536e9637e3898a66c7}{queue\+\_\+}
+\item 
+\hyperlink{class_test_class_abe640a96ccd2edb9a09ad292c8a8b298}{container\+\_\+t} $\ast$ \hyperlink{class_test_class_abe4e24c68b92dd93f411f3b7e62e8cde}{container}
+\item 
+tervel\+::containers\+::wf\+::vector\+::\+Vector$<$ T $>$ $\ast$ \hyperlink{class_test_class_a188a7b0e4dba55a763a64328e9015d5d}{container}
+\end{DoxyCompactItemize}
+
+
+\subsection{Member Typedef Documentation}
+\hypertarget{class_test_class_a0af9e93839a0717ed717ab4818353762}{}\index{Test\+Class@{Test\+Class}!Accessor@{Accessor}}
+\index{Accessor@{Accessor}!Test\+Class@{Test\+Class}}
+\subsubsection[{Accessor}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ typedef {\bf tervel\+::containers\+::wf\+::\+Hash\+Map}$<$Key, {\bf Value}$>$\+::Value\+Accessor {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::{\bf Accessor}}\label{class_test_class_a0af9e93839a0717ed717ab4818353762}
+\hypertarget{class_test_class_a0af9e93839a0717ed717ab4818353762}{}\index{Test\+Class@{Test\+Class}!Accessor@{Accessor}}
+\index{Accessor@{Accessor}!Test\+Class@{Test\+Class}}
+\subsubsection[{Accessor}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ typedef {\bf tervel\+::containers\+::wf\+::\+Hash\+Map}$<$Key, {\bf Value}$>$\+::Value\+Accessor {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::{\bf Accessor}}\label{class_test_class_a0af9e93839a0717ed717ab4818353762}
+\hypertarget{class_test_class_aafbd6570cd1aa88768f912c15ca188b5}{}\index{Test\+Class@{Test\+Class}!c\+\_\+equals@{c\+\_\+equals}}
+\index{c\+\_\+equals@{c\+\_\+equals}!Test\+Class@{Test\+Class}}
+\subsubsection[{c\+\_\+equals}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ typedef struct {\bf equal\+\_\+to}$<$ Key $>$ {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::{\bf c\+\_\+equals}\hspace{0.3cm}{\ttfamily [private]}}\label{class_test_class_aafbd6570cd1aa88768f912c15ca188b5}
+\hypertarget{class_test_class_aafbd6570cd1aa88768f912c15ca188b5}{}\index{Test\+Class@{Test\+Class}!c\+\_\+equals@{c\+\_\+equals}}
+\index{c\+\_\+equals@{c\+\_\+equals}!Test\+Class@{Test\+Class}}
+\subsubsection[{c\+\_\+equals}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ typedef struct {\bf equal\+\_\+to}$<$ Key $>$ {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::{\bf c\+\_\+equals}\hspace{0.3cm}{\ttfamily [private]}}\label{class_test_class_aafbd6570cd1aa88768f912c15ca188b5}
+\hypertarget{class_test_class_ac0d14c72d1a7e359213955041bd3eea5}{}\index{Test\+Class@{Test\+Class}!c\+\_\+hash@{c\+\_\+hash}}
+\index{c\+\_\+hash@{c\+\_\+hash}!Test\+Class@{Test\+Class}}
+\subsubsection[{c\+\_\+hash}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ typedef struct {\bf s\+\_\+hash}$<$ Key $>$ {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::{\bf c\+\_\+hash}\hspace{0.3cm}{\ttfamily [private]}}\label{class_test_class_ac0d14c72d1a7e359213955041bd3eea5}
+\hypertarget{class_test_class_ac0d14c72d1a7e359213955041bd3eea5}{}\index{Test\+Class@{Test\+Class}!c\+\_\+hash@{c\+\_\+hash}}
+\index{c\+\_\+hash@{c\+\_\+hash}!Test\+Class@{Test\+Class}}
+\subsubsection[{c\+\_\+hash}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ typedef struct {\bf s\+\_\+hash}$<$ Key $>$ {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::{\bf c\+\_\+hash}\hspace{0.3cm}{\ttfamily [private]}}\label{class_test_class_ac0d14c72d1a7e359213955041bd3eea5}
+\hypertarget{class_test_class_abe640a96ccd2edb9a09ad292c8a8b298}{}\index{Test\+Class@{Test\+Class}!container\+\_\+t@{container\+\_\+t}}
+\index{container\+\_\+t@{container\+\_\+t}!Test\+Class@{Test\+Class}}
+\subsubsection[{container\+\_\+t}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ typedef {\bf tervel\+::containers\+::wf\+::\+Ring\+Buffer}$<${\bf Wrapper\+Type} $\ast$$>$ {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::{\bf container\+\_\+t}}\label{class_test_class_abe640a96ccd2edb9a09ad292c8a8b298}
+\hypertarget{class_test_class_a8169ffe4884a5ad6488eb7893452ebb1}{}\index{Test\+Class@{Test\+Class}!hash\+\_\+t@{hash\+\_\+t}}
+\index{hash\+\_\+t@{hash\+\_\+t}!Test\+Class@{Test\+Class}}
+\subsubsection[{hash\+\_\+t}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ typedef boost\+::unordered\+\_\+map$<$Key, {\bf Value}, {\bf c\+\_\+hash}, {\bf c\+\_\+equals}, std\+::allocator$<$std\+::pair$<$Key, {\bf Value}$>$ $>$ $>$ {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::{\bf hash\+\_\+t}\hspace{0.3cm}{\ttfamily [private]}}\label{class_test_class_a8169ffe4884a5ad6488eb7893452ebb1}
+\hypertarget{class_test_class_a8fb58a1993096d04900e63c7901dbe75}{}\index{Test\+Class@{Test\+Class}!hash\+\_\+t@{hash\+\_\+t}}
+\index{hash\+\_\+t@{hash\+\_\+t}!Test\+Class@{Test\+Class}}
+\subsubsection[{hash\+\_\+t}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ typedef std\+::tr1\+::unordered\+\_\+map$<$Key, {\bf Value}, {\bf c\+\_\+hash}, {\bf c\+\_\+equals}, std\+::allocator$<$std\+::pair$<$Key, {\bf Value}$>$ $>$ $>$ {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::{\bf hash\+\_\+t}\hspace{0.3cm}{\ttfamily [private]}}\label{class_test_class_a8fb58a1993096d04900e63c7901dbe75}
+\hypertarget{class_test_class_acff06dce1120b0a2879c55f7a5e5acc7}{}\index{Test\+Class@{Test\+Class}!hash\+\_\+t@{hash\+\_\+t}}
+\index{hash\+\_\+t@{hash\+\_\+t}!Test\+Class@{Test\+Class}}
+\subsubsection[{hash\+\_\+t}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ typedef cds\+::container\+::\+Michael\+Hash\+Map$<$cds\+::gc\+::\+H\+P, {\bf Key2\+Value\+\_\+list}, {\bf map\+\_\+traits} $>$ {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::{\bf hash\+\_\+t}\hspace{0.3cm}{\ttfamily [private]}}\label{class_test_class_acff06dce1120b0a2879c55f7a5e5acc7}
+\hypertarget{class_test_class_a8220399a41bb1a4b93273090306ea770}{}\index{Test\+Class@{Test\+Class}!hash\+\_\+t@{hash\+\_\+t}}
+\index{hash\+\_\+t@{hash\+\_\+t}!Test\+Class@{Test\+Class}}
+\subsubsection[{hash\+\_\+t}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ typedef cds\+::container\+::\+Split\+List\+Map$<$ cds\+::gc\+::\+H\+P, Key, {\bf Value}, {\bf foo\+\_\+set\+\_\+traits}$>$ {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::{\bf hash\+\_\+t}\hspace{0.3cm}{\ttfamily [private]}}\label{class_test_class_a8220399a41bb1a4b93273090306ea770}
+\hypertarget{class_test_class_a5c18ae754153ec12a6591663ca817565}{}\index{Test\+Class@{Test\+Class}!Key2\+Value\+\_\+list@{Key2\+Value\+\_\+list}}
+\index{Key2\+Value\+\_\+list@{Key2\+Value\+\_\+list}!Test\+Class@{Test\+Class}}
+\subsubsection[{Key2\+Value\+\_\+list}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ typedef cds\+::container\+::\+Michael\+K\+V\+List$<$ cds\+::gc\+::\+H\+P, Key, {\bf Value}, {\bf list\+\_\+traits}$>$ {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::{\bf Key2\+Value\+\_\+list}\hspace{0.3cm}{\ttfamily [private]}}\label{class_test_class_a5c18ae754153ec12a6591663ca817565}
+\hypertarget{class_test_class_a1b85c62e95a514dec1b9680e76348329}{}\index{Test\+Class@{Test\+Class}!Map@{Map}}
+\index{Map@{Map}!Test\+Class@{Test\+Class}}
+\subsubsection[{Map}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ typedef {\bf tervel\+::containers\+::wf\+::\+Hash\+Map}$<$Key, {\bf Value}$>$ {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::{\bf Map}}\label{class_test_class_a1b85c62e95a514dec1b9680e76348329}
+\hypertarget{class_test_class_a1b85c62e95a514dec1b9680e76348329}{}\index{Test\+Class@{Test\+Class}!Map@{Map}}
+\index{Map@{Map}!Test\+Class@{Test\+Class}}
+\subsubsection[{Map}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ typedef {\bf tervel\+::containers\+::wf\+::\+Hash\+Map}$<$Key, {\bf Value}$>$ {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::{\bf Map}}\label{class_test_class_a1b85c62e95a514dec1b9680e76348329}
+\hypertarget{class_test_class_ae96e169a6dee97fddd6acfc655497f0c}{}\index{Test\+Class@{Test\+Class}!T\+Queue@{T\+Queue}}
+\index{T\+Queue@{T\+Queue}!Test\+Class@{Test\+Class}}
+\subsubsection[{T\+Queue}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ typedef cds\+::container\+::\+Tsigas\+Cycle\+Queue$<$T, cds\+::opt\+::buffer$<$ cds\+::opt\+::v\+::dynamic\+\_\+buffer$<$T$>$ $>$ $>$ {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::{\bf T\+Queue}\hspace{0.3cm}{\ttfamily [private]}}\label{class_test_class_ae96e169a6dee97fddd6acfc655497f0c}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{class_test_class_ab3dbc7a67da46dda1125f7dee533aca2}{}\index{Test\+Class@{Test\+Class}!Test\+Class@{Test\+Class}}
+\index{Test\+Class@{Test\+Class}!Test\+Class@{Test\+Class}}
+\subsubsection[{Test\+Class(size\+\_\+t num\+\_\+threads, size\+\_\+t capacity)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::{\bf Test\+Class} (
+\begin{DoxyParamCaption}
+\item[{size\+\_\+t}]{num\+\_\+threads, }
+\item[{size\+\_\+t}]{capacity}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_ab3dbc7a67da46dda1125f7dee533aca2}
+\hypertarget{class_test_class_ab3dbc7a67da46dda1125f7dee533aca2}{}\index{Test\+Class@{Test\+Class}!Test\+Class@{Test\+Class}}
+\index{Test\+Class@{Test\+Class}!Test\+Class@{Test\+Class}}
+\subsubsection[{Test\+Class(size\+\_\+t num\+\_\+threads, size\+\_\+t capacity)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::{\bf Test\+Class} (
+\begin{DoxyParamCaption}
+\item[{size\+\_\+t}]{num\+\_\+threads, }
+\item[{size\+\_\+t}]{capacity}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_ab3dbc7a67da46dda1125f7dee533aca2}
+\hypertarget{class_test_class_ab3dbc7a67da46dda1125f7dee533aca2}{}\index{Test\+Class@{Test\+Class}!Test\+Class@{Test\+Class}}
+\index{Test\+Class@{Test\+Class}!Test\+Class@{Test\+Class}}
+\subsubsection[{Test\+Class(size\+\_\+t num\+\_\+threads, size\+\_\+t capacity)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::{\bf Test\+Class} (
+\begin{DoxyParamCaption}
+\item[{size\+\_\+t}]{num\+\_\+threads, }
+\item[{size\+\_\+t}]{capacity}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_ab3dbc7a67da46dda1125f7dee533aca2}
+\hypertarget{class_test_class_ab3dbc7a67da46dda1125f7dee533aca2}{}\index{Test\+Class@{Test\+Class}!Test\+Class@{Test\+Class}}
+\index{Test\+Class@{Test\+Class}!Test\+Class@{Test\+Class}}
+\subsubsection[{Test\+Class(size\+\_\+t num\+\_\+threads, size\+\_\+t capacity)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::{\bf Test\+Class} (
+\begin{DoxyParamCaption}
+\item[{size\+\_\+t}]{num\+\_\+threads, }
+\item[{size\+\_\+t}]{capacity}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_ab3dbc7a67da46dda1125f7dee533aca2}
+\hypertarget{class_test_class_ab3dbc7a67da46dda1125f7dee533aca2}{}\index{Test\+Class@{Test\+Class}!Test\+Class@{Test\+Class}}
+\index{Test\+Class@{Test\+Class}!Test\+Class@{Test\+Class}}
+\subsubsection[{Test\+Class(size\+\_\+t num\+\_\+threads, size\+\_\+t capacity)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::{\bf Test\+Class} (
+\begin{DoxyParamCaption}
+\item[{size\+\_\+t}]{num\+\_\+threads, }
+\item[{size\+\_\+t}]{capacity}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_ab3dbc7a67da46dda1125f7dee533aca2}
+\hypertarget{class_test_class_ab3dbc7a67da46dda1125f7dee533aca2}{}\index{Test\+Class@{Test\+Class}!Test\+Class@{Test\+Class}}
+\index{Test\+Class@{Test\+Class}!Test\+Class@{Test\+Class}}
+\subsubsection[{Test\+Class(size\+\_\+t num\+\_\+threads, size\+\_\+t capacity)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::{\bf Test\+Class} (
+\begin{DoxyParamCaption}
+\item[{size\+\_\+t}]{num\+\_\+threads, }
+\item[{size\+\_\+t}]{capacity}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_ab3dbc7a67da46dda1125f7dee533aca2}
+\hypertarget{class_test_class_ab3dbc7a67da46dda1125f7dee533aca2}{}\index{Test\+Class@{Test\+Class}!Test\+Class@{Test\+Class}}
+\index{Test\+Class@{Test\+Class}!Test\+Class@{Test\+Class}}
+\subsubsection[{Test\+Class(size\+\_\+t num\+\_\+threads, size\+\_\+t capacity)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::{\bf Test\+Class} (
+\begin{DoxyParamCaption}
+\item[{size\+\_\+t}]{num\+\_\+threads, }
+\item[{size\+\_\+t}]{capacity}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_ab3dbc7a67da46dda1125f7dee533aca2}
+\hypertarget{class_test_class_ab3dbc7a67da46dda1125f7dee533aca2}{}\index{Test\+Class@{Test\+Class}!Test\+Class@{Test\+Class}}
+\index{Test\+Class@{Test\+Class}!Test\+Class@{Test\+Class}}
+\subsubsection[{Test\+Class(size\+\_\+t num\+\_\+threads, size\+\_\+t capacity)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::{\bf Test\+Class} (
+\begin{DoxyParamCaption}
+\item[{size\+\_\+t}]{num\+\_\+threads, }
+\item[{size\+\_\+t}]{capacity}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_ab3dbc7a67da46dda1125f7dee533aca2}
+\hypertarget{class_test_class_ab3dbc7a67da46dda1125f7dee533aca2}{}\index{Test\+Class@{Test\+Class}!Test\+Class@{Test\+Class}}
+\index{Test\+Class@{Test\+Class}!Test\+Class@{Test\+Class}}
+\subsubsection[{Test\+Class(size\+\_\+t num\+\_\+threads, size\+\_\+t capacity)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::{\bf Test\+Class} (
+\begin{DoxyParamCaption}
+\item[{size\+\_\+t}]{num\+\_\+threads, }
+\item[{size\+\_\+t}]{capacity}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_ab3dbc7a67da46dda1125f7dee533aca2}
+\hypertarget{class_test_class_a25153d9821ce372f9c9146891b04aa07}{}\index{Test\+Class@{Test\+Class}!Test\+Class@{Test\+Class}}
+\index{Test\+Class@{Test\+Class}!Test\+Class@{Test\+Class}}
+\subsubsection[{Test\+Class(size\+\_\+t num\+\_\+threads)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::{\bf Test\+Class} (
+\begin{DoxyParamCaption}
+\item[{size\+\_\+t}]{num\+\_\+threads}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a25153d9821ce372f9c9146891b04aa07}
+\hypertarget{class_test_class_a2caeb43f7bbe5512fac0d4c58f1c2263}{}\index{Test\+Class@{Test\+Class}!Test\+Class@{Test\+Class}}
+\index{Test\+Class@{Test\+Class}!Test\+Class@{Test\+Class}}
+\subsubsection[{Test\+Class(size\+\_\+t capacity, size\+\_\+t num\+\_\+threads)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::{\bf Test\+Class} (
+\begin{DoxyParamCaption}
+\item[{size\+\_\+t}]{capacity, }
+\item[{size\+\_\+t}]{num\+\_\+threads}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a2caeb43f7bbe5512fac0d4c58f1c2263}
+\hypertarget{class_test_class_a2caeb43f7bbe5512fac0d4c58f1c2263}{}\index{Test\+Class@{Test\+Class}!Test\+Class@{Test\+Class}}
+\index{Test\+Class@{Test\+Class}!Test\+Class@{Test\+Class}}
+\subsubsection[{Test\+Class(size\+\_\+t capacity, size\+\_\+t num\+\_\+threads)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::{\bf Test\+Class} (
+\begin{DoxyParamCaption}
+\item[{size\+\_\+t}]{capacity, }
+\item[{size\+\_\+t}]{num\+\_\+threads}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a2caeb43f7bbe5512fac0d4c58f1c2263}
+\hypertarget{class_test_class_a2caeb43f7bbe5512fac0d4c58f1c2263}{}\index{Test\+Class@{Test\+Class}!Test\+Class@{Test\+Class}}
+\index{Test\+Class@{Test\+Class}!Test\+Class@{Test\+Class}}
+\subsubsection[{Test\+Class(size\+\_\+t capacity, size\+\_\+t num\+\_\+threads)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::{\bf Test\+Class} (
+\begin{DoxyParamCaption}
+\item[{size\+\_\+t}]{capacity, }
+\item[{size\+\_\+t}]{num\+\_\+threads}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a2caeb43f7bbe5512fac0d4c58f1c2263}
+\hypertarget{class_test_class_a2caeb43f7bbe5512fac0d4c58f1c2263}{}\index{Test\+Class@{Test\+Class}!Test\+Class@{Test\+Class}}
+\index{Test\+Class@{Test\+Class}!Test\+Class@{Test\+Class}}
+\subsubsection[{Test\+Class(size\+\_\+t capacity, size\+\_\+t num\+\_\+threads)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::{\bf Test\+Class} (
+\begin{DoxyParamCaption}
+\item[{size\+\_\+t}]{capacity, }
+\item[{size\+\_\+t}]{num\+\_\+threads}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a2caeb43f7bbe5512fac0d4c58f1c2263}
+\hypertarget{class_test_class_a2caeb43f7bbe5512fac0d4c58f1c2263}{}\index{Test\+Class@{Test\+Class}!Test\+Class@{Test\+Class}}
+\index{Test\+Class@{Test\+Class}!Test\+Class@{Test\+Class}}
+\subsubsection[{Test\+Class(size\+\_\+t capacity, size\+\_\+t num\+\_\+threads)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::{\bf Test\+Class} (
+\begin{DoxyParamCaption}
+\item[{size\+\_\+t}]{capacity, }
+\item[{size\+\_\+t}]{num\+\_\+threads}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a2caeb43f7bbe5512fac0d4c58f1c2263}
+\hypertarget{class_test_class_ab3dbc7a67da46dda1125f7dee533aca2}{}\index{Test\+Class@{Test\+Class}!Test\+Class@{Test\+Class}}
+\index{Test\+Class@{Test\+Class}!Test\+Class@{Test\+Class}}
+\subsubsection[{Test\+Class(size\+\_\+t num\+\_\+threads, size\+\_\+t capacity)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::{\bf Test\+Class} (
+\begin{DoxyParamCaption}
+\item[{size\+\_\+t}]{num\+\_\+threads, }
+\item[{size\+\_\+t}]{capacity}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_ab3dbc7a67da46dda1125f7dee533aca2}
+\hypertarget{class_test_class_a2466c51dad9d120019f486d8372d2a2e}{}\index{Test\+Class@{Test\+Class}!````~Test\+Class@{$\sim$\+Test\+Class}}
+\index{````~Test\+Class@{$\sim$\+Test\+Class}!Test\+Class@{Test\+Class}}
+\subsubsection[{$\sim$\+Test\+Class()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::$\sim${\bf Test\+Class} (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a2466c51dad9d120019f486d8372d2a2e}
+\hypertarget{class_test_class_ab3dbc7a67da46dda1125f7dee533aca2}{}\index{Test\+Class@{Test\+Class}!Test\+Class@{Test\+Class}}
+\index{Test\+Class@{Test\+Class}!Test\+Class@{Test\+Class}}
+\subsubsection[{Test\+Class(size\+\_\+t num\+\_\+threads, size\+\_\+t capacity)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::{\bf Test\+Class} (
+\begin{DoxyParamCaption}
+\item[{size\+\_\+t}]{num\+\_\+threads, }
+\item[{size\+\_\+t}]{capacity}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_ab3dbc7a67da46dda1125f7dee533aca2}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{class_test_class_ac0b38d5b2783d2989a1351718547c8ba}{}\index{Test\+Class@{Test\+Class}!at@{at}}
+\index{at@{at}!Test\+Class@{Test\+Class}}
+\subsubsection[{at(size\+\_\+t idx, T \&value)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ bool {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::at (
+\begin{DoxyParamCaption}
+\item[{size\+\_\+t}]{idx, }
+\item[{T \&}]{value}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_ac0b38d5b2783d2989a1351718547c8ba}
+\hypertarget{class_test_class_a7e6bce4c39c047282ea8c1f1485a260b}{}\index{Test\+Class@{Test\+Class}!attach\+\_\+thread@{attach\+\_\+thread}}
+\index{attach\+\_\+thread@{attach\+\_\+thread}!Test\+Class@{Test\+Class}}
+\subsubsection[{attach\+\_\+thread()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ void {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::attach\+\_\+thread (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a7e6bce4c39c047282ea8c1f1485a260b}
+\hypertarget{class_test_class_a7e6bce4c39c047282ea8c1f1485a260b}{}\index{Test\+Class@{Test\+Class}!attach\+\_\+thread@{attach\+\_\+thread}}
+\index{attach\+\_\+thread@{attach\+\_\+thread}!Test\+Class@{Test\+Class}}
+\subsubsection[{attach\+\_\+thread()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ void {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::attach\+\_\+thread (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a7e6bce4c39c047282ea8c1f1485a260b}
+\hypertarget{class_test_class_a7e6bce4c39c047282ea8c1f1485a260b}{}\index{Test\+Class@{Test\+Class}!attach\+\_\+thread@{attach\+\_\+thread}}
+\index{attach\+\_\+thread@{attach\+\_\+thread}!Test\+Class@{Test\+Class}}
+\subsubsection[{attach\+\_\+thread()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ void {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::attach\+\_\+thread (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a7e6bce4c39c047282ea8c1f1485a260b}
+\hypertarget{class_test_class_a7e6bce4c39c047282ea8c1f1485a260b}{}\index{Test\+Class@{Test\+Class}!attach\+\_\+thread@{attach\+\_\+thread}}
+\index{attach\+\_\+thread@{attach\+\_\+thread}!Test\+Class@{Test\+Class}}
+\subsubsection[{attach\+\_\+thread()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ void {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::attach\+\_\+thread (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a7e6bce4c39c047282ea8c1f1485a260b}
+\hypertarget{class_test_class_a7e6bce4c39c047282ea8c1f1485a260b}{}\index{Test\+Class@{Test\+Class}!attach\+\_\+thread@{attach\+\_\+thread}}
+\index{attach\+\_\+thread@{attach\+\_\+thread}!Test\+Class@{Test\+Class}}
+\subsubsection[{attach\+\_\+thread()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ void {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::attach\+\_\+thread (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a7e6bce4c39c047282ea8c1f1485a260b}
+\hypertarget{class_test_class_a7e6bce4c39c047282ea8c1f1485a260b}{}\index{Test\+Class@{Test\+Class}!attach\+\_\+thread@{attach\+\_\+thread}}
+\index{attach\+\_\+thread@{attach\+\_\+thread}!Test\+Class@{Test\+Class}}
+\subsubsection[{attach\+\_\+thread()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ void {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::attach\+\_\+thread (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a7e6bce4c39c047282ea8c1f1485a260b}
+\hypertarget{class_test_class_a7e6bce4c39c047282ea8c1f1485a260b}{}\index{Test\+Class@{Test\+Class}!attach\+\_\+thread@{attach\+\_\+thread}}
+\index{attach\+\_\+thread@{attach\+\_\+thread}!Test\+Class@{Test\+Class}}
+\subsubsection[{attach\+\_\+thread()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ void {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::attach\+\_\+thread (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a7e6bce4c39c047282ea8c1f1485a260b}
+\hypertarget{class_test_class_a7e6bce4c39c047282ea8c1f1485a260b}{}\index{Test\+Class@{Test\+Class}!attach\+\_\+thread@{attach\+\_\+thread}}
+\index{attach\+\_\+thread@{attach\+\_\+thread}!Test\+Class@{Test\+Class}}
+\subsubsection[{attach\+\_\+thread()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ void {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::attach\+\_\+thread (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a7e6bce4c39c047282ea8c1f1485a260b}
+\hypertarget{class_test_class_a7e6bce4c39c047282ea8c1f1485a260b}{}\index{Test\+Class@{Test\+Class}!attach\+\_\+thread@{attach\+\_\+thread}}
+\index{attach\+\_\+thread@{attach\+\_\+thread}!Test\+Class@{Test\+Class}}
+\subsubsection[{attach\+\_\+thread()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ void {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::attach\+\_\+thread (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a7e6bce4c39c047282ea8c1f1485a260b}
+\hypertarget{class_test_class_a7e6bce4c39c047282ea8c1f1485a260b}{}\index{Test\+Class@{Test\+Class}!attach\+\_\+thread@{attach\+\_\+thread}}
+\index{attach\+\_\+thread@{attach\+\_\+thread}!Test\+Class@{Test\+Class}}
+\subsubsection[{attach\+\_\+thread()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ void {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::attach\+\_\+thread (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a7e6bce4c39c047282ea8c1f1485a260b}
+\hypertarget{class_test_class_a7e6bce4c39c047282ea8c1f1485a260b}{}\index{Test\+Class@{Test\+Class}!attach\+\_\+thread@{attach\+\_\+thread}}
+\index{attach\+\_\+thread@{attach\+\_\+thread}!Test\+Class@{Test\+Class}}
+\subsubsection[{attach\+\_\+thread()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ void {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::attach\+\_\+thread (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a7e6bce4c39c047282ea8c1f1485a260b}
+\hypertarget{class_test_class_a7e6bce4c39c047282ea8c1f1485a260b}{}\index{Test\+Class@{Test\+Class}!attach\+\_\+thread@{attach\+\_\+thread}}
+\index{attach\+\_\+thread@{attach\+\_\+thread}!Test\+Class@{Test\+Class}}
+\subsubsection[{attach\+\_\+thread()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ void {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::attach\+\_\+thread (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a7e6bce4c39c047282ea8c1f1485a260b}
+\hypertarget{class_test_class_a7e6bce4c39c047282ea8c1f1485a260b}{}\index{Test\+Class@{Test\+Class}!attach\+\_\+thread@{attach\+\_\+thread}}
+\index{attach\+\_\+thread@{attach\+\_\+thread}!Test\+Class@{Test\+Class}}
+\subsubsection[{attach\+\_\+thread()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ void {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::attach\+\_\+thread (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a7e6bce4c39c047282ea8c1f1485a260b}
+\hypertarget{class_test_class_a7e6bce4c39c047282ea8c1f1485a260b}{}\index{Test\+Class@{Test\+Class}!attach\+\_\+thread@{attach\+\_\+thread}}
+\index{attach\+\_\+thread@{attach\+\_\+thread}!Test\+Class@{Test\+Class}}
+\subsubsection[{attach\+\_\+thread()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ void {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::attach\+\_\+thread (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a7e6bce4c39c047282ea8c1f1485a260b}
+\hypertarget{class_test_class_a7e6bce4c39c047282ea8c1f1485a260b}{}\index{Test\+Class@{Test\+Class}!attach\+\_\+thread@{attach\+\_\+thread}}
+\index{attach\+\_\+thread@{attach\+\_\+thread}!Test\+Class@{Test\+Class}}
+\subsubsection[{attach\+\_\+thread()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ void {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::attach\+\_\+thread (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a7e6bce4c39c047282ea8c1f1485a260b}
+\hypertarget{class_test_class_a7e6bce4c39c047282ea8c1f1485a260b}{}\index{Test\+Class@{Test\+Class}!attach\+\_\+thread@{attach\+\_\+thread}}
+\index{attach\+\_\+thread@{attach\+\_\+thread}!Test\+Class@{Test\+Class}}
+\subsubsection[{attach\+\_\+thread()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ void {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::attach\+\_\+thread (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a7e6bce4c39c047282ea8c1f1485a260b}
+\hypertarget{class_test_class_a7e6bce4c39c047282ea8c1f1485a260b}{}\index{Test\+Class@{Test\+Class}!attach\+\_\+thread@{attach\+\_\+thread}}
+\index{attach\+\_\+thread@{attach\+\_\+thread}!Test\+Class@{Test\+Class}}
+\subsubsection[{attach\+\_\+thread()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ void {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::attach\+\_\+thread (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a7e6bce4c39c047282ea8c1f1485a260b}
+\hypertarget{class_test_class_a34905bce461fd703bbfb598a1a4f2ff1}{}\index{Test\+Class@{Test\+Class}!calc\+\_\+next\+\_\+value@{calc\+\_\+next\+\_\+value}}
+\index{calc\+\_\+next\+\_\+value@{calc\+\_\+next\+\_\+value}!Test\+Class@{Test\+Class}}
+\subsubsection[{calc\+\_\+next\+\_\+value(void $\ast$value)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ void$\ast$ {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::calc\+\_\+next\+\_\+value (
+\begin{DoxyParamCaption}
+\item[{void $\ast$}]{value}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a34905bce461fd703bbfb598a1a4f2ff1}
+\hypertarget{class_test_class_abb0a6be1ab9e43fd5fd40fe8c3b2e5a8}{}\index{Test\+Class@{Test\+Class}!cas@{cas}}
+\index{cas@{cas}!Test\+Class@{Test\+Class}}
+\subsubsection[{cas(size\+\_\+t idx, T \&exp\+Value, T new\+Value)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ bool {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::cas (
+\begin{DoxyParamCaption}
+\item[{size\+\_\+t}]{idx, }
+\item[{T \&}]{exp\+Value, }
+\item[{T}]{new\+Value}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_abb0a6be1ab9e43fd5fd40fe8c3b2e5a8}
+\hypertarget{class_test_class_a781dcd2216461c876843923c11bb9aac}{}\index{Test\+Class@{Test\+Class}!dequeue@{dequeue}}
+\index{dequeue@{dequeue}!Test\+Class@{Test\+Class}}
+\subsubsection[{dequeue(\+T \&val)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ bool {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::dequeue (
+\begin{DoxyParamCaption}
+\item[{T \&}]{val}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a781dcd2216461c876843923c11bb9aac}
+\hypertarget{class_test_class_a781dcd2216461c876843923c11bb9aac}{}\index{Test\+Class@{Test\+Class}!dequeue@{dequeue}}
+\index{dequeue@{dequeue}!Test\+Class@{Test\+Class}}
+\subsubsection[{dequeue(\+T \&val)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ bool {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::dequeue (
+\begin{DoxyParamCaption}
+\item[{T \&}]{val}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a781dcd2216461c876843923c11bb9aac}
+\hypertarget{class_test_class_a781dcd2216461c876843923c11bb9aac}{}\index{Test\+Class@{Test\+Class}!dequeue@{dequeue}}
+\index{dequeue@{dequeue}!Test\+Class@{Test\+Class}}
+\subsubsection[{dequeue(\+T \&val)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ bool {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::dequeue (
+\begin{DoxyParamCaption}
+\item[{T \&}]{val}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a781dcd2216461c876843923c11bb9aac}
+\hypertarget{class_test_class_a781dcd2216461c876843923c11bb9aac}{}\index{Test\+Class@{Test\+Class}!dequeue@{dequeue}}
+\index{dequeue@{dequeue}!Test\+Class@{Test\+Class}}
+\subsubsection[{dequeue(\+T \&val)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ bool {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::dequeue (
+\begin{DoxyParamCaption}
+\item[{T \&}]{val}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a781dcd2216461c876843923c11bb9aac}
+\hypertarget{class_test_class_a781dcd2216461c876843923c11bb9aac}{}\index{Test\+Class@{Test\+Class}!dequeue@{dequeue}}
+\index{dequeue@{dequeue}!Test\+Class@{Test\+Class}}
+\subsubsection[{dequeue(\+T \&val)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ bool {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::dequeue (
+\begin{DoxyParamCaption}
+\item[{T \&}]{val}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a781dcd2216461c876843923c11bb9aac}
+\hypertarget{class_test_class_a89fcb2cb3842285e9de88cdb1ac9ff73}{}\index{Test\+Class@{Test\+Class}!dequeue@{dequeue}}
+\index{dequeue@{dequeue}!Test\+Class@{Test\+Class}}
+\subsubsection[{dequeue(\+Value \&value)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ bool {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::dequeue (
+\begin{DoxyParamCaption}
+\item[{{\bf Value} \&}]{value}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a89fcb2cb3842285e9de88cdb1ac9ff73}
+\hypertarget{class_test_class_a79b3a395c8a1fac7a156228a27d829cc}{}\index{Test\+Class@{Test\+Class}!detach\+\_\+thread@{detach\+\_\+thread}}
+\index{detach\+\_\+thread@{detach\+\_\+thread}!Test\+Class@{Test\+Class}}
+\subsubsection[{detach\+\_\+thread()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ void {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::detach\+\_\+thread (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a79b3a395c8a1fac7a156228a27d829cc}
+\hypertarget{class_test_class_a79b3a395c8a1fac7a156228a27d829cc}{}\index{Test\+Class@{Test\+Class}!detach\+\_\+thread@{detach\+\_\+thread}}
+\index{detach\+\_\+thread@{detach\+\_\+thread}!Test\+Class@{Test\+Class}}
+\subsubsection[{detach\+\_\+thread()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ void {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::detach\+\_\+thread (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a79b3a395c8a1fac7a156228a27d829cc}
+\hypertarget{class_test_class_a79b3a395c8a1fac7a156228a27d829cc}{}\index{Test\+Class@{Test\+Class}!detach\+\_\+thread@{detach\+\_\+thread}}
+\index{detach\+\_\+thread@{detach\+\_\+thread}!Test\+Class@{Test\+Class}}
+\subsubsection[{detach\+\_\+thread()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ void {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::detach\+\_\+thread (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a79b3a395c8a1fac7a156228a27d829cc}
+\hypertarget{class_test_class_a79b3a395c8a1fac7a156228a27d829cc}{}\index{Test\+Class@{Test\+Class}!detach\+\_\+thread@{detach\+\_\+thread}}
+\index{detach\+\_\+thread@{detach\+\_\+thread}!Test\+Class@{Test\+Class}}
+\subsubsection[{detach\+\_\+thread()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ void {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::detach\+\_\+thread (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a79b3a395c8a1fac7a156228a27d829cc}
+\hypertarget{class_test_class_a79b3a395c8a1fac7a156228a27d829cc}{}\index{Test\+Class@{Test\+Class}!detach\+\_\+thread@{detach\+\_\+thread}}
+\index{detach\+\_\+thread@{detach\+\_\+thread}!Test\+Class@{Test\+Class}}
+\subsubsection[{detach\+\_\+thread()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ void {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::detach\+\_\+thread (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a79b3a395c8a1fac7a156228a27d829cc}
+\hypertarget{class_test_class_a79b3a395c8a1fac7a156228a27d829cc}{}\index{Test\+Class@{Test\+Class}!detach\+\_\+thread@{detach\+\_\+thread}}
+\index{detach\+\_\+thread@{detach\+\_\+thread}!Test\+Class@{Test\+Class}}
+\subsubsection[{detach\+\_\+thread()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ void {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::detach\+\_\+thread (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a79b3a395c8a1fac7a156228a27d829cc}
+\hypertarget{class_test_class_a79b3a395c8a1fac7a156228a27d829cc}{}\index{Test\+Class@{Test\+Class}!detach\+\_\+thread@{detach\+\_\+thread}}
+\index{detach\+\_\+thread@{detach\+\_\+thread}!Test\+Class@{Test\+Class}}
+\subsubsection[{detach\+\_\+thread()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ void {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::detach\+\_\+thread (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a79b3a395c8a1fac7a156228a27d829cc}
+\hypertarget{class_test_class_a79b3a395c8a1fac7a156228a27d829cc}{}\index{Test\+Class@{Test\+Class}!detach\+\_\+thread@{detach\+\_\+thread}}
+\index{detach\+\_\+thread@{detach\+\_\+thread}!Test\+Class@{Test\+Class}}
+\subsubsection[{detach\+\_\+thread()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ void {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::detach\+\_\+thread (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a79b3a395c8a1fac7a156228a27d829cc}
+\hypertarget{class_test_class_a79b3a395c8a1fac7a156228a27d829cc}{}\index{Test\+Class@{Test\+Class}!detach\+\_\+thread@{detach\+\_\+thread}}
+\index{detach\+\_\+thread@{detach\+\_\+thread}!Test\+Class@{Test\+Class}}
+\subsubsection[{detach\+\_\+thread()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ void {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::detach\+\_\+thread (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a79b3a395c8a1fac7a156228a27d829cc}
+\hypertarget{class_test_class_a79b3a395c8a1fac7a156228a27d829cc}{}\index{Test\+Class@{Test\+Class}!detach\+\_\+thread@{detach\+\_\+thread}}
+\index{detach\+\_\+thread@{detach\+\_\+thread}!Test\+Class@{Test\+Class}}
+\subsubsection[{detach\+\_\+thread()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ void {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::detach\+\_\+thread (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a79b3a395c8a1fac7a156228a27d829cc}
+\hypertarget{class_test_class_a79b3a395c8a1fac7a156228a27d829cc}{}\index{Test\+Class@{Test\+Class}!detach\+\_\+thread@{detach\+\_\+thread}}
+\index{detach\+\_\+thread@{detach\+\_\+thread}!Test\+Class@{Test\+Class}}
+\subsubsection[{detach\+\_\+thread()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ void {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::detach\+\_\+thread (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a79b3a395c8a1fac7a156228a27d829cc}
+\hypertarget{class_test_class_a79b3a395c8a1fac7a156228a27d829cc}{}\index{Test\+Class@{Test\+Class}!detach\+\_\+thread@{detach\+\_\+thread}}
+\index{detach\+\_\+thread@{detach\+\_\+thread}!Test\+Class@{Test\+Class}}
+\subsubsection[{detach\+\_\+thread()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ void {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::detach\+\_\+thread (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a79b3a395c8a1fac7a156228a27d829cc}
+\hypertarget{class_test_class_a79b3a395c8a1fac7a156228a27d829cc}{}\index{Test\+Class@{Test\+Class}!detach\+\_\+thread@{detach\+\_\+thread}}
+\index{detach\+\_\+thread@{detach\+\_\+thread}!Test\+Class@{Test\+Class}}
+\subsubsection[{detach\+\_\+thread()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ void {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::detach\+\_\+thread (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a79b3a395c8a1fac7a156228a27d829cc}
+\hypertarget{class_test_class_a79b3a395c8a1fac7a156228a27d829cc}{}\index{Test\+Class@{Test\+Class}!detach\+\_\+thread@{detach\+\_\+thread}}
+\index{detach\+\_\+thread@{detach\+\_\+thread}!Test\+Class@{Test\+Class}}
+\subsubsection[{detach\+\_\+thread()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ void {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::detach\+\_\+thread (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a79b3a395c8a1fac7a156228a27d829cc}
+\hypertarget{class_test_class_a79b3a395c8a1fac7a156228a27d829cc}{}\index{Test\+Class@{Test\+Class}!detach\+\_\+thread@{detach\+\_\+thread}}
+\index{detach\+\_\+thread@{detach\+\_\+thread}!Test\+Class@{Test\+Class}}
+\subsubsection[{detach\+\_\+thread()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ void {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::detach\+\_\+thread (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a79b3a395c8a1fac7a156228a27d829cc}
+\hypertarget{class_test_class_a79b3a395c8a1fac7a156228a27d829cc}{}\index{Test\+Class@{Test\+Class}!detach\+\_\+thread@{detach\+\_\+thread}}
+\index{detach\+\_\+thread@{detach\+\_\+thread}!Test\+Class@{Test\+Class}}
+\subsubsection[{detach\+\_\+thread()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ void {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::detach\+\_\+thread (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a79b3a395c8a1fac7a156228a27d829cc}
+\hypertarget{class_test_class_a79b3a395c8a1fac7a156228a27d829cc}{}\index{Test\+Class@{Test\+Class}!detach\+\_\+thread@{detach\+\_\+thread}}
+\index{detach\+\_\+thread@{detach\+\_\+thread}!Test\+Class@{Test\+Class}}
+\subsubsection[{detach\+\_\+thread()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ void {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::detach\+\_\+thread (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a79b3a395c8a1fac7a156228a27d829cc}
+\hypertarget{class_test_class_ac5d4fa7fbb51710fc978146124f1f8cf}{}\index{Test\+Class@{Test\+Class}!enqueue@{enqueue}}
+\index{enqueue@{enqueue}!Test\+Class@{Test\+Class}}
+\subsubsection[{enqueue(\+T value)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ bool {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::enqueue (
+\begin{DoxyParamCaption}
+\item[{T}]{value}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_ac5d4fa7fbb51710fc978146124f1f8cf}
+\hypertarget{class_test_class_a2b4f6df9453394ab73885f875801659d}{}\index{Test\+Class@{Test\+Class}!enqueue@{enqueue}}
+\index{enqueue@{enqueue}!Test\+Class@{Test\+Class}}
+\subsubsection[{enqueue(\+T val)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ bool {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::enqueue (
+\begin{DoxyParamCaption}
+\item[{T}]{val}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a2b4f6df9453394ab73885f875801659d}
+\hypertarget{class_test_class_a2b4f6df9453394ab73885f875801659d}{}\index{Test\+Class@{Test\+Class}!enqueue@{enqueue}}
+\index{enqueue@{enqueue}!Test\+Class@{Test\+Class}}
+\subsubsection[{enqueue(\+T val)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ bool {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::enqueue (
+\begin{DoxyParamCaption}
+\item[{T}]{val}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a2b4f6df9453394ab73885f875801659d}
+\hypertarget{class_test_class_a2b4f6df9453394ab73885f875801659d}{}\index{Test\+Class@{Test\+Class}!enqueue@{enqueue}}
+\index{enqueue@{enqueue}!Test\+Class@{Test\+Class}}
+\subsubsection[{enqueue(\+T val)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ bool {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::enqueue (
+\begin{DoxyParamCaption}
+\item[{T}]{val}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a2b4f6df9453394ab73885f875801659d}
+\hypertarget{class_test_class_a2b4f6df9453394ab73885f875801659d}{}\index{Test\+Class@{Test\+Class}!enqueue@{enqueue}}
+\index{enqueue@{enqueue}!Test\+Class@{Test\+Class}}
+\subsubsection[{enqueue(\+T val)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ bool {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::enqueue (
+\begin{DoxyParamCaption}
+\item[{T}]{val}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a2b4f6df9453394ab73885f875801659d}
+\hypertarget{class_test_class_a48ec6b0f960a62ad6073b1df391932ef}{}\index{Test\+Class@{Test\+Class}!enqueue@{enqueue}}
+\index{enqueue@{enqueue}!Test\+Class@{Test\+Class}}
+\subsubsection[{enqueue(\+Value value)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ bool {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::enqueue (
+\begin{DoxyParamCaption}
+\item[{{\bf Value}}]{value}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a48ec6b0f960a62ad6073b1df391932ef}
+\hypertarget{class_test_class_ab545dba6b104cb162aed9d6fd893d3c8}{}\index{Test\+Class@{Test\+Class}!fetch\+Head\+Seq@{fetch\+Head\+Seq}}
+\index{fetch\+Head\+Seq@{fetch\+Head\+Seq}!Test\+Class@{Test\+Class}}
+\subsubsection[{fetch\+Head\+Seq()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ uint64\+\_\+t {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::fetch\+Head\+Seq (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}\label{class_test_class_ab545dba6b104cb162aed9d6fd893d3c8}
+\hypertarget{class_test_class_a29a38598a9e07d80cbcf712ae9634185}{}\index{Test\+Class@{Test\+Class}!fetch\+Tail\+Seq@{fetch\+Tail\+Seq}}
+\index{fetch\+Tail\+Seq@{fetch\+Tail\+Seq}!Test\+Class@{Test\+Class}}
+\subsubsection[{fetch\+Tail\+Seq()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ uint64\+\_\+t {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::fetch\+Tail\+Seq (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}\label{class_test_class_a29a38598a9e07d80cbcf712ae9634185}
+\hypertarget{class_test_class_af497b95115e81f882851b2ab843c298c}{}\index{Test\+Class@{Test\+Class}!find@{find}}
+\index{find@{find}!Test\+Class@{Test\+Class}}
+\subsubsection[{find(\+Key key, Value \&value)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ bool {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::find (
+\begin{DoxyParamCaption}
+\item[{Key}]{key, }
+\item[{{\bf Value} \&}]{value}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_af497b95115e81f882851b2ab843c298c}
+\hypertarget{class_test_class_af497b95115e81f882851b2ab843c298c}{}\index{Test\+Class@{Test\+Class}!find@{find}}
+\index{find@{find}!Test\+Class@{Test\+Class}}
+\subsubsection[{find(\+Key key, Value \&value)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ bool {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::find (
+\begin{DoxyParamCaption}
+\item[{Key}]{key, }
+\item[{{\bf Value} \&}]{value}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_af497b95115e81f882851b2ab843c298c}
+\hypertarget{class_test_class_af497b95115e81f882851b2ab843c298c}{}\index{Test\+Class@{Test\+Class}!find@{find}}
+\index{find@{find}!Test\+Class@{Test\+Class}}
+\subsubsection[{find(\+Key key, Value \&value)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ bool {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::find (
+\begin{DoxyParamCaption}
+\item[{Key}]{key, }
+\item[{{\bf Value} \&}]{value}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_af497b95115e81f882851b2ab843c298c}
+\hypertarget{class_test_class_af497b95115e81f882851b2ab843c298c}{}\index{Test\+Class@{Test\+Class}!find@{find}}
+\index{find@{find}!Test\+Class@{Test\+Class}}
+\subsubsection[{find(\+Key key, Value \&value)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ bool {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::find (
+\begin{DoxyParamCaption}
+\item[{Key}]{key, }
+\item[{{\bf Value} \&}]{value}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_af497b95115e81f882851b2ab843c298c}
+\hypertarget{class_test_class_af497b95115e81f882851b2ab843c298c}{}\index{Test\+Class@{Test\+Class}!find@{find}}
+\index{find@{find}!Test\+Class@{Test\+Class}}
+\subsubsection[{find(\+Key key, Value \&value)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ bool {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::find (
+\begin{DoxyParamCaption}
+\item[{Key}]{key, }
+\item[{{\bf Value} \&}]{value}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_af497b95115e81f882851b2ab843c298c}
+\hypertarget{class_test_class_af497b95115e81f882851b2ab843c298c}{}\index{Test\+Class@{Test\+Class}!find@{find}}
+\index{find@{find}!Test\+Class@{Test\+Class}}
+\subsubsection[{find(\+Key key, Value \&value)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ bool {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::find (
+\begin{DoxyParamCaption}
+\item[{Key}]{key, }
+\item[{{\bf Value} \&}]{value}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_af497b95115e81f882851b2ab843c298c}
+\hypertarget{class_test_class_af497b95115e81f882851b2ab843c298c}{}\index{Test\+Class@{Test\+Class}!find@{find}}
+\index{find@{find}!Test\+Class@{Test\+Class}}
+\subsubsection[{find(\+Key key, Value \&value)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ bool {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::find (
+\begin{DoxyParamCaption}
+\item[{Key}]{key, }
+\item[{{\bf Value} \&}]{value}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_af497b95115e81f882851b2ab843c298c}
+\hypertarget{class_test_class_af497b95115e81f882851b2ab843c298c}{}\index{Test\+Class@{Test\+Class}!find@{find}}
+\index{find@{find}!Test\+Class@{Test\+Class}}
+\subsubsection[{find(\+Key key, Value \&value)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ bool {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::find (
+\begin{DoxyParamCaption}
+\item[{Key}]{key, }
+\item[{{\bf Value} \&}]{value}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_af497b95115e81f882851b2ab843c298c}
+\hypertarget{class_test_class_af497b95115e81f882851b2ab843c298c}{}\index{Test\+Class@{Test\+Class}!find@{find}}
+\index{find@{find}!Test\+Class@{Test\+Class}}
+\subsubsection[{find(\+Key key, Value \&value)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ bool {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::find (
+\begin{DoxyParamCaption}
+\item[{Key}]{key, }
+\item[{{\bf Value} \&}]{value}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_af497b95115e81f882851b2ab843c298c}
+\hypertarget{class_test_class_a0d075565ad4cccdb071bf267fe444681}{}\index{Test\+Class@{Test\+Class}!insert@{insert}}
+\index{insert@{insert}!Test\+Class@{Test\+Class}}
+\subsubsection[{insert(\+Key key, Value value)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ bool {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::insert (
+\begin{DoxyParamCaption}
+\item[{Key}]{key, }
+\item[{{\bf Value}}]{value}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a0d075565ad4cccdb071bf267fe444681}
+\hypertarget{class_test_class_a0d075565ad4cccdb071bf267fe444681}{}\index{Test\+Class@{Test\+Class}!insert@{insert}}
+\index{insert@{insert}!Test\+Class@{Test\+Class}}
+\subsubsection[{insert(\+Key key, Value value)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ bool {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::insert (
+\begin{DoxyParamCaption}
+\item[{Key}]{key, }
+\item[{{\bf Value}}]{value}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a0d075565ad4cccdb071bf267fe444681}
+\hypertarget{class_test_class_a0d075565ad4cccdb071bf267fe444681}{}\index{Test\+Class@{Test\+Class}!insert@{insert}}
+\index{insert@{insert}!Test\+Class@{Test\+Class}}
+\subsubsection[{insert(\+Key key, Value value)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ bool {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::insert (
+\begin{DoxyParamCaption}
+\item[{Key}]{key, }
+\item[{{\bf Value}}]{value}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a0d075565ad4cccdb071bf267fe444681}
+\hypertarget{class_test_class_a0d075565ad4cccdb071bf267fe444681}{}\index{Test\+Class@{Test\+Class}!insert@{insert}}
+\index{insert@{insert}!Test\+Class@{Test\+Class}}
+\subsubsection[{insert(\+Key key, Value value)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ bool {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::insert (
+\begin{DoxyParamCaption}
+\item[{Key}]{key, }
+\item[{{\bf Value}}]{value}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a0d075565ad4cccdb071bf267fe444681}
+\hypertarget{class_test_class_a0d075565ad4cccdb071bf267fe444681}{}\index{Test\+Class@{Test\+Class}!insert@{insert}}
+\index{insert@{insert}!Test\+Class@{Test\+Class}}
+\subsubsection[{insert(\+Key key, Value value)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ bool {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::insert (
+\begin{DoxyParamCaption}
+\item[{Key}]{key, }
+\item[{{\bf Value}}]{value}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a0d075565ad4cccdb071bf267fe444681}
+\hypertarget{class_test_class_a0d075565ad4cccdb071bf267fe444681}{}\index{Test\+Class@{Test\+Class}!insert@{insert}}
+\index{insert@{insert}!Test\+Class@{Test\+Class}}
+\subsubsection[{insert(\+Key key, Value value)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ bool {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::insert (
+\begin{DoxyParamCaption}
+\item[{Key}]{key, }
+\item[{{\bf Value}}]{value}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a0d075565ad4cccdb071bf267fe444681}
+\hypertarget{class_test_class_a0d075565ad4cccdb071bf267fe444681}{}\index{Test\+Class@{Test\+Class}!insert@{insert}}
+\index{insert@{insert}!Test\+Class@{Test\+Class}}
+\subsubsection[{insert(\+Key key, Value value)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ bool {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::insert (
+\begin{DoxyParamCaption}
+\item[{Key}]{key, }
+\item[{{\bf Value}}]{value}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a0d075565ad4cccdb071bf267fe444681}
+\hypertarget{class_test_class_a0d075565ad4cccdb071bf267fe444681}{}\index{Test\+Class@{Test\+Class}!insert@{insert}}
+\index{insert@{insert}!Test\+Class@{Test\+Class}}
+\subsubsection[{insert(\+Key key, Value value)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ bool {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::insert (
+\begin{DoxyParamCaption}
+\item[{Key}]{key, }
+\item[{{\bf Value}}]{value}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a0d075565ad4cccdb071bf267fe444681}
+\hypertarget{class_test_class_a0d075565ad4cccdb071bf267fe444681}{}\index{Test\+Class@{Test\+Class}!insert@{insert}}
+\index{insert@{insert}!Test\+Class@{Test\+Class}}
+\subsubsection[{insert(\+Key key, Value value)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ bool {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::insert (
+\begin{DoxyParamCaption}
+\item[{Key}]{key, }
+\item[{{\bf Value}}]{value}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a0d075565ad4cccdb071bf267fe444681}
+\hypertarget{class_test_class_abb48ce9bd10e18e6362e66ced3af0200}{}\index{Test\+Class@{Test\+Class}!is\+Empty@{is\+Empty}}
+\index{is\+Empty@{is\+Empty}!Test\+Class@{Test\+Class}}
+\subsubsection[{is\+Empty()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ bool {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::is\+Empty (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}\label{class_test_class_abb48ce9bd10e18e6362e66ced3af0200}
+\hypertarget{class_test_class_af8f565d4f1733a92b02b903e882210de}{}\index{Test\+Class@{Test\+Class}!is\+Full@{is\+Full}}
+\index{is\+Full@{is\+Full}!Test\+Class@{Test\+Class}}
+\subsubsection[{is\+Full()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ bool {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::is\+Full (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [private]}}\label{class_test_class_af8f565d4f1733a92b02b903e882210de}
+\hypertarget{class_test_class_a28aaf697b939932f750c2607fe5ec1ce}{}\index{Test\+Class@{Test\+Class}!mcas@{mcas}}
+\index{mcas@{mcas}!Test\+Class@{Test\+Class}}
+\subsubsection[{mcas(int len, std\+::function$<$ int()$>$ pos\+Func, std\+::atomic$<$ void $\ast$ $>$ $\ast$address)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ bool {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::mcas (
+\begin{DoxyParamCaption}
+\item[{int}]{len, }
+\item[{std\+::function$<$ int()$>$}]{pos\+Func, }
+\item[{std\+::atomic$<$ void $\ast$ $>$ $\ast$}]{address}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a28aaf697b939932f750c2607fe5ec1ce}
+\hypertarget{class_test_class_a1bd0edf8d0e906d97e4b3c768398cf7b}{}\index{Test\+Class@{Test\+Class}!name@{name}}
+\index{name@{name}!Test\+Class@{Test\+Class}}
+\subsubsection[{name()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ char$\ast$ {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::name (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a1bd0edf8d0e906d97e4b3c768398cf7b}
+\hypertarget{class_test_class_a1bd0edf8d0e906d97e4b3c768398cf7b}{}\index{Test\+Class@{Test\+Class}!name@{name}}
+\index{name@{name}!Test\+Class@{Test\+Class}}
+\subsubsection[{name()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ char$\ast$ {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::name (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a1bd0edf8d0e906d97e4b3c768398cf7b}
+\hypertarget{class_test_class_a1bd0edf8d0e906d97e4b3c768398cf7b}{}\index{Test\+Class@{Test\+Class}!name@{name}}
+\index{name@{name}!Test\+Class@{Test\+Class}}
+\subsubsection[{name()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ char$\ast$ {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::name (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a1bd0edf8d0e906d97e4b3c768398cf7b}
+\hypertarget{class_test_class_a1bd0edf8d0e906d97e4b3c768398cf7b}{}\index{Test\+Class@{Test\+Class}!name@{name}}
+\index{name@{name}!Test\+Class@{Test\+Class}}
+\subsubsection[{name()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ char$\ast$ {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::name (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a1bd0edf8d0e906d97e4b3c768398cf7b}
+\hypertarget{class_test_class_a1bd0edf8d0e906d97e4b3c768398cf7b}{}\index{Test\+Class@{Test\+Class}!name@{name}}
+\index{name@{name}!Test\+Class@{Test\+Class}}
+\subsubsection[{name()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ char$\ast$ {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::name (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a1bd0edf8d0e906d97e4b3c768398cf7b}
+\hypertarget{class_test_class_a50774f0c4fe248799aae9114a9f01233}{}\index{Test\+Class@{Test\+Class}!pop\+\_\+back@{pop\+\_\+back}}
+\index{pop\+\_\+back@{pop\+\_\+back}!Test\+Class@{Test\+Class}}
+\subsubsection[{pop\+\_\+back(\+T \&value)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ bool {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::pop\+\_\+back (
+\begin{DoxyParamCaption}
+\item[{T \&}]{value}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a50774f0c4fe248799aae9114a9f01233}
+\hypertarget{class_test_class_a794faf7da47f72b05a6b8c57298187e2}{}\index{Test\+Class@{Test\+Class}!print\+\_\+queue@{print\+\_\+queue}}
+\index{print\+\_\+queue@{print\+\_\+queue}!Test\+Class@{Test\+Class}}
+\subsubsection[{print\+\_\+queue()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ void {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::print\+\_\+queue (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a794faf7da47f72b05a6b8c57298187e2}
+\hypertarget{class_test_class_a64245ead64233bf7bc8948ba339785c4}{}\index{Test\+Class@{Test\+Class}!push\+\_\+back@{push\+\_\+back}}
+\index{push\+\_\+back@{push\+\_\+back}!Test\+Class@{Test\+Class}}
+\subsubsection[{push\+\_\+back(\+T value)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ size\+\_\+t {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::push\+\_\+back (
+\begin{DoxyParamCaption}
+\item[{T}]{value}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a64245ead64233bf7bc8948ba339785c4}
+\hypertarget{class_test_class_a3a22d60709c15d419f69d29b7de92d02}{}\index{Test\+Class@{Test\+Class}!remove@{remove}}
+\index{remove@{remove}!Test\+Class@{Test\+Class}}
+\subsubsection[{remove(\+Key key)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ bool {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::remove (
+\begin{DoxyParamCaption}
+\item[{Key}]{key}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a3a22d60709c15d419f69d29b7de92d02}
+\hypertarget{class_test_class_a3a22d60709c15d419f69d29b7de92d02}{}\index{Test\+Class@{Test\+Class}!remove@{remove}}
+\index{remove@{remove}!Test\+Class@{Test\+Class}}
+\subsubsection[{remove(\+Key key)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ bool {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::remove (
+\begin{DoxyParamCaption}
+\item[{Key}]{key}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a3a22d60709c15d419f69d29b7de92d02}
+\hypertarget{class_test_class_a3a22d60709c15d419f69d29b7de92d02}{}\index{Test\+Class@{Test\+Class}!remove@{remove}}
+\index{remove@{remove}!Test\+Class@{Test\+Class}}
+\subsubsection[{remove(\+Key key)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ bool {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::remove (
+\begin{DoxyParamCaption}
+\item[{Key}]{key}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a3a22d60709c15d419f69d29b7de92d02}
+\hypertarget{class_test_class_a3a22d60709c15d419f69d29b7de92d02}{}\index{Test\+Class@{Test\+Class}!remove@{remove}}
+\index{remove@{remove}!Test\+Class@{Test\+Class}}
+\subsubsection[{remove(\+Key key)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ bool {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::remove (
+\begin{DoxyParamCaption}
+\item[{Key}]{key}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a3a22d60709c15d419f69d29b7de92d02}
+\hypertarget{class_test_class_a3a22d60709c15d419f69d29b7de92d02}{}\index{Test\+Class@{Test\+Class}!remove@{remove}}
+\index{remove@{remove}!Test\+Class@{Test\+Class}}
+\subsubsection[{remove(\+Key key)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ bool {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::remove (
+\begin{DoxyParamCaption}
+\item[{Key}]{key}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a3a22d60709c15d419f69d29b7de92d02}
+\hypertarget{class_test_class_a3a22d60709c15d419f69d29b7de92d02}{}\index{Test\+Class@{Test\+Class}!remove@{remove}}
+\index{remove@{remove}!Test\+Class@{Test\+Class}}
+\subsubsection[{remove(\+Key key)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ bool {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::remove (
+\begin{DoxyParamCaption}
+\item[{Key}]{key}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a3a22d60709c15d419f69d29b7de92d02}
+\hypertarget{class_test_class_a3a22d60709c15d419f69d29b7de92d02}{}\index{Test\+Class@{Test\+Class}!remove@{remove}}
+\index{remove@{remove}!Test\+Class@{Test\+Class}}
+\subsubsection[{remove(\+Key key)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ bool {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::remove (
+\begin{DoxyParamCaption}
+\item[{Key}]{key}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a3a22d60709c15d419f69d29b7de92d02}
+\hypertarget{class_test_class_a3a22d60709c15d419f69d29b7de92d02}{}\index{Test\+Class@{Test\+Class}!remove@{remove}}
+\index{remove@{remove}!Test\+Class@{Test\+Class}}
+\subsubsection[{remove(\+Key key)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ bool {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::remove (
+\begin{DoxyParamCaption}
+\item[{Key}]{key}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a3a22d60709c15d419f69d29b7de92d02}
+\hypertarget{class_test_class_a3a22d60709c15d419f69d29b7de92d02}{}\index{Test\+Class@{Test\+Class}!remove@{remove}}
+\index{remove@{remove}!Test\+Class@{Test\+Class}}
+\subsubsection[{remove(\+Key key)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ bool {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::remove (
+\begin{DoxyParamCaption}
+\item[{Key}]{key}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a3a22d60709c15d419f69d29b7de92d02}
+\hypertarget{class_test_class_a72a094bae5f780bb6fae94aaf43f9773}{}\index{Test\+Class@{Test\+Class}!sanity\+\_\+check@{sanity\+\_\+check}}
+\index{sanity\+\_\+check@{sanity\+\_\+check}!Test\+Class@{Test\+Class}}
+\subsubsection[{sanity\+\_\+check()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ void {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::sanity\+\_\+check (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\label{class_test_class_a72a094bae5f780bb6fae94aaf43f9773}
+\hypertarget{class_test_class_af2230f298ab3ef4ebf71aa7afa3fb6ca}{}\index{Test\+Class@{Test\+Class}!size@{size}}
+\index{size@{size}!Test\+Class@{Test\+Class}}
+\subsubsection[{size()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ size\+\_\+t {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::size (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_af2230f298ab3ef4ebf71aa7afa3fb6ca}
+\hypertarget{class_test_class_af2230f298ab3ef4ebf71aa7afa3fb6ca}{}\index{Test\+Class@{Test\+Class}!size@{size}}
+\index{size@{size}!Test\+Class@{Test\+Class}}
+\subsubsection[{size()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ size\+\_\+t {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::size (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_af2230f298ab3ef4ebf71aa7afa3fb6ca}
+\hypertarget{class_test_class_af2230f298ab3ef4ebf71aa7afa3fb6ca}{}\index{Test\+Class@{Test\+Class}!size@{size}}
+\index{size@{size}!Test\+Class@{Test\+Class}}
+\subsubsection[{size()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ size\+\_\+t {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::size (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_af2230f298ab3ef4ebf71aa7afa3fb6ca}
+\hypertarget{class_test_class_af2230f298ab3ef4ebf71aa7afa3fb6ca}{}\index{Test\+Class@{Test\+Class}!size@{size}}
+\index{size@{size}!Test\+Class@{Test\+Class}}
+\subsubsection[{size()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ size\+\_\+t {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::size (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_af2230f298ab3ef4ebf71aa7afa3fb6ca}
+\hypertarget{class_test_class_af2230f298ab3ef4ebf71aa7afa3fb6ca}{}\index{Test\+Class@{Test\+Class}!size@{size}}
+\index{size@{size}!Test\+Class@{Test\+Class}}
+\subsubsection[{size()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ size\+\_\+t {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::size (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_af2230f298ab3ef4ebf71aa7afa3fb6ca}
+\hypertarget{class_test_class_af2230f298ab3ef4ebf71aa7afa3fb6ca}{}\index{Test\+Class@{Test\+Class}!size@{size}}
+\index{size@{size}!Test\+Class@{Test\+Class}}
+\subsubsection[{size()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ size\+\_\+t {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::size (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_af2230f298ab3ef4ebf71aa7afa3fb6ca}
+\hypertarget{class_test_class_af2230f298ab3ef4ebf71aa7afa3fb6ca}{}\index{Test\+Class@{Test\+Class}!size@{size}}
+\index{size@{size}!Test\+Class@{Test\+Class}}
+\subsubsection[{size()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ size\+\_\+t {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::size (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_af2230f298ab3ef4ebf71aa7afa3fb6ca}
+\hypertarget{class_test_class_af2230f298ab3ef4ebf71aa7afa3fb6ca}{}\index{Test\+Class@{Test\+Class}!size@{size}}
+\index{size@{size}!Test\+Class@{Test\+Class}}
+\subsubsection[{size()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ size\+\_\+t {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::size (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_af2230f298ab3ef4ebf71aa7afa3fb6ca}
+\hypertarget{class_test_class_af2230f298ab3ef4ebf71aa7afa3fb6ca}{}\index{Test\+Class@{Test\+Class}!size@{size}}
+\index{size@{size}!Test\+Class@{Test\+Class}}
+\subsubsection[{size()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ size\+\_\+t {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::size (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_af2230f298ab3ef4ebf71aa7afa3fb6ca}
+\hypertarget{class_test_class_af2230f298ab3ef4ebf71aa7afa3fb6ca}{}\index{Test\+Class@{Test\+Class}!size@{size}}
+\index{size@{size}!Test\+Class@{Test\+Class}}
+\subsubsection[{size()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ size\+\_\+t {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::size (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_af2230f298ab3ef4ebf71aa7afa3fb6ca}
+\hypertarget{class_test_class_a84e73a91ede625887472a307235d6de5}{}\index{Test\+Class@{Test\+Class}!to\+String@{to\+String}}
+\index{to\+String@{to\+String}!Test\+Class@{Test\+Class}}
+\subsubsection[{to\+String()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ std\+::string {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::to\+String (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a84e73a91ede625887472a307235d6de5}
+\hypertarget{class_test_class_a84e73a91ede625887472a307235d6de5}{}\index{Test\+Class@{Test\+Class}!to\+String@{to\+String}}
+\index{to\+String@{to\+String}!Test\+Class@{Test\+Class}}
+\subsubsection[{to\+String()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ std\+::string {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::to\+String (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a84e73a91ede625887472a307235d6de5}
+\hypertarget{class_test_class_a84e73a91ede625887472a307235d6de5}{}\index{Test\+Class@{Test\+Class}!to\+String@{to\+String}}
+\index{to\+String@{to\+String}!Test\+Class@{Test\+Class}}
+\subsubsection[{to\+String()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ std\+::string {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::to\+String (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a84e73a91ede625887472a307235d6de5}
+\hypertarget{class_test_class_a84e73a91ede625887472a307235d6de5}{}\index{Test\+Class@{Test\+Class}!to\+String@{to\+String}}
+\index{to\+String@{to\+String}!Test\+Class@{Test\+Class}}
+\subsubsection[{to\+String()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ std\+::string {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::to\+String (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a84e73a91ede625887472a307235d6de5}
+\hypertarget{class_test_class_a84e73a91ede625887472a307235d6de5}{}\index{Test\+Class@{Test\+Class}!to\+String@{to\+String}}
+\index{to\+String@{to\+String}!Test\+Class@{Test\+Class}}
+\subsubsection[{to\+String()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ std\+::string {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::to\+String (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a84e73a91ede625887472a307235d6de5}
+\hypertarget{class_test_class_a84e73a91ede625887472a307235d6de5}{}\index{Test\+Class@{Test\+Class}!to\+String@{to\+String}}
+\index{to\+String@{to\+String}!Test\+Class@{Test\+Class}}
+\subsubsection[{to\+String()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ std\+::string {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::to\+String (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a84e73a91ede625887472a307235d6de5}
+\hypertarget{class_test_class_a84e73a91ede625887472a307235d6de5}{}\index{Test\+Class@{Test\+Class}!to\+String@{to\+String}}
+\index{to\+String@{to\+String}!Test\+Class@{Test\+Class}}
+\subsubsection[{to\+String()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ std\+::string {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::to\+String (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a84e73a91ede625887472a307235d6de5}
+\hypertarget{class_test_class_a84e73a91ede625887472a307235d6de5}{}\index{Test\+Class@{Test\+Class}!to\+String@{to\+String}}
+\index{to\+String@{to\+String}!Test\+Class@{Test\+Class}}
+\subsubsection[{to\+String()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ std\+::string {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::to\+String (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a84e73a91ede625887472a307235d6de5}
+\hypertarget{class_test_class_a84e73a91ede625887472a307235d6de5}{}\index{Test\+Class@{Test\+Class}!to\+String@{to\+String}}
+\index{to\+String@{to\+String}!Test\+Class@{Test\+Class}}
+\subsubsection[{to\+String()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ std\+::string {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::to\+String (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a84e73a91ede625887472a307235d6de5}
+\hypertarget{class_test_class_a84e73a91ede625887472a307235d6de5}{}\index{Test\+Class@{Test\+Class}!to\+String@{to\+String}}
+\index{to\+String@{to\+String}!Test\+Class@{Test\+Class}}
+\subsubsection[{to\+String()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ std\+::string {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::to\+String (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a84e73a91ede625887472a307235d6de5}
+\hypertarget{class_test_class_a84e73a91ede625887472a307235d6de5}{}\index{Test\+Class@{Test\+Class}!to\+String@{to\+String}}
+\index{to\+String@{to\+String}!Test\+Class@{Test\+Class}}
+\subsubsection[{to\+String()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ std\+::string {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::to\+String (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a84e73a91ede625887472a307235d6de5}
+\hypertarget{class_test_class_a84e73a91ede625887472a307235d6de5}{}\index{Test\+Class@{Test\+Class}!to\+String@{to\+String}}
+\index{to\+String@{to\+String}!Test\+Class@{Test\+Class}}
+\subsubsection[{to\+String()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ std\+::string {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::to\+String (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a84e73a91ede625887472a307235d6de5}
+\hypertarget{class_test_class_a4c33c8cac20119f9bee9b5091bc8a385}{}\index{Test\+Class@{Test\+Class}!update@{update}}
+\index{update@{update}!Test\+Class@{Test\+Class}}
+\subsubsection[{update(\+Key key, Value \&value\+\_\+expected, Value value\+\_\+new)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ bool {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::update (
+\begin{DoxyParamCaption}
+\item[{Key}]{key, }
+\item[{{\bf Value} \&}]{value\+\_\+expected, }
+\item[{{\bf Value}}]{value\+\_\+new}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a4c33c8cac20119f9bee9b5091bc8a385}
+\hypertarget{class_test_class_a4c33c8cac20119f9bee9b5091bc8a385}{}\index{Test\+Class@{Test\+Class}!update@{update}}
+\index{update@{update}!Test\+Class@{Test\+Class}}
+\subsubsection[{update(\+Key key, Value \&value\+\_\+expected, Value value\+\_\+new)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ bool {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::update (
+\begin{DoxyParamCaption}
+\item[{Key}]{key, }
+\item[{{\bf Value} \&}]{value\+\_\+expected, }
+\item[{{\bf Value}}]{value\+\_\+new}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a4c33c8cac20119f9bee9b5091bc8a385}
+\hypertarget{class_test_class_a4c33c8cac20119f9bee9b5091bc8a385}{}\index{Test\+Class@{Test\+Class}!update@{update}}
+\index{update@{update}!Test\+Class@{Test\+Class}}
+\subsubsection[{update(\+Key key, Value \&value\+\_\+expected, Value value\+\_\+new)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ bool {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::update (
+\begin{DoxyParamCaption}
+\item[{Key}]{key, }
+\item[{{\bf Value} \&}]{value\+\_\+expected, }
+\item[{{\bf Value}}]{value\+\_\+new}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a4c33c8cac20119f9bee9b5091bc8a385}
+\hypertarget{class_test_class_a4c33c8cac20119f9bee9b5091bc8a385}{}\index{Test\+Class@{Test\+Class}!update@{update}}
+\index{update@{update}!Test\+Class@{Test\+Class}}
+\subsubsection[{update(\+Key key, Value \&value\+\_\+expected, Value value\+\_\+new)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ bool {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::update (
+\begin{DoxyParamCaption}
+\item[{Key}]{key, }
+\item[{{\bf Value} \&}]{value\+\_\+expected, }
+\item[{{\bf Value}}]{value\+\_\+new}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a4c33c8cac20119f9bee9b5091bc8a385}
+\hypertarget{class_test_class_a4c33c8cac20119f9bee9b5091bc8a385}{}\index{Test\+Class@{Test\+Class}!update@{update}}
+\index{update@{update}!Test\+Class@{Test\+Class}}
+\subsubsection[{update(\+Key key, Value \&value\+\_\+expected, Value value\+\_\+new)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ bool {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::update (
+\begin{DoxyParamCaption}
+\item[{Key}]{key, }
+\item[{{\bf Value} \&}]{value\+\_\+expected, }
+\item[{{\bf Value}}]{value\+\_\+new}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a4c33c8cac20119f9bee9b5091bc8a385}
+\hypertarget{class_test_class_a4c33c8cac20119f9bee9b5091bc8a385}{}\index{Test\+Class@{Test\+Class}!update@{update}}
+\index{update@{update}!Test\+Class@{Test\+Class}}
+\subsubsection[{update(\+Key key, Value \&value\+\_\+expected, Value value\+\_\+new)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ bool {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::update (
+\begin{DoxyParamCaption}
+\item[{Key}]{key, }
+\item[{{\bf Value} \&}]{value\+\_\+expected, }
+\item[{{\bf Value}}]{value\+\_\+new}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a4c33c8cac20119f9bee9b5091bc8a385}
+\hypertarget{class_test_class_a4c33c8cac20119f9bee9b5091bc8a385}{}\index{Test\+Class@{Test\+Class}!update@{update}}
+\index{update@{update}!Test\+Class@{Test\+Class}}
+\subsubsection[{update(\+Key key, Value \&value\+\_\+expected, Value value\+\_\+new)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ bool {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::update (
+\begin{DoxyParamCaption}
+\item[{Key}]{key, }
+\item[{{\bf Value} \&}]{value\+\_\+expected, }
+\item[{{\bf Value}}]{value\+\_\+new}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a4c33c8cac20119f9bee9b5091bc8a385}
+\hypertarget{class_test_class_a4c33c8cac20119f9bee9b5091bc8a385}{}\index{Test\+Class@{Test\+Class}!update@{update}}
+\index{update@{update}!Test\+Class@{Test\+Class}}
+\subsubsection[{update(\+Key key, Value \&value\+\_\+expected, Value value\+\_\+new)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ bool {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::update (
+\begin{DoxyParamCaption}
+\item[{Key}]{key, }
+\item[{{\bf Value} \&}]{value\+\_\+expected, }
+\item[{{\bf Value}}]{value\+\_\+new}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a4c33c8cac20119f9bee9b5091bc8a385}
+\hypertarget{class_test_class_a4c33c8cac20119f9bee9b5091bc8a385}{}\index{Test\+Class@{Test\+Class}!update@{update}}
+\index{update@{update}!Test\+Class@{Test\+Class}}
+\subsubsection[{update(\+Key key, Value \&value\+\_\+expected, Value value\+\_\+new)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ bool {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::update (
+\begin{DoxyParamCaption}
+\item[{Key}]{key, }
+\item[{{\bf Value} \&}]{value\+\_\+expected, }
+\item[{{\bf Value}}]{value\+\_\+new}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{class_test_class_a4c33c8cac20119f9bee9b5091bc8a385}
+
+
+\subsection{Member Data Documentation}
+\hypertarget{class_test_class_aa4ccae17f7befca71214f40ddcca6c1a}{}\index{Test\+Class@{Test\+Class}!buff\+\_\+@{buff\+\_\+}}
+\index{buff\+\_\+@{buff\+\_\+}!Test\+Class@{Test\+Class}}
+\subsubsection[{buff\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ Lock\+Free\+Queue$<$T$>$$\ast$ {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::buff\+\_\+\hspace{0.3cm}{\ttfamily [private]}}\label{class_test_class_aa4ccae17f7befca71214f40ddcca6c1a}
+\hypertarget{class_test_class_a011461808ec9d3cfc6f085642fcfec01}{}\index{Test\+Class@{Test\+Class}!capacity\+\_\+@{capacity\+\_\+}}
+\index{capacity\+\_\+@{capacity\+\_\+}!Test\+Class@{Test\+Class}}
+\subsubsection[{capacity\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ uint64\+\_\+t {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::capacity\+\_\+\hspace{0.3cm}{\ttfamily [private]}}\label{class_test_class_a011461808ec9d3cfc6f085642fcfec01}
+\hypertarget{class_test_class_a45c01f347cfca94da55b3f8f626e4a01}{}\index{Test\+Class@{Test\+Class}!container@{container}}
+\index{container@{container}!Test\+Class@{Test\+Class}}
+\subsubsection[{container}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ tbb\+::concurrent\+\_\+hash\+\_\+map$<$Key, {\bf Value}, {\bf My\+Hash\+Compare}$>$$\ast$ {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::container\hspace{0.3cm}{\ttfamily [private]}}\label{class_test_class_a45c01f347cfca94da55b3f8f626e4a01}
+\hypertarget{class_test_class_a188a7b0e4dba55a763a64328e9015d5d}{}\index{Test\+Class@{Test\+Class}!container@{container}}
+\index{container@{container}!Test\+Class@{Test\+Class}}
+\subsubsection[{container}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ tervel\+::containers\+::wf\+::vector\+::\+Vector$<$T$>$$\ast$ {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::container\hspace{0.3cm}{\ttfamily [private]}}\label{class_test_class_a188a7b0e4dba55a763a64328e9015d5d}
+\hypertarget{class_test_class_afd26cf553caeb881f2d24252b973a398}{}\index{Test\+Class@{Test\+Class}!container@{container}}
+\index{container@{container}!Test\+Class@{Test\+Class}}
+\subsubsection[{container}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ {\bf Map}$\ast$ {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::container\hspace{0.3cm}{\ttfamily [private]}}\label{class_test_class_afd26cf553caeb881f2d24252b973a398}
+\hypertarget{class_test_class_abe4e24c68b92dd93f411f3b7e62e8cde}{}\index{Test\+Class@{Test\+Class}!container@{container}}
+\index{container@{container}!Test\+Class@{Test\+Class}}
+\subsubsection[{container}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ {\bf container\+\_\+t}$\ast$ {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::container\hspace{0.3cm}{\ttfamily [private]}}\label{class_test_class_abe4e24c68b92dd93f411f3b7e62e8cde}
+\hypertarget{class_test_class_a82e6fb0f71bfaeab7623660b1c6d5801}{}\index{Test\+Class@{Test\+Class}!container@{container}}
+\index{container@{container}!Test\+Class@{Test\+Class}}
+\subsubsection[{container}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ {\bf Map} $\ast$ {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::container\hspace{0.3cm}{\ttfamily [private]}}\label{class_test_class_a82e6fb0f71bfaeab7623660b1c6d5801}
+\hypertarget{class_test_class_af57483e6863d4fbbe455be1a32514b92}{}\index{Test\+Class@{Test\+Class}!head\+\_\+@{head\+\_\+}}
+\index{head\+\_\+@{head\+\_\+}!Test\+Class@{Test\+Class}}
+\subsubsection[{head\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ uint64\+\_\+t {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::head\+\_\+\hspace{0.3cm}{\ttfamily [private]}}\label{class_test_class_af57483e6863d4fbbe455be1a32514b92}
+\hypertarget{class_test_class_a165f4022d46081c8594106c0247cfef3}{}\index{Test\+Class@{Test\+Class}!queue\+\_\+@{queue\+\_\+}}
+\index{queue\+\_\+@{queue\+\_\+}!Test\+Class@{Test\+Class}}
+\subsubsection[{queue\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ tbb\+::concurrent\+\_\+bounded\+\_\+queue$<$T$>$$\ast$ {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::queue\+\_\+\hspace{0.3cm}{\ttfamily [private]}}\label{class_test_class_a165f4022d46081c8594106c0247cfef3}
+\hypertarget{class_test_class_a6d2a5cb3e074be536e9637e3898a66c7}{}\index{Test\+Class@{Test\+Class}!queue\+\_\+@{queue\+\_\+}}
+\index{queue\+\_\+@{queue\+\_\+}!Test\+Class@{Test\+Class}}
+\subsubsection[{queue\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ {\bf T\+Queue}$\ast$ {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::queue\+\_\+\hspace{0.3cm}{\ttfamily [private]}}\label{class_test_class_a6d2a5cb3e074be536e9637e3898a66c7}
+\hypertarget{class_test_class_a58c609d2496e3e96bf13fa26d9697c6c}{}\index{Test\+Class@{Test\+Class}!queue\+\_\+@{queue\+\_\+}}
+\index{queue\+\_\+@{queue\+\_\+}!Test\+Class@{Test\+Class}}
+\subsubsection[{queue\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ {\bf tervel\+::containers\+::lf\+::mcas\+\_\+buffer\+::\+Ring\+Buffer}$<$T$>$$\ast$ {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::queue\+\_\+\hspace{0.3cm}{\ttfamily [private]}}\label{class_test_class_a58c609d2496e3e96bf13fa26d9697c6c}
+\hypertarget{class_test_class_a25fdd248a90a1027d4f9dec63f7b2328}{}\index{Test\+Class@{Test\+Class}!queue\+\_\+@{queue\+\_\+}}
+\index{queue\+\_\+@{queue\+\_\+}!Test\+Class@{Test\+Class}}
+\subsubsection[{queue\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ std\+::atomic$<$T$>$$\ast$ {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::queue\+\_\+\hspace{0.3cm}{\ttfamily [private]}}\label{class_test_class_a25fdd248a90a1027d4f9dec63f7b2328}
+\hypertarget{class_test_class_aed0b5ac583a2f0c4405ea66e5e4835c6}{}\index{Test\+Class@{Test\+Class}!queue\+\_\+lock\+\_\+@{queue\+\_\+lock\+\_\+}}
+\index{queue\+\_\+lock\+\_\+@{queue\+\_\+lock\+\_\+}!Test\+Class@{Test\+Class}}
+\subsubsection[{queue\+\_\+lock\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ pthread\+\_\+mutex\+\_\+t {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::queue\+\_\+lock\+\_\+\hspace{0.3cm}{\ttfamily [private]}}\label{class_test_class_aed0b5ac583a2f0c4405ea66e5e4835c6}
+\hypertarget{class_test_class_af2429ac335c40b2244dcf1c0d27aa3e7}{}\index{Test\+Class@{Test\+Class}!size\+\_\+mask\+\_\+@{size\+\_\+mask\+\_\+}}
+\index{size\+\_\+mask\+\_\+@{size\+\_\+mask\+\_\+}!Test\+Class@{Test\+Class}}
+\subsubsection[{size\+\_\+mask\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ uint64\+\_\+t {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::size\+\_\+mask\+\_\+\hspace{0.3cm}{\ttfamily [private]}}\label{class_test_class_af2429ac335c40b2244dcf1c0d27aa3e7}
+\hypertarget{class_test_class_a4d2c82c8499f514936f1262c684075aa}{}\index{Test\+Class@{Test\+Class}!tail\+\_\+@{tail\+\_\+}}
+\index{tail\+\_\+@{tail\+\_\+}!Test\+Class@{Test\+Class}}
+\subsubsection[{tail\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ uint64\+\_\+t {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::tail\+\_\+\hspace{0.3cm}{\ttfamily [private]}}\label{class_test_class_a4d2c82c8499f514936f1262c684075aa}
+\hypertarget{class_test_class_a73eaea6b839e2a3171945d0f2d209b98}{}\index{Test\+Class@{Test\+Class}!tervel\+\_\+obj@{tervel\+\_\+obj}}
+\index{tervel\+\_\+obj@{tervel\+\_\+obj}!Test\+Class@{Test\+Class}}
+\subsubsection[{tervel\+\_\+obj}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ {\bf tervel\+::\+Tervel} $\ast$ {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::tervel\+\_\+obj\hspace{0.3cm}{\ttfamily [private]}}\label{class_test_class_a73eaea6b839e2a3171945d0f2d209b98}
+\hypertarget{class_test_class_a94c73b5cb829bdd7e729be5668f6f6da}{}\index{Test\+Class@{Test\+Class}!test\+\_\+container@{test\+\_\+container}}
+\index{test\+\_\+container@{test\+\_\+container}!Test\+Class@{Test\+Class}}
+\subsubsection[{test\+\_\+container}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ {\bf hash\+\_\+t} $\ast$ {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::test\+\_\+container\hspace{0.3cm}{\ttfamily [private]}}\label{class_test_class_a94c73b5cb829bdd7e729be5668f6f6da}
+\hypertarget{class_test_class_ac56bdd8296cec194c437ae49b63d8887}{}\index{Test\+Class@{Test\+Class}!v\+\_\+mutex@{v\+\_\+mutex}}
+\index{v\+\_\+mutex@{v\+\_\+mutex}!Test\+Class@{Test\+Class}}
+\subsubsection[{v\+\_\+mutex}]{\setlength{\rightskip}{0pt plus 5cm}template$<$class Key, class Value$>$ boost\+::mutex {\bf Test\+Class}$<$ Key, {\bf Value} $>$\+::v\+\_\+mutex\hspace{0.3cm}{\ttfamily [private]}}\label{class_test_class_ac56bdd8296cec194c437ae49b63d8887}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+tervel/tests/hash\+\_\+map/api/\hyperlink{blank__api_8h}{blank\+\_\+api.\+h}\item 
+tervel/tests/hash\+\_\+map/api/\hyperlink{cds__michael__map_8h}{cds\+\_\+michael\+\_\+map.\+h}\item 
+tervel/tests/hash\+\_\+map/api/\hyperlink{cds__split__map_8h}{cds\+\_\+split\+\_\+map.\+h}\item 
+tervel/tests/hash\+\_\+map/api/\hyperlink{lock__boost__map_8h}{lock\+\_\+boost\+\_\+map.\+h}\item 
+tervel/tests/hash\+\_\+map/api/\hyperlink{lock__stl__map_8h}{lock\+\_\+stl\+\_\+map.\+h}\item 
+tervel/tests/hash\+\_\+map/api/\hyperlink{wf__hashmap__api_8h}{wf\+\_\+hashmap\+\_\+api.\+h}\item 
+tervel/tests/hash\+\_\+map/api/\hyperlink{wf__hashmap__nodel__api_8h}{wf\+\_\+hashmap\+\_\+nodel\+\_\+api.\+h}\item 
+tervel/tests/ring-\/buffer/api/\hyperlink{tsigas___a_p_i_8h}{tsigas\+\_\+\+A\+P\+I.\+h}\item 
+tervel/tests/ring-\/buffer/api/\hyperlink{wf__ringbuffer__api_8h}{wf\+\_\+ringbuffer\+\_\+api.\+h}\item 
+tervel/tests/hash\+\_\+map/api/\hyperlink{cliff__api_8h}{cliff\+\_\+api.\+h}\item 
+tervel/tests/hash\+\_\+map/api/\hyperlink{tbb__map_8h}{tbb\+\_\+map.\+h}\item 
+tervel/tests/mcas/api/\hyperlink{wf__mcas__api_8h}{wf\+\_\+mcas\+\_\+api.\+h}\item 
+tervel/tests/ring-\/buffer/api/\hyperlink{linux___a_p_i_8h}{linux\+\_\+\+A\+P\+I.\+h}\item 
+tervel/tests/ring-\/buffer/api/\hyperlink{lock___a_p_i_8h}{lock\+\_\+\+A\+P\+I.\+h}\item 
+tervel/tests/ring-\/buffer/api/\hyperlink{mcas___a_p_i_8h}{mcas\+\_\+\+A\+P\+I.\+h}\item 
+tervel/tests/ring-\/buffer/api/\hyperlink{tbb___a_p_i_8h}{tbb\+\_\+\+A\+P\+I.\+h}\item 
+tervel/tests/vector/api/\hyperlink{wf__vector__api_8h}{wf\+\_\+vector\+\_\+api.\+h}\end{DoxyCompactItemize}

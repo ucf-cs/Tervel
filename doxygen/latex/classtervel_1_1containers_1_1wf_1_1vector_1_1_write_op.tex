@@ -1,0 +1,124 @@
+\hypertarget{classtervel_1_1containers_1_1wf_1_1vector_1_1_write_op}{}\section{tervel\+:\+:containers\+:\+:wf\+:\+:vector\+:\+:Write\+Op$<$ T $>$ Class Template Reference}
+\label{classtervel_1_1containers_1_1wf_1_1vector_1_1_write_op}\index{tervel\+::containers\+::wf\+::vector\+::\+Write\+Op$<$ T $>$@{tervel\+::containers\+::wf\+::vector\+::\+Write\+Op$<$ T $>$}}
+
+
+{\ttfamily \#include $<$write\+\_\+op.\+h$>$}
+
+Inheritance diagram for tervel\+:\+:containers\+:\+:wf\+:\+:vector\+:\+:Write\+Op$<$ T $>$\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=3.000000cm]{classtervel_1_1containers_1_1wf_1_1vector_1_1_write_op}
+\end{center}
+\end{figure}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_write_op_a09e0c8cc62247a95e50e43a482df81fe}{Write\+Op} (Vector$<$ T $>$ $\ast$vec, size\+\_\+t idx, T expected, T val)
+\item 
+\hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_write_op_a80cc81812cda1b0b3d379e883106fb51}{$\sim$\+Write\+Op} ()
+\item 
+void \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_write_op_a30f4a6d0e37b6e591fb986977304e08d}{help\+\_\+complete} ()
+\begin{DoxyCompactList}\small\item\em Implementations of this function that upon its return the operation described in the Op\+Record has been completed. \end{DoxyCompactList}\item 
+bool \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_write_op_a972e53578716571f63bca13af4fe8f16}{result} (T \&expected)
+\item 
+bool \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_write_op_ab9b31a254a96f4b7b04c3ae66bda8eca}{is\+\_\+watched} ()
+\end{DoxyCompactItemize}
+\subsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+Vector$<$ T $>$ $\ast$ \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_write_op_aad0429090bde2576091caa8ef1713cda}{vec\+\_\+}
+\item 
+size\+\_\+t \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_write_op_adeee65a9fa4dbe774d09e29356884ea5}{idx\+\_\+}
+\item 
+T \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_write_op_a50dce7c9fe835edf72033b665057bc05}{expected\+\_\+}
+\item 
+T \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_write_op_af75188ef94bec379f9fafb55248491f2}{new\+\_\+val\+\_\+}
+\item 
+std\+::atomic$<$ \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_write_helper}{Write\+Helper}$<$ T $>$ $\ast$ $>$ \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_write_op_ab1239b5ef9dfcabbd9bb4626b036fb3b}{helper\+\_\+} \{nullptr\}
+\end{DoxyCompactItemize}
+\subsection*{Friends}
+\begin{DoxyCompactItemize}
+\item 
+class \hyperlink{classtervel_1_1containers_1_1wf_1_1vector_1_1_write_op_a9f30cc5e47d15bd8dd0d486bb2dd026b}{Write\+Helper$<$ T $>$}
+\end{DoxyCompactItemize}
+
+
+\subsection{Constructor \& Destructor Documentation}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1vector_1_1_write_op_a09e0c8cc62247a95e50e43a482df81fe}{}\index{tervel\+::containers\+::wf\+::vector\+::\+Write\+Op@{tervel\+::containers\+::wf\+::vector\+::\+Write\+Op}!Write\+Op@{Write\+Op}}
+\index{Write\+Op@{Write\+Op}!tervel\+::containers\+::wf\+::vector\+::\+Write\+Op@{tervel\+::containers\+::wf\+::vector\+::\+Write\+Op}}
+\subsubsection[{Write\+Op(\+Vector$<$ T $>$ $\ast$vec, size\+\_\+t idx, T expected, T val)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T$>$ {\bf tervel\+::containers\+::wf\+::vector\+::\+Write\+Op}$<$ T $>$\+::{\bf Write\+Op} (
+\begin{DoxyParamCaption}
+\item[{Vector$<$ T $>$ $\ast$}]{vec, }
+\item[{size\+\_\+t}]{idx, }
+\item[{T}]{expected, }
+\item[{T}]{val}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1containers_1_1wf_1_1vector_1_1_write_op_a09e0c8cc62247a95e50e43a482df81fe}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1vector_1_1_write_op_a80cc81812cda1b0b3d379e883106fb51}{}\index{tervel\+::containers\+::wf\+::vector\+::\+Write\+Op@{tervel\+::containers\+::wf\+::vector\+::\+Write\+Op}!````~Write\+Op@{$\sim$\+Write\+Op}}
+\index{````~Write\+Op@{$\sim$\+Write\+Op}!tervel\+::containers\+::wf\+::vector\+::\+Write\+Op@{tervel\+::containers\+::wf\+::vector\+::\+Write\+Op}}
+\subsubsection[{$\sim$\+Write\+Op()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T$>$ {\bf tervel\+::containers\+::wf\+::vector\+::\+Write\+Op}$<$ T $>$\+::$\sim${\bf Write\+Op} (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1containers_1_1wf_1_1vector_1_1_write_op_a80cc81812cda1b0b3d379e883106fb51}
+
+
+\subsection{Member Function Documentation}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1vector_1_1_write_op_a30f4a6d0e37b6e591fb986977304e08d}{}\index{tervel\+::containers\+::wf\+::vector\+::\+Write\+Op@{tervel\+::containers\+::wf\+::vector\+::\+Write\+Op}!help\+\_\+complete@{help\+\_\+complete}}
+\index{help\+\_\+complete@{help\+\_\+complete}!tervel\+::containers\+::wf\+::vector\+::\+Write\+Op@{tervel\+::containers\+::wf\+::vector\+::\+Write\+Op}}
+\subsubsection[{help\+\_\+complete()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T$>$ void {\bf tervel\+::containers\+::wf\+::vector\+::\+Write\+Op}$<$ T $>$\+::help\+\_\+complete (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}\label{classtervel_1_1containers_1_1wf_1_1vector_1_1_write_op_a30f4a6d0e37b6e591fb986977304e08d}
+
+
+Implementations of this function that upon its return the operation described in the Op\+Record has been completed. 
+
+As such it must be thread-\/safe and the extending class must contain all the information necessary to complete the operation. 
+
+Implements \hyperlink{classtervel_1_1util_1_1_op_record_aa75ab39688a8d4cceb6a1ef0409537c0}{tervel\+::util\+::\+Op\+Record}.
+
+\hypertarget{classtervel_1_1containers_1_1wf_1_1vector_1_1_write_op_ab9b31a254a96f4b7b04c3ae66bda8eca}{}\index{tervel\+::containers\+::wf\+::vector\+::\+Write\+Op@{tervel\+::containers\+::wf\+::vector\+::\+Write\+Op}!is\+\_\+watched@{is\+\_\+watched}}
+\index{is\+\_\+watched@{is\+\_\+watched}!tervel\+::containers\+::wf\+::vector\+::\+Write\+Op@{tervel\+::containers\+::wf\+::vector\+::\+Write\+Op}}
+\subsubsection[{is\+\_\+watched()}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T$>$ bool {\bf tervel\+::containers\+::wf\+::vector\+::\+Write\+Op}$<$ T $>$\+::is\+\_\+watched (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1containers_1_1wf_1_1vector_1_1_write_op_ab9b31a254a96f4b7b04c3ae66bda8eca}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1vector_1_1_write_op_a972e53578716571f63bca13af4fe8f16}{}\index{tervel\+::containers\+::wf\+::vector\+::\+Write\+Op@{tervel\+::containers\+::wf\+::vector\+::\+Write\+Op}!result@{result}}
+\index{result@{result}!tervel\+::containers\+::wf\+::vector\+::\+Write\+Op@{tervel\+::containers\+::wf\+::vector\+::\+Write\+Op}}
+\subsubsection[{result(\+T \&expected)}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T$>$ bool {\bf tervel\+::containers\+::wf\+::vector\+::\+Write\+Op}$<$ T $>$\+::result (
+\begin{DoxyParamCaption}
+\item[{T \&}]{expected}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [inline]}}\label{classtervel_1_1containers_1_1wf_1_1vector_1_1_write_op_a972e53578716571f63bca13af4fe8f16}
+
+
+\subsection{Friends And Related Function Documentation}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1vector_1_1_write_op_a9f30cc5e47d15bd8dd0d486bb2dd026b}{}\index{tervel\+::containers\+::wf\+::vector\+::\+Write\+Op@{tervel\+::containers\+::wf\+::vector\+::\+Write\+Op}!Write\+Helper$<$ T $>$@{Write\+Helper$<$ T $>$}}
+\index{Write\+Helper$<$ T $>$@{Write\+Helper$<$ T $>$}!tervel\+::containers\+::wf\+::vector\+::\+Write\+Op@{tervel\+::containers\+::wf\+::vector\+::\+Write\+Op}}
+\subsubsection[{Write\+Helper$<$ T $>$}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T$>$ friend class {\bf Write\+Helper}$<$ T $>$\hspace{0.3cm}{\ttfamily [friend]}}\label{classtervel_1_1containers_1_1wf_1_1vector_1_1_write_op_a9f30cc5e47d15bd8dd0d486bb2dd026b}
+
+
+\subsection{Member Data Documentation}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1vector_1_1_write_op_a50dce7c9fe835edf72033b665057bc05}{}\index{tervel\+::containers\+::wf\+::vector\+::\+Write\+Op@{tervel\+::containers\+::wf\+::vector\+::\+Write\+Op}!expected\+\_\+@{expected\+\_\+}}
+\index{expected\+\_\+@{expected\+\_\+}!tervel\+::containers\+::wf\+::vector\+::\+Write\+Op@{tervel\+::containers\+::wf\+::vector\+::\+Write\+Op}}
+\subsubsection[{expected\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T$>$ T {\bf tervel\+::containers\+::wf\+::vector\+::\+Write\+Op}$<$ T $>$\+::expected\+\_\+\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1containers_1_1wf_1_1vector_1_1_write_op_a50dce7c9fe835edf72033b665057bc05}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1vector_1_1_write_op_ab1239b5ef9dfcabbd9bb4626b036fb3b}{}\index{tervel\+::containers\+::wf\+::vector\+::\+Write\+Op@{tervel\+::containers\+::wf\+::vector\+::\+Write\+Op}!helper\+\_\+@{helper\+\_\+}}
+\index{helper\+\_\+@{helper\+\_\+}!tervel\+::containers\+::wf\+::vector\+::\+Write\+Op@{tervel\+::containers\+::wf\+::vector\+::\+Write\+Op}}
+\subsubsection[{helper\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T$>$ std\+::atomic$<${\bf Write\+Helper}$<$T$>$ $\ast$$>$ {\bf tervel\+::containers\+::wf\+::vector\+::\+Write\+Op}$<$ T $>$\+::helper\+\_\+ \{nullptr\}\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1containers_1_1wf_1_1vector_1_1_write_op_ab1239b5ef9dfcabbd9bb4626b036fb3b}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1vector_1_1_write_op_adeee65a9fa4dbe774d09e29356884ea5}{}\index{tervel\+::containers\+::wf\+::vector\+::\+Write\+Op@{tervel\+::containers\+::wf\+::vector\+::\+Write\+Op}!idx\+\_\+@{idx\+\_\+}}
+\index{idx\+\_\+@{idx\+\_\+}!tervel\+::containers\+::wf\+::vector\+::\+Write\+Op@{tervel\+::containers\+::wf\+::vector\+::\+Write\+Op}}
+\subsubsection[{idx\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T$>$ size\+\_\+t {\bf tervel\+::containers\+::wf\+::vector\+::\+Write\+Op}$<$ T $>$\+::idx\+\_\+\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1containers_1_1wf_1_1vector_1_1_write_op_adeee65a9fa4dbe774d09e29356884ea5}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1vector_1_1_write_op_af75188ef94bec379f9fafb55248491f2}{}\index{tervel\+::containers\+::wf\+::vector\+::\+Write\+Op@{tervel\+::containers\+::wf\+::vector\+::\+Write\+Op}!new\+\_\+val\+\_\+@{new\+\_\+val\+\_\+}}
+\index{new\+\_\+val\+\_\+@{new\+\_\+val\+\_\+}!tervel\+::containers\+::wf\+::vector\+::\+Write\+Op@{tervel\+::containers\+::wf\+::vector\+::\+Write\+Op}}
+\subsubsection[{new\+\_\+val\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T$>$ T {\bf tervel\+::containers\+::wf\+::vector\+::\+Write\+Op}$<$ T $>$\+::new\+\_\+val\+\_\+\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1containers_1_1wf_1_1vector_1_1_write_op_af75188ef94bec379f9fafb55248491f2}
+\hypertarget{classtervel_1_1containers_1_1wf_1_1vector_1_1_write_op_aad0429090bde2576091caa8ef1713cda}{}\index{tervel\+::containers\+::wf\+::vector\+::\+Write\+Op@{tervel\+::containers\+::wf\+::vector\+::\+Write\+Op}!vec\+\_\+@{vec\+\_\+}}
+\index{vec\+\_\+@{vec\+\_\+}!tervel\+::containers\+::wf\+::vector\+::\+Write\+Op@{tervel\+::containers\+::wf\+::vector\+::\+Write\+Op}}
+\subsubsection[{vec\+\_\+}]{\setlength{\rightskip}{0pt plus 5cm}template$<$typename T$>$ Vector$<$T$>$$\ast$ {\bf tervel\+::containers\+::wf\+::vector\+::\+Write\+Op}$<$ T $>$\+::vec\+\_\+\hspace{0.3cm}{\ttfamily [private]}}\label{classtervel_1_1containers_1_1wf_1_1vector_1_1_write_op_aad0429090bde2576091caa8ef1713cda}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+tervel/containers/wf/vector/\hyperlink{write__op_8h}{write\+\_\+op.\+h}\end{DoxyCompactItemize}
