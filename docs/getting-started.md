@@ -9,7 +9,7 @@ layout: tervel_documentation
 Clone the [Git repo]({{ site.gitrepo }}) and run the
 provided compile script.
 
-[installation guide](install.html).
+[installation guide]({{site.myurl}}/install.html).
 
 {% highlight bash %}
 $ git clone {{ site.gitrepo }}
