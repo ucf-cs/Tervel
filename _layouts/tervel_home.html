@@ -1,4 +1,4 @@
-{% assign site.baseurl = "Tervel" %}
+{% assign site.baseurl = "" %}
 {% assign path_parts = page.url | split:"/" %}
 {% for part in path_parts offset:2 %}
 {% assign site.baseurl = site.baseurl | append:"../" %}
