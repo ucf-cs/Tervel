@@ -7,6 +7,6 @@ kramdown:
 paginate: 10
 highlighter: pygments
 
-myurl: "http://ucf-cs.github.io/Tervel"
+myurl: http://ucf-cs.github.io/Tervel
 gitrepo: "https://github.com/ucf-cs/tervel"
 
