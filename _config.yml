@@ -8,4 +8,4 @@ paginate: 10
 highlighter: pygments
 
 gitrepo: "https://github.com/ucf-cs/tervel"
-baseurl: "Tervel"
+baseurl: ""
