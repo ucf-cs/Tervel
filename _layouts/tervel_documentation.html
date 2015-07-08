@@ -1,3 +1,8 @@
+{% assign site.baseurl = "Tervel" %}
+{% assign path_parts = page.url | split:"/" %}
+{% for part in path_parts offset:2 %}
+{% assign site.baseurl = site.baseurl | append:"../" %}
+{% endfor %}
 <!DOCTYPE html>
 <html lang="en" itemscope itemtype="https://schema.org/WebPage">
   {% include head.html %}
