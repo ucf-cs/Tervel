@@ -271,9 +271,16 @@ enqueue(T value) {
         } else {
           break; // get a new seqid
         }
-      } else if (isEmptyType(val)) {
-        int64_t other_seqid = getEmptyTypeSeqId(val);
-        if (other_seqid < seqid) {
+      } else if (val_isValueType) {
+        if (backoff(pos, val)) {
+          // value changed
+          continue; // process the new value.
+        } else {
+          // Value has not changed so lets skip it.
+          break;
+        }
+      } else { // is emptyType
+        if (val_seqid < seqid) {
           if (backoff(pos, val)) {
             // value changed
             continue; // process the new value.
@@ -289,14 +296,6 @@ enqueue(T value) {
           continue;
         }
 
-      } else {  // (isValueType(val)) {
-        if (backoff(pos, val)) {
-          // value changed
-          continue; // process the new value.
-        } else {
-          // Value has not changed so lets skip it.
-          break;
-        }
       }
     }  // inner while(progAssur.notDelayed())
   }  // outer while(progAssur.notDelayed())
