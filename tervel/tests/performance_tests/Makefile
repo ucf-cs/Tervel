@@ -23,7 +23,7 @@
 #
 
 CXX      = g++-4.8
-CXXFLAGS =  -DCONTAINER_FILE=$(input) -Wall -Werror  -std=c++11  -march=native -m64 -pthread -fno-strict-aliasing -DUSE_PAPI # -DTERVEL_PROG_ASSUR_ALWAYS_ANNOUNCE -DTERVEL_PROG_ASSUR_ALWAYS_CHECK
+CXXFLAGS =  -DCONTAINER_FILE=$(input) -Wall -Werror  -std=c++11  -march=native -m64 -pthread -fno-strict-aliasing  -DTERVEL_PROG_ASSUR_ALWAYS_ANNOUNCE -DTERVEL_PROG_ASSUR_ALWAYS_CHECK
 
 DEBUG = -DDEBUG=1 -g -g3
 # RELEASE = -O3 -DNDEBUG
@@ -49,8 +49,10 @@ all:  blank wfringbuffer lfmcasbuffer wfmcas wfvector wfstack lfstack wfhashmap 
 blank:
 	$(MAKE) test input="api/blank.h" output="blank.x"
 
+wfqueue:
+	$(MAKE) test input="tervel_api/wf_queue_api.h" output="wfqueue.x"
 lfqueue:
-	$(MAKE) test input="tervel_api/lf_queue_api.h" output="queue.x"
+	$(MAKE) test input="tervel_api/lf_queue_api.h" output="lfqueue.x"
 wfringbuffer:
 	$(MAKE) test input="tervel_api/wf_ringbuffer_api.h" output="wfringbuffer.x"
 
