@@ -49,6 +49,8 @@ all:  blank wfringbuffer lfmcasbuffer wfmcas wfvector wfstack lfstack wfhashmap 
 blank:
 	$(MAKE) test input="api/blank.h" output="blank.x"
 
+lfqueue:
+	$(MAKE) test input="tervel_api/lf_queue_api.h" output="queue.x"
 wfringbuffer:
 	$(MAKE) test input="tervel_api/wf_ringbuffer_api.h" output="wfringbuffer.x"
 

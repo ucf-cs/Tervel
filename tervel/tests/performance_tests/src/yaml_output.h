@@ -41,12 +41,12 @@ std::string config_str(int numThreads, std::string execution_str) {
   return res;
 };
 
-std::string results_str(double start_time, double end_time, int numThreads) {
+std::string results_str(double start_time, double end_time, int numThreads, container_t *container) {
   std::string res("");
   res += "time_stamps: \n";
   res += "  start : " + std::to_string(start_time) + "\n";
   res += "  end : " + std::to_string(end_time) + "\n";
-
+  res += "ds_state : " DS_STATE_STR "\n";
   res += "metrics : \n";
   res += "  operations : \n";
   res += "    totals : \n";

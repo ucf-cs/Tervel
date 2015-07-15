@@ -120,4 +120,6 @@ for (int i = 0; i < FLAGS_prefill; i++) { \
 
 #define DS_OP_COUNT 4
 
+inline void sanity_check(container_t *container) {};
+
 #endif  // DS_API_H_

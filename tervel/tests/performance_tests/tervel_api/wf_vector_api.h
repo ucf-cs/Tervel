@@ -73,6 +73,9 @@ for (int i = 0; i < FLAGS_prefill; i++) { \
    "\n" _DS_CONFIG_INDENT "Prefill : " + std::to_string(FLAGS_prefill) +"" + \
    "\n" _DS_CONFIG_INDENT "Capacity : " + std::to_string(FLAGS_capacity) +""
 
+#define DS_STATE_STR \
+   "\n" _DS_CONFIG_INDENT "size : " + std::to_string(container->size()) + ""
+
 #define OP_RAND \
   std::uniform_int_distribution<Value> random(1, UINT_MAX); \
   /*int ecount = 0; */ \
@@ -147,5 +150,7 @@ for (int i = 0; i < FLAGS_prefill; i++) { \
 #define DS_OP_NAMES "at", "cas", "pushBack", "popBack", "size", "eraseAt", "insertAt"
 
 #define DS_OP_COUNT 7
+
+inline void sanity_check(container_t *container) {};
 
 #endif  // DS_API_H_

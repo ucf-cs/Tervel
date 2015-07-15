@@ -59,10 +59,11 @@
 #include __TERVEL_MACRO_xstr( ../ CONTAINER_FILE)
 
 DEFINE_bool(verbose, false, "If true then verbose output is used");
+DEFINE_bool(seq_test, false, "If true then a sequential test is performed");
 
 
 std::string config_str(int numThreads, std::string execution_str);
-std::string results_str(double start_time, double end_time, int numThreads);
+std::string results_str(double start_time, double end_time, int numThreads, container_t *container);
 void run(uint64_t id, char **argv);
 
 typedef struct{

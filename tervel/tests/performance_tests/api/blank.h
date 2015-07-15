@@ -32,24 +32,29 @@
 
 DEFINE_int64(value, 0, "The initial value of the counter");
 
+typedef std::atomic<int64_t> container_t;
 
 #define DS_DECLARE_CODE \
-  std::atomic<int64_t> val;
+  container_t * container;
 
-#define DS_DESTORY_CODE
+#define DS_DESTORY_CODE \
+  delete container;
 
 #define DS_ATTACH_THREAD
 
 #define DS_DETACH_THREAD
 
 #define DS_INIT_CODE \
-  val.store(FLAGS_value);
+  container = new container_t(); \
+  container->store(FLAGS_value);
 
 #define DS_NAME "Atomic Int"
 
 #define DS_CONFIG_STR \
     "\n" _DS_CONFIG_INDENT "Value : " + std::to_string(FLAGS_value) + ""
 
+#define DS_STATE_STR \
+    "\n" _DS_CONFIG_INDENT "Value : " + std::to_string(container->load()) + ""
 
 #define OP_RAND \
   std::uniform_int_distribution<int64_t> random(SHRT_MIN, SHRT_MAX);
@@ -58,28 +63,31 @@ DEFINE_int64(value, 0, "The initial value of the counter");
 #define OP_CODE \
   MACRO_OP_MAKER(0, { \
     int64_t value = random(generator); \
-    val.store(value); \
+    container->store(value); \
   } \
   ) \
   MACRO_OP_MAKER(1, { \
     int64_t value = random(generator); \
-    val.fetch_add(value); \
+    container->fetch_add(value); \
   } \
   ) \
   MACRO_OP_MAKER(2, { \
     int64_t value = random(generator); \
-    val.fetch_sub(value); \
+    container->fetch_sub(value); \
   } \
   ) \
   MACRO_OP_MAKER(3, { \
     int64_t value = random(generator); \
-    val.exchange(value); \
+    container->exchange(value); \
   } \
   ) \
 
 
 #define DS_OP_NAMES "store", "faa", "fas", "exchange"
 
+
 #define DS_OP_COUNT 4
+
+inline void sanity_check(container_t *container) {};
 
 #endif  // DS_API_H_

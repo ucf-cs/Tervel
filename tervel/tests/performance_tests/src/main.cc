@@ -49,6 +49,7 @@ int main(int argc, char **argv) {
 
   // Variables:
   struct timeval start_time, end_time;
+  uint64_t numThreads = 0;
 
   gflags::ParseCommandLineFlags(&argc, &argv, true);
 
@@ -65,15 +66,24 @@ int main(int argc, char **argv) {
     execution_str += std::to_string(atoi(argv[i])) + " ";
   }
 
+
+  if (FLAGS_seq_test) {
+    log("Info", "Performing Sequential Sanity Check");
+    sanity_check(container);
+    log("Info", "Sequential Sanity Check Complete");
+    exit(0);
+  }
+
   // Create PAPI Objects
-#ifdef USE_PAPI
-  PapiUtil papiUtil;
-#endif
+  #ifdef USE_PAPI
+    PapiUtil papiUtil;
+  #endif
+
   // Create Threads
   g_thread_signal.init();
   std::vector<std::thread> thread_list;
 
-  uint64_t numThreads = 0;
+
   for (int j = 1; j < argc; j += DS_OP_COUNT + 1) {
 
     if (j + DS_OP_COUNT >= argc) {
@@ -108,8 +118,8 @@ int main(int argc, char **argv) {
 
 
   (void)gettimeofday(&start_time, NULL);
-#ifdef USE_PAPI  
-  papiUtil.start();  
+#ifdef USE_PAPI
+  papiUtil.start();
 #endif
   g_thread_signal.start();
 
@@ -121,7 +131,7 @@ int main(int argc, char **argv) {
 
 #ifdef USE_PAPI
   papiUtil.stop();
-#endif  
+#endif
 
   log("Info", "Testing Completed");
   sleep(1);
@@ -137,7 +147,8 @@ int main(int argc, char **argv) {
   std::string run_results = results_str(
     ( (double)start_time.tv_sec + (1.0/1000000) * (double)start_time.tv_usec ),
     ( (double)end_time.tv_sec   + (1.0/1000000) * (double)end_time.tv_usec   ),
-    numThreads
+    numThreads,
+    container
   );
   std::cout << run_results << std::endl;
 
