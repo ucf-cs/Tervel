@@ -108,7 +108,7 @@ int main(int argc, char **argv) {
     exit(-1);
   }
   std::cout << config_str(numThreads, execution_str) << std::endl;
-  sleep(FLAGS_main_sleep);
+  sleep_wrapper(FLAGS_main_sleep);
 
 
   // Wait until Threads are ready
@@ -124,7 +124,7 @@ int main(int argc, char **argv) {
   g_thread_signal.start();
 
   // Wait until test is over
-  sleep(FLAGS_execution_time);
+  sleep_wrapper(FLAGS_execution_time);
 
   g_thread_signal.stop();
   (void)gettimeofday(&end_time, NULL);
@@ -134,7 +134,7 @@ int main(int argc, char **argv) {
 #endif
 
   log("Info", "Testing Completed");
-  sleep(1);
+  sleep_wrapper(1);
 
   DS_EXTRA_END_SIGNAL;
 
@@ -156,7 +156,7 @@ int main(int argc, char **argv) {
   std::cout << papiUtil.results() << std::endl;
 #endif
 
-  sleep(1);
+  sleep_wrapper(1);
   DS_DESTORY_CODE
 
 #ifdef USE_CDS

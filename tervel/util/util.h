@@ -87,7 +87,7 @@ namespace util {
 // #define TERVEL_PROG_ASSUR_DELAY
 // sets the delay between calling the check for announcement function
 #ifndef TERVEL_PROG_ASSUR_DELAY
- #define TERVEL_PROG_ASSUR_DELAY 100
+ #define TERVEL_PROG_ASSUR_DELAY 100000
 #endif
 
 // #define TERVEL_PROG_ASSUR_NO_CHECK
@@ -118,7 +118,7 @@ namespace util {
 // #define TERVEL_PROG_ASSUR_LIMIT
   // sets the delay before making an announcement
 #ifndef TERVEL_PROG_ASSUR_LIMIT
-  #define TERVEL_PROG_ASSUR_LIMIT 1000
+  #define TERVEL_PROG_ASSUR_LIMIT 100000
 #endif
 
 // #define TERVEL_PROG_ASSUR_NO_ANNOUNCE
@@ -159,7 +159,7 @@ inline bool isValid(void * value) {
 
 
 #ifndef TERVEL_DEF_BACKOFF_TIME_NS
- #define TERVEL_DEF_BACKOFF_TIME_NS 10000
+ #define TERVEL_DEF_BACKOFF_TIME_NS 100
 #endif
 /**
  * @brief Sets the amount of time in nano-seconds for a thread to backoff before
@@ -170,7 +170,8 @@ inline bool isValid(void * value) {
  * @param duration duration
  */
 inline void backoff(int duration = TERVEL_DEF_BACKOFF_TIME_NS) {
-  std::this_thread::sleep_for(std::chrono::nanoseconds(duration));
+  // std::this_thread::sleep_for(std::chrono::nanoseconds(duration));
+  std::this_thread::yield();
 }
 
 /**

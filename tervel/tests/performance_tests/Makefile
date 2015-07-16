@@ -23,7 +23,7 @@
 #
 
 CXX      = g++-4.8
-CXXFLAGS =  -DCONTAINER_FILE=$(input) -Wall -Werror  -std=c++11  -march=native -m64 -pthread -fno-strict-aliasing  -DTERVEL_PROG_ASSUR_ALWAYS_ANNOUNCE -DTERVEL_PROG_ASSUR_ALWAYS_CHECK
+CXXFLAGS =  -DCONTAINER_FILE=$(input) -Wall -Werror  -std=c++11  -march=native -m64 -pthread -fno-strict-aliasing
 
 DEBUG = -DDEBUG=1 -g -g3
 # RELEASE = -O3 -DNDEBUG
@@ -31,10 +31,7 @@ DEBUG = -DDEBUG=1 -g -g3
 CXXFLAGS += $(DEBUG) $(RELEASE)
 
 CPPFLAGS = -DINTEL
-INC= -I../../../
-LIB += -ldl -lgflags -lpthread -lrt /usr/local/lib/libpapi.a
-
-SOURCES = $(shell find ../../util/ -name '*.cc')
+LIB = $(cLIB) -ldl -lgflags -lpthread -lrt -lllalloc
 
 EXECUTABLE ?=src/main.cc
 OBJECTS = $(SOURCES:.cc=.o)
@@ -42,41 +39,27 @@ OBJECTS = $(SOURCES:.cc=.o)
 output ?= $(input).x
 OUTPUT = executables/
 
+
 .PHONY: all
-all:  blank wfringbuffer lfmcasbuffer wfmcas wfvector wfstack lfstack wfhashmap wfhashmapnodel
+all:  wfringbuffer lfmcasbuffer lock tbb linux tsigas
 
-.PHONY: blank
-blank:
-	$(MAKE) test input="api/blank.h" output="blank.x"
-
-wfqueue:
-	$(MAKE) test input="tervel_api/wf_queue_api.h" output="wfqueue.x"
-lfqueue:
-	$(MAKE) test input="tervel_api/lf_queue_api.h" output="lfqueue.x"
 wfringbuffer:
-	$(MAKE) test input="tervel_api/wf_ringbuffer_api.h" output="wfringbuffer.x"
+	$(MAKE) test input="tervel_api/wf_ringbuffer_api.h" output="wfringbuffer.x" SOURCES="$(shell find ../../util/ -name '*.cc')" INC="-I../../../"
 
 lfmcasbuffer:
-	$(MAKE) test input="tervel_api/lf_mcasbuffer_api.h" output="lfmcasbuffer.x"
+	$(MAKE) test input="tervel_api/lf_mcasbuffer_api.h" output="lfmcasbuffer.x" SOURCES="$(shell find ../../util/ -name '*.cc')" INC="-I../../../"
 
-wfmcas:
-	$(MAKE) test input="tervel_api/wf_mcas_api.h" output="wfmcas.x"
+tsigas:
+	$(MAKE) test input="api/ringbuffer/tsigas.h" output="tsigas.x" INC="-I/Libraries/cds-1.2.0/ " cLIB="-L/Libraries/cds-1.2.0/bin/gcc-amd64-linux-64 -lrt  -lcds"
 
-wfvector:
-	$(MAKE) test input="tervel_api/wf_vector_api.h" output="wf_vector.x"
+tbb:
+	$(MAKE) test input="api/ringbuffer/tbb.h" output="tbb.x" cLIB="-ltbb"
 
-lfstack:
-	$(MAKE) test input="tervel_api/lf_stack_api.h" output="lf_stack.x"
+lock:
+	$(MAKE) test input="api/ringbuffer/lock.h" output="lock.x"
 
-wfstack:
-	$(MAKE) test input="tervel_api/wf_stack_api.h" output="wf_stack.x"
-
-wfhashmap:
-	$(MAKE) test input="tervel_api/wf_hashmap.h" output="wf_hashmap.x"
-
-wfhashmapnodel:
-	$(MAKE) test input="tervel_api/wf_hashmap_nodel.h" output="wf_hashmap_nodel.x"
-
+linux:
+	$(MAKE) test input="api/ringbuffer/linux.h" output="linux.x"
 
 .PHONY: test
 test: $(SOURCES) $(EXECUTABLE)
@@ -84,7 +67,7 @@ test: $(SOURCES) $(EXECUTABLE)
 .PHONY: $(EXECUTABLE)
 $(EXECUTABLE): $(OBJECTS)
 	mkdir -p $(OUTPUT)
-	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(INC)  -o $(OUTPUT)$(output) $(EXECUTABLE) $^ $(LIB) $(TOBJS)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(INC) -o $(OUTPUT)$(output) $(EXECUTABLE) $^ $(LIB) $(TOBJS)
 
 %.o: %.cc
 	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(INC) -c -o $@ $<
@@ -97,4 +80,4 @@ clean:
 .PHONY: clean-all
 clean-all:
 	$(RM) $(OUTPUT)*.x
-	$(RM) $(OBJECTS)
+	$(RM) $(shell find ../../util/ -name '*.o')

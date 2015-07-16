@@ -44,7 +44,7 @@
 #define __TERVEL_MACRO_xstr(s) __TERVEL_MACRO_str(s)
 #define __TERVEL_MACRO_str(s) #s
 #define _DS_CONFIG_INDENT "    "
-#define DS_EXTRA_END_SIGNAL
+
 
 #define MACRO_OP_MAKER(opid, opcode) \
   if (op <= func_call_rate[ opid ]) { \
@@ -57,6 +57,10 @@
 
 
 #include __TERVEL_MACRO_xstr( ../ CONTAINER_FILE)
+
+#ifndef DS_EXTRA_END_SIGNAL
+  #define DS_EXTRA_END_SIGNAL
+#endif
 
 DEFINE_bool(verbose, false, "If true then verbose output is used");
 DEFINE_bool(seq_test, false, "If true then a sequential test is performed");
@@ -152,7 +156,7 @@ void error_log(std::string msg) {
   log("Error", msg, true);
 };
 
-void sleep(int s) {
+void sleep_wrapper(int s) {
   std::this_thread::sleep_for(std::chrono::seconds(s));
 };
 

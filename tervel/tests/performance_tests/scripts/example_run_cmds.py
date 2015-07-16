@@ -5,9 +5,9 @@ time_count = 0;
 cmds  = "dir=logs/$(date +\"%s\")\n"
 cmds += "mkdir $dir\n"
 
-repeat_test=5
-threads = [1,2,4,8,16,32,64]
-exeTime = [5]
+repeat_test=1 #5
+threads = [1,2, 64] #,4,8,16,32,64]
+exeTime = [2]
 path = "../executables/"
 
 def gen_tests(algs_):
@@ -48,10 +48,10 @@ def stack(flags_, time_, thread_):
 
 
 def ringbuffer(flags_, time_, thread_):
-    algs = ["wfringbuffer.x", "lfmcasbuffer.x"]
-    prefills = [0, 1000]
-    capacities = [16, 128, 1024]
-    distributions = ["50 50" , "40 60", "60 40"]
+    algs = ["wfringbuffer.x", "lfmcasbuffer.x", "tbb.x", "lock.x", "tsigas.x", "linux.x"]
+    prefills = [500]
+    capacities = [1024]
+    distributions = ["50 50"] # , "40 60", "60 40"]
     for a in algs:
         for dist in distributions:
             for c in capacities:
@@ -74,7 +74,7 @@ def hashmap(flags_, time_, thread_):
                         flags = "-prefill=" + str(p) +" -capacity="+str(c)+" -expansion_factor="+str(e)
                         add_run(a, time_, flags + flags_, thread_, dist)
 
-algorithms = [hashmap, stack]
+algorithms = [ringbuffer] #hashmap, stack]
 gen_tests(algorithms)
 print "echo Number of Tests: " + str(exe_count)
 print "echo Estimated Time: " + str(time_count)
