@@ -189,7 +189,7 @@ dequeue(T &value) {
           // So we move it up a head.
           cur_head += 2*capacity_ - temp_pos + pos;
           uintptr_t temp = EmptyType(cur_head);
-          array_[pos].compare_exchange_strong(temp, new_value);
+          array_[pos].compare_exchange_strong(val, temp);
           continue;
         }
         if (!backoff(pos, val)) {
