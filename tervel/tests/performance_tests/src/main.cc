@@ -30,10 +30,10 @@ DEFINE_uint64(main_sleep, 0, "Causes the main thread to sleep before signaling g
 DEFINE_uint64(num_threads, 0, "The number of executing threads. The trailing arguments should be in the forum of thread groups which are in the form: [threads oprate1 .. oprateN]");
 DEFINE_uint64(execution_time, 5, "The amount of time to run the tests");
 
+DEFINE_bool(disable_thread_join, false, "Enables skipping of the thread join command, usefull if deadlock may occur");
 
 // Global Variables
 ThreadSignal g_thread_signal;
-
 DS_DECLARE_CODE
 
 const std::string op_names[DS_OP_COUNT] = { DS_OP_NAMES };
@@ -134,15 +134,33 @@ int main(int argc, char **argv) {
 #endif
 
   log("Info", "Testing Completed");
-  sleep_wrapper(1);
 
-  DS_EXTRA_END_SIGNAL;
 
-  // Wait until all threads are done.
-  while (g_thread_signal.notFinished(numThreads));
+  // DS_EXTRA_END_SIGNAL;
 
-  std::for_each(thread_list.begin(), thread_list.end(),
-                [](std::thread &t) { t.join(); });
+  std::this_thread::yield();
+  for (int i = 0; i < 1000 && g_thread_signal.notFinished(numThreads); i++) {};
+
+
+  if  (g_thread_signal.notFinished(numThreads)) {
+    log("Info", ".");
+    sleep_wrapper(1);
+  }
+  if  (g_thread_signal.notFinished(numThreads)) {
+    sleep_wrapper(4);
+  }
+
+  bool notFinished = g_thread_signal.notFinished(numThreads);
+  if (notFinished) {
+    log("WARN", "Threads did not return after 5 seconds.");
+    if ( notFinished == false || FLAGS_disable_thread_join == false)
+      log("INFO", "Attempting to join");
+  }
+
+  if ( notFinished == false || FLAGS_disable_thread_join == false) {
+    std::for_each(thread_list.begin(), thread_list.end(),
+                  [](std::thread &t) { t.join(); });
+  }
 
   std::string run_results = results_str(
     ( (double)start_time.tv_sec + (1.0/1000000) * (double)start_time.tv_usec ),
@@ -156,7 +174,6 @@ int main(int argc, char **argv) {
   std::cout << papiUtil.results() << std::endl;
 #endif
 
-  sleep_wrapper(1);
   DS_DESTORY_CODE
 
 #ifdef USE_CDS

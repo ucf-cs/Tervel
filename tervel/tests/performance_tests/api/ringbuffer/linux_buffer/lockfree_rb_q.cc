@@ -53,23 +53,28 @@
  * ------------------------------------------------------------------------
  * Naive serialized ring buffer queue
  * ------------------------------------------------------------------------
- */ /*
-template<class T, unsigned long Q_SIZE = QUEUE_SIZE>
+ */
+template<class T>
 class NaiveQueue {
 private:
-	static const unsigned long Q_MASK = Q_SIZE - 1;
+
 
 public:
-	NaiveQueue()
-		: head_(0), tail_(0)
+	const unsigned long Q_SIZE;
+	const unsigned long Q_MASK = Q_SIZE - 1;
+	NaiveQueue(int size)
+		: Q_SIZE(size),
+			Q_MASK(Q_SIZE - 1),
+			head_(0),
+			tail_(0)
 	{
-		ptr_array_ = (T **)::memalign(getpagesize(),
-				Q_SIZE * sizeof(void *));
+		ptr_array_ = (T *)::memalign(getpagesize(),
+				 Q_SIZE * sizeof(T));
 		assert(ptr_array_);
 	}
 
 	void
-	push(T *x)
+	push(T x)
 	{
 		std::unique_lock<std::mutex> lock(mtx_);
 
@@ -82,7 +87,7 @@ public:
 		cond_empty_.notify_one();
 	}
 
-	T *
+	T
 	pop()
 	{
 		std::unique_lock<std::mutex> lock(mtx_);
@@ -91,7 +96,7 @@ public:
 					return tail_ < head_;
 				});
 
-		T *x = ptr_array_[tail_++ & Q_MASK];
+		T x = ptr_array_[tail_++ & Q_MASK];
 
 		cond_overflow_.notify_one();
 
@@ -103,9 +108,9 @@ private:
 	std::condition_variable	cond_empty_;
 	std::condition_variable	cond_overflow_;
 	std::mutex		mtx_;
-	T			**ptr_array_;
+	T			*ptr_array_;
 };
-*/
+
 /*
  * ------------------------------------------------------------------------
  * Boost lock-free fixed size multi-producer multi-consumer queue

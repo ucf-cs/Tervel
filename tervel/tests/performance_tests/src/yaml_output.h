@@ -37,7 +37,7 @@ std::string config_str(int numThreads, std::string execution_str) {
   res += "  execution_time : " + std::to_string(FLAGS_execution_time) + "\n";
   res += "  main_delay : " + std::to_string(FLAGS_main_sleep) + "\n";
   res += "  num_threads : " + std::to_string(numThreads) + "\n";
-
+  res += "  num_op_types : " + std::to_string(DS_OP_COUNT) + "\n";
   return res;
 };
 

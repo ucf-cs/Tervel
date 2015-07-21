@@ -32,7 +32,7 @@
 #include <tbb/concurrent_queue.h>
 
 
-typedef uint64_t Value;
+typedef unsigned char Value;
 
 typedef tbb::concurrent_bounded_queue<Value> container_t;
 
@@ -71,14 +71,14 @@ for (int i = 0; i < FLAGS_prefill; i++) { \
 
 #define OP_RAND \
   /* std::uniform_int_distribution<Value> random(1, UINT_MAX); */ \
-  int ecount = 0;
+  int ecount = 1;
 
 
 #define OP_CODE \
   MACRO_OP_MAKER(0, { \
     /* Value value = random(); */ \
     Value value = (thread_id << 56) | ecount; \
-    container->try_push(value); \
+    opRes = container->try_push(value); \
   } \
   ) \
  MACRO_OP_MAKER(1, { \

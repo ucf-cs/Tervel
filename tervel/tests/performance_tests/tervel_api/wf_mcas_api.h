@@ -48,7 +48,7 @@
    "\n" _DS_CONFIG_INDENT "isOverlapping : " + std::to_string(FLAGS_overlapping) +"" \
    "\n" _DS_CONFIG_INDENT "isMultipleObjects : " + std::to_string(FLAGS_multipleObjects) +""
 
-#define DS_STATE_STR
+#define DS_STATE_STR " "
 
 // Constructor Arguments
 DEFINE_bool(overlapping, false, "Whether or not the mcas operations can be overlapping.");

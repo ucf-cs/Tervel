@@ -75,7 +75,7 @@ class LockBuffer {
 };
 
 
-typedef uint64_t Value;
+typedef unsigned char Value;
 
 typedef LockBuffer<Value> container_t;
 
@@ -121,7 +121,7 @@ for (int i = 0; i < FLAGS_prefill; i++) { \
   MACRO_OP_MAKER(0, { \
     /* Value value = random(); */ \
     Value value = (thread_id << 56) | ecount; \
-    container->enqueue(value); \
+    opRes =container->enqueue(value); \
   } \
   ) \
  MACRO_OP_MAKER(1, { \

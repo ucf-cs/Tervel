@@ -32,7 +32,7 @@
 #include <atomic>
 #include "linux_buffer/lockfree_rb_q.cc"
 
-typedef uint64_t Value;
+typedef unsigned char Value;
 
 typedef  LockFreeQueue<Value> container_t;
 
@@ -74,7 +74,7 @@ for (int i = 0; i < FLAGS_prefill; i++) { \
 
 #define OP_RAND \
   /* std::uniform_int_distribution<Value> random(1, UINT_MAX); */ \
-  int ecount = 0;
+  int ecount = 1;
 
 
 #define OP_CODE \

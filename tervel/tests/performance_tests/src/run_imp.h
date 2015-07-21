@@ -35,13 +35,22 @@ void run(uint64_t thread_id, char **argv) {
   }
 
   op_counter_t *op_counter = new op_counter_t[DS_OP_COUNT];
+  g_test_results[thread_id] = op_counter;
 
   __attribute__((unused)) int lcount = 1;
 
   int func_call_rate[DS_OP_COUNT];
   int max_rand = 0;
+
+
+
   for (int i = 0; i < DS_OP_COUNT; i++) {
-    int rate = atoi(argv[i]);
+    int rate;
+    if (FLAGS_iter_dist) {
+      rate = 1;
+    } else {
+      rate = atoi(argv[i]);
+    }
     op_counter[i].init(rate);
     func_call_rate[i] = rate + max_rand;
     max_rand = func_call_rate[i];
@@ -53,8 +62,11 @@ void run(uint64_t thread_id, char **argv) {
   }
 
   // Setup Random Number Generation
-  std::default_random_engine generator;
-  std::uniform_int_distribution<int> distribution(1, max_rand+1);
+  unsigned seed1 = std::chrono::system_clock::now().time_since_epoch().count();
+  seed1 *= (thread_id + FLAGS_num_threads);
+  std::default_random_engine generator(seed1);
+  std::uniform_int_distribution<int> distribution(1, max_rand);
+  const bool skip_ran = (1 == max_rand);
 
   OP_RAND
 
@@ -63,9 +75,18 @@ void run(uint64_t thread_id, char **argv) {
   while (g_thread_signal.wait());
 
   /** Update this when adding a new data structure **/
+  __attribute__((unused)) int op = DS_OP_COUNT % (1 + thread_id);
   while (g_thread_signal.execute()) {
     lcount++;
-    __attribute__((unused)) int op = distribution(generator);
+
+    if (FLAGS_iter_dist) {
+      op--;
+      if (op <= 0) {
+        op = DS_OP_COUNT;
+      }
+    } else {
+      op = (skip_ran) ? 1 : distribution(generator);
+    }
 
     bool opRes = true;
 
@@ -76,9 +97,6 @@ void run(uint64_t thread_id, char **argv) {
   }
 
   g_thread_signal.finished();
-
-
-  g_test_results[thread_id] = op_counter;
 
   {
     DS_DETACH_THREAD

@@ -78,6 +78,7 @@ for (int i = 0; i < FLAGS_prefill; i++) { \
   + "\n" _DS_CONFIG_INDENT "Capacity : " + std::to_string(FLAGS_capacity) \
   + "\n" _DS_CONFIG_INDENT "ExpansionFactor : " + std::to_string(FLAGS_expansion_factor) + ""
 
+#define DS_STATE_STR " "
 
 #define OP_RAND \
   std::uniform_int_distribution<Value> random(1, USHRT_MAX);
