@@ -29,65 +29,82 @@
 
 
 #include <string>
-#include <tervel/util/info.h>
-#include <tervel/util/thread_context.h>
-#include <tervel/util/tervel.h>
+#include <mutex>
 
-#include <tervel/containers/wf/ring-buffer/ring_buffer.h>
-
-
-typedef uint64_t Value_o;
-
-class WrapperType;
-
-typedef tervel::containers::wf::RingBuffer<WrapperType *> container_t;
-
-class WrapperType : public container_t::Value {
+template<typename T>
+class LockBuffer {
  public:
-  WrapperType(Value_o x) : x_(x) {};
-  Value_o value() { return x_; };
-  std::string toString() {
-    // uint64_t x = (thread_id << 56) | loop_count;
-    uint64_t loop = x_ & 0x00FFFFFFFFFFFFFF;
-    uint64_t tid = x_ >> 56;
-    return "TID: " + std::to_string(tid) + " LC: " + std::to_string(loop);
-  }
+  LockBuffer(size_t capacity)
+   : capacity_(capacity)
+   , array_(new T[capacity]()) {};
+
+   size_t size() { return tail_ - head_; };
+
+   bool enqueue(T val) {
+    std::lock_guard<std::mutex> lock(lock_);
+    if (tail_ < head_ + capacity_) {
+      array_[tail_ % capacity_] = val;
+      tail_++;
+      return true;
+    } else {
+      return false;
+    }
+   }
+
+   bool dequeue(T &val) {
+    std::lock_guard<std::mutex> lock(lock_);
+
+    if (head_ < tail_) {
+      val = array_[head_ % capacity_];
+      head_++;
+      return true;
+    } else {
+      return false;
+    }
+   };
  private:
-  const Value_o x_;
+  int head_ {0};
+  int tail_ {0};
+
+  std::mutex lock_;
+  size_t size_;
+  const size_t capacity_;
+  std::unique_ptr<T[]> array_;
+
+
 };
 
 
-#include "../src/main.h"
+typedef unsigned char Value;
+
+typedef LockBuffer<Value> container_t;
+
+#include "../../src/main.h"
 
 DEFINE_int32(prefill, 0, "The number elements to place in the buffer on init.");
 DEFINE_int32(capacity, 0, "The capacity of the buffer.");
 
 #define DS_DECLARE_CODE \
-  tervel::Tervel* tervel_obj; \
   container_t *container;
 
 #define DS_DESTORY_CODE
 
-#define DS_ATTACH_THREAD \
-tervel::ThreadContext* thread_context __attribute__((unused)); \
-thread_context = new tervel::ThreadContext(tervel_obj);
+#define DS_ATTACH_THREAD
 
 #define DS_DETACH_THREAD
 
 #define DS_INIT_CODE \
-tervel_obj = new tervel::Tervel(FLAGS_num_threads+1); \
 DS_ATTACH_THREAD \
 container = new container_t(FLAGS_capacity); \
 \
 std::default_random_engine generator; \
-std::uniform_int_distribution<Value_o> largeValue_o(0, UINT_MAX); \
+std::uniform_int_distribution<Value> largeValue(0, UINT_MAX); \
 for (int i = 0; i < FLAGS_prefill; i++) { \
-  Value_o x = largeValue_o(generator) & (~0x3); \
-  WrapperType *temp = new WrapperType(x); \
-  container->enqueue(temp); \
+  Value x = largeValue(generator) & (~0x3); \
+  container->enqueue(x); \
 }
 
-#define DS_NAME "WF Ring Buffer"
+#define DS_NAME "LockBuffer"
 
 #define DS_CONFIG_STR \
    "\n" _DS_CONFIG_INDENT "prefill : " + std::to_string(FLAGS_prefill) +"" + \
@@ -96,20 +113,19 @@ for (int i = 0; i < FLAGS_prefill; i++) { \
 #define DS_STATE_STR " "
 
 #define OP_RAND \
-  /* std::uniform_int_distribution<Value_o> random(1, UINT_MAX); */ \
+  /* std::uniform_int_distribution<Value> random(1, UINT_MAX); */ \
   int ecount = 0;
 
 
 #define OP_CODE \
   MACRO_OP_MAKER(0, { \
-    /* Value_o value = random(); */ \
-    Value_o value = (thread_id << 56) | ecount; \
-    WrapperType *temp = new WrapperType(value); \
-    opRes = container->enqueue(temp); \
+    /* Value value = random(); */ \
+    Value value = (thread_id << 56) | ecount; \
+    opRes =container->enqueue(value); \
   } \
   ) \
  MACRO_OP_MAKER(1, { \
-      WrapperType *value; \
+      Value value; \
       opRes = container->dequeue(value); \
     } \
   )

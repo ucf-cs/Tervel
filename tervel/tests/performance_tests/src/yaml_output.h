@@ -37,16 +37,16 @@ std::string config_str(int numThreads, std::string execution_str) {
   res += "  execution_time : " + std::to_string(FLAGS_execution_time) + "\n";
   res += "  main_delay : " + std::to_string(FLAGS_main_sleep) + "\n";
   res += "  num_threads : " + std::to_string(numThreads) + "\n";
-
+  res += "  num_op_types : " + std::to_string(DS_OP_COUNT) + "\n";
   return res;
 };
 
-std::string results_str(double start_time, double end_time, int numThreads) {
+std::string results_str(double start_time, double end_time, int numThreads, container_t *container) {
   std::string res("");
   res += "time_stamps: \n";
   res += "  start : " + std::to_string(start_time) + "\n";
   res += "  end : " + std::to_string(end_time) + "\n";
-
+  res += "ds_state : " DS_STATE_STR "\n";
   res += "metrics : \n";
   res += "  operations : \n";
   res += "    totals : \n";

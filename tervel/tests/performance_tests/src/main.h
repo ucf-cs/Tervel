@@ -44,7 +44,7 @@
 #define __TERVEL_MACRO_xstr(s) __TERVEL_MACRO_str(s)
 #define __TERVEL_MACRO_str(s) #s
 #define _DS_CONFIG_INDENT "    "
-#define DS_EXTRA_END_SIGNAL
+
 
 #define MACRO_OP_MAKER(opid, opcode) \
   if (op <= func_call_rate[ opid ]) { \
@@ -58,11 +58,16 @@
 
 #include __TERVEL_MACRO_xstr( ../ CONTAINER_FILE)
 
-DEFINE_bool(verbose, false, "If true then verbose output is used");
+#ifndef DS_EXTRA_END_SIGNAL
+  #define DS_EXTRA_END_SIGNAL
+#endif
 
+DEFINE_bool(verbose, false, "If true then verbose output is used");
+DEFINE_bool(seq_test, false, "If true then a sequential test is performed");
+DEFINE_bool(iter_dist, false, "If true then it iterates between commands");
 
 std::string config_str(int numThreads, std::string execution_str);
-std::string results_str(double start_time, double end_time, int numThreads);
+std::string results_str(double start_time, double end_time, int numThreads, container_t *container);
 void run(uint64_t id, char **argv);
 
 typedef struct{
@@ -151,7 +156,7 @@ void error_log(std::string msg) {
   log("Error", msg, true);
 };
 
-void sleep(int s) {
+void sleep_wrapper(int s) {
   std::this_thread::sleep_for(std::chrono::seconds(s));
 };
 

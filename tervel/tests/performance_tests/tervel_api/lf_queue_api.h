@@ -24,22 +24,22 @@
 #
 */
 
-#ifndef LF_STACK_API_H_
-#define LF_STACK_API_H_
+#ifndef DS_API_H_
+#define DS_API_H_
 
 #include <string>
 #include <tervel/util/info.h>
 #include <tervel/util/thread_context.h>
 #include <tervel/util/tervel.h>
-#include <tervel/containers/lf/stack/stack.h>
+#include <tervel/containers/lf/linked_list_queue/queue.h>
 
 typedef int64_t Value;
-typedef tervel::containers::lf::Stack<Value> container_t;
+typedef tervel::containers::lf::Queue<Value> container_t;
 
 
 #include "../src/main.h"
 
-DEFINE_int32(prefill, 0, "The number elements to place in the stack on init.");
+DEFINE_int32(prefill, 0, "The number elements to place in the container on init.");
 
 
 #define DS_DECLARE_CODE \
@@ -62,15 +62,16 @@ std::default_random_engine generator; \
 std::uniform_int_distribution<Value> largeValue(0, UINT_MAX); \
 for (int i = 0; i < FLAGS_prefill; i++) { \
   Value x = largeValue(generator) & (~0x3); \
-  container->push(x); \
+  container->enqueue(x); \
 }
 
-#define DS_NAME "LF Stack"
+#define DS_NAME "LF LinkedList Queue"
 
 #define DS_CONFIG_STR \
    "\n" _DS_CONFIG_INDENT "Prefill : " + std::to_string(FLAGS_prefill) + ""
 
-#define DS_STATE_STR " "
+#define DS_STATE_STR \
+   "\n" _DS_CONFIG_INDENT "size : " + std::to_string(container->size()) + ""
 
 #define OP_RAND \
   /* std::uniform_int_distribution<Value> random(1, UINT_MAX); */ \
@@ -82,43 +83,59 @@ for (int i = 0; i < FLAGS_prefill; i++) { \
   DS_OP_COUNT should be set to the last passed MACRO OP
  */
 #define OP_CODE \
- MACRO_OP_MAKER(0, { \
-      Value value; \
-      opRes = container->pop(value); \
-    } \
-  ) \
- MACRO_OP_MAKER(1, { \
-      /* Value value = random(); */ \
-      Value value = (thread_id << 56) | ecount; \
-      opRes = container->push(value); \
-    } \
-  )
+MACRO_OP_MAKER(0, { \
+    container_t::Accessor access; \
+    opRes = container->dequeue(access); \
+  } \
+) \
+MACRO_OP_MAKER(1, { \
+    /* Value value = random(); */ \
+    Value value = (thread_id << 56) | ecount; \
+    opRes = container->enqueue(value); \
+  } \
+) \
+MACRO_OP_MAKER(2, { \
+    container->empty(); \
+  } \
+) \
+MACRO_OP_MAKER(3, { \
+    container->size(); \
+  } \
+)
 
-#define DS_OP_NAMES "pop", "push"
+#define DS_OP_NAMES "dequeue", "enqueue", "empty", "size"
 
-#define DS_OP_COUNT 2
+#define DS_OP_COUNT 4
 
 
-inline void sanity_check(container_t *stack) {
+inline void sanity_check(container_t *container) {
   bool res;
   Value i, j, temp;
 
   int limit = 100;
 
   for (i = 0; i < limit; i++) {
-    bool res = stack->push(i);
+    bool res = container->enqueue(i);
     assert(res && "If this assert fails then the there is an issue with either pushing or determining that it is full");
+    assert(container->size() == i + 1 && "If this assert fails then the there is an issue with the size counter");
   };
-  i--;
 
   for (j = 0; j < limit; j++) {
-    res = stack->pop(temp);
-    assert(res && "If this assert fails then the there is an issue with either poping or determining that it is not empty");
-    assert(temp==i && "If this assert fails then there is an issue with  determining the pop element");
+    container_t::Accessor access;
+    res = container->dequeue(access);
+    assert(res && "If this assert fails then the there is an issue with either popping or determining that it is not empty");
+    temp = access.value();
+    assert(temp==j && "If this assert fails then there is an issue with  determining the pop element");
+
     i--;
+    assert(container->size() == i  && "If this assert fails then the there is an issue with the size counter");
+
   };
 
-  res = stack->pop(temp);
-  assert(!res && "If this assert fails then there is an issue with pop or determining that it is empty");
+  {
+    container_t::Accessor access;
+    res = container->dequeue(access);
+    assert(!res && "If this assert fails then there is an issue with pop or determining that it is empty");
+  }
 };
-#endif  // LF_STACK_API_H_
+#endif  // DS_API_H_

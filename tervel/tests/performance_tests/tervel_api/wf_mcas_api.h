@@ -37,7 +37,7 @@
 
 #include "../src/main.h"
 
-   #include <gflags/gflags.h>
+#include <gflags/gflags.h>
 
 
 #define DS_NAME "WF MCAS"
@@ -48,6 +48,7 @@
    "\n" _DS_CONFIG_INDENT "isOverlapping : " + std::to_string(FLAGS_overlapping) +"" \
    "\n" _DS_CONFIG_INDENT "isMultipleObjects : " + std::to_string(FLAGS_multipleObjects) +""
 
+#define DS_STATE_STR " "
 
 // Constructor Arguments
 DEFINE_bool(overlapping, false, "Whether or not the mcas operations can be overlapping.");
@@ -58,7 +59,7 @@ DEFINE_int32(array_length, 32, "The size of the region to test on.");
 
 DEFINE_int32(mcas_size, 2, "The number of words in a mcas operation.");
 
-
+typedef int container_t;
 typedef void * Value;
 typedef tervel::algorithms::wf::mcas::MultiWordCompareAndSwap<Value> containter_t;
 
@@ -93,6 +94,7 @@ struct counter{
 
 
 #define DS_DECLARE_CODE \
+  container_t *container = nullptr; \
   tervel::Tervel* tervel_obj; \
   std::atomic<void *>* shared_memory; \
 
@@ -166,5 +168,6 @@ for (int i = 0; i < FLAGS_array_length; i++) { \
 
 #define DS_OP_COUNT 2
 
+inline void sanity_check(container_t *container) {};
 
 #endif  // DS_API_H_

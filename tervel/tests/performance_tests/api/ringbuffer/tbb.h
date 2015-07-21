@@ -27,67 +27,72 @@
 #ifndef DS_API_H_
 #define DS_API_H_
 
-#include <atomic>
-#include "../src/main.h"
 
-DEFINE_int64(value, 0, "The initial value of the counter");
+#include <string>
+#include <tbb/concurrent_queue.h>
 
-typedef std::atomic<int64_t> container_t;
+
+typedef unsigned char Value;
+
+typedef tbb::concurrent_bounded_queue<Value> container_t;
+
+#include "../../src/main.h"
+
+DEFINE_int32(prefill, 0, "The number elements to place in the buffer on init.");
+DEFINE_int32(capacity, 0, "The capacity of the buffer.");
 
 #define DS_DECLARE_CODE \
-  container_t * container;
+  container_t *container;
 
-#define DS_DESTORY_CODE \
-  delete container;
+#define DS_DESTORY_CODE
 
 #define DS_ATTACH_THREAD
 
 #define DS_DETACH_THREAD
 
 #define DS_INIT_CODE \
-  container = new container_t(); \
-  container->store(FLAGS_value);
+DS_ATTACH_THREAD \
+container = new container_t(); \
+container->set_capacity(FLAGS_capacity); \
+std::default_random_engine generator; \
+std::uniform_int_distribution<Value> largeValue(0, UINT_MAX); \
+for (int i = 0; i < FLAGS_prefill; i++) { \
+  Value x = largeValue(generator) & (~0x3); \
+  container->try_push(x); \
+}
 
-#define DS_NAME "Atomic Int"
+#define DS_NAME "TBB"
 
 #define DS_CONFIG_STR \
-    "\n" _DS_CONFIG_INDENT "Value : " + std::to_string(FLAGS_value) + ""
+   "\n" _DS_CONFIG_INDENT "prefill : " + std::to_string(FLAGS_prefill) +"" + \
+   "\n" _DS_CONFIG_INDENT "capacity : " + std::to_string(FLAGS_capacity) +""
 
-#define DS_STATE_STR \
-    "\n" _DS_CONFIG_INDENT "Value : " + std::to_string(container->load()) + ""
+#define DS_STATE_STR " "
 
 #define OP_RAND \
-  std::uniform_int_distribution<int64_t> random(SHRT_MIN, SHRT_MAX);
+  /* std::uniform_int_distribution<Value> random(1, UINT_MAX); */ \
+  int ecount = 1;
 
 
 #define OP_CODE \
   MACRO_OP_MAKER(0, { \
-    int64_t value = random(generator); \
-    container->store(value); \
+    /* Value value = random(); */ \
+    Value value = (thread_id << 56) | ecount; \
+    opRes = container->try_push(value); \
   } \
   ) \
-  MACRO_OP_MAKER(1, { \
-    int64_t value = random(generator); \
-    container->fetch_add(value); \
-  } \
-  ) \
-  MACRO_OP_MAKER(2, { \
-    int64_t value = random(generator); \
-    container->fetch_sub(value); \
-  } \
-  ) \
-  MACRO_OP_MAKER(3, { \
-    int64_t value = random(generator); \
-    container->exchange(value); \
-  } \
-  ) \
+ MACRO_OP_MAKER(1, { \
+      Value value; \
+      opRes = container->try_pop(value); \
+    } \
+  )
 
+#define DS_OP_NAMES "enqueue", "dequeue"
 
-#define DS_OP_NAMES "store", "faa", "fas", "exchange"
+#define DS_OP_COUNT 2
 
-
-#define DS_OP_COUNT 4
 
 inline void sanity_check(container_t *container) {};
 
 #endif  // DS_API_H_
+

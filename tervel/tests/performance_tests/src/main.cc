@@ -30,10 +30,10 @@ DEFINE_uint64(main_sleep, 0, "Causes the main thread to sleep before signaling g
 DEFINE_uint64(num_threads, 0, "The number of executing threads. The trailing arguments should be in the forum of thread groups which are in the form: [threads oprate1 .. oprateN]");
 DEFINE_uint64(execution_time, 5, "The amount of time to run the tests");
 
+DEFINE_bool(disable_thread_join, false, "Enables skipping of the thread join command, usefull if deadlock may occur");
 
 // Global Variables
 ThreadSignal g_thread_signal;
-
 DS_DECLARE_CODE
 
 const std::string op_names[DS_OP_COUNT] = { DS_OP_NAMES };
@@ -49,6 +49,7 @@ int main(int argc, char **argv) {
 
   // Variables:
   struct timeval start_time, end_time;
+  uint64_t numThreads = 0;
 
   gflags::ParseCommandLineFlags(&argc, &argv, true);
 
@@ -65,15 +66,24 @@ int main(int argc, char **argv) {
     execution_str += std::to_string(atoi(argv[i])) + " ";
   }
 
+
+  if (FLAGS_seq_test) {
+    log("Info", "Performing Sequential Sanity Check");
+    sanity_check(container);
+    log("Info", "Sequential Sanity Check Complete");
+    exit(0);
+  }
+
   // Create PAPI Objects
-#ifdef USE_PAPI
-  PapiUtil papiUtil;
-#endif
+  #ifdef USE_PAPI
+    PapiUtil papiUtil;
+  #endif
+
   // Create Threads
   g_thread_signal.init();
   std::vector<std::thread> thread_list;
 
-  uint64_t numThreads = 0;
+
   for (int j = 1; j < argc; j += DS_OP_COUNT + 1) {
 
     if (j + DS_OP_COUNT >= argc) {
@@ -98,7 +108,7 @@ int main(int argc, char **argv) {
     exit(-1);
   }
   std::cout << config_str(numThreads, execution_str) << std::endl;
-  sleep(FLAGS_main_sleep);
+  sleep_wrapper(FLAGS_main_sleep);
 
 
   // Wait until Threads are ready
@@ -108,36 +118,55 @@ int main(int argc, char **argv) {
 
 
   (void)gettimeofday(&start_time, NULL);
-#ifdef USE_PAPI  
-  papiUtil.start();  
+#ifdef USE_PAPI
+  papiUtil.start();
 #endif
   g_thread_signal.start();
 
   // Wait until test is over
-  sleep(FLAGS_execution_time);
+  sleep_wrapper(FLAGS_execution_time);
 
   g_thread_signal.stop();
   (void)gettimeofday(&end_time, NULL);
 
 #ifdef USE_PAPI
   papiUtil.stop();
-#endif  
+#endif
 
   log("Info", "Testing Completed");
-  sleep(1);
 
-  DS_EXTRA_END_SIGNAL;
 
-  // Wait until all threads are done.
-  while (g_thread_signal.notFinished(numThreads));
+  // DS_EXTRA_END_SIGNAL;
 
-  std::for_each(thread_list.begin(), thread_list.end(),
-                [](std::thread &t) { t.join(); });
+  std::this_thread::yield();
+  for (int i = 0; i < 1000 && g_thread_signal.notFinished(numThreads); i++) {};
+
+
+  if  (g_thread_signal.notFinished(numThreads)) {
+    log("Info", ".");
+    sleep_wrapper(1);
+  }
+  if  (g_thread_signal.notFinished(numThreads)) {
+    sleep_wrapper(4);
+  }
+
+  bool notFinished = g_thread_signal.notFinished(numThreads);
+  if (notFinished) {
+    log("WARN", "Threads did not return after 5 seconds.");
+    if ( notFinished == false || FLAGS_disable_thread_join == false)
+      log("INFO", "Attempting to join");
+  }
+
+  if ( notFinished == false || FLAGS_disable_thread_join == false) {
+    std::for_each(thread_list.begin(), thread_list.end(),
+                  [](std::thread &t) { t.join(); });
+  }
 
   std::string run_results = results_str(
     ( (double)start_time.tv_sec + (1.0/1000000) * (double)start_time.tv_usec ),
     ( (double)end_time.tv_sec   + (1.0/1000000) * (double)end_time.tv_usec   ),
-    numThreads
+    numThreads,
+    container
   );
   std::cout << run_results << std::endl;
 
@@ -145,7 +174,6 @@ int main(int argc, char **argv) {
   std::cout << papiUtil.results() << std::endl;
 #endif
 
-  sleep(1);
   DS_DESTORY_CODE
 
 #ifdef USE_CDS

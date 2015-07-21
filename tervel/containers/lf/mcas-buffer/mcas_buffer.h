@@ -186,9 +186,9 @@ class RingBuffer {
   }
 
   bool enqueue(Node<T> * node) {
-    if (is_full()) {
-      return false;
-    }
+    // if (is_full()) {
+    //   return false;
+    // }
 
     uint64_t h = head();
 
@@ -229,9 +229,9 @@ class RingBuffer {
   }  /// enqueue
 
   Node<T> * dequeue() {
-    if (is_empty()) {
-      return c_not_value;
-    }
+    // if (is_empty()) {
+    //   return c_not_value;
+    // }
 
     uint64_t t = tail();
 

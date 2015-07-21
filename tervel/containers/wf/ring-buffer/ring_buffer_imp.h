@@ -119,12 +119,9 @@ dequeue(T &value) {
   tervel::util::ProgressAssurance::check_for_announcement();
   util::ProgressAssurance::Limit progAssur;
 
-  bool retry = true;
-  while(retry) {
+  while(progAssur.notDelayed(0)) {
     if (isEmpty()) {
       return false;
-    } else if(progAssur.isDelayed()) {
-      break;
     }
 
     int64_t seqid = nextHead();
@@ -132,15 +129,7 @@ dequeue(T &value) {
     uintptr_t val;
     uintptr_t new_value = EmptyType(nextSeqId(seqid));
 
-    bool skip_delay_check = true;
-    while (retry) {
-      if (skip_delay_check) {
-        // Removes a double increment on isDelayed
-        skip_delay_check = false;
-      } else if (progAssur.isDelayed()) {
-        retry = false;
-        break;
-      }
+    while (progAssur.notDelayed(1)) {
 
       if (!readValue(pos, val)) {
         continue;
@@ -169,6 +158,10 @@ dequeue(T &value) {
             new_value =  DelayMarkValue(new_value);
             bool res = array_[pos].compare_exchange_strong(val, new_value);
             assert(res && " If this assert hits, then somehow another thread changed this value, when only this thread should be able to.");
+            // NOTE: These asserts should be disabled, when using progress assurance we allow for this to occur.
+            if (res == false) {
+              continue;
+            }
           }
           return true;
         } else { // val_seqod < seqid
@@ -196,7 +189,7 @@ dequeue(T &value) {
           // So we move it up a head.
           cur_head += 2*capacity_ - temp_pos + pos;
           uintptr_t temp = EmptyType(cur_head);
-          array_[pos].compare_exchange_strong(temp, new_value);
+          array_[pos].compare_exchange_strong(val, temp);
           continue;
         }
         if (!backoff(pos, val)) {
@@ -225,29 +218,16 @@ enqueue(T value) {
   tervel::util::ProgressAssurance::check_for_announcement();
   util::ProgressAssurance::Limit progAssur;
 
-  bool retry = true;
-  while(retry) {
+  while(progAssur.notDelayed(0)) {
     if (isFull()) {
       return false;
-    } else if (progAssur.isDelayed()) {
-      break;
     }
 
     int64_t seqid = nextTail();
     uint64_t pos = getPos(seqid);
     uintptr_t val;
 
-    bool skip_delay_check = true;
-    while (retry) {
-      if (skip_delay_check) {
-        // We skip the first iteration of this loop?
-        // Reduces a double count
-        skip_delay_check = false;
-      } else if (progAssur.isDelayed()) {
-        retry = false;
-        break;
-      }
-
+    while (progAssur.notDelayed(1)) {
       if (!readValue(pos, val)) {
         continue;
       }

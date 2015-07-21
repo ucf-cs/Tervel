@@ -22,19 +22,23 @@
 #THE SOFTWARE.
 #
 
-CXX      = g++-4.8
-CXXFLAGS =  -DCONTAINER_FILE=$(input) -Wall -Werror  -std=c++11  -march=native -m64 -pthread -fno-strict-aliasing -DUSE_PAPI # -DTERVEL_PROG_ASSUR_ALWAYS_ANNOUNCE -DTERVEL_PROG_ASSUR_ALWAYS_CHECK
 
-DEBUG = -DDEBUG=1 -g -g3
+
+tervelINC = "-I../../../"
+tervelSources= "$(shell find ../../util/ -name '*.cc')"
+CXX      = g++-4.8
+CXXFLAGS =  -DCONTAINER_FILE=$(input) -DINTEL -std=c++11  -march=native -m64 -pthread -fno-strict-aliasing  
+
+DEBUG = -DDEBUG=1 -g -g3  -Wall
 # RELEASE = -O3 -DNDEBUG
 
 CXXFLAGS += $(DEBUG) $(RELEASE)
 
-CPPFLAGS = -DINTEL
-INC= -I../../../
-LIB += -ldl -lgflags -lpthread -lrt /usr/local/lib/libpapi.a
+INC= $(cINC)
+LIB = $(cLIB) -ldl -lgflags -lpthread -lrt -lllalloc 
+# LIB += -lrt /usr/local/lib/libpapi.a
 
-SOURCES = $(shell find ../../util/ -name '*.cc')
+SOURCES = $(cSources)
 
 EXECUTABLE ?=src/main.cc
 OBJECTS = $(SOURCES:.cc=.o)
@@ -43,35 +47,44 @@ output ?= $(input).x
 OUTPUT = executables/
 
 .PHONY: all
-all:  blank wfringbuffer lfmcasbuffer wfmcas wfvector wfstack lfstack wfhashmap wfhashmapnodel
+all:  blank
+	$(MAKE) allTervel
+	$(MAKE) allBuffer
+
+include Makefile.ringbuffer
+
+.PHONY: all
+allTervel: tervelBufferWF tervelBufferMcasLF tervelMCASWF tervelVectorWF tervelStackWF tervelStackLF tervelHashMapWF tervelHashMapNoDelWF tervelQueueWF tervelQueueLF
+
+.PHONY: all
+allBuffer: tervelBufferWF tervelBufferMcasLF tsigasBuffer tbbBuffer lockBuffer linuxBuffer naiveBuffer
 
 .PHONY: blank
 blank:
 	$(MAKE) test input="api/blank.h" output="blank.x"
 
-wfringbuffer:
-	$(MAKE) test input="tervel_api/wf_ringbuffer_api.h" output="wfringbuffer.x"
+tervelQueueWF:
+	$(MAKE) test input="tervel_api/wf_queue_api.h" output="queue_tervel_wf.x" cSources=$(tervelSources) cINC=$(tervelINC)
+tervelQueueLF:
+	$(MAKE) test input="tervel_api/lf_queue_api.h" output="queue_tervel_lf.x" cSources=$(tervelSources) cINC=$(tervelINC)
 
-lfmcasbuffer:
-	$(MAKE) test input="tervel_api/lf_mcasbuffer_api.h" output="lfmcasbuffer.x"
+tervelMCASWF:
+	$(MAKE) test input="tervel_api/wf_mcas_api.h" output="mcas_tervel_wf.x" cSources=$(tervelSources) cINC=$(tervelINC)
 
-wfmcas:
-	$(MAKE) test input="tervel_api/wf_mcas_api.h" output="wfmcas.x"
+tervelVectorWF:
+	$(MAKE) test input="tervel_api/wf_vector_api.h" output="vector_tervel_wf.x" cSources=$(tervelSources) cINC=$(tervelINC)
 
-wfvector:
-	$(MAKE) test input="tervel_api/wf_vector_api.h" output="wf_vector.x"
+tervelStackLF:
+	$(MAKE) test input="tervel_api/lf_stack_api.h" output="stack_tervel_lf.x" cSources=$(tervelSources) cINC=$(tervelINC)
 
-lfstack:
-	$(MAKE) test input="tervel_api/lf_stack_api.h" output="lf_stack.x"
+tervelStackWF:
+	$(MAKE) test input="tervel_api/wf_stack_api.h" output="stack_tervel_wf.x" cSources=$(tervelSources) cINC=$(tervelINC)
 
-wfstack:
-	$(MAKE) test input="tervel_api/wf_stack_api.h" output="wf_stack.x"
+tervelHashMapWF:
+	$(MAKE) test input="tervel_api/wf_hashmap.h" output="hashmap_tervel_wf.x" cSources=$(tervelSources) cINC=$(tervelINC)
 
-wfhashmap:
-	$(MAKE) test input="tervel_api/wf_hashmap.h" output="wf_hashmap.x"
-
-wfhashmapnodel:
-	$(MAKE) test input="tervel_api/wf_hashmap_nodel.h" output="wf_hashmap_nodel.x"
+tervelHashMapNoDelWF:
+	$(MAKE) test input="tervel_api/wf_hashmap_nodel.h" output="hashmap_nodel_tervel_wf.x" cSources=$(tervelSources) cINC=$(tervelINC)
 
 
 .PHONY: test
@@ -93,4 +106,5 @@ clean:
 .PHONY: clean-all
 clean-all:
 	$(RM) $(OUTPUT)*.x
-	$(RM) $(OBJECTS)
+	$(RM) $(shell find ../../util/ -name '*.o')
+	

@@ -72,6 +72,8 @@ for (int i = 0; i < FLAGS_prefill; i++) { \
 #define DS_CONFIG_STR \
    "\n" _DS_CONFIG_INDENT "Prefill : " + std::to_string(FLAGS_prefill) +""
 
+#define DS_STATE_STR " "
+
 #define OP_RAND \
   /* std::uniform_int_distribution<Value> random(1, UINT_MAX); */ \
   int ecount = 0;

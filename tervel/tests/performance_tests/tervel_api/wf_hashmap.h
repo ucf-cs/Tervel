@@ -78,6 +78,8 @@ for (int i = 0; i < FLAGS_prefill; i++) { \
   + "\n" _DS_CONFIG_INDENT "Capacity : " + std::to_string(FLAGS_capacity) \
   + "\n" _DS_CONFIG_INDENT "ExpansionFactor : " + std::to_string(FLAGS_expansion_factor) + ""
 
+#define DS_STATE_STR \
+   "\n" _DS_CONFIG_INDENT "size : " + std::to_string(container->size()) + ""
 
 #define OP_RAND \
   std::uniform_int_distribution<Value> random(1, USHRT_MAX);
@@ -119,5 +121,7 @@ for (int i = 0; i < FLAGS_prefill; i++) { \
 #define DS_OP_NAMES "find", "insert", "update", "delete"
 
 #define DS_OP_COUNT 4
+
+inline void sanity_check(container_t *container) {};
 
 #endif  // DS_API_H_

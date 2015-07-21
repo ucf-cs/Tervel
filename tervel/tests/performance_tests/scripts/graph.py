@@ -1,5 +1,6 @@
 __author__ = 'stevenfeldman'
 import sys
+import pickle
 import yaml
 import os
 import pandas as pd
@@ -9,14 +10,25 @@ import numpy as np
 
 # Add <metric_name, functions names> here to allow 'CustomMetrics' to be loaded
 def add_operation(data, name, obj):
-    sum = 0
+    sum_t = 0
+    sum_f = 0
+    sum_p = 0
     for k in obj["totals"]:
         temp = int(obj["totals"][k])
-        sum += temp
+        sum_t += temp
+        if "Fail" in k:
+            sum_f += temp
+        if "Pass" in k:
+            sum_p += temp
 
-    temp = {"total":sum, "count":1 }
+    temp = {"total:all": sum_t,
+            "total:pass": sum_p,
+            "total:fail": sum_f
+            }
+
 
     Execution.add_key_val_pair(data, temp, name)
+    Execution.add_key_val_pair(data, obj["totals"], name)
 
 
 metric_functions = {"operations": add_operation}
@@ -36,24 +48,10 @@ class Execution:
                 data[res] += val
 
     @staticmethod
-    def process(obj):
-        data = {"key":""}
-
-        test_config = obj["test_config"]
-        alg_config = obj["alg_config"]
-        alg_config["run_config"] = " ".join(alg_config["run_config"].split(" ")[1:])
-
-        Execution.add_key_val_pair(data, test_config, "test_config")
-        Execution.add_key_val_pair(data, alg_config, "alg_config")
-
-        return data
-
-    @staticmethod
     def add_metric(data, name, obj):
         if name in metric_functions:
-            metric_functions[name](data, "metrics:"  + name, obj)
+            metric_functions[name](data, "metrics:" + name, obj)
         else:
-            obj["count"] = 1
             Execution.add_key_val_pair(data, obj, "metrics:" + name)
 
     @staticmethod
@@ -63,19 +61,44 @@ class Execution:
                 Execution.add_metric(data, c, obj["metrics"][c])
 
 
-def load_file(results, fname):
+def load_file(fname):
     with open(fname, "r") as fin:
-        execution_result = yaml.load(fin)
+        obj = yaml.load(fin)
 
-    cmd = execution_result["CMD"]
-    if cmd not in results:
-        results[cmd] = Execution.process(execution_result)
+    test_config = obj["test_config"]
+    alg_config = obj["alg_config"]
+    temp = alg_config["run_config"].split(" ")
+    alg_config["run_config"] = ""
+    threads = float(obj["test_config"]["num_threads"])
+    # if "num_op_types" in test_config:
+    #     op_types = int(test_config["num_op_types"])
+    # else:
+    op_types = 2
+    i = 0
+    while i < len(temp):
+        alg_config["run_config"] += "[%.2f%%:" %( float(temp[i])/float(threads) )
+        i += 1
+        for j in range(op_types):
+            alg_config["run_config"] += " %d" %( int(temp[i]) )
+            i += 1
+        alg_config["run_config"] += "]"
 
-    data = results[cmd]
-    Execution.add_execution(data, execution_result)
+    data = {}
 
+    data["CMD"] = obj["CMD"]
+    data["key"] = ""
+    Execution.add_key_val_pair(data, test_config, "test_config")
+    Execution.add_key_val_pair(data, alg_config, "alg_config")
 
-def load_logs_from_dir(results, path):
+    if "metrics" in obj:
+        for c in obj["metrics"]:
+            Execution.add_metric(data, c, obj["metrics"][c])
+        return data
+    else:
+        return None
+
+def load_logs_from_dir(path):
+    results = []
     for (dirpath, dirnames, filenames) in os.walk(path):
         num_files = len(filenames)
         c = 0
@@ -83,34 +106,37 @@ def load_logs_from_dir(results, path):
             c += 1
             f = dirpath + "/" + f
             print "(" + str(c) + "/" + str(num_files) + "):  " + f
-            load_file(results, f)
+            if ".log" in f:
+                res = load_file(f)
+                if (res != None):
+                    results.append(res)
         break
+    return results
 
 
 if __name__ == "__main__":
-    execution_results = {}
-    load_logs_from_dir(execution_results, "logs/1435363336/")
+    reprocess = False
+    folder = "logs/buffer/1437427952/"
+    pFile = folder + "df_1.p"
+    if reprocess or not os.path.exists(pFile):
+        execution_results = load_logs_from_dir( folder)
+        print "Elements:" + str(len(execution_results))
+        df = pd.DataFrame(execution_results)
 
-    df = pd.DataFrame(execution_results.values())
+        pickle.dump(df, open(pFile, "wb"))
+    else:
+        df = pickle.load(open(pFile, "rb"))
 
-    for k in df.keys():
-        if "metrics:" in k and ":count" not in k:
-            # metrics:<metric name>:count
-            count_str = "metrics:" + k.split(":")[1] + ":count"
-            df[k] /= df[count_str]
 
     config = "test_config:num_threads"
     # metric = "metrics:PAPIResults:PAPI_L1_TCA"
-    metric = "metrics:operations:total"
+    # metric = "metrics:operations:total:all"
+    # metric = "metrics:operations:total:pass"
+    metric = "metrics:operations:total:fail"
 
-
-    df_filtered = df #[(df["alg_config:algorithm_name"].str.contains("Stack"))]
-    df_filtered = df[(df["alg_config:algorithm_name"].str.contains("Map") or df["alg_config:algorithm_name"].str.contains("map"))]
-    #df_filtered = df_filtered[(df["alg_config:run_config"].str.contains("50 50"))]
-    # df_filtered = df_filtered[(df["alg_config:ds_config:Prefill"] == 0)]
-
-    for k in df_filtered.keys():
-        if k != config and "metrics" not in k and k != "key":
+    # for k in df.keys():
+    for k in ["alg_config:algorithm_name", "alg_config:run_config", "alg_config:ds_config:prefill"]:
+        if k != config and "metrics" not in k and k != "key" and k != "CMD" :
 
             def func(row):
                 temp = str(row[k])
@@ -118,12 +144,27 @@ if __name__ == "__main__":
                     i = k.rfind(":") + 1
                     return k[i:] + ":" + temp + "_"
                 return ""
-            df_filtered["key"] += df_filtered.apply(lambda row:  func(row), axis=1)
+            df["key"] += df.apply(lambda row:  func(row), axis=1)
+    #
+
+    print df.keys()
+
+    # df = df[(df["alg_config:algorithm_name"].str.contains("MCAS"))]
+    # df = df[(df["alg_config:run_config"].str.contains("100 0"))]
+    # df = df[(df["test_config:num_threads"] == 2)]
+    # df = df[(df["alg_config:ds_config:prefill"]==0)]
+    df = df[(df["alg_config:ds_config:prefill"] == 16384)]
+
+    # for i, v in df.iterrows():
+    #     print str(i) + " " + str(v["key"])
+    #     for k in df.keys():
+    #         if "metrics" in k:
+    #             print "\t" + k + " : " + str(v[k])
 
     plt.figure(1)
 
     sns.set(style="ticks")
-    ax = sns.barplot(config,  metric, "key", data=df_filtered)
+    ax = sns.barplot(config,  metric, "key", data=df)
 
     handles, labels = ax.get_legend_handles_labels()
     # lgd = ax.legend(handles, labels, loc='lower center', bbox_to_anchor=(0.5,-2.0))

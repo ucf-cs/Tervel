@@ -122,6 +122,9 @@ class ProgressAssurance {
     explicit Limit(int64_t limit = TERVEL_PROG_ASSUR_LIMIT)
       : counter_(limit) {}
 
+    bool notDelayed(int64_t val = 1) {
+      return !isDelayed(val);
+    }
     bool isDelayed(int64_t val = 1) {
       int64_t temp = counter_;
       counter_ -= val;
