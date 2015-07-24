@@ -97,12 +97,11 @@ DEFINE_int32(capacity, 0, "The capacity of the buffer.");
 DS_ATTACH_THREAD \
 container = new container_t(FLAGS_capacity); \
 \
-std::default_random_engine generator; \
-std::uniform_int_distribution<Value> largeValue(0, UINT_MAX); \
+Value x = 1; \
 for (int i = 0; i < FLAGS_prefill; i++) { \
-  Value x = largeValue(generator) & (~0x3); \
-  container->enqueue(x); \
-}
+  container->enqueue(x++); \
+  if (x == 0) x = 1; \
+} \
 
 #define DS_NAME "LockBuffer"
 
@@ -114,14 +113,14 @@ for (int i = 0; i < FLAGS_prefill; i++) { \
 
 #define OP_RAND \
   /* std::uniform_int_distribution<Value> random(1, UINT_MAX); */ \
-  int ecount = 0;
+  int ecount = 1;
 
 
 #define OP_CODE \
   MACRO_OP_MAKER(0, { \
-    /* Value value = random(); */ \
-    Value value = (thread_id << 56) | ecount; \
-    opRes =container->enqueue(value); \
+    Value value = ecount++;\
+    if (ecount == 0) ecount++; \
+    opRes = container->enqueue(value); \
   } \
   ) \
  MACRO_OP_MAKER(1, { \

@@ -57,12 +57,11 @@ DEFINE_int32(capacity, 0, "The capacity of the buffer.");
 DS_ATTACH_THREAD \
 container = new container_t(FLAGS_num_threads+1, FLAGS_num_threads+1, FLAGS_capacity); \
 \
-std::default_random_engine generator; \
-std::uniform_int_distribution<Value> largeValue(0, UINT_MAX); \
+Value x = 1; \
 for (int i = 0; i < FLAGS_prefill; i++) { \
-  Value x = largeValue(generator) & (~0x3); \
-  container->push(x); \
-}
+  container->push(x++); \
+  if (x == 0) x = 1; \
+} \
 
 #define DS_NAME "Linux"
 
@@ -79,8 +78,8 @@ for (int i = 0; i < FLAGS_prefill; i++) { \
 
 #define OP_CODE \
   MACRO_OP_MAKER(0, { \
-    /* Value value = random(); */ \
-    Value value = (thread_id << 56) | ecount; \
+    Value value = ecount++;\
+    if (ecount == 0) ecount++; \
     container->push(value); \
   } \
   ) \

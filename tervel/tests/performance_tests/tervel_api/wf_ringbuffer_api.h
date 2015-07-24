@@ -79,13 +79,12 @@ tervel_obj = new tervel::Tervel(FLAGS_num_threads+1); \
 DS_ATTACH_THREAD \
 container = new container_t(FLAGS_capacity); \
 \
-std::default_random_engine generator; \
-std::uniform_int_distribution<Value_o> largeValue_o(0, UINT_MAX); \
+Value_o x = 1; \
 for (int i = 0; i < FLAGS_prefill; i++) { \
-  Value_o x = largeValue_o(generator) & (~0x3); \
   WrapperType *temp = new WrapperType(x); \
   container->enqueue(temp); \
-}
+  if (x == 0) x = 1; \
+} \
 
 #define DS_NAME "WF Ring Buffer"
 
@@ -103,7 +102,8 @@ for (int i = 0; i < FLAGS_prefill; i++) { \
 #define OP_CODE \
   MACRO_OP_MAKER(0, { \
     /* Value_o value = random(); */ \
-    Value_o value = (thread_id << 56) | ecount; \
+    Value_o value = ecount++;\
+    if (ecount == 0) ecount++; \
     WrapperType *temp = new WrapperType(value); \
     opRes = container->enqueue(temp); \
   } \

@@ -13,7 +13,11 @@ else:
   exeTime = [5]
 
 
-path = "../executables/"
+path = "../executables"
+
+pathFolder = path.split("/")
+pathFolder = pathFolder[-1] if pathFolder[-1] else pathFolder[-2]
+path += "" if path[-1] is "/" else "/"
 
 test_commands = []
 def gen_tests(algs_):
@@ -32,7 +36,7 @@ def add_run(exe, time, flags, dist):
     for i in range(0, repeat_test):
         exe_count += 1
         time_count += time
-        exe_cmd = "./" + path + exe + " " + flags + " " + dist + " 2>&1 >> $temp"
+        exe_cmd = "./$exePath/" + exe + " " + flags + " " + dist + " 2>&1 >> $temp"
         test_commands.append([exe_cmd, time + 20])
 
 def stack(flags_, time_, thread_):
@@ -50,21 +54,24 @@ def stack(flags_, time_, thread_):
 
 
 def ringbuffer(flags_, time_):
-    algs = ["buffer_naive_cg.x",  "buffer_tervel_wf.x", "buffer_linux_nb.x", "buffer_tbb_fg.x", "buffer_tsigas_nb.x", "buffer_lock_cg.x", "buffer_tervel_mcas_lf.x"]
+    algs = ["buffer_tervel_wf.x", "buffer_linux_nb.x", "buffer_tbb_fg.x", "buffer_tsigas_nb.x", "buffer_lock_cg.x", "buffer_tervel_mcas_lf.x"] # "buffer_naive_cg.x",
     prefills = [16384]#, 0, 32768]
     capacities = [32768]
     distributions = []
-    distributions.append(None)
-    distributions.append(lambda t: str(t/2) + " 100 0 " + str(t/2) + " 0 100")
-    distributions.append(lambda t: str(t) + " 50 50")
-    distributions.append(lambda t: str(t) + " 20 80")
-    distributions.append(lambda t: str(t) + " 80 20")
+    distributions.append(None) # Alternate Test.
+
+    distributions.append(lambda t: "%d 100 0 %d 0 100" %((t*.5), (t*.5)))
+    distributions.append(lambda t: "%d 100 0 %d 0 100" %((t*.25), (t*.75)))
+    distributions.append(lambda t: "%d 100 0 %d 0 100" %((t*.75), (t*.25)))
+    distributions.append(lambda t: "%d 50 50" %(t))
+    # distributions.append(lambda t: str(t) + " 20 80")
+    # distributions.append(lambda t: str(t) + " 80 20")
 
     for c in capacities:
         for p in prefills:
             for dist in distributions:
                 flags = " -prefill=" + str(p) + " -capacity=" + str(c)
-                test_commands.append(None)
+
                 for thread in threads:
                     temp = flags_ + flags + " -num_threads=" + str(thread)
                     if dist is None:
@@ -75,7 +82,7 @@ def ringbuffer(flags_, time_):
 
                     for a in algs:
                         add_run(a, time_, temp, tdist)
-
+                test_commands.append(None)
 
 def hashmap(flags_, time_):
     algs = ["hashmap_nodel_tervel_wf.x", "hashmap_tervel_wf.x"]
@@ -112,6 +119,8 @@ print "echo Max Estimated Time: %s" %(humanize_time(time_count))
 print "tStamp=$(date +\"%s\")"
 print "dir=logs/buffer/$tStamp"
 print "mkdir -p $dir"
+print "cp -r %s $dir/" %(path)
+print "exePath=$dir/%s" %(pathFolder)
 for c in test_commands:
     if c is None:
         print "tar -zvcf $tStamp.ss.tar.gz $dir/"
