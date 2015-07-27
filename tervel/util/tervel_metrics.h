@@ -52,7 +52,7 @@ public:
   #define tervel_track_hp_watch_fail
   #define tervel_track_rc_remove_descr
   #define tervel_track_rc_offload
-
+  #define tervel_track_helped_announcement
   // #include <tervel/util/tervel_metrics.h>
   // util::EventTracker::countEvent(util::EventTracker::event_code::announcement);
 
@@ -60,7 +60,7 @@ public:
     #ifdef tervel_track_announcements_count
     announcement,
     #endif
-    #ifdef tervel_track_helped_announcement
+    #ifdef tervel_track_helped_announcement // Issue 2 not activated
     helped_announcement,
     #endif
     #ifdef tervel_track_max_recur_depth_reached
@@ -88,7 +88,7 @@ public:
     #ifdef tervel_track_helped_announcement
     "helped_announcement",
     #endif
-    #ifdef max_recur_depth_reached
+    #ifdef tervel_track_max_recur_depth_reached
     "max_recur_depth_reached",
     #endif
     #ifdef tervel_track_rc_watch_fail
