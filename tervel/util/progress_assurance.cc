@@ -46,8 +46,8 @@ void ProgressAssurance::p_check_for_announcement(int64_t &help_id) {
       if (res) {
         assert(memory::hp::HazardPointer::is_watched(op));
         op->help_complete();
-        #ifdef tervel_track_helped_announcement
-        util::EventTracker::countEvent(util::EventTracker::event_code::helped_announcement);
+        #if tervel_track_helped_announcement == tervel_track_enable
+        TERVEL_METRIC(helped_announcement);
         #endif
         memory::hp::HazardPointer::unwatch(pos);
       }

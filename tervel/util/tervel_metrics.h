@@ -28,9 +28,6 @@ THE SOFTWARE.
 #include <tervel/util/util.h>
 #include <tervel/util/info.h>
 
-#define tervel_track_announcements_count
-#define tervel_track_max_recur_depth_reached
-
 namespace tervel {
 namespace util{
 
@@ -42,65 +39,87 @@ class EventScope{
 /**
 * Start of Event tracker class
 */
+
+/**
+#include <tervel/util/tervel_metrics.h>
+#if tervel_track<metric name> == tervel_track_enable
+  TERVEL_METRIC(<metric name>);
+#endif
+ */
+/**
+ * @brief [brief description]
+ * @details [long description]
+ *
+ * @param  [description]
+ * @return [description]
+ */
+
+#define TERVEL_METRIC(metric_name) {\
+  if (tervel_track_##metric_name) {\
+    util::EventTracker::countEvent(util::EventTracker::event_code::metric_name); \
+  }\
+}
+
+
 class EventTracker{
 
 public:
+  #define tervel_track_enable true
+  #define tervel_track_disable false
 
-  #define tervel_track_announcements_count
-  #define tervel_track_max_recur_depth_reached
-  #define tervel_track_rc_watch_fail
-  #define tervel_track_hp_watch_fail
-  #define tervel_track_rc_remove_descr
-  #define tervel_track_rc_offload
-  #define tervel_track_helped_announcement
-  // #include <tervel/util/tervel_metrics.h>
-  // util::EventTracker::countEvent(util::EventTracker::event_code::announcement);
+  #define tervel_track_announcement_count tervel_track_enable
+  #define tervel_track_max_recur_depth_reached tervel_track_enable
+  #define tervel_track_rc_watch_fail tervel_track_enable
+  #define tervel_track_hp_watch_fail tervel_track_enable
+  #define tervel_track_rc_remove_descr tervel_track_enable
+  #define tervel_track_rc_offload tervel_track_enable
+  #define tervel_track_helped_announcement tervel_track_enable
 
   enum class event_code : size_t {
-    #ifdef tervel_track_announcements_count
-    announcement,
+    #if tervel_track_announcement_count == tervel_track_enable
+    announcement_count,
     #endif
-    #ifdef tervel_track_helped_announcement // Issue 2 not activated
+    #if tervel_track_helped_announcement == tervel_track_enable
     helped_announcement,
     #endif
-    #ifdef tervel_track_max_recur_depth_reached
+    #if tervel_track_max_recur_depth_reached == tervel_track_enable
     max_recur_depth_reached,
     #endif
-    #ifdef tervel_track_rc_watch_fail
+    #if tervel_track_rc_watch_fail == tervel_track_enable
     rc_watch_fail,
     #endif
-    #ifdef tervel_track_hp_watch_fail
+    #if tervel_track_hp_watch_fail == tervel_track_enable
     hp_watch_fail,
     #endif
-    #ifdef tervel_track_rc_remove_descr
+    #if tervel_track_rc_remove_descr == tervel_track_enable
     rc_remove_descr,
     #endif
-    #ifdef tervel_track_rc_offload
+    #if tervel_track_rc_offload == tervel_track_enable
     rc_offload,
     #endif
     END
   };
 
   static const constexpr char* const event_code_strings[] = {
-    #ifdef tervel_track_announcements_count
+    #if tervel_track_announcements_count == tervel_track_enable
     "announcement_count",
     #endif
-    #ifdef tervel_track_helped_announcement
+    #if tervel_track_helped_announcement == tervel_track_enable
     "helped_announcement",
     #endif
-    #ifdef tervel_track_max_recur_depth_reached
+    #if tervel_track_max_recur_depth_reached == tervel_track_enable
     "max_recur_depth_reached",
     #endif
-    #ifdef tervel_track_rc_watch_fail
+    #if tervel_track_rc_watch_fail == tervel_track_enable
     "rc_watch_fail",
     #endif
-    #ifdef tervel_track_hp_watch_fail
+    #if tervel_track_hp_watch_fail == tervel_track_enable
     "hp_watch_fail",
     #endif
-    #ifdef tervel_track_rc_remove_descr
+    #if tervel_track_rc_remove_descr == tervel_track_enable
     "rc_remove_descr",
     #endif
-    #ifdef tervel_track_rc_offload
+    #if tervel_track_rc_offload == tervel_track_enable
     "rc_offload",
     #endif
     ""

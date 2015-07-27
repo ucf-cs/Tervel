@@ -175,8 +175,9 @@ class ProgressAssurance {
   static void make_announcement(OpRecord *op, const uint64_t tid =
         tervel::tl_thread_info->get_thread_id(), ProgressAssurance * const prog_assur =
         tervel::tl_thread_info->get_progress_assurance()) {
-    util::EventTracker::countEvent(util::EventTracker::event_code::announcement);
-
+    #if tervel_track_announcement_count  == tervel_track_enable
+        TERVEL_METRIC(announcement_count)
+    #endif
     prog_assur->p_make_announcement(op, tid);
   }
 

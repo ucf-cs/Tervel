@@ -96,8 +96,8 @@ void DescriptorPool::offload() {
 
     this->manager_->add_safe_elements(pool_id_, extras, tail);
 
-    #ifdef tervel_track_rc_offload
-      util::EventTracker::countEvent(util::EventTracker::event_code::rc_offload);
+    #if tervel_track_rc_offload == tervel_track_enable
+      TERVEL_METRIC(rc_offload);
     #endif
   }
 }

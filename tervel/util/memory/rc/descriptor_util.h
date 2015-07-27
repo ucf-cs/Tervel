@@ -125,8 +125,8 @@ inline bool watch(tervel::util::Descriptor *descr, std::atomic<void *> *address,
   if (address->load() != value) {
     int64_t temp = elem->header().ref_count.fetch_add(-1);
     assert(temp > 0 && " Ref count of an object is negative, which implies some thread called unwatch multiple times on the same object");
-    #ifdef tervel_track_rc_watch_fail
-      util::EventTracker::countEvent(util::EventTracker::event_code::rc_watch_fail);
+    #if tervel_track_rc_watch_fail  == tervel_track_enable
+      TERVEL_METRIC(rc_watch_fail)
     #endif
     return false;
   } else {
@@ -229,8 +229,8 @@ inline void * remove_descriptor(void *expected, std::atomic<void *> *address) {
     if (watch(descr, address, expected)) {
       newValue = descr->complete(expected, address);
 
-      #ifdef tervel_track_rc_remove_descr
-        util::EventTracker::countEvent(util::EventTracker::event_code::rc_remove_descr);
+      #if tervel_track_max_rc_remove_descr  == tervel_track_enable
+        TERVEL_METRIC(rc_remove_descr)
       #endif
       unwatch(descr);
     } else {

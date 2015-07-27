@@ -61,8 +61,8 @@ bool HazardPointer::watch(SlotID slot, Element *descr,
 
   if (address->load() != expected) {
     hazard_pointer->clear_watch(slot);
-    #ifdef tervel_track_hp_watch_fail
-      util::EventTracker::countEvent(util::EventTracker::event_code::hp_watch_fail);
+    #if tervel_track_hp_watch_fail == tervel_track_enable
+      TERVEL_METRIC(hp_watch_fail);
     #endif
     return false;
   } else {
