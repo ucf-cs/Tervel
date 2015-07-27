@@ -28,6 +28,7 @@ THE SOFTWARE.
 #include <tervel/util/memory/rc/descriptor_pool.h>
 #include <tervel/util/memory/rc/descriptor_util.h>
 #include <tervel/util/memory/rc/descriptor_util.h>
+#include <tervel/util/tervel_metrics.h>
 
 namespace tervel {
 namespace util {
@@ -97,6 +98,9 @@ void PoolManager::get_safe_elements(PoolElement **pool, uint64_t *count, uint64_
       *pool = temp;
 
       if (*count >= min_elem) {
+        #ifdef tervel_track_rc_get_manager
+          util::EventTracker::countEvent(util::EventTracker::event_code::rc_get_manager);
+        #endif
         break;
       }
     }

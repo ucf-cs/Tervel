@@ -36,7 +36,7 @@
 #include <tervel/containers/wf/ring-buffer/ring_buffer.h>
 
 
-typedef uint64_t Value_o;
+typedef unsigned char Value_o;
 
 class WrapperType;
 
@@ -46,12 +46,12 @@ class WrapperType : public container_t::Value {
  public:
   WrapperType(Value_o x) : x_(x) {};
   Value_o value() { return x_; };
-  std::string toString() {
-    // uint64_t x = (thread_id << 56) | loop_count;
-    uint64_t loop = x_ & 0x00FFFFFFFFFFFFFF;
-    uint64_t tid = x_ >> 56;
-    return "TID: " + std::to_string(tid) + " LC: " + std::to_string(loop);
-  }
+  // std::string toString() {
+  //   // uint64_t x = (thread_id << 56) | loop_count;
+  //   uint64_t loop = x_ & 0x00FFFFFFFFFFFFFF;
+  //   uint64_t tid = x_ >> 56;
+  //   return "TID: " + std::to_string(tid) + " LC: " + std::to_string(loop);
+  // }
  private:
   const Value_o x_;
 };

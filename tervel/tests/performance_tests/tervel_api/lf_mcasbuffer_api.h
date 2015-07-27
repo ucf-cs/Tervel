@@ -36,7 +36,8 @@
 #include <tervel/containers/lf/mcas-buffer/mcas_buffer.h>
 
 
-typedef int64_t Value;
+typedef unsigned char Value;
+
 typedef tervel::containers::lf::mcas_buffer::RingBuffer<Value> container_t;
 
 

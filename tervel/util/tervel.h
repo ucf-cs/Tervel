@@ -30,7 +30,7 @@ THE SOFTWARE.
 #include <tervel/util/progress_assurance.h>
 #include <tervel/util/memory/hp/hazard_pointer.h>
 #include <tervel/util/memory/rc/pool_manager.h>
-
+#include <tervel/util/tervel_metrics.h>
 namespace tervel {
 
 /**
@@ -42,11 +42,20 @@ class Tervel {
       : num_threads_  {num_threads}
       , hazard_pointer_(num_threads)
       , rc_pool_manager_(num_threads)
-      , progress_assurance_(num_threads) {}
+      , progress_assurance_(num_threads)
+      , thread_contexts_(new ThreadContext *[num_threads]) {}
 
   ~Tervel() {
     // Notice: The destructor of the member variables are called when this
     // object is freed.
+  }
+
+  std::string get_metric_stats() {
+    util::EventTracker track;
+    for (size_t i = 0; i < num_threads_; i++) {
+      track.add(thread_contexts_[i]->get_event_tracker());
+    }
+    return track.generateYaml();
   }
 
  private:
@@ -70,6 +79,8 @@ class Tervel {
   util::ProgressAssurance progress_assurance_;
 
   friend ThreadContext;
+
+  std::unique_ptr<ThreadContext *[]> thread_contexts_;
 
   DISALLOW_COPY_AND_ASSIGN(Tervel);
 };

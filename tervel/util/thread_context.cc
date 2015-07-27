@@ -27,6 +27,7 @@ THE SOFTWARE.
 #include <tervel/util/tervel.h>
 #include <tervel/util/memory/hp/hp_list.h>
 #include <tervel/util/memory/rc/descriptor_pool.h>
+#include <tervel/util/tervel_metrics.h>
 
 #include <stdint.h>
 
@@ -36,8 +37,11 @@ ThreadContext::ThreadContext(Tervel* tervel)
     : tervel_ {tervel}
     , thread_id_(tervel_->get_thread_id())
     , hp_element_list_(tervel_->hazard_pointer_.hp_list_manager_.allocate_list())
-    , rc_descriptor_pool_(tervel_->rc_pool_manager_.allocate_pool(thread_id_)) {
+    , rc_descriptor_pool_(tervel_->rc_pool_manager_.allocate_pool(thread_id_))
+    , eventTracker_(new util::EventTracker()){
   tl_thread_info = this;
+  tervel->thread_contexts_[thread_id_] = this;
+
 }
 
 ThreadContext::~ThreadContext() {
@@ -73,6 +77,10 @@ const uint64_t ThreadContext::get_thread_id() {
 
 const uint64_t ThreadContext::get_num_threads() {
   return tervel_->num_threads_;
+}
+
+util::EventTracker* const ThreadContext::get_event_tracker() {
+  return eventTracker_;
 }
 
 

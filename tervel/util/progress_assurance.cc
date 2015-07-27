@@ -25,6 +25,7 @@ THE SOFTWARE.
 #include <tervel/util/progress_assurance.h>
 #include <tervel/util/memory/hp/hazard_pointer.h>
 
+
 namespace tervel {
 namespace util {
 
@@ -45,6 +46,9 @@ void ProgressAssurance::p_check_for_announcement(int64_t &help_id) {
       if (res) {
         assert(memory::hp::HazardPointer::is_watched(op));
         op->help_complete();
+        #ifdef tervel_track_helped_announcement
+        util::EventTracker::countEvent(util::EventTracker::event_code::helped_announcement);
+        #endif
         memory::hp::HazardPointer::unwatch(pos);
       }
     }

@@ -170,6 +170,9 @@ int main(int argc, char **argv) {
   );
   std::cout << run_results << std::endl;
 
+#ifdef USE_TERVEL_METRICS
+  std::cout << tervel_obj->get_metric_stats() << std::endl;
+#endif
 #ifdef USE_PAPI
   std::cout << papiUtil.results() << std::endl;
 #endif

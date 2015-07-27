@@ -31,7 +31,7 @@ THE SOFTWARE.
 #include <tervel/util/info.h>
 #include <tervel/util/util.h>
 #include <tervel/util/memory/hp/hp_element.h>
-
+#include <tervel/util/tervel_metrics.h>
 
 namespace tervel {
 namespace util {
@@ -175,6 +175,8 @@ class ProgressAssurance {
   static void make_announcement(OpRecord *op, const uint64_t tid =
         tervel::tl_thread_info->get_thread_id(), ProgressAssurance * const prog_assur =
         tervel::tl_thread_info->get_progress_assurance()) {
+    util::EventTracker::countEvent(util::EventTracker::event_code::announcement);
+
     prog_assur->p_make_announcement(op, tid);
   }
 

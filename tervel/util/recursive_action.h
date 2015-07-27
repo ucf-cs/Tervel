@@ -40,6 +40,11 @@ class RecursiveAction {
   RecursiveAction() {
     if (RecursiveAction::recursive_depth(0) >
         tervel::tl_thread_info->get_num_threads() + 1) {
+      #ifdef tervel_track_max_recur_depth_reached
+        util::EventTracker::countEvent(util::EventTracker::event_code::max_recur_depth_reached);
+      #endif
+
+
       RecursiveAction::recursive_return(true, true);
     }
     RecursiveAction::recursive_depth(1);
