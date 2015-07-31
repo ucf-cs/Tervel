@@ -29,10 +29,10 @@ tervelSources= "$(shell find ../../util/ -name '*.cc')"
 CXX      = g++-4.8
 CXXFLAGS =  -DCONTAINER_FILE=$(input) -DINTEL -std=c++11  -march=native -m64 -pthread -fno-strict-aliasing  
 
-# DEBUG = -DDEBUG=1 -g -g3  -Wall
-RELEASE = -O3 -DNDEBUG
+DEBUG = -DDEBUG=1 -g -g3  -Wall
+# RELEASE = -O3 -DNDEBUG
 
-cFLAGS=-DUSE_TERVEL_METRICS -DTERVEL_PROG_ASSUR_DELAY=10 -DTERVEL_PROG_ASSUR_LIMIT=10
+#cFLAGS=-DUSE_TERVEL_METRICS -DTERVEL_PROG_ASSUR_DELAY=10 -DTERVEL_PROG_ASSUR_LIMIT=10
 
 CXXFLAGS += $(DEBUG) $(RELEASE) $(cFLAGS)
 

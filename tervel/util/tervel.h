@@ -39,11 +39,12 @@ namespace tervel {
 class Tervel {
  public:
   explicit Tervel(size_t num_threads)
-      : num_threads_  {num_threads}
+      : num_threads_(num_threads)
+      , active_threads_(0)
       , hazard_pointer_(num_threads)
       , rc_pool_manager_(num_threads)
       , progress_assurance_(num_threads)
-      , thread_contexts_(new ThreadContext *[num_threads]) {}
+      , thread_contexts_(new ThreadContext *[num_threads]()) {}
 
   ~Tervel() {
     // Notice: The destructor of the member variables are called when this
@@ -67,7 +68,7 @@ class Tervel {
   const uint64_t num_threads_;
 
   // The number of threads which have been assigned an thread_id
-  std::atomic<uint64_t> active_threads_ {0};
+  std::atomic<uint64_t> active_threads_;
 
   // The shared hazard_pointer object
   util::memory::hp::HazardPointer hazard_pointer_;

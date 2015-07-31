@@ -32,7 +32,7 @@ namespace hp {
 
 ListManager:: ~ListManager() {
   for (size_t i = 0; i < number_pools_; i++) {
-    Element * element = free_lists_[i].element_list_.load();
+    Element * element = free_lists_[i].load();
     while (element != nullptr) {
       Element *cur = element;
       element = element->next();
