@@ -1,9 +1,10 @@
 import time
 
+main_sleep_time = 0
 exe_count = 0;
 time_count = 0;
 
-if False:
+if True:
   repeat_test=1
   threads = [1, 2, 32, 64] #,4,8,16,32,64]
   exeTime = [2]
@@ -22,7 +23,7 @@ path += "" if path[-1] is "/" else "/"
 test_commands = []
 def gen_tests(algs_):
     for time in exeTime:
-        flags  = " -main_sleep=0"
+        flags  = " -main_sleep=%d" %main_sleep_time
         flags += " -verbose"
         flags += " -disable_thread_join"
         flags += " -execution_time=" + str(time)
@@ -35,7 +36,7 @@ def add_run(exe, time, flags, dist):
     global exe_count, time_count, cmds
     for i in range(0, repeat_test):
         exe_count += 1
-        time_count += time
+        time_count += time + main_sleep_time
         exe_cmd = "./$exePath/%s %s %s" %(exe, flags, dist)
         test_commands.append([exe_cmd, time + 20])
 
@@ -136,7 +137,7 @@ time_count += exe_count*20
 print "echo Max Estimated Time: %s" %(humanize_time(time_count))
 
 print "tStamp=$(date +\"%s\")"
-print "dir=logs/buffer/$tStamp"
+print "dir=logs/$tStamp"
 print "mkdir -p $dir"
 print "cp -r %s $dir/" %(path)
 print "cp example_run_cmds.py  $0 $dir/"

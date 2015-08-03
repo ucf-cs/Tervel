@@ -5,14 +5,21 @@ namespace tervel {
 namespace util {
 
 constexpr const char* const EventTracker::event_code_strings[];
+constexpr const char* const EventTracker::event_values_strings[];
 
-void EventTracker::pcountEvent(event_code eventCode) {
-  events_[static_cast<size_t>(eventCode)]++;
+void EventTracker::p_countEventOccurance(event_code_t code) {
+  events_[static_cast<size_t>(code)]++;
+}
+
+
+
+void EventTracker::p_trackEventValue(event_values_code_t code, int64_t val) {
+  event_values_[static_cast<size_t>(code)].update(val);
 }
 
 void EventTracker::add(EventTracker *other){
-  for (size_t iterator = 0; iterator < static_cast<size_t>(event_code::END); iterator++) {
-    events_[iterator] += other->events_[iterator];
+  for (size_t i = 0; i < static_cast<size_t>(event_code_t::END); i++) {
+    events_[i] += other->events_[i];
   }
 }
 
@@ -20,12 +27,22 @@ std::string EventTracker::generateYaml(){
 
   std::string yaml_trace = "  TERVELMETRICS:\n";
 
-  for (size_t iterator = 0; iterator< static_cast<size_t>(event_code::END); iterator++){
+  for (size_t i = 0; i< static_cast<size_t>(event_code_t::END); i++){
     yaml_trace += "    ";
-    yaml_trace += event_code_strings[iterator];
+    yaml_trace += event_code_strings[i];
     yaml_trace += " : ";
-    yaml_trace += std::to_string(events_[iterator]);
+    yaml_trace += std::to_string(events_[i]);
     yaml_trace += "\n";
+  }
+
+  yaml_trace += "\n";
+  for (size_t i = 0; i< static_cast<size_t>(event_values_code_t::END); i++){
+    yaml_trace += "    ";
+    yaml_trace += event_values_strings[i];
+    yaml_trace += " : ";
+    yaml_trace += event_values_[i].yaml_string();
+    yaml_trace += "\n";
+
   }
 
   return yaml_trace;

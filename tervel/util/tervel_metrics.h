@@ -31,10 +31,34 @@ THE SOFTWARE.
 namespace tervel {
 namespace util{
 
-//for future use
-class EventScope{
-  uint64_t counter;
-};
+// Struct used to track average values of a variable.
+typedef struct{
+  int64_t mean;
+  int64_t variance;
+  int64_t card;
+
+  void operator()() {
+    mean = 0;
+    variance = 0;
+    card = 0;
+  }
+
+  void update(int64_t value) {
+    mean =  ((mean * card) + value) / (card + 1.0);
+    int64_t diff = value - mean;
+    variance = ((variance * (card * card)) + (diff * diff));
+    card += 1.0;
+    variance = variance / (card * card);
+  }
+
+  std::string yaml_string() {
+    std::string str = "";
+    str += "\n      mean : " + std::to_string(mean);
+    str += "\n      variance : " + std::to_string(variance);
+    str += "\n      card : " + std::to_string(card);
+    return str;
+  }
+}event_values_t;
 
 /**
 * Start of Event tracker class
@@ -56,7 +80,14 @@ class EventScope{
 
 #define TERVEL_METRIC(metric_name) {\
   if (tervel_track_##metric_name) {\
-    util::EventTracker::countEvent(util::EventTracker::event_code::metric_name); \
+    util::EventTracker::countEvent(util::EventTracker::event_code_t::metric_name); \
+  }\
+}
+
+
+#define TERVEL_METRIC_TRACK_VALUE(metric_name, value) {\
+  if (tervel_track_##metric_name) {\
+    util::EventTracker::trackEventValue(util::EventTracker::event_values_code_t::metric_name, value); \
   }\
 }
 
@@ -67,6 +98,7 @@ public:
   #define tervel_track_enable true
   #define tervel_track_disable false
 
+  #define tervel_track_limit_value tervel_track_enable
   #define tervel_track_announcement_count tervel_track_enable
   #define tervel_track_max_recur_depth_reached tervel_track_enable
   #define tervel_track_rc_watch_fail tervel_track_enable
@@ -75,7 +107,7 @@ public:
   #define tervel_track_rc_offload tervel_track_enable
   #define tervel_track_helped_announcement tervel_track_enable
 
-  enum class event_code : size_t {
+  enum class event_code_t : size_t {
     #if tervel_track_announcement_count == tervel_track_enable
     announcement_count,
     #endif
@@ -101,7 +133,7 @@ public:
   };
 
   static const constexpr char* const event_code_strings[] = {
-    #if tervel_track_announcements_count == tervel_track_enable
+    #if tervel_track_announcement_count == tervel_track_enable
     "announcement_count",
     #endif
     #if tervel_track_helped_announcement == tervel_track_enable
@@ -125,23 +157,47 @@ public:
     ""
   };
 
+  enum class event_values_code_t : size_t {
+    #if tervel_track_limit_value == tervel_track_enable
+    limit_value,
+    #endif
+    END
+  };
+
+  static const constexpr char* const event_values_strings[] = {
+    #if tervel_track_limit_value == tervel_track_enable
+    "limit_value",
+    #endif
+    ""
+  };
+
+
   std::string generateYaml();
 
   EventTracker()
-  : events_(new uint64_t[static_cast<size_t>(event_code::END)]()) {}
+  : events_(new uint64_t[static_cast<size_t>(event_code_t::END)]())
+  , event_values_(new event_values_t[static_cast<size_t>(event_values_code_t::END)]())
+  {}
 
-  static void countEvent(EventTracker::event_code eventCode,
+  static void countEvent(EventTracker::event_code_t code,
   EventTracker* tracker = tervel::tl_thread_info->get_event_tracker()) {
-    tracker->pcountEvent(eventCode);
+    tracker->p_countEventOccurance(code);
   };
 
-  void pcountEvent(event_code eventCode);
+  static void trackEventValue(EventTracker::event_values_code_t code, int64_t val,
+  EventTracker* tracker = tervel::tl_thread_info->get_event_tracker()) {
+    tracker->p_trackEventValue(code, val);
+  };
+
+  void p_countEventOccurance(event_code_t code);
+  void p_trackEventValue(event_values_code_t code, int64_t val);
   void add(EventTracker *other);
 
 public:
   ~EventTracker(){}
 
   std::unique_ptr<uint64_t[]> events_;
+  std::unique_ptr<event_values_t[]> event_values_;
 
 };
 
