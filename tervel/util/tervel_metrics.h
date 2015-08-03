@@ -32,7 +32,7 @@ namespace tervel {
 namespace util{
 
 // Struct used to track average values of a variable.
-typedef struct{
+typedef struct event_values_t{
   int64_t mean;
   int64_t variance;
   int64_t card;
@@ -49,6 +49,12 @@ typedef struct{
     variance = ((variance * (card * card)) + (diff * diff));
     card += 1.0;
     variance = variance / (card * card);
+  }
+
+  void add(struct event_values_t *other) {
+    mean += other->mean;
+    variance += other->variance;
+    card += other->card;
   }
 
   std::string yaml_string() {

@@ -6,8 +6,8 @@ time_count = 0;
 
 if True:
   repeat_test=1
-  threads = [1, 2, 32, 64] #,4,8,16,32,64]
-  exeTime = [2]
+  threads = [1, 64] #,4,8,16,32,64]
+  exeTime = [4]
 else:
   repeat_test=5
   threads = [2,4,8,16,32,64]

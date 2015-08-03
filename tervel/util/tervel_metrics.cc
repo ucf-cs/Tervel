@@ -21,6 +21,9 @@ void EventTracker::add(EventTracker *other){
   for (size_t i = 0; i < static_cast<size_t>(event_code_t::END); i++) {
     events_[i] += other->events_[i];
   }
+  for (size_t i = 0; i < static_cast<size_t>(event_values_code_t::END); i++) {
+    event_values_[i].add(&(other->event_values_[i]));
+  }
 }
 
 std::string EventTracker::generateYaml(){
