@@ -72,8 +72,8 @@ for (int i = 0; i < FLAGS_prefill; i++) { \
 #define DS_NAME "LF MCAS Buffer(2)"
 
 #define DS_CONFIG_STR \
-   "\n" _DS_CONFIG_INDENT "prefill : " + std::to_string(FLAGS_prefill) +"" + \
-   "\n" _DS_CONFIG_INDENT "capacity : " + std::to_string(FLAGS_capacity) +""
+   "\n" _DS_CONFIG_INDENT "prefill : " + std::to_string(FLAGS_prefill) + "" + \
+   "\n" _DS_CONFIG_INDENT "capacity : " + std::to_string(FLAGS_capacity) + "" + tervel_obj->get_config_str() + ""
 
 #define DS_STATE_STR
 
