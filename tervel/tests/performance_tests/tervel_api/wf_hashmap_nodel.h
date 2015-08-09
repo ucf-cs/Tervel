@@ -111,7 +111,7 @@ for (int i = 0; i < FLAGS_prefill; i++) { \
   } \
   ) \
   MACRO_OP_MAKER(3, { \
-    opRes = true; \
+    opRes = false; \
   } \
   ) \
 

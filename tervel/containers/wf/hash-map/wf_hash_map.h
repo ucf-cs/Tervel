@@ -470,7 +470,7 @@ at(Key key, ValueAccessor &va) {
 
   tervel::util::ProgressAssurance::Limit progAssur;
   while (true) {
-    if (progAssur.isDelayed()) {
+    if (progAssur.isDelayed(0)) {
       ForceExpandOp *op = new ForceExpandOp(this, loc, depth);
       util::ProgressAssurance::make_announcement(
             reinterpret_cast<tervel::util::OpRecord *>(op));
@@ -479,6 +479,7 @@ at(Key key, ValueAccessor &va) {
     }
 
     if (!hp_watch_and_get_value(loc, curr_value)) {
+      progAssur.isDelayed(1);
       continue;
     } else if (curr_value == nullptr) {
       break;
@@ -526,30 +527,34 @@ insert(Key key, Value value) {
   DataNode * new_node = new DataNode(key, value);
 
   tervel::util::ProgressAssurance::Limit progAssur;
+
   size_t depth = 0;
   uint64_t position = get_position(key, depth);
-
   Location *loc = &(primary_array_[position]);
   Node *curr_value;
 
   bool op_res;
   while (true) {
-    if (progAssur.isDelayed()) {
-      // TODO(steven): implement an op record.
-      // util::ProgressAssurance::make_announcement(
-      //       reinterpret_cast<tervel::util::OpRecord *>(op));
+    if (progAssur.isDelayed(0)) {
+      ForceExpandOp *op = new ForceExpandOp(this, loc, depth);
+      util::ProgressAssurance::make_announcement(
+            reinterpret_cast<tervel::util::OpRecord *>(op));
       progAssur.reset();
       continue;
     }
 
     if (!hp_watch_and_get_value(loc, curr_value)) {
+      progAssur.isDelayed(1);
       continue;
-    } else if (curr_value == nullptr) {
+    }
+
+    if (curr_value == nullptr) {
       if (loc->compare_exchange_strong(curr_value, new_node)) {
         size_.fetch_add(1);
         op_res = true;
         break;
       } else {
+        progAssur.isDelayed(1);
         continue;
       }
     } else if (curr_value->is_array()) {
@@ -572,6 +577,7 @@ insert(Key key, Value value) {
           break;
         } else {
           hp_unwatch();
+          progAssur.isDelayed(1);
           continue;
         }
       } else if (functor.key_equals(data_node->key_, key)) {
@@ -614,18 +620,18 @@ remove(Key key) {
 
   bool op_res = false;
   while (true) {
-    if (progAssur.isDelayed()) {
-      // TODO(Steven): implement op record
-      // util::ProgressAssurance::make_announcement(
-      //       reinterpret_cast<tervel::util::OpRecord *>(op));
+    if (progAssur.isDelayed(0)) {
+      //TODO add operation record.
       progAssur.reset();
       continue;
     }
 
     Node *curr_value;
     if (!hp_watch_and_get_value(loc, curr_value)) {
+      progAssur.isDelayed(1);
       continue;
-    } else if (curr_value == nullptr) {
+    }
+    if (curr_value == nullptr) {
       op_res = false;
       break;
     } else if (curr_value->is_array()) {
@@ -649,16 +655,6 @@ remove(Key key) {
         if (loc->compare_exchange_strong(curr_value, nullptr)) {
             assert(loc->load() != data_node);
             assert(data_node->access_count_.load() < 0);
-
-            if (tervel::util::memory::hp::HazardPointer::is_watched(curr_value) == false) {
-              tervel::util::memory::hp::HazardPointer::is_watched(curr_value);
-              assert(false);
-            }
-            if (tervel::util::memory::hp::HazardPointer::is_watched(data_node) == false) {
-              tervel::util::memory::hp::HazardPointer::is_watched(data_node);
-              assert(false);
-            }
-
             hp_unwatch();
             data_node->safe_delete();
             break;
