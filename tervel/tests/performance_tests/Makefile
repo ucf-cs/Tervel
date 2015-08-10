@@ -22,12 +22,16 @@
 #THE SOFTWARE.
 #
 
-DEBUG = -DDEBUG=1 -g -g3  -Wall
-# RELEASE = -O3 -DNDEBUG
+# DEBUG = -DDEBUG=1 -g -g3  -Wall
+RELEASE = -O3 -DNDEBUG
+
+delay ?= 10000
+limit ?= 10000
+version ?= NA
 
 tervelINC = "-I../../../"
 tervelSources= "$(shell find ../../util/ -name '*.cc')"
-tervelFlags="-DUSE_TERVEL_METRICS -DTERVEL_PROG_ASSUR_DELAY=10 -DTERVEL_PROG_ASSUR_LIMIT=10"
+tervelFlags="-DUSE_TERVEL_METRICS -DTERVEL_PROG_ASSUR_DELAY=$(delay) -DTERVEL_PROG_ASSUR_LIMIT=$(limit)"
 
 CXX      = g++-4.8
 CXXFLAGS = $(RELEASE) $(DEBUG) $(cFlags) -DCONTAINER_FILE=$(input) -DINTEL -std=c++11  -march=native -m64 -pthread -fno-strict-aliasing  
@@ -44,7 +48,7 @@ EXECUTABLE ?=src/main.cc
 OBJECTS = $(SOURCES:.cc=.o)
 
 output ?= $(input).x
-OUTPUT = executables/
+OUTPUT = executables/version_$(version)_$(delay)_$(limit)/
 
 .PHONY: all
 all:  blank

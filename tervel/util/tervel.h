@@ -93,9 +93,9 @@ class Tervel {
 
     return str;
   }
-  std::string get_metric_stats() {
+  std::string get_metric_stats(size_t i = 0) {
     util::EventTracker track;
-    for (size_t i = 0; i < num_threads_; i++) {
+    for (; i < num_threads_; i++) {
       track.add(thread_contexts_[i]->get_event_tracker());
     }
     return track.generateYaml();
