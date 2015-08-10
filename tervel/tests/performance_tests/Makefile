@@ -32,7 +32,11 @@ CXXFLAGS =  -DCONTAINER_FILE=$(input) -DINTEL -std=c++11  -march=native -m64 -pt
 # DEBUG = -DDEBUG=1 -g -g3  -Wall
 RELEASE = -O3 -DNDEBUG
 
-cFLAGS=-DUSE_TERVEL_METRICS -DTERVEL_PROG_ASSUR_DELAY=10000 -DTERVEL_PROG_ASSUR_LIMIT=10000
+delay ?= 10000
+limit ?= 10000
+version ?= NA
+
+cFLAGS=-DUSE_TERVEL_METRICS -DTERVEL_PROG_ASSUR_DELAY=$(delay) -DTERVEL_PROG_ASSUR_LIMIT=$(limit)
 
 CXXFLAGS += $(DEBUG) $(RELEASE) $(cFLAGS)
 
@@ -46,7 +50,7 @@ EXECUTABLE ?=src/main.cc
 OBJECTS = $(SOURCES:.cc=.o)
 
 output ?= $(input).x
-OUTPUT = executables/previous_version_10000/
+OUTPUT = executables/version_$(version)_$(delay)_$(limit)/
 
 .PHONY: all
 all:  blank
