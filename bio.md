@@ -4,9 +4,7 @@ layout: tervel_about
 
 # The Research Group
 
-The Computer Software Engineering - Scalable and Secure Systems (CSE - S3) Lab at the University of Central Florida was established by Dr. Damian Dechev in 2010. His work focuses on concurrency and multithreading using C++. Dr. Dechev completed his Ph.D. degree in 2009 at Texas A&M University under the supervision of Dr. Bjarne Stroustrup.
-
-Currently, the CSE-S3 Lab includes 5 Ph.D. students and 2 M.S. students. At the CSE-S3 Lab, Dr. Dechev leads the efforts on creating a collection of C++ concurrent wait-free and lock-free data structures along with supporting verification and optimization tools. The CSE-S3 lab has been supported by the National Science Foundation, Sandia National Laboratories, and the Department of Energy.
+The Computer Software Engineering - Scalable and Secure Systems (CSE - S3) Lab at the University of Central Florida was established by Dr. Damian Dechev in 2010. His work focuses on concurrency and multithreading using C++. Dr. Dechev completed his Ph.D. degree in 2009 at Texas A&M University under the supervision of Dr. Bjarne Stroustrup. The CSE-S3 lab has been supported by the National Science Foundation, Sandia National Laboratories, and the Department of Energy.
 
 # Key Tervel Developers[^0]
 <h3> Steven Feldman</h3>

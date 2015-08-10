@@ -93,7 +93,7 @@ Please see our [contribution guidelines](contributing.html).
 How do I contact the team?
 --------------------------
 
-We are reachable at <tervel@cse.eecs.ucf.edu>.
+You can send us messages through github or at <tervel@cse.eecs.ucf.edu>.
 
 
 Where do I report bugs?
@@ -102,9 +102,5 @@ Where do I report bugs?
 Send e-mail to <tervel@cse.eecs.ucf.edu>.
 
 
-This site appears similar to Bazel.io
------------------------
 
-Thats because our design is based on Bazel's site. We are not web designers and the Bazel
-team was kind enough to open-source their website in their [git repo](https://github.com/google/bazel/tree/gh-pages).
 
