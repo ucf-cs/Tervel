@@ -49,13 +49,14 @@ class Stack {
  public:
   class Node;
   class Accessor;
-  Stack() {};
+  Stack()
+  : _stack{nullptr} {};
   ~Stack() {};
 
   bool push(T v);
   bool pop(T &v);
  private:
-  std::atomic<Node *> _stack{nullptr};
+  std::atomic<Node *> _stack __attribute__((aligned(CACHE_LINE_SIZE)));
 };  // class Stack
 
 

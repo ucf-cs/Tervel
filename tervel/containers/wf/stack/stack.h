@@ -65,7 +65,7 @@ class Stack {
 
   DISALLOW_COPY_AND_ASSIGN(Stack);
  private:
-  std::atomic<Node *> lst_;
+  std::atomic<Node *> lst_ __attribute__((aligned(CACHE_LINE_SIZE)));
 };  // class Stack
 
 
