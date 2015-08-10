@@ -32,12 +32,12 @@ CXXFLAGS =  -DCONTAINER_FILE=$(input) -DINTEL -std=c++11  -march=native -m64 -pt
 # DEBUG = -DDEBUG=1 -g -g3  -Wall
 RELEASE = -O3 -DNDEBUG
 
-cFLAGS=-DUSE_TERVEL_METRICS -DTERVEL_PROG_ASSUR_DELAY=10 -DTERVEL_PROG_ASSUR_LIMIT=10
+cFLAGS=-DUSE_TERVEL_METRICS -DTERVEL_PROG_ASSUR_DELAY=10000 -DTERVEL_PROG_ASSUR_LIMIT=10000
 
 CXXFLAGS += $(DEBUG) $(RELEASE) $(cFLAGS)
 
 INC= $(cINC)
-LIB = $(cLIB) -ldl -lgflags -lpthread -lrt -lllalloc 
+LIB = $(cLIB) -ldl -lgflags -lpthread -lrt -lllalloc
 # LIB += -lrt /usr/local/lib/libpapi.a
 
 SOURCES = $(cSources)
@@ -46,7 +46,7 @@ EXECUTABLE ?=src/main.cc
 OBJECTS = $(SOURCES:.cc=.o)
 
 output ?= $(input).x
-OUTPUT = executables/
+OUTPUT = executables/previous_version_10000/
 
 .PHONY: all
 all:  blank

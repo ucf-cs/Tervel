@@ -4,14 +4,14 @@ main_sleep_time = 0
 exe_count = 0;
 time_count = 0;
 
-if True:
+if False:
   repeat_test=1
   threads = [1, 64] #,4,8,16,32,64]
   exeTime = [4]
 else:
   repeat_test=5
-  threads = [2,4,8,16,32,64]
-  exeTime = [10]
+  threads = [2,4,32,64]
+  exeTime = [5]
 
 
 path = "../executables"
@@ -37,7 +37,10 @@ def add_run(exe, time, flags, dist):
     for i in range(0, repeat_test):
         exe_count += 1
         time_count += time + main_sleep_time
-        exe_cmd = "./$exePath/%s %s %s" %(exe, flags, dist)
+        exe_cmd = "likwid-pin -q -c 0,8,1,9,2,10,3,11,4,12,5,13,6,14,7,15,16,24,17,25,18,26,19,27,20,28,21,29,22,30,23,31,32,40,35,38,46,39,47,48,56,49,57,50,58,51,59,52,60,53,61,54,62,55,63 "
+        exe_cmd += "./$exePath/%s %s %s" %(exe, flags, dist)
+ #       exe_cmd += " -papi_events="
+#        exe_cmd += "PAPI_TOT_INS,PAPI_TOT_CYC,INSTRUCTION_CACHE_INVALIDATED,MISALIGNED_ACCESSES"
         test_commands.append([exe_cmd, time + 20])
 
 def stack(flags_, time_):
@@ -122,7 +125,7 @@ def hashmap(flags_, time_):
                         for a in algs:
                             add_run(a, time_, flags + flags_, str(thread) + " " + dist)
 
-algorithms = [ringbuffer, hashmap, stack]
+algorithms = [ringbuffer, stack]
 gen_tests(algorithms)
 
 def humanize_time(secs):
@@ -140,6 +143,7 @@ print "tStamp=$(date +\"%s\")"
 print "dir=logs/$tStamp"
 print "mkdir -p $dir"
 print "cp -r %s $dir/" %(path)
+print "cp ../Makefile $dir/"
 print "cp example_run_cmds.py  $0 $dir/"
 print "exePath=$dir/%s" %(pathFolder)
 
