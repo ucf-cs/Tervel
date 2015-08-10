@@ -147,7 +147,7 @@ bool Stack<T>::pop(T& v) {
 
 
 template<typename T>
-class Stack<T>::Node : public tervel::util::memory::hp::Element {
+class __attribute__((aligned(CACHE_LINE_SIZE))) Stack<T>::Node : public tervel::util::memory::hp::Element {
  public:
   Node(T &v) : _val(v) {};
   ~Node() {};
