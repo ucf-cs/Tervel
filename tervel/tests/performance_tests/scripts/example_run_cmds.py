@@ -37,7 +37,7 @@ def gen_tests(algs_):
 
 def add_run(exe, time, flags, dist):
     global exe_count, time_count, cmds
-    for (dirpath, dirnames, filenames) in os.walk("$exePath/"):
+    for (dirpath, dirnames, filenames) in os.walk(path):
         for p in dirnames:
             for i in range(0, repeat_test):
                 exe_count += 1
