@@ -31,7 +31,7 @@ version ?= NA
 
 tervelINC = "-I../../../"
 tervelSources= "$(shell find ../../util/ -name '*.cc')"
-tervelFlags="-DUSE_TERVEL_METRICS -DUSE_PAPI -DTERVEL_PROG_ASSUR_DELAY=$(delay) -DTERVEL_PROG_ASSUR_LIMIT=$(limit)"
+tervelFlags="-DUSE_PAPI -DUSE_TERVEL_METRICS -DUSE_PAPI -DTERVEL_PROG_ASSUR_DELAY=$(delay) -DTERVEL_PROG_ASSUR_LIMIT=$(limit)"
 
 CXX      = g++-4.8
 CXXFLAGS = $(RELEASE) $(DEBUG) $(cFlags) -DCONTAINER_FILE=$(input) -DINTEL -std=c++11  -march=native -m64 -pthread -fno-strict-aliasing  
