@@ -84,6 +84,7 @@ typedef struct event_values_t{
  * @return [description]
  */
 
+#ifdef USE_TERVEL_METRICS
 #define TERVEL_METRIC(metric_name) {\
   if (tervel_track_##metric_name) {\
     util::EventTracker::countEvent(util::EventTracker::event_code_t::metric_name); \
@@ -96,7 +97,10 @@ typedef struct event_values_t{
     util::EventTracker::trackEventValue(util::EventTracker::event_values_code_t::metric_name, value); \
   }\
 }
-
+#else
+#define TERVEL_METRIC(metric_name)
+#define TERVEL_METRIC_TRACK_VALUE(metric_name, value)
+#endif
 
 class EventTracker{
 
