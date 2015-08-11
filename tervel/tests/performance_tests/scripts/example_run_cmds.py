@@ -157,12 +157,13 @@ print "exePath=$dir/%s" %(pathFolder)
   #
 i = 0
 for c in test_commands:
-    if c is None:
+    if c is None:   
         print "tar -zvcf $tStamp.ss.tar.gz $dir/"
     else:
         print "temp=$dir/$(date +\"%s\").log"
         print "echo \"CMD : %s 2>&1 >> $dir/test_%d.log\" | tee $dir/test_%d.log" %(c[0], i,i)
-        print "echo \"SYSTEM : %s 2>&1 >> $dir/test_%d.log\" | tee $dir/test_%d.log" %(system, i,i)
+
+        print "echo \"SYSTEM : %s 2>&1 >> $dir/test_%d.log\" >> $dir/test_%d.log" %(system, i,i)
         print "timeout %d %s 2>&1 >> $dir/test_%d.log" %(c[1], c[0], i)
         print "if [ $? -ne 0 ]; then"
         print "  echo \"\t killed\""
