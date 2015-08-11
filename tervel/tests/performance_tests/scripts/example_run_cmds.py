@@ -1,5 +1,5 @@
 import time
-
+import os.path
 main_sleep_time = 0
 exe_count = 0;
 time_count = 0;
@@ -34,14 +34,16 @@ def gen_tests(algs_):
 
 def add_run(exe, time, flags, dist):
     global exe_count, time_count, cmds
-    for i in range(0, repeat_test):
-        exe_count += 1
-        time_count += time + main_sleep_time
-        exe_cmd = "likwid-pin -q -c 0,8,1,9,2,10,3,11,4,12,5,13,6,14,7,15,16,24,17,25,18,26,19,27,20,28,21,29,22,30,23,31,32,40,35,38,46,39,47,48,56,49,57,50,58,51,59,52,60,53,61,54,62,55,63 "
-        exe_cmd += "./$exePath/%s %s %s" %(exe, flags, dist)
- #       exe_cmd += " -papi_events="
+    dirs = [d for d in os.listdir(path) if os.path.isdir(os.path.join(path, d))]
+    for d in dirs:
+        for i in range(0, repeat_test):
+            exe_count += 1
+            time_count += time + main_sleep_time
+#        exe_cmd = "likwid-pin -q -c 0,8,1,9,2,10,3,11,4,12,5,13,6,14,7,15,16,24,17,25,18,26,19,27,20,28,21,29,22,30,23,31,32,40,35,38,46,39,47,48,56,49,57,50,58,51,59,52,60,53,61,54,62,55,63 "
+            exe_cmd = "./$exePath/%s/%s %s %s" %(d, exe, flags, dist)
+#        exe_cmd += " -papi_events="
 #        exe_cmd += "PAPI_TOT_INS,PAPI_TOT_CYC,INSTRUCTION_CACHE_INVALIDATED,MISALIGNED_ACCESSES"
-        test_commands.append([exe_cmd, time + 20])
+            test_commands.append([exe_cmd, time + 20])
 
 def stack(flags_, time_):
     algs = ["stack_tervel_wf.x", "stack_tervel_lf.x"]
