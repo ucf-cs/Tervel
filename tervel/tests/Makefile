@@ -1,4 +1,4 @@
-I#The MIT License (MIT)
+#The MIT License (MIT)
 #
 #Copyright (c) 2015 University of Central Florida's Computer Software Engineering
 #Scalable & Secure Systems (CSE - S3) Lab
@@ -22,19 +22,16 @@ I#The MIT License (MIT)
 #THE SOFTWARE.
 #
 
-# DEBUG = -DDEBUG=1 -g -g3  -Wall
-RELEASE = -O3 -DNDEBUG
+DEBUG = -DDEBUG=1 -g -g3  -Wall
+# RELEASE = -O3 -DNDEBUG
 
 delay ?= 10000
 limit ?= 10000
 version ?= NA
 
-tervelINC = "-I../../../"
-tervelSources= "$(shell find ../../util/ -name '*.cc')"
-tervelFlags="-DUSE_PAPI -DUSE_TERVEL_METRICS -DUSE_PAPI -DTERVEL_PROG_ASSUR_DELAY=$(delay) -DTERVEL_PROG_ASSUR_LIMIT=$(limit)"
-
-
-cFLAGS=-DUSE_PAPI -DUSE_TERVEL_METRICS -DTERVEL_PROG_ASSUR_DELAY=$(delay) -DTERVEL_PROG_ASSUR_LIMIT=$(limit)
+tervelINC = "-I../../"
+tervelSources= "$(shell find ../util/ -name '*.cc')"
+tervelFlags="-DUSE_TERVEL_METRICS -DTERVEL_PROG_ASSUR_DELAY=$(delay) -DTERVEL_PROG_ASSUR_LIMIT=$(limit)"
 
 CXX      = g++-4.8
 CXXFLAGS = $(RELEASE) $(DEBUG) $(cFlags) -DCONTAINER_FILE=$(input) -DINTEL -std=c++11  -march=native -m64 -pthread -fno-strict-aliasing  
@@ -44,7 +41,9 @@ CXXFLAGS = $(RELEASE) $(DEBUG) $(cFlags) -DCONTAINER_FILE=$(input) -DINTEL -std=
 
 INC= $(cINC)
 LIB = $(cLIB) -ldl -lgflags -lpthread -lrt 
-LIB += -lrt /usr/local/lib/libpapi.a
+
+# LIB += -lrt /usr/local/lib/libpapi.a
+# cFlags += -DUSE_PAPI
 
 SOURCES = $(cSources)
 
@@ -114,5 +113,5 @@ clean:
 .PHONY: clean-all
 clean-all:
 	$(RM) $(OUTPUT)*.x
-	$(RM) $(shell find ../../util/ -name '*.o')
+	$(RM) $(shell find ../util/ -name '*.o')
 	
