@@ -60,6 +60,12 @@ def stack(flags_, time_):
     # distributions.append(lambda t: None if t < 2 else "%d 100 0 %d 0 100" %((t*.5), (t*.5)))
     # # distributions.append(lambda t: None if t < 4 else "%d 1 0 %d 0 1" %((t*.25), (t*.75)))
     # # distributions.append(lambda t: None if t < 4 else "%d 1 0 %d 0 1" %((t*.75), (t*.25)))
+    distributions.append(lambda t: None if t < 2 else "%d 1 0 %d 0 1" %((t*.5), (t*.5)))
+    distributions.append(lambda t: None if t < 2 else "%d 0 1 %d 1 0" %((t*.5), (t*.5)))
+    distributions.append(lambda t: None if t < 2 else "%d 0 100 %d 100 0" %((t*.5), (t*.5)))
+    #distributions.append(lambda t: None if t < 2 else "%d 1 0 %d 0 1" %((t*.5), (t*.5)))
+    # distributions.append(lambda t: None if t < 4 else "%d 1 0 %d 0 1" %((t*.25), (t*.75)))
+    # distributions.append(lambda t: None if t < 4 else "%d 1 0 %d 0 1" %((t*.75), (t*.25)))
     # distributions.append(lambda t: None if t < 1 else "%d 50 50" %(t))
     # distributions.append(lambda t: None if t < 1 else "%d 25 75" %(t))
     # distributions.append(lambda t: None if t < 1 else "%d 75 25" %(t))
@@ -145,8 +151,7 @@ def hashmap(flags_, time_):
                         for a in algs:
                             add_run(a, time_, flags + flags_, str(thread) + " " + dist)
 
-# algorithms = [ringbuffer, hashmap, stack]
-algorithms = [stack]
+algorithms = [ringbuffer, hashmap, stack]
 gen_tests(algorithms)
 
 def humanize_time(secs):
