@@ -94,7 +94,7 @@ class Tervel {
 
     return str;
   }
-  
+
   std::string get_metric_stats(size_t i = 0) {
     util::EventTracker track;
     for (; i < num_threads_; i++) {

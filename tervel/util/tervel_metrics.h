@@ -76,13 +76,7 @@ typedef struct event_values_t{
   TERVEL_METRIC(<metric name>);
 #endif
  */
-/**
- * @brief [brief description]
- * @details [long description]
- *
- * @param  [description]
- * @return [description]
- */
+
 
 #ifdef USE_TERVEL_METRICS
 #define TERVEL_METRIC(metric_name) {\
@@ -101,6 +95,7 @@ typedef struct event_values_t{
   #define TERVEL_METRIC(metric_name)
   #define TERVEL_METRIC_TRACK_VALUE(metric_name, value)
 #endif
+
 
 class EventTracker{
 

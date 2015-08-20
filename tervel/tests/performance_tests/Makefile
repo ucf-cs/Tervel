@@ -22,13 +22,6 @@ I#The MIT License (MIT)
 #THE SOFTWARE.
 #
 
-
-
-tervelINC = "-I../../../"
-tervelSources= "$(shell find ../../util/ -name '*.cc')"
-CXX      = g++-4.8
-CXXFLAGS =  -DCONTAINER_FILE=$(input) -DINTEL -std=c++11  -march=native -m64 -pthread -fno-strict-aliasing  
-
 # DEBUG = -DDEBUG=1 -g -g3  -Wall
 RELEASE = -O3 -DNDEBUG
 
@@ -36,14 +29,21 @@ delay ?= 10000
 limit ?= 10000
 version ?= NA
 
+tervelINC = "-I../../../"
+tervelSources= "$(shell find ../../util/ -name '*.cc')"
+tervelFlags="-DUSE_PAPI -DUSE_TERVEL_METRICS -DUSE_PAPI -DTERVEL_PROG_ASSUR_DELAY=$(delay) -DTERVEL_PROG_ASSUR_LIMIT=$(limit)"
+
 
 cFLAGS=-DUSE_PAPI -DUSE_TERVEL_METRICS -DTERVEL_PROG_ASSUR_DELAY=$(delay) -DTERVEL_PROG_ASSUR_LIMIT=$(limit)
 
+CXX      = g++-4.8
+CXXFLAGS = $(RELEASE) $(DEBUG) $(cFlags) -DCONTAINER_FILE=$(input) -DINTEL -std=c++11  -march=native -m64 -pthread -fno-strict-aliasing  
 
-CXXFLAGS += $(DEBUG) $(RELEASE) $(cFLAGS)
+
+# $(info CXXFLAGS is $(CXXFLAGS))
 
 INC= $(cINC)
-LIB = $(cLIB) -ldl -lgflags -lpthread -lrt -lllalloc
+LIB = $(cLIB) -ldl -lgflags -lpthread -lrt 
 LIB += -lrt /usr/local/lib/libpapi.a
 
 SOURCES = $(cSources)
@@ -61,10 +61,10 @@ all:  blank
 
 include Makefile.ringbuffer
 
-.PHONY: all
+.PHONY: allTervel
 allTervel: tervelBufferWF tervelBufferMcasLF tervelMCASWF tervelVectorWF tervelStackWF tervelStackLF tervelHashMapWF tervelHashMapNoDelWF tervelQueueWF tervelQueueLF
 
-.PHONY: all
+.PHONY: allBuffer
 allBuffer: tervelBufferWF tervelBufferMcasLF tsigasBuffer tbbBuffer lockBuffer linuxBuffer naiveBuffer
 
 .PHONY: blank
@@ -72,27 +72,27 @@ blank:
 	$(MAKE) test input="api/blank.h" output="blank.x"
 
 tervelQueueWF:
-	$(MAKE) test input="tervel_api/wf_queue_api.h" output="queue_tervel_wf.x" cSources=$(tervelSources) cINC=$(tervelINC)
+	$(MAKE) test input="tervel_api/wf_queue_api.h" output="queue_tervel_wf.x" cSources=$(tervelSources) cINC=$(tervelINC) cFlags=$(tervelFlags)
 tervelQueueLF:
-	$(MAKE) test input="tervel_api/lf_queue_api.h" output="queue_tervel_lf.x" cSources=$(tervelSources) cINC=$(tervelINC)
+	$(MAKE) test input="tervel_api/lf_queue_api.h" output="queue_tervel_lf.x" cSources=$(tervelSources) cINC=$(tervelINC) cFlags=$(tervelFlags)
 
 tervelMCASWF:
-	$(MAKE) test input="tervel_api/wf_mcas_api.h" output="mcas_tervel_wf.x" cSources=$(tervelSources) cINC=$(tervelINC)
+	$(MAKE) test input="tervel_api/wf_mcas_api.h" output="mcas_tervel_wf.x" cSources=$(tervelSources) cINC=$(tervelINC) cFlags=$(tervelFlags)
 
 tervelVectorWF:
-	$(MAKE) test input="tervel_api/wf_vector_api.h" output="vector_tervel_wf.x" cSources=$(tervelSources) cINC=$(tervelINC)
+	$(MAKE) test input="tervel_api/wf_vector_api.h" output="vector_tervel_wf.x" cSources=$(tervelSources) cINC=$(tervelINC) cFlags=$(tervelFlags)
 
 tervelStackLF:
-	$(MAKE) test input="tervel_api/lf_stack_api.h" output="stack_tervel_lf.x" cSources=$(tervelSources) cINC=$(tervelINC)
+	$(MAKE) test input="tervel_api/lf_stack_api.h" output="stack_tervel_lf.x" cSources=$(tervelSources) cINC=$(tervelINC) cFlags=$(tervelFlags)
 
 tervelStackWF:
-	$(MAKE) test input="tervel_api/wf_stack_api.h" output="stack_tervel_wf.x" cSources=$(tervelSources) cINC=$(tervelINC)
+	$(MAKE) test input="tervel_api/wf_stack_api.h" output="stack_tervel_wf.x" cSources=$(tervelSources) cINC=$(tervelINC) cFlags=$(tervelFlags)
 
 tervelHashMapWF:
-	$(MAKE) test input="tervel_api/wf_hashmap.h" output="hashmap_tervel_wf.x" cSources=$(tervelSources) cINC=$(tervelINC)
+	$(MAKE) test input="tervel_api/wf_hashmap.h" output="hashmap_tervel_wf.x" cSources=$(tervelSources) cINC=$(tervelINC) cFlags=$(tervelFlags)
 
 tervelHashMapNoDelWF:
-	$(MAKE) test input="tervel_api/wf_hashmap_nodel.h" output="hashmap_nodel_tervel_wf.x" cSources=$(tervelSources) cINC=$(tervelINC)
+	$(MAKE) test input="tervel_api/wf_hashmap_nodel.h" output="hashmap_nodel_tervel_wf.x" cSources=$(tervelSources) cINC=$(tervelINC) cFlags=$(tervelFlags)
 
 
 .PHONY: test

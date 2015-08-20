@@ -24,10 +24,10 @@
 
 
 tervelBufferWF:
-	$(MAKE) test input="tervel_api/wf_ringbuffer_api.h" output="buffer_tervel_wf.x" cSources=$(tervelSources) cINC=$(tervelINC)
+	$(MAKE) test input="tervel_api/wf_ringbuffer_api.h" output="buffer_tervel_wf.x" cSources=$(tervelSources) cINC=$(tervelINC) cFlags=$(tervelFlags)
 
 tervelBufferMcasLF:
-	$(MAKE) test input="tervel_api/lf_mcasbuffer_api.h" output="buffer_tervel_mcas_lf.x" cSources=$(tervelSources) cINC=$(tervelINC)
+	$(MAKE) test input="tervel_api/lf_mcasbuffer_api.h" output="buffer_tervel_mcas_lf.x" cSources=$(tervelSources) cINC=$(tervelINC) cFlags=$(tervelFlags)
 
 tsigasBuffer:
 	$(MAKE) test input="api/ringbuffer/tsigas.h" output="buffer_tsigas_nb.x" cINC="-I/Libraries/cds-1.2.0/ " cLIB="-L/Libraries/cds-1.2.0/bin/gcc-amd64-linux-64 -lrt  -lcds"

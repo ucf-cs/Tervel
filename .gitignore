@@ -9,3 +9,6 @@ less
 *.class
 .DS_STORE
 core
+*.tar
+*.gz
+*.bash
