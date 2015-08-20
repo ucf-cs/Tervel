@@ -34,6 +34,7 @@
 #include <iostream>
 #include <gflags/gflags.h>
 
+
 #define __tervel_xstr(s) __tervel_str(s)
 #define __tervel_str(s) #s
 #include __tervel_xstr(CONTAINER_FILE)
@@ -45,14 +46,15 @@
 // Operation Rates
 
 DEFINE_int32(prefill, 0, "The number of elements to be initially inserted.");
-DEFINE_int32(pop_rate, 30, "The percent of insert operations.");
-DEFINE_int32(push_rate, 30, "The percent of find operations.");
+DEFINE_int32(pop_rate, 50, "The percent of insert operations.");
+DEFINE_int32(push_rate, 50, "The percent of find operations.");
 const int32_t FLAGS_failpop_rate = 0;
 const int32_t FLAGS_failpush_rate = 0;
 
 /** Arguments for Tester */
 DEFINE_int32(num_threads, 1, "The number of executing threads.");
 DEFINE_int32(execution_time, 5, "The amount of time to run the tests");
+DEFINE_int32(PAPI_metricCacheInfo, 0, "which metric?");
 
 
 
@@ -189,7 +191,15 @@ class TestObject {
       res += "\t\t" + func_name_[i] + ": ";
       res += std::to_string(func_call_rate_[i]) + "\n";
     }
+    // res += "Threads,Execution Time,push,pop\n";
+    // res +=  std::to_string(num_threads_) + "\n";
+    // res += "\tExecution Time: " + std::to_string(execution_time_) + "\n";
 
+    // res += "\tOperation rates\n";
+    // for (int i = 0; i < k_num_functions; i++) {
+    //   res += "\t\t" + func_name_[i] + ": ";
+    //   res += std::to_string(func_call_rate_[i]) + "\n";
+    // }
     return res;
   };
 
@@ -236,7 +246,6 @@ sanity_check() {
   Value i, j, temp;
 
   int limit = 100;
-
   for (i = 0; i < limit; i++) {
     bool res = test_class_->push(i);
     assert(res && "If this assert fails then the there is an issue with either pushing or determining that it is full");
