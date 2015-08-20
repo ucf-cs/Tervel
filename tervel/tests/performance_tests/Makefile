@@ -1,4 +1,4 @@
-#The MIT License (MIT)
+I#The MIT License (MIT)
 #
 #Copyright (c) 2015 University of Central Florida's Computer Software Engineering
 #Scalable & Secure Systems (CSE - S3) Lab
@@ -36,13 +36,15 @@ delay ?= 10000
 limit ?= 10000
 version ?= NA
 
-# cFLAGS=-DUSE_TERVEL_METRICS -DTERVEL_PROG_ASSUR_DELAY=$(delay) -DTERVEL_PROG_ASSUR_LIMIT=$(limit)
+
+cFLAGS=-DUSE_PAPI -DUSE_TERVEL_METRICS -DTERVEL_PROG_ASSUR_DELAY=$(delay) -DTERVEL_PROG_ASSUR_LIMIT=$(limit)
+
 
 CXXFLAGS += $(DEBUG) $(RELEASE) $(cFLAGS)
 
 INC= $(cINC)
 LIB = $(cLIB) -ldl -lgflags -lpthread -lrt -lllalloc
-# LIB += -lrt /usr/local/lib/libpapi.a
+LIB += -lrt /usr/local/lib/libpapi.a
 
 SOURCES = $(cSources)
 

@@ -98,8 +98,8 @@ typedef struct event_values_t{
   }\
 }
 #else
-#define TERVEL_METRIC(metric_name)
-#define TERVEL_METRIC_TRACK_VALUE(metric_name, value)
+  #define TERVEL_METRIC(metric_name)
+  #define TERVEL_METRIC_TRACK_VALUE(metric_name, value)
 #endif
 
 class EventTracker{
