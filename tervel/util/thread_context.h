@@ -38,6 +38,7 @@ namespace util {
 
 class RecursiveAction;
 class ProgressAssurance;
+class EventTracker;
 
 namespace memory {
 namespace hp {
@@ -84,7 +85,7 @@ class ThreadContext {
    */
   util::memory::rc::DescriptorPool * const get_rc_descriptor_pool();
 
-
+  util::EventTracker * const get_event_tracker();
 
 
   /**
@@ -107,6 +108,7 @@ class ThreadContext {
   const uint64_t thread_id_;
   util::memory::hp::ElementList * const hp_element_list_;
   util::memory::rc::DescriptorPool * const rc_descriptor_pool_;
+  util::EventTracker * const eventTracker_;
 
  private:
   DISALLOW_COPY_AND_ASSIGN(ThreadContext);

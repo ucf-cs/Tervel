@@ -36,7 +36,8 @@
 #include <tervel/containers/lf/mcas-buffer/mcas_buffer.h>
 
 
-typedef int64_t Value;
+typedef unsigned char Value;
+
 typedef tervel::containers::lf::mcas_buffer::RingBuffer<Value> container_t;
 
 
@@ -62,18 +63,17 @@ tervel_obj = new tervel::Tervel(FLAGS_num_threads+1); \
 DS_ATTACH_THREAD \
 container = new container_t(FLAGS_capacity); \
 \
-std::default_random_engine generator; \
-std::uniform_int_distribution<Value> largeValue(0, UINT_MAX); \
+Value x = 1; \
 for (int i = 0; i < FLAGS_prefill; i++) { \
-  Value x = largeValue(generator) & (~0x3); \
-  container->enqueue(x); \
-}
+  container->enqueue(x++); \
+  if (x == 0) x = 1; \
+} \
 
 #define DS_NAME "LF MCAS Buffer(2)"
 
 #define DS_CONFIG_STR \
-   "\n" _DS_CONFIG_INDENT "prefill : " + std::to_string(FLAGS_prefill) +"" + \
-   "\n" _DS_CONFIG_INDENT "capacity : " + std::to_string(FLAGS_capacity) +""
+   "\n" _DS_CONFIG_INDENT "prefill : " + std::to_string(FLAGS_prefill) + "" + \
+   "\n" _DS_CONFIG_INDENT "capacity : " + std::to_string(FLAGS_capacity) + "" + tervel_obj->get_config_str() + ""
 
 #define DS_STATE_STR
 
@@ -85,7 +85,8 @@ for (int i = 0; i < FLAGS_prefill; i++) { \
 #define OP_CODE \
  MACRO_OP_MAKER(0, { \
     /* Value value = random(); */ \
-      Value value = (thread_id << 56) | ecount; \
+      Value value = ecount++;\
+      if (ecount == 0) ecount++; \
       opRes = container->enqueue(value); \
     } \
   ) \

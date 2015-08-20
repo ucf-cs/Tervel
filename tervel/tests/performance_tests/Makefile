@@ -29,13 +29,19 @@ tervelSources= "$(shell find ../../util/ -name '*.cc')"
 CXX      = g++-4.8
 CXXFLAGS =  -DCONTAINER_FILE=$(input) -DINTEL -std=c++11  -march=native -m64 -pthread -fno-strict-aliasing  
 
-DEBUG = -DDEBUG=1 -g -g3  -Wall
-# RELEASE = -O3 -DNDEBUG
+# DEBUG = -DDEBUG=1 -g -g3  -Wall
+RELEASE = -O3 -DNDEBUG
 
-CXXFLAGS += $(DEBUG) $(RELEASE)
+delay ?= 10000
+limit ?= 10000
+version ?= NA
+
+# cFLAGS=-DUSE_TERVEL_METRICS -DTERVEL_PROG_ASSUR_DELAY=$(delay) -DTERVEL_PROG_ASSUR_LIMIT=$(limit)
+
+CXXFLAGS += $(DEBUG) $(RELEASE) $(cFLAGS)
 
 INC= $(cINC)
-LIB = $(cLIB) -ldl -lgflags -lpthread -lrt -lllalloc 
+LIB = $(cLIB) -ldl -lgflags -lpthread -lrt -lllalloc
 # LIB += -lrt /usr/local/lib/libpapi.a
 
 SOURCES = $(cSources)
@@ -44,7 +50,7 @@ EXECUTABLE ?=src/main.cc
 OBJECTS = $(SOURCES:.cc=.o)
 
 output ?= $(input).x
-OUTPUT = executables/
+OUTPUT = executables/version_$(version)_$(delay)_$(limit)/
 
 .PHONY: all
 all:  blank

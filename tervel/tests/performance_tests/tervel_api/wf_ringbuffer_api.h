@@ -36,7 +36,7 @@
 #include <tervel/containers/wf/ring-buffer/ring_buffer.h>
 
 
-typedef uint64_t Value_o;
+typedef unsigned char Value_o;
 
 class WrapperType;
 
@@ -46,12 +46,12 @@ class WrapperType : public container_t::Value {
  public:
   WrapperType(Value_o x) : x_(x) {};
   Value_o value() { return x_; };
-  std::string toString() {
-    // uint64_t x = (thread_id << 56) | loop_count;
-    uint64_t loop = x_ & 0x00FFFFFFFFFFFFFF;
-    uint64_t tid = x_ >> 56;
-    return "TID: " + std::to_string(tid) + " LC: " + std::to_string(loop);
-  }
+  // std::string toString() {
+  //   // uint64_t x = (thread_id << 56) | loop_count;
+  //   uint64_t loop = x_ & 0x00FFFFFFFFFFFFFF;
+  //   uint64_t tid = x_ >> 56;
+  //   return "TID: " + std::to_string(tid) + " LC: " + std::to_string(loop);
+  // }
  private:
   const Value_o x_;
 };
@@ -79,19 +79,18 @@ tervel_obj = new tervel::Tervel(FLAGS_num_threads+1); \
 DS_ATTACH_THREAD \
 container = new container_t(FLAGS_capacity); \
 \
-std::default_random_engine generator; \
-std::uniform_int_distribution<Value_o> largeValue_o(0, UINT_MAX); \
+Value_o x = 1; \
 for (int i = 0; i < FLAGS_prefill; i++) { \
-  Value_o x = largeValue_o(generator) & (~0x3); \
   WrapperType *temp = new WrapperType(x); \
   container->enqueue(temp); \
-}
+  if (x == 0) x = 1; \
+} \
 
 #define DS_NAME "WF Ring Buffer"
 
 #define DS_CONFIG_STR \
    "\n" _DS_CONFIG_INDENT "prefill : " + std::to_string(FLAGS_prefill) +"" + \
-   "\n" _DS_CONFIG_INDENT "capacity : " + std::to_string(FLAGS_capacity) +""
+   "\n" _DS_CONFIG_INDENT "capacity : " + std::to_string(FLAGS_capacity) +"" + tervel_obj->get_config_str() + ""
 
 #define DS_STATE_STR " "
 
@@ -103,7 +102,8 @@ for (int i = 0; i < FLAGS_prefill; i++) { \
 #define OP_CODE \
   MACRO_OP_MAKER(0, { \
     /* Value_o value = random(); */ \
-    Value_o value = (thread_id << 56) | ecount; \
+    Value_o value = ecount++;\
+    if (ecount == 0) ecount++; \
     WrapperType *temp = new WrapperType(value); \
     opRes = container->enqueue(temp); \
   } \

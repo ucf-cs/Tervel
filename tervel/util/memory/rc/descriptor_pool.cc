@@ -24,7 +24,7 @@ THE SOFTWARE.
 */
 #include <tervel/util/memory/rc/descriptor_pool.h>
 #include <tervel/util/memory/rc/descriptor_util.h>
-
+#include <tervel/util/tervel_metrics.h>
 namespace tervel {
 namespace util {
 namespace memory {
@@ -95,6 +95,10 @@ void DescriptorPool::offload() {
     assert(verify_pool_count(extras, extra_count));
 
     this->manager_->add_safe_elements(pool_id_, extras, tail);
+
+    #if tervel_track_rc_offload == tervel_track_enable
+      TERVEL_METRIC(rc_offload);
+    #endif
   }
 }
 

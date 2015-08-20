@@ -76,7 +76,7 @@ for (int i = 0; i < FLAGS_prefill; i++) { \
 #define DS_CONFIG_STR \
     "\n" _DS_CONFIG_INDENT "Prefill : " + std::to_string(FLAGS_prefill) \
   + "\n" _DS_CONFIG_INDENT "Capacity : " + std::to_string(FLAGS_capacity) \
-  + "\n" _DS_CONFIG_INDENT "ExpansionFactor : " + std::to_string(FLAGS_expansion_factor) + ""
+  + "\n" _DS_CONFIG_INDENT "ExpansionFactor : " + std::to_string(FLAGS_expansion_factor) + "" + tervel_obj->get_config_str() + ""
 
 #define DS_STATE_STR \
    "\n" _DS_CONFIG_INDENT "size : " + std::to_string(container->size()) + ""

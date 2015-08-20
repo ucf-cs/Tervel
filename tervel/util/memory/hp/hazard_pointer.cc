@@ -24,7 +24,7 @@ THE SOFTWARE.
 */
 #include <tervel/util/memory/hp/hazard_pointer.h>
 #include <tervel/util/memory/hp/hp_element.h>
-
+#include <tervel/util/tervel_metrics.h>
 namespace tervel {
 namespace util {
 namespace memory {
@@ -61,6 +61,9 @@ bool HazardPointer::watch(SlotID slot, Element *descr,
 
   if (address->load() != expected) {
     hazard_pointer->clear_watch(slot);
+    #if tervel_track_hp_watch_fail == tervel_track_enable
+      TERVEL_METRIC(hp_watch_fail);
+    #endif
     return false;
   } else {
     bool success = descr->on_watch(address, expected);

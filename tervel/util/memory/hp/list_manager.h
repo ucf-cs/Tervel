@@ -58,7 +58,7 @@ class Element;
 class ListManager {
  public:
   explicit ListManager(size_t number_pools)
-      : free_lists_(new ManagedPool[number_pools])
+      : free_lists_(new std::atomic<Element *>[number_pools]())
       , number_pools_(number_pools) {}
 
   ~ListManager();
@@ -66,11 +66,6 @@ class ListManager {
   ElementList * allocate_list() {
     return new ElementList(this);
   }
-
- private:
-  struct ManagedPool {
-    std::atomic<Element *> element_list_ {nullptr};
-  };
 
   /**
    * This function is called when a thread is detached. It moves elements from its
@@ -80,11 +75,11 @@ class ListManager {
    * @param element_list The list of elements that it owned.
    */
   void recieve_element_list(uint64_t tid, Element * element_list) {
-    assert(free_lists_[tid].element_list_.load() == nullptr && "The HP shared free_lists should be empty when this function is called");
-    free_lists_[tid].element_list_.store(element_list);
+    assert(free_lists_[tid].load() == nullptr && "The HP shared free_lists should be empty when this function is called");
+    free_lists_[tid].store(element_list);
   };
 
-  std::unique_ptr<ManagedPool[]> free_lists_;
+  std::unique_ptr<std::atomic<Element *>[]> free_lists_;
   size_t number_pools_;
 
   friend class ElementList;

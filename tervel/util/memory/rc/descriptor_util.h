@@ -34,6 +34,7 @@ THE SOFTWARE.
 #include <tervel/util/recursive_action.h>
 #include <tervel/util/progress_assurance.h>
 
+#include <tervel/util/tervel_metrics.h>
 namespace tervel {
 namespace util {
 
@@ -124,6 +125,9 @@ inline bool watch(tervel::util::Descriptor *descr, std::atomic<void *> *address,
   if (address->load() != value) {
     int64_t temp = elem->header().ref_count.fetch_add(-1);
     assert(temp > 0 && " Ref count of an object is negative, which implies some thread called unwatch multiple times on the same object");
+    #if tervel_track_rc_watch_fail  == tervel_track_enable
+      TERVEL_METRIC(rc_watch_fail)
+    #endif
     return false;
   } else {
     bool res = descr->on_watch(address, value);
@@ -224,6 +228,10 @@ inline void * remove_descriptor(void *expected, std::atomic<void *> *address) {
     tervel::util::Descriptor *descr = unmark_first(expected);
     if (watch(descr, address, expected)) {
       newValue = descr->complete(expected, address);
+
+      #if tervel_track_max_rc_remove_descr  == tervel_track_enable
+        TERVEL_METRIC(rc_remove_descr)
+      #endif
       unwatch(descr);
     } else {
       newValue = address->load();

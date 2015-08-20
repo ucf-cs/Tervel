@@ -27,7 +27,7 @@ THE SOFTWARE.
 
 #include <tervel/util/info.h>
 #include <tervel/util/util.h>
-
+#include <tervel/util/tervel_metrics.h>
 namespace tervel{
 namespace util {
 /**
@@ -40,6 +40,11 @@ class RecursiveAction {
   RecursiveAction() {
     if (RecursiveAction::recursive_depth(0) >
         tervel::tl_thread_info->get_num_threads() + 1) {
+      #if tervel_track_max_recur_depth_reached  == tervel_track_enable
+        TERVEL_METRIC(max_recur_depth_reached)
+      #endif
+
+
       RecursiveAction::recursive_return(true, true);
     }
     RecursiveAction::recursive_depth(1);

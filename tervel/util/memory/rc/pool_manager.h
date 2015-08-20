@@ -63,7 +63,7 @@ class PoolManager {
    */
   explicit PoolManager(size_t number_pools)
       : number_pools_(number_pools)
-      , pools_(new ManagedPool[number_pools]) {}
+      , pools_(new ManagedPool[number_pools]()) {}
 
   ~PoolManager();
 
@@ -122,10 +122,14 @@ class PoolManager {
 
  private:
   struct ManagedPool {
-    std::atomic<PoolElement *> safe_pool {nullptr};
-    std::atomic<PoolElement *> unsafe_pool {nullptr};
+    std::atomic<PoolElement *> safe_pool;
+    std::atomic<PoolElement *> unsafe_pool;
 
     char padding[CACHE_LINE_SIZE  - sizeof(safe_pool) - sizeof(unsafe_pool)];
+    void operator()() {
+      safe_pool.store(nullptr);
+      unsafe_pool.store(nullptr);
+    }
   };
   static_assert(sizeof(ManagedPool) == CACHE_LINE_SIZE,
       "Managed pools have to be cache aligned to prevent false sharing.");

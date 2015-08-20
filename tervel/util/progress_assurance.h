@@ -31,7 +31,7 @@ THE SOFTWARE.
 #include <tervel/util/info.h>
 #include <tervel/util/util.h>
 #include <tervel/util/memory/hp/hp_element.h>
-
+#include <tervel/util/tervel_metrics.h>
 
 namespace tervel {
 namespace util {
@@ -122,6 +122,12 @@ class ProgressAssurance {
     explicit Limit(int64_t limit = TERVEL_PROG_ASSUR_LIMIT)
       : counter_(limit) {}
 
+    ~Limit() {
+      #if tervel_track_limit_value == tervel_track_enable
+        TERVEL_METRIC_TRACK_VALUE(limit_value , counter_);
+      #endif
+    }
+
     bool notDelayed(int64_t val = 1) {
       return !isDelayed(val);
     }
@@ -175,6 +181,9 @@ class ProgressAssurance {
   static void make_announcement(OpRecord *op, const uint64_t tid =
         tervel::tl_thread_info->get_thread_id(), ProgressAssurance * const prog_assur =
         tervel::tl_thread_info->get_progress_assurance()) {
+    #if tervel_track_announcement_count  == tervel_track_enable
+        TERVEL_METRIC(announcement_count)
+    #endif
     prog_assur->p_make_announcement(op, tid);
   }
 
