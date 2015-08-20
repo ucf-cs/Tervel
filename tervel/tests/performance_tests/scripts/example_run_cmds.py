@@ -53,13 +53,18 @@ def stack(flags_, time_):
     algs = ["stack_tervel_wf.x", "stack_tervel_lf.x"]
     prefills = [16384]
     distributions = []
-    distributions.append(None) # Alternate Test.
-    distributions.append(lambda t: None if t < 2 else "%d 100 0 %d 0 100" %((t*.5), (t*.5)))
-    # distributions.append(lambda t: None if t < 4 else "%d 100 0 %d 0 100" %((t*.25), (t*.75)))
-    # distributions.append(lambda t: None if t < 4 else "%d 100 0 %d 0 100" %((t*.75), (t*.25)))
-    distributions.append(lambda t: None if t < 1 else "%d 50 50" %(t))
+    # distributions.append(None) # Alternate Test.
+    # distributions.append(lambda t: None if t < 2 else "%d 1 0 %d 0 1" %((t*.5), (t*.5)))
+    # distributions.append(lambda t: None if t < 2 else "%d 0 1 %d 1 0" %((t*.5), (t*.5)))
+    # distributions.append(lambda t: None if t < 2 else "%d 0 100 %d 100 0" %((t*.5), (t*.5)))
+    # distributions.append(lambda t: None if t < 2 else "%d 100 0 %d 0 100" %((t*.5), (t*.5)))
+    # # distributions.append(lambda t: None if t < 4 else "%d 1 0 %d 0 1" %((t*.25), (t*.75)))
+    # # distributions.append(lambda t: None if t < 4 else "%d 1 0 %d 0 1" %((t*.75), (t*.25)))
+    # distributions.append(lambda t: None if t < 1 else "%d 50 50" %(t))
     # distributions.append(lambda t: None if t < 1 else "%d 25 75" %(t))
     # distributions.append(lambda t: None if t < 1 else "%d 75 25" %(t))
+    distributions.append(lambda t: None if t < 2 else alt_spawn(t, 1, 1))
+    distributions.append(lambda t: None if t < 2 else alt_spawn(t, 100, 100))
 
     for p in prefills:
         for dist in distributions:
@@ -80,18 +85,26 @@ def stack(flags_, time_):
             test_commands.append(None)
 
 
+def alt_spawn(threads, rate1, rate2):
+    s = ""
+    for t in range(0, threads, 2):
+        s += "1 0 %d 1 %d 0 " %(rate1, rate1)
+    return s
+
 def ringbuffer(flags_, time_):
     # algs = ["buffer_tervel_wf.x", "buffer_linux_nb.x", "buffer_tbb_fg.x", "buffer_tsigas_nb.x", "buffer_lock_cg.x", "buffer_tervel_mcas_lf.x"] # "buffer_naive_cg.x",
     algs = ["buffer_tervel_wf.x", "buffer_tervel_mcas_lf.x"]
     prefills = [16384]#, 0, 32768]
     capacities = [32768]
     distributions = []
-    distributions.append(None) # Alternate Test.
+    # distributions.append(None) # Alternate Test.
 
-    distributions.append(lambda t: None if t < 2 else "%d 100 0 %d 0 100" %((t*.5), (t*.5)))
+    # distributions.append(lambda t: None if t < 2 else "%d 100 0 %d 0 100" %((t*.5), (t*.5)))
     # distributions.append(lambda t: None if t < 4 else "%d 100 0 %d 0 100" %((t*.25), (t*.75)))
     # distributions.append(lambda t: None if t < 4 else "%d 100 0 %d 0 100" %((t*.75), (t*.25)))
-    distributions.append(lambda t: None if t < 1 else "%d 50 50" %(t))
+    # distributions.append(lambda t: None if t < 1 else "%d 50 50" %(t))
+    distributions.append(lambda t: None if t < 2 else alt_spawn(t, 1, 1))
+    distributions.append(lambda t: None if t < 2 else alt_spawn(t, 100, 100))
     # distributions.append(lambda t: None if t < 1 else "%d 25 75" %(t))
     # distributions.append(lambda t: None if t < 1 else "%d 75 25" %(t))
 
@@ -132,7 +145,8 @@ def hashmap(flags_, time_):
                         for a in algs:
                             add_run(a, time_, flags + flags_, str(thread) + " " + dist)
 
-algorithms = [ringbuffer, hashmap, stack]
+# algorithms = [ringbuffer, hashmap, stack]
+algorithms = [stack]
 gen_tests(algorithms)
 
 def humanize_time(secs):
@@ -154,16 +168,20 @@ print "cp example_run_cmds.py  $0 $dir/"
 print "exePath=$dir/%s" %(pathFolder)
 
 
+print "Enter Description:",
+description = raw_input()
+
   #
 i = 0
 for c in test_commands:
-    if c is None:   
+    if c is None:
         print "tar -zvcf $tStamp.ss.tar.gz $dir/"
     else:
         print "temp=$dir/$(date +\"%s\").log"
         print "echo \"CMD : %s 2>&1 >> $dir/test_%d.log\" | tee $dir/test_%d.log" %(c[0], i,i)
 
         print "echo \"SYSTEM : %s 2>&1 >> $dir/test_%d.log\" >> $dir/test_%d.log" %(system, i,i)
+        print "echo \"description : %s 2>&1 >> $dir/test_%d.log\" >> $dir/test_%d.log" %(description, i,i)
         print "timeout %d %s 2>&1 >> $dir/test_%d.log" %(c[1], c[0], i)
         print "if [ $? -ne 0 ]; then"
         print "  echo \"\t killed\""
