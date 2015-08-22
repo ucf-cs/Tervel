@@ -15,6 +15,14 @@ doi: 10.1109/TPDS.2015.2417887 <br />
 <br />
 <br />
 
+<i>A Wait-Free Hash Map</i>
+, Pierre Laborde, Steven Feldman, and Damian Dechev, Parallel and Distributed Systems, International Journal of Parallel Programming
+doi: 10.1007/s10766-015-0376-3 <br />
+<a href='http://dx.doi.org/10.1007/s10766-015-0376-3' >
+<u>Publisher's Page</u></a>
+<br />
+<br />
+
 <h2>Conference Publications</h2><br />
 <i>A Scalable Multi-Producer Multi-Consumer Wait-Free Ring Buffer </i>
 , Andrew Barrington, Steven Feldman, Damian Dechev, Proceedings of the 2015 ACM Symposium on Applied Computing <br />
