@@ -31,6 +31,8 @@ THE SOFTWARE.
 #include <tervel/util/memory/rc/descriptor_pool.h>
 #include <tervel/util/memory/rc/pool_element.h>
 
+#include <tervel/util/memory/hp/hazard_pointer.h>
+
 #include <tervel/util/recursive_action.h>
 #include <tervel/util/progress_assurance.h>
 
@@ -220,6 +222,8 @@ inline bool is_descriptor_first(void *descr) {
 * @return the current value of the address
 */
 inline void * remove_descriptor(void *expected, std::atomic<void *> *address) {
+  assert(util::memory::hp::HazardPointer::hasWatch(util::memory::hp::HazardPointer::SlotID::SHORTUSE) == false && "Thread did not release all HP watches and may-reuse a SHORTUSE watch");
+
   tervel::util::RecursiveAction recurse;
   void *newValue;
   if (tervel::util::RecursiveAction::recursive_return()) {
@@ -227,6 +231,7 @@ inline void * remove_descriptor(void *expected, std::atomic<void *> *address) {
   } else {
     tervel::util::Descriptor *descr = unmark_first(expected);
     if (watch(descr, address, expected)) {
+      assert(is_watched(descr) && "On watch returned true, but the object is not watched. Error could exist on either [on_]watch or [on_]is_watched functions");
       newValue = descr->complete(expected, address);
 
       #if tervel_track_max_rc_remove_descr  == tervel_track_enable
