@@ -12,9 +12,9 @@ if False:
   threads = [1, 64] #,4,8,16,32,64]
   exeTime = [4]
 else:
-  repeat_test=10
+  repeat_test=20
   threads = [2,4,8,16,32,64]
-  exeTime = [10]
+  exeTime = [5]
 
 
 path = "../executables"
@@ -44,8 +44,8 @@ def add_run(exe, time, flags, dist):
                 time_count += time + main_sleep_time
                 exe_cmd = "likwid-pin -q -c 0,8,1,9,2,10,3,11,4,12,5,13,6,14,7,15,16,24,17,25,18,26,19,27,20,28,21,29,22,30,23,31,32,40,35,38,46,39,47,48,56,49,57,50,58,51,59,52,60,53,61,54,62,55,63 "
                 exe_cmd += "./$exePath/%s/%s %s %s" %(p,exe, flags, dist)
-                exe_cmd += " -papi_events="
-                exe_cmd += papi_events
+                # exe_cmd += " -papi_events=%s" %papi_events
+
                 test_commands.append([exe_cmd, time + 20])
         break
 
@@ -53,24 +53,19 @@ def stack(flags_, time_):
     algs = ["stack_tervel_wf.x", "stack_tervel_lf.x"]
     prefills = [16384]
     distributions = []
-    # distributions.append(None) # Alternate Test.
-    # distributions.append(lambda t: None if t < 2 else "%d 1 0 %d 0 1" %((t*.5), (t*.5)))
-    # distributions.append(lambda t: None if t < 2 else "%d 0 1 %d 1 0" %((t*.5), (t*.5)))
-    # distributions.append(lambda t: None if t < 2 else "%d 0 100 %d 100 0" %((t*.5), (t*.5)))
-    # distributions.append(lambda t: None if t < 2 else "%d 100 0 %d 0 100" %((t*.5), (t*.5)))
-    # # distributions.append(lambda t: None if t < 4 else "%d 1 0 %d 0 1" %((t*.25), (t*.75)))
-    # # distributions.append(lambda t: None if t < 4 else "%d 1 0 %d 0 1" %((t*.75), (t*.25)))
+    distributions.append(None) # Alternate Test.
     distributions.append(lambda t: None if t < 2 else "%d 1 0 %d 0 1" %((t*.5), (t*.5)))
     distributions.append(lambda t: None if t < 2 else "%d 0 1 %d 1 0" %((t*.5), (t*.5)))
     distributions.append(lambda t: None if t < 2 else "%d 0 100 %d 100 0" %((t*.5), (t*.5)))
-    #distributions.append(lambda t: None if t < 2 else "%d 1 0 %d 0 1" %((t*.5), (t*.5)))
-    # distributions.append(lambda t: None if t < 4 else "%d 1 0 %d 0 1" %((t*.25), (t*.75)))
-    # distributions.append(lambda t: None if t < 4 else "%d 1 0 %d 0 1" %((t*.75), (t*.25)))
-    # distributions.append(lambda t: None if t < 1 else "%d 50 50" %(t))
-    # distributions.append(lambda t: None if t < 1 else "%d 25 75" %(t))
-    # distributions.append(lambda t: None if t < 1 else "%d 75 25" %(t))
+    distributions.append(lambda t: None if t < 2 else "%d 100 0 %d 0 100" %((t*.5), (t*.5)))
+    distributions.append(lambda t: None if t < 1 else "%d 50 50" %(t))
     distributions.append(lambda t: None if t < 2 else alt_spawn(t, 1, 1))
     distributions.append(lambda t: None if t < 2 else alt_spawn(t, 100, 100))
+
+    # distributions.append(lambda t: None if t < 4 else "%d 1 0 %d 0 1" %((t*.25), (t*.75)))
+    # distributions.append(lambda t: None if t < 4 else "%d 1 0 %d 0 1" %((t*.75), (t*.25)))
+    # distributions.append(lambda t: None if t < 1 else "%d 25 75" %(t))
+    # distributions.append(lambda t: None if t < 1 else "%d 75 25" %(t))
 
     for p in prefills:
         for dist in distributions:
@@ -151,7 +146,8 @@ def hashmap(flags_, time_):
                         for a in algs:
                             add_run(a, time_, flags + flags_, str(thread) + " " + dist)
 
-algorithms = [ringbuffer, hashmap, stack]
+# algorithms = [ringbuffer, hashmap, stack]
+algorithms = [stack]
 gen_tests(algorithms)
 
 def humanize_time(secs):
@@ -172,8 +168,6 @@ print "cp -r %s $dir/" %(path)
 print "cp example_run_cmds.py  $0 $dir/"
 print "exePath=$dir/%s" %(pathFolder)
 
-
-print "Enter Description:",
 description = raw_input()
 
   #
