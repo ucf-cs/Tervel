@@ -123,6 +123,7 @@ class PopOp: public tervel::util::OpRecord {
 
     // std::cout << "Wait-Free Mode" << std::endl;
     // Wait-Free code
+    assert(util::memory::hp::HazardPointer::hasWatch(util::memory::hp::HazardPointer::SlotID::SHORTUSE) == false && "Thread did not release all HP watches");
     PopOp<T> * op = new PopOp<T>(vec);
     util::ProgressAssurance::make_announcement(reinterpret_cast<
           tervel::util::OpRecord *>(op));
@@ -221,13 +222,13 @@ class PopOp: public tervel::util::OpRecord {
     util::memory::rc::free_descriptor(helper, true);
   };
 
-  bool is_watched() {
+  bool on_is_watched() {
     PopOpHelper<T> * temp = helper_.load();
 
     if (temp == nullptr) {
       assert(false);  // THis state should not be reached
       return false;
-    } else if (this->is_failed()) {
+    } else if (temp == is_empty_const) {
       return false;
     }
     return tervel::util::memory::rc::is_watched(temp);
