@@ -181,14 +181,14 @@ class PushOp: public tervel::util::OpRecord {
     util::memory::rc::free_descriptor(helper, true);
   };
 
-  bool is_watched() {
+  bool on_is_watched() {
     PushOpHelper<T> * temp = helper_.load();
 
     if (temp == nullptr) {
       assert(false);  // THis state should not be reached
       return false;
     }
-    return temp->is_watched();
+    return util::memory::rc::is_watched(temp);
   }
 
  private:
@@ -441,6 +441,7 @@ class PushOpHelper: public tervel::util::Descriptor {
           t_SlotID::SHORTUSE, op_, address, value);
 
     if (success) {
+      util::memory::hp::HazardPointer::unwatch(t_SlotID::SHORTUSE);
       complete(value, address);
     }
     return false;
