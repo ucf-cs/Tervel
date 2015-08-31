@@ -59,9 +59,9 @@ typedef struct event_values_t{
 
   std::string yaml_string() {
     std::string str = "";
-    str += "\n      mean : " + std::to_string(mean);
-    str += "\n      variance : " + std::to_string(variance);
-    str += "\n      card : " + std::to_string(card);
+    str += "\n          mean : " + std::to_string(mean);
+    str += "\n          variance : " + std::to_string(variance);
+    str += "\n          card : " + std::to_string(card);
     return str;
   }
 }event_values_t;
@@ -184,7 +184,7 @@ public:
   };
 
 
-  std::string generateYaml();
+  std::string generateYaml(int tid = -1);
 
   EventTracker()
   : events_(new uint64_t[static_cast<size_t>(event_code_t::END)]())
