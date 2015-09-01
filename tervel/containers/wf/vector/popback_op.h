@@ -80,7 +80,7 @@ class PopOp: public tervel::util::OpRecord {
     T current = spot->load();
 
     tervel::util::ProgressAssurance::Limit progAssur;
-    while (!progAssur.isDelayed()) {
+    while (progAssur.notDelayed()) {
       if (current ==  Vector<T>::c_not_value_) {
 
         // else placed_pos > 0

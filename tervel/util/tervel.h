@@ -97,7 +97,7 @@ class Tervel {
     util::EventTracker track;
 
     std::string s = "";
-    for (; i < num_threads_; i++) {
+    for (; i < active_threads_.load(); i++) {
       s += thread_contexts_[i]->get_event_tracker()->generateYaml(i);
       track.add(thread_contexts_[i]->get_event_tracker());
     }
