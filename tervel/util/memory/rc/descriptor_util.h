@@ -203,6 +203,9 @@ inline tervel::util::Descriptor * unmark_first(void *descr) {
  * @return whether or not it holds a bitmark
  */
 inline bool is_descriptor_first(void *descr) {
+  #if tervel_track_rc_is_descr  == tervel_track_enable
+    TERVEL_METRIC(rc_is_descr)
+  #endif
   return (0x1L == (reinterpret_cast<uintptr_t>(descr) & 0x1L));
 }
 
@@ -234,7 +237,7 @@ inline void * remove_descriptor(void *expected, std::atomic<void *> *address) {
       assert(is_watched(descr) && "On watch returned true, but the object is not watched. Error could exist on either [on_]watch or [on_]is_watched functions");
       newValue = descr->complete(expected, address);
 
-      #if tervel_track_max_rc_remove_descr  == tervel_track_enable
+      #if tervel_track_rc_remove_descr  == tervel_track_enable
         TERVEL_METRIC(rc_remove_descr)
       #endif
       unwatch(descr);

@@ -124,6 +124,7 @@ class ProgressAssurance {
 
     ~Limit() {
       #if tervel_track_limit_value == tervel_track_enable
+        //if (counter_ < 0) counter_ = 0;
         TERVEL_METRIC_TRACK_VALUE(limit_value , counter_);
       #endif
     }
@@ -134,6 +135,11 @@ class ProgressAssurance {
     bool isDelayed(int64_t val = 1) {
       int64_t temp = counter_;
       counter_ -= val;
+
+      #if tervel_track_is_delayed_count  == tervel_track_enable
+        if (temp == 0)
+          TERVEL_METRIC(is_delayed_count)
+      #endif
       return (temp == 0);
     }
 

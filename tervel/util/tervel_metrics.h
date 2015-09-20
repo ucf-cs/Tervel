@@ -33,9 +33,9 @@ namespace util{
 
 // Struct used to track average values of a variable.
 typedef struct event_values_t{
-  int64_t mean;
-  int64_t variance;
-  int64_t card;
+  float mean;
+  float variance;
+  float card;
 
   void operator()() {
     mean = 0;
@@ -45,7 +45,7 @@ typedef struct event_values_t{
 
   void update(int64_t value) {
     mean =  ((mean * card) + value) / (card + 1.0);
-    int64_t diff = value - mean;
+    float diff = value - mean;
     variance = ((variance * (card * card)) + (diff * diff));
     card += 1.0;
     variance = variance / (card * card);
@@ -59,9 +59,9 @@ typedef struct event_values_t{
 
   std::string yaml_string() {
     std::string str = "";
-    str += "\n      mean : " + std::to_string(mean);
-    str += "\n      variance : " + std::to_string(variance);
-    str += "\n      card : " + std::to_string(card);
+    str += "\n          mean : " + std::to_string(mean);
+    str += "\n          variance : " + std::to_string(variance);
+    str += "\n          card : " + std::to_string(card);
     return str;
   }
 }event_values_t;
@@ -109,8 +109,11 @@ public:
   #define tervel_track_rc_watch_fail tervel_track_enable
   #define tervel_track_hp_watch_fail tervel_track_enable
   #define tervel_track_rc_remove_descr tervel_track_enable
+  #define tervel_track_rc_is_descr tervel_track_enable
   #define tervel_track_rc_offload tervel_track_enable
   #define tervel_track_helped_announcement tervel_track_enable
+  #define tervel_track_is_delayed_count tervel_track_enable
+
 
   enum class event_code_t : size_t {
     #if tervel_track_announcement_count == tervel_track_enable
@@ -131,8 +134,14 @@ public:
     #if tervel_track_rc_remove_descr == tervel_track_enable
     rc_remove_descr,
     #endif
+    #if tervel_track_rc_is_descr == tervel_track_enable
+    rc_is_descr,
+    #endif
     #if tervel_track_rc_offload == tervel_track_enable
     rc_offload,
+    #endif
+    #if tervel_track_is_delayed_count == tervel_track_enable
+    is_delayed_count,
     #endif
     END
   };
@@ -156,8 +165,14 @@ public:
     #if tervel_track_rc_remove_descr == tervel_track_enable
     "rc_remove_descr",
     #endif
+    #if tervel_track_rc_is_descr == tervel_track_enable
+    "rc_is_descr",
+    #endif
     #if tervel_track_rc_offload == tervel_track_enable
     "rc_offload",
+    #endif
+    #if tervel_track_is_delayed_count == tervel_track_enable
+    "is_delayed_count",
     #endif
     ""
   };
@@ -177,7 +192,7 @@ public:
   };
 
 
-  std::string generateYaml();
+  std::string generateYaml(int tid = -1);
 
   EventTracker()
   : events_(new uint64_t[static_cast<size_t>(event_code_t::END)]())

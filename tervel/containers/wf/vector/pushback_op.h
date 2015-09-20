@@ -69,7 +69,7 @@ class PushOp: public tervel::util::OpRecord {
     T current = spot->load();
 
     tervel::util::ProgressAssurance::Limit progAssur;
-    while (progAssur.isDelayed()) {
+    while (progAssur.notDelayed()) {
       if (current ==  Vector<T>::c_not_value_) {
         if (placed_pos == 0) {
           if (spot->compare_exchange_strong(current, val)) {
@@ -105,6 +105,7 @@ class PushOp: public tervel::util::OpRecord {
         }
       } else if (vec->internal_array.is_descriptor(current, spot)) {
           assert((current & 2) == 0);
+          current = spot->load();
           continue;
       } else {  // its a valid value
         placed_pos++;
@@ -247,7 +248,7 @@ class PushDescr: public tervel::util::Descriptor {
 
 
     tervel::util::ProgressAssurance::Limit progAssur;
-    while (in_progress() && progAssur.isDelayed()) {
+    while (in_progress() && progAssur.notDelayed()) {
       if (current_prev == Vector<T>::c_not_value_) {
         fail();
         break;

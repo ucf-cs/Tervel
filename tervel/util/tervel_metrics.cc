@@ -26,21 +26,23 @@ void EventTracker::add(EventTracker *other){
   }
 }
 
-std::string EventTracker::generateYaml(){
+std::string EventTracker::generateYaml(int tid){
 
-  std::string yaml_trace = "  TERVELMETRICS:\n";
+  std::string yaml_trace = "";
 
+  if (tid != -1) {
+      yaml_trace += "      - TID : " + std::to_string(tid) + "\n";
+  }
   for (size_t i = 0; i< static_cast<size_t>(event_code_t::END); i++){
-    yaml_trace += "    ";
+    yaml_trace += "        ";
     yaml_trace += event_code_strings[i];
     yaml_trace += " : ";
     yaml_trace += std::to_string(events_[i]);
     yaml_trace += "\n";
   }
 
-  yaml_trace += "\n";
   for (size_t i = 0; i< static_cast<size_t>(event_values_code_t::END); i++){
-    yaml_trace += "    ";
+    yaml_trace += "        ";
     yaml_trace += event_values_strings[i];
     yaml_trace += " : ";
     yaml_trace += event_values_[i].yaml_string();

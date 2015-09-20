@@ -54,16 +54,19 @@ class ArrayArray : public VectorArray<T> {
     if (capacity < 2) {
       capacity = 2;
     }
+    for (int i = 0; i < k_max_array_segments_; i++) {
+      array_of_arrays_[i].store(nullptr);
+    }
     offset_pow_ = tervel::util::round_to_next_power_of_two(capacity);
     offset_ = std::pow(2, offset_pow_);
 
-    array_of_arrays[0].store(allocate_array_segment(offset_));
+    array_of_arrays_[0].store(allocate_array_segment(offset_));
     current_capacity_.store(offset_);
   }
 
   ~ArrayArray() {
     for (size_t i = 0; i < k_max_array_segments_; i++) {
-      delete [] array_of_arrays[i];
+      delete [] array_of_arrays_[i];
     }
   }
 
@@ -74,13 +77,13 @@ class ArrayArray : public VectorArray<T> {
    * @return     the current array segment at the specified position
    */
   ArraySegment add_segment(const size_t pos) {
-    ArraySegment cur_seg = array_of_arrays[pos].load();
+    ArraySegment cur_seg = array_of_arrays_[pos].load();
 
     if (cur_seg == nullptr) {
       size_t seg_cap = 0x1 << (offset_pow_ + pos);
       ArraySegment new_seg = allocate_array_segment(seg_cap);
 
-      if (array_of_arrays[pos].compare_exchange_strong(cur_seg, new_seg)) {
+      if (array_of_arrays_[pos].compare_exchange_strong(cur_seg, new_seg)) {
         current_capacity_.fetch_add(seg_cap);
         return new_seg;
       } else {
@@ -100,7 +103,7 @@ class ArrayArray : public VectorArray<T> {
    */
   ArrayElement * get_spot(const size_t raw_pos, const bool no_add = false) {
     if (raw_pos < offset_) {
-      ArraySegment seg = array_of_arrays[0].load();
+      ArraySegment seg = array_of_arrays_[0].load();
       return &(seg[raw_pos]);
     } else {
       static const int nobits = (sizeof(unsigned int) << 3) - 1;
@@ -110,7 +113,7 @@ class ArrayArray : public VectorArray<T> {
       size_t elem_pos = pos ^ (1 << num);
       size_t seg_num = num - offset_pow_;
 
-      ArraySegment seg = array_of_arrays[seg_num].load();
+      ArraySegment seg = array_of_arrays_[seg_num].load();
       if (seg == nullptr && !no_add) {
         seg = add_segment(seg_num);
         assert(seg != NULL);
@@ -137,10 +140,10 @@ class ArrayArray : public VectorArray<T> {
   }
 
  private:
-  const T default_value_ {nullptr};
+  const T default_value_;
   static const size_t k_max_array_segments_ {64};
 
-  std::atomic<ArraySegment> array_of_arrays[k_max_array_segments_];
+  std::atomic<ArraySegment> array_of_arrays_[k_max_array_segments_];
   size_t offset_, offset_pow_;
 
   std::atomic<size_t> current_capacity_;
