@@ -123,11 +123,6 @@ class Tester:
         return res2
 
     def run_cmd(self, cmd, exe_time):
-        # TODO test number, pre-amble, execution, logging
-        # testfile copy
-        # time estimation
-        # snapshot of logs
-
         logfile = os.path.join(self.config['log_directory'], "output", "test_%d.log" %(self.test_fin_count))
 
 
@@ -149,7 +144,6 @@ class Tester:
     def run_test(self, executable, flag, dist, thread, exe_time, time_count):
 
         if dist is None:
-            # TODO iterate through operations test
             # TODO implement this code
             # dist = ?
             return
@@ -184,6 +178,8 @@ class Tester:
                             executable = "./%s " %(os.path.join(t['path'], executable))
                             for thread in self.config['thread_levels']:
                                 self.run_test(executable, flag, dist, thread, exe_time, time_count)
+                            print ("generating archive...")
+                            subprocess.check_call(["tar", "-zcf", os.path.join(self.config['log_directory'], "log.tar.gz"), os.path.join(self.config['log_directory'], "output")])
 
 
 configFile =  raw_input("Enter config file name: ")
