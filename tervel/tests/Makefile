@@ -33,7 +33,7 @@ tervelINC = "-I../../"
 tervelSources= "$(shell find ../util/ -name '*.cc')"
 tervelFlags="-DUSE_TERVEL_METRICS -DTERVEL_PROG_ASSUR_DELAY=$(delay) -DTERVEL_PROG_ASSUR_LIMIT=$(limit)"
 
-CXX      = g++-4.8
+CXX      = g++
 CXXFLAGS = $(RELEASE) $(DEBUG) $(cFlags) -DCONTAINER_FILE=$(input) -DINTEL -std=c++11  -march=native -m64 -pthread -fno-strict-aliasing  
 
 
@@ -61,7 +61,7 @@ all:  blank
 include Makefile.ringbuffer
 
 .PHONY: allTervel
-allTervel: tervelBufferWF tervelBufferMcasLF tervelMCASWF tervelVectorWF tervelStackWF tervelStackLF tervelHashMapWF tervelHashMapNoDelWF tervelQueueWF tervelQueueLF
+allTervel: tervelBufferWF tervelBufferMcasLF tervelMCASWF tervelVectorWF tervelStackWF tervelStackLF tervelHashMapWF tervelHashMapNoDelWF
 
 .PHONY: allBuffer
 allBuffer: tervelBufferWF tervelBufferMcasLF tsigasBuffer tbbBuffer lockBuffer linuxBuffer naiveBuffer
