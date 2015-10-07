@@ -105,7 +105,7 @@ bool Vector<T>::pop_back_only(T &value) {
     size(1);
     return false;
   } else {
-    std::atomic<T> *spot = internal_array.get_spot(poped_pos);
+    std::atomic<T> *spot = internal_array.get_spot(poped_pos - 1);
     value = spot->load(std::memory_order_relaxed);
     spot->store(Vector<T>::c_not_value_, std::memory_order_relaxed);
 
