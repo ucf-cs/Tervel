@@ -91,7 +91,7 @@ size_t Vector<T>::push_back_only(T value) {
     util::ProgressAssurance::make_announcement(
           reinterpret_cast<tervel::util::OpRecord *>(op));
 
-    size_t result = op->result(value);
+    size_t result = op->result();
     op->safe_delete();
 
     return result;
@@ -146,7 +146,7 @@ bool Vector<T>::pop_back_only(T &value) {
       }
     }
 
-    PopWRAOp<T> *op = new PopWRAOp<T>(this, value);
+    PopWRAOp<T> *op = new PopWRAOp<T>(this);
     util::ProgressAssurance::make_announcement(
           reinterpret_cast<tervel::util::OpRecord *>(op));
 
