@@ -94,7 +94,7 @@ public:
   };
 
   uint64_t result() {
-    PushOpHelper<T> *temp = helper_.load();
+    PushWRAOpHelper<T> *temp = helper_.load();
     assert(temp != nullptr);
     return temp->idx();
   }

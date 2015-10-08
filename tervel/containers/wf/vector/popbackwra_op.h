@@ -149,12 +149,17 @@ class PopWRAOpHelper: public tervel::util::Descriptor {
   ~PopWRAOpHelper() {
   }
 
+  using util::Descriptor::get_logical_value;
+  void * get_logical_value() {
+    return reinterpret_cast<void *>(Vector<T>::c_not_value_);
+  }
+
   using util::Descriptor::complete;
   void * complete(void *value, std::atomic<void *> *address) {
 
     assert(value == util::memory::rc::mark_first(this));
 
-    bool is_valid = associate();
+    /* bool is_valid = */ associate();
 
     void * new_val = reinterpret_cast<void *>(Vector<T>::c_not_value_);
 //    if (is_valid) {
@@ -185,7 +190,7 @@ class PopWRAOpHelper: public tervel::util::Descriptor {
     if (op_->helper_.load() == nullptr) {
       bool res = associate();
       if(res)
-	val = val_;
+        val = val_;
       return res;
     } else if (op_->helper_.load() == this) {
       val = val_;
@@ -210,6 +215,7 @@ class PopWRAOpHelper: public tervel::util::Descriptor {
 
 
  private:
+  friend class PopWRAOp<T>;
   T val_;
   PopWRAOp<T> *op_ {nullptr};
 };

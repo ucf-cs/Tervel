@@ -137,10 +137,15 @@ class ProgressAssurance {
       counter_ -= val;
 
       #if tervel_track_is_delayed_count  == tervel_track_enable
-        if (temp == 0)
+        if (temp == 0) {
           TERVEL_METRIC(is_delayed_count)
+        }
       #endif
-      return (temp == 0);
+        if (temp == 0) {
+          return true;
+        } else {
+          return false;
+        }
     }
 
     void reset(int64_t limit = TERVEL_PROG_ASSUR_LIMIT) {
