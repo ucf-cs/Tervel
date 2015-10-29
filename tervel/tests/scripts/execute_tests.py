@@ -6,7 +6,12 @@ import os.path
 import socket
 import itertools
 import subprocess
+
 timeout = 20
+
+if sys.version_info < (2, 7):
+    raise "must use python 2.7 or greater"
+
 
 def humanize_time(secs):
     mins, secs = divmod(secs, 60)
@@ -98,7 +103,7 @@ class Tester:
                 self.cflags += " -verbose"
             if self.config['disable_thread_join'] is True:
                 self.cflags += " -disable_thread_join"
-        return self.cflags
+        return self.cflags.strip()
 
     def exe_prefix(self):
         return self.config['exe_prefix']
@@ -133,7 +138,7 @@ class Tester:
 
         with open(logfile, 'w') as fout:
             fout.write(self.log_preamble(cmd, self.test_fin_count))
-            cmd = "timeout %d %s 2>&1 >> %s" %(exe_time + timeout, cmd, logfile)
+            cmd = "timeout %d %s" %(exe_time + timeout, cmd)
             subprocess.check_call(cmd.split(" "), stdout=fout, stderr=fout)
 
         # Update Progress Counts
@@ -154,6 +159,7 @@ class Tester:
         cmd += " %s" %(executable)
         cmd += " %s" %(flag)
         cmd += " -num_threads=%d %s" %(thread, dist)
+        cmd = cmd.strip()
 
         reps = self.config['exe_repetition']
         for rep in range(0, reps, 1):
@@ -166,6 +172,7 @@ class Tester:
 
     def run_tests(self):
         self.run_tests_(time_count=True)
+        print("Starting Tests")
         self.run_tests_(time_count=False)
 
     def run_tests_(self, time_count):
@@ -175,19 +182,31 @@ class Tester:
                     flag += " -execution_time=%d %s" %(exe_time, self.const_flags())
                     for dist in t['dist']:
                         for executable in t['executables']:
-                            executable = "./%s " %(os.path.join(t['path'], executable))
+                            executable = "./%s" %(os.path.join(t['path'], executable))
                             for thread in self.config['thread_levels']:
                                 self.run_test(executable, flag, dist, thread, exe_time, time_count)
-                            print ("generating archive...")
-                            subprocess.check_call(["tar", "-zcf", os.path.join(self.config['log_directory'], "log.tar.gz"), os.path.join(self.config['log_directory'], "output")])
 
+                            if time_count == False:
+                                print (dist)
+                                print (t)
+                                print (self.config['thread_levels'])
+                                print ("generating archive...")
+                                subprocess.check_call(["tar", "-zcf", os.path.join(self.config['log_directory'], "log.tar.gz"), os.path.join(self.config['log_directory'], "output")])
 
-configFile =  raw_input("Enter config file name: ")
+if len(sys.argv) < 1:
+    configFile = raw_input("Enter config file name: ")
+else:
+    configFile = sys.argv[1]
+
 if configFile is "":
-    configFile = "example.config"
+    print ("error: config file needed")
+    exit(-1)
 
+
+print ("Loading: %s" %(configFile))
 with open(configFile, 'r') as fin:
     test_config = eval(fin.read())
+
 test = Tester(test_config)
 print ("Log Directory: %s\n" %(test.config['log_directory']))
 test.run_tests()
