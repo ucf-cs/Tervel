@@ -25,8 +25,8 @@
 DEBUG = -DDEBUG=1 -g -g3  -Wall
 # RELEASE = -O3 -DNDEBUG
 
-delay ?= 10000
-limit ?= 10000
+delay ?= 5
+limit ?= 5
 version ?= NA
 
 tervelINC = "-I../../"
@@ -51,7 +51,7 @@ EXECUTABLE ?=src/main.cc
 OBJECTS = $(SOURCES:.cc=.o)
 
 output ?= $(input).x
-OUTPUT = executables/version_$(version)_$(delay)_$(limit)/
+OUTPUT = executables/ver_$(version)_delay_$(delay)_lim_$(limit)/
 
 .PHONY: all
 all:  blank
