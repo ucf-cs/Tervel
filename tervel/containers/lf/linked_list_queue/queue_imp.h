@@ -18,7 +18,6 @@ template<typename T>
 void
 Queue<T>::Node::on_unwatch(std::atomic<void *> *address, void *expected) {
   // Do not change. //
-  assert(false);
   return;
 }
 
