@@ -14,12 +14,13 @@ Queue<T>::Node::on_watch(std::atomic<void *> *address, void *expected) {
 
 }
 
-template<typename T>
-void
-Queue<T>::Node::on_unwatch(std::atomic<void *> *address, void *expected) {
-  // Do not change. //
-  return;
-}
+// template<typename T>
+// void
+// Queue<T>::Node::on_unwatch(std::atomic<void *> *address, void *expected) {
+// // Do not change. //
+// Un comment if necessary
+//   return;
+// }
 
 template<typename T>
 bool
