@@ -39,7 +39,7 @@ blank:
 tervelQueueWF:
 	$(MAKE) -C ../ test input="tervel_api/wf_queue_api.h" output="queue_tervel_wf.x" cSources=$(tervelSources) cINC=$(tervelINC) cFlags=$(tervelFlags)
 tervelQueueLF:
-	$(MAKE) -C test ../ input="tervel_api/lf_queue_api.h" output="queue_tervel_lf.x" cSources=$(tervelSources) cINC=$(tervelINC) cFlags=$(tervelFlags)
+	$(MAKE) -C ../  test input="tervel_api/lf_queue_api.h" output="queue_tervel_lf.x" cSources=$(tervelSources) cINC=$(tervelINC) cFlags=$(tervelFlags)
 
 test-seq-lf:
 	echo "TODO: implement"
