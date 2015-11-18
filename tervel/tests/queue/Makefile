@@ -22,10 +22,38 @@
 #THE SOFTWARE.
 #
 
-tervelINC = "-I../../"
-tervelSources= "$(shell find ../util/ -name '*.cc')"
+DEBUG = -DDEBUG=1 -g -g3  -Wall
+# RELEASE = -O3 -DNDEBUG
+
+delay ?= 5
+limit ?= 5
+version ?= NA
+
+tervelINC = "-I../../../"
+tervelSources= "$(shell find ../../util/ -name '*.cc')"
 tervelFlags="-DUSE_TERVEL_METRICS -DTERVEL_PROG_ASSUR_DELAY=$(delay) -DTERVEL_PROG_ASSUR_LIMIT=$(limit)"
 
+CXX      = g++
+CXXFLAGS = $(RELEASE) $(DEBUG) $(cFlags) -DCONTAINER_FILE=$(input) -DINTEL -std=c++11  -march=native -m64 -pthread -fno-strict-aliasing  
+
+
+# $(info CXXFLAGS is $(CXXFLAGS))
+
+INC= $(cINC)
+LIB = $(cLIB) -ldl -lgflags -lpthread -lrt 
+
+# LIB += -lrt /usr/local/lib/libpapi.a
+# cFlags += -DUSE_PAPI
+
+SOURCES = $(cSources)
+
+EXECUTABLE ?=../src/main.cc
+OBJECTS = $(SOURCES:.cc=.o)
+
+output ?= $(input).x
+OUTPUT = executables/ver_$(version)_delay_$(delay)_lim_$(limit)/
+
+.PHONY: all
 .PHONY: all
 all:  blank tervelQueueWF tervelQueueLF
 
@@ -34,12 +62,13 @@ verify: blank
 
 .PHONY: blank
 blank:
-	$(MAKE) -C ../ test input="api/blank.h" output="blank.x"
+	$(MAKE) test input="api/blank.h" output="blank.x"
 
 tervelQueueWF:
-	$(MAKE) -C ../ test input="tervel_api/wf_queue_api.h" output="queue_tervel_wf.x" cSources=$(tervelSources) cINC=$(tervelINC) cFlags=$(tervelFlags)
+	$(MAKE) test input="tervel_api/wf_queue_api.h" output="queue_tervel_wf.x" cSources=$(tervelSources) cINC=$(tervelINC) cFlags=$(tervelFlags)
+
 tervelQueueLF:
-	$(MAKE) -C ../  test input="tervel_api/lf_queue_api.h" output="queue_tervel_lf.x" cSources=$(tervelSources) cINC=$(tervelINC) cFlags=$(tervelFlags)
+	$(MAKE) test input="tervel_api/lf_queue_api.h" output="queue_tervel_lf.x" cSources=$(tervelSources) cINC=$(tervelINC) cFlags=$(tervelFlags)
 
 test-seq-lf:
 	echo "TODO: implement"
@@ -52,3 +81,26 @@ test-concur-lf:
 
 test-concur-wf:
 	echo "TODO: implement"
+
+
+.PHONY: test
+test: $(SOURCES) $(EXECUTABLE)
+
+.PHONY: $(EXECUTABLE)
+$(EXECUTABLE): $(OBJECTS)
+	mkdir -p $(OUTPUT)
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(INC)  -o $(OUTPUT)$(output) $(EXECUTABLE) $^ $(LIB) $(TOBJS)
+
+%.o: %.cc
+	$(CXX) $(CPPFLAGS) $(CXXFLAGS) $(INC) -c -o $@ $<
+
+
+.PHONY: clean
+clean:
+	$(RM) $(OUTPUT)*.x
+
+.PHONY: clean-all
+clean-all:
+	$(RM) $(OUTPUT)*.x
+	$(RM) $(shell find ../util/ -name '*.o')
+	
