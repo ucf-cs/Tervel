@@ -71,8 +71,6 @@ class OpRecord : public memory::hp::Element {
    */
   using memory::hp::Element::on_watch;
   virtual bool on_watch(std::atomic<void *> *address, void *expected) {
-    (void)address;
-    (void)expected;
     return true;
   }
 

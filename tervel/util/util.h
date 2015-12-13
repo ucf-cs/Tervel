@@ -170,8 +170,6 @@ inline bool isValid(void * value) {
  * @param duration duration
  */
 inline void backoff(int duration = TERVEL_DEF_BACKOFF_TIME_NS) {
-  /* Neil: Inserting this here to get GCC to stop complaining about an unused parameter */
-  (void)duration;
   // std::this_thread::sleep_for(std::chrono::nanoseconds(duration));
   std::this_thread::yield();
 }

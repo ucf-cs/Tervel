@@ -129,9 +129,7 @@ PoolElement * DescriptorPool::get_from_pool(bool allocate_new) {
 #endif
 
     safe_pool_count_--;
-    // Neil: This is always true, because safe_pool_count_ is unsigned.
-    //       Check for overflow instead?
-    /*assert(safe_pool_count_ >=0 );*/
+    assert(safe_pool_count_ >=0 );
   } else if (allocate_new) {  // allocate a new element if needed
     assert(safe_pool_count_ == 0);
     res = new PoolElement();

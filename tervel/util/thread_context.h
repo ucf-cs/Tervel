@@ -69,34 +69,34 @@ class ThreadContext {
   /**
    * @returns a reference to the HazardPointer singleton
    */
-  util::memory::hp::HazardPointer * get_hazard_pointer();
+  util::memory::hp::HazardPointer * const get_hazard_pointer();
 
   /**
    * @returns a reference to the ProgressAssurance singleton
    */
-  util::ProgressAssurance * get_progress_assurance();
+  util::ProgressAssurance * const get_progress_assurance();
 
   /**
    * @returns a reference to the hp_element_list_
    */
-  util::memory::hp::ElementList * get_hp_element_list();
+  util::memory::hp::ElementList * const get_hp_element_list();
   /**
    * @returns a reference to the rc_descriptor_pool
    */
-  util::memory::rc::DescriptorPool * get_rc_descriptor_pool();
+  util::memory::rc::DescriptorPool * const get_rc_descriptor_pool();
 
-  util::EventTracker * get_event_tracker();
+  util::EventTracker * const get_event_tracker();
 
 
   /**
    * A unique ID among all active threads.
    * @return the threads id.
    */
-  uint64_t get_thread_id();
+  const uint64_t get_thread_id();
   /**
    * @return number of threads
    */
-  uint64_t get_num_threads();
+  const uint64_t get_num_threads();
 
  private:
 
