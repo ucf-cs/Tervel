@@ -74,7 +74,7 @@ class Vector {
     return internal_array.capacity();
   };
 
-  static constexpr T c_not_value_ {static_cast<T>(0x1L)};
+  static constexpr T c_not_value_ {reinterpret_cast<T>(0x1L)};
 
   int64_t size(int64_t val) {
     int64_t temp = current_size_.fetch_add(val);

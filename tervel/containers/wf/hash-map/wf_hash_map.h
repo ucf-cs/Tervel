@@ -412,7 +412,7 @@ class HashMap {
 };  // class wf hash map
 
 
-bool hp_check_empty() {
+static inline bool hp_check_empty() {
   return !tervel::util::memory::hp::HazardPointer::hasWatch(
       tervel::util::memory::hp::HazardPointer::SlotID::SHORTUSE);
 }

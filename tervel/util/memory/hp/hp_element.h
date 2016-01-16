@@ -87,6 +87,8 @@ class Element {
    * @return whether or not the element was succefully watched.
    */
   virtual bool on_watch(std::atomic<void *> *address, void *expected) {
+    (void)address;
+    (void)expected;
     return true;
   }
 
