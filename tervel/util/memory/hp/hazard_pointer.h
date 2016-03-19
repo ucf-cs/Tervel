@@ -82,6 +82,11 @@ class HazardPointer {
         void *expected, HazardPointer * const hazard_pointer =
         tervel::tl_thread_info->get_hazard_pointer());
 
+  static void watch(SlotID slot, Element* descr, HazardPointer * const hazard_pointer =
+        tervel::tl_thread_info->get_hazard_pointer()) {
+      hazard_pointer->watch(slot, reinterpret_cast<void*>(descr));
+  }
+
   /**
    * This method is used to achieve a hazard pointer watch on a memory address.
    *
