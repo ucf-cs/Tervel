@@ -5,7 +5,7 @@ kramdown:
   hard_wrap: false
   smart_quotes: ["apos", "apos", "quot", "quot"]
 paginate: 10
-highlighter: pygments
+highlighter: rouge
 
 myurl: http://ucf-cs.github.io/Tervel
 # myurl: http://127.0.0.1:4000/
