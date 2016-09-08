@@ -15,7 +15,7 @@ This had lead to the development of several wait-free algorithms.
 Carlos Valera-Leon received his BS degree in computer science from the University of Central Florida, in 2014. His interests include concurrent algorithms, synchronization techniques, and distributed systems.
 
 <h3> Damian Dechev</h3>
-Damian Dechev is an assistant professor in the EECS Department,University of Central Florida and the founder of the Computer SoftwareEngineering-Scalable and Secure Systems Lab, UCF. He specializes in the design of scalable multiprocessor algorithms and has applied them to real-time embedded space systems at NASA JPL and HPCdata-intensive applications at Sandia National Labs. His research has been supported by grants from the US National Science Foundation(NSF), Sandia National Laboratories, and the Department of Energy.
+Dr. Damian Dechev is an Associate Professor at the CS Department at the University of Central Florida and the founder of the Computer Software Engineering - Scalable and Secure Systems Lab at UCF. Damian completed his Ph.D. in 2009 from Texas A&M University under the supervision of Dr. Bjarne Stroustrup. Dr. Dechev specializes in the design and analysis of multiprocessor data structures and algorithms. Dr. Dechev's research in multiprocessor algorithm design has been supported by grants from the National Science Foundation and Sandia National Laboratories.
 
 <h3> Pierre LaBorde </h3>
 Pierre LaBorde received his Bachelor of Science (2011), and Master of Science (2013), in Computer Science from the University of Central Florida, and is currently pursuing his PhD in Computer Science at UCF. Hid work mainly on developing concurrent lock-free and wait-free data structures. His research interests include:
