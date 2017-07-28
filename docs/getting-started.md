@@ -8,7 +8,7 @@ layout: tervel_documentation
 
 Supported platforms:
 
-*   Ubuntu Linux 16.04
+* Ubuntu Linux 16.04
 
 ## Downloading Tervel
 
@@ -23,7 +23,6 @@ $ git clone {{ site.gitrepo }}
 ### Dependencies
 
 * g++4.8.0 or greater
-
 * [gflags](http://gflags.github.io/gflags/)
 
 {% highlight bash %}
