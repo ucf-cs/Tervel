@@ -8,8 +8,7 @@ layout: tervel_documentation
 
 Supported platforms:
 
-*   Ubuntu Linux, Mac OS X
-
+*   Ubuntu Linux 16.04
 
 ## Downloading Tervel
 
@@ -27,14 +26,16 @@ $ git clone {{ site.gitrepo }}
 
 * [gflags](http://gflags.github.io/gflags/)
 
+{% highlight bash %}
+$ sudo apt-get install libgflags-dev
+{% endhighlight %}
+
 ### Building
 
 {% highlight bash %}
 $ cd tervel/tests
-$ ./compile.sh
+$ make all
 {% endhighlight %}
-
-
 
 ## Running Tervel Tests
 
@@ -47,6 +48,6 @@ To make sure everything runs correctly, run some of the binaries located in:
 
 ## Next Steps
 
-Now you can added Tervel containers and algorithms into your own applications.
-See [user manual](tervel-user-manual.html) for more information.
+See the [User Manual](tervel-user-manual.html) for a more in-depth overview on how to perform Tervel tests.
+See the [Tutorial](beginner-tutorial.html) for a quick walk-through on how to use Tervel to create a wait free and lock free stack.
 Let us know if you have any questions!
