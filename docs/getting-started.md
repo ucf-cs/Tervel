@@ -38,12 +38,13 @@ $ make all
 
 ## Running Tervel Tests
 
-Browse to the test directory, pick a test, and have fun!
+You may run the binaries located in `/tests/Executables/` under a subdirectory with a syntax similar to `version_NA_10000_10000`. Inside, you may run one of the binaries with a command such as
 
-## Sanity Check: Running the tests
+{% highlight bash %}
+$ ./BIN.x
+{% endhighlight %}
 
-To make sure everything runs correctly, run some of the binaries located in:
-`tests/*/Executables/`
+Where `BIN` is the name of the executable you wish to run. The test will execute with default parameters, which includes 0 threads. Therefore, it is normal to see output results containing little to no information. For an explanation on how to change these parameters, see the [User Manual](tervel-user-manual.html).
 
 ## Next Steps
 

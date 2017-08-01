@@ -1,3 +1,7 @@
+---
+layout: tervel_documentation
+---
+
 # User Manual
 
 ## Makefile
@@ -68,26 +72,26 @@ Where
 
 * `T` is the number of threads, and
 
-* `OP` is the ratio of occurrences for each of the data structure's operations. For example, a queue/buffer has two ops: enqueue and dequeue. Therefore, an example command might be `./buffer_tervel_wf.x 2 1 1` which is an execution of the wait-free Tervel buffer with two threads, each performing 50% enqueues and dequeues. `./buffer_tervel_wf.x 2 2 1` would have a 2:1 ratio of enqueues to dequeues, which means approx 66% enqueue and 33% dequeue. A full list of each op required for each executable is listed below.
+* `OP` is the ratio of occurrences for each of the data structure's operations.
 
 ^
 Leaving any of these command line parameters blank will default their values to zero.
 
-Running a binary with these command line parameters alone will not produce any output. There is one extra flag that is required, and that is `-num_threads` with a trailing integer that must be greater than or equal to the number of threads stated previously. Therefore, a full sample command for a test would be:
+There is only one flag that is required, and that is `-num_threads` with a trailing integer that must be greater than or equal to the sum of all `T`s. Therefore, a full sample command for a test would be:
 
 {% highlight bash %}
-$ ./stack_tervel_lf.x -num_threads 2 2 1 1
+$ ./stack_tervel_lf.x -num_threads 3  2 1 0  1 0 1
 {% endhighlight %}
 
-More flags are listed below.
+Which will run the lock-free Tervel stack test with three threads, the first group consisting of two threads performing 100% inserts and the other group just one thread performing 100% removes. More flags are listed below.
 
-If you wish to specify a specific op ratio per thread, a command such as this example will work:
+As another example:
 
 {% highlight bash %}
-$ ./stack_tervel_lf.x -num_threads 2  1 1 0  1 0 1
+$ ./buffer_tervel_wf.x -num_threads 2 2 2 1
 {% endhighlight %}
 
-Which will run the test with two threads, one performing 100% inserts and the other with 100% removes.
+Will run the wait-free Tervel buffer test with two threads, each performing approximately 66% enqueue and 33% dequeue.
 
 ### Data Structure Operations
 
@@ -124,61 +128,45 @@ Vector
 
 A list of universal flags that will work for all binaries. `-num_threads` is required in order to produce any useful output.
 
-`--help` 				type: `bool`, 	default: `false`
-	Show all flags.
-
-`-iter_dist` 			type: `bool`, 	default: `false`
-	If true, then it iterates between commands.
-`-seq_test` 			type: `bool`, 	default: `false`
-	If true, then a sequential test is performed.
-`-verbose` 				type: `bool`, 	default: `false`
-	If true, then verbose output is used.
-`-disable_thread_join` 	type: `bool`, 	default: `false`
-	Enables skipping of the thread join command, useful if deadlock may occur.
-`-execution_time` 		type: `uint64`, 	default: `5`
-	The amount of time to run the tests in seconds.
-`-main_sleep` 			type: `uint64`, 	default: `0`
-	Causes the main thread to sleep before signaling go. Useful for allowing monitors to be attached.
-`-num_threads` 			type: `uint64`, 	default: `0`
-	The number of executing threads.
+| `--help` | type: `bool` | default: `false` | Show all flags.
+| `-iter_dist` | type: `bool` | default: `false` | If true, then it iterates between commands.
+| `-seq_test` | type: `bool` | default: `false` | If true, then a sequential test is performed.
+| `-verbose` | type: `bool` | default: `false` | If true, then verbose output is used.
+| `-disable_thread_join` | type: `bool` | default: `false` | Enables skipping of the thread join command, useful if deadlock may occur.
+| `-execution_time` | type: `uint64` | default: `5` | The amount of time to run the tests in seconds.
+| `-main_sleep` | type: `uint64` | default: `0` | Causes the main thread to sleep before signaling go. Useful for allowing monitors to be attached.
+| `-num_threads` | type: `uint64` | default: `0` | The number of executing threads.
 
 ### Data Structure Flags
 
 A list of flags for every data structure.
 
-Buffer
-	`-capacity` 		type: `int32`, 	default: `32768`
-		The capacity of the buffer.
-	`-prefill` 			type: int32, 	default: 0
-		The number of elements to place in the buffer on init.
+| Buffer
+|-|
+| `-capacity` | type: `int32` | default: `32768` | The capacity of the buffer.
+| `-prefill` | type: int32 | default: 0 | The number of elements to place in the buffer on init.
 
-HashMap
-	`-capacity` 		type: `int32``, 	default: `32768`
-		The capacity of the HashMap - should be power of two.
-	`-expansion_factor` type: `int32`, 	default: `5`
-		The size by whitch the HashMap expands on collision. 2^expansion_factor = positions.
-	`-prefill` 			type: `int32`, 	default: `0`
-		The number of elements to place in the HashMap on init.
+| HashMap
+|-|
+| `-capacity` | type: `int32` | default: `32768` | The capacity of the HashMap - should be power of two.
+| `-expansion_factor` | type: `int32` | default: `5` | The size by which the HashMap expands on collision. 2^expansion_factor = positions.
+| `-prefill` | type: `int32` | default: `0` | The number of elements to place in the HashMap on init.
 
-MCAS
-	`-array_length` 	type: `int32`, 	default: `32`
-		The size of the region to test on.
-	`-mcas_size` 		type: `int32`, 	default: `2`
-		The number of words in an mcas operation.
-	`-multipleObjects` 	type: `bool`, 	default: `false`
-		Whether or not multiple disjoint mcas operations can occur.
-	`-overlapping` 		type: `bool`, 	default: `false`
-		Whether or not the mcas operations can be overlapping.
+| MCAS
+|-|
+| `-array_length`| type: `int32` | default: `32` | The size of the region to test on.
+| `-mcas_size` | type: `int32` | default: `2` | The number of words in an mcas operation.
+| `-multipleObjects` | type: `bool` | default: `false` | Whether or not multiple disjoint mcas operations can occur.
+| `-overlapping` | type: `bool` | default: `false` | Whether or not the mcas operations can be overlapping.
 
-Stack
-	`-prefill` 			type: `int32`, 	default: `0`
-		The number of elements to place in the stack on init.
+| Stack
+|-|
+| `-prefill` | type: `int32` | default: `0` | The number of elements to place in the stack on init.
 
-Vector
-	`-capacity` 		type: `int32`, 	default: `0`
-		The capacity of the vector.
-	`-prefill` 			type: `int32`, 	default: `0`
-		The number of elements to place in the vector on init.
+| Vector
+|-|
+| `-capacity` | type: `int32` | default: `0` | The capacity of the vector.
+| `-prefill` | type: `int32` | default: `0` | The number of elements to place in the vector on init.
 
 ## Python Scripts
 
@@ -194,41 +182,43 @@ Which will prompt you for a config file. Feel free to enter the provided `exampl
 
 The syntax of the config file should be fairly straightforward. At the top of the config file are a bunch of universal options that will carry for all tests the Python script will run. This includes:
 
-| description |	A string of text that will be echoed in the output .log files.
-|---
-| log_git | A bool that determines if .log files should be created for the current status of the git branch.
-|---
-| log_directory | A file path for where all of the output should be generated.
-|---
-| main_sleep_time | An int for how many seconds the main thread will sleep before signaling go. Useful for allowing monitors to be attached.
-|---
-| exe_repetition | TODO
-|---
-| exe_time | TODO
-|---
-| system_name | A string to describe the machine the test is running on.
-|---
-| papi_flag | TODO
-|---
-| misc_flags | Any flags that don't fit into the other categories should go here.
-|---
-| thread_levels | An array listing the different numbers of threads the tests should be ran with. Powers of two reccomended.
-|---
-| disable_thread_join |	A bool that enables skipping of the thread join command, useful if deadlock may occur.
-|---
-| verbose | A bool that if true, verbose output is used.
-|---
-| exe_prefix | TODO
+* `description`: A string of text that will be echoed in the output .log files.
+* `log_git`: A bool that determines if .log files should be created for the current status of the git branch.
+* `log_directory`: A file path for where all of the output should be generated.
+* `main_sleep_time`: An int for how many seconds the main thread will sleep before signaling go. Useful for allowing monitors to be attached.
+* `exe_repetition`: An int for how many times you wish for the exact same execution configuration to run
+* `exe_time`: An array of ints where each entry will coincide with a new test given that many seconds to execute
+* `system_name`: A string to describe the machine the test is running on.
+* `papi_flag`: Power API flags
+* `misc_flags`: Any flags that don't fit into the other categories should go here.
+* `thread_levels`: An array listing the different numbers of threads the tests should be ran with. Powers of two reccomended.
+* `disable_thread_join`: A bool that enables skipping of the thread join command, useful if deadlock may occur.
+* `verbose`: A bool that if true, verbose output is used.
+* `exe_prefix`: Flags that must go before the executable. Usually used for likwid.
 
 Then there are the flags for the tests. The 'tests' object itself is an array, so you may add more simply with ',[test body goes here]'
 Within each test, there are more options:
 
-| name | A string of text to describe this specific test.
-|---
-| executables | An array of the executables that will run. These are the same executables compiled by the Makefile.
-|---
-| path | The file path to the executables. By default '../executables/version_NA_10000_10000'. That final directory may be different for you based on what options were used when running the Makefile.
-|---
-| flags | The flags that are specific to this executable's data structure. See previous section.
-|---
-| dist | TODO
+* `name`: A string of text to describe this specific test.
+
+* `executables`: An array of the executables that will run. These are the same executables compiled by the Makefile.
+
+* `path`: The file path to the executables. By default '../executables/version_NA_10000_10000'. That final directory may be different for you based on what options were used when running the Makefile.
+
+* `flags`: The flags that are specific to this executable's data structure. See previous section.
+
+* `dist`: An array where each entry is a new configuration for op ratios. It follows the following syntax:
+
+^
+> `lambda t: None if t < T else "%d OP1 ... OPN %d OP1 ... OPN %d ..." %((t*D1), ...(t*DG))`
+
+Where:
+* `T` is the number of threads
+* There are `G` occurrences of `%d` for `G` number of thread groups
+* `OP` is each op's ratio
+* `D` is a decimal value for the percentage of threads to be doing this particular thread group
+
+For example, if the following dist entry occurred in a buffer test entry:
+> `lambda t: None if t < 4 else "%d 1 0 %d 0 1" %((t*.25), (t*.75))`
+
+Will be an execution where four or more threads have 25% of threads doing all enqueues and the other 75% doing all dequeues. The reason `T` is four is because a thread group configuration with less than four threads cannot be evenly split into a 25:75 thread group configuration. We can be assured that any amount of threads more than four will work if all entries in thread_levels are powers of two.
