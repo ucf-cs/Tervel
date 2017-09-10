@@ -276,6 +276,7 @@ bool Vector<T>::cas(size_t idx, T &expected, const T val) {
 
 template<typename T>
 bool Vector<T>::insertAt(size_t idx, T value){
+  // Perform bounds checking
   if(!internal_array.is_valid(value)){
     assert(false);
     return false;
@@ -283,36 +284,43 @@ bool Vector<T>::insertAt(size_t idx, T value){
 
   tervel::util::ProgressAssurance::check_for_announcement();
 
+  // Create operation record
   InsertAt<T>* op = new InsertAt<T>(this, idx, value);
+  // Set thread local value equal to control word.
   tl_control_word = op->state();
   op->execute();
-  bool res = !op->isFailed();
-  if (res) {
+  bool success = !op->isFailed();
+  if (success) {
+    // remove remaining discriptors
     op->cleanup();
-    size(1);
+    // adjust vector size
+    size(-1);
   }
-
   op->safe_delete();
-  return res;
+  return success;
 };
 
 template<typename T>
 bool Vector<T>::eraseAt(size_t idx, T &value){
   tervel::util::ProgressAssurance::check_for_announcement();
 
+  // Create operation record
   EraseAt<T>* op = new EraseAt<T>(this, idx);
+  // Set thread local value equal to control word.
   tl_control_word = op->state();
   op->execute();
 
-  bool res = !op->isFailed();
-  if (res) {
+  bool success = !op->isFailed();
+  if (success) {
+    // remove remaining discriptors
     op->cleanup();
+    // get value removed by this operation
     op->removedValue(value);
+    // adjust vector size
     size(-1);
   }
-
   op->safe_delete();
-  return res;
+  return success;
 };
 
 }  // namespace vector
