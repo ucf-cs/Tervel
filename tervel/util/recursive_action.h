@@ -43,15 +43,16 @@ class RecursiveAction {
       #if tervel_track_max_recur_depth_reached  == tervel_track_enable
         TERVEL_METRIC(max_recur_depth_reached)
       #endif
-
-
-      RecursiveAction::recursive_return(true, true);
+      RecursiveAction::set_recursive_return();
     }
     RecursiveAction::recursive_depth(1);
   }
 
   ~RecursiveAction() {
-    RecursiveAction::recursive_depth(-1);
+    size_t d = RecursiveAction::recursive_depth(-1);
+    if (d == 0) {
+      RecursiveAction::clear_recursive_return();
+    }
   }
 
   /**

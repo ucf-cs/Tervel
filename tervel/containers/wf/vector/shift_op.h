@@ -76,10 +76,14 @@ class ShiftOp: public tervel::util::OpRecord {
     return false;
   };
 
+  // help_complete - is the tervel known function for assisting.
   void help_complete() {
     tl_control_word = state();
     execute(true);
   };
+
+  // execute - is the main entry point into the operation and calls the various
+  // functions necessary to complete it.
   void execute(bool announced = false) {
     if (idx_ >= vec_->capacity() || idx_ >= vec_->size()) {
       fail();
@@ -101,19 +105,36 @@ class ShiftOp: public tervel::util::OpRecord {
   }
 
 
+  // place_first_idx - handles the placing of the first helper, once placed, the
+  // operation is guaranteed to be successful.
   void place_first_idx(bool announced);
+  // place_rest - handles placing the rest of the helpers.
   void place_rest(bool announced);
 
-
+  // id_done - indicates if the operation has determined success of failure.
   bool is_done() { return is_done_.load(); };
+  // set_done - called once success or failure has been determined.
   void set_done() { is_done_.store(true); };
 
+  // state - returns a pointer to is_done_, a non-null indicates the operation
+  // is done. This is used by progress assurance scheme.
   void * state() { return &is_done_; };
+  // fail - sets the operation to failed.  
   void fail();
+  // isFailed - returns whether or not the operation failed.
   bool isFailed();
 
+  // getValue - returns the value of the helper based on the state of the
+  // operation.
   virtual T getValue(ShiftHelper<T> * helper) = 0;
  private:
+  // wait_free_return encapsulates logic to determine if the function should
+  // return in case the operation has been completed or if it should giveup
+  // helping another threads opeatation.
+  bool wait_free_giveup(
+    bool announced, tervel::util::ProgressAssurance::Limit &p);
+
+
   size_t idx_;
   Vector<T> *vec_;
   std::atomic<ShiftHelper<T> *> helpers_{nullptr};
@@ -143,7 +164,8 @@ template<typename T>
 void ShiftOp<T>::fail() {
   ShiftHelper<T> *cur = helpers_.load();
   if (cur == nullptr) {
-    if (helpers_.compare_exchange_strong(cur, k_fail_const) || cur == k_fail_const) {
+    if (helpers_.compare_exchange_strong(cur, k_fail_const) ||
+      cur == k_fail_const) {
       set_done();
     }
   }
@@ -169,13 +191,7 @@ void ShiftOp<T>::place_first_idx(bool announced) {
 
   ShiftHelper<T> * cur_helper = helpers_.load();
   while (cur_helper == nullptr) {
-    if (!announced && progAssur.isDelayed()) {
-      if (this == tl_control_word) {
-        util::ProgressAssurance::make_announcement(
-          reinterpret_cast<tervel::util::OpRecord *>(this));
-      } else {
-        tervel::util::RecursiveAction::set_recursive_return();
-      }
+    if (this->wait_free_giveup(announced, progAssur)) {
       break;
     }
 
@@ -186,12 +202,14 @@ void ShiftOp<T>::place_first_idx(bool announced) {
       break;
     } else if (vec_->internal_array.is_descriptor(expected, spot)) {
       // The is_descriptor function changes the value at the address
-      if (tervel::util::RecursiveAction::recursive_return() && this != tl_control_word) {
+      if (tervel::util::RecursiveAction::recursive_return() &&
+          this != tl_control_word) {
         return;
       }
     } else {  // its a valid value
       if (spot->compare_exchange_strong(expected, helper_marked)) {
-        if (!helpers_.compare_exchange_strong(cur_helper, helper) && cur_helper != helper) {
+        if (!helpers_.compare_exchange_strong(cur_helper, helper) &&
+            cur_helper != helper) {
           spot->compare_exchange_strong(helper_marked, expected);
           util::memory::rc::free_descriptor(helper, false);
         } else {
@@ -232,13 +250,8 @@ void ShiftOp<T>::place_rest(bool announced) {
 
     tervel::util::ProgressAssurance::Limit progAssur;
     while (last_helper->notAssociated()) {
-      if (!announced && progAssur.isDelayed()) {
-        if (this == tl_control_word) {
-          util::ProgressAssurance::make_announcement(
-            reinterpret_cast<tervel::util::OpRecord *>(this));
-        } else {
-          tervel::util::RecursiveAction::set_recursive_return();
-        }
+      if (this->wait_free_giveup(announced, progAssur)) {
+        // Free the helper that we did not need.
         util::memory::rc::safefree_descriptor(helper);
         return;
       }
@@ -274,6 +287,29 @@ void ShiftOp<T>::place_rest(bool announced) {
   if (helper != nullptr) {
     util::memory::rc::unsafefree_descriptor(helper);
   }
+}
+
+template<typename T>
+bool ShiftOp<T>::wait_free_giveup(
+  bool announced,
+  const tervel::util::ProgressAssurance::Limit &p) {
+  // Check if we are delayed, ignore delay if this is helping as a result
+  // of progress assurance.
+  if (!announced && p.isDelayed()) {
+    if (this == tl_control_word) {
+      // Delayed while attempting complete the thread's own shift opeation.
+      // So we need to make an announcement
+      util::ProgressAssurance::make_announcement(
+        reinterpret_cast<tervel::util::OpRecord *>(this));
+    } else {
+      // Delayed while helping another thread's shift operation.
+      // So we need to return to our own operation.
+      // Note: The clear_recurive_return needs to be called.
+      tervel::util::RecursiveAction::set_recursive_return();
+    }
+    return true;
+  }
+  return false;
 }
 
 }  // namespace vector
