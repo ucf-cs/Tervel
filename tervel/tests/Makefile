@@ -64,7 +64,13 @@ include Makefile.ringbuffer
 allTervel: tervelBufferWF tervelBufferMcasLF tervelMCASWF tervelVectorWF tervelStackWF tervelStackLF tervelHashMapWF tervelHashMapNoDelWF
 
 .PHONY: allBuffer
-allBuffer: tervelBufferWF tervelBufferMcasLF tsigasBuffer tbbBuffer lockBuffer linuxBuffer naiveBuffer
+allBuffer: tervelBufferWF tervelBufferMcasLF lockBuffer linuxBuffer naiveBuffer
+
+.PHONY: tbb
+tbb: tbbBuffer
+
+# .PHONY: cds
+# cds: tsigasBuffer
 
 .PHONY: blank
 blank:

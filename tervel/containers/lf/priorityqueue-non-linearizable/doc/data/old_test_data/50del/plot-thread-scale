@@ -1,0 +1,37 @@
+#!/usr/bin/gnuplot
+
+set terminal postscript eps enhanced color lw 2 "Helvetica" 18
+set datafile separator ","
+
+set style line 1 lt 1 lc rgb "red" lw 2
+set style line 2 lt 2 lc rgb "blue" lw 2
+set style line 3 lt 3 lc rgb "forest-green" lw 2
+set style line 4 lt 4 lc rgb "magenta" lw 2
+set style line 5 lt 5 lc rgb "dark-orange" lw 2
+set style line 6 lt 6 lc rgb "royalblue" lw 2
+set style line 7 lt 7 lc rgb "black" lw 2
+set style line 8 lt 8 lc rgb "dark-red" lw 2
+set style line 9 lt 9 lc rgb "orange-red" lw 2
+set style line 10 lt 10 lc rgb "gray" lw 2
+
+#set lmargin at screen 0.11
+#set rmargin at screen 0.99
+#set tmargin at screen 0.98
+#set bmargin at screen 0.12
+
+set autoscale
+set key inside right top reverse Left
+#set xrange[0:64]
+#set xtics 0,8,64
+#set xtics("1" 0, "2" 1, "4" 2, "8" 3, "16" 4, "32" 5, "64" 6, "128" 7)
+set grid xtics ytics
+#set logscale y
+set xlabel "Number of Threads"
+set ylabel "Throughput (OP/s)" offset (0,2.5)
+
+set output "| epstopdf --filter --outfile=thread_scale.pdf"
+plot "walltime_MDList_thread_scale" u 1:($1*100000/$2) w lines ls 1 title "MDList",\
+     "walltime_LindenPQ_thread_scale" u 1:($1*100000/$2) w lines ls 2 t "LindenPQ",\
+     "walltime_TBBPQ_thread_scale" u 1:($1*100000/$2) w lines ls 3 t "TBBPQ",\
+     "walltime_STDPQ_thread_scale" u 1:($1*100000/$2) w lines ls 4 t "STDPQ"
+

@@ -1,0 +1,25 @@
+\frametitle {Data Structure}
+    \begin{columns}
+        \begin{column}{6.1cm}
+            %\begin{algorithm}[H]
+                %\caption*{MRLock Classes}
+                \lstinputlisting{../code/mrlockinit_inslide.c}
+            %\end{algorithm}
+        \end{column}
+        \begin{column}{6cm}
+            \begin{itemize}
+                \item Declaration
+                    \begin{itemize}
+                        \item \textit{Sequence number} as sentinel
+                        \item \texttt{bits} as resource flags
+                        \item Atomic queue \texttt{head} and \texttt{tail}
+                    \end{itemize}
+                \item Initialization
+                    \begin{itemize}
+                        \item Allocate adjacent buffer cells
+                        \item \texttt{bits} are initialized to 1s
+                        \item \texttt{seq} are initialized to cell index
+                    \end{itemize}
+            \end{itemize}
+        \end{column}
+    \end{columns}

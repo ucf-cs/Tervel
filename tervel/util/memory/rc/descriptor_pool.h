@@ -32,6 +32,8 @@ THE SOFTWARE.
 #include <tervel/util/memory/rc/pool_element.h>
 #include <tervel/util/memory/rc/pool_manager.h>
 
+// TODO: not many of these methods have @ doxygen markings
+
 namespace tervel {
 namespace util {
 namespace memory {

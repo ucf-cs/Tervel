@@ -1,0 +1,37 @@
+#!/usr/bin/gnuplot
+
+set terminal postscript eps enhanced color lw 1 "Helvetica" 24 size 5in,3in
+set datafile separator ","
+set autoscale
+set pm3d at b
+set palette rgbformulae 23,28,3
+#set pm3d at s
+
+set style data lines
+set key horizontal right reverse Left at 1,0,5000000
+#unset key
+
+set tmargin at screen 0.87
+set bmargin at screen 0.3
+set lmargin at screen 0.3
+set rmargin at screen 0.8
+set colorbox user origin 0.05,0.50 size 0.03,0.28
+set xrange[1:256]
+set yrange[2:64]
+set logscale x
+#set logscale y
+#set logscale z
+
+set xtics("1" 1, "2" 2, "4" 4, "8" 8, "16" 16, "32" 32, "64" 64, "128" 128, "256" 256)
+
+set label "Threshold R" at 10,-20,0 rotate by -8
+set label "Number of Threads" at 900,0,0 rotate by 32
+set label "Throughput (op/s)" at 1,-45,2.5e+06 rotate by 90 
+
+set ytics 0,16 offset 0.5,-0.3 
+#set ztics 1000000,1000000 format ""
+set ztics 1000000,1000000
+set cbtics 1000000,1000000 format ""
+
+set output "| epstopdf --filter --outfile=amdsweepprg50insert.pdf"
+splot 'amdprgsweep/walltime_8DPQ_insertion_50_prg_all' using 1:2:($2*100000/$3) t "8DPQ"

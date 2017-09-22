@@ -64,6 +64,8 @@ class HazardPointer {
   // Static Functions
   // -------
 
+  // TODO: all of the @param comment descriptions are either wrong or out of date
+
   /**
    * This method is used to achieve a hazard pointer watch on the the based descr.
    * Internally it will call the descriptors on_watch function.

@@ -35,6 +35,9 @@ THE SOFTWARE.
 #include <tervel/util/memory/hp/hazard_pointer.h>
 #include <tervel/util/memory/rc/pool_manager.h>
 #include <tervel/util/tervel_metrics.h>
+
+// TODO: needs doxygen
+
 namespace tervel {
 
 /**

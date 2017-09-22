@@ -48,7 +48,6 @@ template<typename T>
 class Stack {
  public:
 
-
   Stack()
    : lst_(nullptr) {};
   ~Stack() {};
@@ -66,7 +65,7 @@ class Stack {
   DISALLOW_COPY_AND_ASSIGN(Stack);
  private:
   std::atomic<Node *> lst_ __attribute__((aligned(CACHE_LINE_SIZE)));
-};  // class Stack
+}; // class Stack
 
 
 }  // namespace WF

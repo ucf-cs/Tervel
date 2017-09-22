@@ -1,0 +1,154 @@
+\begin{thebibliography}{10}
+
+\bibitem{afek2010quasi}
+Y.~Afek, G.~Korland, and E.~Yanovsky.
+\newblock Quasi-linearizability: Relaxed consistency for improved concurrency.
+\newblock In {\em Principles of Distributed Systems}, pages 395--410. Springer,
+  2010.
+
+\bibitem{alistarh2014spraylist}
+D.~Alistarh, J.~Kopinsky, J.~Li, and N.~Shavit.
+\newblock The spraylist: A scalable relaxed priority queue.
+
+\bibitem{burns2010best}
+E.~Burns, S.~Lemons, W.~Ruml, and R.~Zhou.
+\newblock Best-first heuristic search for multicore machines.
+\newblock {\em Journal of Artificial Intelligence Research}, 39(1):689--743,
+  2010.
+
+\bibitem{cormen2001introduction}
+T.~H. Cormen, C.~E. Leiserson, R.~L. Rivest, C.~Stein, et~al.
+\newblock {\em Introduction to algorithms}, volume~2.
+\newblock MIT press Cambridge, 2001.
+
+\bibitem{ellen2012inherent}
+F.~Ellen, D.~Hendler, and N.~Shavit.
+\newblock On the inherent sequentiality of concurrent objects.
+\newblock {\em SIAM Journal on Computing}, 41(3):519--536, 2012.
+
+\bibitem{fraser2004practical}
+K.~Fraser.
+\newblock {\em Practical lock-freedom}.
+\newblock PhD thesis, PhD thesis, Cambridge University Computer Laboratory,
+  2003. Also available as Technical Report UCAM-CL-TR-579, 2004.
+
+\bibitem{fraser2007concurrent}
+K.~Fraser and T.~Harris.
+\newblock Concurrent programming without locks.
+\newblock {\em ACM Transactions on Computer Systems (TOCS)}, 25(2):5, 2007.
+
+\bibitem{fredkin1960trie}
+E.~Fredkin.
+\newblock Trie memory.
+\newblock {\em Communications of the ACM}, 3(9):490--499, 1960.
+
+\bibitem{harris2001pragmatic}
+T.~L. Harris.
+\newblock A pragmatic implementation of non-blocking linked-lists.
+\newblock In {\em Distributed Computing}, pages 300--314. Springer, 2001.
+
+\bibitem{henzinger2013quantitative}
+T.~A. Henzinger, C.~M. Kirsch, H.~Payer, A.~Sezgin, and A.~Sokolova.
+\newblock Quantitative relaxation of concurrent data structures.
+\newblock In {\em Proceedings of the 40th annual ACM SIGPLAN-SIGACT symposium
+  on Principles of programming languages}, pages 317--328. ACM, 2013.
+
+\bibitem{herlihy1993methodology}
+M.~Herlihy.
+\newblock A methodology for implementing highly concurrent data objects.
+\newblock {\em ACM Transactions on Programming Languages and Systems (TOPLAS)},
+  15(5):745--770, 1993.
+
+\bibitem{herlihy2006provably}
+M.~Herlihy, Y.~Lev, V.~Luchangco, and N.~Shavit.
+\newblock A provably correct scalable concurrent skip list.
+\newblock In {\em Principles of Distributed Systems}, page 440. Springer, 2006.
+
+\bibitem{herlihy2012art}
+M.~Herlihy and N.~Shavit.
+\newblock {\em The Art of Multiprocessor Programming, Revised Reprint}.
+\newblock Elsevier, 2012.
+
+\bibitem{herlihy1990linearizability}
+M.~P. Herlihy and J.~M. Wing.
+\newblock Linearizability: A correctness condition for concurrent objects.
+\newblock {\em ACM Transactions on Programming Languages and Systems (TOPLAS)},
+  12(3):463--492, 1990.
+
+\bibitem{hunt1996efficient}
+G.~C. Hunt, M.~M. Michael, S.~Parthasarathy, and M.~L. Scott.
+\newblock An efficient algorithm for concurrent priority queue heaps.
+\newblock {\em Information Processing Letters}, 60(3):151--157, 1996.
+
+\bibitem{linden2013skiplist}
+J.~Lind{\'e}n and B.~Jonsson.
+\newblock A skiplist-based concurrent priority queue with minimal memory
+  contention.
+\newblock In {\em Principles of Distributed Systems}, pages 206--220. Springer,
+  2013.
+
+\bibitem{michael1995correction}
+M.~M. Michael and M.~L. Scott.
+\newblock Correction of a memory management method for lock-free data
+  structures.
+\newblock Technical Report No. TR-599, Rochester University, Department of
+  Computer Science, 1995.
+
+\bibitem{oshman2013skiptrie}
+R.~Oshman and N.~Shavit.
+\newblock The skiptrie: low-depth concurrent search without rebalancing.
+\newblock In {\em Proceedings of the 2013 ACM symposium on Principles of
+  distributed computing}, pages 23--32. ACM, 2013.
+
+\bibitem{prokopec2012concurrent}
+A.~Prokopec, N.~G. Bronson, P.~Bagwell, and M.~Odersky.
+\newblock Concurrent tries with efficient non-blocking snapshots.
+\newblock In {\em Acm Sigplan Notices}, volume~47, pages 151--160. ACM, 2012.
+
+\bibitem{pugh1990concurrent}
+W.~Pugh.
+\newblock Concurrent maintenance of skip lists.
+\newblock Technical Report CS-TR-2222 UMIACS, Univerisity of Maryland, 1990.
+
+\bibitem{pugh1990skip}
+W.~Pugh.
+\newblock Skip lists: a probabilistic alternative to balanced trees.
+\newblock {\em Communications of the ACM}, 33(6):668--676, 1990.
+
+\bibitem{reinders2007intel}
+J.~Reinders.
+\newblock {\em Intel threading building blocks: outfitting C++ for multi-core
+  processor parallelism}.
+\newblock " O'Reilly Media, Inc.", 2007.
+
+\bibitem{shavit2000skiplist}
+N.~Shavit and I.~Lotan.
+\newblock Skiplist-based concurrent priority queues.
+\newblock In {\em Parallel and Distributed Processing Symposium, 2000. IPDPS
+  2000. Proceedings. 14th International}, pages 263--268. IEEE, 2000.
+
+\bibitem{shavit1999scalable}
+N.~Shavit and A.~Zemach.
+\newblock Scalable concurrent priority queue algorithms.
+\newblock In {\em Proceedings of the eighteenth annual ACM symposium on
+  Principles of distributed computing}, pages 113--122. ACM, 1999.
+
+\bibitem{sundell2005fast}
+H.~Sundell and P.~Tsigas.
+\newblock Fast and lock-free concurrent priority queues for multi-thread
+  systems.
+\newblock {\em Journal of Parallel and Distributed Computing}, 65(5):609--627,
+  2005.
+
+\bibitem{willard1983log}
+D.~E. Willard.
+\newblock Log-logarithmic worst-case range queries are possible in space
+  $\theta$ (n).
+\newblock {\em Information Processing Letters}, 17(2):81--84, 1983.
+
+\bibitem{wimmer2013data}
+M.~Wimmer, D.~Cederman, F.~Versaci, J.~L. Tr{\"a}ff, and P.~Tsigas.
+\newblock Data structures for task-based priority scheduling.
+\newblock {\em arXiv preprint arXiv:1312.2501}, 2013.
+
+\end{thebibliography}

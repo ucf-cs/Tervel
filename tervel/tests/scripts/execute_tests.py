@@ -98,6 +98,7 @@ class Tester:
                 self.cflags += " -verbose"
             if self.config['disable_thread_join'] is True:
                 self.cflags += " -disable_thread_join"
+        self.cflags = self.cflags.replace(" None", "")
         return self.cflags
 
     def exe_prefix(self):
@@ -129,12 +130,12 @@ class Tester:
         s = "[%d/%d](%s - %s) %s" %(self.test_fin_count, self.num_tests, humanize_time(self.min_time), humanize_time(self.max_time), cmd)
         print("\r" + s + " " + logfile)
 
-
-
         with open(logfile, 'w') as fout:
             fout.write(self.log_preamble(cmd, self.test_fin_count))
+            fout.close()
             cmd = "timeout %d %s 2>&1 >> %s" %(exe_time + timeout, cmd, logfile)
-            subprocess.check_call(cmd.split(" "), stdout=fout, stderr=fout)
+            # subprocess.check_call(cmd.split(" "), stdout=fout, stderr=fout)
+            os.system(cmd)
 
         # Update Progress Counts
         self.test_fin_count += 1
@@ -153,7 +154,7 @@ class Tester:
         cmd = self.exe_prefix()
         cmd += " %s" %(executable)
         cmd += " %s" %(flag)
-        cmd += " -num_threads=%d %s" %(thread, dist)
+        cmd += " -num_threads=%d %s" %(thread, "" if (dist == None) else dist)
 
         reps = self.config['exe_repetition']
         for rep in range(0, reps, 1):
@@ -182,7 +183,10 @@ class Tester:
                             subprocess.check_call(["tar", "-zcf", os.path.join(self.config['log_directory'], "log.tar.gz"), os.path.join(self.config['log_directory'], "output")])
 
 
-configFile =  raw_input("Enter config file name: ")
+if len(sys.argv) < 2:
+    configFile =  raw_input("Enter config file name: ")
+else:
+    configFile = sys.argv[1]
 if configFile is "":
     configFile = "example.config"
 
@@ -191,5 +195,3 @@ with open(configFile, 'r') as fin:
 test = Tester(test_config)
 print ("Log Directory: %s\n" %(test.config['log_directory']))
 test.run_tests()
-
-

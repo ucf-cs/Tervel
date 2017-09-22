@@ -83,7 +83,7 @@ class ReadOp: public tervel::util::OpRecord {
   Vector<T> *vec_;
   size_t idx_;
   std::atomic<T> value_ {Vector<T>::c_not_value_};
-  static constexpr T c_fail_value_ {reinterpret_cast<T>(~0x1L)};
+  static const T c_fail_value_ {static_cast<T>(~0x1L)};
 };  // class ReadOp
 }  // namespace vector
 }  // namespace wf

@@ -103,8 +103,12 @@ for (int i = 0; i < FLAGS_prefill; i++) { \
         int idx = random(generator) % s;\
         Value old_value; \
         container->at(idx, old_value); \
-        Value new_value = new_value*2; \
-        opRes = container->cas(idx, old_value, new_value); \
+        if (old_value & uint64_t(0x3) != uint64_t(0)) { \
+          opRes = false; \
+        } else { \
+          Value new_value = new_value*2; \
+          opRes = container->cas(idx, old_value, new_value); \
+        } \
       }\
     } \
   ) \

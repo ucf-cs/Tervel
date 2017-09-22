@@ -1,0 +1,11 @@
+\beamer@endinputifotherversion {3.10pt}
+\beamer@sectionintoc {1}{Background}{2}{0}{1}
+\beamer@subsectionintoc {1}{1}{Motivation}{2}{0}{1}
+\beamer@sectionintoc {2}{Algorithm}{4}{0}{2}
+\beamer@subsectionintoc {2}{1}{Overview}{4}{0}{2}
+\beamer@subsectionintoc {2}{2}{Insertions}{8}{0}{2}
+\beamer@subsectionintoc {2}{3}{DeleteMin}{11}{0}{2}
+\beamer@subsectionintoc {2}{4}{Concurrent Access}{15}{0}{2}
+\beamer@subsectionintoc {2}{5}{Correctness}{16}{0}{2}
+\beamer@sectionintoc {3}{Experimental Evaluation}{17}{0}{3}
+\beamer@subsectionintoc {3}{1}{Performance Testing}{17}{0}{3}

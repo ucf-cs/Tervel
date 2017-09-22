@@ -1,0 +1,51 @@
+This is BibTeX, Version 0.99d (TeX Live 2012/Debian)
+Capacity: max_strings=35307, hash_size=35307, hash_prime=30011
+The top-level auxiliary file: mdlist.aux
+The style file: abbrv.bst
+Database file #1: citation.bib
+Warning--empty journal in alistarh2014spraylist
+Warning--empty year in alistarh2014spraylist
+Warning--can't use both volume and number fields in prokopec2012concurrent
+Warning--empty journal in pugh1990concurrent
+You've used 28 entries,
+            2118 wiz_defined-function locations,
+            655 strings with 8146 characters,
+and the built_in function-call counts, 9971 in all, are:
+= -- 1019
+> -- 421
+< -- 11
++ -- 174
+- -- 138
+* -- 656
+:= -- 1606
+add.period$ -- 93
+call.type$ -- 28
+change.case$ -- 149
+chr.to.int$ -- 0
+cite$ -- 32
+duplicate$ -- 411
+empty$ -- 798
+format.name$ -- 138
+if$ -- 2141
+int.to.chr$ -- 0
+int.to.str$ -- 28
+missing$ -- 29
+newline$ -- 142
+num.names$ -- 56
+pop$ -- 176
+preamble$ -- 1
+purify$ -- 124
+quote$ -- 0
+skip$ -- 289
+stack$ -- 0
+substring$ -- 637
+swap$ -- 110
+text.length$ -- 11
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 106
+warning$ -- 4
+while$ -- 102
+width$ -- 30
+write$ -- 311
+(There were 4 warnings)

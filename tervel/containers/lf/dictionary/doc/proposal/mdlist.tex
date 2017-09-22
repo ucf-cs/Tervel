@@ -1,0 +1,52 @@
+\documentclass{article}
+
+\begin{document}
+
+\title{An Efficient Lock-free Logarithmic Search Data Structure Based on Multi-dimensional List}
+
+\maketitle
+
+A \emph{dictionary} abstract data type stores a set of key-value pairs where the keys are drawn from a totally ordered universe. 
+It is defined by its semantics that specify three canonical operations: \textsc{Insert} which adds a key-value pair, \textsc{Delete} which removes the value associated with a specific key, and \textsc{Find} which returns the associated value if the specific key is in the set.
+Binary search trees are among the most ubiquitous sequential data structures for implementing dictionaries. 
+However, due to complicated tree rotation operations, designing an efficient self-balancing non-blocking BST is very challenging and remains an active research topic~\cite{brown2014general,natarajan2014fast,ellen2014amortized}.
+In recent research studies~\cite{linden2013skiplist,sundell2004scalable,fraser2004practical}, non-blocking dictionaries based on skiplists are gaining momentum.
+A skiplist~\cite{pugh1990skip} eliminates the need of rebalancing by using several linked lists, organized into multiple levels, where each list skips a few elements. 
+However, write operations involve updating shortcut links in distant nodes, which incurs unnecessary data dependencies among concurrent operations and limits the overall throughput.
+
+In this work, the PI presents a linearizable lock-free dictionary implementation based on a multi-dimensional list (MDList) using only single-word \textsc{CompareAndSwap} (CAS) primitive.
+The core idea is to partition a linked list into shorter lists and rearrange them in a multi-dimensional space to facilitate search.
+Nodes in the proposed dictionary are ordered by coordinate prefix, which eliminates the need of rebalancing and randomization.
+Its physical layout is deterministic and independent of execution histories, which provides a unique location for each key, and simplifies the \textsc{Find} algorithm.
+Each insertion or deletion modifies at most two consecutive nodes, which allows concurrent updates to be executed with minimal interference.
+
+The search operation examines one coordinate at a time and locates correspondent partitions by traversing nodes that belong to each dimension. 
+The \textsc{Insert} operation involves two steps: node splicing and child adoption.
+In the first step, the appropriate insert position of the new node is determined by predecessor query.
+Splicing involves pointing to the old child of the predecessor from the new node and updating the child pointer of the predecessor atomically using CAS.
+The second step is needed when the dimension of the old child has been changed due to the insertion of a new node.
+This extra child adoption process ensures that the nodes which are no longer accessible through the old child can be reached through the new node.
+This step is atomically announced in a adoption descriptor so that any thread that attempt to read an inaccessible node pointer must help the newly inserted node to finish its child adoption.
+
+Normally, deletion and insertion operation works reciprocally: the former may promote a node to a lower dimension while the latter may demote a node to a higher dimension.
+This works fine for sequential algorithms, but in concurrent execution where threads help each other, bidirectional change of nodes' dimension incurs contention and synchronization issues.
+Consider a deletion operation that tries to promote a node's dimensionality, it may encounter some unfinished helping threads that are simultaneously demoting the node.
+This causes access conflict on the shared data. 
+Additional synchronization is required to prevent threads from interfering with each other when they perform helping task on the same node.
+The lock-free \textsc{Delete} operation is designed to be asymmetrical in the sense that it dose not remove any node from the data structure.
+It only marks a node for logical deletion~\cite{harris2001pragmatic}, and leaves the execution of physical deletion to subsequent \textsc{Insert} operations.
+When a new node ($n_n$) is inserted immediately before a logically deleted node ($n_d$), $n_n$ expunge $n_d$ from the data structure by skipping $n_n$ and linking directly into the child nodes of $n_d$.
+Since the physical deletion is embedded in the insertion operation, we reduce the interaction between insertion and deletion operations to a minimal and achieved an overall simple design of lock-free dictionary.
+Since a logically deleted node only gets purged when an insertion take place immediately in front of it, there will be a number of zombie nodes.
+On the other hand, there is less chance that physical deletions can interfere with concurrent insertion.
+We thus trade memory footprint for scalability.
+
+In our experimental evaluation, we compare our algorithm with the best available skiplist-based~\cite{dick2014logarithmic,fraser2004practical} and BST-based dictionaries~\cite{ellen2014amortized,arbel2014concurrent,bronson2010practical} using a micro-benchmark on a 64-core NUMA system and a 12-core SMP system.
+The result shows that on average our algorithm outperforms the alternative approaches by $30\%$.
+It exhibits excellent scalability by obtaining as much as $100\%$ speedup over the best alternatives under high levels of concurrency with large key spaces.
+We also show that the dimensionality of an MDList-based dictionary can be tuned to fit different application scenarios: a high-dimensional dictionary behaves more like a tree and speeds up insertions; a low-dimensional priority queue behaves more like an ordered linked list and speeds up deletions.
+
+\bibliographystyle{abbrv}
+\bibliography{citation}
+
+\end{document}

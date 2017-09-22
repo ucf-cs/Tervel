@@ -1,0 +1,85 @@
+#!/usr/bin/gnuplot
+
+set terminal postscript eps enhanced color lw 1.5 "Helvetica" 24
+set datafile separator ","
+
+set style line 1 lt 1 lc rgb "red" lw 2
+set style line 2 lt 2 lc rgb "blue" lw 2
+set style line 3 lt 3 lc rgb "forest-green" lw 2
+set style line 4 lt 4 lc rgb "magenta" lw 2
+set style line 5 lt 5 lc rgb "dark-orange" lw 2
+set style line 6 lt 6 lc rgb "royalblue" lw 2
+set style line 7 lt 7 lc rgb "black" lw 2
+set style line 8 lt 8 lc rgb "dark-red" lw 2
+set style line 9 lt 9 lc rgb "orange-red" lw 2
+set style line 10 lt 10 lc rgb "gray" lw 2
+
+#set lmargin at screen 0.11
+#set rmargin at screen 0.99
+#set tmargin at screen 0.98
+#set bmargin at screen 0.12
+
+set autoscale
+set key inside horizontal right top reverse Left
+#set xrange[0:64]
+#set xtics 0,8,64
+set xtics("1" 1, "2" 2, "4" 4, "8" 8, "16" 16, "32" 32, "64" 64, "128" 128)
+set grid xtics ytics
+set logscale x
+#set logscale y
+set xlabel "Number of Threads"
+set ylabel "Throughput (OP/s)" offset (0,1.9)
+
+set output "| epstopdf --filter --outfile=amd50insertion.pdf"
+plot "amd50insertion/walltime_4DPQinsertion50" u 1:($1*1000000/$2) w lines ls 2 title "4DPQ",\
+     "amd50insertion/walltime_8DPQinsertion50" u 1:($1*1000000/$2) w lines ls 1 t "8DPQ",\
+     "amd50insertion/walltime_16DPQinsertion50" u 1:($1*1000000/$2) w lines ls 6 t "16DPQ",\
+     "amd50insertion/walltime_TBBPQinsertion50" u 1:($1*1000000/$2) w lines ls 3 t "TBBPQ",\
+     "amd50insertion/walltime_LJPQinsertion50" u 1:($1*1000000/$2) w lines ls 4 t "LJPQ",\
+     "amd50insertion/walltime_HSPQinsertion50" u 1:($1*1000000/$2) w lines ls 5 t "HSPQ"
+
+set output "| epstopdf --filter --outfile=amd100insertion.pdf"
+plot "amd100insertion/walltime_4DPQ_insertion_100" u 1:($1*1000000/$2) w lines ls 2 t "4DPQ",\
+     "amd100insertion/walltime_8DPQ_insertion_100" u 1:($1*1000000/$2) w lines ls 1 t "8DPQ",\
+     "amd100insertion/walltime_16DPQ_insertion_100" u 1:($1*1000000/$2) w lines ls 6 title "16DPQ",\
+     "amd100insertion/walltime_TBBPQ_insertion_100" u 1:($1*1000000/$2) w lines ls 3 t "TBBPQ",\
+     "amd100insertion/walltime_LJPQ_insertion_100" u 1:($1*1000000/$2) w lines ls 4 t "LJPQ",\
+     "amd100insertion/walltime_HSPQ_insertion_100" u 1:($1*1000000/$2) w lines ls 5 t "HSPQ"
+
+set output "| epstopdf --filter --outfile=amd0insertion.pdf"
+plot "amd0insertion/walltime_4DPQ_insertion_0" u 1:(1000000/$2) w lines ls 2 t "4DPQ",\
+     "amd0insertion/walltime_8DPQ_insertion_0" u 1:(1000000/$2) w lines ls 1 t "8DPQ",\
+     "amd0insertion/walltime_16DPQ_insertion_0" u 1:(1000000/$2) w lines ls 6 t "16DPQ",\
+     "amd0insertion/walltime_TBBPQ_insertion_0" u 1:(1000000/$2) w lines ls 3 t "TBBPQ",\
+     "amd0insertion/walltime_LJPQ_insertion_0" u 1:(1000000/$2) w lines ls 4 t "LJPQ",\
+     "amd0insertion/walltime_HSPQ_insertion_0" u 1:(1000000/$2) w lines ls 5 t "HSPQ"
+
+set xrange[1:24]
+set xtics 0,2 
+unset logscale x
+#unset logscale y
+set output "| epstopdf --filter --outfile=intel100insertion.pdf"
+plot "intel100insertion/walltime_4DPQ_insertion_100" u 1:($1*1000000/$2) w lines ls 2 t "4DPQ",\
+     "intel100insertion/walltime_8DPQ_insertion_100" u 1:($1*1000000/$2) w lines ls 1 t "8DPQ",\
+     "intel100insertion/walltime_16DPQ_insertion_100" u 1:($1*1000000/$2) w lines ls 6 t "16DPQ",\
+     "intel100insertion/walltime_TBBPQ_insertion_100" u 1:($1*1000000/$2) w lines ls 3 t "TBBPQ",\
+     "intel100insertion/walltime_LJPQ_insertion_100" u 1:($1*1000000/$2) w lines ls 4 t "LJPQ",\
+     "intel100insertion/walltime_HSPQ_insertion_100" u 1:($1*1000000/$2) w lines ls 5 t "HSPQ"
+
+set yrange[0:1.4e+07]
+set output "| epstopdf --filter --outfile=intel0insertion.pdf"
+plot "intel0insertion/walltime_4DPQ_insertion_0" u 1:(1000000/$2) w lines ls 2 t "4DPQ",\
+     "intel0insertion/walltime_8DPQ_insertion_0" u 1:(1000000/$2) w lines ls 1 t "8DPQ",\
+     "intel0insertion/walltime_16DPQ_insertion_0" u 1:(1000000/$2) w lines ls 6 t "16DPQ",\
+     "intel0insertion/walltime_TBBPQ_insertion_0" u 1:(1000000/$2) w lines ls 3 t "TBBPQ",\
+     "intel0insertion/walltime_LJPQ_insertion_0" u 1:(1000000/$2) w lines ls 4 t "LJPQ",\
+     "intel0insertion/walltime_HSPQ_insertion_0" u 1:(200000/$2) w lines ls 5 t "HSPQ"
+
+set output "| epstopdf --filter --outfile=intel50insertion.pdf"
+plot "intel50insertion/walltime_4DPQ_insertion_50" u 1:($1*1000000/$2) w lines ls 2 t "4DPQ",\
+     "intel50insertion/walltime_8DPQ_insertion_50" u 1:($1*1000000/$2) w lines ls 1 t "8DPQ",\
+     "intel50insertion/walltime_16DPQ_insertion_50" u 1:($1*1000000/$2) w lines ls 6 t "16DPQ",\
+     "intel50insertion/walltime_TBBPQ_insertion_50" u 1:($1*1000000/$2) w lines ls 3 t "TBBPQ",\
+     "intel50insertion/walltime_LJPQ_insertion_50" u 1:($1*1000000/$2) w lines ls 4 t "LJPQ",\
+     "intel50insertion/walltime_HSPQ_insertion_50" u 1:($1*100000/$2) w lines ls 5 t "HSPQ"
+

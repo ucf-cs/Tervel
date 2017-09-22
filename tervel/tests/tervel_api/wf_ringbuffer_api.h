@@ -60,7 +60,7 @@ class WrapperType : public container_t::Value {
 #include "../src/main.h"
 
 DEFINE_int32(prefill, 0, "The number elements to place in the buffer on init.");
-DEFINE_int32(capacity, 0, "The capacity of the buffer.");
+DEFINE_int32(capacity, 32768, "The capacity of the buffer.");
 
 #define DS_DECLARE_CODE \
   tervel::Tervel* tervel_obj; \

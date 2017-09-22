@@ -40,6 +40,7 @@ typedef tervel::containers::lf::Queue<Value> container_t;
 #include "../src/main.h"
 
 DEFINE_int32(prefill, 0, "The number elements to place in the container on init.");
+DEFINE_int32(capacity, 32768, "The capacity of the buffer.");
 
 
 #define DS_DECLARE_CODE \

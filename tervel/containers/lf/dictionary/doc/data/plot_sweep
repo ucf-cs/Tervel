@@ -1,0 +1,36 @@
+#!/usr/bin/gnuplot
+
+set terminal postscript eps enhanced color lw 2 "Helvetica" 18
+set datafile separator ","
+set autoscale
+set pm3d at b
+set style data lines
+set key inside horizontal right top reverse Left
+#unset key
+
+set lmargin at screen 0.3
+set rmargin at screen 0.8
+#set colorbox user origin 0.01,0.4 size 0.03,0.28
+set colorbox user origin 0.04,0.4 size 0.03,0.28
+set xrange[4:32]
+set yrange[1:64]
+#set logscale x
+#set logscale y
+#set logscale z
+
+#set label "X: Dimension" at screen 0.03,0.97
+#set label "Y: Number of Threads" at screen 0.03,0.93
+#set xlabel "X"
+#set ylabel "Y"
+set xlabel "Dimensions"
+set ylabel "Number of Threads" offset 0,-1.5
+set zlabel "Throughput (op/s)" offset 0.4,-6.5 
+
+set xtics 4,4 offset -0.1,-0.1 
+set ytics 0,8 offset 0.5,-0.3 
+#set ztics 1000000,1000000 format ""
+#set ztics 10000000,200000000
+set cbtics 1000000,5000000 format ""
+
+set output "| epstopdf --filter --outfile=amdsweep50ins.pdf"
+splot 'sweep/walltime_MDLIST_key_4000000000_ins_50_del_50_all' using 1:2:($2*100000/$3) t "50% Insert 50% Delete"

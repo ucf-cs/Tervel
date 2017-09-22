@@ -1,0 +1,15 @@
+\beamer@endinputifotherversion {3.10pt}
+\beamer@sectionintoc {1}{Introduction}{3}{0}{1}
+\beamer@subsectionintoc {1}{1}{Overview}{3}{0}{1}
+\beamer@subsectionintoc {1}{2}{Search Data Structures}{4}{0}{1}
+\beamer@subsectionintoc {1}{3}{Motivation}{7}{0}{1}
+\beamer@sectionintoc {2}{Algorithm}{8}{0}{2}
+\beamer@subsectionintoc {2}{1}{Intuition}{8}{0}{2}
+\beamer@subsectionintoc {2}{2}{Definition}{10}{0}{2}
+\beamer@subsectionintoc {2}{3}{Operations}{12}{0}{2}
+\beamer@subsectionintoc {2}{4}{Correctness}{20}{0}{2}
+\beamer@sectionintoc {3}{Experiments}{21}{0}{3}
+\beamer@subsectionintoc {3}{1}{Setup}{21}{0}{3}
+\beamer@subsectionintoc {3}{2}{Performance}{23}{0}{3}
+\beamer@subsectionintoc {3}{3}{Tuning}{27}{0}{3}
+\beamer@sectionintoc {4}{Conclusion}{28}{0}{4}

@@ -1,0 +1,5 @@
+Concurrent dictionary based on MDList
+
+run ./bootstrap.sh to setup automake
+run ./configure to config
+run make to make

@@ -1,0 +1,42 @@
+#####################
+# Installing Tervel #
+#####################
+
+If you simly wish to run a few quick tests to see how Tervel works and performs, a working runtime environment has already been set up on IEEE Xplore. Check it out: http://ieeexplore.ieee.org/document/7515610/
+
+System Requirements
+===================
+Supported Platorms:
+	- Ubuntu 16.04
+
+Downloading Tervel
+==================
+Clone Tervel from the git repository:
+
+	$ git clone https://github.com/ucf-cs/tervel
+
+Building Tervel
+===============
+Dependencies
+	- g++4.8.0 or greater
+	- gflags
+
+	$ sudo apt-get install libgflags-dev
+
+Building
+
+	$ cd tervel/tests
+	$ make all
+
+Running Tervel Tests
+====================
+You may run the binaries located in tests/Executables under a subdirectory with a syntax similar to version_NA_10000_10000. Inside, you may run one of the binaries with a command such as
+
+	$ ./BIN.x
+
+Where BIN is the name of the executable you wish to run. The test will execute with default parameters, which includes 0 threads. Therefore, it is normal to see output results containing little to no information. For an explanation on how to change these parameters, see the User Manual.
+
+Next Steps
+==========
+See the User Manual for a more in-depth overview on how to perform Tervel tests.
+See the Tutorial for a quick walk-through on how to use Tervel to create a wait free and lock free stack.

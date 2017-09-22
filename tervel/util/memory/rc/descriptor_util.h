@@ -112,7 +112,7 @@ inline bool is_watched(tervel::util::Descriptor *descr) {
 *
 * @param descr the descriptor which needs rc protection
 * @param address address it was dereferenced from
-* @param val the read value of the address
+* @param value the read value of the address
 * @return true if successfully acquired a watch
 */
 inline bool watch(tervel::util::Descriptor *descr, std::atomic<void *> *address,

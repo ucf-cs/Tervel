@@ -5,6 +5,8 @@ import yaml
 import os
 import pandas as pd
 import matplotlib
+import matplotlib
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -40,7 +42,6 @@ def add_operation(data, name, obj):
 
 metric_functions =  {"operations": add_operation}
 
-
 class Execution:
     @staticmethod
     def add_key_val_pair(data, set_src, prefix_=""):
@@ -67,15 +68,17 @@ class Execution:
             for c in obj["metrics"]:
                 Execution.add_metric(data, c, obj["metrics"][c])
 
-
 def load_file(fname):
     global runConfigs
     with open(fname, "r") as fin:
         obj = yaml.load(fin)
 
+    if obj == None:
+    	return None
+
     test_config = obj["test_config"]
     alg_config = obj["alg_config"]
-    temp = alg_config["run_config"].split(" ")
+    temp = alg_config["run_config"].split(" ") if (alg_config["run_config"] != None) else None
     alg_config["run_config"] = ""
     threads = float(obj["test_config"]["num_threads"])
     if "num_op_types" not in test_config:
@@ -85,13 +88,14 @@ def load_file(fname):
         op_types = int(test_config["num_op_types"])
 
     i = 0
-    while i < len(temp):
-        alg_config["run_config"] += "[%.2f%%:" % (float(temp[i]) / float(threads))
-        i += 1
-        for j in range(op_types):
-            alg_config["run_config"] += " %d" % (int(temp[i]))
+    if temp != None:
+        while i < len(temp):
+            alg_config["run_config"] += "[%.2f%%:" % (float(temp[i]) / float(threads))
             i += 1
-        alg_config["run_config"] += "]"
+            for j in range(op_types):
+                alg_config["run_config"] += " %d" % (int(temp[i]))
+                i += 1
+            alg_config["run_config"] += "]"
     runConfigs[alg_config["run_config"]] = 0
 
     data = {}
@@ -107,7 +111,6 @@ def load_file(fname):
     else:
         return None
 
-
 def load_logs_from_dir(path):
     results = []
     for (dirpath, dirnames, filenames) in os.walk(path):
@@ -117,14 +120,12 @@ def load_logs_from_dir(path):
             c += 1
             f = dirpath + "/" + f
             print "(" + str(c) + "/" + str(num_files) + "):  " + f
-            if ".log" in f:
+            if ".log" and not "git_" in f:
                 res = load_file(f)
                 if (res != None):
                     results.append(res)
         break
     return results
-
-
 
 def custom_plot(fname, df_, x_key, y_keys, hue="key",  hue_keys = None, OUTPUT_DATA=False, disable_legend=True):
     plt.close('all')
@@ -136,10 +137,13 @@ def custom_plot(fname, df_, x_key, y_keys, hue="key",  hue_keys = None, OUTPUT_D
 
     yid = 1
     for y_key in y_keys:
+        # print(df_)
+        # if df_[y_key] == None:
+        #     continue
         print str(yid) + " : " + y_key
 
         # Output data
-        if  OUTPUT_DATA:
+        if OUTPUT_DATA:
             for t in [2, 4, 8, 16, 32, 64]:
                 print "Threads: %d" %t
 
@@ -156,7 +160,7 @@ def custom_plot(fname, df_, x_key, y_keys, hue="key",  hue_keys = None, OUTPUT_D
                     s += ", %s(%.2f)" %(k1,x)
                 print s
 
-                for k1 in  ["WaitFree", "Linux"]:
+                for k1 in ["WaitFree", "Linux"]:
                     df_k1 = df_t
                     temp = df_k1[hue].str.contains(k1)
                     df_k1 = df_k1[temp]
@@ -174,14 +178,12 @@ def custom_plot(fname, df_, x_key, y_keys, hue="key",  hue_keys = None, OUTPUT_D
                     print s
 
         f, ax = plt.subplots(1, 1, figsize=(3.25, 1.75))
-        ax = sns.barplot(x=x_key, y=y_key,
-                            hue=hue, hue_order=hue_keys,
-                            data=df_, ax=ax)
-
+        ax = sns.barplot(x=x_key, y=y_key, hue=hue, hue_order=hue_keys, data=df_, ax=ax)
 
         # title = (y_key.split(":")[3]).title()
         # ax.set_title(title)
         ax.set_xlabel("Threads")
+        ax.set_ylabel(y_key[19:])
 
         # ax.set(ylim=(0, 3.5 * pow(10, 7)))
         ax.spines['left'].set_visible(False)
@@ -191,8 +193,14 @@ def custom_plot(fname, df_, x_key, y_keys, hue="key",  hue_keys = None, OUTPUT_D
         ax.xaxis.set_ticks_position('bottom')
         # ax.set_ylabel("Operations")
 
+        ax.legend(title = '')
+        ax.legend(loc = 'best');
 
         yid += 1
+
+        directory = os.path.dirname("graphs/")
+        if not os.path.exists(directory):
+            os.mkdir(directory)
 
         if not disable_legend:
             figLegend = plt.figure(figsize = (6.25,.5))
@@ -201,18 +209,17 @@ def custom_plot(fname, df_, x_key, y_keys, hue="key",  hue_keys = None, OUTPUT_D
             for item in ([ax.title, ax.xaxis.label, ax.yaxis.label] + ax.get_xticklabels() + ax.get_yticklabels()):
                 item.set_fontsize(5)
 
-            plt.savefig(fname+'_legend.pdf')
+            plt.savefig("graphs/" + fname + '_legend.pdf')
             plt.close()
             return
         else:
             # ax.legend_.remove()
             pass
 
-        plt.savefig(fname + "_"+("_".join(y_key.split(":"))).title()+".pdf", bbox_inches='tight')  # saves the current figure into a pdf page
+        plt.savefig("graphs/" + fname + "_" + ("_".join(y_key.split(":"))).title() + ".pdf", bbox_inches='tight')  # saves the current figure into a pdf page
         plt.close()
 
-
-def graph_on_x(df_, x_axis_):
+def graph_on_x(whatGraph, df_, x_axis_):
     # Generates a Unique Key
     df_["key"] = df_.apply(lambda row: "", axis=1)
     for k in df_.keys():
@@ -226,30 +233,67 @@ def graph_on_x(df_, x_axis_):
                 return ""
             df_["key"] += df_.apply(lambda row: func(row), axis=1)
 
-    #Major Filters out tests we dont care about right now
+    # Major Filters out tests we dont care about right now
     # df = df[(df["alg_config:run_config"].str.contains("100 0"))]
     # df = df[(df["test_config:num_threads"] == 2)]
     # df = df[(df["alg_config:ds_config:prefill"] == 16384)]
     # df = df[(df["alg_config:algorithm_name"].str.match("(Naive)").str.len() == False)]
 
+	# Generate Graphs
 
-#Generate Graphs
+    # Minor Filtering
+    y_axis_stack = {"metrics:operations:pop_Pass", "metrics:operations:pop_Fail", "metrics:operations:push_Pass", "metrics:operations:push_Fail"}
+    y_axis_buffer = {"metrics:operations:enqueue_Pass", "metrics:operations:enqueue_Fail", "metrics:operations:dequeue_Pass", "metrics:operations:dequeue_Fail"}
+    y_axis_map = {"metrics:operations:find_Pass", "metrics:operations:find_Fail", "metrics:operations:insert_Pass", "metrics:operations:insert_Fail",
+    "metrics:operations:update_Pass", "metrics:operations:update_Fail", "metrics:operations:delete_Pass", "metrics:operations:delete_Fail"}
+    y_axis_vector = {"metrics:operations:at_Pass", "metrics:operations:at_Fail", "metrics:operations:cas_Pass", "metrics:operations:cas_Fail",
+    "metrics:operations:pushBack_Pass", "metrics:operations:pushBack_Fail", "metrics:operations:popBack_Pass", "metrics:operations:popBack_Fail",
+    "metrics:operations:size_Pass", "metrics:operations:size_Fail", "metrics:operations:eraseAt_Pass", "metrics:operations:eraseAt_Fail",
+    "metrics:operations:insertAt_Pass", "metrics:operations:insertAt_Fail"}
+    y_axis_total = {"metrics:operations:total:all", "metrics:operations:total:fail", "metrics:operations:total:pass"}
+    if whatGraph == "stack":
+    	temp_df = df[(df["alg_config:algorithm_name"].str.contains("Stack"))]
+    	custom_plot("stack", temp_df, x_axis_, y_axis_stack, hue = "alg_config:algorithm_name")
+    elif whatGraph == "buffer":
+    	temp_df = df[(df["alg_config:algorithm_name"].str.contains("Buffer"))]
+    	custom_plot("buffer", temp_df, x_axis_, y_axis_buffer, hue = "alg_config:algorithm_name")
+    elif whatGraph == "map":
+    	temp_df = df[(df["alg_config:algorithm_name"].str.contains("Map"))]
+    	custom_plot("map", temp_df, x_axis_, y_axis_map, hue = "alg_config:algorithm_name")
+    elif whatGraph == "vector":
+    	temp_df = df[(df["alg_config:algorithm_name"].str.contains("Vector"))]
+    	custom_plot("vector", temp_df, x_axis_, y_axis_vector, hue = "alg_config:algorithm_name")
+    else: # all
+        # TODO: mess with temp_df
+    	custom_plot("stack", temp_df, x_axis_, y_axis_stack, hue = "alg_config:algorithm_name")
+    	custom_plot("buffer", temp_df, x_axis_, y_axis_buffer, hue = "alg_config:algorithm_name")
+    	custom_plot("map", temp_df, x_axis_, y_axis_map, hue = "alg_config:algorithm_name")
+    	custom_plot("vector", temp_df, x_axis_, y_axis_vector, hue = "alg_config:algorithm_name")
+    custom_plot("total", temp_df, x_axis_, y_axis_total, hue = "alg_config:algorithm_name")
 
-    #Minor Filtering
-    temp_df = df
+    # Examples of how to further specify which graphs to make - might be useful if we want to define more command line parameters
     # temp_df = temp_df[~(temp_df["alg_config:algorithm_name"].str.contains("Map"))] # Negation Example
     # temp_df = temp_df[(temp_df["alg_config:algorithm_name"].str.contains("(Stack)|(Map)"))] # Regex example
-    temp_df = temp_df[(temp_df["alg_config:algorithm_name"].str.contains("Stack"))] # Standard example
-    #Plot
+    # temp_df = temp_df[(temp_df["alg_config:algorithm_name"].str.contains("Stack"))] # Standard example
+
+    # Plot
     # custom_plot(<filename>, temp_df, <x_axis column name>, <list of y-value column names>)
         #Note filename gets the y_value column name appened
         #hue specified what to join
-    custom_plot("test", temp_df, x_axis_, ["metrics:TERVELMETRICS:announcement_count"], hue = "alg_config:algorithm_name")
+    # print(temp_df)
+    # y_axis_ = ["metrics:TERVELMETRICS:operations"]
+    # custom_plot("test", temp_df, x_axis_, y_axis_, hue = "alg_config:algorithm_name")
 
 if __name__ == "__main__":
-#Loads the data from the specified folder
+	# Loads the data from the specified folder
     reprocess = False
-    folder = "logs/1437938628/"
+    if len(sys.argv) < 3:
+    	dirName = raw_input("Enter logs/ directory name: ")
+    	whatGraph = raw_input("What do you wish to graph? (all, stack, buffer, map, or vector): ")
+    else:
+    	dirName = sys.argv[1]
+    	whatGraph = sys.argv[2]
+    folder = "logs/" + dirName + "/output"
     pFile = folder + "cache_dataframe.p"
     pFile_rc = folder + "cache_runconfig.p"
     if reprocess or not os.path.exists(pFile) or not os.path.exists(pFile_rc):
@@ -257,11 +301,11 @@ if __name__ == "__main__":
         print "Elements:" + str(len(execution_results))
         df = pd.DataFrame(execution_results)
 
-        pickle.dump(df, open(pFile, "wb"))
-        pickle.dump(runConfigs, open(pFile_rc, "wb"))
+        pickle.dump(df, open(pFile, "w+"))
+        pickle.dump(runConfigs, open(pFile_rc, "w+"))
     else:
-        df = pickle.load(open(pFile, "rb"))
-        runConfigs = pickle.load(open(pFile_rc, "rb"))
+        df = pickle.load(open(pFile, "r+"))
+        runConfigs = pickle.load(open(pFile_rc, "r+"))
 
     print df.keys()
 
@@ -270,19 +314,17 @@ if __name__ == "__main__":
     #     if "metrics" not in k and k != "key" and k != "CMD":
     #         print k
     #         print pd.Series(df[k].values.ravel()).unique()
-    temp = (df["metrics:operations:per_thread"].values)
-    exit()
-# Example of replacing a column value in a row:
-#     def rename_rows_col(val):
-#         # val
-#         if val == "old value":
-#             return "new value"
-#         else:
-#             # print "Non matching value " + row
-#             return val
-#     col_name = "alg_config:run_config"
-#     df[col_name] = df[col_name].map(lambda x: rename_rows_col(x))
+    # temp = (df["metrics"]["operations"]["per_thread"].values)
+    # exit()
+	# Example of replacing a column value in a row:
+    # def rename_rows_col(val):
+    #     # val
+    #     if val == "old value":
+    #         return "new value"
+    #     else:
+    #         # print "Non matching value " + row
+    #         return val
+    # col_name = "alg_config:run_config"
+    # df[col_name] = df[col_name].map(lambda x: rename_rows_col(x))
 
-    graph_on_x(df, "test_config:num_threads")
-
-
+    graph_on_x(whatGraph, df, "test_config:num_threads")

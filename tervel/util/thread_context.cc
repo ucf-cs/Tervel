@@ -55,31 +55,31 @@ ThreadContext::~ThreadContext() {
   tl_thread_info = nullptr;
 }
 
-util::memory::hp::HazardPointer * ThreadContext::get_hazard_pointer() {
+util::memory::hp::HazardPointer * const ThreadContext::get_hazard_pointer() {
   return &(tervel_->hazard_pointer_);
 }
 
-util::ProgressAssurance * ThreadContext::get_progress_assurance() {
+util::ProgressAssurance * const ThreadContext::get_progress_assurance() {
   return &(tervel_->progress_assurance_);
 }
 
-util::memory::rc::DescriptorPool * ThreadContext::get_rc_descriptor_pool() {
+util::memory::rc::DescriptorPool * const ThreadContext::get_rc_descriptor_pool() {
   return rc_descriptor_pool_;
 }
 
-util::memory::hp::ElementList * ThreadContext::get_hp_element_list() {
+util::memory::hp::ElementList * const ThreadContext::get_hp_element_list() {
   return hp_element_list_;
 }
 
-uint64_t ThreadContext::get_thread_id() {
+const uint64_t ThreadContext::get_thread_id() {
   return thread_id_;
 }
 
-uint64_t ThreadContext::get_num_threads() {
+const uint64_t ThreadContext::get_num_threads() {
   return tervel_->num_threads_;
 }
 
-util::EventTracker* ThreadContext::get_event_tracker() {
+util::EventTracker* const ThreadContext::get_event_tracker() {
   return eventTracker_;
 }
 

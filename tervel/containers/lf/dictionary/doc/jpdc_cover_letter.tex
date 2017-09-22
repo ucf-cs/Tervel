@@ -1,0 +1,26 @@
+\documentclass[letterpaper, 10pt]{letter}
+\usepackage[english]{babel}
+
+\address{Univeristy of Central Florida\\4000 Central Florida Blvd\\Orlando, FL 32816}
+\signature{Deli Zhang\\ Ph.D. Candidate, Department of EECS\\ University of Central Florida}
+
+\begin{document}
+\begin{letter}{Dr. Viktor Prasanna\\Editor-in-Chief\\Journal of Parallel and Distributed Computing}
+    \opening{Dear Dr. Prasanna}
+    I am pleased to submit an original research article entitled ``Efficient Non-blocking Logarithmic Search Using Multi-dimensional List'' for consideration for publication in the \emph{Journal of parallel and Distributed Computing}.
+
+    In this manuscript, we introduce the multi-dimensional list (MDList), a novel key-value storage data structure that has logarithmic worst-case search time.
+    Comparing with binary search trees (BSTs) and skiplists, the proposed data structure is highly optimized for concurrent accesses on shared-memory multiprocessors.
+    It eliminates the need of rebalancing, which is often the sequential bottleneck impeding concurrent BSTs. 
+    It also has excellent locality of reference which minimizes interference among concurrent mutating operations. 
+    We implement a lock-free linearizable MDList that conforms to the dictionary abstract data type and evaluate its performance against a number of recent concurrent BSTs and skiplists.
+    Our algorithm provides superior scalability and considerable speedups over the state-of-the-art alternatives.
+    
+    We believe that this manuscript is appropriate for the publication by JPDC because logarithm search data structures are fundamental building blocks of a large number of applications, and the proposed algorithm would have a broader impact for future performance critical applications on share-memory multiprocessor systems.
+    This manuscript has not been published and is not under consideration for publication elsewhere. 
+    We have no conflicts of interest to disclose. 
+
+    Thank you for your consideration!
+    \closing{Sincerely,}
+\end{letter}
+\end{document}

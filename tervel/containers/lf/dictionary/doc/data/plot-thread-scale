@@ -1,0 +1,165 @@
+#!/usr/bin/gnuplot
+
+set terminal postscript eps enhanced color lw 2 "Helvetica" 18
+set datafile separator ","
+
+set style line 1 lt 1 lc rgb "red" lw 2
+set style line 2 lt 2 lc rgb "blue" lw 2
+set style line 3 lt 3 lc rgb "forest-green" lw 2
+set style line 4 lt 4 lc rgb "magenta" lw 2
+set style line 5 lt 5 lc rgb "dark-orange" lw 2
+set style line 6 lt 6 lc rgb "royalblue" lw 2
+set style line 7 lt 7 lc rgb "black" lw 2
+set style line 8 lt 8 lc rgb "dark-red" lw 2
+set style line 9 lt 9 lc rgb "orange-red" lw 2
+set style line 10 lt 10 lc rgb "gray" lw 2
+
+#set lmargin at screen 0.11
+#set rmargin at screen 0.99
+#set tmargin at screen 0.98
+#set bmargin at screen 0.12
+
+set autoscale
+set key inside left top reverse Left
+#set xrange[0:64]
+#set xtics 0,8,64
+set xtics("1" 1, "2" 2, "4" 4, "8" 8, "16" 16, "32" 32, "64" 64, "128" 128)
+set grid xtics ytics
+set logscale x
+#set logscale y
+set xlabel "Number of Threads"
+set ylabel "Throughput (OP/s)" offset (0,1.9)
+
+set output "| epstopdf --filter --outfile=amd100ins1Bkey.pdf"
+plot "amd/walltime_MDLIST_key_1000000000_ins_100_del_0" u 1:($1*1000000/$2) w lines ls 1 title "MDLIST",\
+     "amd/walltime_RTLIST_key_1000000000_ins_100_del_0" u 1:($1*1000000/$2) w lines ls 2 title "RTLIST",\
+     "amd/walltime_FRLIST_key_1000000000_ins_100_del_0" u 1:($1*1000000/$2) w lines ls 3 title "FRLIST",\
+     "amd/walltime_HLLIST_key_1000000000_ins_100_del_0" u 1:($1*1000000/$2) w lines ls 4 title "HLLIST",\
+     "amd/walltime_CTRBST_key_1000000000_ins_100_del_0" u 1:($1*1000000/$2) w lines ls 5 title "CTRBST",\
+     "amd/walltime_BRNBST_key_1000000000_ins_100_del_0" u 1:($1*1000000/$2) w lines ls 6 title "BRNBST",\
+     "amd/walltime_ELNBST_key_1000000000_ins_100_del_0" u 1:($1*1000000/$2) w lines ls 7 title "ELNBST"
+
+set output "| epstopdf --filter --outfile=amd100ins1Mkey.pdf"
+plot "amd/walltime_MDLIST_key_1000000_ins_100_del_0" u 1:($1*1000000/$2) w lines ls 1 title "MDLIST",\
+     "amd/walltime_RTLIST_key_1000000_ins_100_del_0" u 1:($1*1000000/$2) w lines ls 2 title "RTLIST",\
+     "amd/walltime_FRLIST_key_1000000_ins_100_del_0" u 1:($1*1000000/$2) w lines ls 3 title "FRLIST",\
+     "amd/walltime_HLLIST_key_1000000_ins_100_del_0" u 1:($1*1000000/$2) w lines ls 4 title "HLLIST",\
+     "amd/walltime_CTRBST_key_1000000_ins_100_del_0" u 1:($1*1000000/$2) w lines ls 5 title "CTRBST",\
+     "amd/walltime_BRNBST_key_1000000_ins_100_del_0" u 1:($1*1000000/$2) w lines ls 6 title "BRNBST",\
+     "amd/walltime_ELNBST_key_1000000_ins_100_del_0" u 1:($1*1000000/$2) w lines ls 7 title "ELNBST"
+
+set output "| epstopdf --filter --outfile=amd100ins1Kkey.pdf"
+plot "amd/walltime_MDLIST_key_1000_ins_100_del_0" u 1:($1*1000000/$2) w lines ls 1 title "MDLIST",\
+     "amd/walltime_RTLIST_key_1000_ins_100_del_0" u 1:($1*1000000/$2) w lines ls 2 title "RTLIST",\
+     "amd/walltime_FRLIST_key_1000_ins_100_del_0" u 1:($1*1000000/$2) w lines ls 3 title "FRLIST",\
+     "amd/walltime_HLLIST_key_1000_ins_100_del_0" u 1:($1*1000000/$2) w lines ls 4 title "HLLIST",\
+     "amd/walltime_CTRBST_key_1000_ins_100_del_0" u 1:($1*1000000/$2) w lines ls 5 title "CTRBST",\
+     "amd/walltime_BRNBST_key_1000_ins_100_del_0" u 1:($1*1000000/$2) w lines ls 6 title "BRNBST",\
+     "amd/walltime_ELNBST_key_1000_ins_100_del_0" u 1:($1*1000000/$2) w lines ls 7 title "ELNBST"
+
+set output "| epstopdf --filter --outfile=amd50ins1Bkey.pdf"
+plot "amd/walltime_MDLIST_key_1000000000_ins_50_del_50" u 1:($1*1000000/$2) w lines ls 1 title "MDLIST",\
+     "amd/walltime_RTLIST_key_1000000000_ins_50_del_50" u 1:($1*1000000/$2) w lines ls 2 title "RTLIST",\
+     "amd/walltime_FRLIST_key_1000000000_ins_50_del_50" u 1:($1*1000000/$2) w lines ls 3 title "FRLIST",\
+     "amd/walltime_HLLIST_key_1000000000_ins_50_del_50" u 1:($1*1000000/$2) w lines ls 4 title "HLLIST",\
+     "amd/walltime_CTRBST_key_1000000000_ins_50_del_50" u 1:($1*1000000/$2) w lines ls 5 title "CTRBST",\
+     "amd/walltime_BRNBST_key_1000000000_ins_50_del_50" u 1:($1*1000000/$2) w lines ls 6 title "BRNBST",\
+     "amd/walltime_ELNBST_key_1000000000_ins_50_del_50" u 1:($1*1000000/$2) w lines ls 7 title "ELNBST"
+
+set output "| epstopdf --filter --outfile=amd50ins1Mkey.pdf"
+plot "amd/walltime_MDLIST_key_1000000_ins_50_del_50" u 1:($1*1000000/$2) w lines ls 1 title "MDLIST",\
+     "amd/walltime_RTLIST_key_1000000_ins_50_del_50" u 1:($1*1000000/$2) w lines ls 2 title "RTLIST",\
+     "amd/walltime_FRLIST_key_1000000_ins_50_del_50" u 1:($1*1000000/$2) w lines ls 3 title "FRLIST",\
+     "amd/walltime_HLLIST_key_1000000_ins_50_del_50" u 1:($1*1000000/$2) w lines ls 4 title "HLLIST",\
+     "amd/walltime_CTRBST_key_1000000_ins_50_del_50" u 1:($1*1000000/$2) w lines ls 5 title "CTRBST",\
+     "amd/walltime_BRNBST_key_1000000_ins_50_del_50" u 1:($1*1000000/$2) w lines ls 6 title "BRNBST",\
+     "amd/walltime_ELNBST_key_1000000_ins_50_del_50" u 1:($1*1000000/$2) w lines ls 7 title "ELNBST"
+
+set output "| epstopdf --filter --outfile=amd50ins1Kkey.pdf"
+plot "amd/walltime_MDLIST_key_1000_ins_50_del_50" u 1:($1*1000000/$2) w lines ls 1 title "MDLIST",\
+     "amd/walltime_RTLIST_key_1000_ins_50_del_50" u 1:($1*1000000/$2) w lines ls 2 title "RTLIST",\
+     "amd/walltime_FRLIST_key_1000_ins_50_del_50" u 1:($1*1000000/$2) w lines ls 3 title "FRLIST",\
+     "amd/walltime_HLLIST_key_1000_ins_50_del_50" u 1:($1*1000000/$2) w lines ls 4 title "HLLIST",\
+     "amd/walltime_CTRBST_key_1000_ins_50_del_50" u 1:($1*1000000/$2) w lines ls 5 title "CTRBST",\
+     "amd/walltime_BRNBST_key_1000_ins_50_del_50" u 1:($1*1000000/$2) w lines ls 6 title "BRNBST",\
+     "amd/walltime_ELNBST_key_1000_ins_50_del_50" u 1:($1*1000000/$2) w lines ls 7 title "ELNBST"
+
+set output "| epstopdf --filter --outfile=amd20ins1Bkey.pdf"
+plot "amd/walltime_MDLIST_key_1000000000_ins_20_del_10" u 1:($1*1000000/$2) w lines ls 1 title "MDLIST",\
+     "amd/walltime_RTLIST_key_1000000000_ins_20_del_10" u 1:($1*1000000/$2) w lines ls 2 title "RTLIST",\
+     "amd/walltime_FRLIST_key_1000000000_ins_20_del_10" u 1:($1*1000000/$2) w lines ls 3 title "FRLIST",\
+     "amd/walltime_HLLIST_key_1000000000_ins_20_del_10" u 1:($1*1000000/$2) w lines ls 4 title "HLLIST",\
+     "amd/walltime_CTRBST_key_1000000000_ins_20_del_10" u 1:($1*1000000/$2) w lines ls 5 title "CTRBST",\
+     "amd/walltime_BRNBST_key_1000000000_ins_20_del_10" u 1:($1*1000000/$2) w lines ls 6 title "BRNBST",\
+     "amd/walltime_ELNBST_key_1000000000_ins_20_del_10" u 1:($1*1000000/$2) w lines ls 7 title "ELNBST"
+
+set output "| epstopdf --filter --outfile=amd20ins1Mkey.pdf"
+plot "amd/walltime_MDLIST_key_1000000_ins_20_del_10" u 1:($1*1000000/$2) w lines ls 1 title "MDLIST",\
+     "amd/walltime_RTLIST_key_1000000_ins_20_del_10" u 1:($1*1000000/$2) w lines ls 2 title "RTLIST",\
+     "amd/walltime_FRLIST_key_1000000_ins_20_del_10" u 1:($1*1000000/$2) w lines ls 3 title "FRLIST",\
+     "amd/walltime_HLLIST_key_1000000_ins_20_del_10" u 1:($1*1000000/$2) w lines ls 4 title "HLLIST",\
+     "amd/walltime_CTRBST_key_1000000_ins_20_del_10" u 1:($1*1000000/$2) w lines ls 5 title "CTRBST",\
+     "amd/walltime_BRNBST_key_1000000_ins_20_del_10" u 1:($1*1000000/$2) w lines ls 6 title "BRNBST",\
+     "amd/walltime_ELNBST_key_1000000_ins_20_del_10" u 1:($1*1000000/$2) w lines ls 7 title "ELNBST"
+
+set output "| epstopdf --filter --outfile=amd20ins1Kkey.pdf"
+plot "amd/walltime_MDLIST_key_1000_ins_20_del_10" u 1:($1*1000000/$2) w lines ls 1 title "MDLIST",\
+     "amd/walltime_RTLIST_key_1000_ins_20_del_10" u 1:($1*1000000/$2) w lines ls 2 title "RTLIST",\
+     "amd/walltime_FRLIST_key_1000_ins_20_del_10" u 1:($1*1000000/$2) w lines ls 3 title "FRLIST",\
+     "amd/walltime_HLLIST_key_1000_ins_20_del_10" u 1:($1*1000000/$2) w lines ls 4 title "HLLIST",\
+     "amd/walltime_CTRBST_key_1000_ins_20_del_10" u 1:($1*1000000/$2) w lines ls 5 title "CTRBST",\
+     "amd/walltime_BRNBST_key_1000_ins_20_del_10" u 1:($1*1000000/$2) w lines ls 6 title "BRNBST",\
+     "amd/walltime_ELNBST_key_1000_ins_20_del_10" u 1:($1*1000000/$2) w lines ls 7 title "ELNBST"
+
+set output "| epstopdf --filter --outfile=amd9ins1Bkey.pdf"
+plot "amd/walltime_MDLIST_key_1000000000_ins_9_del_1" u 1:($1*1000000/$2) w lines ls 1 title "MDLIST",\
+     "amd/walltime_RTLIST_key_1000000000_ins_9_del_1" u 1:($1*1000000/$2) w lines ls 2 title "RTLIST",\
+     "amd/walltime_FRLIST_key_1000000000_ins_9_del_1" u 1:($1*1000000/$2) w lines ls 3 title "FRLIST",\
+     "amd/walltime_HLLIST_key_1000000000_ins_9_del_1" u 1:($1*1000000/$2) w lines ls 4 title "HLLIST",\
+     "amd/walltime_CTRBST_key_1000000000_ins_9_del_1" u 1:($1*1000000/$2) w lines ls 5 title "CTRBST",\
+     "amd/walltime_BRNBST_key_1000000000_ins_9_del_1" u 1:($1*1000000/$2) w lines ls 6 title "BRNBST",\
+     "amd/walltime_ELNBST_key_1000000000_ins_9_del_1" u 1:($1*1000000/$2) w lines ls 7 title "ELNBST"
+
+set output "| epstopdf --filter --outfile=amd9ins1Mkey.pdf"
+plot "amd/walltime_MDLIST_key_1000000_ins_9_del_1" u 1:($1*1000000/$2) w lines ls 1 title "MDLIST",\
+     "amd/walltime_RTLIST_key_1000000_ins_9_del_1" u 1:($1*1000000/$2) w lines ls 2 title "RTLIST",\
+     "amd/walltime_FRLIST_key_1000000_ins_9_del_1" u 1:($1*1000000/$2) w lines ls 3 title "FRLIST",\
+     "amd/walltime_HLLIST_key_1000000_ins_9_del_1" u 1:($1*1000000/$2) w lines ls 4 title "HLLIST",\
+     "amd/walltime_CTRBST_key_1000000_ins_9_del_1" u 1:($1*1000000/$2) w lines ls 5 title "CTRBST",\
+     "amd/walltime_BRNBST_key_1000000_ins_9_del_1" u 1:($1*1000000/$2) w lines ls 6 title "BRNBST",\
+     "amd/walltime_ELNBST_key_1000000_ins_9_del_1" u 1:($1*1000000/$2) w lines ls 7 title "ELNBST"
+
+set output "| epstopdf --filter --outfile=amd9ins1Kkey.pdf"
+plot "amd/walltime_MDLIST_key_1000_ins_9_del_1" u 1:($1*1000000/$2) w lines ls 1 title "MDLIST",\
+     "amd/walltime_RTLIST_key_1000_ins_9_del_1" u 1:($1*1000000/$2) w lines ls 2 title "RTLIST",\
+     "amd/walltime_FRLIST_key_1000_ins_9_del_1" u 1:($1*1000000/$2) w lines ls 3 title "FRLIST",\
+     "amd/walltime_HLLIST_key_1000_ins_9_del_1" u 1:($1*1000000/$2) w lines ls 4 title "HLLIST",\
+     "amd/walltime_CTRBST_key_1000_ins_9_del_1" u 1:($1*1000000/$2) w lines ls 5 title "CTRBST",\
+     "amd/walltime_BRNBST_key_1000_ins_9_del_1" u 1:($1*1000000/$2) w lines ls 6 title "BRNBST",\
+     "amd/walltime_ELNBST_key_1000_ins_9_del_1" u 1:($1*1000000/$2) w lines ls 7 title "ELNBST"
+
+
+
+set xrange[1:24]
+set xtics 0,2 
+unset logscale x
+set key inside left top reverse Left
+#unset logscale y
+
+set output "| epstopdf --filter --outfile=intel100ins4Bkey.pdf"
+plot "intel/walltime_MDLIST_key_4000000000_ins_100_del_0" u 1:($1*1000000/$2) w lines ls 1 title "MDLIST",\
+     "intel/walltime_RTLIST_key_4000000000_ins_100_del_0" u 1:($1*1000000/$2) w lines ls 2 title "RTLIST",\
+     "intel/walltime_FRLIST_key_4000000000_ins_100_del_0" u 1:($1*1000000/$2) w lines ls 3 title "FRLIST",\
+     "intel/walltime_HLLIST_key_4000000000_ins_100_del_0" u 1:($1*1000000/$2) w lines ls 4 title "HLLIST",\
+     "intel/walltime_CTRBST_key_4000000000_ins_100_del_0" u 1:($1*1000000/$2) w lines ls 5 title "CTRBST",\
+     "intel/walltime_BRNBST_key_4000000000_ins_100_del_0" u 1:($1*1000000/$2) w lines ls 6 title "BRNBST",\
+     "intel/walltime_ELNBST_key_4000000000_ins_100_del_0" u 1:($1*1000000/$2) w lines ls 7 title "ELNBST"
+
+set output "| epstopdf --filter --outfile=intel30ins4Mkey.pdf"
+plot "intel/walltime_MDLIST_key_4000000_ins_30_del_20" u 1:($1*1000000/$2) w lines ls 1 title "MDLIST",\
+     "intel/walltime_RTLIST_key_4000000_ins_30_del_20" u 1:($1*1000000/$2) w lines ls 2 title "RTLIST",\
+     "intel/walltime_FRLIST_key_4000000_ins_30_del_20" u 1:($1*1000000/$2) w lines ls 3 title "FRLIST",\
+     "intel/walltime_HLLIST_key_4000000_ins_30_del_20" u 1:($1*1000000/$2) w lines ls 4 title "HLLIST",\
+     "intel/walltime_CTRBST_key_4000000_ins_30_del_20" u 1:($1*1000000/$2) w lines ls 5 title "CTRBST",\
+     "intel/walltime_BRNBST_key_4000000_ins_30_del_20" u 1:($1*1000000/$2) w lines ls 6 title "BRNBST",\
+     "intel/walltime_ELNBST_key_4000000_ins_30_del_20" u 1:($1*1000000/$2) w lines ls 7 title "ELNBST"

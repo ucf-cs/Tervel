@@ -1,0 +1,43 @@
+#!/usr/bin/gnuplot
+
+set terminal postscript eps enhanced color lw 1 "Helvetica" 24 size 5in,3in
+set datafile separator ","
+set autoscale
+set pm3d at b
+set palette rgbformulae 23,28,3
+#set pm3d at s
+
+set style data lines
+#set key horizontal right reverse Left at 0,0,7000000
+unset key
+
+set tmargin at screen 0.87
+set bmargin at screen 0.3
+set lmargin at screen 0.3
+set rmargin at screen 0.8
+set colorbox user origin 0.05,0.50 size 0.03,0.28
+set xrange[4:32]
+set yrange[1:64]
+#set logscale x
+#set logscale y
+#set logscale z
+
+#set xlabel "Dimensions" offset 0,-1
+#set ylabel "Number of Threads" offset 0,-2
+#set zlabel "Throughput (op/s)" offset 0.4,-6.5 
+
+set label "Dimensions" at 20,-35,0 rotate by -8
+set label "Number of Threads" at 44,-22,0 rotate by 32
+set label "Throughput (op/s)" at -8,0,0 rotate by 90 
+
+set xtics 4,4 offset -0.1,-0.1 
+set ytics 0,16 offset 0.5,-0.3 
+#set ztics 1000000,1000000 format ""
+set ztics 1000000,1000000
+set cbtics 1000000,1000000 format ""
+
+set output "| epstopdf --filter --outfile=amdsweep50insert.pdf"
+splot 'amddimsweep/walltime_MDPQ_insertion_50_all' using 1:2:($2*100000/$3) t "NUMA System: 50% Insert"
+
+set output "| epstopdf --filter --outfile=amdsweep75insert.pdf"
+splot 'amddimsweep/walltime_MDPQ_insertion_75_all' using 1:2:($2*100000/$3) t "NUMA system: 75% Insert"
