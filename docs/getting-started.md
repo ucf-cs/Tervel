@@ -20,6 +20,8 @@ $ git clone {{ site.gitrepo }}
 
 ## Building Tervel
 
+An already set-up runtime environment is already available for Tervel online at [IEEE Xplore](http://ieeexplore.ieee.org/document/7363668/algorithms).
+
 ### Dependencies
 
 * g++4.8.0 or greater
