@@ -20,7 +20,7 @@ RC Element
 HP Element
 : We recommend extending the `tervel::memory::hp::Element` class for very large or varying size objects that are used infrequently. 
 
-For reference on how to use the memory protection, refer to the `Stack::Accessor` class in `/tervel/containers/lf/`. In the lock-free stack example, the `Stack::Node` class extends the `hp::Element` class. `Accessor::load()` retrieves an element from an address and calls `HazardPointer::watch()` on it's address. Every time the top of the stack is read, `Accessor::load()` must be called to retrieve the element and attempt to watch the address. 
+For reference on how to use the memory protection, refer to the `Stack::Accessor` class in `/tervel/containers/lf/`. In the lock-free stack example, the `Stack::Node` class extends the `hp::Element` class. `Accessor::load()` retrieves an element from an address and calls `HazardPointer::watch()` on its address. Every time the top of the stack is read, `Accessor::load()` must be called to retrieve the element and attempt to watch the address. 
 
 ## Descriptor
 
@@ -40,7 +40,7 @@ The progress assurance scheme uses an announcement table to guarantee progress. 
 
 For reference on how to use the progress assurance scheme, refer to the Stack class in `/tervel/containers/wf/stack_imp.h`. This is the wait-free version of the same stack implemented in `/tervel/containers/lf/`. The wait-free `Stack::Node` object still extends the `hp::Element` class. 
 
-At the start of each operation, a thread checks the announcement table for other operations that need help by calling `ProgressAssurance::check_for_announcement()`. If no thread needs help, the operation proceeds similar to the lock-free implementation, with the exception of the `ProgressAssurance::Limit` object, `progAssur`. Every time the calling thread attempts to perform it's operation and fails, it calls `progAssur.isDelayed()`. Once these failures reach a certain limit, the thread adds it's operation descriptor to the announcement table by calling `ProgressAssurance::make_announcment()`. This action will result in one or more threads attempting to help the current thread's operation complete. 
+At the start of each operation, a thread checks the announcement table for other operations that need help by calling `ProgressAssurance::check_for_announcement()`. If no thread needs help, the operation proceeds similar to the lock-free implementation, with the exception of the `ProgressAssurance::Limit` object, `progAssur`. Every time the calling thread attempts to perform its operation and fails, it calls `progAssur.isDelayed()`. Once these failures reach a certain limit, the thread adds it's operation descriptor to the announcement table by calling `ProgressAssurance::make_announcment()`. This action will result in one or more threads attempting to help the current thread's operation complete. 
 
 ## Operation Record
 
@@ -50,4 +50,4 @@ To implement an Operation Record, you may extend the `tervel::util::OpRecord` cl
 
 The `help_complete()` method must be implemented. This function is called by a thread in order to help a different thread complete it's operation. It must be guaranteed that upon return of this function, the operation described by the `OpRecord` is complete. 
 
-An Operation Record can be used to create a bound on unbounded loops by ensuring that after a finite amount of steps, all threads will be attempting to help complete the operation. 
+An Operation Record can be used to create a bound on unbounded loops by ensuring that after a finite amount of steps, all threads will be attempting to help complete the operation.

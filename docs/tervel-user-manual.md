@@ -32,7 +32,7 @@ Then compile the binaries for it by running
 $ make tbb
 {% endhighlight %}
 
-Another test using an external library was created for this project, a test for the Tsigas queue. At the time of this project's creation, this data structure was supported in the CDS library. It has since been removed due to an ABA problem, therefore it is now depricated as a Tervel test. If you wish to run this test anyway, the queue is available in [libcds 2.1.0](https://github.com/khizmax/libcds/releases/tag/v2.1.0).
+Another test using an external library was created for this project, a test for the Tsigas queue. At the time of this project's creation, this data structure was supported in the CDS library. It has since been removed due to an ABA problem, therefore it is now deprecated as a Tervel test. If you wish to run this test anyway, the queue is available in [libcds 2.1.0](https://github.com/khizmax/libcds/releases/tag/v2.1.0).
 
 You will also have to uncomment the lines in the Makefiles to do with `tsigasBuffer`. See the `Makefile` and `Makefile.ringbuffer`. Afterwards, you should be able to compile using.
 
@@ -45,7 +45,7 @@ There are also four variables you may pass into the makefile:
 
 * `limit`: how many times an op fails before posing an announcement, 10000 by default, which is quite high
 
-* `version`: just something to help the user name their directories within `/executables/`, NA by default
+* `version`: just something to help the user name their directories within `executables/`, NA by default
 
 ^
 
@@ -55,11 +55,11 @@ As an example of how to use the flags:
 $ make allTervel delay=10 limit=10 version=1
 {% endhighlight %}
 
-Which will compile all Tervel-related test executables under `/executables/version_1_10_10/`
+Which will compile all Tervel-related test executables under `executables/version_1_10_10/`
 
 ## Running Tervel Tests
 
-You may run the binaries located in `/tests/Executables/` under a subdirectory with a syntax similar to `version_NA_10000_10000`. Inside, you may run one of the binaries with a command syntax such as
+You may run the binaries located in `tests/Executables/` under a subdirectory with a syntax similar to `version_NA_10000_10000`. Inside, you may run one of the binaries with a command syntax such as
 
 {% highlight bash %}
 $ ./BIN.x F T OP
@@ -95,7 +95,7 @@ Will run the wait-free Tervel buffer test with two threads, each performing appr
 
 ### Data Structure Operations
 
-A list of all of the Tervel data structure and algorithm operations in the order that they must be received as command line parameters for the test binaries. Providing an integer for at least one but not all of these ops for their appropriate test will cause the program to list the ops for you.
+A list of all the Tervel data structure and algorithm operations in the order that they must be received as command line parameters for the test binaries. Providing an integer for at least one but not all of these ops for their appropriate test will cause the program to list the ops for you.
 
 Buffer/Queue
 * enqueue
@@ -128,49 +128,155 @@ Vector
 
 A list of universal flags that will work for all binaries. `-num_threads` is required in order to produce any useful output.
 
-| `--help` | type: `bool` | default: `false` | Show all flags.
-| `-iter_dist` | type: `bool` | default: `false` | If true, then it iterates between commands.
-| `-seq_test` | type: `bool` | default: `false` | If true, then a sequential test is performed.
-| `-verbose` | type: `bool` | default: `false` | If true, then verbose output is used.
-| `-disable_thread_join` | type: `bool` | default: `false` | Enables skipping of the thread join command, useful if deadlock may occur.
-| `-execution_time` | type: `uint64` | default: `5` | The amount of time to run the tests in seconds.
-| `-main_sleep` | type: `uint64` | default: `0` | Causes the main thread to sleep before signaling go. Useful for allowing monitors to be attached.
-| `-num_threads` | type: `uint64` | default: `0` | The number of executing threads.
+<!-- Kramdown tables don't allow specifying width, so HTML is used instead -->
+<table style = "width: 150%">
+	<tr>
+		<td> <code> --help </code> </td>
+		<td> type: <code> bool </code> </td>
+		<td> default: <code> false </code> </td>
+		<td> Show all flags. </td>
+	</tr>
+	<tr>
+		<td> <code> -iter_dist </code> </td>
+		<td> type: <code> bool </code> </td>
+		<td> default: <code> false </code> </td>
+		<td> If true, then it iterates between commands. </td>
+	</tr>
+	<tr>
+		<td> <code> -seq_test </code> </td>
+		<td> type: <code> bool </code> </td>
+		<td> default: <code> false </code> </td>
+		<td> If true, then a sequential test is performed. </td>
+	</tr>
+	<tr>
+		<td> <code> -verbose </code> </td>
+		<td> type: <code> bool </code> </td>
+		<td> default: <code> false </code> </td>
+		<td> If true, then verbose output is used. </td>
+	</tr>
+	<tr>
+		<td> <code> -disable_thread_join </code> </td>
+		<td> type: <code> bool </code> </td>
+		<td> default: <code> false </code> </td>
+		<td> Enables skipping of the thread join command, useful if deadlock may occur. </td>
+	</tr>
+	<tr>
+		<td> <code> -execution_time </code> </td>
+		<td> type: <code> uint64 </code> </td>
+		<td> default: <code> 5 </code> </td>
+		<td> The amount of time to run the tests in seconds. </td>
+	</tr>
+	<tr>
+		<td> <code> -main_sleep </code> </td>
+		<td> type: <code> uint64 </code> </td>
+		<td> default: <code> 0 </code> </td>
+		<td> Causes the main thread to sleep before signaling go. Useful for allowing monitors to be attached. </td>
+	</tr>
+	<tr>
+		<td> <code> -num_threads </code> </td>
+		<td> type: <code> uint64 </code> </td>
+		<td> default: <code> 0 </code> </td>
+		<td> The number of executing threads. </td>
+	</tr>
+</table>
 
 ### Data Structure Flags
 
 A list of flags for every data structure.
 
-| Buffer
-|-|
-| `-capacity` | type: `int32` | default: `32768` | The capacity of the buffer.
-| `-prefill` | type: int32 | default: 0 | The number of elements to place in the buffer on init.
-
-| HashMap
-|-|
-| `-capacity` | type: `int32` | default: `32768` | The capacity of the HashMap - should be power of two.
-| `-expansion_factor` | type: `int32` | default: `5` | The size by which the HashMap expands on collision. 2^expansion_factor = positions.
-| `-prefill` | type: `int32` | default: `0` | The number of elements to place in the HashMap on init.
-
-| MCAS
-|-|
-| `-array_length`| type: `int32` | default: `32` | The size of the region to test on.
-| `-mcas_size` | type: `int32` | default: `2` | The number of words in an mcas operation.
-| `-multipleObjects` | type: `bool` | default: `false` | Whether or not multiple disjoint mcas operations can occur.
-| `-overlapping` | type: `bool` | default: `false` | Whether or not the mcas operations can be overlapping.
-
-| Stack
-|-|
-| `-prefill` | type: `int32` | default: `0` | The number of elements to place in the stack on init.
-
-| Vector
-|-|
-| `-capacity` | type: `int32` | default: `0` | The capacity of the vector.
-| `-prefill` | type: `int32` | default: `0` | The number of elements to place in the vector on init.
+<table style = "width: 150%">
+	<tr>
+		<th> Buffer </th>
+	</tr>
+	<tr>
+		<td> <code> -capacity </code> </td>
+		<td> type: <code> int32 </code> </td>
+		<td> default: <code> 32768 </code> </td>
+		<td> The capacity of the buffer. </td>
+	</tr>
+	<tr>
+		<td> <code> -prefill </code> </td>
+		<td> type: <code> int32 </code> </td>
+		<td> default: <code> 0 </code> </td>
+		<td> The number of elements to place in the buffer on init. </td>
+	</tr>
+	<tr>
+		<th> Hash Map </th>
+	</tr>
+	<tr>
+		<td> <code> -capacity </code> </td>
+		<td> type: <code> int32 </code> </td>
+		<td> default: <code> 5 </code> </td>
+		<td> The capacity of the HashMap - should be power of two. </td>
+	</tr>
+	<tr>
+		<td> <code> -expansion_factor </code> </td>
+		<td> type: <code> int32 </code> </td>
+		<td> default: <code> 0 </code> </td>
+		<td> The size by which the HashMap expands on collision. 2^expansion_factor = positions. </td>
+	</tr>
+	<tr>
+		<td> <code> -prefill </code> </td>
+		<td> type: <code> int32 </code> </td>
+		<td> default: <code> 0 </code> </td>
+		<td> The number of elements to place in the HashMap on init. </td>
+	</tr>
+	<tr>
+		<th> MCAS </th>
+	</tr>
+	<tr>
+		<td> <code> -array_length </code> </td>
+		<td> type: <code> int32 </code> </td>
+		<td> default: <code> 32 </code> </td>
+		<td> The size of the region to test on. </td>
+	</tr>
+	<tr>
+		<td> <code> -mcas_size </code> </td>
+		<td> type: <code> int32 </code> </td>
+		<td> default: <code> 32 </code> </td>
+		<td> The number of words in an mcas operation. </td>
+	</tr>
+	<tr>
+		<td> <code> -multipleObjects </code> </td>
+		<td> type: <code> bool </code> </td>
+		<td> default: <code> false </code> </td>
+		<td> Decides if multiple disjoint mcas operations can occur. </td>
+	</tr>
+	<tr>
+		<td> <code> -overlapping </code> </td>
+		<td> type: <code> bool </code> </td>
+		<td> default: <code> false </code> </td>
+		<td> Decides if the mcas operations can be overlapping. </td>
+	</tr>
+	<tr>
+		<th> Stack </th>
+	</tr>
+	<tr>
+		<td> <code> -prefill </code> </td>
+		<td> type: <code> int32 </code> </td>
+		<td> default: <code> 0 </code> </td>
+		<td> The number of elements to place in the stack on init. </td>
+	</tr>
+	<tr>
+		<th> Vector </th>
+	</tr>
+	<tr>
+		<td> <code> -capacity </code> </td>
+		<td> type: <code> int32 </code> </td>
+		<td> default: <code> 0 </code> </td>
+		<td> The capacity of the vector. </td>
+	</tr>
+	<tr>
+		<td> <code> -prefill </code> </td>
+		<td> type: <code> int32 </code> </td>
+		<td> default: <code> 0 </code> </td>
+		<td> The number of elements to place in the vector on init. </td>
+	</tr>
+</table>
 
 ## Python Scripts
 
-For more comprehensive tests, the python files in `/tests/scripts/` should be used. Before continuing, ensure Python and likwid are installed. See [likwid's GitHub](https://github.com/RRZE-HPC/likwid). You should also make sure to run the `Makefile` first because the default scripts will check for binaries within `/executables/version_NA_10000_10000/`
+For more comprehensive tests, the python files in `tests/scripts/` should be used. Before continuing, ensure Python and likwid are installed. See [likwid's GitHub](https://github.com/RRZE-HPC/likwid). You should also make sure to run the `Makefile` first because the default scripts will check for binaries within `executables/version_NA_10000_10000/`
 
 You may run the script which will run multiple tests simply by.
 
@@ -178,7 +284,7 @@ You may run the script which will run multiple tests simply by.
 $ python execute_test.py
 {% endhighlight %}
 
-Which will prompt you for a config file. Feel free to enter the provided `example.config` or create your own. The script will run multiple tests based on the `.config` file and place their output in `/scripts/logs/`.
+Which will prompt you for a config file. Feel free to enter the provided `example.config` or create your own. The script will run multiple tests based on the `.config` file and place their output in `scripts/logs/`.
 
 The syntax of the config file should be fairly straightforward. At the top of the config file are a bunch of universal options that will carry for all tests the Python script will run. This includes:
 
@@ -189,21 +295,21 @@ The syntax of the config file should be fairly straightforward. At the top of th
 * `exe_repetition`: An int for how many times you wish for the exact same execution configuration to run
 * `exe_time`: An array of ints where each entry will coincide with a new test given that many seconds to execute
 * `system_name`: A string to describe the machine the test is running on.
-* `papi_flag`: Power API flags
+* `papi_flag`: Performance API flags
 * `misc_flags`: Any flags that don't fit into the other categories should go here.
 * `thread_levels`: An array listing the different numbers of threads the tests should be ran with. Powers of two reccomended.
 * `disable_thread_join`: A bool that enables skipping of the thread join command, useful if deadlock may occur.
 * `verbose`: A bool that if true, verbose output is used.
 * `exe_prefix`: Flags that must go before the executable. Usually used for likwid.
 
-Then there are the flags for the tests. The 'tests' object itself is an array, so you may add more simply with ',[test body goes here]'
+Then there are the flags for the tests. The `tests` object itself is an array, so you may add more simply with `,[test body goes here]`
 Within each test, there are more options:
 
 * `name`: A string of text to describe this specific test.
 
 * `executables`: An array of the executables that will run. These are the same executables compiled by the Makefile.
 
-* `path`: The file path to the executables. By default '../executables/version_NA_10000_10000'. That final directory may be different for you based on what options were used when running the Makefile.
+* `path`: The file path to the executables. By default `../executables/version_NA_10000_10000`. That final directory may be different for you based on what options were used when running the Makefile.
 
 * `flags`: The flags that are specific to this executable's data structure. See previous section.
 
@@ -221,4 +327,4 @@ Where:
 For example, if the following dist entry occurred in a buffer test entry:
 > `lambda t: None if t < 4 else "%d 1 0 %d 0 1" %((t*.25), (t*.75))`
 
-Will be an execution where four or more threads have 25% of threads doing all enqueues and the other 75% doing all dequeues. The reason `T` is four is because a thread group configuration with less than four threads cannot be evenly split into a 25:75 thread group configuration. We can be assured that any amount of threads more than four will work if all entries in thread_levels are powers of two.
+Would result in an execution where four or more threads have 25% of threads doing all enqueues and the other 75% doing all dequeues. The reason `T` is four is because a thread group configuration with less than four threads cannot be evenly split into a 25:75 thread group configuration. We can be assured that any amount of threads more than four will work if all entries in thread_levels are powers of two.
