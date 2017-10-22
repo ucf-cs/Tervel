@@ -14,7 +14,7 @@ from matplotlib.backends.backend_pdf import PdfPages
 
 print matplotlib.__version__, matplotlib.__file__
 
-import seaborn as sns; sns.set(style="ticks", color_codes=True, rc={"lines.linewidth": .3})
+import seaborn as sns; sns.set(style = "ticks", color_codes = True, rc = {"lines.linewidth": .3})
 
 # INSTALL FROM GIT LINKS!
 runConfigs = {}
@@ -127,7 +127,7 @@ def load_logs_from_dir(path):
         break
     return results
 
-def custom_plot(fname, df_, x_key, y_keys, hue="key",  hue_keys = None, OUTPUT_DATA=False, disable_legend=True):
+def custom_plot(fname, df_, x_key, y_keys, hue = "key",  hue_keys = None, OUTPUT_DATA = False, disable_legend = True):
     plt.close('all')
     print fname
 
@@ -178,12 +178,25 @@ def custom_plot(fname, df_, x_key, y_keys, hue="key",  hue_keys = None, OUTPUT_D
                     print s
 
         f, ax = plt.subplots(1, 1, figsize=(3.25, 1.75))
-        ax = sns.barplot(x=x_key, y=y_key, hue=hue, hue_order=hue_keys, data=df_, ax=ax)
+        ax = sns.barplot(x = x_key, y = y_key, hue = hue, hue_order = hue_keys, data = df_, ax = ax)
 
         # title = (y_key.split(":")[3]).title()
         # ax.set_title(title)
+
+        # manipulate the y_key string to create a more meaningful y-axis label
+        ylabel = y_key[19:]
+        if ":" not in ylabel:
+            splitted = ylabel.split("_")
+            ylabel = splitted[1] + "ed " + splitted[0].title() + " Operations"
+        elif "fail" in ylabel:
+            ylabel = "Total Failed Operations"
+        elif "pass" in ylabel:
+            ylabel = "Total Passed Operations"
+        else:
+            ylabel = "Total Operations"
+
         ax.set_xlabel("Threads")
-        ax.set_ylabel(y_key[19:])
+        ax.set_ylabel(ylabel)
 
         # ax.set(ylim=(0, 3.5 * pow(10, 7)))
         ax.spines['left'].set_visible(False)
@@ -193,8 +206,14 @@ def custom_plot(fname, df_, x_key, y_keys, hue="key",  hue_keys = None, OUTPUT_D
         ax.xaxis.set_ticks_position('bottom')
         # ax.set_ylabel("Operations")
 
-        ax.legend(title = '')
-        ax.legend(loc = 'best');
+        # ax.legend(title = '')
+        # ax.legend(loc = 'best');
+        # ax.legend(bbox_to_anchor = (1.05, 1), loc = 2, borderaxespad = 0.)
+        
+        # for some reason, the lock free MCAS buffer always had '(2)' at the end in the legend
+        for text in ax.legend(bbox_to_anchor = (1.05, 1), loc = 2, borderaxespad = 0.).get_texts():
+            if '(2)' in text.get_text():
+                text.set_text(text.get_text().split('(')[0])
 
         yid += 1
 
@@ -216,7 +235,7 @@ def custom_plot(fname, df_, x_key, y_keys, hue="key",  hue_keys = None, OUTPUT_D
             # ax.legend_.remove()
             pass
 
-        plt.savefig("graphs/" + fname + "_" + ("_".join(y_key.split(":"))).title() + ".pdf", bbox_inches='tight')  # saves the current figure into a pdf page
+        plt.savefig("graphs/" + fname + "_" + ("_".join(y_key.split(":"))).title() + ".pdf", bbox_inches = 'tight')  # saves the current figure into a pdf page
         plt.close()
 
 def graph_on_x(whatGraph, df_, x_axis_):
@@ -242,6 +261,7 @@ def graph_on_x(whatGraph, df_, x_axis_):
 	# Generate Graphs
 
     # Minor Filtering
+    temp_df = df
     y_axis_stack = {"metrics:operations:pop_Pass", "metrics:operations:pop_Fail", "metrics:operations:push_Pass", "metrics:operations:push_Fail"}
     y_axis_buffer = {"metrics:operations:enqueue_Pass", "metrics:operations:enqueue_Fail", "metrics:operations:dequeue_Pass", "metrics:operations:dequeue_Fail"}
     y_axis_map = {"metrics:operations:find_Pass", "metrics:operations:find_Fail", "metrics:operations:insert_Pass", "metrics:operations:insert_Fail",
