@@ -40,11 +40,27 @@ namespace tervel {
 namespace containers {
 namespace wf {
 
+/**
+  * The Push() method adds an element to the top of the stack, returning
+  * true if the operation is sucessful. 
+  * 
+  * @param v The value of the element to be added to the stack.
+  *
+  * @return true if successful, false otherwise.
+  */
 template<typename T>
 bool Stack<T>::push(T v) {
   Node *elem = new Node(v);
 
+  // To guarantee wait freedom, we make use of the tervel announcment table.
+  // A thread first checks to see if other threads have made an announcement
+  // by calling check_for_announcement. If an anouncement is found, that means
+  // some thread is having trouble completing its operation. By having other
+  // threads help the troubled thread, we can guarantee system wide progress. 
   tervel::util::ProgressAssurance::check_for_announcement();
+
+  // This limit is a measurement of how many times a thread can fail to complete 
+  // its operation before it makes an annoucement.
   util::ProgressAssurance::Limit progAssur;
 
   while (!progAssur.isDelayed()) {
@@ -59,14 +75,23 @@ bool Stack<T>::push(T v) {
     if (lst_.compare_exchange_strong(cur, elem)) {
       return true;
     }
-  }  // while (true)
+  } // while (true)
 
+  // If isDelayed() returns true, we add our operation to the announcement table.
   PushOp *op = new PushOp(this, elem);
   tervel::util::ProgressAssurance::make_announcement(op);
   op->safe_delete();
   return true;
 }  // bool push(T v)
 
+/**
+  * The Pop() method removes an element from the top of the stack, returning
+  * true if the operation is sucessful.
+  * 
+  * @param v Reference to object in which the value at the top of the stack will be stored.
+  *
+  * @return true if successful, false otherwise.
+  */
 template<typename T>
 bool Stack<T>::pop(T& v) {
   tervel::util::ProgressAssurance::check_for_announcement();
@@ -91,14 +116,14 @@ bool Stack<T>::pop(T& v) {
       cur->safe_delete();
       return true;
     }
-  }  // while (true)
+  } // while (true)
 
   PopOp *op = new PopOp(this);
   tervel::util::ProgressAssurance::make_announcement(op);
   bool res = op->result(v);
   op->safe_delete();
   return res;
-}  // bool pop(T v)
+} // bool pop(T v)
 
 
 }  // namespace WF

@@ -33,6 +33,10 @@ namespace tervel {
 namespace containers {
 namespace wf {
 
+/**
+  * This defines the Helper class. This class extends the "Element" class, 
+  * enabling the use of hazard pointers with Helper objects.  
+  */
 template<typename T>
 class Stack<T>::Helper : public tervel::util::memory::hp::Element {
  public:
@@ -67,11 +71,11 @@ class Stack<T>::Helper : public tervel::util::memory::hp::Element {
   Node * old_value_;
   Node * new_value_;
 
-};  // class Helper
+}; // class Helper
 
 
-}  // namespace wf
-}  // namespace containers
-}  // namespace tervel
+} // namespace wf
+} // namespace containers
+} // namespace tervel
 
 #endif  // TERVEL_CONTAINERS_WF_STACK_HELPER_H_

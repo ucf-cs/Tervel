@@ -37,7 +37,16 @@ namespace tervel {
 namespace containers {
 namespace wf {
 
-
+/**
+  * This defines the StackOp class, which extends OpRecord. An Operation Record
+  * must be implemented when an operation contains an unbounded loop. It contains
+  * information an arbitrary thread may use to execute an entire operation. The stack
+  * operations push and pop contain unbounded loops, thus they require an Operation Record
+  * to satisfy tervels progress assurance scheme. 
+  *
+  * StackOp will be used by both PushOp and PopOp to guide an abritrary thread to
+  * complete a pending push or pop operation.
+  */
 template<typename T>
 class Stack<T>::StackOp : public util::OpRecord {
  public:
@@ -107,17 +116,27 @@ class Stack<T>::StackOp : public util::OpRecord {
 
 };  // class StackOp<T>::StackOp
 
-
+/**
+  * This defines the PopOp class. This class is used to 
+  * guide an arbitrary thread to complete a pending pop operation.
+  */
 template<typename T>
 class Stack<T>::PopOp: public StackOp {
  public:
   PopOp(Stack<T> *s)
     : StackOp(s) {}
 
+/**
+  * help_complete must be implemented when extending util::OpRecord.
+  * This method gurantees that upon return, the described pop operation
+  * is complete.
+  */
   void help_complete() {
     Helper * helper = new Helper(this);
     Node *helper_marked = reinterpret_cast<Node *>(tervel::util::set_1st_lsb_1<Helper>(helper));
 
+    // This loop ensures that some arbitrary thread will complete the operation before returning
+    // The logic for helping complete a pop operation is the same as that of Stack::Pop().
     while (StackOp::notDone()) {
       Accessor access;
       if (access.load(&(StackOp::stack_->lst_)) == false) {
@@ -134,6 +153,8 @@ class Stack<T>::PopOp: public StackOp {
 
       helper->new_value_ = cur->next();
 
+      // If a thread is able to successfully complete the operation, we use helper
+      // to signal to other threads that the operation is finished.
       if (StackOp::stack_->lst_.compare_exchange_strong(cur, helper_marked)) {
         helper->finish(&(StackOp::stack_->lst_), helper_marked);
         assert(StackOp::stack_->lst_.load() != helper_marked);
@@ -148,9 +169,12 @@ class Stack<T>::PopOp: public StackOp {
 
  private:
   DISALLOW_COPY_AND_ASSIGN(PopOp);
-};  // PopOp
+}; // PopOp
 
-
+/**
+  * This defines the PushOp class. This class is used to 
+  * guide an arbitrary thread to complete a pending push operation.
+  */
 template<typename T>
 class Stack<T>::PushOp: public StackOp {
  public:
@@ -169,6 +193,12 @@ class Stack<T>::PushOp: public StackOp {
     }
     return res;
   }
+
+/**
+  * help_complete must be implemented when extending util::OpRecord.
+  * This method gurantees that upon return, the described push operation
+  * is complete.
+  */
   void help_complete() {
     Helper * helper = new Helper(this);
     helper->new_value_ = this->elem_;
