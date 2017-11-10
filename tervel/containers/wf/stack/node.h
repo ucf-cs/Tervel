@@ -42,6 +42,10 @@ namespace tervel {
 namespace containers {
 namespace wf {
 
+/**
+  * This defines the Node class. This class extends the "Element" class, 
+  * enabling the use of hazard pointers with Node objects.  
+  */
 template<typename T>
 class __attribute__((aligned(CACHE_LINE_SIZE)))  Stack<T>::Node : public tervel::util::memory::hp::Element {
  public:
@@ -69,8 +73,8 @@ class __attribute__((aligned(CACHE_LINE_SIZE)))  Stack<T>::Node : public tervel:
   Node *next_ {nullptr};
 };
 
-}  // namespace WF
-}  // namespace containers
-}  // namespace tervel
+} // namespace WF
+} // namespace containers
+} // namespace tervel
 
 #endif  // TERVEL_CONTAINERS_WF_STACK_Node_H_

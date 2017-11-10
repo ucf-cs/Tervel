@@ -24,12 +24,6 @@ THE SOFTWARE.
 */
 
 
-/**
- * TODO(steven):
- *
- *   Annotate code a bit more.
- *
- */
 #ifndef TERVEL_CONTAINERS_LF_STACK_STACK_H_
 #define TERVEL_CONTAINERS_LF_STACK_STACK_H_
 
@@ -43,7 +37,6 @@ namespace tervel {
 namespace containers {
 namespace lf {
 
-// TOTAL Dev time: 2 hours 12 minutes
 template<typename T>
 class Stack {
  public:
@@ -59,7 +52,19 @@ class Stack {
   std::atomic<Node *> _stack __attribute__((aligned(CACHE_LINE_SIZE)));
 };  // class Stack
 
-
+/**
+  * This defines the Accessor class, this class simplifies 
+  * access to the memory management scheme in tervel.
+  * The use of hazard pointers will ensure that no "watched" section
+  * of memory is freed or re-used while a thread is still operating 
+  * on it. 
+  *
+  * The following methods are provided:
+  *   load
+  *   value
+  * They are called when a thread needs to access sections of shared
+  * memory
+  */
 template<typename T>
 class Stack<T>::Accessor {
  public:
@@ -70,6 +75,19 @@ class Stack<T>::Accessor {
     tervel::util::memory::hp::HazardPointer::unwatch(watch_pos);
   };
 
+/**
+  * The load() method takes the address of a Node and places
+  * that address on "watch." This guarantees that the segment of
+  * memory will not be freed or re-used until the same segment of
+  * memory is unwatched.
+  *
+  * load() should be called every time a thread needs to operate 
+  * on a node in the stack.
+  *
+  * @param address Address of the std::atomic<Node *> to be loaded.
+  *
+  * @return true if successful, false otherwise.
+  */
   bool load(std::atomic<Node *> *address) {
     Node *element = address->load();
     bool res = true;
@@ -87,6 +105,14 @@ class Stack<T>::Accessor {
     }
   };
 
+/**
+  * The value() method takes a reference to a Node* in which to store the logical
+  * value of the currently watched node. 
+  *
+  * @param v Reference of type T in which to store the logical value of the Node.
+  *
+  * @return true if successful, false otherwise.
+  */
   bool value(T &v) {
     if (_val == nullptr) {
       return false;
@@ -101,17 +127,30 @@ class Stack<T>::Accessor {
   Node * _val;
 };
 
-
+/**
+  * The Push() method adds an element to the top of the stack, returning
+  * true if the operation is sucessful. 
+  * 
+  * @param v The value of the element to be added to the stack.
+  *
+  * @return true if successful, false otherwise.
+  */
 template<typename T>
 bool Stack<T>::push(T v) {
   Node *elem = new Node(v);
 
+  // When reading a node from the top of the stack, we must first apply the memory protection scheme.
+  // We create an accessor class, and attempt load() on the head of the stack. If successful,
+  // this atomically loads and "watches" the node at the head of the stack, preventing other threads 
+  // from freeing or re-using the node until the access variable has exited scope. 
   while (true) {
     Accessor access;
     if (access.load(&_stack) == false) {
       continue;
     };
 
+    // If successful, access will contain a pointer to a node.
+    // It is now safe to carry out the remainder of the push operation.
     Node *cur = access.ptr();
     elem->next(cur);
 
@@ -121,6 +160,14 @@ bool Stack<T>::push(T v) {
   }  // while (true)
 }  // bool push(T v)
 
+/**
+  * The Pop() method removes an element from the top of the stack, returning
+  * true if the operation is sucessful.
+  * 
+  * @param v Reference to object in which the value at the top of the stack will be stored.
+  *
+  * @return true if successful, false otherwise.
+  */
 template<typename T>
 bool Stack<T>::pop(T& v) {
   while (true) {
@@ -145,7 +192,10 @@ bool Stack<T>::pop(T& v) {
   }  // while (true)
 }  // bool pop(T v)
 
-
+/**
+  * This defines the Node class. This class extends the "Element" class, 
+  * enabling the use of hazard pointers with Node objects.  
+  */
 template<typename T>
 class __attribute__((aligned(CACHE_LINE_SIZE))) Stack<T>::Node : public tervel::util::memory::hp::Element {
  public:

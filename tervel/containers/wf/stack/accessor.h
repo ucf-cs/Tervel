@@ -44,7 +44,19 @@ namespace tervel {
 namespace containers {
 namespace wf {
 
-
+/**
+  * This defines the Accessor class, this class simplifies 
+  * access to the memory management scheme in tervel.
+  * The use of hazard pointers will ensure that no "watched" section
+  * of memory is freed or re-used while a thread is still operating 
+  * on it. 
+  *
+  * The following methods are provided:
+  *   load
+  *   value
+  * They are called when a thread needs to access sections of shared
+  * memory
+  */
 template<typename T>
 class Stack<T>::Accessor {
  public:
@@ -55,10 +67,26 @@ class Stack<T>::Accessor {
     tervel::util::memory::hp::HazardPointer::unwatch(watch_pos);
   };
 
+/**
+  * The load() method takes the address of a Node and places
+  * that address on "watch." This guarantees that the segment of
+  * memory will not be freed or re-used until the same segment of
+  * memory is unwatched. 
+  *
+  * Additionally, this method attempts to help complete any pending operations
+  * occuring at the node pointed to by address. 
+  *
+  * @param address Address of the std::atomic<Node *> to be loaded.
+  *
+  * @return true if successful, false otherwise.
+  */
   bool load(std::atomic<Node *> *address) {
     bool res = true;
     Node *element = address->load();
 
+    // If the node has been marked by setting it's least signifigant bit to 1, 
+    // a Helper object must be created to help complete the pending operation.
+    // The helper object must also be placed on watch to protect it in memory. 
     if (tervel::util::is_1st_lsb_1<Node>(element)) {
       Helper * h = reinterpret_cast<Helper *>(tervel::util::set_1st_lsb_0<Node>(element));
 
@@ -84,6 +112,14 @@ class Stack<T>::Accessor {
     }
   };
 
+/**
+  * The value() method takes a reference to a Node* in which to store the logical
+  * value of the currently watched node. 
+  *
+  * @param v Reference of type T in which to store the logical value of the Node.
+  *
+  * @return true if successful, false otherwise.
+  */
   bool value(T &v) {
     if (_val == nullptr) {
       return false;
@@ -99,8 +135,8 @@ class Stack<T>::Accessor {
 };
 
 
-}  // namespace WF
-}  // namespace containers
-}  // namespace tervel
+} // namespace WF
+} // namespace containers
+} // namespace tervel
 
 #endif  // TERVEL_CONTAINERS_WF_STACK_ACCESSOR_H_
