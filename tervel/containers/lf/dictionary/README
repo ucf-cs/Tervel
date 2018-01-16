@@ -1,3 +1,5 @@
+# DOES NOT YET IMPLEMENT TERVEL
+
 Concurrent dictionary based on MDList
 
 run ./bootstrap.sh to setup automake

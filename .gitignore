@@ -12,3 +12,8 @@ core
 *.tar
 *.gz
 *.bash
+*.jekyll-metadata
+
+production/
+graphs/
+logs/
