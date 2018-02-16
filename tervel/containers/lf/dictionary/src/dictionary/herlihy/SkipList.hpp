@@ -1,6 +1,7 @@
 #ifndef SKIP_LIST
 #define SKIP_LIST
 
+#include <random>
 #include "common/wicht/hash.hpp"
 #include "common/wicht/Utils.hpp"
 #include "common/wicht/DummyHazard.h"

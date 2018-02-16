@@ -360,7 +360,9 @@ Result AVLTree<T, Threads>::attemptUpdate(int key, Function func, bool expected,
 
                 if(success){
                     fixHeightAndRebalance(damaged);
-                    return updateResult(func, nullptr);
+                    // Passing nullptr returns error. 
+                    // Changed, but may not be correct.
+                    return updateResult(func, false /*nullptr*/);
                 }
             }
         } else {
