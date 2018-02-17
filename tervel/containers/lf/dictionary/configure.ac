@@ -8,7 +8,7 @@ AC_CONFIG_HEADERS([src/config.h])
 AC_CONFIG_AUX_DIR(bin)
 AC_CONFIG_MACRO_DIR([acinclude])
 
-AM_INIT_AUTOMAKE([-Wall -Wno-extra-portability -Werror foreign])
+AM_INIT_AUTOMAKE([-Wall -Wno-extra-portability -Werror foreign subdir-objects])
 AC_SUBST([WARN_FLAGS], ['-Wall'])
 #CXXFLAGS='-g -O0 -pg'
 #CXXFLAGS='-g -O0'
