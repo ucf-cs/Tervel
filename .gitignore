@@ -12,3 +12,8 @@ core
 *.tar
 *.gz
 *.bash
+/production
+tervel/tests/*/executables
+tervel/tests/scripts/graphs/
+tervel/tests/scripts/logs/
+*.jekyll-metadata

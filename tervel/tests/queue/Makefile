@@ -22,7 +22,9 @@
 #THE SOFTWARE.
 #
 
-DEBUG = -DDEBUG=1 -g -g3  -Wall
+OS := $(shell uname)
+
+DEBUG = -DDEBUG=1 -g -g3 -Wall
 # RELEASE = -O3 -DNDEBUG
 
 delay ?= 5
@@ -40,7 +42,13 @@ CXXFLAGS = $(RELEASE) $(DEBUG) $(cFlags) -DCONTAINER_FILE=$(input) -DINTEL -std=
 # $(info CXXFLAGS is $(CXXFLAGS))
 
 INC= $(cINC)
-LIB = $(cLIB) -ldl -lgflags -lpthread -lrt 
+ifeq ($(OS), Darwin)
+# Mac
+LIB = $(cLIB) -ldl -lgflags -lpthread
+else
+# Linux
+LIB = $(cLIB) -ldl -lgflags -lpthread -lrt
+endif
 
 # LIB += -lrt /usr/local/lib/libpapi.a
 # cFlags += -DUSE_PAPI
