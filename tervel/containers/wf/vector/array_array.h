@@ -54,7 +54,7 @@ class ArrayArray : public VectorArray<T> {
     if (capacity < 2) {
       capacity = 2;
     }
-    for (int i = 0; i < k_max_array_segments_; i++) {
+    for (size_t i = 0; i < k_max_array_segments_; i++) {
       array_of_arrays_[i].store(nullptr);
     }
     offset_pow_ = tervel::util::round_to_next_power_of_two(capacity);
