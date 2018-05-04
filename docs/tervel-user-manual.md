@@ -8,11 +8,11 @@ layout: tervel_documentation
 
 There are three main Makefile commands.
 
-{% highlight bash %}
+```bash
 $ make all
 $ make allBuffer
 $ make allTervel
-{% endhighlight %}
+```
 
 `allBuffer` will compile all the tests for buffers, that is `buffer_tervel_wf`, `buffer_tervel_mcas_lf`, `buffer_lock_cg`, `buffer_linux_nb`, and `buffer_naive_cg`.
 
@@ -22,23 +22,23 @@ $ make allTervel
 
 There is one additional test not compiled by the above scripts because it requires a separate library. That would be `buffer_tbb_fg` and if you wish to run this test, start by installing Intel Thread Building Blocks:
 
-{% highlight bash %}
+```bash
 $ sudo apt-get install libtbb-dev
-{% endhighlight %}
+```
 
 Then compile the binaries for it by running
 
-{% highlight bash %}
+```bash
 $ make tbb
-{% endhighlight %}
+```
 
 Another test using an external library was created for this project, a test for the Tsigas queue. At the time of this project's creation, this data structure was supported in the CDS library. It has since been removed due to an ABA problem, therefore it is now deprecated as a Tervel test. If you wish to run this test anyway, the queue is available in [libcds 2.1.0](https://github.com/khizmax/libcds/releases/tag/v2.1.0).
 
 You will also have to uncomment the lines in the Makefiles to do with `tsigasBuffer`. See the `Makefile` and `Makefile.ringbuffer`. Afterwards, you should be able to compile using.
 
-{% highlight bash %}
+```bash
 $ make cds
-{% endhighlight %}
+```
 
 There are also four variables you may pass into the makefile:
 * `delay`: how long a thread waits before checking the announcement table, 10000 by default, which is quite high
@@ -51,19 +51,19 @@ There are also four variables you may pass into the makefile:
 
 As an example of how to use the flags:
 
-{% highlight bash %}
+```bash
 $ make allTervel delay=10 limit=10 version=1
-{% endhighlight %}
+```
 
 Which will compile all Tervel-related test executables under `executables/version_1_10_10/`
 
 ## Running Tervel Tests
 
-You may run the binaries located in `tests/Executables/` under a subdirectory with a syntax similar to `version_NA_10000_10000`. Inside, you may run one of the binaries with a command syntax such as
+You may run the binaries located in `tests/executables/` under a subdirectory with a syntax similar to `version_NA_10000_10000`. Inside, you may run one of the binaries with a command syntax such as
 
-{% highlight bash %}
+```bash
 $ ./BIN.x F T OP
-{% endhighlight %}
+```
 
 Where
 * `BIN` is the name of the binary you wish to run,
@@ -79,17 +79,17 @@ Leaving any of these command line parameters blank will default their values to 
 
 There is only one flag that is required, and that is `-num_threads` with a trailing integer that must be greater than or equal to the sum of all `T`s. Therefore, a full sample command for a test would be:
 
-{% highlight bash %}
+```bash
 $ ./stack_tervel_lf.x -num_threads 3  2 1 0  1 0 1
-{% endhighlight %}
+```
 
 Which will run the lock-free Tervel stack test with three threads, the first group consisting of two threads performing 100% inserts and the other group just one thread performing 100% removes. More flags are listed below.
 
 As another example:
 
-{% highlight bash %}
+```bash
 $ ./buffer_tervel_wf.x -num_threads 2 2 2 1
-{% endhighlight %}
+```
 
 Will run the wait-free Tervel buffer test with two threads, each performing approximately 66% enqueue and 33% dequeue.
 
@@ -280,9 +280,9 @@ For more comprehensive tests, the python files in `tests/scripts/` should be use
 
 You may run the script which will run multiple tests simply by.
 
-{% highlight bash %}
+```bash
 $ python execute_test.py
-{% endhighlight %}
+```
 
 Which will prompt you for a config file. Feel free to enter the provided `example.config` or create your own. The script will run multiple tests based on the `.config` file and place their output in `scripts/logs/`.
 
@@ -297,7 +297,7 @@ The syntax of the config file should be fairly straightforward. At the top of th
 * `system_name`: A string to describe the machine the test is running on.
 * `papi_flag`: Performance API flags
 * `misc_flags`: Any flags that don't fit into the other categories should go here.
-* `thread_levels`: An array listing the different numbers of threads the tests should be ran with. Powers of two reccomended.
+* `thread_levels`: An array listing the different numbers of threads the tests should be ran with. Powers of two recommended.
 * `disable_thread_join`: A bool that enables skipping of the thread join command, useful if deadlock may occur.
 * `verbose`: A bool that if true, verbose output is used.
 * `exe_prefix`: Flags that must go before the executable. Usually used for likwid.
