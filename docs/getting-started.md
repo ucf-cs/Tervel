@@ -42,7 +42,7 @@ $ make all
 
 You may run the binaries located in `/tests/executables/` under a subdirectory with a syntax similar to `version_NA_10000_10000`. Inside, you may run one of the binaries with a command such as
 
-```
+```bash
 $ ./BIN.x
 ```
 
