@@ -40,7 +40,7 @@ $ make all
 
 ## Running Tervel Tests
 
-You may run the binaries located in `/tests/Executables/` under a subdirectory with a syntax similar to `version_NA_10000_10000`. Inside, you may run one of the binaries with a command such as
+You may run the binaries located in `/tests/executables/` under a subdirectory with a syntax similar to `version_NA_10000_10000`. Inside, you may run one of the binaries with a command such as
 
 {% highlight bash %}
 $ ./BIN.x
