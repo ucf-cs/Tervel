@@ -14,9 +14,9 @@ Supported platforms:
 
 Clone the Tervel from the git repo:
 
-{% highlight bash %}
+```bash
 $ git clone {{ site.gitrepo }}
-{% endhighlight %}
+```
 
 ## Building Tervel
 
@@ -27,24 +27,24 @@ An already set-up runtime environment is already available for Tervel online at 
 * g++4.8.0 or greater
 * [gflags](http://gflags.github.io/gflags/)
 
-{% highlight bash %}
+```bash
 $ sudo apt-get install libgflags-dev
-{% endhighlight %}
+```
 
 ### Building
 
-{% highlight bash %}
+```bash
 $ cd tervel/tests
 $ make all
-{% endhighlight %}
+```
 
 ## Running Tervel Tests
 
 You may run the binaries located in `/tests/executables/` under a subdirectory with a syntax similar to `version_NA_10000_10000`. Inside, you may run one of the binaries with a command such as
 
-{% highlight bash %}
+```
 $ ./BIN.x
-{% endhighlight %}
+```
 
 Where `BIN` is the name of the executable you wish to run. The test will execute with default parameters, which includes 0 threads. Therefore, it is normal to see output results containing little to no information. For an explanation on how to change these parameters, see the [User Manual](tervel-user-manual.html).
 
