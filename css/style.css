@@ -68,14 +68,14 @@ li {
 }
 pre {
   padding: 8px 16px 8px 16px;
-  font-family: "Source Code Pro";
+  font-family: monospace;
   background-color: #f9f9f9;
   border: none;
   font-size: 13px;
   line-height: 20px;
 }
 code {
-  font-family: "Source Code Pro";
+  font-family: monospace;
   font-size: 13px;
   background-color: #f9f9f9;
 }
